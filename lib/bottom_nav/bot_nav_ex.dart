@@ -104,10 +104,11 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
         backgroundColor: Colors.white,
         body: _pages[_selectedIndex],
         bottomNavigationBar: BottomAppBar(
+
           shape: const CircularNotchedRectangle(),
           notchMargin: 8.0,
           color: const Color(0xFF2E3A66), // Background color
-          child: Container(
+          child: Container( //ClipPath
             height: 70,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -158,4 +159,29 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   }
 }
 
+/*class ConcaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
 
+    // Start from the top-left
+    path.moveTo(0, 50);
+
+    // Draw a concave curve to the top-right corner
+    path.quadraticBezierTo(size.width / 2, -50, size.width, 50);
+
+    // Continue to bottom-right
+    path.lineTo(size.width, size.height);
+
+    // Bottom-left
+    path.lineTo(0, size.height);
+
+    // Close the path
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}*/

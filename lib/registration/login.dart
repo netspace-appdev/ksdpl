@@ -274,34 +274,48 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 25),
 
                       // Sign In Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColor.secondaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                      Obx((){
+                           if(controller.isLoading.value){
+                               return Align(
+                                 alignment: Alignment.center,
+                                 child: SizedBox(
+                                       height: 30,
+                                       width: 30,
+                                   child: CircularProgressIndicator(
+                                     color: AppColor.primaryColor,
+                                   ),
+                                 ),
+                                   );
+                            }
+                        return SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColor.secondaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                            /*if (_formKey.currentState!.validate()) {
-                              controller.loginApi(controller.mobileController.text,
-                                  controller.passwordController.text);
-                            }*/
-                            Get.offAllNamed("/bottomNavbar");
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                controller.loginApi(controller.mobileController.text,
+                                    controller.passwordController.text);
+                              }
+                              //Get.offAllNamed("/bottomNavbar");
 
-                          },
-                          child: const Text(
-                            "SIGN IN",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                            },
+                            child: const Text(
+                              "SIGN IN",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                       const SizedBox(height: 20),
 
                       // Signup Link

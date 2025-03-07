@@ -82,14 +82,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 leading:  Icon(Icons.edit,color: Theme.of(context).brightness == Brightness.dark?Colors.white54:AppColor.black54),
                 title:  Text("Edit profile", style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
                 onTap: () {
-                  Get.toNamed("/editProfile");
+                //  Get.toNamed("/editProfile");
                 },
               ),
               ListTile(
                 leading:  Icon(Icons.lock,color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),
                 title:  Text(AppText.changePassword,style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
                 onTap: () {
-                  Get.toNamed("/changePassword");
+                //  Get.toNamed("/changePassword");
                 },
               ),
             /*  ListTile(
@@ -113,7 +113,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 leading:  Icon(Icons.format_list_bulleted_outlined,color: Theme.of(context).brightness == Brightness.dark?Colors.white54:AppColor.black54),
                 title:  Text(AppText.leadList, style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
                 onTap: () {
-                  Get.toNamed("/leadListScreen");
+               //   Get.toNamed("/leadListScreen");
                 },
               ),
 

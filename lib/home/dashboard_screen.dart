@@ -16,6 +16,8 @@ import '../../common/helper.dart';
 import '../../common/search_bar.dart';
 
 import '../../controllers/api_controller.dart';
+import '../common/circl_graph_class.dart';
+import '../custom_widgets/line_chart.dart';
 import 'custom_drawer.dart';
 
 
@@ -55,135 +57,94 @@ class _DashboardScreenState extends State<DashboardScreen> {
     },
   ];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  double maxGraphValue = 1000;
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColor.backgroundColor,
       drawer:   CustomDrawer(),
-      body: Stack(
-        children: [
-          // Gradient Background
-          Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColor.primaryLight, AppColor.primaryDark],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child:Column(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
               children: [
-                SizedBox(
-                  height: 20,
+                // Gradient Background
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppColor.primaryLight, AppColor.primaryDark],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child:Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+
+                      header(),
+
+                      SizedBox(
+                        height: 20,
+                      ),
+
+                      offerContainer(),
+
+                    ],
+                  ),
                 ),
 
-                header(),
+                // White Container
+                Align(
+                  alignment: Alignment.topCenter,  // Centers it
+                  child: Container(
+                    margin:  EdgeInsets.only(
+                        top:  MediaQuery.of(context).size.height * 0.35
+                    ), // <-- Moves it 30px from top
+                    width: double.infinity,
+                    //height: MediaQuery.of(context).size.height,
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                    decoration: const BoxDecoration(
+                      color: AppColor.backgroundColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(45),
+                        topRight: Radius.circular(45),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                      children: [
 
-                SizedBox(
-                  height: 20,
+                        customGrid(),
+
+                        const SizedBox(height: 20),
+
+                        curveChart(),
+
+                        const SizedBox(height: 30),
+
+                        circleChart(),
+
+                        const SizedBox(height: 30),
+
+                        barChart(),
+
+                        const SizedBox(height: 30),
+
+
+                      ],
+                    ),
+                  ),
                 ),
-
-                offerContainer(),
-
               ],
             ),
-          ),
-
-          // White Container
-          Align(
-            alignment: Alignment.topCenter,  // Centers it
-            child: Container(
-              margin:  EdgeInsets.only(
-                  top:  MediaQuery.of(context).size.height * 0.35
-              ), // <-- Moves it 30px from top
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-              decoration: const BoxDecoration(
-                color: AppColor.backgroundColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(45),
-                  topRight: Radius.circular(45),
-                ),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min, // Prevents extra spacing
-                  children: [
-
-                    customGrid(),
-                    const SizedBox(height: 20),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Total Profile View",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                        ),
-                        const SizedBox(height: 5),
-                        const Text(
-                          "1024",
-                          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          height: 300,
-                          child: BarChart(
-                            BarChartData(
-                              gridData: FlGridData(show: true),
-                              titlesData: FlTitlesData(show: false),
-                              borderData: FlBorderData(show: false),
-                              barGroups: _getBarGroups(), // Bar chart data
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        SizedBox(
-                          height: 300,
-                          child: LineChart(
-                            LineChartData(
-                              gridData: FlGridData(show: false),
-                              titlesData: FlTitlesData(show: false),
-                              borderData: FlBorderData(show: false),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: [
-                                    FlSpot(0, 500),
-                                    FlSpot(1, 800),
-                                    FlSpot(2, 400),
-                                    FlSpot(3, 600),
-                                    FlSpot(4, 300),
-                                    FlSpot(5, 700),
-                                    FlSpot(6, 1000), // Highlighted point
-                                    FlSpot(7, 600),
-                                    FlSpot(8, 800),
-                                    FlSpot(9, 400),
-                                  ],
-                                  isCurved: true,
-                                  color: Colors.amber,
-                                  barWidth: 3,
-                                  isStrokeCapRound: true,
-                                  dotData: FlDotData(show: true),
-                                  belowBarData: BarAreaData(show: false),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-
-
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -382,11 +343,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       height: 145,
       child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // 2 columns
           crossAxisSpacing: 10, // Space between columns
           mainAxisSpacing: 10, // Space between rows
           childAspectRatio: 2.4, // Adjust height
+
         ),
         itemCount: items.length,
         itemBuilder: (context, index) {
@@ -446,18 +409,205 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  List<BarChartGroupData> _getBarGroups() {
-    return List.generate(10, (index) {
-      return BarChartGroupData(
-        x: index,
-        barRods: [
-          BarChartRodData(
-            toY: index == 6 ? 1000 : (500 + (index % 4) * 150), // Highlight bar at index 6
-            color: index == 6 ? Colors.amber : Colors.grey.withOpacity(0.3),
-            width: 18,
+  Widget barChart(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Total Profile View",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+        ),
+        SizedBox(height: 5),
+        Text(
+          "1024",
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 20),
+
+        Stack(
+          children: [
+            SizedBox(
+              //  color: Colors.red,
+                height: 200,
+                child: BarChart(_getBarChartData())), // Background Bar Chart
+            Positioned(
+              top: MediaQuery.of(context).size.height*0.1,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                  height: 50,
+                  child: LineChart(_getLineChartData())),
+            ),
+
+            Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child:Column(
+                  children: [
+                    Divider(
+                      color: Colors.grey,
+                    ),
+                    SizedBox(
+                        height:  MediaQuery.of(context).size.height*0.1
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                    ),
+                    SizedBox(
+                        height:  MediaQuery.of(context).size.height*0.1
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                    ),
+                  ],
+                )
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget circleChart(){
+    return  Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Text(
+          "Performance Insights",
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 20),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                // Background rings
+                CustomPaint(
+                  size: Size(250, 250),
+                  painter: CircularGraphPainter(),
+                ),
+                // Center image
+                Image.asset(
+                  AppImage.searchGlass,
+                  width: 60,
+                  height: 60,
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            // Legend
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Legend(color: AppColor.pinkColor, text: "Below: 40%"),
+                Legend(color: AppColor.orangeColor, text: "60% - 80%"),
+                Legend(color: AppColor.purpleColor, text: "Above: 80%"),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget curveChart(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Legend
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Legend1(color:AppColor.pinkColor, text: "Total Units: 24"),
+            Legend1(color: AppColor.tealColor, text: "Total Departments: 12"),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Legend1(color: AppColor.blackColor, text: "Total Branches: 20"),
+        const SizedBox(height: 30),
+        // Graph
+        SizedBox(
+          height: 200,
+          child: LineChartWidget(),
+        ),
+      ],
+    );
+  }
+
+  /// Bar Chart Data
+  BarChartData _getBarChartData() {
+    return BarChartData(
+
+      maxY: maxGraphValue, // Set the same max value
+      gridData: FlGridData(show: false),
+      titlesData: FlTitlesData(show: false),
+      borderData: FlBorderData(show: false),
+      barGroups: [
+        _barData(0, 600),
+        _barData(1, 800),
+        _barData(2, 500),
+        _barData(3, 1000),
+        _barData(4, 700),
+        _barData(5, 300),
+        _barData(6, 900),
+      ],
+    );
+  }
+
+  /// Individual Bar Data
+  BarChartGroupData _barData(int x, double y) {
+    return BarChartGroupData(
+      x: x,
+      barRods: [
+        BarChartRodData(
+          toY: y,
+          color: Colors.grey.withOpacity(0.3),
+          width: 20,
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ],
+    );
+  }
+
+  /// Line Chart Data (Zigzag Yellow Line)
+  LineChartData _getLineChartData() {
+    return LineChartData(
+      maxY: maxGraphValue,
+      gridData: FlGridData(show: false),
+      titlesData: FlTitlesData(show: false),
+      borderData: FlBorderData(show: false),
+      lineBarsData: [
+        LineChartBarData(
+          spots: _getLineChartSpots(),
+          isCurved: false,
+          color: AppColor.secondaryColor,
+          barWidth: 4,
+          isStrokeCapRound: true,
+          belowBarData: BarAreaData(show: false),
+          dotData: FlDotData(
+            show: true,
+            getDotPainter: (spot, percent, barData, index) =>
+                FlDotCirclePainter(radius: 4, color: AppColor.appWhite, strokeWidth: 2, strokeColor: AppColor.secondaryColor),
           ),
-        ],
-      );
-    });
+        ),
+      ],
+    );
+  }
+
+  /// Data Points for Zigzag Line
+  List<FlSpot> _getLineChartSpots() {
+    return [
+      FlSpot(0, 500),
+      FlSpot(1, 800),
+      FlSpot(2, 500),
+      FlSpot(3, 1000),
+      FlSpot(4, 700),
+      FlSpot(5, 300),
+      FlSpot(6, 900),
+    ];
   }
 }

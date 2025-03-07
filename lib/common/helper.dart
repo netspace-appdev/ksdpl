@@ -194,6 +194,10 @@ class AppColor{
   static const Color black1=Color(0xFF3D3D3D);
   static const Color amberVersion=Color(0x38FFB057);
   static const Color grey4=Color(0xFFE1E1E1);
+  static const Color pinkColor=Colors.pink;
+  static const Color purpleColor=Colors.purple;
+  static const Color tealColor= Colors.teal;
+
 
 
 
@@ -222,6 +226,7 @@ class AppImage{
   static const String arrow="assets/images/arrow.png";
   static const String addIcon="assets/images/addIcon.png";
   static const String faq="assets/images/faq.png";
+  static const String searchGlass="assets/images/searchGlass.png";
 }
 
 class AppStyles {
