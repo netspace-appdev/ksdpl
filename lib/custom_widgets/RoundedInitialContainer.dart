@@ -9,19 +9,20 @@ class RoundedInitialContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 70, // Adjust size as needed
-      height: 70,
+      width: 48, // Adjust size as needed
+      height: 48,
       decoration: BoxDecoration(
-        color: Colors.yellow,
-        shape: BoxShape.circle,
+        color: AppColor.orangeColor,
+       // shape: BoxShape.circle,
         border: Border.all(color: AppColor.appWhite, width: 2),
+        borderRadius: BorderRadius.circular(15),
       ),
       alignment: Alignment.center,
       child: Text(
         firstName.isNotEmpty ? firstName[0].toUpperCase() : "U",
         style: TextStyle(
           color: AppColor.primaryColor,
-          fontSize: 25,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),

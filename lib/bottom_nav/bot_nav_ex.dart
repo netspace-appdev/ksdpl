@@ -113,11 +113,18 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(Icons.home, "Home", 0),
-                _buildNavItem(Icons.person, "Profile", 1),
+
+               /* _buildNavItem(Icons.person, "Profile", 1),
                 const SizedBox(width: 50), // Space for FAB
                 _buildNavItem(Icons.settings, "Settings", 2),
                 _buildNavItem(Icons.more_horiz, "More", 3),
+                _buildNavItem(Icons.more_horiz, "More", 3),*/
+
+                _buildNavItem(AppImage.homeIcon, AppImage.homeYellow,"Home", 0),
+                _buildNavItem(AppImage.personIcon, AppImage.personYellow, "Profile", 1),
+                const SizedBox(width: 50), // Space for FAB
+                _buildNavItem(AppImage.settingIcon, AppImage.settingYellow, "Settings", 2),
+                _buildNavItem(AppImage.homeIcon, AppImage.homeIcon, "More", 3),
               ],
             ),
           ),
@@ -134,7 +141,34 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
+  Widget _buildNavItem(String unSelectedImg, String selectedImg, String label, int index) {
+    bool isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () => _onItemTapped(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          label=="More"? Icon(Icons.more_horiz, size: 24, color: isSelected ? AppColor.secondaryColor : AppColor.appWhite):
+          Image.asset(
+            isSelected ? selectedImg : unSelectedImg, height:  24,
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: isSelected ? const Color(0xFFFBC02D) : Colors.white,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+/*  Widget _buildNavItem(IconData icon, String label, int index) {
     bool isSelected = _selectedIndex == index;
     return GestureDetector(
       onTap: () => _onItemTapped(index),
@@ -156,32 +190,6 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
         ],
       ),
     );
-  }
+  }*/
 }
 
-/*class ConcaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-
-    // Start from the top-left
-    path.moveTo(0, 50);
-
-    // Draw a concave curve to the top-right corner
-    path.quadraticBezierTo(size.width / 2, -50, size.width, 50);
-
-    // Continue to bottom-right
-    path.lineTo(size.width, size.height);
-
-    // Bottom-left
-    path.lineTo(0, size.height);
-
-    // Close the path
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}*/

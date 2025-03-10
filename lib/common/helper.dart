@@ -162,8 +162,10 @@ class AppText{
   static const String tncController="Terms and Conditions";
   static const String companyLogo="Company Logo";
 
-  static const String leads="Lead Pulse";
+  static const String leads="Leads";
   static const String leadList="Lead List";
+  static const String myProfile="My Profile";
+  static const String logout="Logout";
 
 
 }
@@ -220,13 +222,28 @@ class AppImage{
   static const String passwordIcon="assets/images/passwordIcon.png";
   static const String bellIcon="assets/images/bellIcon.png";
   static const String searchIcon="assets/images/searchIcon.png";
-  static const String peopleIcon="assets/images/peopleIcon.png";
   static const String offerImage="assets/images/offerImage.png";
   static const String doc="assets/images/doc.png";
   static const String arrow="assets/images/arrow.png";
   static const String addIcon="assets/images/addIcon.png";
   static const String faq="assets/images/faq.png";
   static const String searchGlass="assets/images/searchGlass.png";
+  static const String editImage="assets/images/editImage.png";
+  static const String homeIcon="assets/images/homeIcon.png";
+  static const String personIcon="assets/images/personIcon.png";
+  static const String personYellow="assets/images/personYellow.png";
+  static const String settingIcon="assets/images/settingIcon.png";
+  static const String settingYellow="assets/images/settingyellow.png";
+  static const String peopleGroup="assets/images/peopleGroup.png";
+  static const String moreIcon="assets/images/moreIcon.png";
+  static const String homeYellow="assets/images/homeYellow.png";
+  static const String backDrawer="assets/images/backDrawer.png";
+  static const String home2="assets/images/home2.png";
+  static const String manInBlack="assets/images/manInBlack.png";
+  static const String powerIcon="assets/images/powerIcon.png";
+  static const String forwardIcon="assets/images/forwardIcon.png";
+  static const String noti_icon="assets/images/noti_icon.png";
+
 }
 
 class AppStyles {

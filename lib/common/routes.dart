@@ -13,6 +13,7 @@ import '../home/LeadListScreen.dart';
 import '../home/change_password.dart';
 import '../home/edit_profile.dart';
 import '../home/lead_details.dart';
+import '../home/leads/lead_list_main.dart';
 import '../home/manage_branch.dart';
 import '../home/product.dart';
 import '../home/splash.dart';
@@ -36,4 +37,5 @@ final routes = [
   GetPage(name: '/callStorageScreen', page: () => CallStorageScreen()),
   GetPage(name: '/leadListScreen', page: () => LeadListScreen()),
   GetPage(name: '/leadDetails', page: () => LeadDetailsScreen()),
+  GetPage(name: '/leadListMain', page: () => LeadListMain()),
 ];

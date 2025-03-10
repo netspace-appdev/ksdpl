@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/helper.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
 import '../custom_widgets/RoundedInitialContainer.dart';
 
@@ -29,131 +30,135 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-        //crossAxisAlignment: CrossAxisAlignment.stretch,
+
         padding: EdgeInsets.zero,
         children: [
-          // Drawer Header with Profile
+
           DrawerHeader(
+
             decoration: const BoxDecoration(
-              color: AppColor.primaryColor,
+              gradient: LinearGradient(
+                colors: [AppColor.primaryDark, AppColor.primaryLight],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              image: DecorationImage(
+                image: AssetImage(AppImage.backDrawer),
+                fit: BoxFit.cover,
+              ),
             ),
             child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  RoundedInitialContainer(firstName: firstName,),
-                  const SizedBox(height: 10),
-                   Text(
-                     firstName,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+              child: Padding(
+                padding: EdgeInsets.only(left: 15, top: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    RoundedInitialContainer(firstName: firstName,),
+                    const SizedBox(height: 10),
+                     Text(
+                       firstName,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                   Text(
-                     email,
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
+                     Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Text(
+                           email,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.white70,
+                          ),
+                         ),
+                         Padding(
+                           padding:  EdgeInsets.only(right: 12.0),
+                           child: Image.asset(AppImage.editImage, height: 18, width: 18,),
+                         )
+                       ],
+                     ),
+                  ],
+                ),
               ),
             ),
           ),
           // Navigation Items
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Dashboard'),
-            onTap: () {
-              Navigator.pop(context);
-              // Add your navigation logic here
-            },
-          ),
+         Padding(
+           padding: const EdgeInsets.only(left: 17.0),
+           child: Column(
+             children: [
+               CustomListTile(
+                 title:  AppText.home,
+                 imagePath:AppImage.home2,
+                 onTap: () {
+                   Navigator.pop(context);
+                   // Add your navigation logic here
+                 },
 
-          ExpansionTile(
-            childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-              title: Text(AppText.manageProfile),
-            leading: const Icon(Icons.person),
-            children: [
-               ListTile(
-
-                leading:  Icon(Icons.edit,color: Theme.of(context).brightness == Brightness.dark?Colors.white54:AppColor.black54),
-                title:  Text("Edit profile", style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
-                onTap: () {
-                //  Get.toNamed("/editProfile");
-                },
-              ),
-              ListTile(
-                leading:  Icon(Icons.lock,color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),
-                title:  Text(AppText.changePassword,style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
-                onTap: () {
-                //  Get.toNamed("/changePassword");
-                },
-              ),
-            /*  ListTile(
-                leading:  Icon(Icons.contrast,color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),
-                title:  Text(AppText.changeTheme,style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
-                onTap: () {
-                  Get.toNamed("/themeSelection");
-                },
-              ),*/
-            ],
-          ),
+               ),
 
 
-          ExpansionTile(
-            childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-            title: Text(AppText.leads),
-            leading: const Icon(Icons.people),
-            children: [
-              ListTile(
+               /*ExpansionTile(
+                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                 title: Text(AppText.myProfile),
+                 leading: Image.asset(AppImage.manInBlack, height: 20,),
+                 children: [
+                   ListTile(
 
-                leading:  Icon(Icons.format_list_bulleted_outlined,color: Theme.of(context).brightness == Brightness.dark?Colors.white54:AppColor.black54),
-                title:  Text(AppText.leadList, style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
-                onTap: () {
-               //   Get.toNamed("/leadListScreen");
-                },
-              ),
+                     leading:  Icon(Icons.home,color: Theme.of(context).brightness == Brightness.dark?Colors.white54:AppColor.black54),
+                     title:  Text("Edit profile", style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
+                     onTap: () {
+                       //  Get.toNamed("/editProfile");
+                     },
+                   ),
+                   ListTile(
+                     leading:  Icon(Icons.lock,color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),
+                     title:  Text(AppText.changePassword,style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
+                     onTap: () {
+                       //  Get.toNamed("/changePassword");
+                     },
+                   ),
+                 ],
+               ),*/
+
+               CustomListTile(
+                 title:  AppText.myProfile,
+                 imagePath:AppImage.manInBlack,
+                 onTap: () {
+                   Navigator.pop(context);
+                   // Add your navigation logic here
+                 },
+
+               ),
 
 
-            ],
-          ),
+               CustomListTile(
+                 title:  AppText.leads,
+                 imagePath:AppImage.manInBlack,
+                 onTap: () {
+                   StorageService.clear();
+                   Get.offNamed("/leadListMain");
+                 },
 
-          // Logout Button
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Logout'),
-            onTap: () {
-              // Add logout logic
-              Navigator.pop(context);
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text('Logout'),
-                    content: const Text('Are you sure you want to logout?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context); // Close dialog
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          StorageService.clear();
-                          Get.offNamed("/login");
-                        },
-                        child: const Text('Logout'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
+               ),
+
+               // Logout Button
+               CustomListTile(
+                 title:  AppText.logout,
+                 imagePath:AppImage.powerIcon,
+                 onTap: () {
+                   StorageService.clear();
+                   Get.offNamed("/login");
+                 },
+
+               ),
+              
+             ],
+           ),
+         )
         ],
       ),
     );

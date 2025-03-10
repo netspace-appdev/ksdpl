@@ -261,7 +261,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             // child: const Icon(Icons.groups, color:  AppColor.secondaryColor, size: 30),
-                            child: index==0? Image.asset(AppImage.peopleIcon,height: 23,):Image.asset(AppImage.faq,height: 23,),
+                            child: index==0? Image.asset(AppImage.peopleGroup,height: 23,):Image.asset(AppImage.faq,height: 23,),
                           ),
                           SizedBox(width: 10),
 
