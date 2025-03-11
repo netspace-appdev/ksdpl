@@ -13,6 +13,7 @@ class StorageService {
   static const String BANKER_ID = "BANKER_ID";
   static const String THEME_MODE = "THEME_MODE";
   static const String BANK_ID = "BANK_ID";
+  static const String EMPLOYEE_ID = "EMPLOYEE_ID";
 
 
   static void put(String key, String value) {

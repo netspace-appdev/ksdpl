@@ -139,8 +139,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  title:  AppText.leads,
                  imagePath:AppImage.manInBlack,
                  onTap: () {
-                   StorageService.clear();
-                   Get.offNamed("/leadListMain");
+
+                   Get.toNamed("/leadListMain");
                  },
 
                ),

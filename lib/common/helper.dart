@@ -191,14 +191,18 @@ class AppColor{
   static const Color grey2=Color(0xFF5E5F60);
   static const Color grey3=Color(0xFFEBEBEB);
   static const Color orangeColor=Color(0xFFFFB057);
-  static const Color primaryLight=Color(0xFF384F9F);
-  static const Color primaryDark=Color(0xFF323F6E);
+/*  static const Color primaryLight=Color(0xFF384F9F);
+  static const Color primaryDark=Color(0xFF323F6E);*/
+  static const Color primaryLight=Color(0xFF3850A5);
+  static const Color primaryDark=Color(0xFF313E6C);
   static const Color black1=Color(0xFF3D3D3D);
   static const Color amberVersion=Color(0x38FFB057);
   static const Color grey4=Color(0xFFE1E1E1);
   static const Color pinkColor=Colors.pink;
   static const Color purpleColor=Colors.purple;
   static const Color tealColor= Colors.teal;
+  static const Color bgMore=Color(0xFFFFF6DC);
+  static const Color grey700=Color(0xFF616161);
 
 
 
@@ -243,6 +247,12 @@ class AppImage{
   static const String powerIcon="assets/images/powerIcon.png";
   static const String forwardIcon="assets/images/forwardIcon.png";
   static const String noti_icon="assets/images/noti_icon.png";
+  static const String searchIcon2="assets/images/searchIcon2.png";
+  static const String filterIcon="assets/images/filerIcon.png";
+  static const String call1="assets/images/call1.png";
+  static const String chat1="assets/images/chat1.png";
+  static const String message1="assets/images/message1.png";
+  static const String whatsapp="assets/images/whatsapp.png";
 
 }
 

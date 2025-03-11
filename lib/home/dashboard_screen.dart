@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ksdpl/common/skelton.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 
@@ -17,6 +18,8 @@ import '../../common/search_bar.dart';
 
 import '../../controllers/api_controller.dart';
 import '../common/circl_graph_class.dart';
+import '../controllers/greeting_controller.dart';
+import '../controllers/leads/infoController.dart';
 import '../custom_widgets/line_chart.dart';
 import 'custom_drawer.dart';
 
@@ -34,6 +37,8 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  GreetingController greetingController = Get.put(GreetingController());
+  DashboardController dashboardController = Get.put(DashboardController());
   final List<Map<String, String>> items = [
     {
       "image": AppImage.doc,
@@ -57,6 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     },
   ];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  InfoController infoController = Get.put(InfoController());
   double maxGraphValue = 1000;
   @override
   Widget build(BuildContext context) {
@@ -168,16 +174,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Good Evening!",
-                    style: TextStyle(
-                        fontSize: 12,
+                 Obx(()=>  Text(
+                   greetingController.greetingMsg.value.toString(),
+                   style: TextStyle(
+                       fontSize: 12,
 
-                        color: AppColor.grey3
-                    ),
-                  ),
-                  const Text(
-                    "Falak John",
+                       color: AppColor.grey3
+                   ),
+                 )),
+                   Text(
+                    infoController.firstName.value.toString(),
                     style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,

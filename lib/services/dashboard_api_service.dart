@@ -9,16 +9,16 @@ import '../common/storage_service.dart';
 class DashboardApiService{
   static const String baseUrl =BaseUrl.baseUrl; //'http://192.168.29.2:8085/api/';
   static const String base2 = '';
-  static const String getBankerByPhone = baseUrl + 'BankerRegistration/GetBankerByPhone';
+  static const String getEmployeeByPhoneNumber = baseUrl + 'Employee/GetEmployeeByPhoneNumber';
 
 
-  static Future<Map<String, dynamic>> getBankerByPhoneApi({
+  static Future<Map<String, dynamic>> getEmployeeByPhoneNumberApi({
     required String phone,
   }) async {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(getBankerByPhone),
+        Uri.parse(getEmployeeByPhoneNumber),
       );
 
       var headers = await MyHeader.getHeaders();
@@ -26,12 +26,11 @@ class DashboardApiService{
 
       request.headers.addAll(headers);
 
-      request.fields['Phone'] = phone;
+      request.fields['PhoneNumber'] = phone;
 
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
