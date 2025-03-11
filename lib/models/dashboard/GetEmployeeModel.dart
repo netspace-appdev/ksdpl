@@ -46,8 +46,8 @@ class Data {
   bool? active;
   String? createdBy;
   String? createdDate;
-  Null? upatedBy;
-  Null? updatedDate;
+  String? upatedBy;
+  String? updatedDate;
   Null? deletedBy;
   Null? deletedDate;
 

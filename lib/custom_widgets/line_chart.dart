@@ -46,7 +46,7 @@ class LineChartWidget extends StatelessWidget {
         minY: 0,
         maxY: 2000,
         lineBarsData: [
-          buildLineData(Colors.pink, [800, 1200, 1500, 1000, 1600, 1400, 700, 900, 1100, 500, 600, 400]), // Pink line
+          buildLineData(AppColor.secondaryColor, [800, 1200, 1500, 1000, 1600, 1400, 700, 900, 1100, 500, 600, 400]), // Pink line
           buildLineData(Colors.teal, [500, 800, 1200, 1400, 1000, 900, 500, 600, 700, 1000, 1100, 1300]), // Teal line
           buildLineData(Colors.black, [700, 900, 1000, 1300, 1100, 600, 500, 400, 800, 1200, 1500, 1700]), // Black line
         ],

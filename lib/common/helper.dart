@@ -172,7 +172,8 @@ class AppText{
 
 class AppColor{
   static const Color primaryColor=Color(0xff32438e);
-  static const Color secondaryColor=Color(0xffFFCC29);
+  // static const Color secondaryColor=Color(0xffFFCC29);
+  static const Color secondaryColor=Color(0xffFF8900);
   static const Color lightGrey=Colors.grey;
   static const Color platinumGrey=Color(0xfffefefe);
   static const Color appBlue=Color(0xfff9ffff);
@@ -190,7 +191,8 @@ class AppColor{
   static const Color grey1=Color(0xFF8A7B7B);
   static const Color grey2=Color(0xFF5E5F60);
   static const Color grey3=Color(0xFFEBEBEB);
-  static const Color orangeColor=Color(0xFFFFB057);
+  // static const Color orangeColor=Color(0xFFFFB057);
+  static const Color orangeColor=Color(0xFFFF8900);
 /*  static const Color primaryLight=Color(0xFF384F9F);
   static const Color primaryDark=Color(0xFF323F6E);*/
   static const Color primaryLight=Color(0xFF3850A5);
@@ -237,7 +239,7 @@ class AppImage{
   static const String personIcon="assets/images/personIcon.png";
   static const String personYellow="assets/images/personYellow.png";
   static const String settingIcon="assets/images/settingIcon.png";
-  static const String settingYellow="assets/images/settingyellow.png";
+  static const String settingYellow="assets/images/settingYellow.png";
   static const String peopleGroup="assets/images/peopleGroup.png";
   static const String moreIcon="assets/images/moreIcon.png";
   static const String homeYellow="assets/images/homeYellow.png";

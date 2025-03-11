@@ -119,7 +119,9 @@ class ApiService {
 
      // print("Response Status Code: ${response.statusCode}");
      // print("Response Body: ${response.body}");
-
+      print("request===> loginApi==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>${response.body.toString()}");
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

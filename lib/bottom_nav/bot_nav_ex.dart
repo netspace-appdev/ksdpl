@@ -130,7 +130,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color(0xFFFBC02D), // Yellow color
+          backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {},
           shape: const CircleBorder(),
           // child: const Icon(Icons.add, size: 30, color: Colors.white),
@@ -159,7 +159,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
             label,
             style: TextStyle(
               fontSize: 12,
-              color: isSelected ? const Color(0xFFFBC02D) : Colors.white,
+              color: isSelected ? AppColor.secondaryColor : Colors.white,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),

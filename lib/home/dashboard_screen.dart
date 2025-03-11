@@ -203,13 +203,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               Image.asset(
                 AppImage.searchIcon, // Replace with your image path
-                height: 55,
+                height: 17,
+              ),
+              SizedBox(
+                width: 10,
               ),
 
 
               Image.asset(
                 AppImage.bellIcon, // Replace with your image path
-                height: 55,
+                height: 22,
               ),
             ],
           )
@@ -528,7 +531,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Legend1(color:AppColor.pinkColor, text: "Total Units: 24"),
+            Legend1(color:AppColor.secondaryColor, text: "Total Units: 24"),
             Legend1(color: AppColor.tealColor, text: "Total Departments: 12"),
           ],
         ),
