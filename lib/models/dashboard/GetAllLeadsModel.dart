@@ -49,7 +49,7 @@ class Data {
   Null? interestedDate;
   Null? doableDate;
   Null? campaign;
-  Null? uniqueLeadNumber;
+  String? uniqueLeadNumber;
 
   Data(
       {this.id,
@@ -118,3 +118,4 @@ class Data {
     return data;
   }
 }
+

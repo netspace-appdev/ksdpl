@@ -45,7 +45,7 @@ class LoginController extends GetxController {
     } catch (e) {
       print("Error here: $e");
      // Get.snackbar('Error', 'Failed to fetch data');
-      ToastMessage.msg(loginModel!.message!);
+      ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
 

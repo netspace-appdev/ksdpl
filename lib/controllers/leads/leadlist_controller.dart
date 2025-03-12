@@ -13,8 +13,12 @@ import '../../services/drawer_api_service.dart';
 class LeadListController extends GetxController {
 
   var isLoading = false.obs;
-  GetAllLeadsModel? getAllLeadsModel;
+  // GetAllLeadsModel? getAllLeadsModel;
+  var getAllLeadsModel = Rxn<GetAllLeadsModel>(); // ✅ Making it observable
   UpdateLeadStageModel? updateLeadStageModel;
+
+  var interestLeadsCheck = false.obs; // Observable variable
+
 
   @override
   void onInit() {
@@ -27,6 +31,11 @@ class LeadListController extends GetxController {
     );
 
   }
+
+  void toggleCheckbox() {
+    interestLeadsCheck.value = !interestLeadsCheck.value; // Toggle checkbox state
+  }
+
 
   void  getAllLeadsApi({
     required String employeeId,
@@ -45,9 +54,11 @@ class LeadListController extends GetxController {
 
       if(data['success'] == true){
 
-        getAllLeadsModel= GetAllLeadsModel.fromJson(data);
+        getAllLeadsModel.value= GetAllLeadsModel.fromJson(data);
 
-        ToastMessage.msg(getAllLeadsModel!.message!);
+        ToastMessage.msg(getAllLeadsModel!.value!.message!);
+
+
 
         isLoading(false);
 
@@ -113,6 +124,7 @@ class LeadListController extends GetxController {
           leadStage: "2",
           employeeId:eId.toString()
       );
+
       isLoading(false);
     }
   }

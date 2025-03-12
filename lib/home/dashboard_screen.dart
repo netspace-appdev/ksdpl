@@ -109,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   alignment: Alignment.topCenter,  // Centers it
                   child: Container(
                     margin:  EdgeInsets.only(
-                        top:  MediaQuery.of(context).size.height * 0.35
+                        top: 250  // MediaQuery.of(context).size.height * 0.35
                     ), // <-- Moves it 30px from top
                     width: double.infinity,
                     //height: MediaQuery.of(context).size.height,
@@ -201,13 +201,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             mainAxisSize: MainAxisSize.min,
 
             children: [
-              Image.asset(
+         /*     Image.asset(
                 AppImage.searchIcon, // Replace with your image path
                 height: 17,
               ),
               SizedBox(
                 width: 10,
-              ),
+              ),*/
 
 
               Image.asset(

@@ -250,11 +250,12 @@ class AppImage{
   static const String forwardIcon="assets/images/forwardIcon.png";
   static const String noti_icon="assets/images/noti_icon.png";
   static const String searchIcon2="assets/images/searchIcon2.png";
-  static const String filterIcon="assets/images/filerIcon.png";
+  static const String filterIcon="assets/images/filterIcon.png";
   static const String call1="assets/images/call1.png";
   static const String chat1="assets/images/chat1.png";
   static const String message1="assets/images/message1.png";
   static const String whatsapp="assets/images/whatsapp.png";
+  static const String arrowLeft="assets/images/arrowLeft.png";
 
 }
 
