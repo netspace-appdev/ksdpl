@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 
@@ -15,9 +15,9 @@ import '../home/edit_profile.dart';
 import '../home/lead_details.dart';
 import '../home/leads/lead_list_main.dart';
 import '../home/manage_branch.dart';
+import '../home/notification_screen.dart';
 import '../home/product.dart';
 import '../home/splash.dart';
-import '../registration/intro1_screen.dart';
 import '../registration/login.dart';
 import '../registration/registration.dart';
 
@@ -38,4 +38,6 @@ final routes = [
   GetPage(name: '/leadListScreen', page: () => LeadListScreen()),
   GetPage(name: '/leadDetails', page: () => LeadDetailsScreen()),
   GetPage(name: '/leadListMain', page: () => LeadListMain()),
+  GetPage(name: '/leadListMain', page: () => LeadListMain()),
+  GetPage(name: '/notificationScreen', page: () =>NotificationScreen()),
 ];

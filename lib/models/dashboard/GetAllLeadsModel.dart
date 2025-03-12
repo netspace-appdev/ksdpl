@@ -44,11 +44,11 @@ class Data {
   bool? active;
   String? uploadedBy;
   String? uploadedDate;
-  Null? interested;
-  Null? doable;
-  Null? interestedDate;
-  Null? doableDate;
-  Null? campaign;
+  int? interested;
+  int? doable;
+  String? interestedDate;
+  String? doableDate;
+  String? campaign;
   String? uniqueLeadNumber;
 
   Data(
@@ -118,4 +118,3 @@ class Data {
     return data;
   }
 }
-

@@ -17,6 +17,7 @@ class DrawerApiService {
   static const String addCompanyProfile = baseUrl + 'CompanyProfile/AddCompanyProfile';
   static const String getAllLeads = baseUrl + 'LeadDetail/GetAllLeads';
   static const String updateLeadStage = baseUrl + 'LeadDetail/UpdateLeadStage';
+  static const String getLeadDetailById = baseUrl + 'LeadDetail/GetLeadDetailById';
 
   static Future<Map<String, dynamic>> getBankerByIdApi({
     required String bankerId,
@@ -314,7 +315,7 @@ class DrawerApiService {
     required leadStage,
     required employeeId,
 }) async {
-    print("request===> getAllLeadsApi==>");
+
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -324,14 +325,13 @@ class DrawerApiService {
       // Headers
 
       var header=await MyHeader.getHeaders2();
-      print("request===> getAllLeadsApi==>${header.toString()}");
+
       request.headers.addAll(header);
       request.fields['LeadStage'] = leadStage.toString();
       request.fields['employeeId'] =employeeId.toString();
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-
       print("request===> getAllLeadsApi==>${request.fields.toString()}");
       print("response.statusCode===>${response.statusCode}");
       print("response==>${response.body.toString()}");
@@ -400,4 +400,47 @@ class DrawerApiService {
       throw Exception('Error: $e');
     }
   }
+
+
+  static Future<Map<String, dynamic>> getLeadDetailByIdApi({
+    required leadId,
+  }) async {
+    print("request===> getLeadDetailById==>");
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllLeads),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+      print("request===> getLeadDetailById==>${header.toString()}");
+      request.headers.addAll(header);
+      request.fields['LeadId'] = leadId.toString();
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("request===> getLeadDetailById==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>${response.body.toString()}");
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
 }

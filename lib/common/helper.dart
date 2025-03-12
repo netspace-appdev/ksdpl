@@ -166,6 +166,7 @@ class AppText{
   static const String leadList="Lead List";
   static const String myProfile="My Profile";
   static const String logout="Logout";
+  static const String notification="Notification";
 
 
 }
@@ -205,6 +206,7 @@ class AppColor{
   static const Color tealColor= Colors.teal;
   static const Color bgMore=Color(0xFFFFF6DC);
   static const Color grey700=Color(0xFF616161);
+  static const Color lightYellow2=Color(0xFFF5F5F5);
 
 
 

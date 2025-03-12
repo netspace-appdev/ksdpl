@@ -34,7 +34,7 @@ class LeadListMain extends StatelessWidget {
                 children: [
                   // Gradient Background
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.7,
+                    height: MediaQuery.of(context).size.height * 0.5,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         colors: [AppColor.primaryLight, AppColor.primaryDark],
@@ -50,7 +50,7 @@ class LeadListMain extends StatelessWidget {
                           height: 20,
                         ),
 
-                        header(),
+                        header(context),
 
                        /* SizedBox(
                           height: 20,
@@ -91,13 +91,13 @@ class LeadListMain extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Fresh Leads",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                             Obx(()=> Text(
+                               leadListController.leadStageName2.value.toString(),
+                               style: TextStyle(
+                                 fontSize: 20,
+                                 fontWeight: FontWeight.bold,
+                               ),
+                             )),
                               Row(
 
                                 children: [
@@ -137,14 +137,18 @@ class LeadListMain extends StatelessWidget {
       ),
     );
   }
-  Widget header(){
+  Widget header(context){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
 
-          Image.asset(AppImage.arrowLeft,height: 24,),
+          InkWell(
+            onTap: (){
+              Get.back();
+            },
+              child: Image.asset(AppImage.arrowLeft,height: 24,)),
           Text(
             "Leads",
             style: TextStyle(
@@ -155,20 +159,27 @@ class LeadListMain extends StatelessWidget {
 
             ),
           ),
-         /* Container(
 
-            width: 40,
-            height:40,
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            decoration:  BoxDecoration(
-              color: AppColor.appWhite.withOpacity(0.15),
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
+          InkWell(
+            onTap: (){
+              showFilterDialog(context: context);
+            },
+            child: Container(
+
+              width: 40,
+              height:40,
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              decoration:  BoxDecoration(
+                color: AppColor.appWhite.withOpacity(0.15),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
               ),
+              child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
             ),
-            child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
-          )*/
-          MenuAnchor(
+          )
+
+    /*      MenuAnchor(
             //childFocusNode: _buttonFocusNode,
             menuChildren: <Widget>[
 
@@ -184,8 +195,31 @@ class LeadListMain extends StatelessWidget {
                       height: 40,
                       child: CheckboxListTile(
                         title: Text("Accept Terms & Conditions"),
+                        value: leadListController.assignedLeadsCheck.value,
+                        onChanged: (value) => leadListController.toggleCheckboxAssigned(),
+                      ),
+                    )),
+                    const SizedBox(width: 15,),
+                    const Text("Assigned Leads", style: TextStyle(color: AppColor.black87),),
+
+                  ],
+                ),
+              ),
+
+              MenuItemButton(
+                onPressed:null,
+
+                child: Row(
+
+                  children: [
+                    Obx(() => Container(
+
+                      width: 40,
+                      height: 40,
+                      child: CheckboxListTile(
+                        title: Text("Accept Terms & Conditions"),
                         value: leadListController.interestLeadsCheck.value,
-                        onChanged: (value) => leadListController.toggleCheckbox(),
+                        onChanged: (value) => leadListController.toggleCheckboxInterested(),
                       ),
                     )),
                     const SizedBox(width: 15,),
@@ -194,6 +228,8 @@ class LeadListMain extends StatelessWidget {
                   ],
                 ),
               ),
+
+
             ],
             builder: (BuildContext context, MenuController controller, Widget? child) {
               return TextButton(
@@ -220,7 +256,7 @@ class LeadListMain extends StatelessWidget {
                 ),
               );
             },
-          )
+          )*/
 
         ],
       ),
@@ -713,6 +749,110 @@ class LeadListMain extends StatelessWidget {
       },
     );
   }
+
+
+  void showFilterDialog({
+    required BuildContext context,
+  }) {
+    List<String> options = ["Assigned Leads", "Interested Leads", "Not Interested Leads"];
+    String? selectedOption = options[0]; // Default selection
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                width: double.infinity, // Makes it full width
+                padding: EdgeInsets.zero,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 🔵 Title in Blue Strip
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color:AppColor.primaryColor, // Title background color
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                        gradient: LinearGradient(
+                          colors: [AppColor.primaryLight, AppColor.primaryDark],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                      child: Text(
+                        "Filter",
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white, // Title text color
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+
+                    // 📝 Content (Radio Buttons)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      child:  Obx(()=>Column(
+                        children: options.asMap().entries.map((entry) {
+                          int index = entry.key;
+                          String option = entry.value;
+
+                          return CheckboxListTile(
+
+                            title: Text(option),
+                            value: leadListController.selectedIndex.value == index,
+                            onChanged: (value) => leadListController.selectCheckbox(index),
+                          );
+                        }).toList(),
+                      )),
+                    ),
+
+                    // 🟠 Buttons (Close & Submit)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              Navigator.pop(context); // Close dialog
+                            },
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColor.grey1,
+                              side: BorderSide(color: AppColor.grey2),
+                            ),
+                            child: Text("Close", style: TextStyle(color: AppColor.grey2)),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              leadListController.filterSubmit();
+                              Navigator.pop(context); // Close dialog after submission
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColor.orangeColor,
+                            ),
+                            child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
 
 }
 

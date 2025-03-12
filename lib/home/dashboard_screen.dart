@@ -210,9 +210,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),*/
 
 
-              Image.asset(
-                AppImage.bellIcon, // Replace with your image path
-                height: 22,
+              InkWell(
+                onTap:(){
+                  Get.toNamed("/notificationScreen");
+                },
+                child: Image.asset(
+                  AppImage.bellIcon, // Replace with your image path
+                  height: 22,
+                ),
               ),
             ],
           )
