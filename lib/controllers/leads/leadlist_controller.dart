@@ -6,11 +6,12 @@ import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
+import '../../models/dashboard/LeadMoveToCommonTaskModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/drawer/UpdateLeadStageModel.dart';
 import '../../services/dashboard_api_service.dart';
 import '../../services/drawer_api_service.dart';
-
+import 'package:flutter/material.dart';
 
 class LeadListController extends GetxController {
 
@@ -19,19 +20,21 @@ class LeadListController extends GetxController {
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
   UpdateLeadStageModel? updateLeadStageModel;
-
+  LeadMoveToCommonTaskModel? leadMoveToCommonTaskModel;
   var interestLeadsCheck = false.obs; // Observable variable
   var assignedLeadsCheck = true.obs; // Observable variable
   var leadCode="2".obs;
-  var leadStageName="Assigned Leads".obs;
-  var leadStageName2="Assigned Leads".obs;
+  var leadStageName="Fresh Leads".obs;
+  var leadStageName2="Fresh Leads".obs;
 
   var selectedIndex = (0).obs;
+  var eId="".obs;
+  final TextEditingController openPollPercentController = TextEditingController();
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    var eId=StorageService.get(StorageService.EMPLOYEE_ID);
+    eId.value=StorageService.get(StorageService.EMPLOYEE_ID).toString();
     getAllLeadsApi(
       leadStage: leadCode.value,
       employeeId:eId.toString()
@@ -39,46 +42,15 @@ class LeadListController extends GetxController {
 
   }
 
-  void toggleCheckboxInterested() {
-    interestLeadsCheck.value = !interestLeadsCheck.value; // Toggle checkbox state
-    assignedLeadsCheck.value = !assignedLeadsCheck.value;
-    if(interestLeadsCheck.value){
-      leadCode.value="4";
-      leadStageName.value="Interested Leads";
-      var eId=StorageService.get(StorageService.EMPLOYEE_ID);
-      getAllLeadsApi(
-          leadStage: leadCode.value,
-          employeeId:eId.toString()
-      );
-    }
-  }
 
-  void toggleCheckboxAssigned() {
-    assignedLeadsCheck.value = !assignedLeadsCheck.value; // Toggle checkbox state
-    interestLeadsCheck.value = !interestLeadsCheck.value;
-    if(assignedLeadsCheck.value){
-      leadCode.value="2";
-      leadStageName.value="Assigned Leads";
-      var eId=StorageService.get(StorageService.EMPLOYEE_ID);
-      getAllLeadsApi(
-          leadStage: leadCode.value,
-          employeeId:eId.toString()
-      );
-    }
-  }
 
 
   void selectCheckbox(int index) {
-    var eId=StorageService.get(StorageService.EMPLOYEE_ID);
-    /*if (selectedIndex.value == index) {
-      selectedIndex.value = -1; // Unselect if clicked again
-    } else {
-      selectedIndex.value = index; // Select new checkbox
-    }*/
+
     selectedIndex.value = index;
     if( selectedIndex.value==0){
       leadCode.value="2";
-      leadStageName.value="Assigned Leads";
+      leadStageName.value="Fresh Leads";
 
     }else if(selectedIndex.value==1){
       leadCode.value="4";
@@ -86,6 +58,14 @@ class LeadListController extends GetxController {
     }else if(selectedIndex.value==2){
       leadCode.value="5";
       leadStageName.value="Not Interested Leads";
+    }
+    else if(selectedIndex.value==3){
+      leadCode.value="6";
+      leadStageName.value="Doable Leads";
+    }
+    else if(selectedIndex.value==4){
+      leadCode.value="7";
+      leadStageName.value="Not Doable Leads";
     }
   }
 
@@ -183,17 +163,17 @@ class LeadListController extends GetxController {
       print("run hua");
 
 
-      var eId=StorageService.get(StorageService.EMPLOYEE_ID);
+
       getAllLeadsApi(
           leadStage: leadCode.value,
-          employeeId:eId.toString()
+          employeeId:eId.value.toString()
       );
 
       isLoading(false);
     }
   }
 
-//change it
+
   void  getLeadDetailByIdApi({
     required String leadId,
   }) async {
@@ -233,4 +213,54 @@ class LeadListController extends GetxController {
   }
 
 
+
+  void  leadMoveToCommonTaskApi({
+    required leadId,
+    required percentage,
+
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await DrawerApiService.leadMoveToCommonTaskApi(
+        leadId:leadId,
+        percentage: percentage,
+
+      );
+
+
+      if(data['success'] == true){
+
+        ///Change model
+
+        leadMoveToCommonTaskModel= LeadMoveToCommonTaskModel.fromJson(data);
+
+        ToastMessage.msg(leadMoveToCommonTaskModel!.message!);
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error leadMoveToCommonTaskModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+      print("run hua");
+
+
+
+      getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString()
+      );
+
+      isLoading(false);
+    }
+  }
 }

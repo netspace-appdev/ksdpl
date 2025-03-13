@@ -167,6 +167,7 @@ class AppText{
   static const String myProfile="My Profile";
   static const String logout="Logout";
   static const String notification="Notification";
+  static const String percentageRequired="Percentage is required";
 
 
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "702239386555",
+    "project_id": "ksdpl-app",
+    "storage_bucket": "ksdpl-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702239386555:android:0f4c91e05ea907740e729e",
+        "android_client_info": {
+          "package_name": "com.ns.ksdpl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhwtDDuhHNQ7yvqcArpPj-X8B0vUdV8Nc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -64,6 +65,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   InfoController infoController = Get.put(InfoController());
   double maxGraphValue = 1000;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("New notification: ${message.notification?.title}");
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("User tapped on notification: ${message.notification?.title}");
+    });
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(

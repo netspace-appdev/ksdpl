@@ -18,6 +18,7 @@ class DrawerApiService {
   static const String getAllLeads = baseUrl + 'LeadDetail/GetAllLeads';
   static const String updateLeadStage = baseUrl + 'LeadDetail/UpdateLeadStage';
   static const String getLeadDetailById = baseUrl + 'LeadDetail/GetLeadDetailById';
+  static const String leadMoveToCommonTask = baseUrl + 'LeadDetail/LeadMoveToCommonTask';
 
   static Future<Map<String, dynamic>> getBankerByIdApi({
     required String bankerId,
@@ -442,5 +443,52 @@ class DrawerApiService {
       throw Exception('Error: $e');
     }
   }
+
+
+  static Future<Map<String, dynamic>> leadMoveToCommonTaskApi({
+    required leadId,
+    required percentage,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(leadMoveToCommonTask),
+      );
+      print("uri===> leadMoveToCommonTask==>${leadMoveToCommonTask.toString()}");
+      // Headers
+      request.headers.addAll({
+        'accept': 'text/plain',
+      });
+      var header=await MyHeader.getHeaders2();
+      print("uri===> leadMoveToCommonTask==>${header}");
+      request.headers.addAll(header);
+      request.fields['LeadId'] = leadId;
+      request.fields['Percentage'] = percentage;
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("request===> leadMoveToCommonTask==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>${response.body.toString()}");
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
 
 }
