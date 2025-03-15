@@ -10,14 +10,19 @@ import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/leads/infoController.dart';
+import '../../controllers/leads/leadDetailsController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 
-class LeadListMain extends StatelessWidget {
-  GreetingController greetingController = Get.find();
-  InfoController infoController = Get.find();
+class LeadDetailsMain extends StatelessWidget {
+/*  GreetingController greetingController = Get.find();
+  InfoController infoController = Get.find();*/
+  GreetingController greetingController = Get.put(GreetingController());
+  InfoController infoController = Get.put(InfoController());
+
   LeadListController leadListController = Get.put(LeadListController());
+  LeadDetailController leadDetailController = Get.put(LeadDetailController());
   final TextEditingController _searchController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -29,7 +34,7 @@ class LeadListMain extends StatelessWidget {
 
         backgroundColor: AppColor.backgroundColor,
 
-          body: SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Column(
             children: [
               Stack(
@@ -54,7 +59,7 @@ class LeadListMain extends StatelessWidget {
 
                         header(context),
 
-                       /* SizedBox(
+                        /* SizedBox(
                           height: 20,
                         ),
 
@@ -90,39 +95,7 @@ class LeadListMain extends StatelessWidget {
                             height: 10,
                           ),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                             Obx(()=> Text(
-                               leadListController.leadStageName2.value.toString(),
-                               style: TextStyle(
-                                 fontSize: 20,
-                                 fontWeight: FontWeight.bold,
-                               ),
-                             )),
-                              Row(
 
-                                children: [
-                                  Icon(Icons.add,color: AppColor.orangeColor,size: 16,),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "Add Lead",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.orangeColor
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-
-                          SizedBox(
-                            height: 20,
-                          ),
 
                           leadSection(context)
 
@@ -147,16 +120,16 @@ class LeadListMain extends StatelessWidget {
         children: [
 
           InkWell(
-            onTap: (){
-              Get.back();
-            },
+              onTap: (){
+                Get.back();
+              },
               child: Image.asset(AppImage.arrowLeft,height: 24,)),
           Text(
-            "Leads",
+            AppText.leadDetails,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
-              fontWeight: FontWeight.w700
+                fontWeight: FontWeight.w700
 
 
             ),
@@ -172,93 +145,16 @@ class LeadListMain extends StatelessWidget {
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration:  BoxDecoration(
-                color: AppColor.appWhite.withOpacity(0.15),
+                color: Colors.transparent,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
-              child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
+
             ),
           )
 
-    /*      MenuAnchor(
-            //childFocusNode: _buttonFocusNode,
-            menuChildren: <Widget>[
 
-              MenuItemButton(
-                onPressed:null,
-
-                child: Row(
-
-                  children: [
-                    Obx(() => Container(
-
-                      width: 40,
-                      height: 40,
-                      child: CheckboxListTile(
-                        title: Text("Accept Terms & Conditions"),
-                        value: leadListController.assignedLeadsCheck.value,
-                        onChanged: (value) => leadListController.toggleCheckboxAssigned(),
-                      ),
-                    )),
-                    const SizedBox(width: 15,),
-                    const Text("Assigned Leads", style: TextStyle(color: AppColor.black87),),
-
-                  ],
-                ),
-              ),
-
-              MenuItemButton(
-                onPressed:null,
-
-                child: Row(
-
-                  children: [
-                    Obx(() => Container(
-
-                      width: 40,
-                      height: 40,
-                      child: CheckboxListTile(
-                        title: Text("Accept Terms & Conditions"),
-                        value: leadListController.interestLeadsCheck.value,
-                        onChanged: (value) => leadListController.toggleCheckboxInterested(),
-                      ),
-                    )),
-                    const SizedBox(width: 15,),
-                    const Text("Interested Leads", style: TextStyle(color: AppColor.black87),),
-
-                  ],
-                ),
-              ),
-
-
-            ],
-            builder: (BuildContext context, MenuController controller, Widget? child) {
-              return TextButton(
-               // focusNode: _buttonFocusNode,
-                onPressed: () {
-                  if (controller.isOpen) {
-                    controller.close();
-                  } else {
-                    controller.open();
-                  }
-                },
-                child: Container(
-
-                  width: 40,
-                  height:40,
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  decoration:  BoxDecoration(
-                    color: AppColor.appWhite.withOpacity(0.15),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
-                ),
-              );
-            },
-          )*/
 
         ],
       ),
@@ -294,11 +190,11 @@ class LeadListMain extends StatelessWidget {
 
   Widget leadSection(BuildContext context){
     return Obx((){
-      if (leadListController.isLoading.value) {
+      if (leadDetailController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-      if (leadListController.getAllLeadsModel.value == null ||
-          leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty) {
+      if (leadDetailController.getLeadDetailModel.value == null ||
+          leadDetailController.getLeadDetailModel.value!.data == null || leadDetailController.getLeadDetailModel.value!.data=="") {
         return  Container(
           height: MediaQuery.of(context).size.height*0.50,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -332,165 +228,137 @@ class LeadListMain extends StatelessWidget {
         );
       }
 
-      return  ListView.builder(
-        itemCount: leadListController.getAllLeadsModel.value!.data!.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          final lead = leadListController.getAllLeadsModel.value!.data![index];
-
-
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            decoration:  BoxDecoration(
-              border: Border.all(color: AppColor.grey200),
-              color: AppColor.appWhite,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-
+      return  Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Lead Details Card
+          Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: Column(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Lead Details",
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
 
-              children: [
-                /// Header with profile and menu icon
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  SizedBox(height: 10),
+
+                  // Status Tags
+                  Row(
                     children: [
-                      Row(
+                      Text("Status: ",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,color:AppColor.primaryColor)),
+                      Wrap(
+                        spacing: 8,
                         children: [
-                          Container(
-                            height: 40,
-                            width: 40,
-
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColor.primaryColor,
-                              border: Border.all(color: AppColor.secondaryColor),
-                            ),
-                            child: Center(
-                              child: Text(
-                                lead.name!.isNotEmpty ?  lead.name![0].toUpperCase() : "U", // Initial Letter
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                lead.name.toString(),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 10,
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                    decoration:  BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(color: AppColor.grey200),
-                                      color: AppColor.grey1,
-                                    ),
-                                  ),
-                                  Text(
-                                    lead.mobileNumber.toString(),
-                                    style: TextStyle(
-                                      color: AppColor.grey700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                          StatusChip(label: "Fresh", color: Colors.orange),
+                          StatusChip(label: "Interested", color: Colors.green),
+                          // StatusChip(label: "Salaried", color: Colors.blue),
                         ],
                       ),
-                      Icon(Icons.more_vert, color: AppColor.grey1,), // Three dots menu icon
                     ],
                   ),
-                ),
-                SizedBox(height: 10),
 
-                /// Lead details
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: [
-                      _buildDetailRow("Email", lead.email.toString()),
-                      _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
-                      _buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
-                      // _buildDetailRow("Uploaded by", lead.uploadedBy.toString()),
-                      // _buildDetailRow("City", "Sagwada"),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
+                  SizedBox(height: 10),
 
-                /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                  child: Row(
+                  DetailRow(label: "Date", value: leadDetailController.getLeadDetailModel.value!.data!.assignedEmployeeDate.toString()),
+                  DetailRow(label: "Full Name", value: leadDetailController.getLeadDetailModel.value!.data!.name.toString()),
+                  DetailRow(label: "Gender", value:  leadDetailController.getLeadDetailModel.value!.data!.gender.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.gender.toString()),
+                  DetailRow(label: "Email Address", value: leadDetailController.getLeadDetailModel.value!.data!.email.toString()),
+                  DetailRow(label: "Phone", value: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString()),
+                  DetailRow(label: "Adhar Card", value: leadDetailController.getLeadDetailModel.value!.data!.adharCard.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.adharCard.toString()),
+                  DetailRow(label: "Pan No", value: leadDetailController.getLeadDetailModel.value!.data!.panCard.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.panCard.toString()),
+                  DetailRow(label: "District", value: leadDetailController.getLeadDetailModel.value!.data!.district.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.district.toString()),
+                  DetailRow(label: "City", value: leadDetailController.getLeadDetailModel.value!.data!.city.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.city.toString()),
+                  DetailRow(label: "Monthly Income", value: leadDetailController.getLeadDetailModel.value!.data!.monthlyIncome.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.monthlyIncome.toString()),
+                  DetailRow(label: "Loan Amount", value: leadDetailController.getLeadDetailModel.value!.data!.loanAmountRequested.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.loanAmountRequested.toString()),
+                ],
+              ),
+            ),
+          ),
+
+          SizedBox(height: 16),
+
+          // Phone Number Card
+          Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Phone Number",
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Text(leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold,color: AppColor.black54)),
+                      SizedBox(height: 10),
 
-                      _buildIconButton(AppImage.call1, AppColor.orangeColor),
-                      _buildIconButton(AppImage.chat1, Colors.orange),
-                      _buildIconButton(AppImage.message1, Colors.green),
-                      _buildIconButton(AppImage.whatsapp, Colors.green),
-                      InkWell(
-                        onTap: () {
-                          showLeadStatusDialog(
-                              context: context,
-                              leadId: lead.id
-                          );
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
-                          decoration: BoxDecoration(
-                            color: AppColor.orangeColor, // Button background color
-                            borderRadius: BorderRadius.circular(2), // Rounded corners
-                          ),
-                          child: Text(
-                            "Status",
-                            style: TextStyle(color: AppColor.appWhite),
-                          ),
-                        ),
+                      // Icon Buttons
+                      Row(
+
+                        children: [
+                          IconButtonWidget(
+                            icon: Icons.share, color: Colors.orange,),
+                          IconButtonWidget(
+                              icon: Icons.phone, color: Colors.green),
+                          IconButtonWidget(
+                              icon: Icons.message, color: Colors.blue),
+                        ],
                       )
-
                     ],
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                /// Bottom Row Buttons (Assigned, Follow Up, Call Back, Employment)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildTextButton("Follow Up", context, Colors.purple, Icons.feedback, lead.id.toString()),
-                    leadListController.leadCode=="4"?
-                    _buildTextButton("Open Poll",context, Colors.green, Icons.lock_open,lead.id.toString()):
-                    Container(),
-                    _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,lead.id.toString()),
-                  ],
-                ),
-              ],
+                  )
+                ],
+              ),
             ),
-          );
+          ),
 
-        },
+          SizedBox(height: 16),
+
+          // Lead Details Description
+          Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Lead Details",
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10),
+                  Text(
+                    "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry.Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry.",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       );
     });
+
   }
 
   Widget _buildDetailRow(String label, String value) {
- //   String assigned = value.toString();
+    //   String assigned = value.toString();
 //    List<String> assignedParts = assigned.split('T');
 
     return Padding(
@@ -511,7 +379,7 @@ class LeadListMain extends StatelessWidget {
           SizedBox(width: 10),
           Expanded(
             child: Text(
-               ": ${value}",
+              ": ${value}",
 
               style: TextStyle(color: Colors.black87),
             ),
@@ -591,17 +459,13 @@ class LeadListMain extends StatelessWidget {
       onTap: () {
         if (label == "Open Poll") {
           showOpenPollDialog(context: context,leadId: leadId);
-        }else if (label == "Details") {
-         Get.toNamed("/leadDetailsMain", arguments: {"leadId":leadId.toString()});
-        }else{
-
         }
       },
       child: Column(
         children: [
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-         /*   width: 40,
+            /*   width: 40,
             height: 40,*/
             decoration: BoxDecoration(
               color: color,
@@ -985,7 +849,7 @@ class LeadListMain extends StatelessWidget {
                                   Navigator.pop(context);
                                 }
 
-                               // Close dialog after submission
+                                // Close dialog after submission
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColor.orangeColor,
@@ -1009,8 +873,82 @@ class LeadListMain extends StatelessWidget {
   String? validatePercentage(String? value) {
     if (value == null || value.isEmpty) {
       return AppText.percentageRequired;
-    } 
+    }
     return null;
   }
 }
 
+
+//details
+
+// Helper Widget for Status Chips
+class StatusChip extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  StatusChip({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(label, style: TextStyle(color: color)),
+    );
+  }
+}
+
+// Helper Widget for Detail Rows
+class DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  DetailRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Container(
+
+            width: 120,
+            child: Text("$label",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor)),
+          ),
+          Expanded(
+              child: Text(": "+value, style: TextStyle(fontSize: 14), maxLines: 1)),
+        ],
+      ),
+    );
+  }
+}
+
+// Helper Widget for Icon Buttons
+class IconButtonWidget extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+
+  IconButtonWidget({required this.icon, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 10),
+      child: Container(
+        height: 27,
+        width: 27,
+       // color: color.withOpacity(0.2),
+        decoration: BoxDecoration(
+
+        ),
+        child: Center(child: Icon(icon, color: color,size: 16,)),
+      ),
+    );
+  }
+}

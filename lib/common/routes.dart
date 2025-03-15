@@ -13,6 +13,7 @@ import '../home/LeadListScreen.dart';
 import '../home/change_password.dart';
 import '../home/edit_profile.dart';
 import '../home/lead_details.dart';
+import '../home/leads/LeadDetailsMain.dart';
 import '../home/leads/lead_list_main.dart';
 import '../home/manage_branch.dart';
 import '../home/notification_screen.dart';
@@ -40,4 +41,5 @@ final routes = [
   GetPage(name: '/leadListMain', page: () => LeadListMain()),
   GetPage(name: '/leadListMain', page: () => LeadListMain()),
   GetPage(name: '/notificationScreen', page: () =>NotificationScreen()),
+  GetPage(name: '/leadDetailsMain', page: () =>LeadDetailsMain()),
 ];

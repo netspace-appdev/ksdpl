@@ -168,6 +168,7 @@ class AppText{
   static const String logout="Logout";
   static const String notification="Notification";
   static const String percentageRequired="Percentage is required";
+  static const String leadDetails="Lead Details";
 
 
 }

@@ -329,7 +329,10 @@ class DrawerApiService {
 
       request.headers.addAll(header);
       request.fields['LeadStage'] = leadStage.toString();
-      request.fields['employeeId'] =employeeId.toString();
+      request.fields['AssignedEmployeeId'] =employeeId.toString();
+      request.fields['StateId'] ="0";
+      request.fields['DistrictId'] ="0";
+      request.fields['CityId'] ="0";
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
@@ -410,7 +413,7 @@ class DrawerApiService {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(getAllLeads),
+        Uri.parse(getLeadDetailById),
       );
 
       // Headers

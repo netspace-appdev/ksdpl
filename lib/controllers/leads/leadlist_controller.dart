@@ -174,46 +174,6 @@ class LeadListController extends GetxController {
   }
 
 
-  void  getLeadDetailByIdApi({
-    required String leadId,
-  }) async {
-    try {
-      isLoading(true);
-
-
-      var data = await DrawerApiService.getLeadDetailByIdApi(
-        leadId:leadId,
-      );
-
-
-      if(data['success'] == true){
-
-        getLeadDetailModel.value= GetLeadDetailModel.fromJson(data);
-
-        ToastMessage.msg(getLeadDetailModel!.value!.message!);
-
-
-
-        isLoading(false);
-
-      }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-
-
-    } catch (e) {
-      print("Error getAllLeadsApi: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
-    } finally {
-
-      isLoading(false);
-    }
-  }
-
-
-
   void  leadMoveToCommonTaskApi({
     required leadId,
     required percentage,

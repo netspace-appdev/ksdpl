@@ -38,11 +38,11 @@ class Data {
   bool? active;
   String? uploadedBy;
   String? uploadedDate;
-  int? interested;
-  Null? doable;
+  String? interested;
+  String? doable;
   String? interestedDate;
-  Null? doableDate;
-  Null? campaign;
+  String? doableDate;
+  String? campaign;
   String? uniqueLeadNumber;
   String? dateOfBirth;
   String? gender;
@@ -55,22 +55,22 @@ class Data {
   int? city;
   String? nationality;
   String? currentEmploymentStatus;
-  String? employeeName;
+  String? employerName;
   String? monthlyIncome;
   String? additionalSourceOfIncome;
   String? prefferedBank;
-  Null? existinRelaationshipWithBank;
+  String? existinRelaationshipWithBank;
   String? branch;
-  Null? productType;
-  Null? loanApplicationNo;
-  int? pickedUpEmployeeId;
-  Null? connectorName;
-  Null? connectorMobileNo;
-  Null? connectorPercentage;
-  Null? existingLoans;
-  Null? noOfExistingLoans;
-  Null? moveToCommon;
-  Null? assignedEmployeePercentage;
+  String? productType;
+  String? loanApplicationNo;
+  String? pickedUpEmployeeId;
+  String? connectorName;
+  String? connectorMobileNo;
+  String? connectorPercentage;
+  String? existingLoans;
+  String? noOfExistingLoans;
+  String? moveToCommon;
+  String? assignedEmployeePercentage;
 
   Data(
       {this.id,
@@ -102,7 +102,7 @@ class Data {
         this.city,
         this.nationality,
         this.currentEmploymentStatus,
-        this.employeeName,
+        this.employerName,
         this.monthlyIncome,
         this.additionalSourceOfIncome,
         this.prefferedBank,
@@ -149,7 +149,7 @@ class Data {
     city = json['city'];
     nationality = json['nationality'];
     currentEmploymentStatus = json['currentEmploymentStatus'];
-    employeeName = json['employeeName'];
+    employerName = json['employerName'];
     monthlyIncome = json['monthlyIncome'];
     additionalSourceOfIncome = json['additionalSourceOfIncome'];
     prefferedBank = json['prefferedBank'];
@@ -198,7 +198,7 @@ class Data {
     data['city'] = this.city;
     data['nationality'] = this.nationality;
     data['currentEmploymentStatus'] = this.currentEmploymentStatus;
-    data['employeeName'] = this.employeeName;
+    data['employerName'] = this.employerName;
     data['monthlyIncome'] = this.monthlyIncome;
     data['additionalSourceOfIncome'] = this.additionalSourceOfIncome;
     data['prefferedBank'] = this.prefferedBank;
