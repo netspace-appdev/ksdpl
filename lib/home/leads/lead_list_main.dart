@@ -100,22 +100,27 @@ class LeadListMain extends StatelessWidget {
                                  fontWeight: FontWeight.bold,
                                ),
                              )),
-                              Row(
+                              InkWell(
+                                onTap: (){
+                                  Get.toNamed("/addLeadScreen");
+                                },
+                                child: const Row(
 
-                                children: [
-                                  Icon(Icons.add,color: AppColor.orangeColor,size: 16,),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    "Add Lead",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.orangeColor
+                                  children: [
+                                    Icon(Icons.add,color: AppColor.orangeColor,size: 16,),
+                                    SizedBox(
+                                      height: 10,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      AppText.addLead,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.orangeColor
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -383,7 +388,9 @@ class LeadListMain extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                lead.name.toString(),
+                                Helper.capitalizeEachWord(lead.name.toString()),
+
+                               // lead.name.toString(),
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -493,6 +500,7 @@ class LeadListMain extends StatelessWidget {
  //   String assigned = value.toString();
 //    List<String> assignedParts = assigned.split('T');
 
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -511,7 +519,7 @@ class LeadListMain extends StatelessWidget {
           SizedBox(width: 10),
           Expanded(
             child: Text(
-               ": ${value}",
+              label=="Assigned"?"${ Helper.formatDate(value)}":  ": ${value}",
 
               style: TextStyle(color: Colors.black87),
             ),

@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -89,7 +90,8 @@ class RegistrationScreen extends StatelessWidget {
 
                       }),
 
-                      /*      Obx(() {
+                      */
+/*      Obx(() {
                         if (regDDController.isLoading.value) {
                           return Center(child: CustomSkelton.productShimmerList(context));
                         }
@@ -112,7 +114,8 @@ class RegistrationScreen extends StatelessWidget {
                             regDDController.getAllBranchByBankIdApi(value);
                           },
                         );
-                      }),*/
+                      }),*//*
+
 
                       const SizedBox(height: 20),
 
@@ -599,3 +602,4 @@ class RegistrationScreen extends StatelessWidget {
   }
 
 }
+*/

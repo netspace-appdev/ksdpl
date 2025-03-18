@@ -100,7 +100,7 @@ class AppText{
   static const String branchName="Branch Name";
   static const String IFSC="IFSC";
   static const String phoneNo="Phone No";
-  static const String eml="Email";
+  static const String eml="Email Address";
   static const String state="State";
   static const String district="District";
   static const String city="City";
@@ -162,13 +162,44 @@ class AppText{
   static const String tncController="Terms and Conditions";
   static const String companyLogo="Company Logo";
 
-  static const String leads="Leads";
+  static const String leads="Manage Leads";
   static const String leadList="Lead List";
   static const String myProfile="My Profile";
   static const String logout="Logout";
   static const String notification="Notification";
   static const String percentageRequired="Percentage is required";
   static const String leadDetails="Lead Details";
+  static const String addLead="Add Lead";
+  static const String fullName="Full Name";
+  static const String enterFullName="Enter Full Name";
+  static const String dateOfBirth="Date of Birth*";
+  static const String enterPhNumber="Enter Phone Number";
+  static const String lar="Loan Amount Requested";
+  static const String enterLar="Enter Loan Amount Requested";
+  static const String enterEA="Enter Email Address";
+  static const String aadhar="Aadhar";
+  static const String enterAadhar="Enter Aadhar";
+  static const String enterPan="Enter PAN";
+  static const String streetAdd="Street Address";
+  static const String enterStreetAdd="Enter Street Address";
+  static const String enterZipCode="Enter Zip Code";
+  static const String nationality="Nationality";
+  static const String enterNationality="Nationality";
+  static const String employerName="Employer Name";
+  static const String enterEmployerName="Enter Employer Name";
+  static const String monIncome="Monthly Income(Gross Income)";
+  static const String enterMonIncome="Enter Monthly Income";
+  static const String addIncome="Additional Source of Income";
+  static const String enterAddIncome="Enter Additional Income";
+  static const String brLoc="Branch Location";
+  static const String enterBrLoc="Enter Branch Location";
+  static const String conName="Connection Name";
+  static const String conMob="Connection Mobile";
+  static const String conShare="Connection Share %";
+  static const String enterConName="Enter Connection Name";
+  static const String enterConMob="Enter Connection Mobile";
+  static const String enterConShare="Enter Connection Share %";
+  static const String mmddyyyy="mm/dd/yyyy";
 
 
 }
@@ -209,6 +240,7 @@ class AppColor{
   static const Color bgMore=Color(0xFFFFF6DC);
   static const Color grey700=Color(0xFF616161);
   static const Color lightYellow2=Color(0xFFF5F5F5);
+  static const Color borderColor=Color(0xFFDCDADA);
 
 
 
@@ -260,6 +292,7 @@ class AppImage{
   static const String message1="assets/images/message1.png";
   static const String whatsapp="assets/images/whatsapp.png";
   static const String arrowLeft="assets/images/arrowLeft.png";
+  static const String down_arrow="assets/images/down_arrow.png";
 
 }
 
@@ -378,6 +411,26 @@ class Helper{
       ),
     );
   }
+
+  static String capitalizeEachWord(String text) {
+    if (text.isEmpty) return text;
+    return text
+        .split(' ')
+        .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
+        .join(' ');
+  }
+  static String formatDate(String dateTime) {
+
+    // Split the string at 'T' to get the date part
+    String datePart = dateTime.split('T')[0];
+
+    // Split the date into year, month, and day
+    List<String> parts = datePart.split('-');
+
+    // Rearrange into DD-MM-YYYY format
+    return '${parts[2]}-${parts[1]}-${parts[0]}';
+  }
+
 }
 
 

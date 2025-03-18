@@ -14,6 +14,7 @@ import '../home/change_password.dart';
 import '../home/edit_profile.dart';
 import '../home/lead_details.dart';
 import '../home/leads/LeadDetailsMain.dart';
+import '../home/leads/add_lead_screen.dart';
 import '../home/leads/lead_list_main.dart';
 import '../home/manage_branch.dart';
 import '../home/notification_screen.dart';
@@ -29,7 +30,7 @@ final routes = [
   GetPage(name: '/login', page: () => LoginScreen()),
   GetPage(name: '/bottomNavbar', page: () => BottomNavBarExample()),
   GetPage(name: '/manageBranch', page: () => ManageBranchScreen1()),
-  GetPage(name: '/registration', page: () => RegistrationScreen()),
+  GetPage(name: '/registration', page: () => SplashScreen()),
   GetPage(name: '/editProfile', page: () => EditProfileScreen()),
   GetPage(name: '/changePassword', page: () => ChangePasswordScreen()),
   GetPage(name: '/themeSelection', page: () => ThemeSelectionScreen()),
@@ -42,4 +43,5 @@ final routes = [
   GetPage(name: '/leadListMain', page: () => LeadListMain()),
   GetPage(name: '/notificationScreen', page: () =>NotificationScreen()),
   GetPage(name: '/leadDetailsMain', page: () =>LeadDetailsMain()),
+  GetPage(name: '/addLeadScreen', page: () =>AddLeadScreen()),
 ];

@@ -38,7 +38,7 @@ class Data {
   bool? active;
   String? uploadedBy;
   String? uploadedDate;
-  String? interested;
+  int? interested;
   String? doable;
   String? interestedDate;
   String? doableDate;
@@ -50,9 +50,9 @@ class Data {
   String? adharCard;
   String? panCard;
   String? streetAddress;
-  int? state;
-  int? district;
-  int? city;
+  String? state;
+  String? district;
+  String? city;
   String? nationality;
   String? currentEmploymentStatus;
   String? employerName;
@@ -70,7 +70,7 @@ class Data {
   String? existingLoans;
   String? noOfExistingLoans;
   String? moveToCommon;
-  String? assignedEmployeePercentage;
+  int? assignedEmployeePercentage;
 
   Data(
       {this.id,

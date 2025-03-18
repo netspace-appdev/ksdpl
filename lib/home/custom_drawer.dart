@@ -134,15 +134,29 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
                ),
 
+               ExpansionTile(
 
-               CustomListTile(
-                 title:  AppText.leads,
-                 imagePath:AppImage.manInBlack,
-                 onTap: () {
 
-                   Get.toNamed("/leadListMain");
-                 },
+                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                 title:const Text(AppText.leads, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                 leading: Image.asset(AppImage.manInBlack, height: 20,),
+                 children: [
+                   ListTile(
 
+                     leading:  Icon(Icons.add_task,color: AppColor.blackColor),
+                     title:  Text("Add", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                     onTap: () {
+                        Get.toNamed("/addLeadScreen");
+                     },
+                   ),
+                   ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
+                     leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
+                     title:  Text("View",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                     onTap: () {
+                       Get.toNamed("/leadListMain");
+                     },
+                   ),
+                 ],
                ),
 
                // Logout Button

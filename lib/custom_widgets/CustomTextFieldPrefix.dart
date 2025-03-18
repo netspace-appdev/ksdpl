@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ksdpl/common/helper.dart';
 
 class CustomTextFieldPrefix extends StatelessWidget {
-  final String hintText;
+  final String? hintText;
   final TextEditingController controller;
   final bool isPassword;
   final bool obscureText;
@@ -11,10 +11,10 @@ class CustomTextFieldPrefix extends StatelessWidget {
   final TextInputType inputType;
   final Function(String)? onChanged;
   final String? prefixImage; // Nullable image path
-
+  final String? label;
   const CustomTextFieldPrefix({
     Key? key,
-    required this.hintText,
+    this.hintText,
     required this.controller,
     this.isPassword = false,
     this.obscureText = false,
@@ -23,6 +23,7 @@ class CustomTextFieldPrefix extends StatelessWidget {
     required this.inputType,
     this.onChanged,
     this.prefixImage, // Optional parameter
+    this.label,
   }) : super(key: key);
 
   @override
@@ -33,15 +34,24 @@ class CustomTextFieldPrefix extends StatelessWidget {
       obscureText: obscureText,
       validator: validator,
       onChanged: onChanged,
+
       decoration: InputDecoration(
-        hintText: hintText,
+        hintText: hintText!=null?hintText:null,
         hintStyle: TextStyle(color: AppColor.grey2),
         filled: true,
         fillColor: AppColor.grey3,
+        label: label != null?
+        Text(label!):null,
+
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide.none,
+          borderSide:  const BorderSide(color: Colors.red, width: 1.5),
         ),
+        enabledBorder:OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide:  const BorderSide(color: AppColor.borderColor, width: 1.5),
+        ),
+
         // Conditionally add prefix icon
         prefixIcon: prefixImage != null
             ? Padding(
