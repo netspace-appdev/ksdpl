@@ -21,6 +21,10 @@ class DrawerApiService {
   static const String leadMoveToCommonTask = baseUrl + 'LeadDetail/LeadMoveToCommonTask';
   static const String getAllState = baseUrl + 'StateMaster/GetAllState';
   static const String getDistrictByStateId = baseUrl + 'DistrictMaster/GetDistrictByStateId';
+  static const String getCityByDistrictId = baseUrl + 'CityMaster/GetCityByDistrictId';
+  static const String getAllBank = baseUrl + 'BankMaster/GetAllBank';
+  static const String getAllKsdplProductList = baseUrl + 'KsdplProductList/GetAllKsdplProductList';
+  static const String getProductListByBankId = baseUrl + 'ProductList/GetProductListByBankId';
 
   static Future<Map<String, dynamic>> getBankerByIdApi({
     required String bankerId,
@@ -338,9 +342,7 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===> getAllLeadsApi==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -386,9 +388,7 @@ class DrawerApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request===> updateLeadStage==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -428,9 +428,7 @@ class DrawerApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request===> getLeadDetailById==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -474,9 +472,7 @@ class DrawerApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request===> leadMoveToCommonTask==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -512,9 +508,7 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===> getAllStateApi==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -553,7 +547,164 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===> getDistrict==>${getDistrictByStateId.toString()}");
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+
+
+  static Future<Map<String, dynamic>> getCityByDistrictIdApi({
+    required districtId
+  }) async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getCityByDistrictId),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['districtId'] = districtId;
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> getAllBankApi() async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllBank),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> getAllKsdplProductApi() async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllKsdplProductList),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("request===>  getAllKsdplProductApi==>${getAllKsdplProductList.toString()}");
+      print("request===>==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>${response.body.toString()}");
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+
+
+  static Future<Map<String, dynamic>> getProductListByBankIdApi({
+    required bankId
+}) async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getProductListByBankId),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['BankId'] = bankId;
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("request===>  getProductListByBankIdApi==>${getProductListByBankId.toString()}");
       print("request===>==>${request.fields.toString()}");
       print("response.statusCode===>${response.statusCode}");
       print("response==>${response.body.toString()}");

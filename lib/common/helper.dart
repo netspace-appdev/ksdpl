@@ -192,6 +192,7 @@ class AppText{
   static const String addIncome="Additional Source of Income";
   static const String enterAddIncome="Enter Additional Income";
   static const String brLoc="Branch Location";
+  static const String productTypeInt="Product Type Interested";
   static const String enterBrLoc="Enter Branch Location";
   static const String conName="Connection Name";
   static const String conMob="Connection Mobile";
@@ -200,6 +201,17 @@ class AppText{
   static const String enterConMob="Enter Connection Mobile";
   static const String enterConShare="Enter Connection Share %";
   static const String mmddyyyy="mm/dd/yyyy";
+  static const String preferredBank="Preferred Bank for Loan";
+  static const String connector="Connector";
+  static const String gender="Gender";
+  static const String existingRelationship="Existing Relationship with Bank?";
+  static const String currEmpSt="Current Employement Status";
+  static const String employed="Employed";
+  static const String selfEmployed="Self-Employed";
+  static const String unemployed="Unemployed";
+  static const String retired="Retired";
+  static const String student="Student";
+
 
 
 }

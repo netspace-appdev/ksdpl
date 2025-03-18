@@ -37,7 +37,6 @@ final routes = [
   GetPage(name: '/enforcementDashboard', page: () => EnforcementDashboard()),
   GetPage(name: '/uploadCommonTask', page: () => UploadCommonTask()),
   GetPage(name: '/callStorageScreen', page: () => CallStorageScreen()),
-  GetPage(name: '/leadListScreen', page: () => LeadListScreen()),
   GetPage(name: '/leadDetails', page: () => LeadDetailsScreen()),
   GetPage(name: '/leadListMain', page: () => LeadListMain()),
   GetPage(name: '/leadListMain', page: () => LeadListMain()),

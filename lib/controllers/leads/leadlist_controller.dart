@@ -28,6 +28,7 @@ class LeadListController extends GetxController {
   var leadStageName2="Fresh Leads".obs;
 
   var selectedIndex = (0).obs;
+
   var eId="".obs;
   final TextEditingController openPollPercentController = TextEditingController();
   @override
@@ -76,6 +77,7 @@ class LeadListController extends GetxController {
         employeeId:eId.toString()
     );
   }
+
 
   void  getAllLeadsApi({
     required String employeeId,

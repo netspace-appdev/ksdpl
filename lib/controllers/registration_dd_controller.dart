@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../common/helper.dart';
 import '../models/AdminSupervisorModel.dart';
 import '../models/FunctionalSupervisorModel.dart';
-import '../models/GetAllBankModel.dart';
+import '../models/dashboard/GetAllBankModel.dart';
 import '../models/GetAllBranchByBankIdModel.dart';
 import '../models/GetBankerRoleByLevelAndBankIdModel.dart';
 import '../models/GetLevelOfBankerRoleModel.dart';
@@ -40,7 +40,7 @@ class RegistrationDDController extends GetxController{
    // getLevelOfBankerRoleApi();
   }
 
-  void fetchAllBankApi() async {
+/*  void fetchAllBankApi() async {
     try {
       isLoading(true);
 
@@ -77,7 +77,7 @@ class RegistrationDDController extends GetxController{
 
       isLoading(false);
     }
-  }
+  }*/
 
   Future<void>  getAllBranchByBankIdApi(String bankId) async {
     print("getAllBranchByBankIdApi");
