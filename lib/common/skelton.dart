@@ -164,4 +164,31 @@ class CustomSkelton{
       ),
     );
   }
+
+  static dashboardShimmerList(BuildContext context) {
+    return SizedBox(
+      height: 160.0, // Adjusted height to match the shimmer container
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal, // Enables horizontal scrolling
+        itemCount: 6, // Number of shimmer placeholders
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0), // Adjusted spacing
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.8, // Set width for each shimmer
+                height: 160.0, // Keep height fixed
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }

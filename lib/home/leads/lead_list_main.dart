@@ -465,7 +465,7 @@ class LeadListMain extends StatelessWidget {
                             borderRadius: BorderRadius.circular(2), // Rounded corners
                           ),
                           child: Text(
-                            "Status",
+                           "Status",
                             style: TextStyle(color: AppColor.appWhite),
                           ),
                         ),

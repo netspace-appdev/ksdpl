@@ -211,6 +211,9 @@ class AppText{
   static const String unemployed="Unemployed";
   static const String retired="Retired";
   static const String student="Student";
+  static const String upcomingBirthdays="🎉 Upcoming Birthdays 🎉";
+  static const String sendWishes="Send Wishes";
+  static const String latestNews="Latest News";
 
 
 
@@ -305,6 +308,7 @@ class AppImage{
   static const String whatsapp="assets/images/whatsapp.png";
   static const String arrowLeft="assets/images/arrowLeft.png";
   static const String down_arrow="assets/images/down_arrow.png";
+  static const String news="assets/images/news.jpg";
 
 }
 

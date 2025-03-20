@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:ksdpl/common/skelton.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 
@@ -18,9 +19,11 @@ import '../../common/helper.dart';
 import '../../common/search_bar.dart';
 
 import '../../controllers/api_controller.dart';
+import '../common/base_url.dart';
 import '../common/circl_graph_class.dart';
 import '../controllers/greeting_controller.dart';
 import '../controllers/leads/infoController.dart';
+import '../custom_widgets/RoundedInitialContainer.dart';
 import '../custom_widgets/line_chart.dart';
 import 'custom_drawer.dart';
 
@@ -40,7 +43,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   GreetingController greetingController = Get.put(GreetingController());
   DashboardController dashboardController = Get.put(DashboardController());
-  final List<Map<String, String>> items = [
+/*  final List<Map<String, String>> items = [
     {
       "image": AppImage.doc,
       "title": "1120",
@@ -61,10 +64,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
       "title": "1120",
       "subtitle": "Closed Deals"
     },
-  ];
+  ];*/
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   InfoController infoController = Get.put(InfoController());
   double maxGraphValue = 1000;
+  final List<Map<String, dynamic>> birthdays = [
+    {"name": "Grace Lee", "date": DateTime(2025, 4, 5), "image": "assets/profile1.png"},
+    {"name": "Hannah Turner", "date": DateTime(2025, 4, 8), "image": "assets/profile2.png"},
+    {"name": "Kylie King", "date": DateTime(2025, 4, 20), "image": "assets/profile3.png"},
+  ];
+  final List<Map<String, dynamic>> news = [
+    {"title":"Shortcovering rally: Nifty ends near 23,200, Sensex jumps 899 points", "descr": "The domestic key equity indices closed on a positive note for the fourth consecutive session on Thursday. The NSE Nifty 50 rose 283 points or 1.24% to settle at 23,190.65, while the BSE Sensex jumped 899 points or 1.19% to finish at 76,348.",  "image": AppImage.new},
+    {"title":"Shortcovering rally: Nifty ends near 23,200, Sensex jumps 899 points", "descr": "The domestic key equity indices closed on a positive note for the fourth consecutive session on Thursday. The NSE Nifty 50 rose 283 points or 1.24% to settle at 23,190.65, while the BSE Sensex jumped 899 points or 1.19% to finish at 76,348.",  "image": AppImage.new},
+    {"title":"Shortcovering rally: Nifty ends near 23,200, Sensex jumps 899 points", "descr": "The domestic key equity indices closed on a positive note for the fourth consecutive session on Thursday. The NSE Nifty 50 rose 283 points or 1.24% to settle at 23,190.65, while the BSE Sensex jumped 899 points or 1.19% to finish at 76,348.",  "image": AppImage.new},
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -123,7 +138,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   alignment: Alignment.topCenter,  // Centers it
                   child: Container(
                     margin:  EdgeInsets.only(
-                        top: 250  // MediaQuery.of(context).size.height * 0.35
+                        top: 280  // 250
                     ), // <-- Moves it 30px from top
                     width: double.infinity,
                     //height: MediaQuery.of(context).size.height,
@@ -140,7 +155,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                       children: [
 
-                        customGrid(),
+                        //customGrid(),
+
+                        birthday(),
+
+                        SizedBox(
+                          height: 20,
+                        ),
+
+                        latestNews(),
+
+                        SizedBox(
+                          height: 20,
+                        ),
 
                         const SizedBox(height: 20),
 
@@ -161,6 +188,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                 ),
+
               ],
             ),
           ],
@@ -240,7 +268,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget offerContainer(){
+  /*Widget offerContainer(){
     return  SizedBox(
 
       height: 150,
@@ -265,11 +293,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     spreadRadius: 2,
                   ),
                 ],
-                /* image: DecorationImage(
+                *//* image: DecorationImage(
                             image: AssetImage(AppImage.offerImage), // Use your image path
                             fit: BoxFit.cover, // Cover the entire container
                             opacity: 0.2, // Adjust transparency if needed
-                          ),*/
+                          ),*//*
 
               ),
               child: Row(
@@ -364,9 +392,84 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
       ),
     );
+  }*/
+
+  Widget offerContainer(){
+    return  Obx((){
+
+      if (dashboardController.isLoading.value) {
+        return  Center(child: CustomSkelton.dashboardShimmerList(context));
+      }
+      if (dashboardController.getCountOfLeadsModel.value == null ||
+          dashboardController.getCountOfLeadsModel.value!.data == null) {
+        return Center(child: Container(
+          height: 160,
+          width: MediaQuery.of(context).size.width*0.80,
+          decoration: BoxDecoration(
+            color: AppColor.appWhite,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+        )); // Handle the null case
+      }
+      var allLeads = dashboardController.getCountOfLeadsModel.value!.data!;
+
+      // Filter out the "Fresh" lead
+      var filteredLeads = allLeads.where((lead) => lead.id != 1).toList();
+
+      // Group the leads into chunks of 4
+      List<List<dynamic>> leadChunks = [];
+      for (var i = 0; i < filteredLeads.length; i += 4) {
+        leadChunks.add(filteredLeads.sublist(i, (i + 4 > filteredLeads.length) ? filteredLeads.length : i + 4));
+      }
+      return SizedBox(
+
+        height: 180,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: leadChunks.length,
+            //physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context,index){
+              var chunk = leadChunks[index];
+              return Container(
+                width: MediaQuery.of(context).size.width*0.80,
+                padding: const EdgeInsets.all(16),
+                margin: EdgeInsets.symmetric(horizontal: 5),
+
+                decoration: BoxDecoration(
+                  color: index%2==0?AppColor.appWhite:AppColor.secondaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                  /* image: DecorationImage(
+                            image: AssetImage(AppImage.offerImage), // Use your image path
+                            fit: BoxFit.cover, // Cover the entire container
+                            opacity: 0.2, // Adjust transparency if needed
+                          ),*/
+
+                ),
+                child: customGrid(chunk),
+              );
+
+            }
+        ),
+      );
+    });
   }
 
-  Widget customGrid(){
+ /* Widget customGrid(){
     return  SizedBox(
 
       height: 145,
@@ -387,13 +490,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColor.grey4),
-              /* boxShadow: [
+              *//* boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
                                   blurRadius: 3,
                                   spreadRadius: 2,
                                 ),
-                              ],*/
+                              ],*//*
             ),
             child: Row(
 
@@ -426,6 +529,81 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Text(
                       items[index]["subtitle"]!,
                       style: TextStyle(fontSize: 10, color: AppColor.black1),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }*/
+
+  Widget customGrid( List<dynamic> chunk){
+    return  SizedBox(
+
+      height: 145,
+      child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 2 columns
+          crossAxisSpacing: 10, // Space between columns
+          mainAxisSpacing: 10, // Space between rows
+          childAspectRatio: 1.9, // Adjust height
+
+        ),
+        itemCount: chunk.length,
+        itemBuilder: (context, ind) {
+          //print("chunk==>${chunk[ind].leadCount.toString()}");
+          return Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColor.grey4),
+              /* boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 3,
+                                  spreadRadius: 2,
+                                ),
+                              ],*/
+            ),
+            child: Row(
+
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColor.amberVersion, // Light yellow background
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  // child: const Icon(Icons.groups, color:  AppColor.secondaryColor, size: 30),
+                  child: Image.asset(AppImage.doc, height: 20),
+                ),
+
+                SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          chunk[ind].leadCount.toString(),
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
+                        ),
+                        SizedBox(width: 5),
+                        Image.asset(AppImage.arrow, height: 8),
+                      ],
+                    ),
+                    SizedBox(height: 5),
+                    Container(
+                      width: 40,
+                      child: Text(
+                        chunk[ind].stageName.toString(),
+                        style: TextStyle(fontSize: 8, color: AppColor.blackColor),
+                      ),
                     ),
                   ],
                 )
@@ -637,5 +815,216 @@ class _DashboardScreenState extends State<DashboardScreen> {
       FlSpot(5, 300),
       FlSpot(6, 900),
     ];
+  }
+
+  Widget birthday(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+           // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                AppText.upcomingBirthdays,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: birthdays.length,
+            itemBuilder: (context, index) {
+              var birthday = birthdays[index];
+              return Container(
+                width: 180,
+                margin: EdgeInsets.symmetric(horizontal: 8),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor.grey200,
+                      blurRadius: 5,
+                      spreadRadius: 2,
+                      offset: Offset(3, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 48, // Adjust size as needed
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: AppColor.secondaryColor,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColor.appWhite, width: 2),
+                        // borderRadius: BorderRadius.circular(15),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        birthday["name"].isNotEmpty ? birthday["name"][0].toUpperCase() : "U",
+                        style: TextStyle(
+                          color: AppColor.appWhite,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    //RoundedInitialContainer(firstName: birthday["name"],),
+                    const SizedBox(height: 8),
+                    Text(
+                      birthday["name"],
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      DateFormat('MMMM d, yyyy').format(birthday["date"]),
+                      style: TextStyle(fontSize: 12, color: AppColor.grey700),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor.secondaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: const Text(AppText.sendWishes, style: TextStyle(color: AppColor.appWhite),),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget latestNews(){
+    return Obx((){
+
+      if (dashboardController.isLoading.value) {
+        return  Center(child: CustomSkelton.dashboardShimmerList(context));
+      }
+      if (dashboardController.getBreakingNewsModel.value == null ||
+          dashboardController.getBreakingNewsModel.value!.data == null) {
+        return Center(child: Container(
+          height: 160,
+          width: MediaQuery.of(context).size.width*0.80,
+          decoration: BoxDecoration(
+            color: AppColor.appWhite,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+        )); // Handle the null case
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            child: Text(
+              "Latest News",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(height: 10),
+          SizedBox(
+            height: 220,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: dashboardController.getBreakingNewsModel.value!.data!.length,
+              itemBuilder: (context, index) {
+                var data = dashboardController.getBreakingNewsModel.value!.data![index];
+                return Container(
+                  width: 200,
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        blurRadius: 6,
+                        spreadRadius: 2,
+                        offset: Offset(2, 3),
+                      ),
+                    ],
+                  ),
+                  child:SizedBox(
+                    width: 200, // Width of each news card
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            BaseUrl.imageBaseUrl+ data.imageUrl.toString(),
+                            width: double.infinity,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        // Wrapping title and description inside Expanded/Flexible to prevent overflow
+                        Expanded(
+                          child: Text(
+                            data.title.toString(),//data["title"]!,
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Expanded(
+                          child: Text(
+                            data.description.toString(),
+                            style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        // Removed Spacer() as it forces max height usage
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Read More",
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    });
   }
 }
