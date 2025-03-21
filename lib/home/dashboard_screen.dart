@@ -13,6 +13,7 @@ import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 
 import 'package:ksdpl/services/home_service.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/carousel_slider.dart';
 import '../../common/helper.dart';
@@ -415,6 +416,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 spreadRadius: 2,
               ),
             ],
+
+          ),
+          child: Center(
+            child: Text(
+              AppText.noDataFound,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColor.grey1,
+              ),
+            ),
           ),
         )); // Handle the null case
       }
@@ -824,7 +836,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
-           // mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 AppText.upcomingBirthdays,
@@ -836,120 +848,167 @@ class _DashboardScreenState extends State<DashboardScreen> {
         SizedBox(
           height: 20,
         ),
-        Container(
+        Obx((){
+          if (dashboardController.isLoading.value) {
+            return  Center(child: CustomSkelton.dashboardShimmerList(context));
+          }
+          if (dashboardController.getUpcomingDateOfBirthModel.value == null ||
+              dashboardController.getUpcomingDateOfBirthModel.value!.data == null) {
+            return Center(child: Container(
+              height: 160,
+              width: MediaQuery.of(context).size.width*0.80,
+              decoration: BoxDecoration(
+                color: AppColor.appWhite,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
 
-          height: 200,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: birthdays.length,
-            itemBuilder: (context, index) {
-              var birthday = birthdays[index];
-              return Container(
-                width: 180,
-                margin: EdgeInsets.symmetric(horizontal: 8),
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColor.grey200,
-                      blurRadius: 5,
-                      spreadRadius: 2,
-                      offset: Offset(3, 3),
-                    ),
-                  ],
+              ),
+              child: Center(
+                child: Text(
+                  AppText.noBirhday,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey1,
+                  ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 48, // Adjust size as needed
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: AppColor.secondaryColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColor.appWhite, width: 2),
-                        // borderRadius: BorderRadius.circular(15),
+              ),
+            )); // Handle the null case
+          }
+          return Container(
+
+            height: 200,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: dashboardController.getUpcomingDateOfBirthModel.value!.data!.length,
+              itemBuilder: (context, index) {
+                // var birthday = birthdays[index];
+                var birthday = dashboardController.getUpcomingDateOfBirthModel.value!.data![index];
+                return Container(
+                  width: 180,
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColor.grey200,
+                        blurRadius: 5,
+                        spreadRadius: 2,
+                        offset: Offset(3, 3),
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        birthday["name"].isNotEmpty ? birthday["name"][0].toUpperCase() : "U",
-                        style: TextStyle(
-                          color: AppColor.appWhite,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 48, // Adjust size as needed
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColor.secondaryColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColor.appWhite, width: 2),
+                          // borderRadius: BorderRadius.circular(15),
                         ),
+                        alignment: Alignment.center,
+                        /*child: Text(
+                          birthday.employeeName!.isNotEmpty ? birthday.employeeName![0].toUpperCase() : "U",
+                          style: TextStyle(
+                            color: AppColor.appWhite,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),*/
+                        child: Icon(Icons.cake_sharp,color: AppColor.appWhite,),
                       ),
-                    ),
-                    //RoundedInitialContainer(firstName: birthday["name"],),
-                    const SizedBox(height: 8),
-                    Text(
-                      birthday["name"],
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      DateFormat('MMMM d, yyyy').format(birthday["date"]),
-                      style: TextStyle(fontSize: 12, color: AppColor.grey700),
-                    ),
-                    const SizedBox(height: 8),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.secondaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                      //RoundedInitialContainer(firstName: birthday["name"],),
+                      const SizedBox(height: 8),
+                      Text(
+                        birthday.employeeName.toString(),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        // DateFormat('MMMM d, yyyy').format(birthday.dateOfBirth.toString()),
+                        Helper.birthdayFormat(birthday.dateOfBirth.toString()),
+                        style: TextStyle(fontSize: 12, color: AppColor.grey700),
+                      ),
+                      const SizedBox(height: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.secondaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
+                        onPressed: () {},
+                        child: const Text(AppText.sendWishes, style: TextStyle(color: AppColor.appWhite),),
                       ),
-                      onPressed: () {},
-                      child: const Text(AppText.sendWishes, style: TextStyle(color: AppColor.appWhite),),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        })
       ],
     );
   }
 
   Widget latestNews(){
-    return Obx((){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          child: Text(
+            "Latest News",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(height: 10),
+        Obx((){
+          if (dashboardController.isLoading.value) {
+            return  Center(child: CustomSkelton.dashboardShimmerList(context));
+          }
+          if (dashboardController.getBreakingNewsModel.value == null ||
+              dashboardController.getBreakingNewsModel.value!.data == null) {
+            return Center(child: Container(
+              height: 160,
+              width: MediaQuery.of(context).size.width*0.80,
+              decoration: BoxDecoration(
+                color: AppColor.appWhite,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
 
-      if (dashboardController.isLoading.value) {
-        return  Center(child: CustomSkelton.dashboardShimmerList(context));
-      }
-      if (dashboardController.getBreakingNewsModel.value == null ||
-          dashboardController.getBreakingNewsModel.value!.data == null) {
-        return Center(child: Container(
-          height: 160,
-          width: MediaQuery.of(context).size.width*0.80,
-          decoration: BoxDecoration(
-            color: AppColor.appWhite,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 10,
-                spreadRadius: 2,
               ),
-            ],
-          ),
-        )); // Handle the null case
-      }
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            child: Text(
-              "Latest News",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(height: 10),
-          SizedBox(
+              child: Center(
+                child: Text(
+                  AppText.noDataFound,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey1,
+                  ),
+                ),
+              ),
+            )); // Handle the null case
+          }
+          return SizedBox(
             height: 220,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -1009,7 +1068,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Align(
                           alignment: Alignment.bottomRight,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () => _launchURL(data.url.toString()),
                             child: Text(
                               "Read More",
                               style: TextStyle(color: Colors.blue),
@@ -1022,9 +1081,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 );
               },
             ),
-          ),
-        ],
-      );
-    });
+          );
+        })
+      ],
+    );
+  }
+
+  _launchURL(String url) async {
+    final Uri _url = Uri.parse(url);
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 }

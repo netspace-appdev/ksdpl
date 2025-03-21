@@ -213,7 +213,7 @@ class AppText{
   static const String student="Student";
   static const String upcomingBirthdays="🎉 Upcoming Birthdays 🎉";
   static const String sendWishes="Send Wishes";
-  static const String latestNews="Latest News";
+  static const String noBirhday="No upcoming birthdays";
 
 
 
@@ -445,6 +445,20 @@ class Helper{
 
     // Rearrange into DD-MM-YYYY format
     return '${parts[2]}-${parts[1]}-${parts[0]}';
+  }
+
+  static String birthdayFormat(String dateTime) {
+    // Split the string at 'T' to get the date part
+    String datePart = dateTime.split('T')[0];
+
+    // Split the date into year, month, and day
+    List<String> parts = datePart.split('-');
+
+    // Get the current year
+    String currentYear = DateTime.now().year.toString();
+
+    // Return the date in DD-MM-YYYY format with the current year
+    return '${parts[2]}-${parts[1]}-$currentYear';
   }
 
 }
