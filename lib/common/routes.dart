@@ -9,6 +9,7 @@ import '../controllers/profile/theme_selection_screen.dart';
 import '../enforcement_panel/enforcement_dashboard.dart';
 import '../enforcement_panel/upload_common_task.dart';
 
+import '../exp.dart';
 import '../home/LeadListScreen.dart';
 import '../home/change_password.dart';
 import '../home/edit_profile.dart';
@@ -16,6 +17,7 @@ import '../home/lead_details.dart';
 import '../home/leads/LeadDetailsMain.dart';
 import '../home/leads/add_lead_screen.dart';
 import '../home/leads/lead_list_main.dart';
+import '../home/leads/loan_application_screen.dart';
 import '../home/manage_branch.dart';
 import '../home/notification_screen.dart';
 import '../home/product.dart';
@@ -43,4 +45,5 @@ final routes = [
   GetPage(name: '/notificationScreen', page: () =>NotificationScreen()),
   GetPage(name: '/leadDetailsMain', page: () =>LeadDetailsMain()),
   GetPage(name: '/addLeadScreen', page: () =>AddLeadScreen()),
+  GetPage(name: '/loanApplication', page: () =>LoanApplicationScreen()),
 ];

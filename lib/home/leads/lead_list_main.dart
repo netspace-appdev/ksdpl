@@ -15,8 +15,8 @@ import '../../controllers/leads/leadlist_controller.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 
 class LeadListMain extends StatelessWidget {
-  GreetingController greetingController = Get.find();
-  InfoController infoController = Get.find();
+  GreetingController greetingController = Get.put(GreetingController());
+  InfoController infoController = Get.put(InfoController());
   LeadListController leadListController = Get.put(LeadListController());
   final TextEditingController _searchController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -40,8 +40,8 @@ class LeadListMain extends StatelessWidget {
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         colors: [AppColor.primaryLight, AppColor.primaryDark],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                        begin: Alignment.centerRight,
+                        end: Alignment.centerLeft,
                       ),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 15),

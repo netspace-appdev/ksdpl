@@ -68,6 +68,9 @@ class CustomLabeledPickerTextField extends StatelessWidget {
           onTap: isDateField ? () => _selectDate(context) : null, // ✅ Open Date Picker
           decoration: InputDecoration(
             hintText: hintText,
+            hintStyle:TextStyle(
+              color: AppColor.grey700
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: AppColor.borderColor, width: 1.5),

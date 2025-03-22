@@ -74,6 +74,8 @@ import 'package:ksdpl/common/helper.dart';
 
 import '../home/dashboard_screen.dart';
 import '../home/home_screen.dart';
+import '../home/leads/add_lead_screen.dart';
+import '../home/leads/lead_list_main.dart';
 
 class BottomNavBarExample extends StatefulWidget {
   @override
@@ -84,8 +86,8 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   int _selectedIndex = 0;
   final List<Widget> _pages = [
     DashboardScreen(),
-    const Center(child: Text('Item 2')),
-    const Center(child: Text('Item 3')),
+    LeadListMain(),
+    AddLeadScreen(),
     const Center(child: Text('Item 4')),
   ];
   void _onItemTapped(int index) {
@@ -121,9 +123,9 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
                 _buildNavItem(Icons.more_horiz, "More", 3),*/
 
                 _buildNavItem(AppImage.homeIcon, AppImage.homeYellow,"Home", 0),
-                _buildNavItem(AppImage.personIcon, AppImage.personYellow, "Profile", 1),
+                _buildNavItem(AppImage.personIcon, AppImage.personYellow, "Leads", 1),
                 const SizedBox(width: 50), // Space for FAB
-                _buildNavItem(AppImage.settingIcon, AppImage.settingYellow, "Settings", 2),
+                _buildNavItem(AppImage.settingIcon, AppImage.settingYellow, "Add Lead", 2),
                 _buildNavItem(AppImage.homeIcon, AppImage.homeIcon, "More", 3),
               ],
             ),

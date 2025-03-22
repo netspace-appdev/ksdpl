@@ -214,7 +214,20 @@ class AppText{
   static const String upcomingBirthdays="🎉 Upcoming Birthdays 🎉";
   static const String sendWishes="Send Wishes";
   static const String noBirhday="No upcoming birthdays";
-
+  static const String loanAppl="Loan Application";
+  static const String coApplDetails="Co-Applicant Details";
+  static const String fathersName="Father's Name";
+  static const String enterFathersName = "Enter Father's Name";
+  static const String qualification = "Qualification";
+  static const String enterQualification = "Enter Qualification";
+  static const String maritalStatus = "Marital Status";
+  static const String enterMaritalStatus = "Enter Marital Status";
+  static const String employmentStatus = "Employment Status";
+  static const String enterEmploymentStatus = "Enter Employment Status";
+  static const String occupation = "Occupation";
+  static const String enterOccupation = "Enter Occupation";
+  static const String occupationSector = "Occupation Sector";
+  static const String enterOccupationSector = "Enter Occupation Sector";
 
 
 }
@@ -256,6 +269,7 @@ class AppColor{
   static const Color grey700=Color(0xFF616161);
   static const Color lightYellow2=Color(0xFFF5F5F5);
   static const Color borderColor=Color(0xFFDCDADA);
+  static const Color greenColor= Colors.green;
 
 
 

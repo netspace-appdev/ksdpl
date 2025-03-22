@@ -159,6 +159,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  ],
                ),
 
+               CustomListTile(
+                 title:  AppText.loanAppl,
+                 imagePath:AppImage.manInBlack,
+                 onTap: () {
+                   Get.toNamed("/loanApplication");
+
+                 },
+
+               ),
+
                // Logout Button
                CustomListTile(
                  title:  AppText.logout,

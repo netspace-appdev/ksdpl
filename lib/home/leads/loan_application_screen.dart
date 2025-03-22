@@ -7,6 +7,7 @@ import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
@@ -15,20 +16,24 @@ import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
+import '../../controllers/leads/loan_appl_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 
 
-class AddLeadScreen extends StatelessWidget {
+class LoanApplicationScreen extends StatelessWidget {
 
   LeadDDController leadDDController = Get.put(LeadDDController());
   GreetingController greetingController = Get.put(GreetingController());
   InfoController infoController = Get.put(InfoController());
   final TextEditingController _searchController = TextEditingController();
+  final MultiStepFormController controller = Get.put(MultiStepFormController());
 
   final _formKey = GlobalKey<FormState>();
-  final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
+  final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());/// Remove it
+  final LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
+
   @override
   Widget build(BuildContext context) {
 
@@ -94,97 +99,172 @@ class AddLeadScreen extends StatelessWidget {
                               height: 10,
                             ),
 
-                            CustomLabeledTextField(
-                              label: AppText.fullName,
-                              isRequired: true,
-                              controller: addleadcontroller.fullNameController,
-                              inputType: TextInputType.name,
-                              hintText: AppText.enterFullName,
-                              validator:  ValidationHelper.validateName,
+                            percentBar()  ,
+
+                            const SizedBox(
+                              height: 10,
                             ),
 
-                            CustomLabeledPickerTextField(
-                              label: AppText.dateOfBirth,
-                              isRequired: true,
-                              controller: addleadcontroller.dobController,
-                              inputType: TextInputType.name,
-                              hintText: AppText.mmddyyyy,
-                              validator: ValidationHelper.validateDob,
-                              isDateField: true,
+                            Helper.customDivider(color: AppColor.grey4),
+
+                            const SizedBox(
+                              height: 10,
                             ),
 
-                            CustomLabeledTextField(
-                              label: AppText.phoneNumberNoStar,
-                              isRequired: true,
-                              controller: addleadcontroller.phoneController,
-                              inputType: TextInputType.phone,
-                              hintText: AppText.enterPhNumber,
-                              validator: ValidationHelper.validatePhoneNumber,
-                            ),
-                            const SizedBox(height: 10),
-                            const Row(
+                            ExpansionTile(
+
+
+                              childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                              title:const Text( AppText.coApplDetails, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                              leading: Icon(Icons.list_alt, size: 20,),
                               children: [
-                                Text(
-                                  AppText.gender,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.grey2,
-                                  ),
+
+                                const SizedBox(
+                                  height: 20,
                                 ),
-                                  Text(
-                                    " *",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.redColor,
+
+                                CustomLabeledTextField(
+                                  label: AppText.fullName,
+                                  isRequired: true,
+                                  controller: loanApplicationController.fullNameController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.enterFullName,
+                                  validator:  ValidationHelper.validateName,
+                                ),
+
+                                CustomLabeledTextField(
+                                  label: AppText.fathersName,
+                                  isRequired: true,
+                                  controller: loanApplicationController.fatherNameController,
+                                  inputType: TextInputType.phone,
+                                  hintText: AppText.enterFathersName,
+                                  validator: ValidationHelper.validatePhoneNumber,
+                                ),
+
+                                const SizedBox(height: 10),
+                                const Row(
+                                  children: [
+                                    Text(
+                                      AppText.gender,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.grey2,
+                                      ),
                                     ),
-                                  ),
+                                    Text(
+                                      " *",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.redColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 10),
+                                /// Label Row (with * if required)
+
+                                Obx(()=>  Row(
+                                  children: [
+                                    _buildRadioOption("Male"),
+                                    _buildRadioOption("Female"),
+                                    _buildRadioOption("Other"),
+                                  ],
+                                )
+                                ),
+
+                                const SizedBox(height: 20),
+
+                                CustomLabeledPickerTextField(
+                                  label: AppText.dateOfBirth,
+                                  isRequired: true,
+                                  controller: loanApplicationController.dobController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.mmddyyyy,
+                                  validator: ValidationHelper.validateDob,
+                                  isDateField: true,
+                                ),
+
+                                CustomLabeledTextField(
+                                  label: AppText.qualification,
+                                  isRequired: true,
+                                  controller: loanApplicationController.qualiController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.enterQualification,
+                                  validator: ValidationHelper.validatePhoneNumber,
+                                ),
+
+                                CustomLabeledTextField(
+                                  label: AppText.maritalStatus,
+                                  isRequired: true,
+                                  controller: loanApplicationController.maritalController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.enterMaritalStatus,
+                                  validator: ValidationHelper.validatePhoneNumber,
+                                ),
+
+                                CustomLabeledTextField(
+                                  label: AppText.employmentStatus,
+                                  isRequired: true,
+                                  controller: loanApplicationController.emplStatusController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.enterEmploymentStatus,
+                                  validator: ValidationHelper.validatePhoneNumber,
+                                ),
+
+                                CustomLabeledTextField(
+                                  label: AppText.nationality,
+                                  isRequired: true,
+                                  controller: loanApplicationController.nationalityController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.enterNationality,
+                                  validator: ValidationHelper.validatePhoneNumber,
+                                ),
+
+
+                                CustomLabeledTextField(
+                                  label: AppText.occupation,
+                                  isRequired: true,
+                                  controller: loanApplicationController.occupationController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.enterOccupation,
+                                  validator: ValidationHelper.validatePhoneNumber,
+                                ),
+
+                                CustomLabeledTextField(
+                                  label: AppText.occupationSector,
+                                  isRequired: true,
+                                  controller: loanApplicationController.occupationController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.enterOccupationSector,
+                                  validator: ValidationHelper.validatePhoneNumber,
+                                ),
+
+
+                                CustomLabeledTextField(
+                                  label: AppText.eml,
+                                  isRequired: false,
+                                  controller: loanApplicationController.emailController,
+                                  inputType: TextInputType.emailAddress,
+                                  hintText: AppText.enterEA,
+                                  validator: ValidationHelper.validateEmail,
+                                ),
+
+                                CustomLabeledTextField(
+                                  label: AppText.mobileNumber,
+                                  isRequired: true,
+                                  controller: loanApplicationController.mobController ,
+                                  inputType: TextInputType.phone,
+                                  hintText: AppText.enterPhNumber,
+                                  validator: ValidationHelper.validatePhoneNumber,
+
+                                ),
                               ],
                             ),
 
-                            const SizedBox(height: 10),
-                            /// Label Row (with * if required)
-
-                            Obx(()=>  Row(
-                              children: [
-                                _buildRadioOption("Male"),
-                                _buildRadioOption("Female"),
-                                _buildRadioOption("Other"),
-                              ],
-                            )
-                            ),
-
-                            const SizedBox(height: 20),
-
-
-                            CustomLabeledTextField(
-                              label: AppText.lar,
-                              isRequired: true,
-                              controller: addleadcontroller.loanAmtReqController,
-                              inputType: TextInputType.phone,
-                              hintText: AppText.enterLar,
-                              validator: ValidationHelper.validateLoanAmt,
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.eml,
-                              isRequired: false,
-                              controller: addleadcontroller.emailController,
-                              inputType: TextInputType.emailAddress,
-                              hintText: AppText.enterEA,
-                              validator: ValidationHelper.validateEmail,
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.aadhar,
-                              isRequired: false,
-                              controller: addleadcontroller.aadharController ,
-                              inputType: TextInputType.phone,
-                              hintText: AppText.enterAadhar,
-
-                            ),
-
+                            
                             CustomLabeledTextField(
                               label: AppText.panNumber,
                               isRequired: false,
@@ -466,7 +546,7 @@ class AddLeadScreen extends StatelessWidget {
                             const SizedBox(height: 10),
 
 
-                              Obx((){
+                            Obx((){
                               if (leadDDController.isLoading.value) {
                                 return  Center(child:CustomSkelton.productShimmerList(context));
                               }
@@ -537,6 +617,56 @@ class AddLeadScreen extends StatelessWidget {
                             SizedBox(height: 20),
 
 
+                            /*Obx(() => Container(
+                              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 8,
+                                    spreadRadius: 1,
+                                  )
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Previous Button (Hidden on Step 1)
+                                  if (controller.currentStep.value > 0)
+                                    ElevatedButton(
+                                      onPressed: controller.previousStep,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey[400],
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 24, vertical: 12),
+                                      ),
+                                      child: Text("Previous",
+                                          style: TextStyle(color: Colors.white)),
+                                    )
+                                  else
+                                    SizedBox(), // Empty space to maintain layout
+
+                                  // Next & Save Button
+                                  ElevatedButton(
+                                    onPressed: controller.currentStep.value == 5
+                                        ? controller.saveForm
+                                        : controller.nextStep,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                      padding:
+                                      EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                    ),
+                                    child: Text(
+                                      controller.currentStep.value == 5
+                                          ? "Save & Continue"
+                                          : "Next",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),*/
                           ],
                         ),
                       ),
@@ -590,6 +720,7 @@ class AddLeadScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget header(context){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -603,7 +734,7 @@ class AddLeadScreen extends StatelessWidget {
               },
               child: Image.asset(AppImage.arrowLeft,height: 24,)),
           const Text(
-            AppText.addLead,
+            AppText.loanAppl,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
@@ -644,9 +775,9 @@ class AddLeadScreen extends StatelessWidget {
       children: [
         Radio<String>(
           value: gender,
-          groupValue: addleadcontroller.selectedGender.value,
+          groupValue: loanApplicationController.selectedGender.value,
           onChanged: (value) {
-            addleadcontroller.selectedGender.value=value;
+            loanApplicationController.selectedGender.value=value;
           },
         ),
         Text(gender),
@@ -667,7 +798,37 @@ class AddLeadScreen extends StatelessWidget {
     }
   }
 
-
+  Widget percentBar(){
+    return Padding(
+      padding: EdgeInsets.all(15.0),
+      child: new LinearPercentIndicator(
+        //width: MediaQuery.of(context).size.width - 50,
+        animation: true,
+        lineHeight: 15.0,
+        animationDuration: 2500,
+        percent: 0.8,
+        //center: Text("80.0%"),
+        // linearStrokeCap: LinearStrokeCap.roundAll,
+        barRadius: Radius.circular(15),
+        progressColor:AppColor.greenColor,
+      ),
+    );
+  }
 }
 
 
+class MultiStepFormController extends GetxController {
+  var currentStep = 0.obs;
+
+  void nextStep() {
+    if (currentStep.value < 5) currentStep.value++;
+  }
+
+  void previousStep() {
+    if (currentStep.value > 0) currentStep.value--;
+  }
+
+  void saveForm() {
+    print("Form Saved!");
+  }
+}
