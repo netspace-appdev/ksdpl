@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/helper.dart';
+import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
+import '../controllers/leads/leadlist_controller.dart';
 import '../custom_widgets/RoundedInitialContainer.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -19,6 +21,8 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   String firstName="user";
   String email="user@email.com";
+  LeadListController leadListController = Get.find();
+  Addleadcontroller addLeadController = Get.find();
   @override
   void initState() {
     // TODO: implement initState
@@ -146,6 +150,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                      leading:  Icon(Icons.add_task,color: AppColor.blackColor),
                      title:  Text("Add", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                      onTap: () {
+                       addLeadController.fromWhere.value="drawer";
                         Get.toNamed("/addLeadScreen");
                      },
                    ),
@@ -153,6 +158,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                      leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
                      title:  Text("View",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
                      onTap: () {
+                       leadListController.stateIdMain.value="0";
+                       leadListController.distIdMain.value="0";
+                       leadListController.cityIdMain.value="0";
+                       leadListController.fromWhere.value="drawer";
                        Get.toNamed("/leadListMain");
                      },
                    ),

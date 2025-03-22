@@ -2,6 +2,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
@@ -26,6 +27,10 @@ class LeadListController extends GetxController {
   var leadCode="2".obs;
   var leadStageName="Fresh Leads".obs;
   var leadStageName2="Fresh Leads".obs;
+  var fromWhere="".obs;
+  var stateIdMain="0".obs;
+  var distIdMain="0".obs;
+  var cityIdMain="0".obs;
 
   var selectedIndex = (0).obs;
 
@@ -38,12 +43,46 @@ class LeadListController extends GetxController {
     eId.value=StorageService.get(StorageService.EMPLOYEE_ID).toString();
     getAllLeadsApi(
       leadStage: leadCode.value,
-      employeeId:eId.toString()
+      employeeId:eId.toString(),
+        stateId:stateIdMain.value,
+        distId: distIdMain.value,
+        cityId: cityIdMain.value
     );
 
   }
 
 
+  void makePhoneCall(String phoneNumber) async {
+    final Uri phoneUri = Uri.parse("tel:$phoneNumber");
+
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+
+      ToastMessage.msg(AppText.couldNotCall);
+    }
+  }
+
+  void openWhatsApp({required String phoneNumber, String message = ""}) async {
+    String url = "https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}";
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+
+      ToastMessage.msg(AppText.couldNotWA);
+    }
+  }
+
+  void sendSMS({required String phoneNumber, required String message}) async {
+    String smsUrl = "sms:$phoneNumber?body=${Uri.encodeComponent(message)}";
+
+    if (await canLaunchUrl(Uri.parse(smsUrl))) {
+      await launchUrl(Uri.parse(smsUrl));
+    } else {
+      ToastMessage.msg(AppText.couldNotMsg);
+    }
+  }
 
 
   void selectCheckbox(int index) {
@@ -74,7 +113,10 @@ class LeadListController extends GetxController {
     var eId=StorageService.get(StorageService.EMPLOYEE_ID);
     getAllLeadsApi(
         leadStage: leadCode.value,
-        employeeId:eId.toString()
+        employeeId:eId.toString(),
+        stateId:stateIdMain.value,
+        distId: distIdMain.value,
+        cityId: cityIdMain.value
     );
   }
 
@@ -82,7 +124,9 @@ class LeadListController extends GetxController {
   void  getAllLeadsApi({
     required String employeeId,
     required String leadStage,
-
+    required stateId,
+    required distId,
+    required cityId,
   }) async {
     try {
       isLoading(true);
@@ -90,7 +134,10 @@ class LeadListController extends GetxController {
 
       var data = await DrawerApiService.getAllLeadsApi(
         employeeId:employeeId,
-        leadStage: leadStage
+        leadStage: leadStage,
+          stateId: stateId,
+          distId: distId,
+          cityId: cityId
       );
 
 
@@ -168,7 +215,10 @@ class LeadListController extends GetxController {
 
       getAllLeadsApi(
           leadStage: leadCode.value,
-          employeeId:eId.value.toString()
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value
       );
 
       isLoading(false);
@@ -219,7 +269,10 @@ class LeadListController extends GetxController {
 
       getAllLeadsApi(
           leadStage: leadCode.value,
-          employeeId:eId.value.toString()
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value
       );
 
       isLoading(false);

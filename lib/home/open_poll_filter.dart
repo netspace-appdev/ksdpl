@@ -1,42 +1,48 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-
+import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
+import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
+import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
+import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
+import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
+import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
+import '../../common/validation_helper.dart';
 import '../../controllers/drawer_controller.dart';
 import '../../controllers/greeting_controller.dart';
+import '../../controllers/lead_dd_controller.dart';
+import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
-import '../../controllers/leads/leadlist_controller.dart';
+import '../../custom_widgets/CustomDropdown.dart';
+import '../../custom_widgets/CustomLabelPickerTextField.dart';
+import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../controllers/leads/leadlist_controller.dart';
+import '../controllers/open_poll_filter_controller.dart';
+import '../custom_widgets/CustomTextFieldPrefix.dart';
 
-import '../../custom_widgets/CustomTextFieldPrefix.dart';
-import '../../exp.dart';
-import '../custom_drawer.dart';
 
-class LeadListMain extends StatelessWidget {
-  GreetingController greetingController = Get.put(GreetingController());
-  InfoController infoController = Get.put(InfoController());
-  LeadListController leadListController = Get.find();
-  final TextEditingController _searchController = TextEditingController();
+
+class OpenPollFilter extends StatelessWidget {
+
+  LeadDDController leadDDController = Get.put(LeadDDController());
+
   final _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
+  LeadListController leadListController = Get.find();
+  OpenPollFilterController openPollFilterController = Get.put(OpenPollFilterController());
   @override
   Widget build(BuildContext context) {
 
     return SafeArea(
       child: Scaffold(
-        key:_scaffoldKey,
 
         backgroundColor: AppColor.backgroundColor,
-          drawer:   CustomDrawer(),
-          body: SingleChildScrollView(
+
+        body: SingleChildScrollView(
           child: Column(
             children: [
               Stack(
@@ -55,12 +61,11 @@ class LeadListMain extends StatelessWidget {
                     child:Column(
                       children: [
 
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
 
                         header(context),
-
 
                       ],
                     ),
@@ -84,65 +89,170 @@ class LeadListMain extends StatelessWidget {
                         ),
 
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min, // Prevents extra spacing
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
 
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                             Obx(()=> Text(
-                               leadListController.leadStageName2.value.toString(),
-                               style: TextStyle(
-                                 fontSize: 20,
-                                 fontWeight: FontWeight.bold,
-                               ),
-                             )),
-                              InkWell(
-                                onTap: (){
-                                  Get.toNamed("/addLeadScreen");
-                                },
-                                child: const Row(
+                            const Text(
+                              AppText.state,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.grey2,
+                              ),
+                            ),
 
-                                  children: [
-                                    Icon(Icons.add,color: AppColor.orangeColor,size: 16,),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      AppText.addLead,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColor.orangeColor
-                                      ),
-                                    ),
-                                  ],
+                            SizedBox(height: 10),
+
+
+                            Obx((){
+                              if (leadDDController.isLoading.value) {
+                                return  Center(child:CustomSkelton.productShimmerList(context));
+                              }
+
+                              return CustomDropdown<Data>(
+                                items: leadDDController.getAllStateModel.value?.data ?? [],
+                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                getName: (item) => item.stateName.toString(),
+                                selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                                      (item) => item.id.toString() == leadDDController.selectedState.value,
                                 ),
-                              )
-                            ],
-                          ),
+                                onChanged: (value) {
+                                  leadDDController.selectedState.value =  value?.id?.toString();
+                                  leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+                                },
+                              );
+                            }),
 
-                          SizedBox(
-                            height: 20,
-                          ),
+                            const SizedBox(height: 20),
 
-                          leadSection(context)
+                            const Text(
+                              AppText.district,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.grey2,
+                              ),
+                            ),
+
+                            const SizedBox(height: 10),
 
 
-                        ],
+                            Obx((){
+                              if (leadDDController.isLoading.value) {
+                                return  Center(child:CustomSkelton.productShimmerList(context));
+                              }
+
+
+                              return CustomDropdown<dist.Data>(
+                                items: leadDDController.getDistrictByStateModel.value?.data ?? [],
+                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                getName: (item) => item.districtName.toString(),
+                                selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
+                                      (item) => item.id.toString() == leadDDController.selectedDistrict.value,
+                                ),
+                                onChanged: (value) {
+                                  leadDDController.selectedDistrict.value =  value?.id?.toString();
+                                  leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+                                },
+                              );
+                            }),
+
+                            const SizedBox(height: 20),
+
+
+                            const Text(
+                              AppText.city,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.grey2,
+                              ),
+                            ),
+
+                            const SizedBox(height: 10),
+
+
+                            Obx((){
+                              if (leadDDController.isLoading.value) {
+                                return  Center(child:CustomSkelton.productShimmerList(context));
+                              }
+
+
+                              return CustomDropdown<city.Data>(
+                                items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
+                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                getName: (item) => item.cityName.toString(),
+                                selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
+                                      (item) => item.id.toString() == leadDDController.selectedCity.value,
+                                ),
+                                onChanged: (value) {
+                                  leadDDController.selectedCity.value =  value?.id?.toString();
+                                },
+                              );
+                            }),
+
+                            const SizedBox(height: 20),
+
+
+                            Obx((){
+                              if(addleadcontroller.isLoading.value){
+                                return const Align(
+                                  alignment: Alignment.center,
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      color: AppColor.primaryColor,
+                                    ),
+                                  ),
+                                );
+                              }
+                              return SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.secondaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  onPressed: onPressed,
+                                  child: const Text(
+                                    AppText.submit,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+
+                            const SizedBox(height: 20),
+
+                            leadSection(context)
+                          ],
+                        ),
                       ),
                     ),
                   ),
+
+
                 ],
               ),
             ],
           ),
         ),
+
       ),
     );
   }
@@ -152,24 +262,21 @@ class LeadListMain extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          leadListController.fromWhere.value=="drawer"?
-          InkWell(
-            onTap: (){
-              Get.back();
-            },
-              child: Image.asset(AppImage.arrowLeft,height: 24,)):
+
+
           InkWell(
               onTap: (){
-                _scaffoldKey.currentState?.openDrawer();
+                Get.back();
               },
-              child: SvgPicture.asset(AppImage.drawerIcon)),
+              child: Image.asset(AppImage.arrowLeft,height: 24,)),
 
-          Text(
-            "Leads",
+
+          const Text(
+            AppText.openPollFilter,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
-              fontWeight: FontWeight.w700
+                fontWeight: FontWeight.w700
 
 
             ),
@@ -177,132 +284,61 @@ class LeadListMain extends StatelessWidget {
 
           InkWell(
             onTap: (){
-              showFilterDialog(context: context);
+
             },
             child: Container(
 
               width: 40,
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              decoration:  BoxDecoration(
-                color: AppColor.appWhite.withOpacity(0.15),
+              decoration:  const BoxDecoration(
+                color: Colors.transparent,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
-              child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
+
             ),
           )
 
-    /*      MenuAnchor(
-            //childFocusNode: _buttonFocusNode,
-            menuChildren: <Widget>[
 
-              MenuItemButton(
-                onPressed:null,
-
-                child: Row(
-
-                  children: [
-                    Obx(() => Container(
-
-                      width: 40,
-                      height: 40,
-                      child: CheckboxListTile(
-                        title: Text("Accept Terms & Conditions"),
-                        value: leadListController.assignedLeadsCheck.value,
-                        onChanged: (value) => leadListController.toggleCheckboxAssigned(),
-                      ),
-                    )),
-                    const SizedBox(width: 15,),
-                    const Text("Assigned Leads", style: TextStyle(color: AppColor.black87),),
-
-                  ],
-                ),
-              ),
-
-              MenuItemButton(
-                onPressed:null,
-
-                child: Row(
-
-                  children: [
-                    Obx(() => Container(
-
-                      width: 40,
-                      height: 40,
-                      child: CheckboxListTile(
-                        title: Text("Accept Terms & Conditions"),
-                        value: leadListController.interestLeadsCheck.value,
-                        onChanged: (value) => leadListController.toggleCheckboxInterested(),
-                      ),
-                    )),
-                    const SizedBox(width: 15,),
-                    const Text("Interested Leads", style: TextStyle(color: AppColor.black87),),
-
-                  ],
-                ),
-              ),
-
-
-            ],
-            builder: (BuildContext context, MenuController controller, Widget? child) {
-              return TextButton(
-               // focusNode: _buttonFocusNode,
-                onPressed: () {
-                  if (controller.isOpen) {
-                    controller.close();
-                  } else {
-                    controller.open();
-                  }
-                },
-                child: Container(
-
-                  width: 40,
-                  height:40,
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  decoration:  BoxDecoration(
-                    color: AppColor.appWhite.withOpacity(0.15),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
-                ),
-              );
-            },
-          )*/
 
         ],
       ),
     );
   }
 
-  Widget searchArea(){
+  Widget _buildRadioOption(String gender) {
     return Row(
       children: [
-        Expanded(
-          child: CustomSearchBar(
-            controller: _searchController,
-            onChanged: (val){},
-            hintText: "Search Leads...",
-          ),
+        Radio<String>(
+          value: gender,
+          groupValue: addleadcontroller.selectedGender.value,
+          onChanged: (value) {
+            addleadcontroller.selectedGender.value=value;
+          },
         ),
-        Container(
-
-          width: 50,
-          height:50,
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          decoration: const BoxDecoration(
-            color: AppColor.backgroundColor,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          child: Center(child: Image.asset(AppImage.filterIcon, height: 22,)),
-        )
+        Text(gender),
       ],
     );
+  }
+
+  void onPressed(){
+
+
+    if (_formKey.currentState!.validate()) {
+
+      if (leadDDController.selectedState.value==null) {
+        ToastMessage.msg("Please select state");
+      }else  if (leadDDController.selectedDistrict.value==null) {
+        ToastMessage.msg("Please select district");
+      } else  if (leadDDController.selectedCity.value==null) {
+        ToastMessage.msg("Please select city");
+      } {
+        openPollFilterController.pollFilterSubmit();
+        ToastMessage.msg("Form Submitted");
+      }
+    }
   }
 
   Widget leadSection(BuildContext context){
@@ -399,31 +435,13 @@ class LeadListMain extends StatelessWidget {
                               Text(
                                 Helper.capitalizeEachWord(lead.name.toString()),
 
-                               // lead.name.toString(),
+                                // lead.name.toString(),
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: 10,
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                    decoration:  BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(color: AppColor.grey200),
-                                      color: AppColor.grey1,
-                                    ),
-                                  ),
-                                  Text(
-                                    lead.mobileNumber.toString(),
-                                    style: TextStyle(
-                                      color: AppColor.grey700,
-                                    ),
-                                  ),
-                                ],
-                              ),
+
                             ],
                           ),
                         ],
@@ -447,54 +465,15 @@ class LeadListMain extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 10),
 
-                /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-
-                      _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call" ),
-                      _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp"  ),
-                      _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message" ),
-                      //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
-                      InkWell(
-                        onTap: () {
-                          showLeadStatusDialog(
-                              context: context,
-                              leadId: lead.id
-                          );
-
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
-                          decoration: BoxDecoration(
-                            color: AppColor.orangeColor, // Button background color
-                            borderRadius: BorderRadius.circular(2), // Rounded corners
-                          ),
-                          child: Text(
-                           "Status",
-                            style: TextStyle(color: AppColor.appWhite),
-                          ),
-                        ),
-                      )
-
-                    ],
-                  ),
-                ),
                 SizedBox(height: 10),
 
                 /// Bottom Row Buttons (Assigned, Follow Up, Call Back, Employment)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildTextButton("Follow Up", context, Colors.purple, Icons.feedback, lead.id.toString()),
-                    if(leadListController.leadCode.value=="4")
-                    _buildTextButton("Open Poll",context, Colors.green, Icons.lock_open,lead.id.toString())
-                    else if(leadListController.leadCode.value=="2")
-                      _buildTextButton("Interested",context, Colors.green, Icons.thumb_up_alt_outlined,lead.id.toString()),
+                    _buildTextButton("Pick Lead", context, Colors.purple, Icons.shopping_bag_outlined, lead.id.toString()),
+
 
                     _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,lead.id.toString()),
                   ],
@@ -509,7 +488,7 @@ class LeadListMain extends StatelessWidget {
   }
 
   Widget _buildDetailRow(String label, String value) {
- //   String assigned = value.toString();
+    //   String assigned = value.toString();
 //    List<String> assignedParts = assigned.split('T');
 
 
@@ -547,7 +526,7 @@ class LeadListMain extends StatelessWidget {
     required Color color,
     required String phoneNumber,
     required String label,
-}) {
+  }) {
     return IconButton(
       onPressed: () {
         if(label=="call"){
@@ -582,45 +561,6 @@ class LeadListMain extends StatelessWidget {
   }
 
 
-/*  Widget _buildTextButton(String label, BuildContext context, Color color, IconData icon) {
-    return GestureDetector(
-      onTap: () {
-        if (label == "Open Poll") {
-          showOpenPollDialog(context: context);
-        }
-      },
-      child: Column(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  offset: Offset(4, 4),
-                  blurRadius: 6,
-                ),
-                BoxShadow(
-                  color: Colors.white.withOpacity(0.7),
-                  offset: Offset(-4, -4),
-                  blurRadius: 6,
-                ),
-              ],
-            ),
-            child: Icon(icon, color: Colors.white, size: 20),
-          ),
-          SizedBox(height: 6),
-          Text(
-            label,
-            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.grey[800]),
-          ),
-        ],
-      ),
-    );
-  }*/
 
   Widget _buildTextButton(String label, BuildContext context, Color color, IconData icon, String leadId) {
     return GestureDetector(
@@ -628,7 +568,7 @@ class LeadListMain extends StatelessWidget {
         if (label == "Open Poll") {
           showOpenPollDialog(context: context,leadId: leadId);
         }else if (label == "Details") {
-         Get.toNamed("/leadDetailsMain", arguments: {"leadId":leadId.toString()});
+          Get.toNamed("/leadDetailsMain", arguments: {"leadId":leadId.toString()});
         }else{
 
         }
@@ -637,25 +577,16 @@ class LeadListMain extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            width: MediaQuery.of(context).size.width*0.40,
 
             decoration: BoxDecoration(
-              //color: color,
-              borderRadius: BorderRadius.circular(5),
+
+                borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: AppColor.grey700)
-        /*      boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  offset: Offset(4, 4),
-                  blurRadius: 6,
-                ),
-                BoxShadow(
-                  color: Colors.white.withOpacity(0.7),
-                  offset: Offset(-4, -4),
-                  blurRadius: 6,
-                ),
-              ],*/
+
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(icon, color: AppColor.grey700, size: 20),
                 SizedBox(width: 6),
@@ -670,11 +601,6 @@ class LeadListMain extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
 
 
   void showLeadStatusDialog({
@@ -1174,7 +1100,7 @@ class LeadListMain extends StatelessWidget {
                                   Navigator.pop(context);
                                 }
 
-                               // Close dialog after submission
+                                // Close dialog after submission
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColor.orangeColor,
@@ -1198,9 +1124,11 @@ class LeadListMain extends StatelessWidget {
   String? validatePercentage(String? value) {
     if (value == null || value.isEmpty) {
       return AppText.percentageRequired;
-    } 
+    }
     return null;
   }
 
+
 }
+
 

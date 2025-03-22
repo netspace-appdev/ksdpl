@@ -228,6 +228,11 @@ class AppText{
   static const String enterOccupation = "Enter Occupation";
   static const String occupationSector = "Occupation Sector";
   static const String enterOccupationSector = "Enter Occupation Sector";
+  static const String whatsappMsg = "Hello! We belong to KSDPL...";
+  static const String couldNotCall = "Could not make a call";
+  static const String couldNotWA = "Could not open WhatsApp";
+  static const String couldNotMsg = "Could not open Messages";
+  static const String openPollFilter = "Open Poll Filter";
 
 
 }
@@ -269,6 +274,9 @@ class AppColor{
   static const Color grey700=Color(0xFF616161);
   static const Color lightYellow2=Color(0xFFF5F5F5);
   static const Color borderColor=Color(0xFFDCDADA);
+  static const Color blackLight=Color(0xFF3D3D3D);
+  static const Color lightGreen=Color(0xFF00B383);
+  static const Color lightBrown=Color(0xFF704F38);
   static const Color greenColor= Colors.green;
 
 

@@ -20,6 +20,7 @@ import '../home/leads/lead_list_main.dart';
 import '../home/leads/loan_application_screen.dart';
 import '../home/manage_branch.dart';
 import '../home/notification_screen.dart';
+import '../home/open_poll_filter.dart';
 import '../home/product.dart';
 import '../home/splash.dart';
 import '../registration/login.dart';
@@ -46,4 +47,5 @@ final routes = [
   GetPage(name: '/leadDetailsMain', page: () =>LeadDetailsMain()),
   GetPage(name: '/addLeadScreen', page: () =>AddLeadScreen()),
   GetPage(name: '/loanApplication', page: () =>LoanApplicationScreen()),
+  GetPage(name: '/openPollFilter', page: () =>OpenPollFilter()),
 ];

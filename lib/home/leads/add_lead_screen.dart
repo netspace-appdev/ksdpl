@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
@@ -11,6 +12,7 @@ import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
+import '../../controllers/drawer_controller.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
@@ -18,6 +20,7 @@ import '../../controllers/leads/infoController.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../custom_drawer.dart';
 
 
 class AddLeadScreen extends StatelessWidget {
@@ -26,7 +29,7 @@ class AddLeadScreen extends StatelessWidget {
   GreetingController greetingController = Get.put(GreetingController());
   InfoController infoController = Get.put(InfoController());
   final TextEditingController _searchController = TextEditingController();
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
   @override
@@ -34,9 +37,9 @@ class AddLeadScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-
+        key:_scaffoldKey,
         backgroundColor: AppColor.backgroundColor,
-
+        drawer:   CustomDrawer(),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -536,7 +539,41 @@ class AddLeadScreen extends StatelessWidget {
 
                             SizedBox(height: 20),
 
-
+                            Obx((){
+                              if(addleadcontroller.isLoading.value){
+                                return const Align(
+                                  alignment: Alignment.center,
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      color: AppColor.primaryColor,
+                                    ),
+                                  ),
+                                );
+                              }
+                              return SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.secondaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  onPressed: onPressed,
+                                  child: const Text(
+                                    AppText.submit,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            })
                           ],
                         ),
                       ),
@@ -549,44 +586,7 @@ class AddLeadScreen extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: Obx((){
-          if(addleadcontroller.isLoading.value){
-            return const Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                height: 30,
-                width: 30,
-                child: CircularProgressIndicator(
-                  color: AppColor.primaryColor,
-                ),
-              ),
-            );
-          }
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColor.secondaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: onPressed,
-                child: const Text(
-                  AppText.submit,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          );
-        }),
+
       ),
     );
   }
@@ -597,11 +597,18 @@ class AddLeadScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
 
+          addleadcontroller.fromWhere.value=="drawer"?
           InkWell(
               onTap: (){
                 Get.back();
               },
-              child: Image.asset(AppImage.arrowLeft,height: 24,)),
+              child: Image.asset(AppImage.arrowLeft,height: 24,)):
+          InkWell(
+              onTap: (){
+                _scaffoldKey.currentState?.openDrawer();
+              },
+              child: SvgPicture.asset(AppImage.drawerIcon)),
+
           const Text(
             AppText.addLead,
             style: TextStyle(

@@ -1,34 +1,24 @@
-import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
 import 'package:ksdpl/common/skelton.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 
-import 'package:ksdpl/services/home_service.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../common/carousel_slider.dart';
 import '../../common/helper.dart';
-import '../../common/search_bar.dart';
 
-import '../../controllers/api_controller.dart';
 import '../common/base_url.dart';
 import '../common/circl_graph_class.dart';
+
 import '../controllers/greeting_controller.dart';
 import '../controllers/leads/infoController.dart';
-import '../custom_widgets/RoundedInitialContainer.dart';
+
 import '../custom_widgets/line_chart.dart';
 import 'custom_drawer.dart';
-
-
 
 
 
@@ -44,52 +34,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   GreetingController greetingController = Get.put(GreetingController());
   DashboardController dashboardController = Get.put(DashboardController());
-/*  final List<Map<String, String>> items = [
-    {
-      "image": AppImage.doc,
-      "title": "1120",
-      "subtitle": "New Leads"
-    },
-    {
-      "image": AppImage.doc,
-      "title": "1120",
-      "subtitle": "Qualified Leads"
-    },
-    {
-      "image": AppImage.doc,
-      "title": "1120",
-      "subtitle": "Follow-ups Made"
-    },
-    {
-      "image": AppImage.doc,
-      "title": "1120",
-      "subtitle": "Closed Deals"
-    },
-  ];*/
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   InfoController infoController = Get.put(InfoController());
   double maxGraphValue = 1000;
-  final List<Map<String, dynamic>> birthdays = [
-    {"name": "Grace Lee", "date": DateTime(2025, 4, 5), "image": "assets/profile1.png"},
-    {"name": "Hannah Turner", "date": DateTime(2025, 4, 8), "image": "assets/profile2.png"},
-    {"name": "Kylie King", "date": DateTime(2025, 4, 20), "image": "assets/profile3.png"},
-  ];
-  final List<Map<String, dynamic>> news = [
-    {"title":"Shortcovering rally: Nifty ends near 23,200, Sensex jumps 899 points", "descr": "The domestic key equity indices closed on a positive note for the fourth consecutive session on Thursday. The NSE Nifty 50 rose 283 points or 1.24% to settle at 23,190.65, while the BSE Sensex jumped 899 points or 1.19% to finish at 76,348.",  "image": AppImage.new},
-    {"title":"Shortcovering rally: Nifty ends near 23,200, Sensex jumps 899 points", "descr": "The domestic key equity indices closed on a positive note for the fourth consecutive session on Thursday. The NSE Nifty 50 rose 283 points or 1.24% to settle at 23,190.65, while the BSE Sensex jumped 899 points or 1.19% to finish at 76,348.",  "image": AppImage.new},
-    {"title":"Shortcovering rally: Nifty ends near 23,200, Sensex jumps 899 points", "descr": "The domestic key equity indices closed on a positive note for the fourth consecutive session on Thursday. The NSE Nifty 50 rose 283 points or 1.24% to settle at 23,190.65, while the BSE Sensex jumped 899 points or 1.19% to finish at 76,348.",  "image": AppImage.new},
-  ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("New notification: ${message.notification?.title}");
+      //print("New notification: ${message.notification?.title}");
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("User tapped on notification: ${message.notification?.title}");
+      //print("User tapped on notification: ${message.notification?.title}");
     });
 
 
@@ -99,7 +57,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return  Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColor.backgroundColor,
-      drawer:   CustomDrawer(),
+      drawer:   const CustomDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -115,16 +73,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       end: Alignment.bottomCenter,
                     ),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child:Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
 
                       header(),
 
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
 
@@ -138,7 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Align(
                   alignment: Alignment.topCenter,  // Centers it
                   child: Container(
-                    margin:  EdgeInsets.only(
+                    margin:  const EdgeInsets.only(
                         top: 280  // 250
                     ), // <-- Moves it 30px from top
                     width: double.infinity,
@@ -160,13 +118,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                         birthday(),
 
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
 
                         latestNews(),
 
-                        SizedBox(
+                        const  SizedBox(
                           height: 20,
                         ),
 
@@ -211,7 +169,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   _scaffoldKey.currentState?.openDrawer();
                 },
                   child: SvgPicture.asset(AppImage.drawerIcon)),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Column(
@@ -219,7 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                  Obx(()=>  Text(
                    greetingController.greetingMsg.value.toString(),
-                   style: TextStyle(
+                   style: const TextStyle(
                        fontSize: 12,
 
                        color: AppColor.grey3
@@ -227,7 +185,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                  )),
                    Text(
                     infoController.firstName.value.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
 
@@ -418,7 +376,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
 
           ),
-          child: Center(
+          child: const Center(
             child: Text(
               AppText.noDataFound,
               style: TextStyle(
@@ -453,7 +411,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return Container(
                 width: MediaQuery.of(context).size.width*0.80,
                 padding: const EdgeInsets.all(16),
-                margin: EdgeInsets.symmetric(horizontal: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 5),
 
                 decoration: BoxDecoration(
                   color: index%2==0?AppColor.appWhite:AppColor.secondaryColor,
@@ -557,7 +515,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       height: 145,
       child: GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // 2 columns
           crossAxisSpacing: 10, // Space between columns
@@ -569,7 +527,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         itemBuilder: (context, ind) {
           //print("chunk==>${chunk[ind].leadCount.toString()}");
           return Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -595,7 +553,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Image.asset(AppImage.doc, height: 20),
                 ),
 
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -603,18 +561,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         Text(
                           chunk[ind].leadCount.toString(),
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Image.asset(AppImage.arrow, height: 8),
                       ],
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Container(
                       width: 40,
                       child: Text(
                         chunk[ind].stageName.toString(),
-                        style: TextStyle(fontSize: 8, color: AppColor.blackColor),
+                        style: const TextStyle(fontSize: 8, color: AppColor.blackColor),
                       ),
                     ),
                   ],
@@ -631,16 +589,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "Total Profile View",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
         ),
-        SizedBox(height: 5),
-        Text(
+        const SizedBox(height: 5),
+        const Text(
           "1024",
           style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
 
         Stack(
           children: [
@@ -663,19 +621,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 right: 0,
                 child:Column(
                   children: [
-                    Divider(
+                    const Divider(
                       color: Colors.grey,
                     ),
                     SizedBox(
                         height:  MediaQuery.of(context).size.height*0.1
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.grey,
                     ),
                     SizedBox(
                         height:  MediaQuery.of(context).size.height*0.1
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.grey,
                     ),
                   ],
@@ -692,7 +650,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
-        Text(
+        const Text(
           "Performance Insights",
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -705,7 +663,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 // Background rings
                 CustomPaint(
-                  size: Size(250, 250),
+                  size: const Size(250, 250),
                   painter: CircularGraphPainter(),
                 ),
                 // Center image
@@ -718,7 +676,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: 20),
             // Legend
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Legend(color: AppColor.pinkColor, text: "Below: 40%"),
@@ -737,7 +695,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Legend
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Legend1(color:AppColor.secondaryColor, text: "Total Units: 24"),
@@ -745,7 +703,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
         const SizedBox(height: 10),
-        Legend1(color: AppColor.blackColor, text: "Total Branches: 20"),
+        const Legend1(color: AppColor.blackColor, text: "Total Branches: 20"),
         const SizedBox(height: 30),
         // Graph
         SizedBox(
@@ -761,8 +719,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return BarChartData(
 
       maxY: maxGraphValue, // Set the same max value
-      gridData: FlGridData(show: false),
-      titlesData: FlTitlesData(show: false),
+      gridData: const FlGridData(show: false),
+      titlesData: const FlTitlesData(show: false),
       borderData: FlBorderData(show: false),
       barGroups: [
         _barData(0, 600),
@@ -795,8 +753,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   LineChartData _getLineChartData() {
     return LineChartData(
       maxY: maxGraphValue,
-      gridData: FlGridData(show: false),
-      titlesData: FlTitlesData(show: false),
+      gridData:const FlGridData(show: false),
+      titlesData: const FlTitlesData(show: false),
       borderData: FlBorderData(show: false),
       lineBarsData: [
         LineChartBarData(
@@ -819,13 +777,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   /// Data Points for Zigzag Line
   List<FlSpot> _getLineChartSpots() {
     return [
-      FlSpot(0, 500),
-      FlSpot(1, 800),
-      FlSpot(2, 500),
-      FlSpot(3, 1000),
-      FlSpot(4, 700),
-      FlSpot(5, 300),
-      FlSpot(6, 900),
+      const FlSpot(0, 500),
+      const FlSpot(1, 800),
+      const FlSpot(2, 500),
+      const FlSpot(3, 1000),
+      const  FlSpot(4, 700),
+      const FlSpot(5, 300),
+      const FlSpot(6, 900),
     ];
   }
 
@@ -833,8 +791,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+        const Padding(
+          padding:  EdgeInsets.symmetric(vertical: 10),
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -845,7 +803,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Obx((){
@@ -869,7 +827,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
 
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   AppText.noBirhday,
                   style: TextStyle(
@@ -882,75 +840,80 @@ class _DashboardScreenState extends State<DashboardScreen> {
             )); // Handle the null case
           }
           return Container(
-
-            height: 200,
+            height: 150,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: dashboardController.getUpcomingDateOfBirthModel.value!.data!.length,
               itemBuilder: (context, index) {
-                // var birthday = birthdays[index];
+
+
+
                 var birthday = dashboardController.getUpcomingDateOfBirthModel.value!.data![index];
+                List<Color> colors = [AppColor.secondaryColor, AppColor.lightGreen, AppColor.lightBrown];
+                var thColor=colors[index % colors.length]; // Cycle through colors
+
                 return Container(
-                  width: 180,
-                  margin: EdgeInsets.symmetric(horizontal: 8),
-                  padding: EdgeInsets.all(12),
+                  width: 150,
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColor.grey200,
-                        blurRadius: 5,
-                        spreadRadius: 2,
-                        offset: Offset(3, 3),
-                      ),
-                    ],
+                    color: AppColor.appWhite,
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: thColor, width: 1),
                   ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
+                      const SizedBox(height: 10),
                       Container(
-                        width: 48, // Adjust size as needed
-                        height: 48,
+                        height: 40,
+                        width: 40,
+
                         decoration: BoxDecoration(
-                          color: AppColor.secondaryColor,
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColor.appWhite, width: 2),
-                          // borderRadius: BorderRadius.circular(15),
+                          color: thColor,
+                          border: Border.all(color: thColor),
                         ),
-                        alignment: Alignment.center,
-                        /*child: Text(
-                          birthday.employeeName!.isNotEmpty ? birthday.employeeName![0].toUpperCase() : "U",
-                          style: TextStyle(
-                            color: AppColor.appWhite,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        child: Center(
+                          child: Text(
+                            birthday.employeeName!.isNotEmpty ? birthday.employeeName![0].toUpperCase() : "U", // Initial Letter
+                            style: TextStyle(color: Colors.white),
                           ),
-                        ),*/
-                        child: Icon(Icons.cake_sharp,color: AppColor.appWhite,),
+                        ),
                       ),
-                      //RoundedInitialContainer(firstName: birthday["name"],),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 10),
                       Text(
                         birthday.employeeName.toString(),
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.blackLight),
                       ),
-                      const SizedBox(height: 5),
                       Text(
-                        // DateFormat('MMMM d, yyyy').format(birthday.dateOfBirth.toString()),
-                        Helper.birthdayFormat(birthday.dateOfBirth.toString()),
-                        style: TextStyle(fontSize: 12, color: AppColor.grey700),
+                        Helper.birthdayFormat(birthday.dateOfBirth.toString()), // Formatted date
+                        style: const TextStyle(fontSize: 14, color: AppColor.blackLight),
                       ),
-                      const SizedBox(height: 8),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.secondaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                      const SizedBox(height: 10),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: thColor,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(5),
+                                bottomRight: Radius.circular(5),
+                              ),
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                // Add action for sending wishes
+                              },
+                              child: const Text(
+                                "Send Wishes",
+                                style: TextStyle(color: Colors.white, fontSize: 14),
+                              ),
+                            ),
                           ),
                         ),
-                        onPressed: () {},
-                        child: const Text(AppText.sendWishes, style: TextStyle(color: AppColor.appWhite),),
                       ),
                     ],
                   ),
@@ -967,14 +930,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        const Padding(
+          padding:  EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: Text(
             "Latest News",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Obx((){
           if (dashboardController.isLoading.value) {
             return  Center(child: CustomSkelton.dashboardShimmerList(context));
@@ -996,7 +959,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
 
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   AppText.noDataFound,
                   style: TextStyle(
@@ -1017,19 +980,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 var data = dashboardController.getBreakingNewsModel.value!.data![index];
                 return Container(
                   width: 200,
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  padding: EdgeInsets.all(10),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        blurRadius: 6,
-                        spreadRadius: 2,
-                        offset: Offset(2, 3),
-                      ),
-                    ],
+                    border: Border.all(color: AppColor.grey4, width: 1),
                   ),
                   child:SizedBox(
                     width: 200, // Width of each news card
@@ -1045,17 +1001,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         // Wrapping title and description inside Expanded/Flexible to prevent overflow
                         Expanded(
                           child: Text(
                             data.title.toString(),//data["title"]!,
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Expanded(
                           child: Text(
                             data.description.toString(),
@@ -1064,12 +1020,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        // Removed Spacer() as it forces max height usage
+                        // Remove,d Spacer() as it forces max height usage
                         Align(
-                          alignment: Alignment.bottomRight,
+                          alignment: Alignment.bottomLeft,
                           child: TextButton(
                             onPressed: () => _launchURL(data.url.toString()),
-                            child: Text(
+                            child: const Text(
                               "Read More",
                               style: TextStyle(color: Colors.blue),
                             ),

@@ -32,6 +32,8 @@ class Addleadcontroller extends GetxController{
   final TextEditingController connMobController = TextEditingController();
   final TextEditingController connShareController = TextEditingController();
 
+  var fromWhere="".obs;
+
   void toggleConnectorCheckbox(bool? value) {
     isConnectorChecked.value = value ?? false;
   }

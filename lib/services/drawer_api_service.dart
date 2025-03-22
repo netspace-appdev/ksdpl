@@ -321,6 +321,9 @@ class DrawerApiService {
   static Future<Map<String, dynamic>> getAllLeadsApi({
     required leadStage,
     required employeeId,
+    required stateId,
+    required distId,
+    required cityId,
 }) async {
 
     try {
@@ -336,9 +339,9 @@ class DrawerApiService {
       request.headers.addAll(header);
       request.fields['LeadStage'] = leadStage.toString();
       request.fields['AssignedEmployeeId'] =employeeId.toString();
-      request.fields['StateId'] ="0";
-      request.fields['DistrictId'] ="0";
-      request.fields['CityId'] ="0";
+      request.fields['StateId'] =stateId;
+      request.fields['DistrictId'] =distId;
+      request.fields['CityId'] =cityId;
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
