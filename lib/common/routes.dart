@@ -13,14 +13,15 @@ import '../exp.dart';
 import '../home/LeadListScreen.dart';
 import '../home/change_password.dart';
 import '../home/edit_profile.dart';
-import '../home/lead_details.dart';
+import '../home/leads/lead_details.dart';
 import '../home/leads/LeadDetailsMain.dart';
 import '../home/leads/add_lead_screen.dart';
+import '../home/leads/lead_follow_up_screen.dart';
 import '../home/leads/lead_list_main.dart';
 import '../home/leads/loan_application_screen.dart';
 import '../home/manage_branch.dart';
 import '../home/notification_screen.dart';
-import '../home/open_poll_filter.dart';
+import '../home/leads/open_poll_filter.dart';
 import '../home/product.dart';
 import '../home/splash.dart';
 import '../registration/login.dart';
@@ -40,12 +41,11 @@ final routes = [
   GetPage(name: '/enforcementDashboard', page: () => EnforcementDashboard()),
   GetPage(name: '/uploadCommonTask', page: () => UploadCommonTask()),
   GetPage(name: '/callStorageScreen', page: () => CallStorageScreen()),
-  GetPage(name: '/leadDetails', page: () => LeadDetailsScreen()),
-  GetPage(name: '/leadListMain', page: () => LeadListMain()),
   GetPage(name: '/leadListMain', page: () => LeadListMain()),
   GetPage(name: '/notificationScreen', page: () =>NotificationScreen()),
   GetPage(name: '/leadDetailsMain', page: () =>LeadDetailsMain()),
   GetPage(name: '/addLeadScreen', page: () =>AddLeadScreen()),
   GetPage(name: '/loanApplication', page: () =>LoanApplicationScreen()),
   GetPage(name: '/openPollFilter', page: () =>OpenPollFilter()),
+  GetPage(name: '/leadFollowup', page: () =>LeadFollowupScreen()),
 ];

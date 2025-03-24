@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class GetLeadDetailModel {
   String? status;
   bool? success;
@@ -39,38 +41,39 @@ class Data {
   String? uploadedBy;
   String? uploadedDate;
   int? interested;
-  String? doable;
+  Null? doable;
   String? interestedDate;
-  String? doableDate;
-  String? campaign;
+  Null? doableDate;
+  Null? campaign;
   String? uniqueLeadNumber;
-  String? dateOfBirth;
-  String? gender;
-  String? loanAmountRequested;
-  String? adharCard;
-  String? panCard;
-  String? streetAddress;
-  String? state;
-  String? district;
-  String? city;
-  String? nationality;
-  String? currentEmploymentStatus;
-  String? employerName;
-  String? monthlyIncome;
-  String? additionalSourceOfIncome;
-  String? prefferedBank;
-  String? existinRelaationshipWithBank;
-  String? branch;
-  String? productType;
-  String? loanApplicationNo;
-  String? pickedUpEmployeeId;
-  String? connectorName;
-  String? connectorMobileNo;
-  String? connectorPercentage;
-  String? existingLoans;
-  String? noOfExistingLoans;
+  Null? dateOfBirth;
+  Null? gender;
+  Null? loanAmountRequested;
+  Null? adharCard;
+  Null? panCard;
+  Null? streetAddress;
+  Null? state;
+  Null? district;
+  Null? city;
+  Null? nationality;
+  Null? currentEmploymentStatus;
+  Null? employerName;
+  Null? monthlyIncome;
+  Null? additionalSourceOfIncome;
+  Null? prefferedBank;
+  Null? existinRelaationshipWithBank;
+  Null? branch;
+  Null? productType;
+  Null? loanApplicationNo;
+  int? pickedUpEmployeeId;
+  Null? connectorName;
+  Null? connectorMobileNo;
+  Null? connectorPercentage;
+  Null? existingLoans;
+  Null? noOfExistingLoans;
   String? moveToCommon;
-  int? assignedEmployeePercentage;
+  Double? assignedEmployeePercentage;
+  String? lastUpdatedDate;
 
   Data(
       {this.id,
@@ -117,7 +120,8 @@ class Data {
         this.existingLoans,
         this.noOfExistingLoans,
         this.moveToCommon,
-        this.assignedEmployeePercentage});
+        this.assignedEmployeePercentage,
+        this.lastUpdatedDate});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -164,7 +168,8 @@ class Data {
     existingLoans = json['existingLoans'];
     noOfExistingLoans = json['noOfExistingLoans'];
     moveToCommon = json['moveToCommon'];
-    assignedEmployeePercentage = json['assignedEmployeePercentage'];
+    assignedEmployeePercentage = json['assignedEmployeePercentage']?.toInt();
+    lastUpdatedDate = json['lastUpdatedDate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -214,6 +219,7 @@ class Data {
     data['noOfExistingLoans'] = this.noOfExistingLoans;
     data['moveToCommon'] = this.moveToCommon;
     data['assignedEmployeePercentage'] = this.assignedEmployeePercentage;
+    data['lastUpdatedDate'] = this.lastUpdatedDate;
     return data;
   }
 }

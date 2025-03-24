@@ -3,22 +3,22 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ksdpl/controllers/registration_dd_controller.dart';
 import 'package:ksdpl/custom_widgets/CustomDropdown.dart';
-import '../../custom_widgets/CustomTextField.dart';
-import '../../common/helper.dart';
-import '../common/skelton.dart';
-import '../common/storage_service.dart';
-import '../controllers/ImagePickerController.dart';
-import '../controllers/check_valid_email_controller.dart';
-import '../controllers/checkphone_controller.dart';
-import '../controllers/password_controller.dart';
-import '../controllers/profile/EditProfileController.dart';
-import '../controllers/regstration_controller.dart';
-import '../custom_widgets/CustomElevatedButton.dart';
-import '../custom_widgets/CustomTexFieldFreezed.dart';
-import '../custom_widgets/CustomTextArea.dart';
-import '../custom_widgets/CustomTextFieldListener.dart';
-import '../custom_widgets/CustomTextFieldPassword.dart';
-import '../custom_widgets/SnackBarHelper.dart';
+import '../../../custom_widgets/CustomTextField.dart';
+import '../../../common/helper.dart';
+import '../../common/skelton.dart';
+import '../../common/storage_service.dart';
+import '../../controllers/ImagePickerController.dart';
+import '../../controllers/check_valid_email_controller.dart';
+import '../../controllers/checkphone_controller.dart';
+import '../../controllers/password_controller.dart';
+import '../../controllers/profile/EditProfileController.dart';
+import '../../controllers/regstration_controller.dart';
+import '../../custom_widgets/CustomElevatedButton.dart';
+import '../../custom_widgets/CustomTexFieldFreezed.dart';
+import '../../custom_widgets/CustomTextArea.dart';
+import '../../custom_widgets/CustomTextFieldListener.dart';
+import '../../custom_widgets/CustomTextFieldPassword.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
 
 
 

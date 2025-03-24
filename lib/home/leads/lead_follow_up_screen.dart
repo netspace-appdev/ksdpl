@@ -11,22 +11,24 @@ import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
+import '../../common/storage_service.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/drawer_controller.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
+import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/open_poll_filter_controller.dart';
+import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
-import '../controllers/leads/leadlist_controller.dart';
-import '../controllers/open_poll_filter_controller.dart';
-import '../custom_widgets/CustomTextFieldPrefix.dart';
+import '../../custom_widgets/CustomTextFieldPrefix.dart';
 
 
 
-class OpenPollFilter extends StatelessWidget {
+class LeadFollowupScreen extends StatelessWidget {
 
   LeadDDController leadDDController = Get.put(LeadDDController());
 
@@ -99,147 +101,17 @@ class OpenPollFilter extends StatelessWidget {
                               height: 10,
                             ),
 
-                            const Text(
-                              AppText.state,
+
+
+                            Text(
+                              AppText.history,
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
                               ),
                             ),
-
-                            SizedBox(height: 10),
-
-
-                            Obx((){
-                              if (leadDDController.isLoading.value) {
-                                return  Center(child:CustomSkelton.productShimmerList(context));
-                              }
-
-                              return CustomDropdown<Data>(
-                                items: leadDDController.getAllStateModel.value?.data ?? [],
-                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                getName: (item) => item.stateName.toString(),
-                                selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                                      (item) => item.id.toString() == leadDDController.selectedState.value,
-                                ),
-                                onChanged: (value) {
-                                  leadDDController.selectedState.value =  value?.id?.toString();
-                                  leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
-                                },
-                              );
-                            }),
-
                             const SizedBox(height: 20),
 
-                            const Text(
-                              AppText.district,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
-                              ),
-                            ),
-
-                            const SizedBox(height: 10),
-
-
-                            Obx((){
-                              if (leadDDController.isLoading.value) {
-                                return  Center(child:CustomSkelton.productShimmerList(context));
-                              }
-
-
-                              return CustomDropdown<dist.Data>(
-                                items: leadDDController.getDistrictByStateModel.value?.data ?? [],
-                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                getName: (item) => item.districtName.toString(),
-                                selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
-                                      (item) => item.id.toString() == leadDDController.selectedDistrict.value,
-                                ),
-                                onChanged: (value) {
-                                  leadDDController.selectedDistrict.value =  value?.id?.toString();
-                                  leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
-                                },
-                              );
-                            }),
-
-                            const SizedBox(height: 20),
-
-
-                            const Text(
-                              AppText.city,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
-                              ),
-                            ),
-
-                            const SizedBox(height: 10),
-
-
-                            Obx((){
-                              if (leadDDController.isLoading.value) {
-                                return  Center(child:CustomSkelton.productShimmerList(context));
-                              }
-
-
-                              return CustomDropdown<city.Data>(
-                                items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
-                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                getName: (item) => item.cityName.toString(),
-                                selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
-                                      (item) => item.id.toString() == leadDDController.selectedCity.value,
-                                ),
-                                onChanged: (value) {
-                                  leadDDController.selectedCity.value =  value?.id?.toString();
-                                },
-                              );
-                            }),
-
-                            const SizedBox(height: 20),
-
-
-                            Obx((){
-                              if(addleadcontroller.isLoading.value){
-                                return const Align(
-                                  alignment: Alignment.center,
-                                  child: SizedBox(
-                                    height: 30,
-                                    width: 30,
-                                    child: CircularProgressIndicator(
-                                      color: AppColor.primaryColor,
-                                    ),
-                                  ),
-                                );
-                              }
-                              return SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColor.secondaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  onPressed: onPressed,
-                                  child: const Text(
-                                    AppText.submit,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-
-                            const SizedBox(height: 20),
-
-                            leadSection(context)
                           ],
                         ),
                       ),
@@ -272,7 +144,7 @@ class OpenPollFilter extends StatelessWidget {
 
 
           const Text(
-            AppText.openPollFilter,
+            AppText.followup,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
@@ -328,7 +200,7 @@ class OpenPollFilter extends StatelessWidget {
 
     if (_formKey.currentState!.validate()) {
 
-      if (leadDDController.selectedState.value==null) {
+      /* if (leadDDController.selectedState.value==null) {
         ToastMessage.msg("Please select state");
       }else  if (leadDDController.selectedDistrict.value==null) {
         ToastMessage.msg("Please select district");
@@ -337,17 +209,18 @@ class OpenPollFilter extends StatelessWidget {
       } {
         openPollFilterController.pollFilterSubmit();
         ToastMessage.msg("Form Submitted");
-      }
+      }*/
+      openPollFilterController.pollFilterSubmit();
     }
   }
 
   Widget leadSection(BuildContext context){
     return Obx((){
-      if (leadListController.isLoading.value) {
+      if (openPollFilterController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-      if (leadListController.getAllLeadsModel.value == null ||
-          leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty) {
+      if (openPollFilterController.getAllLeadsModel.value == null ||
+          openPollFilterController.getAllLeadsModel.value!.data == null || openPollFilterController.getAllLeadsModel.value!.data!.isEmpty) {
         return  Container(
           height: MediaQuery.of(context).size.height*0.50,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -382,11 +255,11 @@ class OpenPollFilter extends StatelessWidget {
       }
 
       return  ListView.builder(
-        itemCount: leadListController.getAllLeadsModel.value!.data!.length,
+        itemCount: openPollFilterController.getAllLeadsModel.value!.data!.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          final lead = leadListController.getAllLeadsModel.value!.data![index];
+          final lead = openPollFilterController.getAllLeadsModel.value!.data![index];
 
 
 
@@ -423,7 +296,7 @@ class OpenPollFilter extends StatelessWidget {
                             ),
                             child: Center(
                               child: Text(
-                                lead.name!.isNotEmpty ?  lead.name![0].toUpperCase() : "U", // Initial Letter
+                                lead.name==null?"N": lead.name!.isNotEmpty ?  lead.name![0].toUpperCase() : "U", // Initial Letter
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
@@ -565,8 +438,30 @@ class OpenPollFilter extends StatelessWidget {
   Widget _buildTextButton(String label, BuildContext context, Color color, IconData icon, String leadId) {
     return GestureDetector(
       onTap: () {
-        if (label == "Open Poll") {
-          showOpenPollDialog(context: context,leadId: leadId);
+        if (label == "Pick Lead") {
+          // showOpenPollDialog(context: context,leadId: leadId);
+          showDialog(
+            context: context,
+            builder: (context) {
+              return CustomDialogBox(
+                title: "Are you sure?",
+
+                onYes: () {
+                  var eId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+                  openPollFilterController.pickupLeadFromCommonTasksApi(
+                      employeeId: eId,
+                      leadId: leadId
+                  );
+
+
+                },
+                onNo: () {
+
+                },
+              );
+            },
+          );
+
         }else if (label == "Details") {
           Get.toNamed("/leadDetailsMain", arguments: {"leadId":leadId.toString()});
         }else{

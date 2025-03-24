@@ -233,6 +233,15 @@ class AppText{
   static const String couldNotWA = "Could not open WhatsApp";
   static const String couldNotMsg = "Could not open Messages";
   static const String openPollFilter = "Open Poll Filter";
+  static const String openPollLeads = "Open Poll Leads";
+  static const String followup = "Follow Up";
+  static const String history = "History";
+  static const String details = "Details";
+  static const String openPoll = "Open Poll";
+  static const String interested = "Interested";
+  static const String notInterested = "Not Interested";
+  static const String doable = "Doable";
+  static const String notDoable = "Not Doable";
 
 
 }

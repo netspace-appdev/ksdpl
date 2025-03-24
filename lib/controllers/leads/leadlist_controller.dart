@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
@@ -8,6 +10,7 @@ import '../../common/storage_service.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
 import '../../models/dashboard/LeadMoveToCommonTaskModel.dart';
+import '../../models/dashboard/WorkOnLeadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/drawer/UpdateLeadStageModel.dart';
 import '../../services/dashboard_api_service.dart';
@@ -22,6 +25,7 @@ class LeadListController extends GetxController {
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
   UpdateLeadStageModel? updateLeadStageModel;
   LeadMoveToCommonTaskModel? leadMoveToCommonTaskModel;
+  WorkOnLeadModel? workOnLeadModel;
   var interestLeadsCheck = false.obs; // Observable variable
   var assignedLeadsCheck = true.obs; // Observable variable
   var leadCode="2".obs;
@@ -36,6 +40,8 @@ class LeadListController extends GetxController {
 
   var eId="".obs;
   final TextEditingController openPollPercentController = TextEditingController();
+  final TextEditingController followDateController = TextEditingController();
+  final TextEditingController followTimeController = TextEditingController();
   @override
   void onInit() {
     // TODO: implement onInit
@@ -259,6 +265,79 @@ class LeadListController extends GetxController {
 
     } catch (e) {
       print("Error leadMoveToCommonTaskModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+      print("run hua");
+
+
+
+      getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value
+      );
+
+      isLoading(false);
+    }
+  }
+
+
+  void workOnLeadApi({
+    required String leadId,
+    required String leadStageStatus,
+    String leadPercent = "0",
+    String employeeId = "0",
+    String? callEndTime,
+    String callStatus = "0",
+    String? callStartTime,
+    String? feedbackRelatedToLead,
+    String? callDuration,
+    String? callReminder,
+    String? feedbackRelatedToCall,
+    String moveToCommon = "0",
+    File? callRecordingPathUrl, // File upload
+  }) async {
+    try {
+      isLoading(true);
+
+      var eId=StorageService.get(StorageService.EMPLOYEE_ID);
+
+      var data = await DrawerApiService.workOnLeadApi(
+          leadId:leadId,
+          leadStageStatus: leadStageStatus,
+          leadPercent: leadPercent,
+          employeeId: eId.toString(),
+          callEndTime: callEndTime,
+          callStatus: callStatus,
+          callStartTime: callStartTime,
+          feedbackRelatedToLead: feedbackRelatedToLead,
+          callDuration: callDuration,
+          callReminder: callReminder,
+          feedbackRelatedToCall: feedbackRelatedToCall,
+          moveToCommon: moveToCommon,
+          callRecordingPathUrl: callRecordingPathUrl,
+      );
+
+
+      if(data['success'] == true){
+
+        workOnLeadModel= WorkOnLeadModel.fromJson(data);
+
+        ToastMessage.msg(workOnLeadModel!.message!);
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error workOnLeadModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);

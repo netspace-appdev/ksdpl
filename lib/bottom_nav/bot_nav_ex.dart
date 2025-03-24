@@ -18,6 +18,7 @@ class BottomNavBarExample extends StatefulWidget {
 class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   BotNavController botNavController = Get.put(BotNavController());
   LeadDDController leadDDController = Get.put(LeadDDController());
+  LeadListController leadListController = Get.put(LeadListController());
 
   final List<Widget> _pages = [
     DashboardScreen(),
@@ -62,6 +63,10 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
         floatingActionButton: FloatingActionButton(
           backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {
+            leadDDController.selectedState.value="0";
+            leadDDController.selectedDistrict.value="0";
+            leadDDController.selectedCity.value="0";
+            leadListController.leadCode.value="4";
             Get.toNamed("/openPollFilter");
           },
           shape: const CircleBorder(),

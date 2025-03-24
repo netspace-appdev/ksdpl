@@ -123,7 +123,10 @@ class LeadDetailsMain extends StatelessWidget {
               onTap: (){
                 Get.back();
               },
-              child: Image.asset(AppImage.arrowLeft,height: 24,)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(AppImage.arrowLeft,height: 24,),
+              )),
           Text(
             AppText.leadDetails,
             style: TextStyle(
