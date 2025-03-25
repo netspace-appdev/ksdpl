@@ -12,11 +12,14 @@ import '../enforcement_panel/upload_common_task.dart';
 import '../exp.dart';
 import '../home/LeadListScreen.dart';
 import '../home/change_password.dart';
+import '../home/dashboard_screen.dart';
 import '../home/edit_profile.dart';
 import '../home/leads/lead_details.dart';
 import '../home/leads/LeadDetailsMain.dart';
 import '../home/leads/add_lead_screen.dart';
+import '../home/leads/lead_details_tab.dart';
 import '../home/leads/lead_follow_up_screen.dart';
+import '../home/leads/lead_history.dart';
 import '../home/leads/lead_list_main.dart';
 import '../home/leads/loan_application_screen.dart';
 import '../home/manage_branch.dart';
@@ -48,4 +51,7 @@ final routes = [
   GetPage(name: '/loanApplication', page: () =>LoanApplicationScreen()),
   GetPage(name: '/openPollFilter', page: () =>OpenPollFilter()),
   GetPage(name: '/leadFollowup', page: () =>LeadFollowupScreen()),
+  GetPage(name: '/leadDetailsTab', page: () =>LeadDetailsTab()),
+  GetPage(name: '/leadHistory', page: () => LeadHistory()),
+  GetPage(name: '/dashboardScreen', page: () => DashboardScreen()),
 ];

@@ -242,6 +242,7 @@ class AppText{
   static const String notInterested = "Not Interested";
   static const String doable = "Doable";
   static const String notDoable = "Not Doable";
+  static const String leadHistory = "Lead History";
 
 
 }
@@ -394,7 +395,7 @@ class Helper{
       imageUrl: imageURL,//"",//"https://img.freepik.com/free-photo/close-up-portrait-brunette-smiling-woman-looking-confident-front-standing-hoodie-against-white-wall_176420-39066.jpg?t=st=1737785621~exp=1737789221~hmac=e5648802111562bfcb27f8ed3e9c8d2ca70f826e407a1b9007a98e326b455929&w=1380",
       imageBuilder: (context, imageProvider) => Container(
         width: cHeight, // Must be 2 * radius to fit
-        height: cWidth, // Must be 2 * radius to fit
+        //height: cWidth, // Must be 2 * radius to fit
         decoration: BoxDecoration(
           image: DecorationImage(
             image: imageProvider,

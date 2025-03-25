@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class GetLeadDetailModel {
   String? status;
   bool? success;
@@ -40,39 +38,39 @@ class Data {
   bool? active;
   String? uploadedBy;
   String? uploadedDate;
-  int? interested;
-  Null? doable;
+  String? interested;
+  String? doable;
   String? interestedDate;
-  Null? doableDate;
-  Null? campaign;
+  String? doableDate;
+  String? campaign;
   String? uniqueLeadNumber;
-  Null? dateOfBirth;
-  Null? gender;
-  Null? loanAmountRequested;
-  Null? adharCard;
-  Null? panCard;
-  Null? streetAddress;
-  Null? state;
-  Null? district;
-  Null? city;
-  Null? nationality;
-  Null? currentEmploymentStatus;
-  Null? employerName;
-  Null? monthlyIncome;
-  Null? additionalSourceOfIncome;
-  Null? prefferedBank;
-  Null? existinRelaationshipWithBank;
-  Null? branch;
-  Null? productType;
-  Null? loanApplicationNo;
-  int? pickedUpEmployeeId;
-  Null? connectorName;
-  Null? connectorMobileNo;
-  Null? connectorPercentage;
-  Null? existingLoans;
-  Null? noOfExistingLoans;
+  String? dateOfBirth;
+  String? gender;
+  String? loanAmountRequested;
+  String? adharCard;
+  String? panCard;
+  String? streetAddress;
+  String? state;
+  String? district;
+  String? city;
+  String? nationality;
+  String? currentEmploymentStatus;
+  String? employerName;
+  String? monthlyIncome;
+  String? additionalSourceOfIncome;
+  String? prefferedBank;
+  String? existinRelaationshipWithBank;
+  String? branch;
+  String? productType;
+  String? loanApplicationNo;
+  String? pickedUpEmployeeId;
+  String? connectorName;
+  String? connectorMobileNo;
+  String? connectorPercentage;
+  String? existingLoans;
+  String? noOfExistingLoans;
   String? moveToCommon;
-  Double? assignedEmployeePercentage;
+  double? assignedEmployeePercentage;
   String? lastUpdatedDate;
 
   Data(
@@ -168,7 +166,7 @@ class Data {
     existingLoans = json['existingLoans'];
     noOfExistingLoans = json['noOfExistingLoans'];
     moveToCommon = json['moveToCommon'];
-    assignedEmployeePercentage = json['assignedEmployeePercentage']?.toInt();
+    assignedEmployeePercentage = json['assignedEmployeePercentage'];
     lastUpdatedDate = json['lastUpdatedDate'];
   }
 

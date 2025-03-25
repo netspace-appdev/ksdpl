@@ -109,6 +109,7 @@ class LeadListMain extends StatelessWidget {
                              )),
                               InkWell(
                                 onTap: (){
+
                                   Get.toNamed("/addLeadScreen");
                                 },
                                 child: const Row(
@@ -198,86 +199,6 @@ class LeadListMain extends StatelessWidget {
               child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
             ),
           )
-
-    /*      MenuAnchor(
-            //childFocusNode: _buttonFocusNode,
-            menuChildren: <Widget>[
-
-              MenuItemButton(
-                onPressed:null,
-
-                child: Row(
-
-                  children: [
-                    Obx(() => Container(
-
-                      width: 40,
-                      height: 40,
-                      child: CheckboxListTile(
-                        title: Text("Accept Terms & Conditions"),
-                        value: leadListController.assignedLeadsCheck.value,
-                        onChanged: (value) => leadListController.toggleCheckboxAssigned(),
-                      ),
-                    )),
-                    const SizedBox(width: 15,),
-                    const Text("Assigned Leads", style: TextStyle(color: AppColor.black87),),
-
-                  ],
-                ),
-              ),
-
-              MenuItemButton(
-                onPressed:null,
-
-                child: Row(
-
-                  children: [
-                    Obx(() => Container(
-
-                      width: 40,
-                      height: 40,
-                      child: CheckboxListTile(
-                        title: Text("Accept Terms & Conditions"),
-                        value: leadListController.interestLeadsCheck.value,
-                        onChanged: (value) => leadListController.toggleCheckboxInterested(),
-                      ),
-                    )),
-                    const SizedBox(width: 15,),
-                    const Text("Interested Leads", style: TextStyle(color: AppColor.black87),),
-
-                  ],
-                ),
-              ),
-
-
-            ],
-            builder: (BuildContext context, MenuController controller, Widget? child) {
-              return TextButton(
-               // focusNode: _buttonFocusNode,
-                onPressed: () {
-                  if (controller.isOpen) {
-                    controller.close();
-                  } else {
-                    controller.open();
-                  }
-                },
-                child: Container(
-
-                  width: 40,
-                  height:40,
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  decoration:  BoxDecoration(
-                    color: AppColor.appWhite.withOpacity(0.15),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
-                ),
-              );
-            },
-          )*/
-
         ],
       ),
     );
@@ -474,11 +395,8 @@ class LeadListMain extends StatelessWidget {
                       //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
                       InkWell(
                         onTap: () {
-                         /* showLeadStatusDialog(
-                              context: context,
-                              leadId: lead.id
-                          );*/
-                          Get.toNamed("/leadDetailsMain", arguments: {"leadId":lead.id.toString()});
+                          //Get.toNamed("/leadDetailsMain", arguments: {"leadId":lead.id.toString()});
+                          Get.toNamed("/leadDetailsTab", arguments: {"leadId":lead.id.toString()});
 
                         },
                         child: Container(
@@ -1337,7 +1255,7 @@ class LeadListMain extends StatelessWidget {
 
                           SizedBox(height: 30),
                           SizedBox(
-                            width: 200,
+                            width: 250,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.orange,

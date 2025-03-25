@@ -29,6 +29,7 @@ class DrawerApiService {
   static const String getProductListByBankId = baseUrl + 'ProductList/GetProductListByBankId';
   static const String pickupLeadFromCommonTasks = baseUrl + 'LeadDetail/PickupLeadFromCommonTasks';
   static const String workOnLead = baseUrl + 'LeadDetail/WorkOnLead';
+  static const String getLeadWorkByLeadId = baseUrl + 'LeadDetail/GetLeadWorkByLeadId';
 
   static Future<Map<String, dynamic>> getBankerByIdApi({
     required String bankerId,
@@ -779,92 +780,7 @@ class DrawerApiService {
     }
   }
 
-/*  static Future<Map<String, dynamic>> workOnLeadApi({
-    required String leadId,
-    required String leadStageStatus,
-    String? leadPercent,
-    String? employeeId,
-    String? callEndTime,
-    String? callStatus,
-    String? callStartTime,
-    String? feedbackRelatedToLead,
-    String? callDuration,
-    String? callReminder,
-    String? feedbackRelatedToCall,
-    String? moveToCommon,
-    File? callRecordingPathUrl, // File upload
-  }) async {
-    try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(workOnLead),
-      );
 
-      print("URI ===> workOnLead ===> ${workOnLead.toString()}");
-
-      // Headers
-      request.headers.addAll({
-        'accept': 'text/plain',
-        'Content-Type': 'multipart/form-data',
-      });
-
-      var header = await MyHeader.getHeaders2();
-
-      request.headers.addAll(header);
-
-      // Required fields
-      request.fields['LeadId'] = leadId;
-      request.fields['LeadStage_Status'] = leadStageStatus;
-      request.fields['Call_Recording_PathURL'] = "null";
-
-      // Optional fields: Only add if not null
-      if (leadPercent != null) request.fields['Lead_Percent'] = leadPercent;
-      if (employeeId != null) request.fields['EmployeeId'] = employeeId;
-      if (callEndTime != null) request.fields['CallEndTime'] = callEndTime;
-      if (callStatus != null) request.fields['callStatus'] = callStatus;
-      if (callStartTime != null) request.fields['CallStartTime'] = callStartTime;
-      if (feedbackRelatedToLead != null) request.fields['FeedBack_Related_To_Lead'] = feedbackRelatedToLead;
-      if (callDuration != null) request.fields['CallDuration'] = callDuration;
-      if (callReminder != null) request.fields['Call_Reminder'] = callReminder;
-      if (feedbackRelatedToCall != null) request.fields['FeedBack_Related_To_Call'] = feedbackRelatedToCall;
-      if (moveToCommon != null) request.fields['MoveToCommon'] = moveToCommon;
-
-
-      // File Upload: Only attach if file exists
-      *//*if (callRecordingPathUrl != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'Call_Recording_PathURL',
-            callRecordingPathUrl.path,
-            contentType: MediaType('image', 'png'), // Change based on file type
-          ),
-        );
-      }*//*
-
-      // Sending request
-      var streamedResponse = await request.send();
-      var response = await http.Response.fromStream(streamedResponse);
-
-      print("request===>  workOnLead==>${pickupLeadFromCommonTasks.toString()}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
-
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-
-        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
-          return jsonResponse;
-        } else {
-          return jsonResponse;
-        }
-      } else {
-        throw Exception('Failed to load data: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
-  }*/
 
   static Future<Map<String, dynamic>> workOnLeadApi({
     required String leadId,
@@ -951,5 +867,46 @@ class DrawerApiService {
   }
 
 
+  static Future<Map<String, dynamic>> getLeadWorkByLeadIdApi({
+    required leadId,
+  }) async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getLeadWorkByLeadId),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['LeadId'] = leadId;
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("request===>  getLeadWorkByLeadId==>${getLeadWorkByLeadId.toString()}");
+      print("request===>==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>${response.body.toString()}");
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
 
 }
