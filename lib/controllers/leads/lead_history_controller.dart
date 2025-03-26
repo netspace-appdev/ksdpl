@@ -14,6 +14,7 @@ class LeadHistoryController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    print("lead histiry controller");
     dynamic arg= Get.arguments;
     getLeadWorkByLeadIdApi(leadId:arg["leadId"] );
 
@@ -23,7 +24,8 @@ class LeadHistoryController extends GetxController{
     required String leadId,
   }) async {
     try {
-      //print("getLeadWorkByLeadIdApi==>${}")
+      dynamic arg= Get.arguments;
+      print("getLeadWorkByLeadIdApi==>${arg["leadId"]}");
       isLoading(true);
 
 

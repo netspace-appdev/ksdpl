@@ -4,7 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
 class AppText{
   static const String brandName="KSDPL";
 
@@ -243,8 +246,16 @@ class AppText{
   static const String doable = "Doable";
   static const String notDoable = "Not Doable";
   static const String leadHistory = "Lead History";
-
-
+  static const String setFollowup = "Set Follow Up";
+  static const String selectDate = "Select Date";
+  static const String selectTime = "Select Time";
+  static const String enterDetails = "Enter Follow-up details";
+  static const String addFeedback = "Add Feedback";
+  static const String callFeedback = "Call Feedback";
+  static const String leadFeedback = "Lead Feedback";
+  static const String enterCallFeedback = "Enter Call Feedback";
+  static const String enterLeadFeedback = "Enter Lead Feedback";
+  static const String addFeedbackFirst = "Add feedback first";
 }
 
 class AppColor{
@@ -492,7 +503,19 @@ class Helper{
     // Return the date in DD-MM-YYYY format with the current year
     return '${parts[2]}-${parts[1]}-$currentYear';
   }
+  static String formatTimeAgo(String timestamp) {
+    DateTime dateTime = DateTime.parse(timestamp);
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(dateTime);
 
+    if (difference.inDays >= 1) {
+      // If more than a day, show formatted date & time
+      return DateFormat('dd-MM-yyyy, h:mm a').format(dateTime);
+    } else {
+      // Show relative time like "5 min ago"
+      return timeago.format(dateTime, locale: 'en');
+    }
+  }
 }
 
 

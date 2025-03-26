@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:call_log/call_log.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
@@ -42,6 +43,11 @@ class LeadListController extends GetxController {
   final TextEditingController openPollPercentController = TextEditingController();
   final TextEditingController followDateController = TextEditingController();
   final TextEditingController followTimeController = TextEditingController();
+  final TextEditingController followDetailsController = TextEditingController();
+
+  final TextEditingController callFeedbackController = TextEditingController();
+  final TextEditingController leadFeedbackController = TextEditingController();
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -62,10 +68,50 @@ class LeadListController extends GetxController {
     final Uri phoneUri = Uri.parse("tel:$phoneNumber");
 
     if (await canLaunchUrl(phoneUri)) {
+
       await launchUrl(phoneUri);
+      await Future.delayed(Duration(seconds: 5)); // Wait before checking logs
+      checkCallStatus(phoneNumber);
+
+
     } else {
 
       ToastMessage.msg(AppText.couldNotCall);
+    }
+  }
+/*  Future<void> checkLastCallStatus() async {
+    Iterable<CallLogEntry> entries = await CallLog.get();
+    if (entries.isNotEmpty) {
+      CallLogEntry lastCall = entries.first;
+
+      if (lastCall.duration! > 0) {
+        print("Call was answered, duration: ${lastCall.duration} sec");
+        print("Call was answered, duration: ${lastCall.number}");
+
+      } else {
+        print("Call was not answered");
+      }
+    }
+  }*/
+  Future<void> checkCallStatus(String phoneNumber) async {
+    await Future.delayed(Duration(seconds: 3)); // Allow time for call logs to update
+
+    Iterable<CallLogEntry> callLogs = await CallLog.query(
+      number: phoneNumber,
+    );
+
+    if (callLogs.isNotEmpty) {
+      CallLogEntry lastCall = callLogs.first;
+      print("Call Type: ${lastCall.callType}");
+      print("Duration: ${lastCall.duration} seconds");
+
+      if (lastCall.duration! > 0) {
+        print("Call was connected and lasted ${lastCall.duration} seconds.");
+      } else {
+        print("Call was not answered or disconnected immediately.");
+      }
+    } else {
+      print("No call log found for $phoneNumber.");
     }
   }
 
@@ -288,7 +334,7 @@ class LeadListController extends GetxController {
 
   void workOnLeadApi({
     required String leadId,
-    required String leadStageStatus,
+    String leadStageStatus = "0",
     String leadPercent = "0",
     String employeeId = "0",
     String? callEndTime,

@@ -597,7 +597,7 @@ class AddLeadScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
 
-          addleadcontroller.fromWhere.value=="drawer"?
+          addleadcontroller.fromWhere.value=="drawer" ||addleadcontroller.fromWhere.value=="leadList" ?
           InkWell(
               onTap: (){
                 Get.back();

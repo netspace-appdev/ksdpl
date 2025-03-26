@@ -1,9 +1,11 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -17,11 +19,14 @@ import '../../controllers/greeting_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 
+import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
+import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 import '../../exp.dart';
+import '../../services/call_service.dart';
 import '../custom_drawer.dart';
 
 class LeadListMain extends StatelessWidget {
@@ -31,6 +36,7 @@ class LeadListMain extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Addleadcontroller addLeadController = Get.put(Addleadcontroller());
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +115,7 @@ class LeadListMain extends StatelessWidget {
                              )),
                               InkWell(
                                 onTap: (){
-
+                                  addLeadController.fromWhere.value="leadList";
                                   Get.toNamed("/addLeadScreen");
                                 },
                                 child: const Row(
@@ -183,7 +189,7 @@ class LeadListMain extends StatelessWidget {
 
           InkWell(
             onTap: (){
-              showFilterDialog(context: context);
+              showFilterDialog(context: context,leadId: "0");
             },
             child: Container(
 
@@ -277,6 +283,7 @@ class LeadListMain extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           final lead = leadListController.getAllLeadsModel.value!.data![index];
+
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             margin: const EdgeInsets.symmetric(vertical: 10),
@@ -389,9 +396,9 @@ class LeadListMain extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
 
-                      _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call" ),
-                      _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp"  ),
-                      _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message" ),
+                      _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                      _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
+                      _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
                       //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
                       InkWell(
                         onTap: () {
@@ -471,12 +478,29 @@ class LeadListMain extends StatelessWidget {
                         icon:  Icons.thumb_down_alt_outlined,
                         leadId: lead.id.toString(),
                         label_code: "not_interested",
+
                       ),
                     ]
+
+
 
                     //_buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,lead.id.toString()),
                   ],
                 ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    _buildTextButton(
+                      label:AppText.addFeedback,
+                      context: context,
+                      color: Colors.purple,
+                      icon:  Icons.add_call,
+                      leadId: lead.id.toString(),
+                      label_code: "add_feedback",
+                      currentLeadStage: lead.leadStage.toString(),
+                    ),
+                  ],
+                )
 
               ],
             ),
@@ -526,11 +550,21 @@ class LeadListMain extends StatelessWidget {
     required Color color,
     required String phoneNumber,
     required String label,
+    required String leadId,
+    required String currentLeadStage,
+    required BuildContext context,
 }) {
     return IconButton(
       onPressed: () {
         if(label=="call"){
-          leadListController.makePhoneCall(phoneNumber);
+          // leadListController.makePhoneCall(phoneNumber);
+          CallService callService = CallService();
+          callService.makePhoneCall(
+            phoneNumber: "+919399299880",//phoneNumber,
+            leadId: leadId,
+            currentLeadStage: currentLeadStage,
+            context: context
+          );
         }
         if(label=="whatsapp"){
           leadListController.openWhatsApp(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
@@ -569,17 +603,26 @@ class LeadListMain extends StatelessWidget {
     required Color color,
     required IconData icon,
     required String leadId,
-    required String label_code
+    required String label_code,
+    String? currentLeadStage
 }) {
 
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         if (label == "Open Poll") {
-          showOpenPollDialog(context: context,leadId: leadId);
+          showOpenPollDialog2(context: context,leadId: leadId);
         }else if (label_code == "follow_up") {
-          showFollowupDialog(
+
+           showFollowupDialog(
             context: context,
             leadId: leadId,
+          );
+        }else if (label_code == "add_feedback") {
+
+          showCallFeedbackDialog(
+            context: context,
+            leadId: leadId,
+            currentLeadStage: currentLeadStage.toString()
           );
         }else if (label_code == "interested" || label_code =="not_interested" || label_code == "doable" || label_code =="not_doable") {
           showDialog(
@@ -794,256 +837,9 @@ class LeadListMain extends StatelessWidget {
     );
   }
 
-  void showChangeDialog({
-    required BuildContext context,
-    required leadId,
-  }) {
 
 
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: double.infinity, // Makes it full width
-                padding: EdgeInsets.zero,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 🔵 Title in Blue Strip
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color:AppColor.secondaryColor, // Title background color
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                      ),
-
-                    ),
-
-                    // 📝 Content (Radio Buttons)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Are you sure?",
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w700,
-                              color: AppColor.black87, // Title text color
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-
-                          SizedBox(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.orange,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Get.back(); // Close dialog
-                                  // Handle Yes action
-                                },
-                                child: Text("Yes", style: TextStyle(color: Colors.white)),
-                              ),
-                              OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(color: Colors.orange),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Get.back(); // Close dialog
-                                },
-                                child: Text("No", style: TextStyle(color: Colors.black)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // 🟠 Buttons (Close & Submit)
-                    /*Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Close dialog
-                            },
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppColor.grey1,
-                              side: BorderSide(color: AppColor.grey2),
-                            ),
-                            child: Text("No", style: TextStyle(color: AppColor.grey2)),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              String selectedValue = (selectedOption == "Interested") ? "4" : "5";
-                              String activeValue = (selectedOption == "Interested") ? "1" : "0";
-
-                              String selectedValueDoable = (selectedOption == "Doable") ? "6" : "7";
-                              String activeValueDoable = (selectedOption == "Doable") ? "1" : "0";
-                              if(leadListController.leadCode.value=="2"){
-                                print("for intrested");
-                                leadListController.updateLeadStageApi(
-                                  id: leadId.toString(),
-                                  stage: selectedValue,
-                                  active: activeValue,
-                                );
-                              }else  if(leadListController.leadCode.value=="4"){
-                                print("for doable");
-                                leadListController.updateLeadStageApi(
-                                  id: leadId.toString(),
-                                  stage: selectedValueDoable,
-                                  active: activeValueDoable,
-                                );
-                              }else{
-
-                              }
-
-                              Navigator.pop(context); // Close dialog after submission
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.orangeColor,
-                            ),
-                            child: Text("Yes", style: TextStyle(color: AppColor.appWhite)),
-                          ),
-                        ],
-                      ),
-                    ),*/
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-
-  void showFilterDialog({
-    required BuildContext context,
-  }) {
-    List<String> options = ["Fresh Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
-    //String? selectedOption = options[0]; // Default selection
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: double.infinity, // Makes it full width
-                padding: EdgeInsets.zero,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 🔵 Title in Blue Strip
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                        color:AppColor.primaryColor, // Title background color
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                        gradient: LinearGradient(
-                          colors: [AppColor.primaryLight, AppColor.primaryDark],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                      ),
-                      child: const Text(
-                        "Filter",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white, // Title text color
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-
-                    // 📝 Content (Radio Buttons)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child:  Obx(()=>Column(
-                        children: options.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          String option = entry.value;
-
-                          return CheckboxListTile(
-                            activeColor: AppColor.secondaryColor,
-
-                            title: Text(option),
-                            value: leadListController.selectedIndex.value == index,
-                            onChanged: (value) => leadListController.selectCheckbox(index),
-                          );
-                        }).toList(),
-                      )),
-                    ),
-
-                    // 🟠 Buttons (Close & Submit)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Close dialog
-                            },
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppColor.grey1,
-                              side: BorderSide(color: AppColor.grey2),
-                            ),
-                            child: Text("Close", style: TextStyle(color: AppColor.grey2)),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              leadListController.filterSubmit();
-                              Navigator.pop(context); // Close dialog after submission
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.orangeColor,
-                            ),
-                            child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void showOpenPollDialog({
+/*  void showOpenPollDialog({
     required BuildContext context,
     required String leadId,
   }) {
@@ -1166,7 +962,7 @@ class LeadListMain extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 
   String? validatePercentage(String? value) {
     if (value == null || value.isEmpty) {
@@ -1179,156 +975,48 @@ class LeadListMain extends StatelessWidget {
     required BuildContext context,
     required leadId,
   }) {
-
-
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title: AppText.setFollowup,
+          content: Column(
+            children: [
+              CustomLabeledPickerTextField(
+                label: AppText.selectDate,
+                isRequired: true,
+                controller: leadListController.followDateController,
+                inputType: TextInputType.name,
+                hintText: "MM/DD/YYYY",
+                isDateField: true,
               ),
-              child: Container(
-                width: double.infinity, // Makes it full width
-                padding: EdgeInsets.zero,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 🔵 Title in Blue Strip
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color:AppColor.secondaryColor, // Title background color
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                      ),
-
-                    ),
-
-                    // 📝 Content (Radio Buttons)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Set follow up",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColor.black87, // Title text color
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              InkWell(
-                                onTap: (){
-                                  Get.back(); // C
-                                },
-                                  child: Icon(Icons.close, color: AppColor.grey700,))
-                            ],
-                          ),
-                          CustomLabeledPickerTextField(
-                            label: "Date",
-                            isRequired: true,
-                            controller: leadListController.followDateController,
-                            inputType: TextInputType.name,
-                            hintText: AppText.mmddyyyy,
-                            validator: ValidationHelper.validateDob,
-                            isDateField: true,
-                          ),
-
-                          CustomLabeledTimePickerTextField(
-                            label: "Select Time",
-                            isRequired: true,
-                            controller: leadListController.followTimeController,
-                            inputType: TextInputType.datetime,
-                            hintText: "HH:MM AM/PM",
-                            isTimeField: true, // ✅ Enable Time Picker
-                          ),
-
-
-                          SizedBox(height: 30),
-                          SizedBox(
-                            width: 250,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              onPressed: () {
-                                Get.back(); // Close dialog
-                                // Handle Yes action
-                              },
-                              child: Text("Submit", style: TextStyle(color: Colors.white)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // 🟠 Buttons (Close & Submit)
-                    /*Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Close dialog
-                            },
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppColor.grey1,
-                              side: BorderSide(color: AppColor.grey2),
-                            ),
-                            child: Text("No", style: TextStyle(color: AppColor.grey2)),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              String selectedValue = (selectedOption == "Interested") ? "4" : "5";
-                              String activeValue = (selectedOption == "Interested") ? "1" : "0";
-
-                              String selectedValueDoable = (selectedOption == "Doable") ? "6" : "7";
-                              String activeValueDoable = (selectedOption == "Doable") ? "1" : "0";
-                              if(leadListController.leadCode.value=="2"){
-                                print("for intrested");
-                                leadListController.updateLeadStageApi(
-                                  id: leadId.toString(),
-                                  stage: selectedValue,
-                                  active: activeValue,
-                                );
-                              }else  if(leadListController.leadCode.value=="4"){
-                                print("for doable");
-                                leadListController.updateLeadStageApi(
-                                  id: leadId.toString(),
-                                  stage: selectedValueDoable,
-                                  active: activeValueDoable,
-                                );
-                              }else{
-
-                              }
-
-                              Navigator.pop(context); // Close dialog after submission
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.orangeColor,
-                            ),
-                            child: Text("Yes", style: TextStyle(color: AppColor.appWhite)),
-                          ),
-                        ],
-                      ),
-                    ),*/
-                  ],
-                ),
+              CustomLabeledTimePickerTextField(
+                label: AppText.selectTime,
+                isRequired: true,
+                controller: leadListController.followTimeController,
+                inputType: TextInputType.datetime,
+                hintText: "HH:MM AM/PM",
+                isTimeField: true,
               ),
-            );
+              SizedBox(height: 15,),
+              CustomLabeledTextField(
+                label: AppText.details,
+                isRequired: true,
+                controller: leadListController.followDetailsController,
+                inputType: TextInputType.name,
+                hintText: AppText.enterDetails,
+                validator:  ValidationHelper.validateName,
+                isTextArea: true,
+
+              ),
+
+            ],
+          ),
+          onSubmit: () {
+            Get.back(); // Close dialog
+            // Handle submission logic
           },
         );
       },
@@ -1336,5 +1024,254 @@ class LeadListMain extends StatelessWidget {
   }
 
 
+  void showFilterDialog({
+    required BuildContext context,
+    required leadId,
+  }) {
+    List<String> options = ["Fresh Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title: "Filter",
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
+                child:  Obx(()=>Column(
+                  children: options.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    String option = entry.value;
+
+                    return CheckboxListTile(
+                      activeColor: AppColor.secondaryColor,
+
+                      title: Text(option),
+                      value: leadListController.selectedIndex.value == index,
+                      onChanged: (value) => leadListController.selectCheckbox(index),
+                    );
+                  }).toList(),
+                )),
+              ),
+
+              // 🟠 Buttons (Close & Submit)
+             /* Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Close dialog
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColor.grey1,
+                        side: BorderSide(color: AppColor.grey2),
+                      ),
+                      child: Text("Close", style: TextStyle(color: AppColor.grey2)),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        leadListController.filterSubmit();
+                        Navigator.pop(context); // Close dialog after submission
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor.orangeColor,
+                      ),
+                      child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
+                    ),
+                  ],
+                ),
+              ),*/
+            ],
+          ),
+          onSubmit: () {
+            leadListController.filterSubmit();
+            Navigator.pop(context); // Close dialog after submission
+            // Handle submission logic
+          },
+        );
+      },
+    );
+  }
+
+  void showOpenPollDialog2({
+    required BuildContext context,
+    required leadId,
+  }) {
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title: "Open Poll",
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+
+
+                // 📝 Content (Radio Buttons)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  child:  Column(
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Enter percent for leads",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            color: AppColor.grey1, // Title text color
+                          ),
+
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomTextFieldPrefix(
+                        inputType:  TextInputType.number,
+                        controller: leadListController.openPollPercentController,
+                        hintText: "like 2.0 %",
+                        validator: validatePercentage,
+                        isPassword: false,
+                        obscureText: false,
+                      ),
+                    ],
+                  ),
+                ),
+/*
+                // 🟠 Buttons (Close & Submit)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close dialog
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColor.grey1,
+                          side: BorderSide(color: AppColor.grey2),
+                        ),
+                        child: Text("Close", style: TextStyle(color: AppColor.grey2)),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            leadListController.leadMoveToCommonTaskApi(
+                                leadId: leadId,
+                                percentage: leadListController.openPollPercentController.text.trim().toString()
+                            );
+                            Navigator.pop(context);
+                          }
+
+                          // Close dialog after submission
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.orangeColor,
+                        ),
+                        child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
+                      ),
+                    ],
+                  ),
+                ),*/
+              ],
+            ),
+          ),
+          onSubmit: () {
+            if (_formKey.currentState!.validate()) {
+              leadListController.leadMoveToCommonTaskApi(
+                  leadId: leadId,
+                  percentage: leadListController.openPollPercentController.text.trim().toString()
+              );
+              Navigator.pop(context);
+            }
+          },
+        );
+      },
+    );
+  }
+
+  void showCallFeedbackDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title: AppText.addFeedback,
+          content: Form(
+            child: Column(
+              children: [
+                SizedBox(height: 15,),
+                CustomLabeledTextField(
+                  label: AppText.callFeedback,
+                  isRequired: false,
+                  controller: leadListController.callFeedbackController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterCallFeedback,
+                  //validator:  ValidationHelper.validateName,
+                  isTextArea: true,
+
+                ),
+                SizedBox(height: 15,),
+                CustomLabeledTextField(
+                  label: AppText.leadFeedback,
+                  isRequired: false,
+                  controller: leadListController.leadFeedbackController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterLeadFeedback,
+                 // validator:  ValidationHelper.validateName,
+                  isTextArea: true,
+
+                ),
+
+              ],
+            ),
+          ),
+          onSubmit: () {
+            if(leadListController.callFeedbackController.text.isEmpty && leadListController.leadFeedbackController.text.isEmpty){
+              ToastMessage.msg(AppText.addFeedbackFirst);
+            }else{
+              leadListController.workOnLeadApi(
+                  leadId: leadId.toString(),
+                  leadStageStatus: currentLeadStage,
+                  feedbackRelatedToCall:leadListController.callFeedbackController.text.trim().toString(),
+                  feedbackRelatedToLead:leadListController.leadFeedbackController.text.trim().toString(),
+                  callStatus: "1",
+                  callDuration: "00:00",
+                callStartTime:  "00:00",
+                callEndTime: "00:00",
+
+
+              );
+              Get.back();
+            }
+            print("currentLeadStage===>${currentLeadStage}");
+
+
+          },
+        );
+      },
+    );
+  }
 }
 

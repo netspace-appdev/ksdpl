@@ -138,9 +138,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                         const SizedBox(height: 30),
 
-                        barChart(),
+                        /*barChart(),
 
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 30),*/
 
 
                       ],
@@ -943,20 +943,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             return  Center(child: CustomSkelton.dashboardShimmerList(context));
           }
           if (dashboardController.getBreakingNewsModel.value == null ||
-              dashboardController.getBreakingNewsModel.value!.data == null) {
+              dashboardController.getBreakingNewsModel.value!.data == null ||dashboardController.getBreakingNewsModel.value!.data!.isEmpty) {
             return Center(child: Container(
               height: 160,
               width: MediaQuery.of(context).size.width*0.80,
               decoration: BoxDecoration(
                 color: AppColor.appWhite,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ],
+                border: Border.all(color: AppColor.grey4, width: 1),
 
               ),
               child: const Center(

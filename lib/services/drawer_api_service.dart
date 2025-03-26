@@ -784,7 +784,7 @@ class DrawerApiService {
 
   static Future<Map<String, dynamic>> workOnLeadApi({
     required String leadId,
-    required String leadStageStatus,
+    String leadStageStatus="0",
     String leadPercent = "0",
     String employeeId = "0",
     String? callEndTime,

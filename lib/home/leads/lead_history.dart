@@ -5,6 +5,7 @@ import '../../common/skelton.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadDetailsController.dart';
+import '../../controllers/leads/lead_history_controller.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 import '../../custom_widgets/CustomCard.dart';
 
@@ -15,7 +16,7 @@ class LeadHistory extends StatelessWidget {
   InfoController infoController = Get.put(InfoController());
 
   LeadListController leadListController = Get.put(LeadListController());
-  LeadDetailController leadDetailController = Get.put(LeadDetailController());
+  LeadHistoryController leadHistoryController = Get.put(LeadHistoryController());
 
   @override
   Widget build(BuildContext context) {
@@ -118,11 +119,11 @@ class LeadHistory extends StatelessWidget {
 
   Widget leadSection(BuildContext context){
     return Obx((){
-      if (leadDetailController.isLoading.value) {
+      if (leadHistoryController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-    /*  if (leadDetailController.getLeadDetailModel.value == null ||
-          leadDetailController.getLeadDetailModel.value!.data == null || leadDetailController.getLeadDetailModel.value!.data=="") {
+      if (leadHistoryController.getLeadWorkByLeadIdModel.value == null ||
+          leadHistoryController.getLeadWorkByLeadIdModel.value!.data == null || leadHistoryController.getLeadWorkByLeadIdModel.value!.data=="") {
         return  Container(
           height: MediaQuery.of(context).size.height*0.50,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -154,15 +155,17 @@ class LeadHistory extends StatelessWidget {
             ],
           ),
         );
-      }*/
+      }
 
       return ListView.builder(
-        itemCount: 5,
+        itemCount:leadHistoryController.getLeadWorkByLeadIdModel.value!.data!.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
+        reverse: true,
         itemBuilder: (context, index) {
-
-
+          var lead=leadHistoryController.getLeadWorkByLeadIdModel.value!.data![index];
+          print("call status===>${lead.callStatus.toString()}");
+          //var time=Helper.formatTimeAgo(lead.workDate.toString());
 
           return CustomCard(
             borderColor: AppColor.grey200,
@@ -183,27 +186,35 @@ class LeadHistory extends StatelessWidget {
                       children: [
                         Icon(Icons.star_border_outlined),
                         Icon(Icons.list_alt_rounded),
+                        if(lead.callStatus.toString()=="0")
+                        Icon(Icons.published_with_changes_rounded),
+                        if(lead.callStatus.toString()=="1")
                         Icon(Icons.call),
                       ],
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text("Before 2 Min",
+                      child: Text(Helper.formatTimeAgo(lead.workDate.toString()),
                           style: TextStyle(
                               fontSize: 14,color: AppColor.grey700)),
                     ),
                   ],
                 ),
+                if(lead.callStatus.toString()=="1")
+                  Column(
+                    children: [
+                      Helper.customDivider(color: AppColor.grey200),
+                      DetailRow(label: "Call Duration", value:lead.callDuration.toString() ),
+                      DetailRow(label: "Call Start Time", value: lead.callStartTime.toString() ),
+                      DetailRow(label: "Call End Time", value: lead.callEndTime.toString()),
+                      DetailRow(label: "Call Reminder", value: lead.callReminder.toString()),
+                      DetailRow(label: "Call Feedback", value: lead.feedBackRelatedToCall.toString()),
+                      DetailRow(label: "Lead Feedback", value: lead.feedBackRelatedToLead.toString()),
+                    ],
+                  ),
+                Helper.customDivider(color: AppColor.grey200),
 
-                Helper.customDivider(color: AppColor.grey200),
-                DetailRow(label: "Call Duration", value:"1m 20s" ),
-                DetailRow(label: "Call Start Time", value: "2:37 PM"),
-                DetailRow(label: "Call End Time", value: "3:40 PM"),
-                DetailRow(label: "Call Feedback", value: "Connected"),
-                DetailRow(label: "Call Reminder", value: "27 Apr 2025, 2:37PM"),
-                Helper.customDivider(color: AppColor.grey200),
-                DetailRow(label: "Lead Feedback", value: "Given Information"),
-                DetailRow(label: "Lead Status", value: "Fresh--->Interested"),
+                DetailRow(label: "Lead Status", value: lead.previousStageName.toString(), value2: lead.stageName.toString(),),
 
               ],
             ),
@@ -249,8 +260,9 @@ class StatusChip extends StatelessWidget {
 class DetailRow extends StatelessWidget {
   final String label;
   final String value;
+  final String? value2;
 
-  DetailRow({required this.label, required this.value});
+  DetailRow({required this.label, required this.value, this.value2});
 
   @override
   Widget build(BuildContext context) {
@@ -258,6 +270,7 @@ class DetailRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
 
@@ -268,10 +281,14 @@ class DetailRow extends StatelessWidget {
           if(label=="Lead Status")
             Expanded(
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(": Fresh", style: TextStyle(fontSize: 14), maxLines: 1),
+                    Text(": ${value}", style: TextStyle(fontSize: 14), maxLines: 1),
                     Icon(Icons.arrow_right_alt),
-                    Text("Interested", style: TextStyle(fontSize: 14), maxLines: 1)
+                    Flexible(
+                        child: Text(value2.toString(), style: TextStyle(fontSize: 14),),
+
+                    )
                   ],
                 ))
           else

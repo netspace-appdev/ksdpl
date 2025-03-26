@@ -11,6 +11,7 @@ class CustomLabeledTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool isPassword;
   final bool obscureText;
+  final bool isTextArea;
 
   const CustomLabeledTextField({
     Key? key,
@@ -22,6 +23,7 @@ class CustomLabeledTextField extends StatelessWidget {
     this.validator,
     this.isPassword = false,
     this.obscureText = false,
+    this.isTextArea = false
   }) : super(key: key);
 
   @override
@@ -63,6 +65,7 @@ class CustomLabeledTextField extends StatelessWidget {
           isPassword: isPassword,
           obscureText: obscureText,
           hintText: hintText,
+          isTextArea: isTextArea,
         ),
 
         SizedBox(height: 20),

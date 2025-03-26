@@ -11,7 +11,6 @@ class LeadDetailController extends GetxController{
   var email="".obs;
   var isLoading = false.obs;
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
-  var getLeadWorkByLeadIdModel = Rxn<GetLeadWorkByLeadIdModel>(); //
   @override
   void onInit() {
     // TODO: implement onInit
@@ -59,45 +58,6 @@ class LeadDetailController extends GetxController{
     }
   }
 
-  void  getLeadWorkByLeadIdApi({
-    required String leadId,
-  }) async {
-    try {
-      isLoading(true);
 
-
-      var data = await DrawerApiService.getLeadWorkByLeadIdApi(
-        leadId: leadId
-      );
-
-
-      if(data['success'] == true){
-
-        getLeadWorkByLeadIdModel.value= GetLeadWorkByLeadIdModel.fromJson(data);
-
-        ToastMessage.msg(getLeadWorkByLeadIdModel!.value!.message!);
-
-
-        isLoading(false);
-
-      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
-
-        getLeadWorkByLeadIdModel.value=null;
-      }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-
-
-    } catch (e) {
-      print("Error getLeadWorkByLeadIdModel: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
-    } finally {
-
-      isLoading(false);
-    }
-  }
 
 }

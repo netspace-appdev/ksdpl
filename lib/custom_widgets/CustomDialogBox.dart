@@ -19,7 +19,7 @@ class CustomDialogBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Container(
         width: double.infinity,
@@ -30,10 +30,10 @@ class CustomDialogBox extends StatelessWidget {
             // 🔵 Title Bar
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(2),
               decoration: BoxDecoration(
                 color: AppColor.secondaryColor, // Change as per your theme
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
               ),
             ),
 
