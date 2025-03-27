@@ -128,7 +128,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  ],
                ),*/
 
-               CustomListTile(
+             /*  CustomListTile(
                  title:  AppText.myProfile,
                  imagePath:AppImage.manInBlack,
                  onTap: () {
@@ -136,7 +136,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                    // Add your navigation logic here
                  },
 
-               ),
+               ),*/
 
                ExpansionTile(
 

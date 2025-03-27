@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -196,13 +197,15 @@ class CallStorageScreenState extends State<CallStorageScreen> {
   @override
   void initState() {
     super.initState();
-    /*var bankId=StorageService.get(StorageService.BANK_ID).toString();
+    */
+/*var bankId=StorageService.get(StorageService.BANK_ID).toString();
     regDDController.getAllBranchByBankIdApi(bankId).then((_){
       print("req data ===>${regDDController.getAllBranchByBankIdModel!.data.toString()}");
       branchData=regDDController.getAllBranchByBankIdModel!.data as List<Map<String, String>>;
       print("req branchData ===>${branchData.toString()}");
     });
-    _filteredData = branchData; // Initially, show all data*/
+    _filteredData = branchData; // Initially, show all data*//*
+
   }
 
   void _filterData(String query) {
@@ -695,7 +698,8 @@ class CallStorageScreenState extends State<CallStorageScreen> {
                           (BuildContext context, SearchController controller) async {
                         _searchingWithQuery = controller.text;
 
-                       /*      if (_searchingWithQuery != controller.text) {
+                       */
+/*      if (_searchingWithQuery != controller.text) {
                           return _lastOptions;
                         }
 
@@ -714,7 +718,8 @@ class CallStorageScreenState extends State<CallStorageScreen> {
                               ),
                             ),
                           )
-                        ];*/
+                        ];*//*
+
 
                         return [];
                       },
@@ -891,7 +896,8 @@ class CallStorageScreenState extends State<CallStorageScreen> {
     );
   }
 
- /*Widget customSearchBox(){
+ */
+/*Widget customSearchBox(){
     return Column(
       children: [
         Padding(
@@ -918,7 +924,8 @@ class CallStorageScreenState extends State<CallStorageScreen> {
           ),
       ],
     );
-}*/
+}*//*
+
 
 
 }
@@ -1057,3 +1064,4 @@ class _FakeAPI {
     });
   }
 }
+*/

@@ -1,6 +1,6 @@
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,10 +9,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'common/routes.dart';
 import 'controllers/profile/them_controller.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+/*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
-}
-Future<void> requestPermission() async {
+}*/
+/*Future<void> requestPermission() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
@@ -25,13 +25,13 @@ Future<void> requestPermission() async {
   } else {
     print('User declined or has not accepted permission');
   }
-}
+}*/
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  requestPermission();
+ // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+//  requestPermission();
   await GetStorage.init();
 
   await Permission.microphone.request();

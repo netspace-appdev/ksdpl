@@ -171,7 +171,7 @@ class ChangePasswordScreen extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       if (changePasswordController.newPassController.text!=changePasswordController.confirmPassController.text) {
         SnackbarHelper.showSnackbar(
-            title: AppText.mrb,
+            title: AppText.companyHeader,
             message: AppText.passwordMustBeSame
         );
       } else {

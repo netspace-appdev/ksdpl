@@ -32,7 +32,7 @@ import '../custom_drawer.dart';
 class LeadListMain extends StatelessWidget {
   GreetingController greetingController = Get.put(GreetingController());
   InfoController infoController = Get.put(InfoController());
-  LeadListController leadListController = Get.find();
+  LeadListController leadListController = Get.put(LeadListController());
   final TextEditingController _searchController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

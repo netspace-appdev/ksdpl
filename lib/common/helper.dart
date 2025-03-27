@@ -68,7 +68,7 @@ class AppText{
   static const String strong ="Strong";
   static const String validEmailWarning ="Please enter a valid official email address (e.g., user@company.com). Public domains like gmail.com or yahoo.com are not allowed";
   static const String iAgreeTC ="I agree to the Terms and Conditions";
-  static const String mrb ="KSDPL";
+  static const String companyHeader ="KSDPL";
   static const String registrationsuccessfulMsg ="Lender registration successful. Please wait for verification.";
   static const String ok ="Ok";
   static const String message ="Message";
@@ -256,6 +256,8 @@ class AppText{
   static const String enterCallFeedback = "Enter Call Feedback";
   static const String enterLeadFeedback = "Enter Lead Feedback";
   static const String addFeedbackFirst = "Add feedback first";
+  static const String settings = "Settings";
+  static const String aboutUs = "About Us";
 }
 
 class AppColor{
@@ -326,6 +328,7 @@ class AppImage{
   static const String doc="assets/images/doc.png";
   static const String arrow="assets/images/arrow.png";
   static const String addIcon="assets/images/addIcon.png";
+  static const String addIconYellow="assets/images/addIcon_yellow.png";
   static const String faq="assets/images/faq.png";
   static const String searchGlass="assets/images/searchGlass.png";
   static const String editImage="assets/images/editImage.png";

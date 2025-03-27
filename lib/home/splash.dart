@@ -11,6 +11,7 @@ import 'package:ksdpl/common/helper.dart';
 import 'package:flutter/material.dart';
 
 import '../common/storage_service.dart';
+import '../controllers/splash_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -64,6 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
   onLoad(){
     var userId=StorageService.get(StorageService.USER_ID);
     if(userId!=null){
+
       Get.offAllNamed("/bottomNavbar");
     }else{
       Get.offAllNamed("/login");

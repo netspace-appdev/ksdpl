@@ -23,6 +23,7 @@ class DashboardController extends GetxController {
     super.onInit();
     var phone=StorageService.get(StorageService.PHONE);
     getEmployeeByPhoneNumberApi(phone: phone.toString());
+
     getBreakingNewsApi();
     getUpcomingDateOfBirthApi();
   }

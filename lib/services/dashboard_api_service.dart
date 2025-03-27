@@ -34,7 +34,9 @@ class DashboardApiService{
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-
+      print("Request Fields getEmployeeByPhoneNumberApi: ${request.fields}");
+      print("Response Status: ${response.statusCode}");
+      print("Response Body: ${response.body}");
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

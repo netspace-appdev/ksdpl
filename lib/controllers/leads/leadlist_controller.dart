@@ -47,19 +47,17 @@ class LeadListController extends GetxController {
 
   final TextEditingController callFeedbackController = TextEditingController();
   final TextEditingController leadFeedbackController = TextEditingController();
+  GetEmployeeModel? getEmployeeModel;
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    eId.value=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-    getAllLeadsApi(
-      leadStage: leadCode.value,
-      employeeId:eId.toString(),
-        stateId:stateIdMain.value,
-        distId: distIdMain.value,
-        cityId: cityIdMain.value
-    );
+
+    var phone=StorageService.get(StorageService.PHONE);
+    getEmployeeByPhoneNumberApi(phone: phone.toString());
+
+
 
   }
 
@@ -403,4 +401,50 @@ class LeadListController extends GetxController {
       isLoading(false);
     }
   }
+
+
+  void  getEmployeeByPhoneNumberApi({
+    required String phone,
+
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await DashboardApiService.getEmployeeByPhoneNumberApi(phone: phone,);
+
+
+      if(data['success'] == true){
+
+        getEmployeeModel= GetEmployeeModel.fromJson(data);
+
+        ToastMessage.msg(getEmployeeModel!.message!);
+        StorageService.put(StorageService.EMPLOYEE_ID, getEmployeeModel!.data!.id.toString());
+        isLoading(false);
+        eId.value=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+        print("eId.value===>${eId.value}");
+        getAllLeadsApi(
+            leadStage: leadCode.value,
+            employeeId:eId.toString(),
+            stateId:stateIdMain.value,
+            distId: distIdMain.value,
+            cityId: cityIdMain.value
+        );
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getEmployeeByPhoneNumberApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
 }

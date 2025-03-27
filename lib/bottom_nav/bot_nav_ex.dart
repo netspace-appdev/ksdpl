@@ -9,6 +9,7 @@ import '../controllers/leads/leadlist_controller.dart';
 import '../home/dashboard_screen.dart';
 import '../home/leads/add_lead_screen.dart';
 import '../home/leads/lead_list_main.dart';
+import '../home/more_screen.dart';
 
 class BottomNavBarExample extends StatefulWidget {
   @override
@@ -17,14 +18,13 @@ class BottomNavBarExample extends StatefulWidget {
 
 class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   BotNavController botNavController = Get.put(BotNavController());
-  LeadDDController leadDDController = Get.put(LeadDDController());
-  LeadListController leadListController = Get.put(LeadListController());
+
 
   final List<Widget> _pages = [
     DashboardScreen(),
     LeadListMain(),
     AddLeadScreen(),
-    const Center(child: Text('Item 4')),
+    MoreSettingScreen()
   ];
 
 
@@ -54,7 +54,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
                 _buildNavItem(AppImage.homeIcon, AppImage.homeYellow,"Home", 0),
                 _buildNavItem(AppImage.personIcon, AppImage.personYellow, "Leads", 1),
                 const SizedBox(width: 50), // Space for FAB
-                _buildNavItem(AppImage.settingIcon, AppImage.settingYellow, "Add Lead", 2),
+                _buildNavItem(AppImage.addIcon, AppImage.addIconYellow, "Add Lead", 2),
                 _buildNavItem(AppImage.homeIcon, AppImage.homeIcon, "More", 3),
               ],
             ),
@@ -63,6 +63,8 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
         floatingActionButton: FloatingActionButton(
           backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {
+            LeadDDController leadDDController = Get.put(LeadDDController());
+            LeadListController leadListController = Get.find();
             leadDDController.selectedState.value="0";
             leadDDController.selectedDistrict.value="0";
             leadDDController.selectedCity.value="0";
@@ -71,7 +73,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
           },
           shape: const CircleBorder(),
           // child: const Icon(Icons.add, size: 30, color: Colors.white),
-          child:  Image.asset(AppImage.addIcon, height: 30,),
+          child:  Image.asset(AppImage.searchIcon, height: 20,),//addIcon
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
@@ -105,30 +107,5 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
       }),
     );
   }
-
-
-/*  Widget _buildNavItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: isSelected ? const Color(0xFFFBC02D) : Colors.white,
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: isSelected ? const Color(0xFFFBC02D) : Colors.white,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-        ],
-      ),
-    );
-  }*/
 }
 

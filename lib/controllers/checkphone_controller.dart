@@ -35,7 +35,7 @@ class CheckPhoneController extends GetxController {
           isPhoneNumberExists.value=false;
 
           SnackbarHelper.showSnackbar(
-              title: AppText.mrb,
+              title: AppText.companyHeader,
               message: checkPhoneExistsModel!.message.toString()
           );
         }else{

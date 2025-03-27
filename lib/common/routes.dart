@@ -43,7 +43,6 @@ final routes = [
   GetPage(name: '/themeSelection', page: () => ThemeSelectionScreen()),
   GetPage(name: '/enforcementDashboard', page: () => EnforcementDashboard()),
   GetPage(name: '/uploadCommonTask', page: () => UploadCommonTask()),
-  GetPage(name: '/callStorageScreen', page: () => CallStorageScreen()),
   GetPage(name: '/leadListMain', page: () => LeadListMain()),
   GetPage(name: '/notificationScreen', page: () =>NotificationScreen()),
   GetPage(name: '/leadDetailsMain', page: () =>LeadDetailsMain()),

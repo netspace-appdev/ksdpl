@@ -34,7 +34,7 @@ class CheckValidEmailController extends GetxController {
         isValidEmail.value=false;
 
         SnackbarHelper.showSnackbar(
-            title: AppText.mrb,
+            title: AppText.companyHeader,
             message: AppText.validEmailWarning
         );
        // ToastMessage.msg(AppText.validEmailWarning);

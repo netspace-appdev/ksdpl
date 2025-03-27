@@ -6,10 +6,18 @@ import 'leads/addLeadController.dart';
 import 'leads/leadlist_controller.dart';
 class BotNavController extends GetxController {
   final RxInt selectedIndex = 0.obs;
-  final LeadListController leadListController = Get.put(LeadListController());
-  final Addleadcontroller addleadcontroller = Get.put(Addleadcontroller());
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+
+  }
+
 
   void onItemTapped(int index) {
+    final LeadListController leadListController = Get.put(LeadListController());
+    final Addleadcontroller addleadcontroller = Get.put(Addleadcontroller());
     if (selectedIndex.value == index) return; // Prevent unnecessary state updates
 
     selectedIndex.value = index;
