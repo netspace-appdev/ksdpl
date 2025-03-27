@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/helper.dart';
+import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -23,6 +24,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String email="user@email.com";
   LeadListController leadListController = Get.find();
   Addleadcontroller addLeadController = Get.find();
+  BotNavController botNavController=Get.find();
   @override
   void initState() {
     // TODO: implement initState
@@ -99,7 +101,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  imagePath:AppImage.home2,
                  onTap: () {
                    Navigator.pop(context);
-
+                   botNavController.selectedIndex.value = 0;
                  },
 
                ),

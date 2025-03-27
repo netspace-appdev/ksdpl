@@ -28,6 +28,7 @@ class GetLeadDetailModel {
 class Data {
   int? id;
   String? name;
+  String? stageName;
   String? mobileNumber;
   String? email;
   String? pincode;
@@ -76,6 +77,7 @@ class Data {
   Data(
       {this.id,
         this.name,
+        this.stageName,
         this.mobileNumber,
         this.email,
         this.pincode,
@@ -124,6 +126,7 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    stageName = json['stageName'];
     mobileNumber = json['mobileNumber'];
     email = json['email'];
     pincode = json['pincode'];
@@ -162,18 +165,26 @@ class Data {
     pickedUpEmployeeId = json['pickedUpEmployeeId'];
     connectorName = json['connectorName'];
     connectorMobileNo = json['connectorMobileNo'];
-    connectorPercentage = json['connectorPercentage'];
+    //connectorPercentage = json['connectorPercentage'];
     existingLoans = json['existingLoans'];
     noOfExistingLoans = json['noOfExistingLoans'];
     moveToCommon = json['moveToCommon'];
-    assignedEmployeePercentage = json['assignedEmployeePercentage'];
+   // assignedEmployeePercentage = json['assignedEmployeePercentage'];
     lastUpdatedDate = json['lastUpdatedDate'];
+    connectorPercentage = (json['connectorPercentage'] is int)
+        ? (json['connectorPercentage'] as int).toDouble()
+        : json['connectorPercentage'];
+
+    assignedEmployeePercentage = (json['assignedEmployeePercentage'] is int)
+        ? (json['assignedEmployeePercentage'] as int).toDouble()
+        : json['assignedEmployeePercentage'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
+    data['stageName'] = this.stageName;
     data['mobileNumber'] = this.mobileNumber;
     data['email'] = this.email;
     data['pincode'] = this.pincode;

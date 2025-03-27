@@ -355,6 +355,7 @@ class AppImage{
   static const String arrowLeft="assets/images/arrowLeft.png";
   static const String down_arrow="assets/images/down_arrow.png";
   static const String news="assets/images/news.jpg";
+  static const String noImage="assets/images/no_image2.png";
 
 }
 
@@ -519,6 +520,24 @@ class Helper{
       return timeago.format(dateTime, locale: 'en');
     }
   }
+  static String formatCallDuration(int seconds) {
+    int hours = seconds ~/ 3600;
+    int minutes = (seconds % 3600) ~/ 60;
+    int remainingSeconds = seconds % 60;
+
+    List<String> parts = [];
+
+    if (hours > 0) parts.add("${hours}h");
+    if (minutes > 0) parts.add("${minutes}m");
+    if (remainingSeconds > 0 || parts.isEmpty) parts.add("${remainingSeconds}s");
+
+    return parts.join(" ");
+  }
+  static String convertUnixTo12HourFormat(int timestamp) {
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000); // Convert seconds to milliseconds
+    return DateFormat('h:mm a').format(dateTime); // Format as 12-hour time
+  }
+
 }
 
 

@@ -185,7 +185,7 @@ class LeadDetailsMain extends StatelessWidget {
                     Wrap(
                       spacing: 8,
                       children: [
-                        StatusChip(label: "Fresh", color: Colors.orange),
+                        StatusChip(label: leadDetailController.getLeadDetailModel.value!.data!.stageName.toString(), color: Colors.orange),
 
                       ],
                     ),

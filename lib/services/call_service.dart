@@ -65,14 +65,19 @@ class CallService {
       print("Duration: ${lastCall.duration} seconds");
 
       if (lastCall.duration! > 0) {
-        print("✅ Call was connected and lasted ${lastCall.duration} seconds.");
+
         print("✅ Call started at ${lastCall.timestamp}");
+        var callDuration=Helper.formatCallDuration(lastCall.duration!.toInt());
+        var callStartTime=Helper.convertUnixTo12HourFormat(lastCall.timestamp!+19800 );
+        var callEndTime=Helper.convertUnixTo12HourFormat((lastCall.timestamp!+19800) +lastCall.duration!.toInt());
+        print("✅ Call was connected and lasted ${lastCall.duration} seconds. which is ${callDuration} ");
         showCallFeedbackDialog(
           leadId: leadId,
           currentLeadStage: currentLeadStage,
           context: context,
-          callDuration: lastCall.duration.toString(),
-          callStartTime: convertTimestamp(lastCall.timestamp!)
+          callDuration: callDuration.toString(),
+          callStartTime:callStartTime.toString(),
+          callEndTime: callEndTime.toString()
         );
       } else {
         print("❌ Call was not answered or disconnected immediately.");
@@ -94,6 +99,7 @@ class CallService {
     required currentLeadStage,
     required callDuration,
     required callStartTime,
+    required callEndTime,
   }) {
     showDialog(
       context: context,
@@ -141,9 +147,13 @@ class CallService {
                 feedbackRelatedToCall:leadListController.callFeedbackController.text.trim().toString(),
                 feedbackRelatedToLead:leadListController.leadFeedbackController.text.trim().toString(),
                 callStatus: "1",
-                callDuration: callDuration,
+               /* callDuration: callDuration,
                 callStartTime: callStartTime,
-                callEndTime: "00:00",
+                callEndTime: "00:00",*/
+
+                  callDuration: callDuration.toString(),
+                  callStartTime:callStartTime.toString(),
+                  callEndTime: callEndTime.toString()
 
 
               );
@@ -157,8 +167,5 @@ class CallService {
       },
     );
   }
-  String convertTimestamp(int timestamp) {
-    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    return dateTime.toIso8601String();
-  }
+
 }

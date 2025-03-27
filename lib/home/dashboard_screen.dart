@@ -988,7 +988,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
+                          child:
+                          data.imageUrl.toString()==""?
+                          Image.asset(
+                            AppImage.noImage,
+                            width: double.infinity,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ):
+                          Image.network(
                             BaseUrl.imageBaseUrl+ data.imageUrl.toString(),
                             width: double.infinity,
                             height: 100,
