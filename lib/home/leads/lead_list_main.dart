@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -297,6 +298,7 @@ class LeadListMain extends StatelessWidget {
             ),
             child: Column(
 
+
               children: [
                 /// Header with profile and menu icon
                 Padding(
@@ -434,7 +436,7 @@ class LeadListMain extends StatelessWidget {
                 Row(
                   mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
                   children: [
-                    if(leadListController.leadCode.value=="2" ||leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6")
+                    /*if(leadListController.leadCode.value=="2" ||leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6")
                     _buildTextButton(
                       label:AppText.followup,
                       context: context,
@@ -442,7 +444,7 @@ class LeadListMain extends StatelessWidget {
                       icon:  Icons.feedback,
                       leadId: lead.id.toString(),
                       label_code: "follow_up",
-                    ),
+                    ),*/
                     if(leadListController.leadCode.value=="4")...[
                       _buildTextButton(
                         label:AppText.doable,
@@ -488,19 +490,16 @@ class LeadListMain extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 10),
-                Row(
-                  children: [
-                    _buildTextButton(
-                      label:AppText.addFeedback,
-                      context: context,
-                      color: Colors.purple,
-                      icon:  Icons.add_call,
-                      leadId: lead.id.toString(),
-                      label_code: "add_feedback",
-                      currentLeadStage: lead.leadStage.toString(),
-                    ),
-                  ],
-                )
+
+                _buildTextButton(
+                  label:AppText.addFAndF,
+                  context: context,
+                  color: Colors.purple,
+                  icon:  Icons.add_call,
+                  leadId: lead.id.toString(),
+                  label_code: "add_feedback",
+                  currentLeadStage: lead.leadStage.toString(),
+                ),
 
               ],
             ),
@@ -558,19 +557,9 @@ class LeadListMain extends StatelessWidget {
       onPressed: () {
         if(label=="call"){
 
-         /* CallService callService = CallService();
-          callService.makePhoneCall(
-            phoneNumber:phoneNumber,//"+919399299880"
-            leadId: leadId,
-            currentLeadStage: currentLeadStage,
-            context: context
-          );*/
-
-
-
           CallService callService = CallService();
           callService.makePhoneCall(
-              phoneNumber:"+919399299880",//phoneNumber,//"+919399299880"
+              phoneNumber:phoneNumber,//"+919399299880"
               leadId: leadId,
               currentLeadStage: currentLeadStage,
               context: context,
@@ -684,10 +673,12 @@ class LeadListMain extends StatelessWidget {
         }
       },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            width: leadListController.leadCode.value == "6"?MediaQuery.of(context).size.width*0.80:MediaQuery.of(context).size.width*0.26,
+            width: label_code=="add_feedback"?MediaQuery.of(context).size.width*0.85: label_code=="open_poll"? MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
 
             decoration: BoxDecoration(
               //color: color,
@@ -701,7 +692,7 @@ class LeadListMain extends StatelessWidget {
                 SizedBox(width: 6),
                 Text(
                   label,
-                  style: TextStyle(fontSize: 8, fontWeight: FontWeight.w600, color: AppColor.blackColor),
+                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: AppColor.grey700),
                 ),
               ],
             ),
@@ -1229,7 +1220,7 @@ class LeadListMain extends StatelessWidget {
     required callDuration,
     required callStartTime,
     required callEndTime,
-    required  callStatus,
+    required callStatus,
   }) {
     showDialog(
       barrierDismissible: false,
@@ -1237,133 +1228,185 @@ class LeadListMain extends StatelessWidget {
       builder: (BuildContext context) {
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.addFAndF,
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.callFeedback,
+                      isRequired: false,
+                      controller: leadListController.callFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterCallFeedback,
+                      isTextArea: true,
+                    ),
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.leadFeedback,
+                      isRequired: false,
+                      controller: leadListController.leadFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterLeadFeedback,
+                      isTextArea: true,
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Obx(()=>Checkbox(
+                          activeColor: AppColor.secondaryColor,
+                          value: leadListController.isCallReminder.value,
+                          onChanged: (bool? value) {
 
-          title: AppText.addFeedback,
-          content: Form(
-            child: Column(
-              children: [
-                SizedBox(height: 15,),
-                CustomLabeledTextField(
-                  label: AppText.callFeedback,
-                  isRequired: false,
-                  controller: leadListController.callFeedbackController,
-                  inputType: TextInputType.name,
-                  hintText: AppText.enterCallFeedback,
-                  //validator:  ValidationHelper.validateName,
-                  isTextArea: true,
+                            leadListController.isCallReminder.value = value ?? false;
 
+                          },
+                        )),
+                        Text(
+                          AppText.callReminder,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                   Obx(()=> CustomLabeledPickerTextField(
+                     label: AppText.selectDate,
+                     isRequired: false,
+                     controller: leadListController.followDateController,
+                     inputType: TextInputType.name,
+                     hintText: "MM/DD/YYYY",
+                     isDateField: true,
+                     enabled: leadListController.isCallReminder.value,
+                   )),
+                    Obx(()=>CustomLabeledTimePickerTextField(
+                      label: AppText.selectTime,
+                      isRequired: false,
+                      controller: leadListController.followTimeController,
+                      inputType: TextInputType.datetime,
+                      hintText: "HH:MM AM/PM",
+                      isTimeField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                  ],
                 ),
-                SizedBox(height: 15,),
-                CustomLabeledTextField(
-                  label: AppText.leadFeedback,
-                  isRequired: false,
-                  controller: leadListController.leadFeedbackController,
-                  inputType: TextInputType.name,
-                  hintText: AppText.enterLeadFeedback,
-                 // validator:  ValidationHelper.validateName,
-                  isTextArea: true,
-
-                ),
-
-              ],
+              ),
             ),
           ),
           onSubmit: () {
-            if(leadListController.callFeedbackController.text.isEmpty && leadListController.leadFeedbackController.text.isEmpty){
+            if (leadListController.callFeedbackController.text.isEmpty &&
+                leadListController.leadFeedbackController.text.isEmpty) {
               ToastMessage.msg(AppText.addFeedbackFirst);
-            }else{
-              leadListController.workOnLeadApi(
-                  leadId: leadId.toString(),
-                  leadStageStatus: currentLeadStage,
-                  feedbackRelatedToCall:leadListController.callFeedbackController.text.trim().toString(),
-                  feedbackRelatedToLead:leadListController.leadFeedbackController.text.trim().toString(),
-                  callStatus: callStatus,
-                  callDuration: callDuration,
-                  callStartTime:  callStartTime,
-                  callEndTime: callEndTime,
+            } else {
+              print("here==>${leadListController.followDateController.text}");
+              print("here==>${leadListController.followTimeController.text}");
+              String selectedDate = leadListController.followDateController.text; // MM/DD/YYYY
+              String selectedTime = leadListController.followTimeController.text; // HH:MM AM/PM
+
+              /*String formattedDateTime="";
+              if(leadListController.isCallReminder.value){
+                if (selectedDate.isEmpty || selectedTime.isEmpty) {
+                  ToastMessage.msg("Date or Time is empty!");
+                  return;
+                }
+
+                // ✅ Convert Date String (MM/DD/YYYY) to DateTime
+                DateTime parsedDate = DateFormat("MM-dd-yyyy").parse(selectedDate);
+
+                // ✅ Convert Time String (HH:MM AM/PM) to DateTime
+                DateTime parsedTime = DateFormat("hh:mm a").parse(selectedTime);
+
+                // ✅ Combine Date and Time
+                DateTime combinedDateTime = DateTime(
+                  parsedDate.year,
+                  parsedDate.month,
+                  parsedDate.day,
+                  parsedTime.hour,
+                  parsedTime.minute,
+                );
+
+                // ✅ Format to Required API Format (yyyy-MM-ddTHH:mm:ss.SS)
+                String formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
+
+                print("Final Formatted DateTime: $formattedDateTime");
+              }else{
+                DateTime now = DateTime.now();
+                // ✅ If user has selected date & time, use them. Otherwise, use DateTime.now()
+                DateTime parsedDate =now; // If empty, use today’s date
+
+                DateTime parsedTime =  now; // If empty, use current time
+
+// ✅ Combine Date and Time
+                DateTime combinedDateTime = DateTime(
+                  parsedDate.year,
+                  parsedDate.month,
+                  parsedDate.day,
+                  parsedTime.hour,
+                  parsedTime.minute,
+                );
+
+// ✅ Format to Required API Format (yyyy-MM-ddTHH:mm:ss.SS)
+                String formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
+
+                print("Final Formatted DateTime today: $formattedDateTime");
+              }
+*/
+
+
+              if (selectedDate.isEmpty || selectedTime.isEmpty) {
+                ToastMessage.msg("Date or Time is empty!");
+                return;
+              }
+
+              // ✅ Convert Date String (MM/DD/YYYY) to DateTime
+              DateTime parsedDate = DateFormat("MM-dd-yyyy").parse(selectedDate);
+
+              // ✅ Convert Time String (HH:MM AM/PM) to DateTime
+              DateTime parsedTime = DateFormat("hh:mm a").parse(selectedTime);
+
+              // ✅ Combine Date and Time
+              DateTime combinedDateTime = DateTime(
+                parsedDate.year,
+                parsedDate.month,
+                parsedDate.day,
+                parsedTime.hour,
+                parsedTime.minute,
               );
 
+              // ✅ Format to Required API Format (yyyy-MM-ddTHH:mm:ss.SS)
+              String formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
+
+              print("Final Formatted DateTime: $formattedDateTime");
+
+
+              leadListController.workOnLeadApi(
+                leadId: leadId.toString(),
+                leadStageStatus: currentLeadStage,
+                feedbackRelatedToCall: leadListController.callFeedbackController.text.trim(),
+                feedbackRelatedToLead: leadListController.leadFeedbackController.text.trim(),
+                callStatus: callStatus,
+                callDuration: callDuration,
+                callStartTime: callStartTime,
+                callEndTime: callEndTime,
+                callReminder: formattedDateTime
+              );
               Get.back();
             }
-           // print("call time==>${Helper.convertUnixTo12HourFormat(1743144247686)}");
-
-
 
           },
         );
       },
     );
   }
-
-  ///old
-/*  void showCallFeedbackDialog({
-    required BuildContext context,
-    required leadId,
-    required currentLeadStage,
-  }) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-
-          title: AppText.addFeedback,
-          content: Form(
-            child: Column(
-              children: [
-                SizedBox(height: 15,),
-                CustomLabeledTextField(
-                  label: AppText.callFeedback,
-                  isRequired: false,
-                  controller: leadListController.callFeedbackController,
-                  inputType: TextInputType.name,
-                  hintText: AppText.enterCallFeedback,
-                  //validator:  ValidationHelper.validateName,
-                  isTextArea: true,
-
-                ),
-                SizedBox(height: 15,),
-                CustomLabeledTextField(
-                  label: AppText.leadFeedback,
-                  isRequired: false,
-                  controller: leadListController.leadFeedbackController,
-                  inputType: TextInputType.name,
-                  hintText: AppText.enterLeadFeedback,
-                  // validator:  ValidationHelper.validateName,
-                  isTextArea: true,
-
-                ),
-
-              ],
-            ),
-          ),
-          onSubmit: () {
-            if(leadListController.callFeedbackController.text.isEmpty && leadListController.leadFeedbackController.text.isEmpty){
-              ToastMessage.msg(AppText.addFeedbackFirst);
-            }else{
-              leadListController.workOnLeadApi(
-                leadId: leadId.toString(),
-                leadStageStatus: currentLeadStage,
-                feedbackRelatedToCall:leadListController.callFeedbackController.text.trim().toString(),
-                feedbackRelatedToLead:leadListController.leadFeedbackController.text.trim().toString(),
-                callStatus: "1",
-                callDuration: "00:00",
-                callStartTime:  "00:00",
-                callEndTime: "00:00",
-
-
-              );
-
-              Get.back();
-            }
-            // print("call tine==>${Helper.convertUnixTo12HourFormat(1743084223326)}");
-
-
-
-          },
-        );
-      },
-    );
-  }*/
 }
 

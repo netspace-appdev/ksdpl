@@ -832,6 +832,7 @@ class DrawerApiService {
       if (feedbackRelatedToLead != "string") request.fields['FeedBack_Related_To_Lead'] = feedbackRelatedToLead ?? "null";
       if (callDuration != "string") request.fields['CallDuration'] = callDuration ?? "null";
       if (callReminder != "string") request.fields['Call_Reminder'] = callReminder ?? "null";
+
       if (feedbackRelatedToCall != "string") request.fields['FeedBack_Related_To_Call'] = feedbackRelatedToCall ?? "null";
 
       // File Upload: Only attach if file exists

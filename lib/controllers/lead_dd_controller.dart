@@ -56,7 +56,7 @@ class LeadDDController extends GetxController{
 
         getAllStateModel.value= GetAllStateModel.fromJson(data);
 
-        ToastMessage.msg(getAllStateModel!.value!.message!);
+
 
 
         isLoading(false);
@@ -96,7 +96,7 @@ class LeadDDController extends GetxController{
 
         getDistrictByStateModel.value= GetDistrictByStateModel.fromJson(data);
 
-        ToastMessage.msg(getDistrictByStateModel!.value!.message!);
+
 
 
         isLoading(false);
@@ -136,8 +136,6 @@ class LeadDDController extends GetxController{
 
         getCityByDistrictIdModel.value= GetCityByDistrictIdModel.fromJson(data);
 
-        ToastMessage.msg(getCityByDistrictIdModel!.value!.message!);
-
 
         isLoading(false);
 
@@ -172,8 +170,6 @@ class LeadDDController extends GetxController{
       if(data['success'] == true){
 
         getAllBankModel.value= GetAllBankModel.fromJson(data);
-
-        ToastMessage.msg(getAllBankModel!.value!.message!);
 
 
         isLoading(false);
@@ -210,7 +206,7 @@ class LeadDDController extends GetxController{
 
         getAllKsdplProductModel.value= GetAllKsdplProductModel.fromJson(data);
 
-        ToastMessage.msg(getAllKsdplProductModel!.value!.message!);
+
 
 
         isLoading(false);
@@ -249,7 +245,7 @@ class LeadDDController extends GetxController{
 
         getAllKsdplProductModel.value= GetAllKsdplProductModel.fromJson(data);
 
-        ToastMessage.msg(getAllKsdplProductModel!.value!.message!);
+
 
 
         isLoading(false);

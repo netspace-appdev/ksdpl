@@ -12,6 +12,7 @@ class CustomLabeledPickerTextField extends StatelessWidget {
   final bool isPassword;
   final bool obscureText;
   final bool isDateField; // ✅ New parameter to check if it's a date field
+  final bool enabled;
 
   const CustomLabeledPickerTextField({
     Key? key,
@@ -24,6 +25,7 @@ class CustomLabeledPickerTextField extends StatelessWidget {
     this.isPassword = false,
     this.obscureText = false,
     this.isDateField = false, // Default: Not a date field
+    this.enabled = true, // ✅ Default enabled
   }) : super(key: key);
 
   @override
@@ -61,15 +63,19 @@ class CustomLabeledPickerTextField extends StatelessWidget {
         /// Custom TextField
         TextFormField(
           controller: controller,
+
           keyboardType: inputType,
           validator: validator,
           obscureText: obscureText,
-          readOnly: isDateField, // ✅ Prevent manual input for date fields
-          onTap: isDateField ? () => _selectDate(context) : null, // ✅ Open Date Picker
+          readOnly: isDateField || !enabled, // ✅ Prevent manual input for date fields
+          onTap:  (isDateField && enabled) ? () => _selectDate(context) : null, // ✅ Open Date Picker
           decoration: InputDecoration(
+            fillColor: enabled?Colors.transparent:AppColor.grey4,
+            filled: true,
             hintText: hintText,
             hintStyle:TextStyle(
               color: AppColor.grey700
+
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),

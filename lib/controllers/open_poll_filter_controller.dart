@@ -73,9 +73,6 @@ class OpenPollFilterController extends GetxController{
 
         getAllLeadsModel.value= GetAllLeadsModel.fromJson(data);
 
-        ToastMessage.msg(getAllLeadsModel!.value!.message!);
-        ///leadStageName2.value=leadStageName.value;
-
 
         isLoading(false);
 
@@ -120,9 +117,6 @@ class OpenPollFilterController extends GetxController{
       if(data['success'] == true){
 
         pickLeadComTaskModel.value= PickLeadComTaskModel.fromJson(data);
-
-        ToastMessage.msg(pickLeadComTaskModel!.value!.message!);
-        ///leadStageName2.value=leadStageName.value;
 
 
         isLoading(false);

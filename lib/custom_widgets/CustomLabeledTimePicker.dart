@@ -12,7 +12,7 @@ class CustomLabeledTimePickerTextField extends StatelessWidget {
   final bool isPassword;
   final bool obscureText;
   final bool isTimeField; // ✅ New parameter for time picker
-
+  final bool enabled;
   const CustomLabeledTimePickerTextField({
     Key? key,
     required this.label,
@@ -24,6 +24,7 @@ class CustomLabeledTimePickerTextField extends StatelessWidget {
     this.isPassword = false,
     this.obscureText = false,
     this.isTimeField = false, // Default: Not a time field
+    this.enabled = true, // ✅ Default enabled
   }) : super(key: key);
 
   @override
@@ -64,9 +65,11 @@ class CustomLabeledTimePickerTextField extends StatelessWidget {
           keyboardType: inputType,
           validator: validator,
           obscureText: obscureText,
-          readOnly: isTimeField, // ✅ Prevent manual input for time fields
-          onTap: isTimeField ? () => _selectTime(context) : null, // ✅ Open Time Picker
+          readOnly: isTimeField || !enabled,  // ✅ Prevent manual input for time fields
+          onTap: (isTimeField && enabled) ? () => _selectTime(context) : null, // ✅ Open Time Picker
           decoration: InputDecoration(
+            fillColor: enabled?Colors.transparent:AppColor.grey4,
+            filled: true,
             hintText: hintText,
             hintStyle: TextStyle(color: AppColor.grey700),
             border: OutlineInputBorder(
@@ -89,10 +92,26 @@ class CustomLabeledTimePickerTextField extends StatelessWidget {
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
+      //initialEntryMode: TimePickerEntryMode.dial,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      },
     );
 
     if (pickedTime != null) {
-      controller.text = pickedTime.format(context); // ✅ Format Time
+     // controller.text = pickedTime.format(context); // ✅ Format Time
+
+      int hour = pickedTime.hourOfPeriod ; // Convert 0 to 12 for AM
+      String minute = pickedTime.minute.toString(); // Ensure 2-digit minutes
+      String period = pickedTime.period == DayPeriod.am ? "AM" : "PM"; // Determine AM/PM
+
+      String formattedTime = "$hour:$minute $period";
+
+      controller.text = formattedTime;
+
     }
   }
 }

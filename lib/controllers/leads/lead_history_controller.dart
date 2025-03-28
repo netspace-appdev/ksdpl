@@ -38,7 +38,7 @@ class LeadHistoryController extends GetxController{
 
         getLeadWorkByLeadIdModel.value= GetLeadWorkByLeadIdModel.fromJson(data);
 
-        ToastMessage.msg(getLeadWorkByLeadIdModel!.value!.message!);
+
 
 
         isLoading(false);

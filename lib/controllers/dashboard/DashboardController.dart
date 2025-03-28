@@ -43,7 +43,7 @@ class DashboardController extends GetxController {
 
         getEmployeeModel= GetEmployeeModel.fromJson(data);
 
-        ToastMessage.msg(getEmployeeModel!.message!);
+
         StorageService.put(StorageService.EMPLOYEE_ID, getEmployeeModel!.data!.id.toString());
         isLoading(false);
         getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
@@ -85,7 +85,7 @@ class DashboardController extends GetxController {
 
         getCountOfLeadsModel.value= GetCountOfLeadsModel.fromJson(data);
 
-        ToastMessage.msg(getCountOfLeadsModel!.value!.message!);
+
 
 
 
@@ -123,7 +123,7 @@ class DashboardController extends GetxController {
 
         getBreakingNewsModel.value= GetBreakingNewsModel.fromJson(data);
 
-        ToastMessage.msg(getBreakingNewsModel!.value!.message!);
+
 
 
 
@@ -161,7 +161,7 @@ class DashboardController extends GetxController {
 
         getUpcomingDateOfBirthModel.value= GetUpcomingDateOfBirthModel.fromJson(data);
 
-        ToastMessage.msg(getUpcomingDateOfBirthModel!.value!.message!);
+
 
 
 

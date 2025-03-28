@@ -36,7 +36,7 @@ class LeadDetailController extends GetxController{
 
         getLeadDetailModel.value= GetLeadDetailModel.fromJson(data);
 
-        ToastMessage.msg(getLeadDetailModel!.value!.message!);
+
 
 
 

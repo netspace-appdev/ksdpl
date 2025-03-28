@@ -119,7 +119,7 @@ class EditProfileController extends GetxController {
 
         lenderCodeController.text=getBankerByIdModel!.data![0].bankerCode.toString();
 
-        ToastMessage.msg(getBankerByIdModel!.message!);
+
         isLoading(false);
 
       }else{
@@ -192,7 +192,7 @@ class EditProfileController extends GetxController {
 
         editBankerRegistrationModel= EditBankerRegistrationModel.fromJson(data);
 
-        ToastMessage.msg(editBankerRegistrationModel!.message!);
+
         isLoading(false);
 
       }else{
@@ -257,7 +257,7 @@ class EditProfileController extends GetxController {
         updateDateController.text=getCompanyProfileModel!.data![0].updateDate.toString();
         updatedByController.text=getCompanyProfileModel!.data![0].updatedBy.toString();
 
-        ToastMessage.msg(getCompanyProfileModel!.message!);
+
         isLoading(false);
 
       }else{
@@ -346,7 +346,7 @@ class EditProfileController extends GetxController {
 
         addCompanyProfileModel= AddCompanyProfileModel.fromJson(data);
 
-        ToastMessage.msg(addCompanyProfileModel!.message!);
+
         isLoading(false);
 
       }else{

@@ -48,6 +48,7 @@ class LeadListController extends GetxController {
   final TextEditingController callFeedbackController = TextEditingController();
   final TextEditingController leadFeedbackController = TextEditingController();
   GetEmployeeModel? getEmployeeModel;
+  var isCallReminder=true.obs;
 
   @override
   void onInit() {
@@ -195,7 +196,7 @@ class LeadListController extends GetxController {
 
         getAllLeadsModel.value= GetAllLeadsModel.fromJson(data);
 
-        ToastMessage.msg(getAllLeadsModel!.value!.message!);
+
         leadStageName2.value=leadStageName.value;
 
 
@@ -244,7 +245,7 @@ class LeadListController extends GetxController {
 
         updateLeadStageModel= UpdateLeadStageModel.fromJson(data);
 
-        ToastMessage.msg(updateLeadStageModel!.message!);
+
 
         isLoading(false);
 
@@ -298,7 +299,7 @@ class LeadListController extends GetxController {
 
         leadMoveToCommonTaskModel= LeadMoveToCommonTaskModel.fromJson(data);
 
-        ToastMessage.msg(leadMoveToCommonTaskModel!.message!);
+
 
         isLoading(false);
 
@@ -344,6 +345,7 @@ class LeadListController extends GetxController {
     String? feedbackRelatedToCall,
     String moveToCommon = "0",
     File? callRecordingPathUrl, // File upload
+
   }) async {
     try {
       isLoading(true);
@@ -371,7 +373,7 @@ class LeadListController extends GetxController {
 
         workOnLeadModel= WorkOnLeadModel.fromJson(data);
 
-        ToastMessage.msg(workOnLeadModel!.message!);
+
 
         isLoading(false);
 
@@ -418,7 +420,7 @@ class LeadListController extends GetxController {
 
         getEmployeeModel= GetEmployeeModel.fromJson(data);
 
-        ToastMessage.msg(getEmployeeModel!.message!);
+
         StorageService.put(StorageService.EMPLOYEE_ID, getEmployeeModel!.data!.id.toString());
         isLoading(false);
         eId.value=StorageService.get(StorageService.EMPLOYEE_ID).toString();

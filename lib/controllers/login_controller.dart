@@ -34,7 +34,7 @@ class LoginController extends GetxController {
 
 
         isLoading(false);
-        ToastMessage.msg(loginModel!.message!);
+
 
         Get.offAllNamed("/bottomNavbar");
       }else{

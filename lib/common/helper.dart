@@ -251,13 +251,15 @@ class AppText{
   static const String selectTime = "Select Time";
   static const String enterDetails = "Enter Follow-up details";
   static const String addFeedback = "Add Feedback";
-  static const String callFeedback = "Call Feedback";
+  static const String callFeedback = "Call Feedback / Follow up Note";
   static const String leadFeedback = "Lead Feedback";
-  static const String enterCallFeedback = "Enter Call Feedback";
+  static const String enterCallFeedback = "Enter the details";
   static const String enterLeadFeedback = "Enter Lead Feedback";
   static const String addFeedbackFirst = "Add feedback first";
   static const String settings = "Settings";
   static const String aboutUs = "About Us";
+  static const String callReminder = "Call Reminder";
+  static const String addFAndF = "Add Feedback & Followup";
 }
 
 class AppColor{
