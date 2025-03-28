@@ -200,7 +200,7 @@ class LeadHistory extends StatelessWidget {
                     ),
                   ],
                 ),
-                if(lead.callStatus.toString()=="1")
+               // if(lead.callStatus.toString()=="1")
                   Column(
                     children: [
                       Helper.customDivider(color: AppColor.grey200),

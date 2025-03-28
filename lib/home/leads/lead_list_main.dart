@@ -557,13 +557,24 @@ class LeadListMain extends StatelessWidget {
     return IconButton(
       onPressed: () {
         if(label=="call"){
-          // leadListController.makePhoneCall(phoneNumber);
-          CallService callService = CallService();
+
+         /* CallService callService = CallService();
           callService.makePhoneCall(
             phoneNumber:phoneNumber,//"+919399299880"
             leadId: leadId,
             currentLeadStage: currentLeadStage,
             context: context
+          );*/
+
+
+
+          CallService callService = CallService();
+          callService.makePhoneCall(
+              phoneNumber:"+919399299880",//phoneNumber,//"+919399299880"
+              leadId: leadId,
+              currentLeadStage: currentLeadStage,
+              context: context,
+            showFeedbackDialog:showCallFeedbackDialog,
           );
         }
         if(label=="whatsapp"){
@@ -618,11 +629,16 @@ class LeadListMain extends StatelessWidget {
             leadId: leadId,
           );
         }else if (label_code == "add_feedback") {
-
+          leadListController.callFeedbackController.clear();
+          leadListController.leadFeedbackController.clear();
           showCallFeedbackDialog(
             context: context,
             leadId: leadId,
-            currentLeadStage: currentLeadStage.toString()
+            currentLeadStage: currentLeadStage.toString(),
+            callDuration: "00:00",
+            callStartTime:  "00:00",
+            callEndTime: "00:00",
+            callStatus: "1"
           );
         }else if (label_code == "interested" || label_code =="not_interested" || label_code == "doable" || label_code =="not_doable") {
           showDialog(
@@ -1210,8 +1226,13 @@ class LeadListMain extends StatelessWidget {
     required BuildContext context,
     required leadId,
     required currentLeadStage,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+    required  callStatus,
   }) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return CustomBigDialogBox(
@@ -1256,17 +1277,15 @@ class LeadListMain extends StatelessWidget {
                   leadStageStatus: currentLeadStage,
                   feedbackRelatedToCall:leadListController.callFeedbackController.text.trim().toString(),
                   feedbackRelatedToLead:leadListController.leadFeedbackController.text.trim().toString(),
-                  callStatus: "1",
-                  callDuration: "00:00",
-                callStartTime:  "00:00",
-                callEndTime: "00:00",
-
-
+                  callStatus: callStatus,
+                  callDuration: callDuration,
+                  callStartTime:  callStartTime,
+                  callEndTime: callEndTime,
               );
 
               Get.back();
             }
-           // print("call tine==>${Helper.convertUnixTo12HourFormat(1743084223326)}");
+           // print("call time==>${Helper.convertUnixTo12HourFormat(1743144247686)}");
 
 
 
@@ -1275,5 +1294,76 @@ class LeadListMain extends StatelessWidget {
       },
     );
   }
+
+  ///old
+/*  void showCallFeedbackDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title: AppText.addFeedback,
+          content: Form(
+            child: Column(
+              children: [
+                SizedBox(height: 15,),
+                CustomLabeledTextField(
+                  label: AppText.callFeedback,
+                  isRequired: false,
+                  controller: leadListController.callFeedbackController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterCallFeedback,
+                  //validator:  ValidationHelper.validateName,
+                  isTextArea: true,
+
+                ),
+                SizedBox(height: 15,),
+                CustomLabeledTextField(
+                  label: AppText.leadFeedback,
+                  isRequired: false,
+                  controller: leadListController.leadFeedbackController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterLeadFeedback,
+                  // validator:  ValidationHelper.validateName,
+                  isTextArea: true,
+
+                ),
+
+              ],
+            ),
+          ),
+          onSubmit: () {
+            if(leadListController.callFeedbackController.text.isEmpty && leadListController.leadFeedbackController.text.isEmpty){
+              ToastMessage.msg(AppText.addFeedbackFirst);
+            }else{
+              leadListController.workOnLeadApi(
+                leadId: leadId.toString(),
+                leadStageStatus: currentLeadStage,
+                feedbackRelatedToCall:leadListController.callFeedbackController.text.trim().toString(),
+                feedbackRelatedToLead:leadListController.leadFeedbackController.text.trim().toString(),
+                callStatus: "1",
+                callDuration: "00:00",
+                callStartTime:  "00:00",
+                callEndTime: "00:00",
+
+
+              );
+
+              Get.back();
+            }
+            // print("call tine==>${Helper.convertUnixTo12HourFormat(1743084223326)}");
+
+
+
+          },
+        );
+      },
+    );
+  }*/
 }
 

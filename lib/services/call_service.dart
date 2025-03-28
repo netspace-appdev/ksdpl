@@ -13,7 +13,8 @@ import 'package:flutter/material.dart';
 import '../custom_widgets/CustomBigDialogBox.dart';
 import '../custom_widgets/CustomLabeledTextField.dart';
 
-class CallService {
+///Old code
+/*class CallService {
   StreamSubscription<PhoneState>? phoneStateSubscription;
   String? lastDialedNumber;
   LeadListController leadListController = Get.find();
@@ -147,9 +148,9 @@ class CallService {
                 feedbackRelatedToCall:leadListController.callFeedbackController.text.trim().toString(),
                 feedbackRelatedToLead:leadListController.leadFeedbackController.text.trim().toString(),
                 callStatus: "1",
-               /* callDuration: callDuration,
+               *//* callDuration: callDuration,
                 callStartTime: callStartTime,
-                callEndTime: "00:00",*/
+                callEndTime: "00:00",*//*
 
                   callDuration: callDuration.toString(),
                   callStartTime:callStartTime.toString(),
@@ -167,5 +168,200 @@ class CallService {
       },
     );
   }
+
+}*/
+
+///New code
+class CallService {
+  StreamSubscription<PhoneState>? phoneStateSubscription;
+  String? lastDialedNumber;
+  LeadListController leadListController = Get.find();
+  void makePhoneCall({
+    required String phoneNumber,
+    required String leadId,
+    required String currentLeadStage,
+    required BuildContext context,
+    required Function({
+    required BuildContext context,
+    required String leadId,
+    required String currentLeadStage,
+    required String callDuration,
+    required String callStartTime,
+    required String callEndTime,
+    required String callStatus,
+    }) showFeedbackDialog,
+  }) async {
+    print("call service ");
+    final Uri phoneUri = Uri.parse("tel:$phoneNumber");
+
+    if (await canLaunchUrl(phoneUri)) {
+      lastDialedNumber = phoneNumber;
+
+      // Start listening to call status
+      phoneStateSubscription = PhoneState.stream.listen((PhoneState event) {
+        if (event.status == PhoneStateStatus.CALL_ENDED) {
+          print("Call Ended, checking duration...");
+          Future.delayed(Duration(seconds: 2), () => checkCallStatus(
+              leadId: leadId,
+              currentLeadStage: currentLeadStage,
+              context: context,
+            showFeedbackDialog: showFeedbackDialog
+          ));
+        }
+      });
+
+      await launchUrl(phoneUri);
+    } else {
+      print("Could not make the call");
+    }
+  }
+
+  Future<void> checkCallStatus({
+    required String leadId,
+    required String currentLeadStage,
+    required BuildContext context,
+    required Function({
+    required BuildContext context,
+    required String leadId,
+    required String currentLeadStage,
+    required String callDuration,
+    required String callStartTime,
+    required String callEndTime,
+    required String callStatus,
+    }) showFeedbackDialog,
+  }) async {
+    if (lastDialedNumber == null) return;
+
+    Iterable<CallLogEntry> callLogs = await CallLog.query(
+      number: lastDialedNumber,
+
+    );
+
+    if (callLogs.isNotEmpty) {
+      CallLogEntry lastCall = callLogs.first;
+      print("Call Type: ${lastCall.callType}");
+      print("Duration: ${lastCall.duration} seconds");
+
+      print("✅ Call started at ${lastCall.timestamp}");
+      var callDuration=Helper.formatCallDuration(lastCall.duration!.toInt());
+      var callStartTime=Helper.convertUnixTo12HourFormat(lastCall.timestamp!+19800 );
+      var callEndTime=Helper.convertUnixTo12HourFormat((lastCall.timestamp!+19800) +lastCall.duration!.toInt());
+      print("✅ Call was connected and lasted ${lastCall.duration} seconds. which is ${callDuration} ");
+      leadListController.callFeedbackController.clear();
+      leadListController.leadFeedbackController.clear();
+
+      if (lastCall.duration! > 0) {
+
+
+        showFeedbackDialog(
+            leadId: leadId,
+            currentLeadStage: currentLeadStage,
+            context: context,
+            callDuration: callDuration.toString(),
+            callStartTime:callStartTime.toString(),
+            callEndTime: callEndTime.toString(),
+          callStatus: "1",
+        );
+      } else {
+        showFeedbackDialog(
+          leadId: leadId,
+          currentLeadStage: currentLeadStage,
+          context: context,
+          callDuration: callDuration.toString(),
+          callStartTime:callStartTime.toString(),
+          callEndTime: callEndTime.toString(),
+          callStatus: "1",
+        );
+        print("❌ Call was not answered or disconnected immediately.");
+      }
+    } else {
+      print("No call log found.");
+    }
+
+    lastDialedNumber = null;
+  }
+
+  void dispose() {
+    phoneStateSubscription?.cancel();
+  }
+
+/*
+  void showCallFeedbackDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title: AppText.addFeedback,
+          content: Form(
+            child: Column(
+              children: [
+                SizedBox(height: 15,),
+                CustomLabeledTextField(
+                  label: AppText.callFeedback,
+                  isRequired: false,
+                  controller: leadListController.callFeedbackController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterCallFeedback,
+                  //validator:  ValidationHelper.validateName,
+                  isTextArea: true,
+
+                ),
+                SizedBox(height: 15,),
+                CustomLabeledTextField(
+                  label: AppText.leadFeedback,
+                  isRequired: false,
+                  controller: leadListController.leadFeedbackController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterLeadFeedback,
+                  // validator:  ValidationHelper.validateName,
+                  isTextArea: true,
+
+                ),
+
+              ],
+            ),
+          ),
+          onSubmit: () {
+            if(leadListController.callFeedbackController.text.isEmpty && leadListController.leadFeedbackController.text.isEmpty){
+              ToastMessage.msg(AppText.addFeedbackFirst);
+            }else{
+              leadListController.workOnLeadApi(
+                  leadId: leadId.toString(),
+                  leadStageStatus: currentLeadStage,
+                  feedbackRelatedToCall:leadListController.callFeedbackController.text.trim().toString(),
+                  feedbackRelatedToLead:leadListController.leadFeedbackController.text.trim().toString(),
+                  callStatus: "1",
+                  */
+/* callDuration: callDuration,
+                callStartTime: callStartTime,
+                callEndTime: "00:00",*//*
+
+
+                  callDuration: callDuration.toString(),
+                  callStartTime:callStartTime.toString(),
+                  callEndTime: callEndTime.toString()
+
+
+              );
+              Get.back();
+            }
+
+
+
+          },
+        );
+      },
+    );
+  }
+*/
 
 }

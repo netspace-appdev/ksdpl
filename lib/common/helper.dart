@@ -534,7 +534,8 @@ class Helper{
     return parts.join(" ");
   }
   static String convertUnixTo12HourFormat(int timestamp) {
-    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000); // Convert seconds to milliseconds
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true); // Treat as UTC
+    dateTime = dateTime.add(Duration(hours: 5, minutes: 30)); // Convert to IST
     return DateFormat('h:mm a').format(dateTime); // Format as 12-hour time
   }
 
