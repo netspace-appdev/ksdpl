@@ -7,7 +7,11 @@ import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadDetailsController.dart';
 import '../../controllers/leads/lead_history_controller.dart';
 import '../../controllers/leads/leadlist_controller.dart';
+import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomCard.dart';
+import '../../custom_widgets/CustomLabelPickerTextField.dart';
+import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomLabeledTimePicker.dart';
 
 
 class LeadHistory extends StatelessWidget {
@@ -164,8 +168,6 @@ class LeadHistory extends StatelessWidget {
         reverse: true,
         itemBuilder: (context, index) {
           var lead=leadHistoryController.getLeadWorkByLeadIdModel.value!.data![index];
-          print("call status===>${lead.callStatus.toString()}");
-          //var time=Helper.formatTimeAgo(lead.workDate.toString());
 
           return CustomCard(
             borderColor: AppColor.grey200,
@@ -207,7 +209,7 @@ class LeadHistory extends StatelessWidget {
                       DetailRow(label: "Call Duration", value:lead.callDuration.toString() ),
                       DetailRow(label: "Call Start Time", value: lead.callStartTime.toString() ),
                       DetailRow(label: "Call End Time", value: lead.callEndTime.toString()),
-                      DetailRow(label: "Call Reminder", value: lead.callReminder.toString()=="null"?"No Reminder": Helper.convertDateTime(lead.callReminder.toString())),
+                      DetailRow(label: "Call Reminder", value: lead.callReminder.toString()=="null"?AppText.noReminder: Helper.convertDateTime(lead.callReminder.toString())),
                       DetailRow(label: "Call Feedback", value: lead.feedBackRelatedToCall.toString()),
                       DetailRow(label: "Lead Feedback", value: lead.feedBackRelatedToLead.toString()),
                     ],
@@ -215,6 +217,24 @@ class LeadHistory extends StatelessWidget {
                 Helper.customDivider(color: AppColor.grey200),
 
                 DetailRow(label: "Lead Status", value: lead.previousStageName.toString(), value2: lead.stageName.toString(),),
+
+                SizedBox(height: 10),
+
+                _buildTextButton(
+                  label:AppText.addFAndF,
+                  context: context,
+                  color: Colors.purple,
+                  icon:  Icons.add_call,
+                  leadId: lead.leadId.toString(),
+                  label_code: "add_feedback",
+                  currentLeadStage: lead.stageName.toString(),
+                  callStatus:  lead.callStatus.toString(),
+                  callDuration:  lead.callDuration.toString(),
+                  callStartTime:  lead.callStartTime.toString(),
+                  callEndTime:  lead.callEndTime.toString(),
+                  id:  lead.id.toString(),
+                  currentLeadStageId: lead.leadStageStatus.toString(),
+                )
 
               ],
             ),
@@ -230,7 +250,199 @@ class LeadHistory extends StatelessWidget {
   }
 
 
+  Widget _buildTextButton({
+    required String label,
+    required BuildContext context,
+    required Color color,
+    required IconData icon,
+    required String leadId,
+    required String label_code,
+    String? currentLeadStage,
+    required String callDuration,
+    required String callStartTime,
+    required String callEndTime,
+    required String callStatus,
+    required String id,
+    required String currentLeadStageId,
+  }) {
 
+    return InkWell(
+      onTap: () {
+        if (label_code == "add_feedback") {
+          leadListController.callFeedbackController.clear();
+          leadListController.leadFeedbackController.clear();
+          leadListController.followDateController.clear();
+          leadListController.followTimeController.clear();
+          leadListController.isCallReminder.value=false;
+          showCallFeedbackDialog(
+              context: context,
+              leadId: leadId,
+              currentLeadStage: currentLeadStage.toString(),
+              callDuration: callDuration,
+              callStartTime: callStartTime,
+              callEndTime: callEndTime,
+              callStatus: callStatus,
+            id: id,
+            currentLeadStageId: currentLeadStageId
+
+          );
+
+        }else{
+
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            width: label_code=="add_feedback"?MediaQuery.of(context).size.width*0.85: label_code=="open_poll"? MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
+
+            decoration: BoxDecoration(
+              //color: color,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: AppColor.grey700)
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: AppColor.grey700, size: 16),
+                SizedBox(width: 6),
+                Text(
+                  label,
+                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: AppColor.grey700),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  void showCallFeedbackDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+    required callStatus,
+    required id,
+    required currentLeadStageId,
+  }) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.addFAndF,
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.callFeedback,
+                      isRequired: false,
+                      controller: leadListController.callFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterCallFeedback,
+                      isTextArea: true,
+                    ),
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.leadFeedback,
+                      isRequired: false,
+                      controller: leadListController.leadFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterLeadFeedback,
+                      isTextArea: true,
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Obx(()=>Checkbox(
+                          activeColor: AppColor.secondaryColor,
+                          value: leadListController.isCallReminder.value,
+                          onChanged: (bool? value) {
+
+                            leadListController.isCallReminder.value = value ?? false;
+
+                          },
+                        )),
+                        Text(
+                          AppText.callReminder,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Obx(()=> CustomLabeledPickerTextField(
+                      label: AppText.selectDate,
+                      isRequired: false,
+                      controller: leadListController.followDateController,
+                      inputType: TextInputType.name,
+                      hintText: "MM/DD/YYYY",
+                      isDateField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                    Obx(()=>CustomLabeledTimePickerTextField(
+                      label: AppText.selectTime,
+                      isRequired: false,
+                      controller: leadListController.followTimeController,
+                      inputType: TextInputType.datetime,
+                      hintText: "HH:MM AM/PM",
+                      isTimeField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onSubmit: () {
+            if (leadListController.callFeedbackController.text.isEmpty &&
+                leadListController.leadFeedbackController.text.isEmpty) {
+              ToastMessage.msg(AppText.addFeedbackFirst);
+            } else {
+            /*  if(callStatus=="1"){
+                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
+                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
+                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
+
+              }*/
+
+              leadListController.callFeedbackSubmit(
+                  leadId: leadId,
+                  currentLeadStage: currentLeadStageId,
+                  callStatus: callStatus,
+                  callDuration: callDuration,
+                  callStartTime: callStartTime,
+                  callEndTime: callEndTime,
+                  id: id,
+                fromWhere: "call"
+
+              );
+              Get.back();
+            }
+
+          },
+        );
+      },
+    );
+  }
 }
 
 

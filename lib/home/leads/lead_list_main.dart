@@ -107,12 +107,23 @@ class LeadListMain extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                             Obx(()=> Text(
-                               leadListController.leadStageName2.value.toString(),
-                               style: TextStyle(
-                                 fontSize: 20,
-                                 fontWeight: FontWeight.bold,
-                               ),
+                             Obx(()=> Row(
+                               children: [
+                                 Text(
+                                   leadListController.leadStageName2.value.toString(),
+                                   style: TextStyle(
+                                     fontSize: 20,
+                                     fontWeight: FontWeight.bold,
+                                   ),
+                                 ),
+                                 Text(
+                                  " (${ leadListController.getAllLeadsModel.value!.data!.length.toString()})",
+                                   style: TextStyle(
+                                     fontSize: 20,
+                                    // fontWeight: FontWeight.bold,
+                                   ),
+                                 ),
+                               ],
                              )),
                               InkWell(
                                 onTap: (){
@@ -492,10 +503,10 @@ class LeadListMain extends StatelessWidget {
                 SizedBox(height: 10),
 
                 _buildTextButton(
-                  label:AppText.addFAndF,
+                  label:AppText.addFollowUp,
                   context: context,
                   color: Colors.purple,
-                  icon:  Icons.add_call,
+                  icon:  Icons.call,
                   leadId: lead.id.toString(),
                   label_code: "add_feedback",
                   currentLeadStage: lead.leadStage.toString(),
@@ -559,7 +570,7 @@ class LeadListMain extends StatelessWidget {
 
           CallService callService = CallService();
           callService.makePhoneCall(
-              phoneNumber:phoneNumber,//"+919399299880"
+              phoneNumber:"+919399299880",//phoneNumber,//"+919399299880"
               leadId: leadId,
               currentLeadStage: currentLeadStage,
               context: context,
@@ -613,12 +624,8 @@ class LeadListMain extends StatelessWidget {
           showOpenPollDialog2(context: context,leadId: leadId);
         }else if (label_code == "follow_up") {
 
-           showFollowupDialog(
-            context: context,
-            leadId: leadId,
-          );
         }else if (label_code == "add_feedback") {
-          leadListController.callFeedbackController.clear();
+          /*leadListController.callFeedbackController.clear();
           leadListController.leadFeedbackController.clear();
           leadListController.followDateController.clear();
           leadListController.followTimeController.clear();
@@ -629,7 +636,20 @@ class LeadListMain extends StatelessWidget {
             callDuration: "00:00",
             callStartTime:  "00:00",
             callEndTime: "00:00",
-            callStatus: "1"
+            callStatus: "0"
+          );*/
+          leadListController.callFeedbackController.clear();
+          leadListController.leadFeedbackController.clear();
+          leadListController.followDateController.clear();
+          leadListController.followTimeController.clear();
+          showFollowupDialog(
+              context: context,
+              leadId: leadId,
+              currentLeadStage: currentLeadStage.toString(),
+              callDuration: "00:00",
+              callStartTime:  "00:00",
+              callEndTime: "00:00",
+              callStatus: "0"
           );
 
         }else if (label_code == "interested" || label_code =="not_interested" || label_code == "doable" || label_code =="not_doable") {
@@ -981,57 +1001,6 @@ class LeadListMain extends StatelessWidget {
     return null;
   }
 
-  void showFollowupDialog({
-    required BuildContext context,
-    required leadId,
-  }) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-
-          title: AppText.setFollowup,
-          content: Column(
-            children: [
-              CustomLabeledPickerTextField(
-                label: AppText.selectDate,
-                isRequired: true,
-                controller: leadListController.followDateController,
-                inputType: TextInputType.name,
-                hintText: "MM/DD/YYYY",
-                isDateField: true,
-              ),
-              CustomLabeledTimePickerTextField(
-                label: AppText.selectTime,
-                isRequired: true,
-                controller: leadListController.followTimeController,
-                inputType: TextInputType.datetime,
-                hintText: "HH:MM AM/PM",
-                isTimeField: true,
-              ),
-              SizedBox(height: 15,),
-              CustomLabeledTextField(
-                label: AppText.details,
-                isRequired: true,
-                controller: leadListController.followDetailsController,
-                inputType: TextInputType.name,
-                hintText: AppText.enterDetails,
-                validator:  ValidationHelper.validateName,
-                isTextArea: true,
-
-              ),
-
-            ],
-          ),
-          onSubmit: () {
-            Get.back(); // Close dialog
-            // Handle submission logic
-          },
-        );
-      },
-    );
-  }
 
 
   void showFilterDialog({
@@ -1311,65 +1280,112 @@ class LeadListMain extends StatelessWidget {
                 leadListController.leadFeedbackController.text.isEmpty) {
               ToastMessage.msg(AppText.addFeedbackFirst);
             } else {
+             var id=leadListController.workOnLeadModel!.data!.id.toString();
+            if(callStatus=="1"){
+              callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
+              callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
+              callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
 
-              String selectedDate = leadListController.followDateController.text; // MM/DD/YYYY
-              String selectedTime = leadListController.followTimeController.text; // HH:MM AM/PM
+            }
 
-
-              String formattedDateTime="";
-
-              if(leadListController.isCallReminder.value){
-                print("call reminder");
-                if (selectedDate.isEmpty || selectedTime.isEmpty) {
-                  ToastMessage.msg("Date or Time is empty!");
-                  return;
-                }
-
-                DateTime parsedDate = DateFormat("MM-dd-yyyy").parse(selectedDate);
-
-
-                DateTime parsedTime = DateFormat("hh:mm a").parse(selectedTime);
-
-
-                DateTime combinedDateTime = DateTime(
-                  parsedDate.year,
-                  parsedDate.month,
-                  parsedDate.day,
-                  parsedTime.hour,
-                  parsedTime.minute,
-                );
-
-                formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
-
-                print("Final Formatted DateTime if reminder is set: $formattedDateTime");
-              }else{
-                print("No call reminder");
-
-                DateTime now = DateTime.now();
-
-                formattedDateTime=now.toString();
-                print("Final Formatted DateTime if reminder is not set: $formattedDateTime");
-              }
-
-
-
-
-
-              var remStatus=leadListController.isCallReminder.value?"1":"0";
-              print("remStatus before passing: $remStatus");
-              print("formattedDateTime before passing: $formattedDateTime");
-
-              leadListController.workOnLeadApi(
-                leadId: leadId.toString(),
-                leadStageStatus: currentLeadStage,
-                feedbackRelatedToCall: leadListController.callFeedbackController.text.trim(),
-                feedbackRelatedToLead: leadListController.leadFeedbackController.text.trim(),
+            leadListController.callFeedbackSubmit(
+                leadId: leadId,
+                currentLeadStage: currentLeadStage,
                 callStatus: callStatus,
                 callDuration: callDuration,
                 callStartTime: callStartTime,
                 callEndTime: callEndTime,
-                callReminder: formattedDateTime,
-                reminderStatus:  leadListController.isCallReminder.value?"1":"0",
+                id: id,
+              fromWhere: "call"
+
+            );
+              Get.back();
+            }
+
+          },
+        );
+      },
+    );
+  }
+
+
+  void showFollowupDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+    required callStatus,
+  }) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        leadListController.isCallReminder.value =true;
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.addFollowUp,
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.followupNote,
+                      isRequired: false,
+                      controller: leadListController.callFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterCallFeedback,
+                      isTextArea: true,
+                    ),
+
+                    Obx(()=> CustomLabeledPickerTextField(
+                      label: AppText.selectDate,
+                      isRequired: false,
+                      controller: leadListController.followDateController,
+                      inputType: TextInputType.name,
+                      hintText: "MM/DD/YYYY",
+                      isDateField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                    Obx(()=>CustomLabeledTimePickerTextField(
+                      label: AppText.selectTime,
+                      isRequired: false,
+                      controller: leadListController.followTimeController,
+                      inputType: TextInputType.datetime,
+                      hintText: "HH:MM AM/PM",
+                      isTimeField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onSubmit: () {
+            if (leadListController.callFeedbackController.text.isEmpty &&
+                leadListController.followDateController.text.isEmpty &&
+                leadListController.followTimeController.text.isEmpty
+            ) {
+              ToastMessage.msg(AppText.addDetailsFirst);
+            } else {
+              var id=0;
+
+              leadListController.callFeedbackSubmit(
+                  leadId: leadId,
+                  currentLeadStage: currentLeadStage,
+                  callStatus: callStatus,
+                  callDuration: callDuration,
+                  callStartTime: callStartTime,
+                  callEndTime: callEndTime,
+                  id: id.toString(),
+                  fromWhere: "follow_up"
               );
               Get.back();
             }

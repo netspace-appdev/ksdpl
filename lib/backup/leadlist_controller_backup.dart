@@ -1,3 +1,4 @@
+/*
 
 import 'dart:io';
 
@@ -18,8 +19,6 @@ import '../../models/drawer/UpdateLeadStageModel.dart';
 import '../../services/dashboard_api_service.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
-
-import 'lead_history_controller.dart';
 
 class LeadListController extends GetxController {
 
@@ -168,11 +167,8 @@ class LeadListController extends GetxController {
     required callDuration,
     required callStartTime,
     required callEndTime,
-    String? id,
-    required fromWhere,
-}){
-    
 
+  }){
     String selectedDate = followDateController.text; // MM/DD/YYYY
     String selectedTime = followTimeController.text; // HH:MM AM/PM
 
@@ -219,13 +215,8 @@ class LeadListController extends GetxController {
     var remStatus=isCallReminder.value?"1":"0";
     print("remStatus before passing: $remStatus");
     print("formattedDateTime before passing: $formattedDateTime");
-    print("id before passing: $id");
-    print("callDuration before passing: $callDuration");
-    print("callStartTime before passing: $callStartTime");
-    print("callEndTime before passing: $callEndTime");
 
     workOnLeadApi(
-      id:callStatus=="1"?id.toString():"0",
       leadId: leadId.toString(),
       leadStageStatus: currentLeadStage,
       feedbackRelatedToCall: callFeedbackController.text.trim(),
@@ -236,13 +227,7 @@ class LeadListController extends GetxController {
       callEndTime: callEndTime,
       callReminder: formattedDateTime,
       reminderStatus:  isCallReminder.value?"1":"0",
-    ).then((_){
-     if(fromWhere=="call"){
-       LeadHistoryController leadHistoryController = Get.find();
-       leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId.toString());
-     }
-     print("only followup");
-    });
+    );
   }
 
 
@@ -258,8 +243,8 @@ class LeadListController extends GetxController {
 
 
       var data = await DrawerApiService.getAllLeadsApi(
-        employeeId:employeeId,
-        leadStage: leadStage,
+          employeeId:employeeId,
+          leadStage: leadStage,
           stateId: stateId,
           distId: distId,
           cityId: cityId
@@ -405,7 +390,7 @@ class LeadListController extends GetxController {
   }
 
 
-  Future<void> workOnLeadApi({
+  void workOnLeadApi({
     required String leadId,
     String leadStageStatus = "0",
     String leadPercent = "0",
@@ -420,7 +405,6 @@ class LeadListController extends GetxController {
     String moveToCommon = "0",
     File? callRecordingPathUrl, // File upload
     String reminderStatus = "0",
-    String id = "0",
   }) async {
     try {
       isLoading(true);
@@ -428,27 +412,27 @@ class LeadListController extends GetxController {
       var eId=StorageService.get(StorageService.EMPLOYEE_ID);
 
       var data = await DrawerApiService.workOnLeadApi(
-          leadId:leadId,
-          leadStageStatus: leadStageStatus,
-          leadPercent: leadPercent,
-          employeeId: eId.toString(),
-          callEndTime: callEndTime,
-          callStatus: callStatus,
-          callStartTime: callStartTime,
-          feedbackRelatedToLead: feedbackRelatedToLead,
-          callDuration: callDuration,
-          callReminder: callReminder,
-          feedbackRelatedToCall: feedbackRelatedToCall,
-          moveToCommon: moveToCommon,
-          callRecordingPathUrl: callRecordingPathUrl,
+        leadId:leadId,
+        leadStageStatus: leadStageStatus,
+        leadPercent: leadPercent,
+        employeeId: eId.toString(),
+        callEndTime: callEndTime,
+        callStatus: callStatus,
+        callStartTime: callStartTime,
+        feedbackRelatedToLead: feedbackRelatedToLead,
+        callDuration: callDuration,
+        callReminder: callReminder,
+        feedbackRelatedToCall: feedbackRelatedToCall,
+        moveToCommon: moveToCommon,
+        callRecordingPathUrl: callRecordingPathUrl,
         reminderStatus: reminderStatus,
-        id: id,
       );
 
 
       if(data['success'] == true){
 
         workOnLeadModel= WorkOnLeadModel.fromJson(data);
+
 
 
         isLoading(false);
@@ -526,3 +510,4 @@ class LeadListController extends GetxController {
   }
 
 }
+*/

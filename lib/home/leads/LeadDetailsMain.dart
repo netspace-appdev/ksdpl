@@ -50,6 +50,8 @@ class LeadDetailsMain extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                     children: [
 
+
+
                       leadSection(context)
 
                     ],

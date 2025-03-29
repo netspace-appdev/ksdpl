@@ -1,7 +1,7 @@
 class WorkOnLeadModel {
   String? status;
   bool? success;
-  List<Data>? data;
+  Data? data;
   String? message;
 
   WorkOnLeadModel({this.status, this.success, this.data, this.message});
@@ -9,12 +9,7 @@ class WorkOnLeadModel {
   WorkOnLeadModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     success = json['success'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     message = json['message'];
   }
 
@@ -23,7 +18,7 @@ class WorkOnLeadModel {
     data['status'] = this.status;
     data['success'] = this.success;
     if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.toJson();
     }
     data['message'] = this.message;
     return data;
@@ -31,17 +26,74 @@ class WorkOnLeadModel {
 }
 
 class Data {
-  bool? success;
+  int? id;
+  int? leadId;
+  int? callStatus;
+  String? callRecordingPathUrl;
+  String? callStartTime;
+  String? callEndTime;
+  String? callDuration;
+  String? feedBackRelatedToCall;
+  String? callReminder;
+  String? feedBackRelatedToLead;
+  int? employeeId;
+  int? leadStageStatus;
+  double? leadPercent;
+  int? moveToCommon;
+  String? workDate;
 
-  Data({this.success});
+  Data(
+      {this.id,
+        this.leadId,
+        this.callStatus,
+        this.callRecordingPathUrl,
+        this.callStartTime,
+        this.callEndTime,
+        this.callDuration,
+        this.feedBackRelatedToCall,
+        this.callReminder,
+        this.feedBackRelatedToLead,
+        this.employeeId,
+        this.leadStageStatus,
+        this.leadPercent,
+        this.moveToCommon,
+        this.workDate});
 
   Data.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
+    id = json['id'];
+    leadId = json['leadId'];
+    callStatus = json['callStatus'];
+    callRecordingPathUrl = json['callRecordingPathUrl'];
+    callStartTime = json['callStartTime'];
+    callEndTime = json['callEndTime'];
+    callDuration = json['callDuration'];
+    feedBackRelatedToCall = json['feedBackRelatedToCall'];
+    callReminder = json['callReminder'];
+    feedBackRelatedToLead = json['feedBackRelatedToLead'];
+    employeeId = json['employeeId'];
+    leadStageStatus = json['leadStageStatus'];
+    leadPercent = json['leadPercent'];
+    moveToCommon = json['moveToCommon'];
+    workDate = json['workDate'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
+    data['id'] = this.id;
+    data['leadId'] = this.leadId;
+    data['callStatus'] = this.callStatus;
+    data['callRecordingPathUrl'] = this.callRecordingPathUrl;
+    data['callStartTime'] = this.callStartTime;
+    data['callEndTime'] = this.callEndTime;
+    data['callDuration'] = this.callDuration;
+    data['feedBackRelatedToCall'] = this.feedBackRelatedToCall;
+    data['callReminder'] = this.callReminder;
+    data['feedBackRelatedToLead'] = this.feedBackRelatedToLead;
+    data['employeeId'] = this.employeeId;
+    data['leadStageStatus'] = this.leadStageStatus;
+    data['leadPercent'] = this.leadPercent;
+    data['moveToCommon'] = this.moveToCommon;
+    data['workDate'] = this.workDate;
     return data;
   }
 }

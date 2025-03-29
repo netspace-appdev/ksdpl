@@ -260,6 +260,10 @@ class AppText{
   static const String aboutUs = "About Us";
   static const String callReminder = "Call Reminder";
   static const String addFAndF = "Add Feedback & Followup";
+  static const String noReminder = "No Reminder";
+  static const String addFollowUp = "Add Follow-up";
+  static const String followupNote = "Followup Note";
+  static const String addDetailsFirst = "Add details first";
 }
 
 class AppColor{

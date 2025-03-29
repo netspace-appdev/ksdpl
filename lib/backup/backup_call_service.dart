@@ -1,3 +1,4 @@
+/*
 
 import 'package:call_log/call_log.dart';
 import 'package:get/get.dart';
@@ -48,7 +49,7 @@ class CallService {
               leadId: leadId,
               currentLeadStage: currentLeadStage,
               context: context,
-            showFeedbackDialog: showFeedbackDialog
+              showFeedbackDialog: showFeedbackDialog
           ));
         }
       });
@@ -92,51 +93,29 @@ class CallService {
       print("✅ Call was connected and lasted ${lastCall.duration} seconds. which is ${callDuration} ");
       leadListController.callFeedbackController.clear();
       leadListController.leadFeedbackController.clear();
-      DateTime now = DateTime.now();
-      leadListController.isCallReminder.value =false;
-      var formattedDateTime=now.toString();
+
       if (lastCall.duration! > 0) {
-        leadListController.workOnLeadApi(
-          leadId: leadId.toString(),
-          leadStageStatus: currentLeadStage,
+
+
+        showFeedbackDialog(
+          leadId: leadId,
+          currentLeadStage: currentLeadStage,
+          context: context,
+          callDuration: callDuration.toString(),
+          callStartTime:callStartTime.toString(),
+          callEndTime: callEndTime.toString(),
           callStatus: "1",
-          callDuration: callDuration,
-          callStartTime: callStartTime,
-          callEndTime: callEndTime,
-          callReminder: formattedDateTime,
-        ).then((_){
-          showFeedbackDialog(
-            leadId: leadId,
-            currentLeadStage: currentLeadStage,
-            context: context,
-            callDuration: callDuration.toString(),
-            callStartTime:callStartTime.toString(),
-            callEndTime: callEndTime.toString(),
-            callStatus: "1",
-          );
-        });
-
-
+        );
       } else {
-        leadListController.workOnLeadApi(
-          leadId: leadId.toString(),
-          leadStageStatus: currentLeadStage,
-          callStatus: "0",
-          callDuration: callDuration,
-          callStartTime: callStartTime,
-          callEndTime: callEndTime,
-          callReminder: formattedDateTime,
-        ).then((_){
-          showFeedbackDialog(
-            leadId: leadId,
-            currentLeadStage: currentLeadStage,
-            context: context,
-            callDuration: callDuration.toString(),
-            callStartTime:callStartTime.toString(),
-            callEndTime: callEndTime.toString(),
-            callStatus: "0",
-          );
-        });
+        showFeedbackDialog(
+          leadId: leadId,
+          currentLeadStage: currentLeadStage,
+          context: context,
+          callDuration: callDuration.toString(),
+          callStartTime:callStartTime.toString(),
+          callEndTime: callEndTime.toString(),
+          callStatus: "1",
+        );
         print("❌ Call was not answered or disconnected immediately.");
       }
     } else {
@@ -150,4 +129,4 @@ class CallService {
     phoneStateSubscription?.cancel();
   }
 
-}
+}*/
