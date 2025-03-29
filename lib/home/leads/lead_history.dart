@@ -55,8 +55,10 @@ class LeadHistory extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                     children: [
 
-                      leadSection(context)
-
+                      leadSection(context),
+                      SizedBox(
+                        height: 50,
+                      )
                     ],
                   ),
                 ),

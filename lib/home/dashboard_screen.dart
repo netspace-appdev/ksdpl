@@ -128,7 +128,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: 20,
                         ),
 
-                        const SizedBox(height: 20),
+                       /* reminders(),
+
+                        const  SizedBox(
+                          height: 20,
+                        ),*/
+
+
 
                         curveChart(),
 
@@ -1050,5 +1056,189 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (!await launchUrl(_url)) {
       throw Exception('Could not launch $_url');
     }
+  }
+
+  Widget reminders(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding:  EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                AppText.upcomingFollowUp,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          height: 180,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5,
+            itemBuilder: (context, index) {
+
+
+
+             // var birthday = dashboardController.getUpcomingDateOfBirthModel.value!.data![index];
+              //List<Color> colors = [AppColor.secondaryColor, AppColor.lightGreen, AppColor.lightBrown];
+             // var thColor=colors[index % colors.length]; // Cycle through colors
+
+              return Container(
+                width: 250,
+
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                decoration:  BoxDecoration(
+                  border: Border.all(color: AppColor.grey200),
+                  color: AppColor.appWhite,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+
+                ),
+                child: Column(
+
+
+                  children: [
+                    /// Header with profile and menu icon
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: 40,
+                                width: 40,
+
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColor.primaryColor,
+                                  border: Border.all(color: AppColor.secondaryColor),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "N", // Initial Letter
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+
+                                children: [
+                                  Text(
+                                    Helper.capitalizeEachWord("Name"),
+
+                                    // lead.name.toString(),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 10,
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                        decoration:  BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(color: AppColor.grey200),
+                                          color: AppColor.grey1,
+                                        ),
+                                      ),
+                                      Text(
+                                        "9179313131",
+                                        style: TextStyle(
+                                          color: AppColor.grey700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    /// Lead details
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: [
+                          _buildDetailRow("Next Followup Date", "Email"),
+                        //  _buildDetailRow("Last Work Date", "Assigned"),
+                          //_buildDetailRow("Uploaded on", "Uploaded onm"),
+
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+
+
+                  ],
+                ),
+              );
+            },
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    //   String assigned = value.toString();
+//    List<String> assignedParts = assigned.split('T');
+
+
+    return Container(
+      height: 90,
+
+      //color: Colors.red,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Column(
+         // crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+            Container(
+              //width: 100,
+
+
+              child: Text(
+                "$label",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.primaryLight,
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                //label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ": ${value}",
+                "20 Apr 20025, 03:00 PM",
+
+                style: TextStyle(color: Colors.black87),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -52,7 +52,9 @@ class LeadDetailsMain extends StatelessWidget {
 
 
 
-                      leadSection(context)
+                      leadSection(context),
+
+
 
                     ],
                   ),
@@ -160,6 +162,7 @@ class LeadDetailsMain extends StatelessWidget {
 
       return  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           // Lead Details Card
 
