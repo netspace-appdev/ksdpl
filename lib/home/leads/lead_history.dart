@@ -207,7 +207,7 @@ class LeadHistory extends StatelessWidget {
                       DetailRow(label: "Call Duration", value:lead.callDuration.toString() ),
                       DetailRow(label: "Call Start Time", value: lead.callStartTime.toString() ),
                       DetailRow(label: "Call End Time", value: lead.callEndTime.toString()),
-                      DetailRow(label: "Call Reminder", value: lead.callReminder.toString()),
+                      DetailRow(label: "Call Reminder", value: lead.callReminder.toString()=="null"?"No Reminder": Helper.convertDateTime(lead.callReminder.toString())),
                       DetailRow(label: "Call Feedback", value: lead.feedBackRelatedToCall.toString()),
                       DetailRow(label: "Lead Feedback", value: lead.feedBackRelatedToLead.toString()),
                     ],

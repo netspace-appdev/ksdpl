@@ -799,6 +799,7 @@ class DrawerApiService {
     String? feedbackRelatedToCall,
     String moveToCommon = "0",
     File? callRecordingPathUrl, // File upload
+    String reminderStatus = "0",
   }) async {
     try {
       var request = http.MultipartRequest(
@@ -825,6 +826,7 @@ class DrawerApiService {
       request.fields['CallStatus'] = callStatus;
       request.fields['MoveToCommon'] = moveToCommon;
       request.fields['Call_Recording_PathURL'] = "null";
+      request.fields['ReminderStatus'] = reminderStatus;
 
       // Optional fields (Set null for "string" values)
       if (callEndTime != "string") request.fields['CallEndTime'] = callEndTime ?? "null";

@@ -486,14 +486,39 @@ class Helper{
   }
   static String formatDate(String dateTime) {
 
-    // Split the string at 'T' to get the date part
+   /* // Split the string at 'T' to get the date part
     String datePart = dateTime.split('T')[0];
 
     // Split the date into year, month, and day
     List<String> parts = datePart.split('-');
 
     // Rearrange into DD-MM-YYYY format
-    return '${parts[2]}-${parts[1]}-${parts[0]}';
+    return '${parts[2]}-${parts[1]}-${parts[0]}';*/
+
+    try {
+      // Parse the input date-time string
+      DateTime parsedDateTime = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SS").parse(dateTime);
+
+      // Format to "dd-MM-yyyy, HH:mm a"
+      return DateFormat("dd-MM-yyyy, HH:mm a").format(parsedDateTime);
+    } catch (e) {
+      return "Invalid Date Format";
+    }
+  }
+
+  static String convertDateTime(String dateTimeStr) {
+    try {
+      // Parse the input date-time string
+      DateTime parsedDateTime = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(dateTimeStr);
+
+      // Subtract one day
+      parsedDateTime = parsedDateTime.subtract(Duration(days: 1));
+
+      // Format to "dd-MM-yyyy, HH:mm a"
+      return DateFormat("dd-MM-yyyy, HH:mm a").format(parsedDateTime);
+    } catch (e) {
+      return "Invalid Date Format";
+    }
   }
 
   static String birthdayFormat(String dateTime) {

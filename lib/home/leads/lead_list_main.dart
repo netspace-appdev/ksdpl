@@ -620,6 +620,8 @@ class LeadListMain extends StatelessWidget {
         }else if (label_code == "add_feedback") {
           leadListController.callFeedbackController.clear();
           leadListController.leadFeedbackController.clear();
+          leadListController.followDateController.clear();
+          leadListController.followTimeController.clear();
           showCallFeedbackDialog(
             context: context,
             leadId: leadId,
@@ -629,6 +631,7 @@ class LeadListMain extends StatelessWidget {
             callEndTime: "00:00",
             callStatus: "1"
           );
+
         }else if (label_code == "interested" || label_code =="not_interested" || label_code == "doable" || label_code =="not_doable") {
           showDialog(
             context: context,
@@ -1308,25 +1311,26 @@ class LeadListMain extends StatelessWidget {
                 leadListController.leadFeedbackController.text.isEmpty) {
               ToastMessage.msg(AppText.addFeedbackFirst);
             } else {
-              print("here==>${leadListController.followDateController.text}");
-              print("here==>${leadListController.followTimeController.text}");
+
               String selectedDate = leadListController.followDateController.text; // MM/DD/YYYY
               String selectedTime = leadListController.followTimeController.text; // HH:MM AM/PM
 
-              /*String formattedDateTime="";
+
+              String formattedDateTime="";
+
               if(leadListController.isCallReminder.value){
+                print("call reminder");
                 if (selectedDate.isEmpty || selectedTime.isEmpty) {
                   ToastMessage.msg("Date or Time is empty!");
                   return;
                 }
 
-                // ✅ Convert Date String (MM/DD/YYYY) to DateTime
                 DateTime parsedDate = DateFormat("MM-dd-yyyy").parse(selectedDate);
 
-                // ✅ Convert Time String (HH:MM AM/PM) to DateTime
+
                 DateTime parsedTime = DateFormat("hh:mm a").parse(selectedTime);
 
-                // ✅ Combine Date and Time
+
                 DateTime combinedDateTime = DateTime(
                   parsedDate.year,
                   parsedDate.month,
@@ -1335,59 +1339,25 @@ class LeadListMain extends StatelessWidget {
                   parsedTime.minute,
                 );
 
-                // ✅ Format to Required API Format (yyyy-MM-ddTHH:mm:ss.SS)
-                String formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
+                formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
 
-                print("Final Formatted DateTime: $formattedDateTime");
+                print("Final Formatted DateTime if reminder is set: $formattedDateTime");
               }else{
+                print("No call reminder");
+
                 DateTime now = DateTime.now();
-                // ✅ If user has selected date & time, use them. Otherwise, use DateTime.now()
-                DateTime parsedDate =now; // If empty, use today’s date
 
-                DateTime parsedTime =  now; // If empty, use current time
-
-// ✅ Combine Date and Time
-                DateTime combinedDateTime = DateTime(
-                  parsedDate.year,
-                  parsedDate.month,
-                  parsedDate.day,
-                  parsedTime.hour,
-                  parsedTime.minute,
-                );
-
-// ✅ Format to Required API Format (yyyy-MM-ddTHH:mm:ss.SS)
-                String formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
-
-                print("Final Formatted DateTime today: $formattedDateTime");
-              }
-*/
-
-
-              if (selectedDate.isEmpty || selectedTime.isEmpty) {
-                ToastMessage.msg("Date or Time is empty!");
-                return;
+                formattedDateTime=now.toString();
+                print("Final Formatted DateTime if reminder is not set: $formattedDateTime");
               }
 
-              // ✅ Convert Date String (MM/DD/YYYY) to DateTime
-              DateTime parsedDate = DateFormat("MM-dd-yyyy").parse(selectedDate);
 
-              // ✅ Convert Time String (HH:MM AM/PM) to DateTime
-              DateTime parsedTime = DateFormat("hh:mm a").parse(selectedTime);
 
-              // ✅ Combine Date and Time
-              DateTime combinedDateTime = DateTime(
-                parsedDate.year,
-                parsedDate.month,
-                parsedDate.day,
-                parsedTime.hour,
-                parsedTime.minute,
-              );
 
-              // ✅ Format to Required API Format (yyyy-MM-ddTHH:mm:ss.SS)
-              String formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
 
-              print("Final Formatted DateTime: $formattedDateTime");
-
+              var remStatus=leadListController.isCallReminder.value?"1":"0";
+              print("remStatus before passing: $remStatus");
+              print("formattedDateTime before passing: $formattedDateTime");
 
               leadListController.workOnLeadApi(
                 leadId: leadId.toString(),
@@ -1398,7 +1368,8 @@ class LeadListMain extends StatelessWidget {
                 callDuration: callDuration,
                 callStartTime: callStartTime,
                 callEndTime: callEndTime,
-                callReminder: formattedDateTime
+                callReminder: formattedDateTime,
+                reminderStatus:  leadListController.isCallReminder.value?"1":"0",
               );
               Get.back();
             }

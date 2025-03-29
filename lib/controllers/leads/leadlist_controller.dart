@@ -48,7 +48,7 @@ class LeadListController extends GetxController {
   final TextEditingController callFeedbackController = TextEditingController();
   final TextEditingController leadFeedbackController = TextEditingController();
   GetEmployeeModel? getEmployeeModel;
-  var isCallReminder=true.obs;
+  var isCallReminder=false.obs;
 
   @override
   void onInit() {
@@ -345,7 +345,7 @@ class LeadListController extends GetxController {
     String? feedbackRelatedToCall,
     String moveToCommon = "0",
     File? callRecordingPathUrl, // File upload
-
+    String reminderStatus = "0",
   }) async {
     try {
       isLoading(true);
@@ -366,6 +366,7 @@ class LeadListController extends GetxController {
           feedbackRelatedToCall: feedbackRelatedToCall,
           moveToCommon: moveToCommon,
           callRecordingPathUrl: callRecordingPathUrl,
+        reminderStatus: reminderStatus,
       );
 
 
