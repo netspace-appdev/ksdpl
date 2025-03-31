@@ -267,7 +267,7 @@ class AppText{
   static const String upcomingFollowUp = "Upcoming Follow up";
   static const String campaign = "Campaign";
   static const String customdash = "customDash";
-  static const String customdash = "customDash";
+  static const String allReminders = "All Reminders";
 }
 
 class AppColor{

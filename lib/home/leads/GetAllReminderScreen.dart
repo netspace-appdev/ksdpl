@@ -12,6 +12,7 @@ import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
+import '../../controllers/dashboard/DashboardController.dart';
 import '../../controllers/drawer_controller.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
@@ -25,21 +26,15 @@ import '../custom_drawer.dart';
 
 class GetAllReminderScreen extends StatelessWidget {
 
-  LeadDDController leadDDController = Get.put(LeadDDController());
-  GreetingController greetingController = Get.put(GreetingController());
-  InfoController infoController = Get.put(InfoController());
-  final TextEditingController _searchController = TextEditingController();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _formKey = GlobalKey<FormState>();
-  final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
+  DashboardController dashboardController = Get.put(DashboardController());
   @override
   Widget build(BuildContext context) {
 
     return SafeArea(
       child: Scaffold(
-        key:_scaffoldKey,
+
         backgroundColor: AppColor.backgroundColor,
-        drawer:   CustomDrawer(),
+
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -87,495 +82,12 @@ class GetAllReminderScreen extends StatelessWidget {
                         ),
 
                       ),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min, // Prevents extra spacing
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.fullName,
-                              isRequired: true,
-                              controller: addleadcontroller.fullNameController,
-                              inputType: TextInputType.name,
-                              hintText: AppText.enterFullName,
-                              validator:  ValidationHelper.validateName,
-                            ),
-
-                            CustomLabeledPickerTextField(
-                              label: AppText.dateOfBirth,
-                              isRequired: true,
-                              controller: addleadcontroller.dobController,
-                              inputType: TextInputType.name,
-                              hintText: AppText.mmddyyyy,
-                              validator: ValidationHelper.validateDob,
-                              isDateField: true,
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.phoneNumberNoStar,
-                              isRequired: true,
-                              controller: addleadcontroller.phoneController,
-                              inputType: TextInputType.phone,
-                              hintText: AppText.enterPhNumber,
-                              validator: ValidationHelper.validatePhoneNumber,
-                            ),
-                            const SizedBox(height: 10),
-                            const Row(
-                              children: [
-                                Text(
-                                  AppText.gender,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.grey2,
-                                  ),
-                                ),
-                                Text(
-                                  " *",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.redColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            const SizedBox(height: 10),
-                            /// Label Row (with * if required)
-
-                            Obx(()=>  Row(
-                              children: [
-                                _buildRadioOption("Male"),
-                                _buildRadioOption("Female"),
-                                _buildRadioOption("Other"),
-                              ],
-                            )
-                            ),
-
-                            const SizedBox(height: 20),
-
-
-                            CustomLabeledTextField(
-                              label: AppText.lar,
-                              isRequired: true,
-                              controller: addleadcontroller.loanAmtReqController,
-                              inputType: TextInputType.phone,
-                              hintText: AppText.enterLar,
-                              validator: ValidationHelper.validateLoanAmt,
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.eml,
-                              isRequired: false,
-                              controller: addleadcontroller.emailController,
-                              inputType: TextInputType.emailAddress,
-                              hintText: AppText.enterEA,
-                              validator: ValidationHelper.validateEmail,
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.aadhar,
-                              isRequired: false,
-                              controller: addleadcontroller.aadharController ,
-                              inputType: TextInputType.phone,
-                              hintText: AppText.enterAadhar,
-
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.panNumber,
-                              isRequired: false,
-                              controller: addleadcontroller.panController ,
-                              inputType: TextInputType.name,
-                              hintText: AppText.enterPan,
-
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.streetAdd,
-                              isRequired: false,
-                              controller: addleadcontroller.streetAddController ,
-                              inputType: TextInputType.name,
-                              hintText: AppText.enterStreetAdd,
-
-                            ),
-
-                            const Text(
-                              AppText.state,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
-                              ),
-                            ),
-
-                            SizedBox(height: 10),
-
-
-                            Obx((){
-                              if (leadDDController.isLoading.value) {
-                                return  Center(child:CustomSkelton.productShimmerList(context));
-                              }
-
-                              return CustomDropdown<Data>(
-                                items: leadDDController.getAllStateModel.value?.data ?? [],
-                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                getName: (item) => item.stateName.toString(),
-                                selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                                      (item) => item.id.toString() == leadDDController.selectedState.value,
-                                ),
-                                onChanged: (value) {
-                                  leadDDController.selectedState.value =  value?.id?.toString();
-                                  leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
-                                },
-                              );
-                            }),
-
-                            const SizedBox(height: 20),
-
-                            const Text(
-                              AppText.district,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
-                              ),
-                            ),
-
-                            const SizedBox(height: 10),
-
-
-                            Obx((){
-                              if (leadDDController.isLoading.value) {
-                                return  Center(child:CustomSkelton.productShimmerList(context));
-                              }
-
-
-                              return CustomDropdown<dist.Data>(
-                                items: leadDDController.getDistrictByStateModel.value?.data ?? [],
-                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                getName: (item) => item.districtName.toString(),
-                                selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
-                                      (item) => item.id.toString() == leadDDController.selectedDistrict.value,
-                                ),
-                                onChanged: (value) {
-                                  leadDDController.selectedDistrict.value =  value?.id?.toString();
-                                  leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
-                                },
-                              );
-                            }),
-
-                            const SizedBox(height: 20),
-
-
-                            const Text(
-                              AppText.city,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
-                              ),
-                            ),
-
-                            const SizedBox(height: 10),
-
-
-                            Obx((){
-                              if (leadDDController.isLoading.value) {
-                                return  Center(child:CustomSkelton.productShimmerList(context));
-                              }
-
-
-                              return CustomDropdown<city.Data>(
-                                items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
-                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                getName: (item) => item.cityName.toString(),
-                                selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
-                                      (item) => item.id.toString() == leadDDController.selectedCity.value,
-                                ),
-                                onChanged: (value) {
-                                  leadDDController.selectedCity.value =  value?.id?.toString();
-                                },
-                              );
-                            }),
-
-                            const SizedBox(height: 20),
-
-                            CustomLabeledTextField(
-                              label: AppText.zipCode,
-                              isRequired: false,
-                              controller: addleadcontroller.zipController ,
-                              inputType: TextInputType.number,
-                              hintText: AppText.enterZipCode,
-
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.nationality,
-                              isRequired: false,
-                              controller: addleadcontroller.nationalityController ,
-                              inputType: TextInputType.name,
-                              hintText: AppText.nationality,
-                              validator: ValidationHelper.validateNationality,
-                            ),
-
-
-                            const Text(
-                              AppText.currEmpSt,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
-                              ),
-                            ),
-
-                            const SizedBox(height: 10),
-
-
-                            Obx((){
-                              if (leadDDController.isLoading.value) {
-                                return  Center(child:CustomSkelton.productShimmerList(context));
-                              }
-
-
-                              return CustomDropdown<String>(
-                                items: leadDDController.currEmpStList,
-                                getId: (item) => item,  // Adjust based on your model structure
-                                getName: (item) => item,
-                                selectedValue: leadDDController.currEmpStatus.value,
-                                onChanged: (value) {
-                                  leadDDController.currEmpStatus.value =  value;
-                                },
-                              );
-                            }),
-
-                            const SizedBox(height: 20),
-
-                            CustomLabeledTextField(
-                              label: AppText.employerName,
-                              isRequired: false,
-                              controller: addleadcontroller.employerNameController ,
-                              inputType: TextInputType.name,
-                              hintText: AppText.enterEmployerName,
-                              validator: ValidationHelper.validateEmpName,
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.monIncome,
-                              isRequired: false,
-                              controller: addleadcontroller.monthlyIncomeController ,
-                              inputType: TextInputType.number,
-                              hintText: AppText.enterMonIncome,
-
-                            ),
-
-                            CustomLabeledTextField(
-                              label: AppText.addIncome,
-                              isRequired: false,
-                              controller: addleadcontroller.addSourceIncomeController ,
-                              inputType: TextInputType.name,
-                              hintText: AppText.enterAddIncome,
-                              validator: ValidationHelper.validateAddSrcInc,
-                            ),
-
-                            const Text(
-                              AppText.preferredBank,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
-                              ),
-                            ),
-
-                            const SizedBox(height: 10),
-
-
-                            Obx((){
-                              if (leadDDController.isLoading.value) {
-                                return  Center(child:CustomSkelton.productShimmerList(context));
-                              }
-
-
-                              return CustomDropdown<bank.Data>(
-                                items: leadDDController.getAllBankModel.value?.data ?? [],
-                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                getName: (item) => item.bankName.toString(),
-                                selectedValue: leadDDController.getAllBankModel.value?.data?.firstWhereOrNull(
-                                      (item) => item.id.toString() == leadDDController.selectedBank.value,
-                                ),
-                                onChanged: (value) {
-
-                                  leadDDController.selectedBank.value =  value?.id?.toString();
-                                  leadDDController.getProductListByBankIdApi(bankId: leadDDController.selectedBank.value);
-                                },
-                              );
-                            }),
-
-                            const SizedBox(height: 20),
-
-                            const Text(
-                              AppText.existingRelationship,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
-                              ),
-                            ),
-
-                            const SizedBox(height: 10),
-
-
-                            Obx(()=>Column(
-                              children: addleadcontroller.optionsRelBank.asMap().entries.map((entry) {
-                                int index = entry.key;
-                                String option = entry.value;
-
-                                return CheckboxListTile(
-                                  activeColor: AppColor.secondaryColor,
-
-                                  title: Text(option),
-                                  value: addleadcontroller.selectedIndexRelBank.value == index,
-                                  onChanged: (value) => addleadcontroller.selectCheckboxRelBank(index),
-                                );
-                              }).toList(),
-                            )),
-
-                            const SizedBox(height: 20),
-
-                            CustomLabeledTextField(
-                              label: AppText.brLoc,
-                              isRequired: false,
-                              controller: addleadcontroller.branchLocController ,
-                              inputType: TextInputType.name,
-                              hintText: AppText.enterBrLoc,
-                              validator: ValidationHelper.validateBrLoc,
-                            ),
-
-                            const Text(
-                              AppText.productTypeInt,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.grey2,
-                              ),
-                            ),
-
-                            const SizedBox(height: 10),
-
-
-                            Obx((){
-                              if (leadDDController.isLoading.value) {
-                                return  Center(child:CustomSkelton.productShimmerList(context));
-                              }
-
-
-                              return CustomDropdown<product.Data>(
-                                items: leadDDController.getAllKsdplProductModel.value?.data ?? [],
-                                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                getName: (item) => item.productName.toString(),
-                                selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
-                                      (item) => item.id.toString() == leadDDController.selectedProdType.value,
-                                ),
-                                onChanged: (value) {
-                                  leadDDController.selectedProdType.value =  value?.id?.toString();
-                                },
-                              );
-                            }),
-
-
-                            const SizedBox(height: 20),
-
-                            Obx(() => Column(
-
-                              children: [
-                                CheckboxListTile(
-                                  activeColor: AppColor.secondaryColor,
-                                  title: Text(AppText.connector),
-                                  value: addleadcontroller.isConnectorChecked.value,
-                                  onChanged: addleadcontroller.toggleConnectorCheckbox,
-                                  controlAffinity: ListTileControlAffinity.leading, // Puts checkbox on the left
-                                ),
-                                if(addleadcontroller.isConnectorChecked.value)
-                                  Column(
-                                    children: [
-                                      const SizedBox(height: 10),
-                                      CustomLabeledTextField(
-                                        label: AppText.conName,
-                                        isRequired: false,
-                                        controller: addleadcontroller.connNameController ,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.enterConName,
-                                        validator: ValidationHelper.validateConnName,
-                                      ),
-
-                                      CustomLabeledTextField(
-                                        label: AppText.conMob,
-                                        isRequired: false,
-                                        controller: addleadcontroller.connMobController ,
-                                        inputType: TextInputType.number,
-                                        hintText: AppText.enterConMob,
-
-                                      ),
-
-                                      CustomLabeledTextField(
-                                        label: AppText.conShare,
-                                        isRequired: false,
-                                        controller: addleadcontroller.connShareController ,
-                                        inputType: TextInputType.number,
-                                        hintText: AppText.enterConShare,
-
-                                      )
-
-                                    ],
-                                  )
-                              ],
-                            )),
-
-                            SizedBox(height: 20),
-
-                            Obx((){
-                              if(addleadcontroller.isLoading.value){
-                                return const Align(
-                                  alignment: Alignment.center,
-                                  child: SizedBox(
-                                    height: 30,
-                                    width: 30,
-                                    child: CircularProgressIndicator(
-                                      color: AppColor.primaryColor,
-                                    ),
-                                  ),
-                                );
-                              }
-                              return SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColor.secondaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  onPressed: onPressed,
-                                  child: const Text(
-                                    AppText.submit,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            })
-                          ],
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                        children: [
+                          leadSection(context)
+                        ],
                       ),
                     ),
                   ),
@@ -594,7 +106,7 @@ class GetAllReminderScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
         children: [
 
 
@@ -604,16 +116,20 @@ class GetAllReminderScreen extends StatelessWidget {
               },
               child: Image.asset(AppImage.arrowLeft,height: 24,)),
 
-          const Text(
-            AppText.addLead,
-            style: TextStyle(
-                fontSize: 20,
-                color: AppColor.grey3,
-                fontWeight: FontWeight.w700
+           Expanded(
+             child: Center(
+               child: Text(
+                AppText.allReminders,
+                style: TextStyle(
+                    fontSize: 20,
+                    color: AppColor.grey3,
+                    fontWeight: FontWeight.w700
 
 
-            ),
-          ),
+                ),
+                         ),
+             ),
+           ),
 
           InkWell(
             onTap: (){
@@ -641,35 +157,234 @@ class GetAllReminderScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRadioOption(String gender) {
-    return Row(
-      children: [
-        Radio<String>(
-          value: gender,
-          groupValue: addleadcontroller.selectedGender.value,
-          onChanged: (value) {
-            addleadcontroller.selectedGender.value=value;
-          },
-        ),
-        Text(gender),
-      ],
+
+  Widget leadSection(BuildContext context){
+    return Obx((){
+      if (dashboardController.isLoading.value) {
+        return  Center(child: CustomSkelton.productShimmerList(context));
+      }
+      if (dashboardController.getRemindersModel.value == null ||
+          dashboardController.getRemindersModel.value!.data == null || dashboardController.getRemindersModel.value!.data!.isEmpty) {
+        return  Container(
+          height: MediaQuery.of(context).size.height*0.50,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          decoration:  BoxDecoration(
+            border: Border.all(color: AppColor.grey200),
+            color: AppColor.appWhite,
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+
+          ),
+          child: const Column(
+
+            children: [
+              /// Header with profile and menu icon
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "No data found",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.grey700
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+        );
+      }
+
+      return  ListView.builder(
+        itemCount: dashboardController.getRemindersModel.value!.data!.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          final lead = dashboardController.getRemindersModel.value!.data![index];
+
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            decoration:  BoxDecoration(
+              border: Border.all(color: AppColor.grey200),
+              color: AppColor.appWhite,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(10),
+              ),
+
+            ),
+            child: Column(
+
+
+              children: [
+                /// Header with profile and menu icon
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 40,
+                            width: 40,
+
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColor.primaryColor,
+                              border: Border.all(color: AppColor.secondaryColor),
+                            ),
+                            child: Center(
+                              child: Text(
+                                lead.leadCustomerName==null?"N":lead.leadCustomerName!.isNotEmpty ? lead.leadCustomerName![0].toUpperCase() : "U", // Initial Letter
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                Helper.capitalizeEachWord(lead.leadCustomerName.toString()),
+
+                                // lead.name.toString(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    height: 10,
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                    decoration:  BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: AppColor.grey200),
+                                      color: AppColor.grey1,
+                                    ),
+                                  ),
+                                  Text(
+                                    lead.leadMobileNo.toString(),
+                                    style: TextStyle(
+                                      color: AppColor.grey700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10),
+
+                /// Lead details
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                    children: [
+                      _buildDetailRow("Email", lead.leadEmail.toString()),
+                      _buildDetailRow("Upcoming reminder Date", Helper.convertDateTime(lead.callReminder.toString())),
+                      _buildDetailRow("Last work date",Helper.convertDateTime(lead.workDate.toString()) ),
+                      _buildDetailRow("Call Feedback",lead.feedBackRelatedToCall.toString() ),
+                      _buildDetailRow("Lead Feedback",lead.feedBackRelatedToLead.toString() ),
+
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10),
+
+                /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
+                /*Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                      _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
+                      _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                      //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
+                      InkWell(
+                        onTap: () {
+                          //Get.toNamed("/leadDetailsMain", arguments: {"leadId":lead.id.toString()});
+                          Get.toNamed("/leadDetailsTab", arguments: {"leadId":lead.id.toString()});
+
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
+                          decoration: BoxDecoration(
+                            color: AppColor.orangeColor, // Button background color
+                            borderRadius: BorderRadius.circular(2), // Rounded corners
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
+                              SizedBox(width: 5,),
+                              Text(
+                                AppText.details,
+                                style: TextStyle(color: AppColor.appWhite),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+
+                    ],
+                  ),
+                ),*/
+                SizedBox(height: 10),
+
+
+              ],
+            ),
+          );
+
+        },
+      );
+    });
+  }
+  Widget _buildDetailRow(String label, String value) {
+    //   String assigned = value.toString();
+//    List<String> assignedParts = assigned.split('T');
+
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 100,
+
+            child: Text(
+              "$label",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: AppColor.primaryLight,
+              ),
+            ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ": ${value}",
+
+              style: TextStyle(color: Colors.black87),
+            ),
+          ),
+        ],
+      ),
     );
   }
-
-  void onPressed(){
-
-
-    if (_formKey.currentState!.validate()) {
-
-      if (addleadcontroller.selectedGender.value==null) {
-        ToastMessage.msg("Please select gender");
-      }else {
-        ToastMessage.msg("Form Submitted");
-      }
-    }
-  }
-
-
 }
 
 

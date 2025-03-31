@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/common/skelton.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
+import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,10 +15,16 @@ import '../../common/helper.dart';
 import '../common/base_url.dart';
 import '../common/circl_graph_class.dart';
 
+import '../controllers/bot_nav_controller.dart';
 import '../controllers/greeting_controller.dart';
 import '../controllers/leads/infoController.dart';
 
+import '../custom_widgets/CustomBigDialogBox.dart';
+import '../custom_widgets/CustomLabelPickerTextField.dart';
+import '../custom_widgets/CustomLabeledTextField.dart';
+import '../custom_widgets/CustomLabeledTimePicker.dart';
 import '../custom_widgets/line_chart.dart';
+import '../services/call_service.dart';
 import 'custom_drawer.dart';
 
 
@@ -38,6 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   InfoController infoController = Get.put(InfoController());
   double maxGraphValue = 1000;
+  BotNavController botNavController=Get.find();
 
   @override
   void initState() {
@@ -414,29 +422,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
             shrinkWrap: true,
             itemBuilder: (context,index){
               var chunk = leadChunks[index];
-              return Container(
-                width: MediaQuery.of(context).size.width*0.80,
-                padding: const EdgeInsets.all(16),
-                margin: const EdgeInsets.symmetric(horizontal: 5),
+              return InkWell(
+                onTap: (){
+                  botNavController.selectedIndex.value = 1;
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.80,
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
 
-                decoration: BoxDecoration(
-                  color: index%2==0?AppColor.appWhite:AppColor.secondaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                  /* image: DecorationImage(
-                            image: AssetImage(AppImage.offerImage), // Use your image path
-                            fit: BoxFit.cover, // Cover the entire container
-                            opacity: 0.2, // Adjust transparency if needed
-                          ),*/
+                  decoration: BoxDecoration(
+                    color: index%2==0?AppColor.appWhite:AppColor.secondaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                    /* image: DecorationImage(
+                              image: AssetImage(AppImage.offerImage), // Use your image path
+                              fit: BoxFit.cover, // Cover the entire container
+                              opacity: 0.2, // Adjust transparency if needed
+                            ),*/
 
+                  ),
+                  child: customGrid(chunk),
                 ),
-                child: customGrid(chunk),
               );
 
             }
@@ -1062,7 +1075,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+         Padding(
           padding:  EdgeInsets.symmetric(vertical: 10),
           child: Row(
              mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1071,9 +1084,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 AppText.upcomingFollowUp,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Text(
-                "View All",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
+              InkWell(
+                onTap: (){
+                  Get.toNamed("/getAllReminder");
+                },
+                child: Text(
+                  "View All",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
+                ),
               ),
             ],
           ),
@@ -1224,7 +1242,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         alignment: Alignment.bottomCenter,
                         child: TextButton(
                           onPressed: () {
-                            // Add action for sending wishes
+
+                            CallService callService = CallService();
+                            callService.makePhoneCall(
+                              phoneNumber: "9399299880",//data.leadMobileNo.toString(),//"+919399299880"
+                              leadId:  data.leadId.toString(),
+                              currentLeadStage:  data.leadStageStatus.toString(),
+                              context: context,
+                              showFeedbackDialog:showCallFeedbackDialog,
+                            );
                           },
                           child: const Text(
                             "Call Now",
@@ -1271,6 +1297,130 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void showCallFeedbackDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+    required callStatus,
+  }) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        LeadListController leadListController =Get.find();
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.addFAndF,
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.callFeedback,
+                      isRequired: false,
+                      controller: leadListController.callFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterCallFeedback,
+                      isTextArea: true,
+                    ),
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.leadFeedback,
+                      isRequired: false,
+                      controller: leadListController.leadFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterLeadFeedback,
+                      isTextArea: true,
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Obx(()=>Checkbox(
+                          activeColor: AppColor.secondaryColor,
+                          value: leadListController.isCallReminder.value,
+                          onChanged: (bool? value) {
+
+                            leadListController.isCallReminder.value = value ?? false;
+
+                          },
+                        )),
+                        Text(
+                          AppText.callReminder,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Obx(()=> CustomLabeledPickerTextField(
+                      label: AppText.selectDate,
+                      isRequired: false,
+                      controller: leadListController.followDateController,
+                      inputType: TextInputType.name,
+                      hintText: "MM/DD/YYYY",
+                      isDateField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                    Obx(()=>CustomLabeledTimePickerTextField(
+                      label: AppText.selectTime,
+                      isRequired: false,
+                      controller: leadListController.followTimeController,
+                      inputType: TextInputType.datetime,
+                      hintText: "HH:MM AM/PM",
+                      isTimeField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onSubmit: () {
+            if (leadListController.callFeedbackController.text.isEmpty &&
+                leadListController.leadFeedbackController.text.isEmpty) {
+              ToastMessage.msg(AppText.addFeedbackFirst);
+            } else {
+              var id=leadListController.workOnLeadModel!.data!.id.toString();
+              if(callStatus=="1"){
+                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
+                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
+                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
+
+              }
+
+              leadListController.callFeedbackSubmit(
+                  leadId: leadId,
+                  currentLeadStage: currentLeadStage,
+                  callStatus: callStatus,
+                  callDuration: callDuration,
+                  callStartTime: callStartTime,
+                  callEndTime: callEndTime,
+                  id: id,
+                  fromWhere: "call"
+
+              );
+              Get.back();
+            }
+
+          },
+        );
+      },
     );
   }
 }

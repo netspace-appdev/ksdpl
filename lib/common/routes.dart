@@ -14,6 +14,7 @@ import '../home/LeadListScreen.dart';
 import '../home/change_password.dart';
 import '../home/dashboard_screen.dart';
 import '../home/edit_profile.dart';
+import '../home/leads/GetAllReminderScreen.dart';
 import '../home/leads/lead_details.dart';
 import '../home/leads/LeadDetailsMain.dart';
 import '../home/leads/add_lead_screen.dart';
@@ -53,4 +54,5 @@ final routes = [
   GetPage(name: '/leadDetailsTab', page: () =>LeadDetailsTab()),
   GetPage(name: '/leadHistory', page: () => LeadHistory()),
   GetPage(name: '/dashboardScreen', page: () => DashboardScreen()),
+  GetPage(name: '/getAllReminder', page: () => GetAllReminderScreen()),
 ];
