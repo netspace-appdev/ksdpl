@@ -44,7 +44,8 @@ class OpenPollFilterController extends GetxController{
         employeeId:"0",
         stateId:leadDDController.selectedState.value,
         distId: leadDDController.selectedDistrict.value,
-        cityId: leadDDController.selectedCity.value
+        cityId: leadDDController.selectedCity.value,
+        campaign: leadDDController.selectedCampaign.value,
     );
   }
 
@@ -55,6 +56,7 @@ class OpenPollFilterController extends GetxController{
     required stateId,
     required distId,
     required cityId,
+    required campaign,
   }) async {
     try {
       isLoading(true);
@@ -65,7 +67,8 @@ class OpenPollFilterController extends GetxController{
           leadStage: leadStage,
           stateId: stateId,
           distId: distId,
-          cityId: cityId
+          cityId: cityId,
+        campaign: campaign
       );
 
 

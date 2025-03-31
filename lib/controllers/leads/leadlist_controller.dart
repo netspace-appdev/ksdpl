@@ -6,11 +6,13 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
+import '../../models/dashboard/GetRemindersModel.dart';
 import '../../models/dashboard/LeadMoveToCommonTaskModel.dart';
 import '../../models/dashboard/WorkOnLeadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
@@ -25,11 +27,13 @@ class LeadListController extends GetxController {
 
   var isLoading = false.obs;
   // GetAllLeadsModel? getAllLeadsModel;
+
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
   UpdateLeadStageModel? updateLeadStageModel;
   LeadMoveToCommonTaskModel? leadMoveToCommonTaskModel;
   WorkOnLeadModel? workOnLeadModel;
+
   var interestLeadsCheck = false.obs; // Observable variable
   var assignedLeadsCheck = true.obs; // Observable variable
   var leadCode="2".obs;
@@ -39,6 +43,7 @@ class LeadListController extends GetxController {
   var stateIdMain="0".obs;
   var distIdMain="0".obs;
   var cityIdMain="0".obs;
+  var campaignMain="".obs;
 
   var selectedIndex = (0).obs;
 
@@ -157,7 +162,8 @@ class LeadListController extends GetxController {
         employeeId:eId.toString(),
         stateId:stateIdMain.value,
         distId: distIdMain.value,
-        cityId: cityIdMain.value
+        cityId: cityIdMain.value,
+        campaign: campaignMain.value
     );
   }
 
@@ -202,14 +208,14 @@ class LeadListController extends GetxController {
 
       formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
 
-      print("Final Formatted DateTime if reminder is set: $formattedDateTime");
+
     }else{
-      print("No call reminder");
+
 
       DateTime now = DateTime.now();
 
       formattedDateTime=now.toString();
-      print("Final Formatted DateTime if reminder is not set: $formattedDateTime");
+
     }
 
 
@@ -217,12 +223,7 @@ class LeadListController extends GetxController {
 
 
     var remStatus=isCallReminder.value?"1":"0";
-    print("remStatus before passing: $remStatus");
-    print("formattedDateTime before passing: $formattedDateTime");
-    print("id before passing: $id");
-    print("callDuration before passing: $callDuration");
-    print("callStartTime before passing: $callStartTime");
-    print("callEndTime before passing: $callEndTime");
+
 
     workOnLeadApi(
       id:callStatus=="1"?id.toString():"0",
@@ -241,6 +242,8 @@ class LeadListController extends GetxController {
        LeadHistoryController leadHistoryController = Get.find();
        leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId.toString());
      }
+     DashboardController dashboardController=Get.find();
+     dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
      print("only followup");
     });
   }
@@ -252,6 +255,7 @@ class LeadListController extends GetxController {
     required stateId,
     required distId,
     required cityId,
+    required campaign,
   }) async {
     try {
       isLoading(true);
@@ -262,7 +266,8 @@ class LeadListController extends GetxController {
         leadStage: leadStage,
           stateId: stateId,
           distId: distId,
-          cityId: cityId
+          cityId: cityId,
+        campaign: campaign,
       );
 
 
@@ -343,7 +348,8 @@ class LeadListController extends GetxController {
           employeeId:eId.value.toString(),
           stateId:stateIdMain.value,
           distId: distIdMain.value,
-          cityId: cityIdMain.value
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value
       );
 
       isLoading(false);
@@ -397,7 +403,8 @@ class LeadListController extends GetxController {
           employeeId:eId.value.toString(),
           stateId:stateIdMain.value,
           distId: distIdMain.value,
-          cityId: cityIdMain.value
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value
       );
 
       isLoading(false);
@@ -473,7 +480,8 @@ class LeadListController extends GetxController {
           employeeId:eId.value.toString(),
           stateId:stateIdMain.value,
           distId: distIdMain.value,
-          cityId: cityIdMain.value
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value
       );
 
       isLoading(false);
@@ -500,13 +508,14 @@ class LeadListController extends GetxController {
         StorageService.put(StorageService.EMPLOYEE_ID, getEmployeeModel!.data!.id.toString());
         isLoading(false);
         eId.value=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-        print("eId.value===>${eId.value}");
+
         getAllLeadsApi(
             leadStage: leadCode.value,
             employeeId:eId.toString(),
             stateId:stateIdMain.value,
             distId: distIdMain.value,
-            cityId: cityIdMain.value
+            cityId: cityIdMain.value,
+            campaign: campaignMain.value
         );
 
       }else{
@@ -524,5 +533,6 @@ class LeadListController extends GetxController {
       isLoading(false);
     }
   }
+
 
 }

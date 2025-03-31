@@ -8,6 +8,7 @@ import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
+import 'package:ksdpl/models/GetCampaignNameModel.dart' as campaign;
 import '../../../common/CustomSearchBar.dart';
 import '../../../common/helper.dart';
 import '../../../common/skelton.dart';
@@ -215,6 +216,38 @@ class OpenPollFilter extends StatelessWidget {
                                         },
                                       );
                                     }),
+
+
+                                    const SizedBox(height: 20),
+
+                                    const Text(
+                                      AppText.campaign,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.grey2,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    Obx((){
+                                      if (leadDDController.isLoading.value) {
+                                        return  Center(child:CustomSkelton.productShimmerList(context));
+                                      }
+
+
+                                      return CustomDropdown<String>(
+                                        items: leadDDController.getCampaignNameModel.value!.data!,
+                                        getId: (item) => item,  // Adjust based on your model structure
+                                        getName: (item) => item,
+                                        selectedValue: leadDDController.selectedCampaign.value,
+                                        onChanged: (value) {
+                                          leadDDController.selectedCampaign.value =  value;
+                                        },
+                                      );
+                                    }),
+
 
                                     const SizedBox(height: 20),
 

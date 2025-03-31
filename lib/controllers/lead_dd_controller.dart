@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../common/helper.dart';
 import '../models/AdminSupervisorModel.dart';
 import '../models/FunctionalSupervisorModel.dart';
+import '../models/GetCampaignNameModel.dart';
 import '../models/dashboard/GetAllBankModel.dart';
 import '../models/GetAllBranchByBankIdModel.dart';
 import '../models/GetBankerRoleByLevelAndBankIdModel.dart';
@@ -31,8 +32,8 @@ class LeadDDController extends GetxController{
   var selectedProdType = Rxn<String>();
   var currEmpStatus = Rxn<String>();
   var currEmpStList=[AppText.employed, AppText.selfEmployed, AppText.unemployed, AppText.retired, AppText.student];
-
-
+  var getCampaignNameModel = Rxn<GetCampaignNameModel>();
+  var selectedCampaign = Rxn<String>();
 
   @override
   void onInit() {
@@ -41,7 +42,7 @@ class LeadDDController extends GetxController{
     getAllStateApi();
     getAllBankApi();
     getAllKsdplProductApi();
-
+    getCampaignNameApi();
   }
 
   void  getAllStateApi() async {
@@ -261,6 +262,43 @@ class LeadDDController extends GetxController{
 
     } catch (e) {
       print("Error getProductListByBankModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+  void  getCampaignNameApi() async {
+    try {
+
+      isLoading(true);
+
+      var data = await DrawerApiService.getCampaignNameApi();
+
+
+      if(data['success'] == true){
+
+        getCampaignNameModel.value= GetCampaignNameModel.fromJson(data);
+
+
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getCampaignNameModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getCampaignNameModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);

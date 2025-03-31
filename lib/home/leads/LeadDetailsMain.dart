@@ -160,6 +160,9 @@ class LeadDetailsMain extends StatelessWidget {
         );
       }
 
+     var data=leadDetailController.getLeadDetailModel.value!.data!;
+
+
       return  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -200,16 +203,20 @@ class LeadDetailsMain extends StatelessWidget {
                 SizedBox(height: 10),
 
                 DetailRow(label: "Date", value:Helper.formatDate(leadDetailController.getLeadDetailModel.value!.data!.assignedEmployeeDate.toString()) ),
-                DetailRow(label: "Full Name", value: leadDetailController.getLeadDetailModel.value!.data!.name.toString()),
-                DetailRow(label: "Gender", value:  leadDetailController.getLeadDetailModel.value!.data!.gender.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.gender.toString()),
-                DetailRow(label: "Email Address", value: leadDetailController.getLeadDetailModel.value!.data!.email.toString()),
-                DetailRow(label: "Phone", value: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString()),
-                DetailRow(label: "Adhar Card", value: leadDetailController.getLeadDetailModel.value!.data!.adharCard.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.adharCard.toString()),
-                DetailRow(label: "Pan No", value: leadDetailController.getLeadDetailModel.value!.data!.panCard.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.panCard.toString()),
-                DetailRow(label: "District", value: leadDetailController.getLeadDetailModel.value!.data!.district.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.district.toString()),
-                DetailRow(label: "City", value: leadDetailController.getLeadDetailModel.value!.data!.city.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.city.toString()),
-                DetailRow(label: "Monthly Income", value: leadDetailController.getLeadDetailModel.value!.data!.monthlyIncome.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.monthlyIncome.toString()),
-                DetailRow(label: "Loan Amount", value: leadDetailController.getLeadDetailModel.value!.data!.loanAmountRequested.toString()=="null"?AppText.noDataFound:leadDetailController.getLeadDetailModel.value!.data!.loanAmountRequested.toString()),
+                DetailRow(label: "Full Name", value: data.name.toString()),
+                DetailRow(label: "Gender", value:  data.gender.toString()=="null"?AppText.customdash:data.gender.toString()),
+                DetailRow(label: "Email", value: data.email.toString()=="null"||data.email.toString()==""?AppText.customdash:data.email.toString()),
+                DetailRow(label: "Phone", value: data.mobileNumber.toString()),
+                DetailRow(label: "Aadhar Card", value: data.adharCard.toString()=="null"?AppText.customdash:data.adharCard.toString()),
+                DetailRow(label: "Pan No", value: data.panCard.toString()=="null"?AppText.customdash:data.panCard.toString()),
+                DetailRow(label: "State", value: data.stateName.toString()=="null" ||data.stateName.toString()==""?AppText.customdash:data.stateName.toString()),
+                DetailRow(label: "District", value: data.districtName.toString()=="null"||data.districtName.toString()==""?AppText.customdash:data.districtName.toString()),
+                DetailRow(label: "City", value: data.cityName.toString()=="null"||data.cityName.toString()==""?AppText.customdash:data.cityName.toString()),
+                DetailRow(label: "Monthly Income", value: data.monthlyIncome.toString()=="null"?AppText.customdash:data.monthlyIncome.toString()),
+                DetailRow(label: "Loan Amount", value: data.loanAmountRequested.toString()=="null"?AppText.customdash:data.loanAmountRequested.toString()),
+                DetailRow(label: "Campaign", value: data.campaign.toString()=="null"?AppText.customdash:data.campaign.toString()),
+                DetailRow(label: "Employee Name", value: data.employeeName.toString()=="null"?AppText.customdash:data.employeeName.toString()),
+                DetailRow(label: "Pickup Employee Name", value: data.pickedUpEmployeeName.toString()=="null"?AppText.customdash:data.pickedUpEmployeeName.toString()),
               ],
             ),
           ),
@@ -364,9 +371,11 @@ class DetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
 
@@ -375,7 +384,7 @@ class DetailRow extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor)),
           ),
           Expanded(
-              child: Text(": "+value, style: TextStyle(fontSize: 14), maxLines: 1)),
+              child: value==AppText.customdash?Row(children: [Text(":  ", style: TextStyle(fontSize: 14), maxLines: 1),Icon(Icons.horizontal_rule, size: 15,),],):Text(": "+value, style: TextStyle(fontSize: 14), maxLines: 1)),
         ],
       ),
     );

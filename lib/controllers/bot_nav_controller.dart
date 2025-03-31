@@ -28,6 +28,7 @@ class BotNavController extends GetxController {
       leadListController.stateIdMain.value="0";
       leadListController.distIdMain.value="0";
       leadListController.cityIdMain.value="0";
+      leadListController.campaignMain.value="";
     } else if (index == 2) {
       addleadcontroller.fromWhere.value = "bottom_nav";
     }

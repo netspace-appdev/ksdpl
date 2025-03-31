@@ -265,6 +265,9 @@ class AppText{
   static const String followupNote = "Followup Note";
   static const String addDetailsFirst = "Add details first";
   static const String upcomingFollowUp = "Upcoming Follow up";
+  static const String campaign = "Campaign";
+  static const String customdash = "customDash";
+  static const String customdash = "customDash";
 }
 
 class AppColor{

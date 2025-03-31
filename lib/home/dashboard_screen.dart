@@ -128,11 +128,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: 20,
                         ),
 
-                       /* reminders(),
+                        reminders(),
 
                         const  SizedBox(
                           height: 20,
-                        ),*/
+                        ),
 
 
 
@@ -1065,11 +1065,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const Padding(
           padding:  EdgeInsets.symmetric(vertical: 10),
           child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 AppText.upcomingFollowUp,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "View All",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
               ),
             ],
           ),
@@ -1077,161 +1081,189 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const SizedBox(
           height: 20,
         ),
-        SizedBox(
-          height: 180,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (context, index) {
+        Obx((){
 
+          if (dashboardController.isLoading.value) {
+            return  Center(child: CustomSkelton.dashboardShimmerList(context));
+          }
+          if (dashboardController.getRemindersModel.value == null ||
+              dashboardController.getRemindersModel.value!.data == null ||dashboardController.getRemindersModel.value!.data!.isEmpty) {
+            return Center(child: Container(
+              height: 160,
+              width: MediaQuery.of(context).size.width*0.80,
+              decoration: BoxDecoration(
+                color: AppColor.appWhite,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColor.grey4, width: 1),
 
-
-             // var birthday = dashboardController.getUpcomingDateOfBirthModel.value!.data![index];
-              //List<Color> colors = [AppColor.secondaryColor, AppColor.lightGreen, AppColor.lightBrown];
-             // var thColor=colors[index % colors.length]; // Cycle through colors
-
-              return Container(
-                width: 250,
-
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                decoration:  BoxDecoration(
-                  border: Border.all(color: AppColor.grey200),
-                  color: AppColor.appWhite,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
+              ),
+              child: const Center(
+                child: Text(
+                  AppText.noDataFound,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey1,
                   ),
-
                 ),
-                child: Column(
+              ),
+            )); // Handle the null case
+          }
+          if (dashboardController.getRemindersModel.value?.data?.isNotEmpty ?? false) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              dashboardController.scrollToLatestItem();
+            });
+          }
+
+          return SizedBox(
+            height: 230,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: dashboardController.getRemindersModel.value!.data!.length > 5
+                  ? 5
+                  : dashboardController.getRemindersModel.value!.data!.length,
+              //reverse: true,
 
 
-                  children: [
-                    /// Header with profile and menu icon
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 40,
-                                width: 40,
+              itemBuilder: (context, index) {
+                var data = dashboardController.getRemindersModel.value!.data![index];
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration:  BoxDecoration(
+                    border: Border.all(color: AppColor.grey200),
+                    color: AppColor.appWhite,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  child: Column(
 
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColor.primaryColor,
-                                  border: Border.all(color: AppColor.secondaryColor),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "N", // Initial Letter
-                                    style: TextStyle(color: Colors.white),
+
+                    children: [
+                      /// Header with profile and menu icon
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColor.primaryColor,
+                                    border: Border.all(color: AppColor.secondaryColor),
                                   ),
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-
-                                children: [
-                                  Text(
-                                    Helper.capitalizeEachWord("Name"),
-
-                                    // lead.name.toString(),
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                  child: Center(
+                                    child: Text(
+                                        data.leadCustomerName!.isNotEmpty ? data.leadCustomerName![0].toUpperCase() : "U", // Initial Letter
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 10,
-                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                        decoration:  BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(color: AppColor.grey200),
-                                          color: AppColor.grey1,
-                                        ),
+                                ),
+                                SizedBox(height: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+
+                                  children: [
+                                    Text(
+                                      Helper.capitalizeEachWord(data.leadCustomerName!.toString()),
+
+                                      // lead.name.toString(),
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      Text(
-                                        "9179313131",
-                                        style: TextStyle(
-                                          color: AppColor.grey700,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 10,
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                          decoration:  BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(color: AppColor.grey200),
+                                            color: AppColor.grey1,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                                        Text(
+                                          data.leadMobileNo.toString(),
+                                          style: TextStyle(
+                                            color: AppColor.grey700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            _buildDetailRow("Next Followup Date", Helper.convertDateTime(data.callReminder.toString())),
+                          ],
+                        ),
+                      ),
+                      //SizedBox(height: 10),
+
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: TextButton(
+                          onPressed: () {
+                            // Add action for sending wishes
+                          },
+                          child: const Text(
+                            "Call Now",
+                            style: TextStyle(color: AppColor.secondaryColor, fontSize: 14),
                           ),
-
-                        ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
 
-                    /// Lead details
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        children: [
-                          _buildDetailRow("Next Followup Date", "Email"),
-                        //  _buildDetailRow("Last Work Date", "Assigned"),
-                          //_buildDetailRow("Uploaded on", "Uploaded onm"),
-
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-
-
-
-                  ],
-                ),
-              );
-            },
-          ),
-        )
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        })
       ],
     );
   }
 
   Widget _buildDetailRow(String label, String value) {
-    //   String assigned = value.toString();
-//    List<String> assignedParts = assigned.split('T');
-
 
     return Container(
-      height: 90,
 
-      //color: Colors.red,
+      height: 40,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
         child: Column(
-         // crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
-            Container(
-              //width: 100,
-
-
-              child: Text(
-                "$label",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: AppColor.primaryLight,
-                ),
+            Text(
+              "$label",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: AppColor.primaryLight,
               ),
             ),
             SizedBox(width: 10),
             Expanded(
               child: Text(
-                //label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ": ${value}",
-                "20 Apr 20025, 03:00 PM",
+                value,
 
                 style: TextStyle(color: Colors.black87),
               ),
