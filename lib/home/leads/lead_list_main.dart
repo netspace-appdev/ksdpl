@@ -127,6 +127,7 @@ class LeadListMain extends StatelessWidget {
                              )),
                               InkWell(
                                 onTap: (){
+
                                   addLeadController.fromWhere.value="leadList";
                                   Get.toNamed("/addLeadScreen");
                                 },
@@ -512,6 +513,19 @@ class LeadListMain extends StatelessWidget {
                   currentLeadStage: lead.leadStage.toString(),
                 ),
 
+                SizedBox(height: 10),
+
+                if(leadListController.leadCode.value=="4" )
+                _buildTextButton(
+                  label:AppText.fillLeadForm,
+                  context: context,
+                  color: Colors.purple,
+                  icon:  Icons.add_circle_outline_outlined,
+                  leadId: lead.id.toString(),
+                  label_code: "add_lead_form",
+                  currentLeadStage: lead.leadStage.toString(),
+                ),
+
               ],
             ),
           );
@@ -622,22 +636,15 @@ class LeadListMain extends StatelessWidget {
       onTap: () {
         if (label == "Open Poll") {
           showOpenPollDialog2(context: context,leadId: leadId);
-        }else if (label_code == "follow_up") {
+        }else if (label_code == "add_lead_form") {
+
+          addLeadController.fromWhere.value="interested";
+          addLeadController.getLeadId.value=leadId;
+          addLeadController.getLeadDetailByIdApi(leadId: leadId);
+          Get.toNamed("/addLeadScreen",);
 
         }else if (label_code == "add_feedback") {
-          /*leadListController.callFeedbackController.clear();
-          leadListController.leadFeedbackController.clear();
-          leadListController.followDateController.clear();
-          leadListController.followTimeController.clear();
-          showCallFeedbackDialog(
-            context: context,
-            leadId: leadId,
-            currentLeadStage: currentLeadStage.toString(),
-            callDuration: "00:00",
-            callStartTime:  "00:00",
-            callEndTime: "00:00",
-            callStatus: "0"
-          );*/
+
           leadListController.callFeedbackController.clear();
           leadListController.leadFeedbackController.clear();
           leadListController.followDateController.clear();
@@ -701,7 +708,7 @@ class LeadListMain extends StatelessWidget {
 
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            width: label_code=="add_feedback"?MediaQuery.of(context).size.width*0.85: label_code=="open_poll"? MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
+            width: label_code=="add_feedback" || label_code=="add_lead_form"?MediaQuery.of(context).size.width*0.85: label_code=="open_poll"? MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
 
             decoration: BoxDecoration(
               //color: color,

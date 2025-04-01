@@ -57,7 +57,7 @@ class LeadDetailsTab extends StatelessWidget {
   InfoController infoController = Get.put(InfoController());
 
   LeadListController leadListController = Get.put(LeadListController());
-  LeadDetailController leadDetailController = Get.put(LeadDetailController());
+  //LeadDetailController leadDetailController = Get.put(LeadDetailController());
   final TextEditingController _searchController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 

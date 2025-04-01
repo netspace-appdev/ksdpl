@@ -197,12 +197,12 @@ class AppText{
   static const String brLoc="Branch Location";
   static const String productTypeInt="Product Type Interested";
   static const String enterBrLoc="Enter Branch Location";
-  static const String conName="Connection Name";
-  static const String conMob="Connection Mobile";
-  static const String conShare="Connection Share %";
-  static const String enterConName="Enter Connection Name";
-  static const String enterConMob="Enter Connection Mobile";
-  static const String enterConShare="Enter Connection Share %";
+  static const String conName="Connector Name";
+  static const String conMob="Connector Mobile";
+  static const String conShare="Connector Share %";
+  static const String enterConName="Enter Connector Name";
+  static const String enterConMob="Enter Connector Mobile";
+  static const String enterConShare="Enter Connector Share %";
   static const String mmddyyyy="mm/dd/yyyy";
   static const String preferredBank="Preferred Bank for Loan";
   static const String connector="Connector";
@@ -268,6 +268,7 @@ class AppText{
   static const String campaign = "Campaign";
   static const String customdash = "customDash";
   static const String allReminders = "All Reminders";
+  static const String fillLeadForm = "Fill Lead form";
 }
 
 class AppColor{

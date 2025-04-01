@@ -81,7 +81,12 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   }
   Widget _buildNavItem(String unSelectedImg, String selectedImg, String label, int index) {
     return InkWell(
-      onTap: () => botNavController.onItemTapped(index),
+      onTap: (){
+        if (index == 2) {  // AddLeadScreen index
+          Get.arguments?["leadId"]=0;
+        }
+        botNavController.onItemTapped(index);
+      },
       child: Obx(() {
         bool isSelected = botNavController.selectedIndex.value == index;
         return Padding(

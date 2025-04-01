@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
+import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
@@ -46,6 +47,7 @@ class LeadListController extends GetxController {
   var campaignMain="".obs;
 
   var selectedIndex = (0).obs;
+  var leadId = RxnString();
 
   var eId="".obs;
   final TextEditingController openPollPercentController = TextEditingController();
@@ -62,6 +64,7 @@ class LeadListController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+
 
     var phone=StorageService.get(StorageService.PHONE);
     getEmployeeByPhoneNumberApi(phone: phone.toString());
