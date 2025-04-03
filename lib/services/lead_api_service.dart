@@ -16,9 +16,9 @@ class LeadApiService {
 
   static Future<Map<String, dynamic>> fillLeadFormApi({
     required String id,
-    required String fullName,
+
     required String dob,
-    required String phone,
+
     required String gender,
     required String loanAmtReq,
     String? email,
@@ -43,7 +43,7 @@ class LeadApiService {
     String? connShare,
     String? loanApplNo,
    }) async {
-    print("request===>  getCampaignNameApi ==>${fillLeadForm.toString()}");
+
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -55,34 +55,34 @@ class LeadApiService {
       var header=await MyHeader.getHeaders2();
 
       request.headers.addAll(header);
-      request.fields['Id'] = id;
-      request.fields['FullName'] = fullName;//
+      request.fields['Id'] = id.toString();
+
       request.fields['DateOfBirth'] = dob;
-      request.fields['Phone'] = phone;//
+
       request.fields['Gender'] = gender;
       request.fields['LoanAmountRequested'] = loanAmtReq;
       if (email != "string") request.fields['Email'] = email ?? "null";
       if (aadhar != "string") request.fields['AdharCard'] = aadhar ?? "null";
       if (pan != "string") request.fields['PanCard'] = pan ?? "null";
-      if (pan != "streetAdd") request.fields['StreetAddress'] = streetAdd ?? "null";
+      if (streetAdd != "streetAdd") request.fields['StreetAddress'] = streetAdd ?? "null";
       request.fields['State'] = state;
       request.fields['District'] = district;
       request.fields['City'] = city;
       if (zip != "string") request.fields['Pincode'] = zip ?? "null";
       if (nationality != "string") request.fields['Nationality'] = nationality ?? "null";
       request.fields['CurrentEmploymentStatus'] = currEmpSt;
-      if (employerName != "string") request.fields['EmployeeName'] = employerName ?? "null";
+      if (employerName != "string") request.fields['EmployerName'] = employerName ?? "null";
       if (monthlyIncome != "string") request.fields['MonthlyIncome'] = monthlyIncome ?? "null";
       if (addSrcIncome != "string") request.fields['AdditionalSourceOfIncome'] = addSrcIncome ?? "null";
       request.fields['PrefferedBank'] = prefBank;
-      request.fields['Id'] = prefBank;
+
       if (exRelBank != "string") request.fields['ExistinRelaationshipWithBank'] = exRelBank ?? "null";
       if (branchLoc != "string") request.fields['Branch'] = branchLoc ?? "null";
       request.fields['ProductType'] = prodTypeInt;
       if (connName != "string") request.fields['ConnectorName'] = connName ?? "null";
       if (connMob != "string") request.fields['ConnectorMobileNo'] = connMob ?? "null";
       if (connShare != "string") request.fields['ConnectorPercentage'] = connShare ?? "null";
-      if (connShare != "string") request.fields['LoanApplicationNo'] = connShare ?? "null";
+
 
 
       // Sending request

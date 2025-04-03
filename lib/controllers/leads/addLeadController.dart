@@ -43,25 +43,7 @@ class Addleadcontroller extends GetxController{
   var getLeadDetailModel = Rxn<GetLeadDetailModel>();
   var getLeadId = Rxn<String>();
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
 
-    print("I am here");
-
-
-    print("fromWhere.value===>${fromWhere.value}");
-    /*if(fromWhere.value=="interested"){
-      print("interested ");
-      dynamic arg= Get.arguments;
-      print("leadId===>${arg["leadId"]}");
-      getLeadDetailByIdApi(leadId: arg["leadId"]);
-    }{
-      print("something else");
-    }
-*/
-  }
 
   void toggleConnectorCheckbox(bool? value) {
     isConnectorChecked.value = value ?? false;
@@ -90,6 +72,7 @@ class Addleadcontroller extends GetxController{
 
         LeadDDController leadDDController=Get.put(LeadDDController());
         getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
+
         fullNameController.text=getLeadDetailModel.value!.data!.name!.toString();
         dobController.text=Helper.birthdayFormat(getLeadDetailModel.value!.data!.dateOfBirth!.toString());
         phoneController.text=getLeadDetailModel.value!.data!.mobileNumber!.toString();
@@ -135,11 +118,11 @@ class Addleadcontroller extends GetxController{
     }
   }
 
-  void  fillLeadFormApi({
+ Future<void>fillLeadFormApi({
     required String id,
-    required String fullName,
+
     required String dob,
-    required String phone,
+
     required String gender,
     required String loanAmtReq,
     String? email,
@@ -170,9 +153,9 @@ class Addleadcontroller extends GetxController{
 
       var data = await LeadApiService.fillLeadFormApi(
         id: id,
-        fullName: fullName,
+
         dob: dob,
-        phone: phone,
+
         gender: gender,
         loanAmtReq: loanAmtReq,
         email: email,
@@ -202,7 +185,10 @@ class Addleadcontroller extends GetxController{
       if(data['success'] == true){
 
         getLeadDetailModel.value= GetLeadDetailModel.fromJson(data);
+        ToastMessage.msg( getLeadDetailModel.value!.message!.toString());
 
+
+        clearControllers();
         isLoading(false);
 
       }else{
@@ -219,6 +205,37 @@ class Addleadcontroller extends GetxController{
 
       isLoading(false);
     }
+  }
+
+  void clearControllers(){
+    fullNameController.clear();
+    dobController.clear();
+    phoneController.clear();
+    genderController.clear();
+    loanAmtReqController.clear();
+    emailController.clear();
+    aadharController.clear();
+    panController.clear();
+    streetAddController.clear();
+    zipController.clear();
+    nationalityController.clear();
+    currEmpStController.clear();
+    employerNameController.clear();
+    monthlyIncomeController.clear();
+    addSourceIncomeController.clear();
+    branchLocController.clear();
+    productTypeController.clear();
+    connNameController.clear();
+    connMobController.clear();
+    connShareController.clear();
+    selectedGender.value="";
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    print("all close");
   }
 
 }

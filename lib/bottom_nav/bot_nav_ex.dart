@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/helper.dart';
+import 'package:ksdpl/models/drawer/GetLeadDetailModel.dart';
 import '../controllers/bot_nav_controller.dart';
 import '../controllers/lead_dd_controller.dart';
+import '../controllers/leads/addLeadController.dart';
 import '../controllers/leads/leadlist_controller.dart';
 import '../home/dashboard_screen.dart';
 import '../home/leads/add_lead_screen.dart';
@@ -83,7 +85,12 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
     return InkWell(
       onTap: (){
         if (index == 2) {  // AddLeadScreen index
+          print("here==>");
           Get.arguments?["leadId"]=0;
+          Addleadcontroller addleadcontroller=Get.put(Addleadcontroller());
+          addleadcontroller.clearControllers();
+
+
         }
         botNavController.onItemTapped(index);
       },

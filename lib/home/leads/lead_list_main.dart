@@ -641,6 +641,8 @@ class LeadListMain extends StatelessWidget {
           addLeadController.fromWhere.value="interested";
           addLeadController.getLeadId.value=leadId;
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
+          print("leadId===>${leadId}");
+          print("leadId===>${ addLeadController.getLeadId.value}");
           Get.toNamed("/addLeadScreen",);
 
         }else if (label_code == "add_feedback") {

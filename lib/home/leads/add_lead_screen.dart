@@ -31,7 +31,9 @@ class AddLeadScreen extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  Addleadcontroller addleadcontroller=Get.put(Addleadcontroller());
+  Addleadcontroller addleadcontroller=Get.put(Addleadcontroller(),permanent: false);
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -675,36 +677,43 @@ class AddLeadScreen extends StatelessWidget {
       if (addleadcontroller.selectedGender.value==null) {
         ToastMessage.msg("Please select gender");
       }else {
-        print("leadIdfg===>${addleadcontroller.getLeadId.value.toString()}");
-        addleadcontroller.fillLeadFormApi(
-          id: addleadcontroller.getLeadId.value.toString(),
-          fullName: addleadcontroller.fullNameController.text.toString(),
-          dob:  addleadcontroller.dobController.text.toString(),
-          phone:  addleadcontroller.phoneController.text.toString(),
-          gender:  addleadcontroller.selectedGender.toString(),
-          loanAmtReq:  addleadcontroller.loanAmtReqController.text.toString(),
-          email:  addleadcontroller.emailController.text.toString(),
-          aadhar:  addleadcontroller.aadharController.text.toString(),
-          pan:  addleadcontroller.panController.text.toString(),
-          streetAdd:  addleadcontroller.streetAddController.text.toString(),
-          state:  leadDDController.selectedDistrict.value.toString(),
-          district: leadDDController.selectedDistrict.value.toString(),
-          city: leadDDController.selectedCity.value.toString(),
-          zip: addleadcontroller.zipController.text.toString(),
-          nationality: addleadcontroller.nationalityController.text.toString(),
-          currEmpSt: addleadcontroller.currEmpStController.text.toString(),
-          employerName: addleadcontroller.employerNameController.text.toString(),
-          monthlyIncome: addleadcontroller.monthlyIncomeController.text.toString(),
-          addSrcIncome: addleadcontroller.addSourceIncomeController.text.toString(),
-          prefBank: leadDDController.selectedBank.toString(),
-          exRelBank: addleadcontroller.selectedIndexRelBank.value.toString(),
-          branchLoc:addleadcontroller.branchLocController.text.toString(),
-          prodTypeInt: addleadcontroller.productTypeController.text.toString(),
-          connName: addleadcontroller.connNameController.text.toString(),
-          connMob: addleadcontroller.connMobController.text.toString(),
-          connShare: addleadcontroller.connShareController.text.toString(),
-          loanApplNo: "",
-        );
+        if(addleadcontroller.fromWhere.value=="interested"){
+
+          addleadcontroller.fillLeadFormApi(
+            id: addleadcontroller.getLeadId.value.toString(),
+
+            dob:  addleadcontroller.dobController.text.toString(),
+
+            gender:  addleadcontroller.selectedGender.toString(),
+            loanAmtReq:  addleadcontroller.loanAmtReqController.text.toString(),
+            email:  addleadcontroller.emailController.text.toString(),
+            aadhar:  addleadcontroller.aadharController.text.toString(),
+            pan:  addleadcontroller.panController.text.toString(),
+            streetAdd:  addleadcontroller.streetAddController.text.toString(),
+            state:  leadDDController.selectedState.value==null?"0":leadDDController.selectedState.value.toString(),
+            district: leadDDController.selectedDistrict.value==null?"0":leadDDController.selectedDistrict.value.toString(),
+            city: leadDDController.selectedCity.value==null?"0":leadDDController.selectedCity.value.toString(),
+            zip: addleadcontroller.zipController.text.toString(),
+            nationality: addleadcontroller.nationalityController.text.toString(),
+            currEmpSt: addleadcontroller.currEmpStController.text.toString(),
+            employerName: addleadcontroller.employerNameController.text.toString(),
+            monthlyIncome: addleadcontroller.monthlyIncomeController.text.toString(),
+            addSrcIncome: addleadcontroller.addSourceIncomeController.text.toString(),
+            prefBank: leadDDController.selectedBank.toString(),
+            exRelBank: addleadcontroller.selectedIndexRelBank.value==-1?"":addleadcontroller.selectedIndexRelBank.value.toString(),
+            branchLoc:addleadcontroller.branchLocController.text.toString(),
+            prodTypeInt: addleadcontroller.productTypeController.text.toString(),
+            connName: addleadcontroller.connNameController.text.toString(),
+            connMob: addleadcontroller.connMobController.text.toString(),
+            connShare: addleadcontroller.connShareController.text.toString(),
+            loanApplNo: "",
+          ).then((_){
+            Get.back();
+          });
+        }else{
+
+        }
+
       }
     }
   }
