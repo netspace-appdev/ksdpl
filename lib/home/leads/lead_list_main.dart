@@ -109,7 +109,16 @@ class LeadListMain extends StatelessWidget {
                             children: [
                              Obx(()=> Row(
                                children: [
-                                 Text(
+
+                                   Text(
+                                     "",
+                                     style: TextStyle(
+                                       fontSize: 20,
+                                       fontWeight: FontWeight.bold,
+                                     ),
+                                   ),
+
+                                   Text(
                                    leadListController.leadStageName2.value.toString(),
                                    style: TextStyle(
                                      fontSize: 20,
@@ -117,6 +126,8 @@ class LeadListMain extends StatelessWidget {
                                    ),
                                  ),
                                  Text(
+                                     leadListController.getAllLeadsModel.value == null ||
+                                         leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty?"(0)":
                                   " (${ leadListController.getAllLeadsModel.value!.data!.length.toString()})",
                                    style: TextStyle(
                                      fontSize: 20,
@@ -580,13 +591,19 @@ class LeadListMain extends StatelessWidget {
 }) {
     return IconButton(
       onPressed: () {
+        var newLeadStage="";
         if(label=="call"){
+          if(currentLeadStage=="2"){
+            newLeadStage="3";
+          }else{
+            newLeadStage=currentLeadStage;
+          }
 
           CallService callService = CallService();
           callService.makePhoneCall(
-              phoneNumber:phoneNumber,//"+919399299880"
+              phoneNumber:phoneNumber,//"+919399299880",//phoneNumber
               leadId: leadId,
-              currentLeadStage: currentLeadStage,
+              currentLeadStage: newLeadStage,
               context: context,
             showFeedbackDialog:showCallFeedbackDialog,
           );
@@ -1016,7 +1033,8 @@ class LeadListMain extends StatelessWidget {
     required BuildContext context,
     required leadId,
   }) {
-    List<String> options = ["Fresh Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+    // List<String> options = ["Fresh Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+    List<String> options = ["Fresh Leads","Working Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
     showDialog(
       context: context,
       builder: (BuildContext context) {

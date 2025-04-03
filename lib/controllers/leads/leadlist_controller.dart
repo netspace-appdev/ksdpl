@@ -134,7 +134,7 @@ class LeadListController extends GetxController {
   }
 
 
-  void selectCheckbox(int index) {
+/*  void selectCheckbox(int index) {
 
     selectedIndex.value = index;
     if( selectedIndex.value==0){
@@ -153,6 +153,33 @@ class LeadListController extends GetxController {
       leadStageName.value="Doable Leads";
     }
     else if(selectedIndex.value==4){
+      leadCode.value="7";
+      leadStageName.value="Not Doable Leads";
+    }
+  }*/
+
+  void selectCheckbox(int index) {
+
+    selectedIndex.value = index;
+    if( selectedIndex.value==0){
+      leadCode.value="2";
+      leadStageName.value="Fresh Leads";
+
+    }else if(selectedIndex.value==1){
+      leadCode.value="3";
+      leadStageName.value="Working Leads";
+    }else if(selectedIndex.value==2){
+      leadCode.value="4";
+      leadStageName.value="Interested Leads";
+    }else if(selectedIndex.value==3){
+      leadCode.value="5";
+      leadStageName.value="Not Interested Leads";
+    }
+    else if(selectedIndex.value==4){
+      leadCode.value="6";
+      leadStageName.value="Doable Leads";
+    }
+    else if(selectedIndex.value==5){
       leadCode.value="7";
       leadStageName.value="Not Doable Leads";
     }

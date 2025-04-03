@@ -139,22 +139,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         reminders(),
 
                         const  SizedBox(
-                          height: 20,
+                          height: 50,//20
                         ),
 
 
 
-                        curveChart(),
+                      /*  curveChart(),
 
                         const SizedBox(height: 30),
 
                         circleChart(),
 
-                        const SizedBox(height: 30),
-
-                        /*barChart(),
-
                         const SizedBox(height: 30),*/
+
+
 
 
                       ],

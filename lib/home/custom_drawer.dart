@@ -22,6 +22,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   String firstName="user";
   String email="user@email.com";
+  String role="";
   LeadListController leadListController = Get.find();
   Addleadcontroller addLeadController = Get.find();
   BotNavController botNavController=Get.find();
@@ -55,37 +56,34 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.only(left: 15, top: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding: EdgeInsets.only(left: 15, top: 40),
+                child: Row(
+                  //crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: [
                     RoundedInitialContainer(firstName: firstName,),
-                    const SizedBox(height: 10),
-                     Text(
-                       firstName,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                     Row(
-                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       children: [
-                         Text(
-                           email,
+                    SizedBox(width: 10,),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          firstName,
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          role,
                           style: TextStyle(
                             fontSize: 14.0,
                             color: Colors.white70,
                           ),
-                         ),
-                         Padding(
-                           padding:  EdgeInsets.only(right: 12.0),
-                           child: Image.asset(AppImage.editImage, height: 18, width: 18,),
-                         )
-                       ],
-                     ),
+                        )
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -201,7 +199,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   loadData(){
+    print("role===>${StorageService.get(StorageService.ROLE).toString()}");
     firstName=StorageService.get(StorageService.FIRST_NAME).toString();
     email=StorageService.get(StorageService.EMAIL).toString();
+    role=StorageService.get(StorageService.ROLE).toString();
   }
 }

@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 
 import '../../common/helper.dart';
+import '../../models/IndividualLeadUploadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../services/drawer_api_service.dart';
 import '../../services/lead_api_service.dart';
@@ -41,7 +42,9 @@ class Addleadcontroller extends GetxController{
   var fromWhere="".obs;
 
   var getLeadDetailModel = Rxn<GetLeadDetailModel>();
+  var individualLeadUploadModel = Rxn<IndividualLeadUploadModel>();
   var getLeadId = Rxn<String>();
+  var createdByWhichEmployee = Rxn<String>();
 
 
 
@@ -99,7 +102,7 @@ class Addleadcontroller extends GetxController{
         connMobController.text=getLeadDetailModel.value!.data!.connectorMobileNo!.toString();
         connShareController.text=getLeadDetailModel.value!.data!.connectorPercentage!.toString();
 
-
+       // createdByWhichEmployee.value=getLeadDetailModel.value!.data!.id!.toString()
         isLoading(false);
 
       }else{
@@ -230,6 +233,104 @@ class Addleadcontroller extends GetxController{
     connShareController.clear();
     selectedGender.value="";
   }
+
+
+
+
+  Future<void>individualLeadUploadApi({
+
+    required String name,
+    required String mobileNo,
+    required String createdBy,
+
+    String? gender,
+    String? dob,
+    String? loanAmtReq,
+    String? email,
+    String? aadhar,
+    String? pan,
+    String? streetAdd,
+    String state = "0",
+    String district = "0",
+    String city = "0",
+    String? zip,
+    String? nationality,
+    String currEmpSt = "0",
+    String? employerName,
+    String? monthlyIncome,
+    String? addSrcIncome,
+    String prefBank = "0",
+    String? exRelBank,
+    String? branchLoc,
+    String prodTypeInt = "0",
+    String? connName,
+    String? connMob,
+    String? connShare,
+    String? existingLoans,
+    String? noOfExistingLoans,
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await LeadApiService.individualLeadUploadApi(
+          name: name,
+          mobileNo: mobileNo,
+          createdBy: createdBy,
+          gender: gender,
+          dob: dob,
+          loanAmtReq: loanAmtReq,
+          email: email,
+          aadhar: aadhar,
+          pan: pan,
+          streetAdd: streetAdd,
+          state: state,
+          district: district,
+          city: city,
+          zip: zip,
+          nationality: nationality,
+          currEmpSt: currEmpSt,
+          employerName: employerName,
+          monthlyIncome: monthlyIncome,
+          addSrcIncome: addSrcIncome,
+          prefBank: prefBank,
+          exRelBank: exRelBank,
+          branchLoc: branchLoc,
+          prodTypeInt: prodTypeInt,
+          connName: connName,
+          connMob: connMob,
+          connShare: connShare,
+          existingLoans: existingLoans,
+          noOfExistingLoans: noOfExistingLoans,
+
+      );
+
+
+      if(data['success'] == true){
+
+        individualLeadUploadModel.value= IndividualLeadUploadModel.fromJson(data);
+        ToastMessage.msg( individualLeadUploadModel.value!.message!.toString());
+
+
+        clearControllers();
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getLeadDetailByIdApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
 
   @override
   void onClose() {

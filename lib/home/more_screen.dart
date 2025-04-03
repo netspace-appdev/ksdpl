@@ -112,19 +112,19 @@ class MoreSettingScreen extends StatelessWidget {
                                         leading:  Icon(Icons.home,color: Theme.of(context).brightness == Brightness.dark?Colors.white54:AppColor.black54),
                                         title:  Text("Edit profile", style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
                                         onTap: () {
-                                          //  Get.toNamed("/editProfile");
+                                            Get.toNamed("/editProfile2");
                                         },
                                       ),
-                                      ListTile(
+                                    /*  ListTile(
                                         leading:  Icon(Icons.lock,color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),
                                         title:  Text(AppText.changePassword,style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
                                         onTap: () {
                                           //  Get.toNamed("/changePassword");
                                         },
-                                      ),
+                                      ),*/
                                     ],
                                   ),
-                                  CustomExpansionTile(
+                               /*   CustomExpansionTile(
                                     image: AppImage.manInBlack,
                                     title: AppText.aboutUs,
                                     onTap: (){
@@ -132,7 +132,7 @@ class MoreSettingScreen extends StatelessWidget {
                                     },
 
                                   ),
-
+*/
                                 ],
                               ),
                             )

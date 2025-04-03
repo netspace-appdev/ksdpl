@@ -10,6 +10,7 @@ import '../enforcement_panel/enforcement_dashboard.dart';
 import '../enforcement_panel/upload_common_task.dart';
 
 import '../exp.dart';
+import '../home/EditProfile2.dart';
 import '../home/LeadListScreen.dart';
 import '../home/change_password.dart';
 import '../home/dashboard_screen.dart';
@@ -40,6 +41,7 @@ final routes = [
   GetPage(name: '/manageBranch', page: () => ManageBranchScreen1()),
   GetPage(name: '/registration', page: () => SplashScreen()),
   GetPage(name: '/editProfile', page: () => EditProfileScreen()),
+  GetPage(name: '/editProfile2', page: () => EditProfile2()),
   GetPage(name: '/changePassword', page: () => ChangePasswordScreen()),
   GetPage(name: '/themeSelection', page: () => ThemeSelectionScreen()),
   GetPage(name: '/enforcementDashboard', page: () => EnforcementDashboard()),
