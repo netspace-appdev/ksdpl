@@ -11,6 +11,7 @@ import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
+import '../../common/storage_service.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/drawer_controller.dart';
 import '../../controllers/greeting_controller.dart';
@@ -130,6 +131,7 @@ class AddLeadScreen extends StatelessWidget {
                                 inputType: TextInputType.phone,
                                 hintText: AppText.enterPhNumber,
                                 validator: ValidationHelper.validatePhoneNumber,
+                                maxLength: 10,
                               ),
                               const SizedBox(height: 10),
                               const Row(
@@ -192,6 +194,7 @@ class AddLeadScreen extends StatelessWidget {
                                 controller: addleadcontroller.aadharController ,
                                 inputType: TextInputType.phone,
                                 hintText: AppText.enterAadhar,
+                                maxLength: 12,
 
                               ),
 
@@ -201,6 +204,8 @@ class AddLeadScreen extends StatelessWidget {
                                 controller: addleadcontroller.panController ,
                                 inputType: TextInputType.name,
                                 hintText: AppText.enterPan,
+                                validator: ValidationHelper.validatePanCard,
+                                maxLength: 10,
 
                               ),
 
@@ -320,7 +325,7 @@ class AddLeadScreen extends StatelessWidget {
                                 controller: addleadcontroller.zipController ,
                                 inputType: TextInputType.number,
                                 hintText: AppText.enterZipCode,
-
+                                maxLength: 6,
                               ),
 
                               CustomLabeledTextField(
@@ -458,12 +463,42 @@ class AddLeadScreen extends StatelessWidget {
                               CustomLabeledTextField(
                                 label: AppText.brLoc,
                                 isRequired: false,
-                                controller: addleadcontroller.branchLocController ,
+                                controller: addleadcontroller.branchLocController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.enterBrLoc,
                                 validator: ValidationHelper.validateBrLoc,
                               ),
 
+
+
+                              const SizedBox(height: 20),
+
+                              if(addleadcontroller.fromWhere.value!="interested")
+                                Column(
+                                  children: [
+                                    CustomLabeledTextField(
+                                      label: AppText.existingLoans,
+                                      isRequired: false,
+                                      controller: addleadcontroller.existingLoansController ,
+                                      inputType: TextInputType.name,
+                                      hintText: AppText.enterExistingLoans,
+                                      validator: ValidationHelper.validateExLoan,
+                                    ),
+
+                                    const SizedBox(height: 20),
+
+                                    CustomLabeledTextField(
+                                      label: AppText.noOfExistingLoans,
+                                      isRequired: false,
+                                      controller: addleadcontroller.noOfExistingLoansController ,
+                                      inputType: TextInputType.number,
+                                      hintText: AppText.enterNoOfExistingLoans,
+                                      validator: ValidationHelper.validateNoExLoan,
+                                    ),
+
+                                    const SizedBox(height: 20),
+                                  ],
+                                ),
                               const Text(
                                 AppText.productTypeInt,
                                 style: TextStyle(
@@ -472,10 +507,7 @@ class AddLeadScreen extends StatelessWidget {
                                   color: AppColor.grey2,
                                 ),
                               ),
-
                               const SizedBox(height: 10),
-
-
                               Obx((){
                                 if (leadDDController.isLoading.value) {
                                   return  Center(child:CustomSkelton.productShimmerList(context));
@@ -695,14 +727,14 @@ class AddLeadScreen extends StatelessWidget {
             city: leadDDController.selectedCity.value==null?"0":leadDDController.selectedCity.value.toString(),
             zip: addleadcontroller.zipController.text.toString(),
             nationality: addleadcontroller.nationalityController.text.toString(),
-            currEmpSt: addleadcontroller.currEmpStController.text.toString(),
+            currEmpSt: leadDDController.currEmpStatus.value??"",
             employerName: addleadcontroller.employerNameController.text.toString(),
             monthlyIncome: addleadcontroller.monthlyIncomeController.text.toString(),
             addSrcIncome: addleadcontroller.addSourceIncomeController.text.toString(),
             prefBank: leadDDController.selectedBank.toString(),
             exRelBank: addleadcontroller.selectedIndexRelBank.value==-1?"":addleadcontroller.selectedIndexRelBank.value.toString(),
             branchLoc:addleadcontroller.branchLocController.text.toString(),
-            prodTypeInt: addleadcontroller.productTypeController.text.toString(),
+            prodTypeInt: leadDDController.selectedProdType.value.toString(),
             connName: addleadcontroller.connNameController.text.toString(),
             connMob: addleadcontroller.connMobController.text.toString(),
             connShare: addleadcontroller.connShareController.text.toString(),
@@ -711,13 +743,13 @@ class AddLeadScreen extends StatelessWidget {
             Get.back();
           });
         }else{
-         /* addleadcontroller.individualLeadUploadApi(
+          var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+          addleadcontroller.individualLeadUploadApi(
+
             name: addleadcontroller.fullNameController.text.toString(),
-            createdBy: "",
+            createdBy: empId.toString(),
             mobileNo:  addleadcontroller.phoneController.text.toString(),
-
             dob:  addleadcontroller.dobController.text.toString(),
-
             gender:  addleadcontroller.selectedGender.toString(),
             loanAmtReq:  addleadcontroller.loanAmtReqController.text.toString(),
             email:  addleadcontroller.emailController.text.toString(),
@@ -729,21 +761,24 @@ class AddLeadScreen extends StatelessWidget {
             city: leadDDController.selectedCity.value==null?"0":leadDDController.selectedCity.value.toString(),
             zip: addleadcontroller.zipController.text.toString(),
             nationality: addleadcontroller.nationalityController.text.toString(),
-            currEmpSt: addleadcontroller.currEmpStController.text.toString(),
+            currEmpSt:  leadDDController.currEmpStatus.value??"",
             employerName: addleadcontroller.employerNameController.text.toString(),
             monthlyIncome: addleadcontroller.monthlyIncomeController.text.toString(),
             addSrcIncome: addleadcontroller.addSourceIncomeController.text.toString(),
             prefBank: leadDDController.selectedBank.toString(),
             exRelBank: addleadcontroller.selectedIndexRelBank.value==-1?"":addleadcontroller.selectedIndexRelBank.value.toString(),
             branchLoc:addleadcontroller.branchLocController.text.toString(),
-            prodTypeInt: addleadcontroller.productTypeController.text.toString(),
+            prodTypeInt:leadDDController.selectedProdType.value.toString(),
             connName: addleadcontroller.connNameController.text.toString(),
             connMob: addleadcontroller.connMobController.text.toString(),
             connShare: addleadcontroller.connShareController.text.toString(),
-            existingLoans: "",
-            noOfExistingLoans: ""
-
-          );*/
+            existingLoans: addleadcontroller.existingLoansController.text.toString(),
+            noOfExistingLoans: addleadcontroller.noOfExistingLoansController.text.toString(),
+          ).then((_){
+            if(addleadcontroller.fromWhere.value=="drawer"){
+              Get.back();
+            }
+          });
         }
 
       }

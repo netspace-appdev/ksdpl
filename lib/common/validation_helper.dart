@@ -148,4 +148,42 @@ class ValidationHelper {
 
     return null; // Name is valid
   }
+
+  static String? validateExLoan(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    String pattern = r'^[a-zA-Z\s]+$';
+    RegExp regex = RegExp(pattern);
+
+    if (!regex.hasMatch(value)) {
+      return "Enter valid Existing loans";
+    }
+
+    return null; // Name is valid
+  }
+
+  static String? validateNoExLoan(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    return null; // Name is valid
+  }
+
+  static String? validatePanCard(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+    // PAN card format: 5 uppercase letters, 4 digits, 1 uppercase letter
+    String pattern = r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$';
+    RegExp regex = RegExp(pattern);
+
+    if (!regex.hasMatch(value)) {
+      return "Enter a valid PAN card number (e.g. ABCDE1234F)";
+    }
+
+    return null;
+  }
 }

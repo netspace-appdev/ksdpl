@@ -13,6 +13,7 @@ class CustomTextFieldPrefix extends StatelessWidget {
   final String? prefixImage; // Nullable image path
   final String? label;
   final bool isTextArea;
+  final int? maxLength;
 
   const CustomTextFieldPrefix({
     Key? key,
@@ -27,6 +28,7 @@ class CustomTextFieldPrefix extends StatelessWidget {
     this.prefixImage, // Optional parameter
     this.label,
     this.isTextArea = false,
+    this.maxLength
   }) : super(key: key);
 
   @override
@@ -39,6 +41,7 @@ class CustomTextFieldPrefix extends StatelessWidget {
       onChanged: onChanged,
       maxLines: isTextArea ? null : 1, // Allow multiple lines if isTextArea is true
       minLines: isTextArea ? 3 : 1, // Minimum 5 lines for text area
+      maxLength: maxLength,
 
       decoration: InputDecoration(
         hintText: hintText!=null?hintText:null,

@@ -39,6 +39,9 @@ class Addleadcontroller extends GetxController{
   final TextEditingController connMobController = TextEditingController();
   final TextEditingController connShareController = TextEditingController();
 
+  final TextEditingController existingLoansController = TextEditingController();
+  final TextEditingController noOfExistingLoansController = TextEditingController();
+
   var fromWhere="".obs;
 
   var getLeadDetailModel = Rxn<GetLeadDetailModel>();
@@ -71,38 +74,71 @@ class Addleadcontroller extends GetxController{
 
       if(data['success'] == true){
 
+        print("here 1");
+
+
         getLeadDetailModel.value= GetLeadDetailModel.fromJson(data);
-
+        print("here 1");
         LeadDDController leadDDController=Get.put(LeadDDController());
+        print("here 2");
         getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
-
+        print("here 3");
         fullNameController.text=getLeadDetailModel.value!.data!.name!.toString();
+        print("here 4");
         dobController.text=Helper.birthdayFormat(getLeadDetailModel.value!.data!.dateOfBirth!.toString());
-        phoneController.text=getLeadDetailModel.value!.data!.mobileNumber!.toString();
-        selectedGender.value=getLeadDetailModel.value!.data!.gender!.toString();
-        loanAmtReqController.text=getLeadDetailModel.value!.data!.loanAmountRequested!.toString();
-        loanAmtReqController.text=getLeadDetailModel.value!.data!.loanAmountRequested!.toString();
-        emailController.text=getLeadDetailModel.value!.data!.email!.toString();
-        aadharController.text=getLeadDetailModel.value!.data!.adharCard!.toString();
-        panController.text=getLeadDetailModel.value!.data!.panCard!.toString();
-        streetAddController.text=getLeadDetailModel.value!.data!.streetAddress!.toString();
-        leadDDController.selectedState.value=getLeadDetailModel.value!.data!.state!.toString();
-        leadDDController.selectedDistrict.value=getLeadDetailModel.value!.data!.district!.toString();
-        leadDDController.selectedCity.value=getLeadDetailModel.value!.data!.city!.toString();
-        zipController.text=getLeadDetailModel.value!.data!.pincode!.toString();
-        nationalityController.text=getLeadDetailModel.value!.data!.nationality!.toString();
-        leadDDController.currEmpStatus.value=getLeadDetailModel.value!.data!.currentEmploymentStatus!.toString();
-        employerNameController.text=getLeadDetailModel.value!.data!.employerName!.toString();
-        monthlyIncomeController.text=getLeadDetailModel.value!.data!.monthlyIncome!.toString();
-        addSourceIncomeController.text=getLeadDetailModel.value!.data!.additionalSourceOfIncome!.toString();
-        leadDDController.selectedBank.value=getLeadDetailModel.value!.data!.prefferedBank!.toString();
-        branchLocController.text=getLeadDetailModel.value!.data!.branchName!.toString();
-        leadDDController.selectedProdType.value=getLeadDetailModel.value!.data!.productType!.toString();
-        connNameController.text=getLeadDetailModel.value!.data!.connectorName!.toString();
-        connMobController.text=getLeadDetailModel.value!.data!.connectorMobileNo!.toString();
-        connShareController.text=getLeadDetailModel.value!.data!.connectorPercentage!.toString();
+        print("here 5");
+        phoneController.text=getLeadDetailModel.value?.data?.mobileNumber??"";
+        print("here 6");
+        selectedGender.value=getLeadDetailModel.value?.data?.gender??"";
+        print("here 7");
+        loanAmtReqController.text=getLeadDetailModel.value?.data?.loanAmountRequested??"";
+        print("here 8");
 
-       // createdByWhichEmployee.value=getLeadDetailModel.value!.data!.id!.toString()
+        print("here 9");
+        emailController.text=getLeadDetailModel.value?.data?.email??"";
+
+        print("email==>${ emailController.text.toString()}");
+
+        aadharController.text=getLeadDetailModel.value?.data?.adharCard??"";
+        print("here 10");
+        panController.text=getLeadDetailModel.value?.data?.panCard??"";
+        print("here 11");
+
+        streetAddController.text=getLeadDetailModel.value?.data?.streetAddress??"";
+        print("here 12");
+        leadDDController.selectedState.value=getLeadDetailModel.value!.data!.state!.toString();
+        print("here 13");
+        leadDDController.selectedDistrict.value=getLeadDetailModel.value!.data!.district!.toString();
+        print("here 14");
+        leadDDController.selectedCity.value=getLeadDetailModel.value!.data!.city!.toString();
+        print("here 15");
+        zipController.text=getLeadDetailModel.value?.data?.pincode??"";
+        print("here 16");
+        nationalityController.text=getLeadDetailModel.value?.data?.nationality??"";
+        print("here 17");
+        leadDDController.currEmpStatus.value=getLeadDetailModel.value?.data?.currentEmploymentStatus??"";
+        print("here 18");
+        employerNameController.text=getLeadDetailModel.value?.data?.employerName??"";
+        print("here 19");
+        monthlyIncomeController.text=getLeadDetailModel.value?.data?.monthlyIncome??"";
+        print("here 20");
+        addSourceIncomeController.text=getLeadDetailModel.value?.data?.additionalSourceOfIncome??"";
+        print("here 21");
+        leadDDController.selectedBank.value=getLeadDetailModel.value?.data?.prefferedBank??"";
+        print("here 22");
+        branchLocController.text=getLeadDetailModel.value?.data?.branch??"";
+        print("here 23");
+        leadDDController.selectedProdType.value=getLeadDetailModel.value?.data?.productType??"";
+        print("here 24");
+        connNameController.text=getLeadDetailModel.value?.data?.connectorName??"";
+        print("here 25");
+        connMobController.text=getLeadDetailModel.value?.data?.connectorMobileNo??"";
+        print("here 26");
+        connShareController.text=getLeadDetailModel.value?.data?.connectorPercentage.toString()??"";
+        print("here 27");
+
+        createdByWhichEmployee.value=getLeadDetailModel.value?.data?.assignedEmployeeId.toString()??"";
+        print("here 28");
         isLoading(false);
 
       }else{
@@ -231,6 +267,8 @@ class Addleadcontroller extends GetxController{
     connNameController.clear();
     connMobController.clear();
     connShareController.clear();
+    existingLoansController.clear();
+    noOfExistingLoansController.clear();
     selectedGender.value="";
   }
 

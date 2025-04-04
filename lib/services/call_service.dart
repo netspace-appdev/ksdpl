@@ -105,9 +105,11 @@ class CallService {
           callEndTime: callEndTime,
           callReminder: formattedDateTime,
         ).then((_){
+          print("lead state before===>${currentLeadStage}");
+          print("lead state after===>${leadListController.workOnLeadModel!.data!.leadStageStatus}");
           showFeedbackDialog(
             leadId: leadId,
-            currentLeadStage: currentLeadStage,
+            currentLeadStage: leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),
             context: context,
             callDuration: callDuration.toString(),
             callStartTime:callStartTime.toString(),
@@ -129,7 +131,7 @@ class CallService {
         ).then((_){
           showFeedbackDialog(
             leadId: leadId,
-            currentLeadStage: currentLeadStage,
+            currentLeadStage:leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),
             context: context,
             callDuration: callDuration.toString(),
             callStartTime:callStartTime.toString(),

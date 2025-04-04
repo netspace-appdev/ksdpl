@@ -269,6 +269,10 @@ class AppText{
   static const String customdash = "customDash";
   static const String allReminders = "All Reminders";
   static const String fillLeadForm = "Fill Lead form";
+  static const String existingLoans = "Existing Loans";
+  static const String noOfExistingLoans = "No. of Existing Loans";
+  static const String enterExistingLoans = "Enter Existing Loans";
+  static const String enterNoOfExistingLoans = "Enter No. of Existing Loans";
 }
 
 class AppColor{

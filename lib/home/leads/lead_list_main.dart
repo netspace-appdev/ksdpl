@@ -486,7 +486,7 @@ class LeadListMain extends StatelessWidget {
                         label_code: "not_doable",
                       )
                     ]
-                    else if(leadListController.leadCode.value=="2")...[
+                    else if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="3")...[
 
                       _buildTextButton(
                         label:AppText.interested,
@@ -591,19 +591,19 @@ class LeadListMain extends StatelessWidget {
 }) {
     return IconButton(
       onPressed: () {
-        var newLeadStage="";
+       // var newLeadStage="";
         if(label=="call"){
-          if(currentLeadStage=="2"){
+        /*  if(currentLeadStage=="2"){
             newLeadStage="3";
           }else{
             newLeadStage=currentLeadStage;
-          }
+          }*/
 
           CallService callService = CallService();
           callService.makePhoneCall(
-              phoneNumber:phoneNumber,//"+919399299880",//phoneNumber
+              phoneNumber: "+919399299880",//phoneNumber
               leadId: leadId,
-              currentLeadStage: newLeadStage,
+              currentLeadStage: currentLeadStage,//newLeadStage,
               context: context,
             showFeedbackDialog:showCallFeedbackDialog,
           );
