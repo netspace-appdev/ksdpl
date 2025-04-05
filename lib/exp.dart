@@ -1,73 +1,84 @@
-import 'package:flutter/material.dart';
+/*@override
+Widget build(BuildContext context) {
+  return Dialog(
+    insetPadding: EdgeInsets.all(20),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5),
+    ),
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.85,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Top color bar
+                  Container(
+                    width: double.infinity,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: titleBackgroundColor,
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
+                    ),
+                  ),
 
-void main() {
-  runApp(MyApp());
-}
+                  // Actual Dialog Body
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                title,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () => Get.back(),
+                              child: Icon(Icons.close, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15),
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(title: Text('Settings')),
-        body: SettingsList(),
-      ),
-    );
-  }
-}
+                        /// 👇 YOUR Custom Content Here
+                        Flexible(child: content),
 
-class SettingsList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.all(12),
-      children: [
-        CustomExpansionTile(
-          icon: Icons.login,
-          title: "Login Settings",
-        ),
-        CustomExpansionTile(
-          icon: Icons.people,
-          title: "Family Members",
-        ),
-        CustomExpansionTile(
-          icon: Icons.shield,
-          title: "Famillly Moment Premium", // Keeping the typo as in the image
-        ),
-      ],
-    );
-  }
-}
-
-class CustomExpansionTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-
-  CustomExpansionTile({required this.icon, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: ExpansionTile(
-        leading: Icon(icon, color: Colors.black54),
-        title: Text(
-          title,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text("More options..."),
+                        SizedBox(height: 30),
+                        SizedBox(
+                          width: 250,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: submitButtonColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: onSubmit,
+                            child: Text(submitButtonText, style: TextStyle(color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
-      ),
-    );
-  }
-}
+        );
+      },
+    ),
+  );
+}*/

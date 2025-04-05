@@ -405,9 +405,9 @@ class LeadListMain extends StatelessWidget {
                   child: Column(
                     children: [
                       _buildDetailRow("Email", lead.email.toString()),
-                      _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
-                      _buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
-                      _buildDetailRow("Campaign", lead.campaign??"  -  "),
+                     /* _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
+                      _buildDetailRow("Uploaded on", lead.uploadedDate.toString()),*/
+                      _buildDetailRow("Campaign","Summer Slaes" /*lead.campaign??"  -  "*/),
                       _buildDetailRow("Status", lead.stageName.toString()??""),
                     ],
                   ),
@@ -518,15 +518,7 @@ class LeadListMain extends StatelessWidget {
                  mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
                  children: [
                    if(leadListController.leadCode.value=="2")...[
-                     _buildTextButton(
-                       label:AppText.addFollowUp,
-                       context: context,
-                       color: Colors.purple,
-                       icon:  Icons.call,
-                       leadId: lead.id.toString(),
-                       label_code: "add_feedback",
-                       currentLeadStage: lead.leadStage.toString(),
-                     ),
+
                      _buildTextButton(
                        label:AppText.couldntConneect,
                        context: context,
@@ -536,13 +528,33 @@ class LeadListMain extends StatelessWidget {
                        label_code: "cc",
                        currentLeadStage: lead.leadStage.toString(),
                      ),
+                     _buildTextButton(
+                       label:AppText.addFollowUp,
+                       context: context,
+                       color: Colors.purple,
+                       icon:  Icons.call,
+                       leadId: lead.id.toString(),
+                       label_code: "add_feedback",
+                       currentLeadStage: lead.leadStage.toString(),
+                     ),
                    ],
                  ],
                ),
 
                 Row(
-                  mainAxisAlignment:leadListController.leadCode.value!="2"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+
+                    if(leadListController.leadCode.value=="4" )
+                      _buildTextButton(
+                        label:AppText.fillLeadForm,
+                        context: context,
+                        color: Colors.purple,
+                        icon:  Icons.add_circle_outline_outlined,
+                        leadId: lead.id.toString(),
+                        label_code: "add_lead_form",
+                        currentLeadStage: lead.leadStage.toString(),
+                      ),
                     if(leadListController.leadCode.value!="2")...[
                       _buildTextButton(
                         label:AppText.addFollowUp,
@@ -561,16 +573,7 @@ class LeadListMain extends StatelessWidget {
 
                 SizedBox(height: 10),
 
-                if(leadListController.leadCode.value=="4" )
-                _buildTextButton(
-                  label:AppText.fillLeadForm,
-                  context: context,
-                  color: Colors.purple,
-                  icon:  Icons.add_circle_outline_outlined,
-                  leadId: lead.id.toString(),
-                  label_code: "add_lead_form",
-                  currentLeadStage: lead.leadStage.toString(),
-                ),
+
 
               ],
             ),
@@ -582,9 +585,6 @@ class LeadListMain extends StatelessWidget {
   }
 
   Widget _buildDetailRow(String label, String value) {
- //   String assigned = value.toString();
-//    List<String> assignedParts = assigned.split('T');
-
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -626,22 +626,20 @@ class LeadListMain extends StatelessWidget {
 }) {
     return IconButton(
       onPressed: () {
-       // var newLeadStage="";
+
         if(label=="call"){
-        /*  if(currentLeadStage=="2"){
-            newLeadStage="3";
-          }else{
-            newLeadStage=currentLeadStage;
-          }*/
+
 
           CallService callService = CallService();
           callService.makePhoneCall(
-              phoneNumber: "+919399299880",//phoneNumber
+              phoneNumber:phoneNumber,// "+919399299880",//phoneNumber
               leadId: leadId,
               currentLeadStage: currentLeadStage,//newLeadStage,
               context: context,
             showFeedbackDialog:showCallFeedbackDialog,
           );
+
+
         }
         if(label=="whatsapp"){
           leadListController.openWhatsApp(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
@@ -722,55 +720,60 @@ class LeadListMain extends StatelessWidget {
 
                 onYes: () {
                   if(label_code == "interested"){
-                    leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"4",
-                    );
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "4",
                       active: "1",
                     );
-                  }else if(label_code == "not_interested"){
-                    leadListController.workOnLeadApi(
+                   /* leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
-                      leadStageStatus:"5",
-                    );
+                      leadStageStatus:"4",
+                    );*/
+
+                  }else if(label_code == "not_interested"){
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "5",
                       active: "0",
                     );
-                  }else if(label_code == "doable"){
-                    leadListController.workOnLeadApi(
+                  /*  leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
-                      leadStageStatus:"6",
-                    );
+                      leadStageStatus:"5",
+                    );*/
+
+                  }else if(label_code == "doable"){
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "6",
                       active: "1",
                     );
-                  }else if(label_code == "not_doable"){
-                    leadListController.workOnLeadApi(
+                   /* leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
-                      leadStageStatus:"7",
-                    );
+                      leadStageStatus:"6",
+                    );*/
+
+                  }else if(label_code == "not_doable"){
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "7",
                       active: "0",
                     );
-                  }else if(label_code == "cc"){
-                    leadListController.workOnLeadApi(
+                    /*leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
-                      leadStageStatus:"13",
-                    );
+                      leadStageStatus:"7",
+                    );*/
+
+                  }else if(label_code == "cc"){
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "13",
                       active: "0",
                     );
+                    /*leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"13",
+                    );*/
+
                   }
 
 
@@ -792,7 +795,7 @@ class LeadListMain extends StatelessWidget {
 
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            width:(label_code=="add_feedback" || label_code=="add_lead_form") && leadListController.leadCode.value=="13" ?
+            width:(label_code=="add_feedback" ) ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
 

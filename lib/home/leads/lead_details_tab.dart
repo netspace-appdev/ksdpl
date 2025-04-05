@@ -71,98 +71,95 @@ class LeadDetailsTab extends StatelessWidget {
 
           backgroundColor: AppColor.backgroundColor,
 
-          body: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
-              child: Column(
+          body: Column(
+            children: [
+              Stack(
                 children: [
-                  Stack(
-                    children: [
-                      // Gradient Background
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [AppColor.primaryLight, AppColor.primaryDark],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child:Column(
-                          children: [
+                  // Gradient Background
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColor.primaryLight, AppColor.primaryDark],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child:Column(
+                      children: [
 
+                        SizedBox(
+                          height: 20,
+                        ),
+
+                        header(context),
+
+                      ],
+                    ),
+                  ),
+
+                  // White Container
+                  Align(
+                    alignment: Alignment.topCenter,  // Centers it
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Container(
+                        margin:  EdgeInsets.only(
+                            top:90 // MediaQuery.of(context).size.height * 0.22
+                        ), // <-- Moves it 30px from top
+                        width: double.infinity,
+                       // height: MediaQuery.of(context).size.height*0.99,
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                        decoration: const BoxDecoration(
+                          color: AppColor.backgroundColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(45),
+                            topRight: Radius.circular(45),
+                          ),
+
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                          children: [
                             SizedBox(
-                              height: 20,
+                              height: 10,
                             ),
 
-                            header(context),
+                            const TabBar(
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              indicatorColor: AppColor.secondaryColor, // Yellow Indicator
+                              labelColor: AppColor.secondaryColor, // Yellow when selected
+                              unselectedLabelColor: AppColor.grey700, // Grey when unselected
+                              tabs: [
+                                CustomTab(icon: Icons.list_alt, text: "Details"),
+                                CustomTab(icon: Icons.history, text: "History"),
+                                //CustomTab(icon: Icons.content_paste_search_outlined, text: "Followup"),
+                              ],
+                            ),
+
+
+                            Expanded(
+                            // height: MediaQuery.of(context).size.height,
+                             child: TabBarView(
+                                children: [
+                                  LeadDetailsMain(),
+                                  LeadHistory(),
+
+                                ],
+                              ),
+                             )
+
 
                           ],
                         ),
                       ),
-
-                      // White Container
-                      Align(
-                        alignment: Alignment.topCenter,  // Centers it
-                        child: Container(
-                          margin:  EdgeInsets.only(
-                              top:90 // MediaQuery.of(context).size.height * 0.22
-                          ), // <-- Moves it 30px from top
-                          width: double.infinity,
-                          //height: MediaQuery.of(context).size.height,
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                          decoration: const BoxDecoration(
-                            color: AppColor.backgroundColor,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(45),
-                              topRight: Radius.circular(45),
-                            ),
-
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min, // Prevents extra spacing
-                            children: [
-                              SizedBox(
-                                height: 10,
-                              ),
-
-                              const TabBar(
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                indicatorColor: AppColor.secondaryColor, // Yellow Indicator
-                                labelColor: AppColor.secondaryColor, // Yellow when selected
-                                unselectedLabelColor: AppColor.grey700, // Grey when unselected
-                                tabs: [
-                                  CustomTab(icon: Icons.list_alt, text: "Details"),
-                                  CustomTab(icon: Icons.history, text: "History"),
-                                  //CustomTab(icon: Icons.content_paste_search_outlined, text: "Followup"),
-                                ],
-                              ),
-
-
-                              SizedBox(
-                               height: MediaQuery.of(context).size.height,
-                               child: TabBarView(
-                                  children: [
-                                    LeadDetailsMain(),
-                                    LeadHistory(),
-
-                                  ],
-                                ),
-                               )
-
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
-            ),
+            ],
           ),
         ),
       ),

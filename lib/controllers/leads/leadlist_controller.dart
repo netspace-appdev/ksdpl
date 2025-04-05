@@ -364,7 +364,10 @@ class LeadListController extends GetxController {
 
         updateLeadStageModel= UpdateLeadStageModel.fromJson(data);
 
-
+        workOnLeadApi(
+          leadId: id,
+          leadStageStatus:stage,
+        );
 
         isLoading(false);
 

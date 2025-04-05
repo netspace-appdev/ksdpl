@@ -387,13 +387,13 @@ class DrawerApiService {
         'POST',
         Uri.parse( updateLeadStage),
       );
-      print("uri===> updateLeadStage==>${getAllLeads.toString()}");
+      print("uri===> updateLeadStage==>");
       // Headers
       request.headers.addAll({
         'accept': 'text/plain',
       });
       var header=await MyHeader.getHeaders2();
-      print("uri===> updateLeadStage==>${header}");
+
       request.headers.addAll(header);
       request.fields['Id'] = id;
       request.fields['Stage'] = stage;
@@ -401,7 +401,9 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-
+      print("request===> updateLeadStage==>${request.fields}");
+      print("response===> updateLeadStage==>${response.statusCode}");
+      print("response===> updateLeadStage==>${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
