@@ -407,8 +407,8 @@ class LeadListMain extends StatelessWidget {
                       _buildDetailRow("Email", lead.email.toString()),
                       _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
                       _buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
-                      // _buildDetailRow("Uploaded by", lead.uploadedBy.toString()),
-                      // _buildDetailRow("City", "Sagwada"),
+                      _buildDetailRow("Campaign", lead.campaign??"  -  "),
+                      _buildDetailRow("Status", lead.stageName.toString()??""),
                     ],
                   ),
                 ),
@@ -486,7 +486,7 @@ class LeadListMain extends StatelessWidget {
                         label_code: "not_doable",
                       )
                     ]
-                    else if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="3")...[
+                    else if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="13")...[
 
                       _buildTextButton(
                         label:AppText.interested,
@@ -514,15 +514,50 @@ class LeadListMain extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
 
-                _buildTextButton(
-                  label:AppText.addFollowUp,
-                  context: context,
-                  color: Colors.purple,
-                  icon:  Icons.call,
-                  leadId: lead.id.toString(),
-                  label_code: "add_feedback",
-                  currentLeadStage: lead.leadStage.toString(),
+               Row(
+                 mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
+                 children: [
+                   if(leadListController.leadCode.value=="2")...[
+                     _buildTextButton(
+                       label:AppText.addFollowUp,
+                       context: context,
+                       color: Colors.purple,
+                       icon:  Icons.call,
+                       leadId: lead.id.toString(),
+                       label_code: "add_feedback",
+                       currentLeadStage: lead.leadStage.toString(),
+                     ),
+                     _buildTextButton(
+                       label:AppText.couldntConneect,
+                       context: context,
+                       color: Colors.purple,
+                       icon:  Icons.phone_callback,
+                       leadId: lead.id.toString(),
+                       label_code: "cc",
+                       currentLeadStage: lead.leadStage.toString(),
+                     ),
+                   ],
+                 ],
+               ),
+
+                Row(
+                  mainAxisAlignment:leadListController.leadCode.value!="2"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if(leadListController.leadCode.value!="2")...[
+                      _buildTextButton(
+                        label:AppText.addFollowUp,
+                        context: context,
+                        color: Colors.purple,
+                        icon:  Icons.call,
+                        leadId: lead.id.toString(),
+                        label_code: "add_feedback",
+                        currentLeadStage: lead.leadStage.toString(),
+                      ),
+
+                    ],
+                  ],
                 ),
+
 
                 SizedBox(height: 10),
 
@@ -678,7 +713,7 @@ class LeadListMain extends StatelessWidget {
               callStatus: "0"
           );
 
-        }else if (label_code == "interested" || label_code =="not_interested" || label_code == "doable" || label_code =="not_doable") {
+        }else if (label_code == "interested" || label_code =="not_interested" || label_code == "doable" || label_code =="not_doable" || label_code == "cc") {
           showDialog(
             context: context,
             builder: (context) {
@@ -691,20 +726,50 @@ class LeadListMain extends StatelessWidget {
                       leadId: leadId.toString(),
                       leadStageStatus:"4",
                     );
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "4",
+                      active: "1",
+                    );
                   }else if(label_code == "not_interested"){
                     leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
                       leadStageStatus:"5",
+                    );
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "5",
+                      active: "0",
                     );
                   }else if(label_code == "doable"){
                     leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
                       leadStageStatus:"6",
                     );
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "6",
+                      active: "1",
+                    );
                   }else if(label_code == "not_doable"){
                     leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
                       leadStageStatus:"7",
+                    );
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "7",
+                      active: "0",
+                    );
+                  }else if(label_code == "cc"){
+                    leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"13",
+                    );
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "13",
+                      active: "0",
                     );
                   }
 
@@ -727,21 +792,24 @@ class LeadListMain extends StatelessWidget {
 
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            width: label_code=="add_feedback" || label_code=="add_lead_form"?MediaQuery.of(context).size.width*0.85: label_code=="open_poll"? MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
+            width:(label_code=="add_feedback" || label_code=="add_lead_form") && leadListController.leadCode.value=="13" ?
+            MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
+            MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
 
             decoration: BoxDecoration(
               //color: color,
+              color: label_code=="add_feedback"?AppColor.primaryColor:Colors.transparent,
               borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: AppColor.grey700)
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: AppColor.grey700, size: 16),
+                Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
                 SizedBox(width: 6),
                 Text(
                   label,
-                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: AppColor.grey700),
+                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
                 ),
               ],
             ),
@@ -1033,8 +1101,9 @@ class LeadListMain extends StatelessWidget {
     required BuildContext context,
     required leadId,
   }) {
-    // List<String> options = ["Fresh Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
-    List<String> options = ["Fresh Leads","Working Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+
+   // List<String> options = ["Fresh Leads","Working Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+   List<String> options = ["All Leads","Fresh Leads","Could Not Connect", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1105,6 +1174,8 @@ class LeadListMain extends StatelessWidget {
     );
   }
 
+
+
   void showOpenPollDialog2({
     required BuildContext context,
     required leadId,
@@ -1150,7 +1221,7 @@ class LeadListMain extends StatelessWidget {
                       CustomTextFieldPrefix(
                         inputType:  TextInputType.number,
                         controller: leadListController.openPollPercentController,
-                        hintText: "like 2.0 %",
+                        hintText: "Enter open poll percentage",
                         validator: validatePercentage,
                         isPassword: false,
                         obscureText: false,

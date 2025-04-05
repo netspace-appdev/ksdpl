@@ -46,7 +46,7 @@ class LeadListController extends GetxController {
   var cityIdMain="0".obs;
   var campaignMain="".obs;
 
-  var selectedIndex = (0).obs;
+  var selectedIndex = (1).obs;
   var leadId = RxnString();
 
   var eId="".obs;
@@ -134,31 +134,41 @@ class LeadListController extends GetxController {
   }
 
 
-/*  void selectCheckbox(int index) {
+
+
+  void selectCheckbox(int index) {
 
     selectedIndex.value = index;
     if( selectedIndex.value==0){
+      leadCode.value="0";
+      leadStageName.value="All Leads";
+
+    } else if( selectedIndex.value==1){
       leadCode.value="2";
       leadStageName.value="Fresh Leads";
 
-    }else if(selectedIndex.value==1){
+    }else if(selectedIndex.value==2){
+      leadCode.value="13";
+      leadStageName.value="Couldn't Connect";
+    }else if(selectedIndex.value==3){
       leadCode.value="4";
       leadStageName.value="Interested Leads";
-    }else if(selectedIndex.value==2){
+    }else if(selectedIndex.value==4){
       leadCode.value="5";
       leadStageName.value="Not Interested Leads";
     }
-    else if(selectedIndex.value==3){
+    else if(selectedIndex.value==5){
       leadCode.value="6";
       leadStageName.value="Doable Leads";
     }
-    else if(selectedIndex.value==4){
+    else if(selectedIndex.value==6){
       leadCode.value="7";
       leadStageName.value="Not Doable Leads";
     }
-  }*/
+  }
 
-  void selectCheckbox(int index) {
+
+/*  void selectCheckbox(int index) {
 
     selectedIndex.value = index;
     if( selectedIndex.value==0){
@@ -183,7 +193,7 @@ class LeadListController extends GetxController {
       leadCode.value="7";
       leadStageName.value="Not Doable Leads";
     }
-  }
+  }*/
 
   void filterSubmit(){
     var eId=StorageService.get(StorageService.EMPLOYEE_ID);
@@ -564,5 +574,16 @@ class LeadListController extends GetxController {
     }
   }
 
+
+  Future<void> refreshItems() async {
+    getAllLeadsApi(
+        leadStage: leadCode.value,
+        employeeId:eId.toString(),
+        stateId:stateIdMain.value,
+        distId: distIdMain.value,
+        cityId: cityIdMain.value,
+        campaign: campaignMain.value
+    );
+  }
 
 }
