@@ -266,11 +266,15 @@ class LeadListController extends GetxController {
 
 
 
-    var remStatus=isCallReminder.value?"1":"0";
+
+
+    print("call status  in real box==>${callStatus}");
+    print("id in real box==>${id}");
 
 
     workOnLeadApi(
-      id:callStatus=="1"?id.toString():"0",
+      // id:callStatus=="1"?id.toString():"0",
+      id:id.toString(),
       leadId: leadId.toString(),
       leadStageStatus: currentLeadStage,
       feedbackRelatedToCall: callFeedbackController.text.trim(),
@@ -283,7 +287,7 @@ class LeadListController extends GetxController {
       reminderStatus:  isCallReminder.value?"1":"0",
     ).then((_){
       if(fromWhere=="call"){
-        LeadHistoryController leadHistoryController = Get.find();
+        LeadHistoryController leadHistoryController = Get.put(LeadHistoryController());
         leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId.toString());
       }
       DashboardController dashboardController=Get.find();

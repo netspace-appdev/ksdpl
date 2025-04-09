@@ -660,7 +660,14 @@ class OpenPollFilter extends StatelessWidget {
                   openPollFilterController.pickupLeadFromCommonTasksApi(
                       employeeId: eId,
                       leadId: leadId
-                  );
+                  ).then((_){
+                    openPollFilterController. getCommonLeadListByFilterApi(
+                      stateId: leadDDController.selectedState.value??"0",
+                      distId: leadDDController.selectedDistrict.value??"0",
+                      cityId:  leadDDController.selectedCity.value??"0",
+                      KsdplBranchId: leadDDController.selectedKsdplBr.value??"0",
+                    );
+                  });
 
 
                 },

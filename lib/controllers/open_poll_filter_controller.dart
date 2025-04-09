@@ -101,7 +101,7 @@ class OpenPollFilterController extends GetxController{
 
 
 
-  void  pickupLeadFromCommonTasksApi({
+  Future<void>  pickupLeadFromCommonTasksApi({
     required String leadId,
     required String employeeId,
 

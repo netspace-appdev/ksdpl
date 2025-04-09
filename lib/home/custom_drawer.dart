@@ -202,6 +202,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     print("role===>${StorageService.get(StorageService.ROLE).toString()}");
     firstName=StorageService.get(StorageService.FIRST_NAME).toString();
     email=StorageService.get(StorageService.EMAIL).toString();
-    role=StorageService.get(StorageService.ROLE).toString();
+    var rawRole = StorageService.get(StorageService.ROLE).toString();
+    role = rawRole.replaceAll('[', '').replaceAll(']', '');
   }
 }

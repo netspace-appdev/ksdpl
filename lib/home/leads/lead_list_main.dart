@@ -555,7 +555,7 @@ class LeadListMain extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        if(leadListController.leadCode.value=="4" )
+                        if(leadListController.leadCode.value=="4" || leadListController.leadCode.value=="6" )
                           _buildTextButton(
                             label:AppText.fillLeadForm,
                             context: context,

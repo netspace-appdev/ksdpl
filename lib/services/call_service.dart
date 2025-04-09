@@ -20,6 +20,10 @@ class CallService {
   StreamSubscription<PhoneState>? phoneStateSubscription;
   String? lastDialedNumber;
   LeadListController leadListController = Get.find();
+  bool _hasHandledCall = false;
+
+
+
   void makePhoneCall({
     required String phoneNumber,
     required String leadId,
@@ -41,10 +45,11 @@ class CallService {
 
     if (await canLaunchUrl(phoneUri)) {
       lastDialedNumber = phoneNumber;
-
+      _hasHandledCall = false;
       // Start listening to call status
       phoneStateSubscription = PhoneState.stream.listen((PhoneState event) {
-        if (event.status == PhoneStateStatus.CALL_ENDED) {
+        if (event.status == PhoneStateStatus.CALL_ENDED && !_hasHandledCall) {
+          _hasHandledCall = true;
           print("Call Ended, checking duration...");
           Future.delayed(Duration(seconds: 2), () => checkCallStatus(
               leadId: leadId,
@@ -153,6 +158,7 @@ class CallService {
   void dispose() {
     phoneStateSubscription?.cancel();
     phoneStateSubscription = null;
+    _hasHandledCall = false;
   }
 
 }
