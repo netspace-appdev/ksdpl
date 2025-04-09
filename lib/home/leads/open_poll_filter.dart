@@ -9,6 +9,7 @@ import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
 import 'package:ksdpl/models/GetCampaignNameModel.dart' as campaign;
+import 'package:ksdpl/models/leads/GetAllKsdplBranchModel.dart' as ksdplBranch;
 import '../../../common/CustomSearchBar.dart';
 import '../../../common/helper.dart';
 import '../../../common/skelton.dart';
@@ -221,7 +222,7 @@ class OpenPollFilter extends StatelessWidget {
                                     const SizedBox(height: 20),
 
                                     const Text(
-                                      AppText.campaign,
+                                      AppText.ksdplBr,
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -231,7 +232,7 @@ class OpenPollFilter extends StatelessWidget {
 
                                     const SizedBox(height: 10),
 
-                                    Obx((){
+                                    /* Obx((){
                                       if (leadDDController.isLoading.value) {
                                         return  Center(child:CustomSkelton.productShimmerList(context));
                                       }
@@ -247,7 +248,26 @@ class OpenPollFilter extends StatelessWidget {
                                         },
                                       );
                                     }),
+*/
 
+                                    Obx((){
+                                      if (leadDDController.isLoading.value) {
+                                        return  Center(child:CustomSkelton.productShimmerList(context));
+                                      }
+
+
+                                      return CustomDropdown<ksdplBranch.Data>(
+                                        items: leadDDController.getAllKsdplBranchModel.value?.data ?? [],
+                                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                        getName: (item) => item.branchName.toString(),
+                                        selectedValue: leadDDController.getAllKsdplBranchModel.value?.data?.firstWhereOrNull(
+                                              (item) => item.id.toString() == leadDDController.selectedKsdplBr.value,
+                                        ),
+                                        onChanged: (value) {
+                                          leadDDController.selectedKsdplBr.value =  value?.id?.toString();
+                                        },
+                                      );
+                                    }),
 
                                     const SizedBox(height: 20),
 
@@ -398,16 +418,7 @@ class OpenPollFilter extends StatelessWidget {
 
     if (_formKey.currentState!.validate()) {
 
-     /* if (leadDDController.selectedState.value==null) {
-        ToastMessage.msg("Please select state");
-      }else  if (leadDDController.selectedDistrict.value==null) {
-        ToastMessage.msg("Please select district");
-      } else  if (leadDDController.selectedCity.value==null) {
-        ToastMessage.msg("Please select city");
-      } {
-        openPollFilterController.pollFilterSubmit();
-        ToastMessage.msg("Form Submitted");
-      }*/
+
       openPollFilterController.pollFilterSubmit();
     }
   }
@@ -417,8 +428,8 @@ class OpenPollFilter extends StatelessWidget {
       if (openPollFilterController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-      if (openPollFilterController.getAllLeadsModel.value == null ||
-          openPollFilterController.getAllLeadsModel.value!.data == null || openPollFilterController.getAllLeadsModel.value!.data!.isEmpty) {
+      if (openPollFilterController.getCommonLeadListFModel.value == null ||
+          openPollFilterController.getCommonLeadListFModel.value!.data == null || openPollFilterController.getCommonLeadListFModel.value!.data!.isEmpty) {
         return  Container(
           height: MediaQuery.of(context).size.height*0.50,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -453,11 +464,11 @@ class OpenPollFilter extends StatelessWidget {
       }
 
       return  ListView.builder(
-        itemCount: openPollFilterController.getAllLeadsModel.value!.data!.length,
+        itemCount: openPollFilterController.getCommonLeadListFModel.value!.data!.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          final lead = openPollFilterController.getAllLeadsModel.value!.data![index];
+          final lead = openPollFilterController.getCommonLeadListFModel.value!.data![index];
 
 
 
@@ -494,7 +505,7 @@ class OpenPollFilter extends StatelessWidget {
                             ),
                             child: Center(
                               child: Text(
-                                  lead.name==null?"N": lead.name!.isNotEmpty ?  lead.name![0].toUpperCase() : "U", // Initial Letter
+                                lead.name==null?"N": lead.name!.isNotEmpty ?  lead.name![0].toUpperCase() : "U", // Initial Letter
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
@@ -637,7 +648,7 @@ class OpenPollFilter extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (label == "Pick Lead") {
-         // showOpenPollDialog(context: context,leadId: leadId);
+          // showOpenPollDialog(context: context,leadId: leadId);
           showDialog(
             context: context,
             builder: (context) {
@@ -647,8 +658,8 @@ class OpenPollFilter extends StatelessWidget {
                 onYes: () {
                   var eId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
                   openPollFilterController.pickupLeadFromCommonTasksApi(
-                    employeeId: eId,
-                    leadId: leadId
+                      employeeId: eId,
+                      leadId: leadId
                   );
 
 

@@ -31,6 +31,8 @@ class DrawerApiService {
   static const String workOnLead = baseUrl + 'LeadDetail/WorkOnLead';
   static const String getLeadWorkByLeadId = baseUrl + 'LeadDetail/GetLeadWorkByLeadId';
   static const String getCampaignName = baseUrl + 'LeadDetail/GetCampaignName';
+  static const String getCommonLeadListByFilter = baseUrl + 'LeadDetail/GetCommonLeadListByFilter';
+  static const String getAllKsdplBranch = baseUrl + 'KsdplBranch/GetAllKsdplBranch';
 
   static Future<Map<String, dynamic>> getBankerByIdApi({
     required String bankerId,
@@ -331,7 +333,7 @@ class DrawerApiService {
     required distId,
     required cityId,
     required campaign,
-}) async {
+  }) async {
     print("request===>  getAllLeadsApi in leadlist==>${getAllLeads.toString()}");
     try {
       var request = http.MultipartRequest(
@@ -707,7 +709,7 @@ class DrawerApiService {
 
   static Future<Map<String, dynamic>> getProductListByBankIdApi({
     required bankId
-}) async {
+  }) async {
 
     try {
       var request = http.MultipartRequest(
@@ -748,7 +750,7 @@ class DrawerApiService {
     required leadId,
     required employeeId
 
-}) async {
+  }) async {
 
     try {
       var request = http.MultipartRequest(
@@ -850,7 +852,7 @@ class DrawerApiService {
       if (feedbackRelatedToCall != "string") request.fields['FeedBack_Related_To_Call'] = feedbackRelatedToCall ?? "null";
 
       // File Upload: Only attach if file exists
-     /* if (callRecordingPathUrl != null) {
+      /* if (callRecordingPathUrl != null) {
         request.files.add(
           await http.MultipartFile.fromPath(
             'Call_Recording_PathURL',
@@ -948,6 +950,96 @@ class DrawerApiService {
       print("request===>==>${request.fields.toString()}");
       print("response.statusCode===>${response.statusCode}");
       print("response==>getCampaignNameApi==>${response.body.toString()}");
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getCommonLeadListByFilterApi({
+
+    String stateId="0",
+    String distId="0",
+    String cityId="0",
+    String KsdplBranchId="0",
+
+  }) async {
+    print("request===>  getCommonLeadListByFilter in open poll==>${getCommonLeadListByFilter.toString()}");
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getCommonLeadListByFilter),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['State'] = stateId.toString();
+      request.fields['District'] = distId.toString();
+      request.fields['City'] = cityId.toString();
+      request.fields['KsdplBranchId'] = KsdplBranchId.toString();
+
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("request===>  getCommonLeadListByFilterApi==>${getAllLeads.toString()}");
+      print("request===>==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>${response.body.toString()}");
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getAllKsdplBranchApi() async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllKsdplBranch),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("request===>  getAllKsdplBranch==>${getAllKsdplProductList.toString()}");
+      print("request===>==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>${response.body.toString()}");
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

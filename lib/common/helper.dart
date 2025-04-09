@@ -274,6 +274,7 @@ class AppText{
   static const String enterExistingLoans = "Enter Existing Loans";
   static const String enterNoOfExistingLoans = "Enter No. of Existing Loans";
   static const String couldntConneect = "Couldn't connect";
+  static const String ksdplBr = "KDSPL Branch";
 }
 
 class AppColor{

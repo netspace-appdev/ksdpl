@@ -5,6 +5,7 @@ import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
 
 import '../common/helper.dart';
 import '../models/dashboard/PickLeadComTaskModel.dart';
+import '../models/leads/GetCommonLeadListFModel.dart';
 import '../services/drawer_api_service.dart';
 import 'lead_dd_controller.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
@@ -19,6 +20,7 @@ class OpenPollFilterController extends GetxController{
   LeadDDController leadDDController=Get.find();
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
   var pickLeadComTaskModel = Rxn<PickLeadComTaskModel>(); //
+  var getCommonLeadListFModel = Rxn<GetCommonLeadListFModel>(); //
   @override
   void onInit() {
     // TODO: implement onInit
@@ -30,22 +32,20 @@ class OpenPollFilterController extends GetxController{
   var fromWhere="".obs;
 
   pollFilterSubmit(){
-    // leadListController.stateIdMain.value="0";
-    // leadListController.distIdMain.value="0";
-    // leadListController.cityIdMain.value="0";
-    // leadListController.leadCode.value="4";
+
     print("st==>${leadDDController.selectedState.value}");
     print("st==>${leadDDController.selectedDistrict.value}");
     print("st==>${leadDDController.selectedCity.value}");
     print("st==>${leadListController.eId}");
+    print("st==>${leadListController.leadCode.value}");
 
-    getAllLeadsApi(
-        leadStage:leadListController.leadCode.value,
-        employeeId:"0",
-        stateId:leadDDController.selectedState.value,
-        distId: leadDDController.selectedDistrict.value,
-        cityId: leadDDController.selectedCity.value,
-        campaign: leadDDController.selectedCampaign.value,
+
+
+    getCommonLeadListByFilterApi(
+      stateId: leadDDController.selectedState.value??"0",
+      distId: leadDDController.selectedDistrict.value??"0",
+      cityId:  leadDDController.selectedCity.value??"0",
+      KsdplBranchId: leadDDController.selectedKsdplBr.value??"0",
     );
   }
 
@@ -68,7 +68,7 @@ class OpenPollFilterController extends GetxController{
           stateId: stateId,
           distId: distId,
           cityId: cityId,
-        campaign: campaign
+          campaign: campaign
       );
 
 
@@ -81,7 +81,7 @@ class OpenPollFilterController extends GetxController{
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
-      //  leadStageName2.value=leadStageName.value;
+        //  leadStageName2.value=leadStageName.value;
         getAllLeadsModel.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
@@ -135,6 +135,53 @@ class OpenPollFilterController extends GetxController{
 
     } catch (e) {
       print("Error pickLeadComTaskModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+  void  getCommonLeadListByFilterApi({
+    String stateId="0",
+    String distId="0",
+    String cityId="0",
+    String KsdplBranchId="0",
+
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await DrawerApiService.getCommonLeadListByFilterApi(
+
+        stateId: stateId,
+        distId: distId,
+        cityId: cityId,
+        KsdplBranchId: KsdplBranchId,
+      );
+
+
+      if(data['success'] == true){
+
+        getCommonLeadListFModel.value= GetCommonLeadListFModel.fromJson(data);
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+        //  leadStageName2.value=leadStageName.value;
+        getCommonLeadListFModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getCommonLeadListFModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);

@@ -239,8 +239,14 @@ class DashboardController extends GetxController {
   }
 
   Future<void> refreshItems() async {
-   // await Future.delayed(Duration(seconds: 2));
-    getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
+
+    // getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
+
+    var phone=StorageService.get(StorageService.PHONE);
+    getEmployeeByPhoneNumberApi(phone: phone.toString());
+
+    getBreakingNewsApi();
+    getUpcomingDateOfBirthApi();
   }
 
 }

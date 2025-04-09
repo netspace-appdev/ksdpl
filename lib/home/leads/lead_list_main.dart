@@ -47,9 +47,13 @@ class LeadListMain extends StatelessWidget {
         key:_scaffoldKey,
 
         backgroundColor: AppColor.backgroundColor,
-          drawer:   CustomDrawer(),
-          body: SingleChildScrollView(
-          child: Column(
+        drawer:   CustomDrawer(),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await leadListController.refreshItems(); // Make sure this triggers API call
+          },
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
             children: [
               Stack(
                 children: [
@@ -107,35 +111,35 @@ class LeadListMain extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                             Obx(()=> Row(
-                               children: [
+                              Obx(()=> Row(
+                                children: [
 
-                                   Text(
-                                     "",
-                                     style: TextStyle(
-                                       fontSize: 20,
-                                       fontWeight: FontWeight.bold,
-                                     ),
-                                   ),
+                                  Text(
+                                    "",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
 
-                                   Text(
-                                   leadListController.leadStageName2.value.toString(),
-                                   style: TextStyle(
-                                     fontSize: 20,
-                                     fontWeight: FontWeight.bold,
-                                   ),
-                                 ),
-                                 Text(
-                                     leadListController.getAllLeadsModel.value == null ||
-                                         leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty?"(0)":
-                                  " (${ leadListController.getAllLeadsModel.value!.data!.length.toString()})",
-                                   style: TextStyle(
-                                     fontSize: 20,
-                                    // fontWeight: FontWeight.bold,
-                                   ),
-                                 ),
-                               ],
-                             )),
+                                  Text(
+                                    leadListController.leadStageName2.value.toString(),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    leadListController.getAllLeadsModel.value == null ||
+                                        leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty?"(0)":
+                                    " (${ leadListController.getAllLeadsModel.value!.data!.length.toString()})",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )),
                               InkWell(
                                 onTap: (){
 
@@ -152,9 +156,9 @@ class LeadListMain extends StatelessWidget {
                                     Text(
                                       AppText.addLead,
                                       style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColor.orangeColor
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.orangeColor
                                       ),
                                     ),
                                   ],
@@ -175,7 +179,7 @@ class LeadListMain extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
+              )
             ],
           ),
         ),
@@ -190,9 +194,9 @@ class LeadListMain extends StatelessWidget {
         children: [
           leadListController.fromWhere.value=="drawer"?
           InkWell(
-            onTap: (){
-              Get.back();
-            },
+              onTap: (){
+                Get.back();
+              },
               child: Image.asset(AppImage.arrowLeft,height: 24,)):
           InkWell(
               onTap: (){
@@ -205,7 +209,7 @@ class LeadListMain extends StatelessWidget {
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
-              fontWeight: FontWeight.w700
+                fontWeight: FontWeight.w700
 
 
             ),
@@ -384,7 +388,7 @@ class LeadListMain extends StatelessWidget {
                         ],
                       ),
 
-                      if(leadListController.leadCode.value=="4" )
+                      if(leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6" )
                         _buildTextButton(
                           label:AppText.openPoll,
                           context: context,
@@ -405,8 +409,8 @@ class LeadListMain extends StatelessWidget {
                   child: Column(
                     children: [
                       _buildDetailRow("Email", lead.email.toString()),
-                     /* _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
-                      _buildDetailRow("Uploaded on", lead.uploadedDate.toString()),*/
+                      _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
+                      //_buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
                       _buildDetailRow("Campaign","Summer Slaes" /*lead.campaign??"  -  "*/),
                       _buildDetailRow("Status", lead.stageName.toString()??""),
                     ],
@@ -514,32 +518,32 @@ class LeadListMain extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
 
-               Row(
-                 mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
-                 children: [
-                   if(leadListController.leadCode.value=="2")...[
+                Row(
+                  mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if(leadListController.leadCode.value=="2")...[
 
-                     _buildTextButton(
-                       label:AppText.couldntConneect,
-                       context: context,
-                       color: Colors.purple,
-                       icon:  Icons.phone_callback,
-                       leadId: lead.id.toString(),
-                       label_code: "cc",
-                       currentLeadStage: lead.leadStage.toString(),
-                     ),
-                     _buildTextButton(
-                       label:AppText.addFollowUp,
-                       context: context,
-                       color: Colors.purple,
-                       icon:  Icons.call,
-                       leadId: lead.id.toString(),
-                       label_code: "add_feedback",
-                       currentLeadStage: lead.leadStage.toString(),
-                     ),
-                   ],
-                 ],
-               ),
+                      _buildTextButton(
+                        label:AppText.couldntConneect,
+                        context: context,
+                        color: Colors.purple,
+                        icon:  Icons.phone_callback,
+                        leadId: lead.id.toString(),
+                        label_code: "cc",
+                        currentLeadStage: lead.leadStage.toString(),
+                      ),
+                      _buildTextButton(
+                        label:AppText.addFollowUp,
+                        context: context,
+                        color: Colors.purple,
+                        icon:  Icons.call,
+                        leadId: lead.id.toString(),
+                        label_code: "add_feedback",
+                        currentLeadStage: lead.leadStage.toString(),
+                      ),
+                    ],
+                  ],
+                ),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -623,7 +627,7 @@ class LeadListMain extends StatelessWidget {
     required String leadId,
     required String currentLeadStage,
     required BuildContext context,
-}) {
+  }) {
     return IconButton(
       onPressed: () {
 
@@ -632,10 +636,10 @@ class LeadListMain extends StatelessWidget {
 
           CallService callService = CallService();
           callService.makePhoneCall(
-              phoneNumber:phoneNumber,// "+919399299880",//phoneNumber
-              leadId: leadId,
-              currentLeadStage: currentLeadStage,//newLeadStage,
-              context: context,
+            phoneNumber:"+919399299880",//phoneNumber
+            leadId: leadId,
+            currentLeadStage: currentLeadStage,//newLeadStage,
+            context: context,
             showFeedbackDialog:showCallFeedbackDialog,
           );
 
@@ -680,7 +684,7 @@ class LeadListMain extends StatelessWidget {
     required String leadId,
     required String label_code,
     String? currentLeadStage
-}) {
+  }) {
 
     return InkWell(
       onTap: () {
@@ -725,7 +729,7 @@ class LeadListMain extends StatelessWidget {
                       stage: "4",
                       active: "1",
                     );
-                   /* leadListController.workOnLeadApi(
+                    /* leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
                       leadStageStatus:"4",
                     );*/
@@ -736,7 +740,7 @@ class LeadListMain extends StatelessWidget {
                       stage: "5",
                       active: "0",
                     );
-                  /*  leadListController.workOnLeadApi(
+                    /*  leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
                       leadStageStatus:"5",
                     );*/
@@ -747,7 +751,7 @@ class LeadListMain extends StatelessWidget {
                       stage: "6",
                       active: "1",
                     );
-                   /* leadListController.workOnLeadApi(
+                    /* leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
                       leadStageStatus:"6",
                     );*/
@@ -801,8 +805,8 @@ class LeadListMain extends StatelessWidget {
 
             decoration: BoxDecoration(
               //color: color,
-              color: label_code=="add_feedback"?AppColor.primaryColor:Colors.transparent,
-              borderRadius: BorderRadius.circular(5),
+                color: label_code=="add_feedback"?AppColor.primaryColor:Colors.transparent,
+                borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: AppColor.grey700)
             ),
             child: Row(
@@ -1094,7 +1098,7 @@ class LeadListMain extends StatelessWidget {
   String? validatePercentage(String? value) {
     if (value == null || value.isEmpty) {
       return AppText.percentageRequired;
-    } 
+    }
     return null;
   }
 
@@ -1105,8 +1109,8 @@ class LeadListMain extends StatelessWidget {
     required leadId,
   }) {
 
-   // List<String> options = ["Fresh Leads","Working Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
-   List<String> options = ["All Leads","Fresh Leads","Could Not Connect", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+    // List<String> options = ["Fresh Leads","Working Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+    List<String> options = ["All Leads","Fresh Leads","Could Not Connect", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1137,7 +1141,7 @@ class LeadListMain extends StatelessWidget {
               ),
 
               // 🟠 Buttons (Close & Submit)
-             /* Padding(
+              /* Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1353,15 +1357,15 @@ class LeadListMain extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 10),
-                   Obx(()=> CustomLabeledPickerTextField(
-                     label: AppText.selectDate,
-                     isRequired: false,
-                     controller: leadListController.followDateController,
-                     inputType: TextInputType.name,
-                     hintText: "MM/DD/YYYY",
-                     isDateField: true,
-                     enabled: leadListController.isCallReminder.value,
-                   )),
+                    Obx(()=> CustomLabeledPickerTextField(
+                      label: AppText.selectDate,
+                      isRequired: false,
+                      controller: leadListController.followDateController,
+                      inputType: TextInputType.name,
+                      hintText: "MM/DD/YYYY",
+                      isDateField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
                     Obx(()=>CustomLabeledTimePickerTextField(
                       label: AppText.selectTime,
                       isRequired: false,
@@ -1381,25 +1385,25 @@ class LeadListMain extends StatelessWidget {
                 leadListController.leadFeedbackController.text.isEmpty) {
               ToastMessage.msg(AppText.addFeedbackFirst);
             } else {
-             var id=leadListController.workOnLeadModel!.data!.id.toString();
-            if(callStatus=="1"){
-              callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
-              callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
-              callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
+              var id=leadListController.workOnLeadModel!.data!.id.toString();
+              if(callStatus=="1"){
+                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
+                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
+                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
 
-            }
+              }
 
-            leadListController.callFeedbackSubmit(
-                leadId: leadId,
-                currentLeadStage: currentLeadStage,
-                callStatus: callStatus,
-                callDuration: callDuration,
-                callStartTime: callStartTime,
-                callEndTime: callEndTime,
-                id: id,
-              fromWhere: "call"
+              leadListController.callFeedbackSubmit(
+                  leadId: leadId,
+                  currentLeadStage: currentLeadStage,
+                  callStatus: callStatus,
+                  callDuration: callDuration,
+                  callStartTime: callStartTime,
+                  callEndTime: callEndTime,
+                  id: id,
+                  fromWhere: "call"
 
-            );
+              );
               Get.back();
             }
 

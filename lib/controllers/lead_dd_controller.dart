@@ -13,6 +13,7 @@ import '../models/dashboard/GetAllStateModel.dart';
 import '../models/dashboard/GetCityByDistrictIdModel.dart';
 import '../models/dashboard/GetDistrictByStateModel.dart';
 import '../models/dashboard/GetProductListByBank.dart';
+import '../models/leads/GetAllKsdplBranchModel.dart';
 import '../services/drawer_api_service.dart';
 import '../services/home_service.dart';
 
@@ -25,6 +26,7 @@ class LeadDDController extends GetxController{
   var getAllBankModel = Rxn<GetAllBankModel>(); //
   var getAllKsdplProductModel = Rxn<GetAllKsdplProductModel>(); //
   var getProductListByBankModel = Rxn<GetProductListByBankModel>(); //
+  var getAllKsdplBranchModel = Rxn<GetAllKsdplBranchModel>(); //
   var selectedState = Rxn<String>();
   var selectedDistrict = Rxn<String>();
   var selectedCity = Rxn<String>();
@@ -34,6 +36,7 @@ class LeadDDController extends GetxController{
   var currEmpStList=[AppText.employed, AppText.selfEmployed, AppText.unemployed, AppText.retired, AppText.student];
   var getCampaignNameModel = Rxn<GetCampaignNameModel>();
   var selectedCampaign = Rxn<String>();
+  var selectedKsdplBr = Rxn<String>();
 
   @override
   void onInit() {
@@ -43,6 +46,7 @@ class LeadDDController extends GetxController{
     getAllBankApi();
     getAllKsdplProductApi();
     getCampaignNameApi();
+    getAllKsdplBranchApi();
   }
 
   void  getAllStateApi() async {
@@ -238,7 +242,7 @@ class LeadDDController extends GetxController{
 
 
       var data = await DrawerApiService.getProductListByBankIdApi(
-        bankId: bankId
+          bankId: bankId
       );
 
 
@@ -299,6 +303,43 @@ class LeadDDController extends GetxController{
 
     } catch (e) {
       print("Error getCampaignNameModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+  void  getAllKsdplBranchApi() async {
+    try {
+      isLoading(true);
+
+
+      var data = await DrawerApiService.getAllKsdplBranchApi();
+
+
+      if(data['success'] == true){
+
+        getAllKsdplBranchModel.value= GetAllKsdplBranchModel.fromJson(data);
+
+
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAllKsdplBranchModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllKsdplBranchModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);

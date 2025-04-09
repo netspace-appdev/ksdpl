@@ -8,6 +8,7 @@ import '../controllers/bot_nav_controller.dart';
 import '../controllers/lead_dd_controller.dart';
 import '../controllers/leads/addLeadController.dart';
 import '../controllers/leads/leadlist_controller.dart';
+import '../controllers/open_poll_filter_controller.dart';
 import '../home/dashboard_screen.dart';
 import '../home/leads/add_lead_screen.dart';
 import '../home/leads/lead_list_main.dart';
@@ -65,12 +66,13 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
         floatingActionButton: FloatingActionButton(
           backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {
-            LeadDDController leadDDController = Get.put(LeadDDController());
-            LeadListController leadListController = Get.find();
-            leadDDController.selectedState.value="0";
-            leadDDController.selectedDistrict.value="0";
-            leadDDController.selectedCity.value="0";
-            leadListController.leadCode.value="4";
+            OpenPollFilterController openPollFilterController=Get.put(OpenPollFilterController());
+            openPollFilterController.getCommonLeadListByFilterApi(
+              stateId: "0",
+              distId: "0",
+              cityId:  "0",
+              KsdplBranchId: "0",
+            );
             Get.toNamed("/openPollFilter");
           },
           shape: const CircleBorder(),

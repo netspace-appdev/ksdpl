@@ -216,8 +216,8 @@ class LeadListController extends GetxController {
     required callEndTime,
     String? id,
     required fromWhere,
-}){
-    
+  }){
+
 
     String selectedDate = followDateController.text; // MM/DD/YYYY
     String selectedTime = followTimeController.text; // HH:MM AM/PM
@@ -278,13 +278,13 @@ class LeadListController extends GetxController {
       callReminder: formattedDateTime,
       reminderStatus:  isCallReminder.value?"1":"0",
     ).then((_){
-     if(fromWhere=="call"){
-       LeadHistoryController leadHistoryController = Get.find();
-       leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId.toString());
-     }
-     DashboardController dashboardController=Get.find();
-     dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
-     print("only followup");
+      if(fromWhere=="call"){
+        LeadHistoryController leadHistoryController = Get.find();
+        leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId.toString());
+      }
+      DashboardController dashboardController=Get.find();
+      dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
+      print("only followup");
     });
   }
 
@@ -304,9 +304,9 @@ class LeadListController extends GetxController {
       var data = await DrawerApiService.getAllLeadsApi(
         employeeId:employeeId,
         leadStage: leadStage,
-          stateId: stateId,
-          distId: distId,
-          cityId: cityId,
+        stateId: stateId,
+        distId: distId,
+        cityId: cityId,
         campaign: campaign,
       );
 
@@ -478,19 +478,19 @@ class LeadListController extends GetxController {
       var eId=StorageService.get(StorageService.EMPLOYEE_ID);
 
       var data = await DrawerApiService.workOnLeadApi(
-          leadId:leadId,
-          leadStageStatus: leadStageStatus,
-          leadPercent: leadPercent,
-          employeeId: eId.toString(),
-          callEndTime: callEndTime,
-          callStatus: callStatus,
-          callStartTime: callStartTime,
-          feedbackRelatedToLead: feedbackRelatedToLead,
-          callDuration: callDuration,
-          callReminder: callReminder,
-          feedbackRelatedToCall: feedbackRelatedToCall,
-          moveToCommon: moveToCommon,
-          callRecordingPathUrl: callRecordingPathUrl,
+        leadId:leadId,
+        leadStageStatus: leadStageStatus,
+        leadPercent: leadPercent,
+        employeeId: eId.toString(),
+        callEndTime: callEndTime,
+        callStatus: callStatus,
+        callStartTime: callStartTime,
+        feedbackRelatedToLead: feedbackRelatedToLead,
+        callDuration: callDuration,
+        callReminder: callReminder,
+        feedbackRelatedToCall: feedbackRelatedToCall,
+        moveToCommon: moveToCommon,
+        callRecordingPathUrl: callRecordingPathUrl,
         reminderStatus: reminderStatus,
         id: id,
       );
@@ -579,6 +579,7 @@ class LeadListController extends GetxController {
 
 
   Future<void> refreshItems() async {
+
     getAllLeadsApi(
         leadStage: leadCode.value,
         employeeId:eId.toString(),

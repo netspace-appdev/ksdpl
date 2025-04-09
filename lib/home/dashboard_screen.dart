@@ -51,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  /*  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    /*  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       //print("New notification: ${message.notification?.title}");
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -66,106 +66,106 @@ class _DashboardScreenState extends State<DashboardScreen> {
       key: _scaffoldKey,
       backgroundColor: AppColor.backgroundColor,
       drawer:   const CustomDrawer(),
-      body: SingleChildScrollView(
-        child: Column(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await dashboardController.refreshItems();
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
           children: [
-            RefreshIndicator(
+            Stack(
+              children: [
+                // Gradient Background
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppColor.primaryLight, AppColor.primaryDark],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child:Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
 
-                onRefresh: dashboardController.refreshItems,
-              child: Stack(
-                children: [
-                  // Gradient Background
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.7,
+                      header(),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      offerContainer(),
+
+                    ],
+                  ),
+                ),
+
+                // White Container
+                Align(
+                  alignment: Alignment.topCenter,  // Centers it
+                  child: Container(
+                    margin:  const EdgeInsets.only(
+                        top: 280  // 250
+                    ), // <-- Moves it 30px from top
+                    width: double.infinity,
+                    //height: MediaQuery.of(context).size.height,
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                     decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColor.primaryLight, AppColor.primaryDark],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                      color: AppColor.backgroundColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(45),
+                        topRight: Radius.circular(45),
                       ),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child:Column(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                       children: [
+
+                        //customGrid(),
+
+                        birthday(),
+
                         const SizedBox(
                           height: 20,
                         ),
 
-                        header(),
+                        latestNews(),
 
-                        const SizedBox(
+                        const  SizedBox(
                           height: 20,
                         ),
 
-                        offerContainer(),
+                        reminders(),
+
+                        const  SizedBox(
+                          height: 50,//20
+                        ),
+
+
+
+                        /*  curveChart(),
+
+                  const SizedBox(height: 30),
+
+                  circleChart(),
+
+                  const SizedBox(height: 30),*/
+
+
+
 
                       ],
                     ),
                   ),
+                ),
 
-                  // White Container
-                  Align(
-                    alignment: Alignment.topCenter,  // Centers it
-                    child: Container(
-                      margin:  const EdgeInsets.only(
-                          top: 280  // 250
-                      ), // <-- Moves it 30px from top
-                      width: double.infinity,
-                      //height: MediaQuery.of(context).size.height,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                      decoration: const BoxDecoration(
-                        color: AppColor.backgroundColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(45),
-                          topRight: Radius.circular(45),
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min, // Prevents extra spacing
-                        children: [
-
-                          //customGrid(),
-
-                          birthday(),
-
-                          const SizedBox(
-                            height: 20,
-                          ),
-
-                          latestNews(),
-
-                          const  SizedBox(
-                            height: 20,
-                          ),
-
-                          reminders(),
-
-                          const  SizedBox(
-                            height: 50,//20
-                          ),
-
-
-
-                          /*  curveChart(),
-
-                        const SizedBox(height: 30),
-
-                        circleChart(),
-
-                        const SizedBox(height: 30),*/
-
-
-
-
-                        ],
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
+              ],
+            )
           ],
         ),
       ),
@@ -181,9 +181,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             children: [
               InkWell(
-                onTap: (){
-                  _scaffoldKey.currentState?.openDrawer();
-                },
+                  onTap: (){
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
                   child: SvgPicture.asset(AppImage.drawerIcon)),
               const SizedBox(
                 width: 10,
@@ -191,15 +191,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                 Obx(()=>  Text(
-                   greetingController.greetingMsg.value.toString(),
-                   style: const TextStyle(
-                       fontSize: 12,
+                  Obx(()=>  Text(
+                    greetingController.greetingMsg.value.toString(),
+                    style: const TextStyle(
+                        fontSize: 12,
 
-                       color: AppColor.grey3
-                   ),
-                 )),
-                   Text(
+                        color: AppColor.grey3
+                    ),
+                  )),
+                  Text(
                     infoController.firstName.value.toString(),
                     style: const TextStyle(
                         fontSize: 17,
@@ -220,7 +220,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
 
 
-            /*  InkWell(
+              /*  InkWell(
                 onTap:(){
                   Get.toNamed("/notificationScreen");
                 },
@@ -435,34 +435,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
             shrinkWrap: true,
             itemBuilder: (context,index){
               var chunk = leadChunks[index];
-              return InkWell(
-                onTap: (){
-                  botNavController.selectedIndex.value = 1;
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width*0.80,
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
 
-                  decoration: BoxDecoration(
-                    color: index%2==0?AppColor.appWhite:AppColor.secondaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                      ),
-                    ],
-                    /* image: DecorationImage(
-                              image: AssetImage(AppImage.offerImage), // Use your image path
-                              fit: BoxFit.cover, // Cover the entire container
-                              opacity: 0.2, // Adjust transparency if needed
-                            ),*/
+              return Container(
+                width: MediaQuery.of(context).size.width*0.80,
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.symmetric(horizontal: 5),
 
-                  ),
-                  child: customGrid(chunk),
+                decoration: BoxDecoration(
+                  color: index%2==0?AppColor.appWhite:AppColor.secondaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                  /* image: DecorationImage(
+                            image: AssetImage(AppImage.offerImage), // Use your image path
+                            fit: BoxFit.cover, // Cover the entire container
+                            opacity: 0.2, // Adjust transparency if needed
+                          ),*/
+
                 ),
+                child: customGrid(chunk),
               );
 
             }
@@ -487,7 +483,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         itemCount: chunk.length,
         itemBuilder: (context, ind) {
-          //print("chunk==>${chunk[ind].leadCount.toString()}");
+
           return Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -505,14 +501,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Row(
 
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColor.amberVersion, // Light yellow background
-                    borderRadius: BorderRadius.circular(12),
+                InkWell(
+                  onTap: (){
+                    print("chunk==>${ind.toString()}");
+                    botNavController.selectedIndex.value = 1;
+                    LeadListController leadListController=Get.find();
+                    if(ind==0){
+                      leadListController.selectCheckbox(1);
+                      leadListController.filterSubmit();
+                    }else if(ind==2){
+                      leadListController.selectCheckbox(3);
+                      leadListController.filterSubmit();
+                    }else if(ind==3){
+                      leadListController.selectCheckbox(4);
+                      leadListController.filterSubmit();
+                    }else if(ind==4){
+                      leadListController.selectCheckbox(5);
+                      leadListController.filterSubmit();
+                    }else if(ind==5){
+                      leadListController.selectCheckbox(6);
+                      leadListController.filterSubmit();
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColor.amberVersion, // Light yellow background
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    // child: const Icon(Icons.groups, color:  AppColor.secondaryColor, size: 30),
+                    child: Image.asset(AppImage.doc, height: 20),
                   ),
-                  // child: const Icon(Icons.groups, color:  AppColor.secondaryColor, size: 30),
-                  child: Image.asset(AppImage.doc, height: 20),
                 ),
 
                 const SizedBox(width: 10),
@@ -1018,10 +1037,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Padding(
+        Padding(
           padding:  EdgeInsets.symmetric(vertical: 10),
           child: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 AppText.upcomingFollowUp,
@@ -1123,7 +1142,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                        data.leadCustomerName!.isNotEmpty ? data.leadCustomerName![0].toUpperCase() : "U", // Initial Letter
+                                      data.leadCustomerName!.isNotEmpty ? data.leadCustomerName![0].toUpperCase() : "U", // Initial Letter
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
