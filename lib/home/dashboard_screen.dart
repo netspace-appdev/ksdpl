@@ -431,10 +431,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: leadChunks.length,
-            //physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context,index){
               var chunk = leadChunks[index];
+
 
               return Container(
                 width: MediaQuery.of(context).size.width*0.80,
@@ -458,7 +458,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),*/
 
                 ),
-                child: customGrid(chunk),
+                child: customGrid(chunk,index),
               );
 
             }
@@ -468,7 +468,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
 
-  Widget customGrid( List<dynamic> chunk){
+  Widget customGrid( List<dynamic> chunk, int chunkIndex){
     return  SizedBox(
 
       height: 145,
@@ -503,24 +503,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 InkWell(
                   onTap: (){
-                    print("chunk==>${ind.toString()}");
-                    botNavController.selectedIndex.value = 1;
+                    int globalIndex = chunkIndex * 4 + ind;
+
+
                     LeadListController leadListController=Get.find();
-                    if(ind==0){
+                    if(globalIndex==0){
                       leadListController.selectCheckbox(1);
                       leadListController.filterSubmit();
-                    }else if(ind==2){
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==2){
                       leadListController.selectCheckbox(3);
                       leadListController.filterSubmit();
-                    }else if(ind==3){
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==3){
                       leadListController.selectCheckbox(4);
                       leadListController.filterSubmit();
-                    }else if(ind==4){
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==4){
                       leadListController.selectCheckbox(5);
                       leadListController.filterSubmit();
-                    }else if(ind==5){
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==5){
                       leadListController.selectCheckbox(6);
                       leadListController.filterSubmit();
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==11){
+                      leadListController.selectCheckbox(2);
+                      leadListController.filterSubmit();
+                      botNavController.selectedIndex.value = 1;
+                    }else{
+
                     }
                   },
                   child: Container(

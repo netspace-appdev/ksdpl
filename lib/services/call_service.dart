@@ -16,6 +16,7 @@ import '../custom_widgets/CustomLabeledTextField.dart';
 
 ///New code
 class CallService {
+
   StreamSubscription<PhoneState>? phoneStateSubscription;
   String? lastDialedNumber;
   LeadListController leadListController = Get.find();
@@ -34,6 +35,7 @@ class CallService {
     required String callStatus,
     }) showFeedbackDialog,
   }) async {
+
     print("call service ");
     final Uri phoneUri = Uri.parse("tel:$phoneNumber");
 
@@ -150,6 +152,7 @@ class CallService {
 
   void dispose() {
     phoneStateSubscription?.cancel();
+    phoneStateSubscription = null;
   }
 
 }

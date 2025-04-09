@@ -132,7 +132,8 @@ class LeadListMain extends StatelessWidget {
                                   Text(
                                     leadListController.getAllLeadsModel.value == null ||
                                         leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty?"(0)":
-                                    " (${ leadListController.getAllLeadsModel.value!.data!.length.toString()})",
+
+                                    " (${ leadListController.leadListLength.value.toString()})",
                                     style: TextStyle(
                                       fontSize: 20,
                                       // fontWeight: FontWeight.bold,
@@ -305,285 +306,312 @@ class LeadListMain extends StatelessWidget {
         );
       }
 
-      return  ListView.builder(
-        itemCount: leadListController.getAllLeadsModel.value!.data!.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          final lead = leadListController.getAllLeadsModel.value!.data![index];
-
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            decoration:  BoxDecoration(
-              border: Border.all(color: AppColor.grey200),
-              color: AppColor.appWhite,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-
-            ),
-            child: Column(
 
 
-              children: [
-                /// Header with profile and menu icon
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+      return  Column(
+        children: [
+          ListView.builder(
+            itemCount: leadListController.getAllLeadsModel.value!.data!.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+
+              final lead = leadListController.getAllLeadsModel.value!.data![index];
+
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration:  BoxDecoration(
+                  border: Border.all(color: AppColor.grey200),
+                  color: AppColor.appWhite,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+
+                ),
+                child: Column(
+
+
+                  children: [
+                    /// Header with profile and menu icon
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            height: 40,
-                            width: 40,
-
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColor.primaryColor,
-                              border: Border.all(color: AppColor.secondaryColor),
-                            ),
-                            child: Center(
-                              child: Text(
-                                lead.name==null?"N":lead.name!.isNotEmpty ?  lead.name![0].toUpperCase() : "U", // Initial Letter
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
                             children: [
-                              Text(
-                                Helper.capitalizeEachWord(lead.name.toString()),
+                              Container(
+                                height: 40,
+                                width: 40,
 
-                                // lead.name.toString(),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColor.primaryColor,
+                                  border: Border.all(color: AppColor.secondaryColor),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    lead.name==null?"N":lead.name!.isNotEmpty ?  lead.name![0].toUpperCase() : "U", // Initial Letter
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ),
-                              Row(
+                              SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    height: 10,
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                    decoration:  BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(color: AppColor.grey200),
-                                      color: AppColor.grey1,
+                                  Text(
+                                    Helper.capitalizeEachWord(lead.name.toString()),
+
+                                    // lead.name.toString(),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Text(
-                                    lead.mobileNumber.toString(),
-                                    style: TextStyle(
-                                      color: AppColor.grey700,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 10,
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                        decoration:  BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(color: AppColor.grey200),
+                                          color: AppColor.grey1,
+                                        ),
+                                      ),
+                                      Text(
+                                        lead.mobileNumber.toString(),
+                                        style: TextStyle(
+                                          color: AppColor.grey700,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
+
+                          if(leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6" )
+                            _buildTextButton(
+                              label:AppText.openPoll,
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.lock_open,
+                              leadId: lead.id.toString(),
+                              label_code: "open_poll",
+                            ),
+                          //Icon(Icons.more_vert, color: AppColor.grey1,), // Three dots menu icon
                         ],
                       ),
+                    ),
+                    SizedBox(height: 10),
 
-                      if(leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6" )
+                    /// Lead details
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: [
+                          _buildDetailRow("Email", lead.email.toString()),
+                          _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
+                          //_buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
+                          _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  "),
+                          _buildDetailRow("Status", lead.stageName.toString()??""),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+
+                          _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                          _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
+                          _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                          //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
+                          InkWell(
+                            onTap: () {
+                              //Get.toNamed("/leadDetailsMain", arguments: {"leadId":lead.id.toString()});
+                              Get.toNamed("/leadDetailsTab", arguments: {"leadId":lead.id.toString()});
+
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
+                              decoration: BoxDecoration(
+                                color: AppColor.orangeColor, // Button background color
+                                borderRadius: BorderRadius.circular(2), // Rounded corners
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
+                                  SizedBox(width: 5,),
+                                  Text(
+                                    AppText.details,
+                                    style: TextStyle(color: AppColor.appWhite),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    /// Bottom Row Buttons (Assigned, Follow Up, Call Back, Employment)
+                    Row(
+                      mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
+                      children: [
+                        /*if(leadListController.leadCode.value=="2" ||leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6")
                         _buildTextButton(
-                          label:AppText.openPoll,
+                          label:AppText.followup,
                           context: context,
                           color: Colors.purple,
-                          icon:  Icons.lock_open,
+                          icon:  Icons.feedback,
                           leadId: lead.id.toString(),
-                          label_code: "open_poll",
-                        ),
-                      //Icon(Icons.more_vert, color: AppColor.grey1,), // Three dots menu icon
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                /// Lead details
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: [
-                      _buildDetailRow("Email", lead.email.toString()),
-                      _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
-                      //_buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
-                      _buildDetailRow("Campaign","Summer Slaes" /*lead.campaign??"  -  "*/),
-                      _buildDetailRow("Status", lead.stageName.toString()??""),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-
-                      _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
-                      _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
-                      _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
-                      //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
-                      InkWell(
-                        onTap: () {
-                          //Get.toNamed("/leadDetailsMain", arguments: {"leadId":lead.id.toString()});
-                          Get.toNamed("/leadDetailsTab", arguments: {"leadId":lead.id.toString()});
-
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
-                          decoration: BoxDecoration(
-                            color: AppColor.orangeColor, // Button background color
-                            borderRadius: BorderRadius.circular(2), // Rounded corners
+                          label_code: "follow_up",
+                        ),*/
+                        if(leadListController.leadCode.value=="4")...[
+                          _buildTextButton(
+                            label:AppText.doable,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.thumb_up_alt_outlined,
+                            leadId: lead.id.toString(),
+                            label_code: "doable",
                           ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
-                              SizedBox(width: 5,),
-                              Text(
-                                AppText.details,
-                                style: TextStyle(color: AppColor.appWhite),
-                              )
-                            ],
+                          _buildTextButton(
+                            label:AppText.notDoable,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.thumb_down_alt_outlined,
+                            leadId: lead.id.toString(),
+                            label_code: "not_doable",
+                          )
+                        ]
+                        else if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="13")...[
+
+                          _buildTextButton(
+                            label:AppText.interested,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.thumb_up_alt_outlined,
+                            leadId: lead.id.toString(),
+                            label_code: "interested",
                           ),
-                        ),
-                      )
+                          _buildTextButton(
+                            label:AppText.notInterested,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.thumb_down_alt_outlined,
+                            leadId: lead.id.toString(),
+                            label_code: "not_interested",
 
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                /// Bottom Row Buttons (Assigned, Follow Up, Call Back, Employment)
-                Row(
-                  mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
-                  children: [
-                    /*if(leadListController.leadCode.value=="2" ||leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6")
-                    _buildTextButton(
-                      label:AppText.followup,
-                      context: context,
-                      color: Colors.purple,
-                      icon:  Icons.feedback,
-                      leadId: lead.id.toString(),
-                      label_code: "follow_up",
-                    ),*/
-                    if(leadListController.leadCode.value=="4")...[
-                      _buildTextButton(
-                        label:AppText.doable,
-                        context: context,
-                        color: Colors.purple,
-                        icon:  Icons.thumb_up_alt_outlined,
-                        leadId: lead.id.toString(),
-                        label_code: "doable",
-                      ),
-                      _buildTextButton(
-                        label:AppText.notDoable,
-                        context: context,
-                        color: Colors.purple,
-                        icon:  Icons.thumb_down_alt_outlined,
-                        leadId: lead.id.toString(),
-                        label_code: "not_doable",
-                      )
-                    ]
-                    else if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="13")...[
-
-                      _buildTextButton(
-                        label:AppText.interested,
-                        context: context,
-                        color: Colors.purple,
-                        icon:  Icons.thumb_up_alt_outlined,
-                        leadId: lead.id.toString(),
-                        label_code: "interested",
-                      ),
-                      _buildTextButton(
-                        label:AppText.notInterested,
-                        context: context,
-                        color: Colors.purple,
-                        icon:  Icons.thumb_down_alt_outlined,
-                        leadId: lead.id.toString(),
-                        label_code: "not_interested",
-
-                      ),
-                    ]
+                          ),
+                        ]
 
 
 
-                    //_buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,lead.id.toString()),
+                        //_buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,lead.id.toString()),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+
+                    Row(
+                      mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if(leadListController.leadCode.value=="2")...[
+
+                          _buildTextButton(
+                            label:AppText.couldntConneect,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.phone_callback,
+                            leadId: lead.id.toString(),
+                            label_code: "cc",
+                            currentLeadStage: lead.leadStage.toString(),
+                          ),
+                          _buildTextButton(
+                            label:AppText.addFollowUp,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.call,
+                            leadId: lead.id.toString(),
+                            label_code: "add_feedback",
+                            currentLeadStage: lead.leadStage.toString(),
+                          ),
+                        ],
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        if(leadListController.leadCode.value=="4" )
+                          _buildTextButton(
+                            label:AppText.fillLeadForm,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.add_circle_outline_outlined,
+                            leadId: lead.id.toString(),
+                            label_code: "add_lead_form",
+                            currentLeadStage: lead.leadStage.toString(),
+                          ),
+                        if(leadListController.leadCode.value!="2")...[
+                          _buildTextButton(
+                            label:AppText.addFollowUp,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.call,
+                            leadId: lead.id.toString(),
+                            label_code: "add_feedback",
+                            currentLeadStage: lead.leadStage.toString(),
+                          ),
+
+                        ],
+                      ],
+                    ),
+
+
+                    SizedBox(height: 10),
+
+
+
                   ],
                 ),
-                SizedBox(height: 10),
+              );
 
-                Row(
-                  mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if(leadListController.leadCode.value=="2")...[
-
-                      _buildTextButton(
-                        label:AppText.couldntConneect,
-                        context: context,
-                        color: Colors.purple,
-                        icon:  Icons.phone_callback,
-                        leadId: lead.id.toString(),
-                        label_code: "cc",
-                        currentLeadStage: lead.leadStage.toString(),
-                      ),
-                      _buildTextButton(
-                        label:AppText.addFollowUp,
-                        context: context,
-                        color: Colors.purple,
-                        icon:  Icons.call,
-                        leadId: lead.id.toString(),
-                        label_code: "add_feedback",
-                        currentLeadStage: lead.leadStage.toString(),
-                      ),
-                    ],
-                  ],
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    if(leadListController.leadCode.value=="4" )
-                      _buildTextButton(
-                        label:AppText.fillLeadForm,
-                        context: context,
-                        color: Colors.purple,
-                        icon:  Icons.add_circle_outline_outlined,
-                        leadId: lead.id.toString(),
-                        label_code: "add_lead_form",
-                        currentLeadStage: lead.leadStage.toString(),
-                      ),
-                    if(leadListController.leadCode.value!="2")...[
-                      _buildTextButton(
-                        label:AppText.addFollowUp,
-                        context: context,
-                        color: Colors.purple,
-                        icon:  Icons.call,
-                        leadId: lead.id.toString(),
-                        label_code: "add_feedback",
-                        currentLeadStage: lead.leadStage.toString(),
-                      ),
-
-                    ],
-                  ],
-                ),
-
-
-                SizedBox(height: 10),
-
-
-
-              ],
+            },
+          ),
+          if (leadListController.hasMore.value)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: ElevatedButton(
+                onPressed: () {
+                  leadListController.getAllLeadsApi(
+                    employeeId: leadListController.eId.value.toString(),
+                    leadStage:leadListController.leadCode.value.toString(),
+                    stateId: leadListController.stateIdMain.value.toString(),
+                    distId: leadListController.distIdMain.value.toString(),
+                    cityId:leadListController.cityIdMain.value.toString(),
+                    campaign: leadListController.campaignMain.value.toString(),
+                    isLoadMore: true,
+                  );
+                },
+                child: leadListController.isLoading.value
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text("Load More"),
+              ),
             ),
-          );
-
-        },
+        ],
       );
     });
   }
@@ -606,6 +634,22 @@ class LeadListMain extends StatelessWidget {
             ),
           ),
           SizedBox(width: 10),
+          label=="Campaign"?
+              value=="  -  "|| value==""?
+              Text(
+                ":  -  ",
+
+                style: TextStyle(color: Colors.black87),
+              ):
+          Container(
+            color: AppColor.lightPrimary2,
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+            child: Text(
+             "${value}",
+
+              style: TextStyle(color: AppColor.primaryColor),
+            ),
+          ):
           Expanded(
             child: Text(
               label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ": ${value}",
@@ -689,6 +733,7 @@ class LeadListMain extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (label == "Open Poll") {
+          leadListController.openPollPercentController.clear();
           showOpenPollDialog2(context: context,leadId: leadId);
         }else if (label_code == "add_lead_form") {
 

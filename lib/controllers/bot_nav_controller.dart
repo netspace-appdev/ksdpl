@@ -20,8 +20,6 @@ class BotNavController extends GetxController {
     if (selectedIndex.value == index) return; // Prevent unnecessary state updates
 
     selectedIndex.value = index;
-    print("Navigating to index: $index");
-
     if (index == 1) {
       leadListController.fromWhere.value = "bottom_nav";
       leadListController.stateIdMain.value="0";

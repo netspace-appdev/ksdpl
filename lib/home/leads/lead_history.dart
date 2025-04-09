@@ -110,10 +110,7 @@ class LeadHistory extends StatelessWidget {
 
       return ListView.builder(
         itemCount:leadHistoryController.getLeadWorkByLeadIdModel.value!.data!.length,
-        // shrinkWrap: true,
-
         physics: BouncingScrollPhysics(),
-        reverse: true,
         itemBuilder: (context, index) {
           var lead=leadHistoryController.getLeadWorkByLeadIdModel.value!.data![index];
 
@@ -240,132 +237,6 @@ class LeadHistory extends StatelessWidget {
         ],
       ),
     );
-  }
-
-
-
-  Widget leadSection(BuildContext context){
-    return Obx((){
-      if (leadHistoryController.isLoading.value) {
-        return  Center(child: CustomSkelton.productShimmerList(context));
-      }
-      if (leadHistoryController.getLeadWorkByLeadIdModel.value == null ||
-          leadHistoryController.getLeadWorkByLeadIdModel.value!.data == null || leadHistoryController.getLeadWorkByLeadIdModel.value!.data=="") {
-        return  Container(
-          height: MediaQuery.of(context).size.height*0.50,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          margin: EdgeInsets.symmetric(vertical: 10),
-          decoration:  BoxDecoration(
-            border: Border.all(color: AppColor.grey200),
-            color: AppColor.appWhite,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-
-          ),
-          child: const Column(
-
-            children: [
-              /// Header with profile and menu icon
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "No data found",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.grey700
-                  ),
-                ),
-              ),
-
-            ],
-          ),
-        );
-      }
-
-      return ListView.builder(
-        itemCount:leadHistoryController.getLeadWorkByLeadIdModel.value!.data!.length,
-       // shrinkWrap: true,
-
-        physics: BouncingScrollPhysics(),
-        reverse: true,
-        itemBuilder: (context, index) {
-          var lead=leadHistoryController.getLeadWorkByLeadIdModel.value!.data![index];
-
-          return CustomCard(
-            borderColor: AppColor.grey200,
-            backgroundColor: AppColor.appWhite,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.star_border_outlined),
-                        Icon(Icons.list_alt_rounded),
-                        if(lead.callStatus.toString()=="0")
-                        Icon(Icons.published_with_changes_rounded),
-                        if(lead.callStatus.toString()=="1")
-                        Icon(Icons.call),
-                      ],
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(Helper.formatTimeAgo(lead.workDate.toString()),
-                          style: TextStyle(
-                              fontSize: 14,color: AppColor.grey700)),
-                    ),
-                  ],
-                ),
-               // if(lead.callStatus.toString()=="1")
-                  Column(
-                    children: [
-                      Helper.customDivider(color: AppColor.grey200),
-                      DetailRow(label: "Call Duration", value:lead.callDuration.toString()=="null"?"-": lead.callDuration.toString()),
-                      DetailRow(label: "Call Start Time", value: lead.callStartTime.toString()=="null"?"-": lead.callStartTime.toString() ),
-                      DetailRow(label: "Call End Time", value: lead.callEndTime.toString()=="null"?"-": lead.callEndTime.toString()),
-                      DetailRow(label: "Call Reminder", value: lead.callReminder.toString()=="null"?AppText.noReminder: Helper.convertDateTime(lead.callReminder.toString())),
-                      DetailRow(label: "Call Feedback", value: lead.feedBackRelatedToCall.toString()=="null"?"-":lead.feedBackRelatedToCall.toString() ),
-                      DetailRow(label: "Lead Feedback", value: lead.feedBackRelatedToLead.toString()=="null"?"-":lead.feedBackRelatedToLead.toString() ),
-                    ],
-                  ),
-                Helper.customDivider(color: AppColor.grey200),
-
-                DetailRow(label: "Lead Status", value: lead.previousStageName.toString(), value2: lead.stageName.toString(),),
-
-                SizedBox(height: 10),
-
-                _buildTextButton(
-                  label:AppText.addFAndF,
-                  context: context,
-                  color: Colors.purple,
-                  icon:  Icons.add_call,
-                  leadId: lead.leadId.toString(),
-                  label_code: "add_feedback",
-                  currentLeadStage: lead.stageName.toString(),
-                  callStatus:  lead.callStatus.toString(),
-                  callDuration:  lead.callDuration.toString(),
-                  callStartTime:  lead.callStartTime.toString(),
-                  callEndTime:  lead.callEndTime.toString(),
-                  id:  lead.id.toString(),
-                  currentLeadStageId: lead.leadStageStatus.toString(),
-                )
-
-              ],
-            ),
-          );
-
-        },
-      );
-
-
-
-    });
-
   }
 
 

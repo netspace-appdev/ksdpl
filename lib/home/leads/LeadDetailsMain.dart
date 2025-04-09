@@ -226,6 +226,7 @@ class LeadDetailsMain extends StatelessWidget {
                 DetailRow(label: "Campaign", value: data.campaign.toString()=="null"?AppText.customdash:data.campaign.toString()),
                 DetailRow(label: "Employee Name", value: data.employeeName.toString()=="null"?AppText.customdash:data.employeeName.toString()),
                 DetailRow(label: "Pickup Employee Name", value: data.pickedUpEmployeeName.toString()=="null"?AppText.customdash:data.pickedUpEmployeeName.toString()),
+                DetailRow(label: "Moved to Open Poll", value: data.moveToCommon.toString()=="null"?AppText.customdash:data.moveToCommon.toString()),
               ],
             ),
           ),

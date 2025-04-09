@@ -50,7 +50,7 @@ class OpenPollFilterController extends GetxController{
   }
 
 
-  void  getAllLeadsApi({
+/*  void  getAllLeadsApi({
     required String employeeId,
     required String leadStage,
     required stateId,
@@ -97,7 +97,7 @@ class OpenPollFilterController extends GetxController{
 
       isLoading(false);
     }
-  }
+  }*/
 
 
 

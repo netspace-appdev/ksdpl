@@ -317,6 +317,7 @@ class AppColor{
   static const Color blackLight=Color(0xFF3D3D3D);
   static const Color lightGreen=Color(0xFF00B383);
   static const Color lightBrown=Color(0xFF704F38);
+  static const Color lightPrimary2=Color(0xFFDEE5FD);
   static const Color greenColor= Colors.green;
 
 

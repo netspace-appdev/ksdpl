@@ -559,7 +559,8 @@ class AddLeadScreen extends StatelessWidget {
                                           controller: addleadcontroller.connMobController ,
                                           inputType: TextInputType.number,
                                           hintText: AppText.enterConMob,
-
+                                          validator: ValidationHelper.validatePhoneNumber,
+                                          maxLength: 10,
                                         ),
 
                                         CustomLabeledTextField(

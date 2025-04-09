@@ -326,6 +326,7 @@ class DrawerApiService {
     }
   }
 
+/*
   static Future<Map<String, dynamic>> getAllLeadsApi({
     required leadStage,
     required employeeId,
@@ -333,6 +334,8 @@ class DrawerApiService {
     required distId,
     required cityId,
     required campaign,
+
+
   }) async {
     print("request===>  getAllLeadsApi in leadlist==>${getAllLeads.toString()}");
     try {
@@ -369,6 +372,46 @@ class DrawerApiService {
           //throw Exception('Invalid API response');
           return jsonResponse;
         }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+*/
+  static Future<Map<String, dynamic>> getAllLeadsApi({
+    required leadStage,
+    required employeeId,
+    required stateId,
+    required distId,
+    required cityId,
+    required campaign,
+    required int pageNumber,
+    required int pageSize,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse("$getAllLeads?pageNumber=$pageNumber&pageSize=$pageSize"),
+      );
+
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      request.fields['LeadStage'] = leadStage.toString();
+      request.fields['AssignedEmployeeId'] = employeeId.toString();
+      request.fields['StateId'] = stateId;
+      request.fields['DistrictId'] = distId;
+      request.fields['CityId'] = cityId;
+      request.fields['Campaign'] = campaign;
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        return jsonResponse;
       } else {
         throw Exception('Failed to load data: ${response.statusCode}');
       }

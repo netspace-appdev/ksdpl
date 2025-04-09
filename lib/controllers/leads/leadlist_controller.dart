@@ -60,6 +60,10 @@ class LeadListController extends GetxController {
   GetEmployeeModel? getEmployeeModel;
   var isCallReminder=false.obs;
 
+  RxInt currentPage = 1.obs;
+  final int pageSize = 20;
+  RxBool hasMore = true.obs;
+  RxInt leadListLength = 0.obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -289,15 +293,18 @@ class LeadListController extends GetxController {
   }
 
 
-  void  getAllLeadsApi({
+/*  void  getAllLeadsApi({
     required String employeeId,
     required String leadStage,
     required stateId,
     required distId,
     required cityId,
     required campaign,
+
   }) async {
     try {
+      if (isLoading.value || !hasMore.value) return;
+
       isLoading(true);
 
 
@@ -339,7 +346,71 @@ class LeadListController extends GetxController {
 
       isLoading(false);
     }
+  }*/
+
+  void getAllLeadsApi({
+    required String employeeId,
+    required String leadStage,
+    required stateId,
+    required distId,
+    required cityId,
+    required campaign,
+    bool isLoadMore = false,
+  }) async {
+    try {
+      if (isLoading.value || (!hasMore.value && isLoadMore)) return;
+
+      isLoading(true);
+
+      if (!isLoadMore) {
+        currentPage.value = 1; // Reset to first page on fresh load
+        hasMore.value = true;
+      }
+
+      var data = await DrawerApiService.getAllLeadsApi(
+        employeeId: employeeId,
+        leadStage: leadStage,
+        stateId: stateId,
+        distId: distId,
+        cityId: cityId,
+        campaign: campaign,
+        pageNumber: currentPage.value,
+        pageSize: pageSize,
+      );
+
+      if (data['success'] == true) {
+        var newLeads = GetAllLeadsModel.fromJson(data);
+
+        if (isLoadMore) {
+          getAllLeadsModel.value!.data!.addAll(newLeads.data!);
+        } else {
+          getAllLeadsModel.value = newLeads;
+        }
+
+        leadStageName2.value = leadStageName.value;
+
+        // If less data returned than requested pageSize, mark as no more
+        if (newLeads.data!.length < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++; // Ready for next page
+        }
+        leadListLength.value=getAllLeadsModel.value!.data!.length;
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        leadStageName2.value = leadStageName.value;
+        getAllLeadsModel.value = null;
+        hasMore.value = false;
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getAllLeadsApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
   }
+
 
 
 
