@@ -12,6 +12,7 @@ import '../controllers/open_poll_filter_controller.dart';
 import '../home/dashboard_screen.dart';
 import '../home/leads/add_lead_screen.dart';
 import '../home/leads/lead_list_main.dart';
+import '../home/leads/open_poll_filter.dart';
 import '../home/more_screen.dart';
 
 class BottomNavBarExample extends StatefulWidget {
@@ -26,7 +27,8 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   final List<Widget> _pages = [
     DashboardScreen(),
     LeadListMain(),
-    AddLeadScreen(),
+    //AddLeadScreen(),
+    OpenPollFilter(),
     MoreSettingScreen()
   ];
 
@@ -55,9 +57,9 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
                 _buildNavItem(Icons.more_horiz, "More", 3),*/
 
                 _buildNavItem(AppImage.homeIcon, AppImage.homeYellow,"Home", 0),
-                _buildNavItem(AppImage.personIcon, AppImage.personYellow, "Leads", 1),
+                _buildNavItem(AppImage.lead_white, AppImage.lead_yellow, "Leads", 1),
                 const SizedBox(width: 50), // Space for FAB
-                _buildNavItem(AppImage.addIcon, AppImage.addIconYellow, "Add Lead", 2),
+                _buildNavItem(AppImage.poll_white, AppImage.poll_yellow, "Open Poll", 2),
                 _buildNavItem(AppImage.homeIcon, AppImage.homeIcon, "More", 3),
               ],
             ),
@@ -66,14 +68,14 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
         floatingActionButton: FloatingActionButton(
           backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {
-            OpenPollFilterController openPollFilterController=Get.put(OpenPollFilterController());
+           /* OpenPollFilterController openPollFilterController=Get.put(OpenPollFilterController());
             openPollFilterController.getCommonLeadListByFilterApi(
               stateId: "0",
               distId: "0",
               cityId:  "0",
               KsdplBranchId: "0",
-            );
-            Get.toNamed("/openPollFilter");
+            );*/
+            Get.toNamed("/leadSearchScreen");
           },
           shape: const CircleBorder(),
           // child: const Icon(Icons.add, size: 30, color: Colors.white),

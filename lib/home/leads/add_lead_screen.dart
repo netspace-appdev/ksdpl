@@ -231,8 +231,8 @@ class AddLeadScreen extends StatelessWidget {
 
 
                               Obx((){
-                                if (leadDDController.isLoading.value) {
-                                  return  Center(child:CustomSkelton.productShimmerList(context));
+                                if (leadDDController.isStateLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
                                 }
 
                                 return CustomDropdown<Data>(
@@ -264,8 +264,8 @@ class AddLeadScreen extends StatelessWidget {
 
 
                               Obx((){
-                                if (leadDDController.isLoading.value) {
-                                  return  Center(child:CustomSkelton.productShimmerList(context));
+                                if (leadDDController.isDistrictLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
                                 }
 
 
@@ -299,8 +299,8 @@ class AddLeadScreen extends StatelessWidget {
 
 
                               Obx((){
-                                if (leadDDController.isLoading.value) {
-                                  return  Center(child:CustomSkelton.productShimmerList(context));
+                                if (leadDDController.isCityLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
                                 }
 
 
@@ -409,8 +409,8 @@ class AddLeadScreen extends StatelessWidget {
 
 
                               Obx((){
-                                if (leadDDController.isLoading.value) {
-                                  return  Center(child:CustomSkelton.productShimmerList(context));
+                                if (leadDDController.isBankLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
                                 }
 
 
@@ -509,8 +509,8 @@ class AddLeadScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Obx((){
-                                if (leadDDController.isLoading.value) {
-                                  return  Center(child:CustomSkelton.productShimmerList(context));
+                                if (leadDDController.isProductLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
                                 }
 
 

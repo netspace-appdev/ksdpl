@@ -280,7 +280,7 @@ class LeadDetailsMain extends StatelessWidget {
           SizedBox(height: 16),
 
           // Lead Details Description
-          const CustomCard(
+         /* const CustomCard(
             borderColor: AppColor.grey200,
             backgroundColor: AppColor.appWhite,
             child:  Column(
@@ -296,7 +296,7 @@ class LeadDetailsMain extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          ),*/
 
           SizedBox(height: 20),
         ],
@@ -320,7 +320,7 @@ class LeadDetailsMain extends StatelessWidget {
           //leadListController.makePhoneCall(phoneNumber);
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:"+919399299880",//phoneNumber,
+            phoneNumber:phoneNumber,
             leadId: leadId,
             currentLeadStage: leadStage,//newLeadStage,
             context: context,
@@ -519,7 +519,8 @@ class DetailRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+
         children: [
           Container(
 
@@ -527,8 +528,16 @@ class DetailRow extends StatelessWidget {
             child: Text("$label",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor)),
           ),
+          Text(":", style: TextStyle(fontSize: 14),),
           Expanded(
-              child: value==AppText.customdash?Row(children: [Text(":  ", style: TextStyle(fontSize: 14), maxLines: 1),Icon(Icons.horizontal_rule, size: 15,),],):Text(": "+value, style: TextStyle(fontSize: 14), maxLines: 1)),
+              child: value==AppText.customdash?
+              Row(
+
+
+                children: [
+                  Icon(Icons.horizontal_rule, size: 15,),
+                ],):
+              Text(" "+value, style: TextStyle(fontSize: 14), maxLines: 2)),
         ],
       ),
     );

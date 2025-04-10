@@ -1244,7 +1244,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+/*  Widget _buildDetailRow(String label, String value) {
 
     return Container(
 
@@ -1272,7 +1272,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
     );
+  }*/
+  Widget _buildDetailRow(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColor.primaryLight,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black54,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
   }
+
 
   void showCallFeedbackDialog({
     required BuildContext context,

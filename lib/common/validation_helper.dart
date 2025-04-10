@@ -23,6 +23,14 @@ class ValidationHelper {
     return null; // Name is valid
   }
 
+  static String? validateFromDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    return null; // Name is valid
+  }
+
   static String? validateLoanAmt(String? value) {
     if (value == null || value.isEmpty) {
       return "Loan Amount is required";

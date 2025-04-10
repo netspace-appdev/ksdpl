@@ -165,6 +165,33 @@ class CustomSkelton{
     );
   }
 
+
+  static leadShimmerList(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: ListView.builder(
+        itemCount: 1, // Number of shimmer placeholders
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                height: 100.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+            ),
+          );
+
+        },
+      ),
+    );
+  }
+
   static dashboardShimmerList(BuildContext context) {
     return SizedBox(
       height: 160.0, // Adjusted height to match the shimmer container

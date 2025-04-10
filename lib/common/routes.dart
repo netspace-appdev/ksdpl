@@ -1,5 +1,6 @@
 
 import 'package:get/get.dart';
+import 'package:ksdpl/home/leads/lead_search_screen.dart';
 
 
 
@@ -57,4 +58,5 @@ final routes = [
   GetPage(name: '/leadHistory', page: () => LeadHistory()),
   GetPage(name: '/dashboardScreen', page: () => DashboardScreen()),
   GetPage(name: '/getAllReminder', page: () => GetAllReminderScreen()),
+  GetPage(name: '/leadSearchScreen', page: () => LeadSearchScreen()),
 ];

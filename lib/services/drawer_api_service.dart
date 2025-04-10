@@ -389,6 +389,8 @@ class DrawerApiService {
     required campaign,
     required int pageNumber,
     required int pageSize,
+    required fromDate,
+    required toDate,
   }) async {
     try {
       var request = http.MultipartRequest(
@@ -405,6 +407,8 @@ class DrawerApiService {
       request.fields['DistrictId'] = distId;
       request.fields['CityId'] = cityId;
       request.fields['Campaign'] = campaign;
+      request.fields['FromDate'] = fromDate;
+      request.fields['ToDate'] = toDate;
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
@@ -726,10 +730,7 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>  getAllKsdplProductApi==>${getAllKsdplProductList.toString()}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

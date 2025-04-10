@@ -102,7 +102,7 @@ class CustomLabeledPickerTextField extends StatelessWidget {
     );
 
     if (pickedDate != null) {
-      controller.text = "${pickedDate.month}-${pickedDate.day}-${pickedDate.year}"; // ✅ Format Date
+      controller.text = "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}"; // ✅ Format Date
     }
   }
 }

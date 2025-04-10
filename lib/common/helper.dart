@@ -235,7 +235,7 @@ class AppText{
   static const String couldNotCall = "Could not make a call";
   static const String couldNotWA = "Could not open WhatsApp";
   static const String couldNotMsg = "Could not open Messages";
-  static const String openPollFilter = "Open Poll Filter";
+  static const String openPollFilter = "Open Poll";
   static const String openPollLeads = "Open Poll Leads";
   static const String followup = "Follow Up";
   static const String history = "History";
@@ -275,6 +275,11 @@ class AppText{
   static const String enterNoOfExistingLoans = "Enter No. of Existing Loans";
   static const String couldntConneect = "Couldn't connect";
   static const String ksdplBr = "KDSPL Branch";
+  static const String searchLeads = "Search Leads";
+  static const String fromDate = "From Date";
+  static const String toDate = "To Date";
+  static const String ddmmyyyy = "dd/mm/yyyy";
+  static const String searchedLeads = "Searched Leads";
 }
 
 class AppColor{
@@ -374,6 +379,10 @@ class AppImage{
   static const String down_arrow="assets/images/down_arrow.png";
   static const String news="assets/images/news.jpg";
   static const String noImage="assets/images/no_image2.png";
+  static const String poll_white="assets/images/poll_yellow.png";
+  static const String poll_yellow="assets/images/poll_white.png";
+  static const String lead_white="assets/images/lead_white.png";
+  static const String lead_yellow="assets/images/lead_yellow.png";
 
 }
 

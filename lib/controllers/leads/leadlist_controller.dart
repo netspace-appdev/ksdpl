@@ -45,6 +45,8 @@ class LeadListController extends GetxController {
   var distIdMain="0".obs;
   var cityIdMain="0".obs;
   var campaignMain="".obs;
+  var fromDateMain="".obs;
+  var toDateMain="".obs;
 
   var selectedIndex = (1).obs;
   var leadId = RxnString();
@@ -207,7 +209,9 @@ class LeadListController extends GetxController {
         stateId:stateIdMain.value,
         distId: distIdMain.value,
         cityId: cityIdMain.value,
-        campaign: campaignMain.value
+        campaign: campaignMain.value,
+        fromDate: fromDateMain.value,
+        toDate: toDateMain.value,
     );
   }
 
@@ -359,6 +363,8 @@ class LeadListController extends GetxController {
     required distId,
     required cityId,
     required campaign,
+    required fromDate,
+    required toDate,
     bool isLoadMore = false,
   }) async {
     try {
@@ -380,6 +386,8 @@ class LeadListController extends GetxController {
         campaign: campaign,
         pageNumber: currentPage.value,
         pageSize: pageSize,
+        fromDate: fromDate,
+        toDate: toDate,
       );
 
       if (data['success'] == true) {
@@ -467,7 +475,9 @@ class LeadListController extends GetxController {
           stateId:stateIdMain.value,
           distId: distIdMain.value,
           cityId: cityIdMain.value,
-          campaign: campaignMain.value
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
       );
 
       isLoading(false);
@@ -522,7 +532,9 @@ class LeadListController extends GetxController {
           stateId:stateIdMain.value,
           distId: distIdMain.value,
           cityId: cityIdMain.value,
-          campaign: campaignMain.value
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
       );
 
       isLoading(false);
@@ -599,7 +611,9 @@ class LeadListController extends GetxController {
           stateId:stateIdMain.value,
           distId: distIdMain.value,
           cityId: cityIdMain.value,
-          campaign: campaignMain.value
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
       );
 
       isLoading(false);
@@ -633,7 +647,9 @@ class LeadListController extends GetxController {
             stateId:stateIdMain.value,
             distId: distIdMain.value,
             cityId: cityIdMain.value,
-            campaign: campaignMain.value
+            campaign: campaignMain.value,
+            fromDate: fromDateMain.value,
+            toDate: toDateMain.value,
         );
 
       }else{
@@ -661,7 +677,9 @@ class LeadListController extends GetxController {
         stateId:stateIdMain.value,
         distId: distIdMain.value,
         cityId: cityIdMain.value,
-        campaign: campaignMain.value
+        campaign: campaignMain.value,
+        fromDate: fromDateMain.value,
+        toDate: toDateMain.value,
     );
   }
 

@@ -24,22 +24,24 @@ import '../../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../../custom_widgets/CustomLabeledTextField.dart';
 import '../../common/storage_service.dart';
 import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/leads/seachLeadController.dart';
+import '../../controllers/leads/seachLeadController.dart';
+import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/open_poll_filter_controller.dart';
-import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 import '../custom_drawer.dart';
 
 
 
-class OpenPollFilter extends StatelessWidget {
+class LeadSearchScreen extends StatelessWidget {
 
   LeadDDController leadDDController = Get.put(LeadDDController());
 
   final _formKey = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
   LeadListController leadListController = Get.find();
-  OpenPollFilterController openPollFilterController = Get.put(OpenPollFilterController());
+  SearchLeadController searchLeadController=Get.put(SearchLeadController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -107,8 +109,8 @@ class OpenPollFilter extends StatelessWidget {
                               height: 10,
                             ),
 
-                           /* ExpansionTile(
-                              initiallyExpanded: false,
+                            ExpansionTile(
+                              initiallyExpanded: true,
 
                               childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                               title:const Text("Filter", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -223,6 +225,8 @@ class OpenPollFilter extends StatelessWidget {
                                     }),
 
 
+                                    const SizedBox(height: 20),
+
                                     const Text(
                                       AppText.ksdplBr,
                                       style: TextStyle(
@@ -233,6 +237,27 @@ class OpenPollFilter extends StatelessWidget {
                                     ),
 
                                     const SizedBox(height: 10),
+
+                                    /* Obx((){
+                                      if (leadDDController.isLoading.value) {
+                                        return  Center(child:CustomSkelton.productShimmerList(context));
+                                      }
+
+
+                                      return CustomDropdown<String>(
+                                        items: leadDDController.getCampaignNameModel.value!.data!,
+                                        getId: (item) => item,  // Adjust based on your model structure
+                                        getName: (item) => item,
+                                        selectedValue: leadDDController.selectedCampaign.value,
+                                        onChanged: (value) {
+                                          leadDDController.selectedCampaign.value =  value;
+                                        },
+                                      );
+                                    }),
+*/
+
+
+
                                     Obx((){
                                       if (leadDDController.isLoading.value) {
                                         return  Center(child:CustomSkelton.productShimmerList(context));
@@ -254,6 +279,54 @@ class OpenPollFilter extends StatelessWidget {
 
                                     const SizedBox(height: 20),
 
+                                    const Text(
+                                      AppText.campaign,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.grey2,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 10),
+                                     Obx((){
+                                      if (leadDDController.isLoading.value) {
+                                        return  Center(child:CustomSkelton.productShimmerList(context));
+                                      }
+
+
+                                      return CustomDropdown<String>(
+                                        items: leadDDController.getCampaignNameModel.value!.data!,
+                                        getId: (item) => item,  // Adjust based on your model structure
+                                        getName: (item) => item,
+                                        selectedValue: leadDDController.selectedCampaign.value,
+                                        onChanged: (value) {
+                                          leadDDController.selectedCampaign.value =  value;
+                                        },
+                                      );
+                                    }),
+
+                                    const SizedBox(height: 10),
+
+                                    CustomLabeledPickerTextField(
+                                      label: AppText.fromDate,
+                                      isRequired: false,
+                                      controller: addleadcontroller.dobController,
+                                      inputType: TextInputType.name,
+                                      hintText: AppText.ddmmyyyy,
+                                      validator: ValidationHelper.validateFromDate,
+                                      isDateField: true,
+                                    ),
+
+                                    CustomLabeledPickerTextField(
+                                      label: AppText.toDate,
+                                      isRequired: false,
+                                      controller: addleadcontroller.dobController,
+                                      inputType: TextInputType.name,
+                                      hintText: AppText.ddmmyyyy,
+                                      validator: ValidationHelper.validateFromDate,
+                                      isDateField: true,
+                                    ),
 
                                     Obx((){
                                       if(addleadcontroller.isLoading.value){
@@ -278,7 +351,7 @@ class OpenPollFilter extends StatelessWidget {
                                               borderRadius: BorderRadius.circular(10),
                                             ),
                                           ),
-                                          onPressed: onPressed,
+                                          onPressed: (){},
                                           child: const Text(
                                             AppText.submit,
                                             style: TextStyle(
@@ -298,34 +371,18 @@ class OpenPollFilter extends StatelessWidget {
                                 ),
 
                               ],
-                            ),*/
+                            ),
 
 
 
                             const SizedBox(height: 20),
 
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  AppText.openPollLeads,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: (){
-
-                                    openPollFilterController.clearFilter();
-
-                                  },
-                                  child: Text(
-                                    "Clear Filter",
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              AppText.searchedLeads,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const SizedBox(height: 20),
                             leadSection(context)
@@ -353,7 +410,7 @@ class OpenPollFilter extends StatelessWidget {
         children: [
 
 
-         /* InkWell(
+          /* InkWell(
               onTap: (){
                 Get.back();
               },
@@ -366,7 +423,7 @@ class OpenPollFilter extends StatelessWidget {
 
 
           const Text(
-            AppText.openPollFilter,
+            AppText.searchLeads,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
@@ -378,24 +435,20 @@ class OpenPollFilter extends StatelessWidget {
 
           InkWell(
             onTap: (){
-               leadDDController.selectedState.value="0";
-               leadDDController.selectedDistrict.value="0";
-               leadDDController.selectedCity.value="0";
-               leadDDController.selectedKsdplBr.value="0";
-              showFilterDialog(context: context,leadId: "0");
+
             },
             child: Container(
 
               width: 40,
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              decoration:  BoxDecoration(
-                color: AppColor.appWhite.withOpacity(0.15),
+              decoration:  const BoxDecoration(
+                color: Colors.transparent,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
-              child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
+
             ),
           )
 
@@ -427,18 +480,17 @@ class OpenPollFilter extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
 
 
-      openPollFilterController.pollFilterSubmit();
+      searchLeadController.pollFilterSubmit();
     }
-    Get.back();
   }
 
   Widget leadSection(BuildContext context){
     return Obx((){
-      if (openPollFilterController.isLoading.value) {
+      if (searchLeadController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-      if (openPollFilterController.getCommonLeadListFModel.value == null ||
-          openPollFilterController.getCommonLeadListFModel.value!.data == null || openPollFilterController.getCommonLeadListFModel.value!.data!.isEmpty) {
+      if (searchLeadController.getCommonLeadListFModel.value == null ||
+          searchLeadController.getCommonLeadListFModel.value!.data == null || searchLeadController.getCommonLeadListFModel.value!.data!.isEmpty) {
         return  Container(
           height: MediaQuery.of(context).size.height*0.50,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -473,11 +525,11 @@ class OpenPollFilter extends StatelessWidget {
       }
 
       return  ListView.builder(
-        itemCount: openPollFilterController.getCommonLeadListFModel.value!.data!.length,
+        itemCount: searchLeadController.getCommonLeadListFModel.value!.data!.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          final lead = openPollFilterController.getCommonLeadListFModel.value!.data![index];
+          final lead = searchLeadController.getCommonLeadListFModel.value!.data![index];
 
 
 
@@ -665,19 +717,19 @@ class OpenPollFilter extends StatelessWidget {
                 title: "Are you sure?",
 
                 onYes: () {
-                  var eId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-                  openPollFilterController.pickupLeadFromCommonTasksApi(
+                /*  var eId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+                  searchLeadController.pickupLeadFromCommonTasksApi(
                       employeeId: eId,
                       leadId: leadId
                   ).then((_){
-                    openPollFilterController. getCommonLeadListByFilterApi(
+                    searchLeadController. getCommonLeadListByFilterApi(
                       stateId: leadDDController.selectedState.value??"0",
                       distId: leadDDController.selectedDistrict.value??"0",
                       cityId:  leadDDController.selectedCity.value??"0",
                       KsdplBranchId: leadDDController.selectedKsdplBr.value??"0",
                     );
                   });
-
+*/
 
                 },
                 onNo: () {
@@ -688,8 +740,7 @@ class OpenPollFilter extends StatelessWidget {
           );
 
         }else if (label == "Details") {
-          //Get.toNamed("/leadDetailsMain", arguments: {"leadId":leadId.toString()});
-          Get.toNamed("/leadDetailsTab", arguments: {"leadId":leadId.toString()});
+          Get.toNamed("/leadDetailsMain", arguments: {"leadId":leadId.toString()});
         }else{
 
         }
@@ -1014,169 +1065,104 @@ class OpenPollFilter extends StatelessWidget {
   }
 
 
-
   void showFilterDialog({
     required BuildContext context,
-    required leadId,
   }) {
+    List<String> options = ["Fresh Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+    //String? selectedOption = options[0]; // Default selection
 
-    // List<String> options = ["Fresh Leads","Working Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
-    List<String> options = ["All Leads","Fresh Leads","Could Not Connect", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-
-          title: "Filter",
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              const SizedBox(
-                height: 10,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-
-              const Text(
-                AppText.state,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.grey2,
-                ),
-              ),
-
-              SizedBox(height: 10),
-
-
-              Obx((){
-                if (leadDDController.isStateLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
-
-                return CustomDropdown<Data>(
-                  items: leadDDController.getAllStateModel.value?.data ?? [],
-                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.stateName.toString(),
-                  selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedState.value,
-                  ),
-                  onChanged: (value) {
-                    leadDDController.selectedState.value =  value?.id?.toString();
-                    leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
-                  },
-                );
-              }),
-
-              const SizedBox(height: 20),
-
-              const Text(
-                AppText.district,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.grey2,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-
-              Obx((){
-                if (leadDDController.isDistrictLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
-
-
-                return CustomDropdown<dist.Data>(
-                  items: leadDDController.getDistrictByStateModel.value?.data ?? [],
-                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.districtName.toString(),
-                  selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedDistrict.value,
-                  ),
-                  onChanged: (value) {
-                    leadDDController.selectedDistrict.value =  value?.id?.toString();
-                    leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
-                  },
-                );
-              }),
-
-                  const SizedBox(height: 20),
-
-
-                const Text(
-                  AppText.city,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.grey2,
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-
-                Obx((){
-                  if (leadDDController.isCityLoading.value) {
-                    return  Center(child:CustomSkelton.leadShimmerList(context));
-                  }
-
-
-                  return CustomDropdown<city.Data>(
-                    items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
-                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                    getName: (item) => item.cityName.toString(),
-                    selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
-                          (item) => item.id.toString() == leadDDController.selectedCity.value,
+              child: Container(
+                width: double.infinity, // Makes it full width
+                padding: EdgeInsets.zero,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 🔵 Title in Blue Strip
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
+                        color:AppColor.primaryColor, // Title background color
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                        gradient: LinearGradient(
+                          colors: [AppColor.primaryLight, AppColor.primaryDark],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                      child: const Text(
+                        "Filter",
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white, // Title text color
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    onChanged: (value) {
-                      leadDDController.selectedCity.value =  value?.id?.toString();
-                    },
-                  );
-                }),
 
+                    // 📝 Content (Radio Buttons)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      child:  Obx(()=>Column(
+                        children: options.asMap().entries.map((entry) {
+                          int index = entry.key;
+                          String option = entry.value;
 
-              const SizedBox(height: 20),
+                          return CheckboxListTile(
+                            activeColor: AppColor.secondaryColor,
 
+                            title: Text(option),
+                            value: leadListController.selectedIndex.value == index,
+                            onChanged: (value) => leadListController.selectCheckbox(index),
+                          );
+                        }).toList(),
+                      )),
+                    ),
 
-              const Text(
-                AppText.ksdplBr,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.grey2,
+                    // 🟠 Buttons (Close & Submit)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              Navigator.pop(context); // Close dialog
+                            },
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColor.grey1,
+                              side: BorderSide(color: AppColor.grey2),
+                            ),
+                            child: Text("Close", style: TextStyle(color: AppColor.grey2)),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              leadListController.filterSubmit();
+                              Navigator.pop(context); // Close dialog after submission
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColor.orangeColor,
+                            ),
+                            child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-
-              const SizedBox(height: 10),
-              Obx((){
-                if (leadDDController.isKSDPLBrLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
-
-
-                return CustomDropdown<ksdplBranch.Data>(
-                  items: leadDDController.getAllKsdplBranchModel.value?.data ?? [],
-                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.branchName.toString(),
-                  selectedValue: leadDDController.getAllKsdplBranchModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedKsdplBr.value,
-                  ),
-                  onChanged: (value) {
-                    leadDDController.selectedKsdplBr.value =  value?.id?.toString();
-                  },
-                );
-              }),
-
-              const SizedBox(height: 20),
-
-
-            ],
-          ),
-
-          onSubmit: onPressed,
+            );
+          },
         );
       },
     );

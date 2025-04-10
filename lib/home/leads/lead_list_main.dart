@@ -603,6 +603,8 @@ class LeadListMain extends StatelessWidget {
                     distId: leadListController.distIdMain.value.toString(),
                     cityId:leadListController.cityIdMain.value.toString(),
                     campaign: leadListController.campaignMain.value.toString(),
+                    fromDate: leadListController.fromDateMain.value,
+                    toDate: leadListController.toDateMain.value,
                     isLoadMore: true,
                   );
                 },
@@ -680,7 +682,7 @@ class LeadListMain extends StatelessWidget {
 
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:"+919399299880",//phoneNumber
+            phoneNumber:phoneNumber,//"+919399299880",//phoneNumber
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,

@@ -38,6 +38,14 @@ class LeadDDController extends GetxController{
   var selectedCampaign = Rxn<String>();
   var selectedKsdplBr = Rxn<String>();
 
+  var isStateLoading = false.obs;
+  var isDistrictLoading = false.obs;
+  var isCityLoading = false.obs;
+  var isCampaignLoading = false.obs;
+  var isKSDPLBrLoading = false.obs;
+  var isBankLoading = false.obs;
+  var isProductLoading = false.obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -52,6 +60,7 @@ class LeadDDController extends GetxController{
   void  getAllStateApi() async {
     try {
       isLoading(true);
+      isStateLoading(true);
 
 
       var data = await DrawerApiService.getAllStateApi();
@@ -65,6 +74,7 @@ class LeadDDController extends GetxController{
 
 
         isLoading(false);
+        isStateLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -80,9 +90,11 @@ class LeadDDController extends GetxController{
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      isStateLoading(false);
     } finally {
 
       isLoading(false);
+      isStateLoading(false);
     }
   }
 
@@ -92,6 +104,7 @@ class LeadDDController extends GetxController{
   }) async {
     try {
       isLoading(true);
+      isDistrictLoading(true);
 
 
       var data = await DrawerApiService.getDistrictByStateIdApi(stateId: stateId);
@@ -105,6 +118,7 @@ class LeadDDController extends GetxController{
 
 
         isLoading(false);
+        isDistrictLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -120,9 +134,11 @@ class LeadDDController extends GetxController{
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      isDistrictLoading(false);
     } finally {
 
       isLoading(false);
+      isDistrictLoading(false);
     }
   }
 
@@ -132,6 +148,7 @@ class LeadDDController extends GetxController{
   }) async {
     try {
       isLoading(true);
+      isCityLoading(true);
 
 
       var data = await DrawerApiService.getCityByDistrictIdApi(districtId: districtId);
@@ -143,6 +160,7 @@ class LeadDDController extends GetxController{
 
 
         isLoading(false);
+        isCityLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -158,6 +176,7 @@ class LeadDDController extends GetxController{
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      isCityLoading(false);
     } finally {
 
       isLoading(false);
@@ -167,7 +186,7 @@ class LeadDDController extends GetxController{
   void  getAllBankApi() async {
     try {
       isLoading(true);
-
+      isBankLoading(true);
 
       var data = await DrawerApiService.getAllBankApi();
 
@@ -178,7 +197,7 @@ class LeadDDController extends GetxController{
 
 
         isLoading(false);
-
+        isBankLoading(false);
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
@@ -193,16 +212,18 @@ class LeadDDController extends GetxController{
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      isBankLoading(false);
     } finally {
 
       isLoading(false);
+      isBankLoading(false);
     }
   }
 
   void  getAllKsdplProductApi() async {
     try {
       isLoading(true);
-
+      isProductLoading(true);
 
       var data = await DrawerApiService.getAllKsdplProductApi();
 
@@ -215,7 +236,7 @@ class LeadDDController extends GetxController{
 
 
         isLoading(false);
-
+        isProductLoading(false);
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
@@ -230,16 +251,18 @@ class LeadDDController extends GetxController{
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      isProductLoading(false);
     } finally {
 
       isLoading(false);
+      isProductLoading(false);
     }
   }
 
   void  getProductListByBankIdApi({required bankId}) async {
     try {
       isLoading(true);
-
+      isProductLoading(true);
 
       var data = await DrawerApiService.getProductListByBankIdApi(
           bankId: bankId
@@ -254,7 +277,7 @@ class LeadDDController extends GetxController{
 
 
         isLoading(false);
-
+        isProductLoading(false);
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
@@ -269,9 +292,11 @@ class LeadDDController extends GetxController{
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      isProductLoading(false);
     } finally {
 
       isLoading(false);
+      isProductLoading(false);
     }
   }
 
@@ -279,7 +304,7 @@ class LeadDDController extends GetxController{
     try {
 
       isLoading(true);
-
+      isCampaignLoading(true);
       var data = await DrawerApiService.getCampaignNameApi();
 
 
@@ -291,7 +316,7 @@ class LeadDDController extends GetxController{
 
 
         isLoading(false);
-
+        isCampaignLoading(false);
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
@@ -306,16 +331,18 @@ class LeadDDController extends GetxController{
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      isCampaignLoading(false);
     } finally {
 
       isLoading(false);
+      isCampaignLoading(false);
     }
   }
 
   void  getAllKsdplBranchApi() async {
     try {
       isLoading(true);
-
+      isKSDPLBrLoading(true);
 
       var data = await DrawerApiService.getAllKsdplBranchApi();
 
@@ -328,6 +355,7 @@ class LeadDDController extends GetxController{
 
 
         isLoading(false);
+        isKSDPLBrLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -343,9 +371,11 @@ class LeadDDController extends GetxController{
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      isKSDPLBrLoading(false);
     } finally {
 
       isLoading(false);
+      isKSDPLBrLoading(false);
     }
   }
 }
