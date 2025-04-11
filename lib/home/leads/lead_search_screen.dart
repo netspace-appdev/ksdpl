@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:ksdpl/models/dashboard/GetAllStateModel.dart' as state;
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
@@ -10,6 +11,7 @@ import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
 import 'package:ksdpl/models/GetCampaignNameModel.dart' as campaign;
 import 'package:ksdpl/models/leads/GetAllKsdplBranchModel.dart' as ksdplBranch;
+import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
 import '../../../common/CustomSearchBar.dart';
 import '../../../common/helper.dart';
 import '../../../common/skelton.dart';
@@ -28,8 +30,11 @@ import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/open_poll_filter_controller.dart';
+import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
+import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
+import '../../services/call_service.dart';
 import '../custom_drawer.dart';
 
 
@@ -40,9 +45,10 @@ class LeadSearchScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
-  LeadListController leadListController = Get.find();
+  LeadListController leadListController =Get.put(LeadListController(),tag: 'search');
   SearchLeadController searchLeadController=Get.put(SearchLeadController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Addleadcontroller addLeadController = Get.put(Addleadcontroller());
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +148,7 @@ class LeadSearchScreen extends StatelessWidget {
                                         return  Center(child:CustomSkelton.productShimmerList(context));
                                       }
 
-                                      return CustomDropdown<Data>(
+                                      return CustomDropdown<state.Data>(
                                         items: leadDDController.getAllStateModel.value?.data ?? [],
                                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                         getName: (item) => item.stateName.toString(),
@@ -238,24 +244,6 @@ class LeadSearchScreen extends StatelessWidget {
 
                                     const SizedBox(height: 10),
 
-                                    /* Obx((){
-                                      if (leadDDController.isLoading.value) {
-                                        return  Center(child:CustomSkelton.productShimmerList(context));
-                                      }
-
-
-                                      return CustomDropdown<String>(
-                                        items: leadDDController.getCampaignNameModel.value!.data!,
-                                        getId: (item) => item,  // Adjust based on your model structure
-                                        getName: (item) => item,
-                                        selectedValue: leadDDController.selectedCampaign.value,
-                                        onChanged: (value) {
-                                          leadDDController.selectedCampaign.value =  value;
-                                        },
-                                      );
-                                    }),
-*/
-
 
 
                                     Obx((){
@@ -306,12 +294,45 @@ class LeadSearchScreen extends StatelessWidget {
                                       );
                                     }),
 
+                                    const SizedBox(height: 20),
+
+                                    const Text(
+                                      AppText.leadStage,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.grey2,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 10),
+                                    Obx((){
+                                      if (leadDDController.isLeadStageLoading.value) {
+                                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                                      }
+
+
+                                      return CustomDropdown<stage.Data>(
+                                        items: leadDDController.getAllLeadStageModel.value!.data!.where((lead) => lead.id != 1).toList(),
+                                        getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                                        getName: (item) => item.stageName.toString(),
+                                        selectedValue: leadDDController.getAllLeadStageModel.value?.data?.firstWhereOrNull(
+                                              (item) => item.id.toString() == leadDDController.selectedStage.value,
+                                        ),
+                                        onChanged: (value) {
+                                          leadDDController.selectedStage.value =  value?.id?.toString();
+                                        },
+                                      );
+                                    }),
+
+                                    const SizedBox(height: 10),
+
                                     const SizedBox(height: 10),
 
                                     CustomLabeledPickerTextField(
                                       label: AppText.fromDate,
                                       isRequired: false,
-                                      controller: addleadcontroller.dobController,
+                                      controller: leadListController.fromDateController,
                                       inputType: TextInputType.name,
                                       hintText: AppText.ddmmyyyy,
                                       validator: ValidationHelper.validateFromDate,
@@ -321,7 +342,7 @@ class LeadSearchScreen extends StatelessWidget {
                                     CustomLabeledPickerTextField(
                                       label: AppText.toDate,
                                       isRequired: false,
-                                      controller: addleadcontroller.dobController,
+                                      controller: leadListController.toDateController,
                                       inputType: TextInputType.name,
                                       hintText: AppText.ddmmyyyy,
                                       validator: ValidationHelper.validateFromDate,
@@ -351,7 +372,7 @@ class LeadSearchScreen extends StatelessWidget {
                                               borderRadius: BorderRadius.circular(10),
                                             ),
                                           ),
-                                          onPressed: (){},
+                                          onPressed: onPressed,
                                           child: const Text(
                                             AppText.submit,
                                             style: TextStyle(
@@ -410,16 +431,12 @@ class LeadSearchScreen extends StatelessWidget {
         children: [
 
 
-          /* InkWell(
+           InkWell(
               onTap: (){
                 Get.back();
               },
-              child: Image.asset(AppImage.arrowLeft,height: 24,)),*/
-          InkWell(
-              onTap: (){
-                _scaffoldKey.currentState?.openDrawer();
-              },
-              child: SvgPicture.asset(AppImage.drawerIcon)),
+              child: Image.asset(AppImage.arrowLeft,height: 24,)),
+
 
 
           const Text(
@@ -477,20 +494,25 @@ class LeadSearchScreen extends StatelessWidget {
   void onPressed(){
 
 
-    if (_formKey.currentState!.validate()) {
+    leadListController.getAllLeadsApi(
+      employeeId: leadListController.eId.value.toString(),
+      leadStage:leadDDController.selectedStage.value??"0",
+      stateId: leadDDController.selectedState.value??"0",
+      distId: leadDDController.selectedDistrict.value??"0",
+      cityId:leadDDController.selectedCity.value??"0",
+      campaign: leadDDController.selectedCampaign.value??"",
+      fromDate: leadListController.fromDateController.value.text,
+      toDate: leadListController.toDateController.value.text,
 
-
-      searchLeadController.pollFilterSubmit();
-    }
+    );
   }
-
   Widget leadSection(BuildContext context){
     return Obx((){
-      if (searchLeadController.isLoading.value) {
+      if (leadListController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-      if (searchLeadController.getCommonLeadListFModel.value == null ||
-          searchLeadController.getCommonLeadListFModel.value!.data == null || searchLeadController.getCommonLeadListFModel.value!.data!.isEmpty) {
+      if (leadListController.getAllLeadsModel.value == null ||
+          leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty) {
         return  Container(
           height: MediaQuery.of(context).size.height*0.50,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -524,116 +546,396 @@ class LeadSearchScreen extends StatelessWidget {
         );
       }
 
-      return  ListView.builder(
-        itemCount: searchLeadController.getCommonLeadListFModel.value!.data!.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          final lead = searchLeadController.getCommonLeadListFModel.value!.data![index];
 
 
+      return  Column(
+        children: [
+          ListView.builder(
+            itemCount: leadListController.getAllLeadsModel.value!.data!.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
 
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            decoration:  BoxDecoration(
-              border: Border.all(color: AppColor.grey200),
-              color: AppColor.appWhite,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
+              final lead = leadListController.getAllLeadsModel.value!.data![index];
 
-            ),
-            child: Column(
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration:  BoxDecoration(
+                  border: Border.all(color: AppColor.grey200),
+                  color: AppColor.appWhite,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
 
-              children: [
-                /// Header with profile and menu icon
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                ),
+                child: Column(
+
+
+                  children: [
+                    /// Header with profile and menu icon
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            height: 40,
-                            width: 40,
-
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColor.primaryColor,
-                              border: Border.all(color: AppColor.secondaryColor),
-                            ),
-                            child: Center(
-                              child: Text(
-                                lead.name==null?"N": lead.name!.isNotEmpty ?  lead.name![0].toUpperCase() : "U", // Initial Letter
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
                             children: [
-                              Text(
-                                Helper.capitalizeEachWord(lead.name.toString()),
+                              Container(
+                                height: 40,
+                                width: 40,
 
-                                // lead.name.toString(),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColor.primaryColor,
+                                  border: Border.all(color: AppColor.secondaryColor),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    lead.name==null?"N":lead.name!.isNotEmpty ?  lead.name![0].toUpperCase() : "U", // Initial Letter
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ),
+                              SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    Helper.capitalizeEachWord(lead.name.toString()),
 
+                                    // lead.name.toString(),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 10,
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                        decoration:  BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(color: AppColor.grey200),
+                                          color: AppColor.grey1,
+                                        ),
+                                      ),
+                                      Text(
+                                        lead.mobileNumber.toString(),
+                                        style: TextStyle(
+                                          color: AppColor.grey700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
+
+                          if(leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6" )
+                            _buildTextButton(
+                              label:AppText.openPoll,
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.lock_open,
+                              leadId: lead.id.toString(),
+                              label_code: "open_poll",
+                            ),
+                          //Icon(Icons.more_vert, color: AppColor.grey1,), // Three dots menu icon
                         ],
                       ),
-                      //Icon(Icons.more_vert, color: AppColor.grey1,), // Three dots menu icon
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
+                    ),
+                    SizedBox(height: 10),
 
-                /// Lead details
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: [
-                      _buildDetailRow("Email", lead.email.toString()),
-                      _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
-                      _buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
-                      // _buildDetailRow("Uploaded by", lead.uploadedBy.toString()),
-                      // _buildDetailRow("City", "Sagwada"),
-                    ],
-                  ),
-                ),
+                    /// Lead details
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: [
+                          _buildDetailRow("Email", lead.email.toString()),
+                          _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
+                          //_buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
+                          _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  "),
+                          _buildDetailRow("Status", lead.stageName.toString()??""),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
 
-                SizedBox(height: 10),
+                    /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
 
-                /// Bottom Row Buttons (Assigned, Follow Up, Call Back, Employment)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildTextButton("Pick Lead", context, Colors.purple, Icons.shopping_bag_outlined, lead.id.toString()),
+                          _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                          _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
+                          _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                          //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
+                          InkWell(
+                            onTap: () {
+                              //Get.toNamed("/leadDetailsMain", arguments: {"leadId":lead.id.toString()});
+                              Get.toNamed("/leadDetailsTab", arguments: {"leadId":lead.id.toString()});
+
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
+                              decoration: BoxDecoration(
+                                color: AppColor.orangeColor, // Button background color
+                                borderRadius: BorderRadius.circular(2), // Rounded corners
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
+                                  SizedBox(width: 5,),
+                                  Text(
+                                    AppText.details,
+                                    style: TextStyle(color: AppColor.appWhite),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
 
 
-                    _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,lead.id.toString()),
+                    SizedBox(height: 10),
+
+
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+
+                          _buildTextButton(
+                            label:AppText.changeLeadStatus,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.add_circle_outline_outlined,
+                            leadId: lead.id.toString(),
+                            label_code: "change_lead_st",
+                            currentLeadStage: lead.leadStage.toString(),
+                          ),
+
+                          _buildTextButton(
+                            label:AppText.addFollowUp,
+                            context: context,
+                            color: Colors.purple,
+                            icon:  Icons.call,
+                            leadId: lead.id.toString(),
+                            label_code: "add_feedback",
+                            currentLeadStage: lead.leadStage.toString(),
+                          ),
+
+
+                      ],
+                    ),
+
+
+                    SizedBox(height: 10),
+
+
+
                   ],
                 ),
-              ],
-            ),
-          );
+              );
 
-        },
+            },
+          ),
+          if (leadListController.hasMore.value)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: ElevatedButton(
+                onPressed: () {
+                  leadListController.getAllLeadsApi(
+                    employeeId: leadListController.eId.value.toString(),
+                    leadStage:leadListController.leadCode.value.toString(),
+                    stateId: leadListController.stateIdMain.value.toString(),
+                    distId: leadListController.distIdMain.value.toString(),
+                    cityId:leadListController.cityIdMain.value.toString(),
+                    campaign: leadListController.campaignMain.value.toString(),
+                    fromDate: leadListController.fromDateMain.value,
+                    toDate: leadListController.toDateMain.value,
+                    isLoadMore: true,
+                  );
+                },
+                child: leadListController.isLoading.value
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text("Load More"),
+              ),
+            ),
+        ],
       );
     });
   }
 
-  Widget _buildDetailRow(String label, String value) {
-    //   String assigned = value.toString();
-//    List<String> assignedParts = assigned.split('T');
+  Widget _buildTextButton({
+    required String label,
+    required BuildContext context,
+    required Color color,
+    required IconData icon,
+    required String leadId,
+    required String label_code,
+    String? currentLeadStage
+  }) {
 
+    return InkWell(
+      onTap: () {
+        if (label == "Open Poll") {
+          leadListController.openPollPercentController.clear();
+          showOpenPollDialog2(context: context,leadId: leadId);
+        }else if (label_code == "add_lead_form") {
+
+          addLeadController.fromWhere.value="interested";
+          addLeadController.getLeadId.value=leadId;
+          addLeadController.getLeadDetailByIdApi(leadId: leadId);
+          print("leadId===>${leadId}");
+          print("leadId===>${ addLeadController.getLeadId.value}");
+          Get.toNamed("/addLeadScreen",);
+
+        }else if (label_code == "add_feedback") {
+
+          leadListController.callFeedbackController.clear();
+          leadListController.leadFeedbackController.clear();
+          leadListController.followDateController.clear();
+          leadListController.followTimeController.clear();
+          showFollowupDialog(
+              context: context,
+              leadId: leadId,
+              currentLeadStage: currentLeadStage.toString(),
+              callDuration: "00:00",
+              callStartTime:  "00:00",
+              callEndTime: "00:00",
+              callStatus: "0"
+          );
+
+        }else if (label_code == "interested" || label_code =="not_interested" || label_code == "doable" || label_code =="not_doable" || label_code == "cc") {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return CustomDialogBox(
+                title: "Are you sure?",
+
+                onYes: () {
+                  if(label_code == "interested"){
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "4",
+                      active: "1",
+                    );
+                    /* leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"4",
+                    );*/
+
+                  }else if(label_code == "not_interested"){
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "5",
+                      active: "0",
+                    );
+                    /*  leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"5",
+                    );*/
+
+                  }else if(label_code == "doable"){
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "6",
+                      active: "1",
+                    );
+                    /* leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"6",
+                    );*/
+
+                  }else if(label_code == "not_doable"){
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "7",
+                      active: "0",
+                    );
+                    /*leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"7",
+                    );*/
+
+                  }else if(label_code == "cc"){
+                    leadListController.updateLeadStageApi(
+                      id: leadId.toString(),
+                      stage: "13",
+                      active: "0",
+                    );
+                    /*leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"13",
+                    );*/
+
+                  }
+
+
+
+                },
+                onNo: () {
+
+                },
+              );
+            },
+          );
+        }else if (label_code == "change_lead_st"){
+
+          showFilterDialog(
+            context: context,
+            leadId: leadId,
+            leadStageId: currentLeadStage
+          );
+        } else{
+
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            width:(label_code=="add_feedback" ) ?
+            MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
+            MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
+
+            decoration: BoxDecoration(
+              //color: color,
+                color: label_code=="add_feedback"?AppColor.primaryColor:Colors.transparent,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: AppColor.grey700)
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
+                SizedBox(width: 6),
+                Text(
+                  label,
+                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -651,6 +953,22 @@ class LeadSearchScreen extends StatelessWidget {
             ),
           ),
           SizedBox(width: 10),
+          label=="Campaign"?
+          value=="  -  "|| value==""?
+          Text(
+            ":  -  ",
+
+            style: TextStyle(color: Colors.black87),
+          ):
+          Container(
+            color: AppColor.lightPrimary2,
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+            child: Text(
+              "${value}",
+
+              style: TextStyle(color: AppColor.primaryColor),
+            ),
+          ):
           Expanded(
             child: Text(
               label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ": ${value}",
@@ -669,11 +987,26 @@ class LeadSearchScreen extends StatelessWidget {
     required Color color,
     required String phoneNumber,
     required String label,
+    required String leadId,
+    required String currentLeadStage,
+    required BuildContext context,
   }) {
     return IconButton(
       onPressed: () {
+
         if(label=="call"){
-          leadListController.makePhoneCall(phoneNumber);
+
+
+          CallService callService = CallService();
+          callService.makePhoneCall(
+            phoneNumber:phoneNumber,//"+919399299880",//phoneNumber
+            leadId: leadId,
+            currentLeadStage: currentLeadStage,//newLeadStage,
+            context: context,
+            showFeedbackDialog:showCallFeedbackDialog,
+          );
+
+
         }
         if(label=="whatsapp"){
           leadListController.openWhatsApp(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
@@ -703,589 +1036,384 @@ class LeadSearchScreen extends StatelessWidget {
     );
   }
 
+  void showOpenPollDialog2({
+    required BuildContext context,
+    required leadId,
+  }) {
 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
 
-  Widget _buildTextButton(String label, BuildContext context, Color color, IconData icon, String leadId) {
-    return GestureDetector(
-      onTap: () {
-        if (label == "Pick Lead") {
-          // showOpenPollDialog(context: context,leadId: leadId);
-          showDialog(
-            context: context,
-            builder: (context) {
-              return CustomDialogBox(
-                title: "Are you sure?",
-
-                onYes: () {
-                /*  var eId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-                  searchLeadController.pickupLeadFromCommonTasksApi(
-                      employeeId: eId,
-                      leadId: leadId
-                  ).then((_){
-                    searchLeadController. getCommonLeadListByFilterApi(
-                      stateId: leadDDController.selectedState.value??"0",
-                      distId: leadDDController.selectedDistrict.value??"0",
-                      cityId:  leadDDController.selectedCity.value??"0",
-                      KsdplBranchId: leadDDController.selectedKsdplBr.value??"0",
-                    );
-                  });
-*/
-
-                },
-                onNo: () {
-
-                },
-              );
-            },
-          );
-
-        }else if (label == "Details") {
-          Get.toNamed("/leadDetailsMain", arguments: {"leadId":leadId.toString()});
-        }else{
-
-        }
-      },
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            width: MediaQuery.of(context).size.width*0.40,
-
-            decoration: BoxDecoration(
-
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: AppColor.grey700)
-
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          title: "Open Poll",
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, color: AppColor.grey700, size: 20),
-                SizedBox(width: 6),
-                Text(
-                  label,
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.blackColor),
+                SizedBox(
+                  height: 10,
                 ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
 
-  void showLeadStatusDialog({
-    required BuildContext context,
-    required leadId,
-  }) {
-    List<String> options=[];
-    if(leadListController.leadCode.value=="2"){
-      options = ["Interested", "Not Interested"];
-    }else  if(leadListController.leadCode.value=="4"){
-      options = ["Doable", "Not Doable"];
-    }else{
-
-    }
-
-    String? selectedOption = options[0]; // Default selection
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: double.infinity, // Makes it full width
-                padding: EdgeInsets.zero,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 🔵 Title in Blue Strip
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color:AppColor.primaryColor, // Title background color
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                        gradient: LinearGradient(
-                          colors: [AppColor.primaryLight, AppColor.primaryDark],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                      ),
-                      child: Text(
-                        "Select Status:",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white, // Title text color
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-
-                    // 📝 Content (Radio Buttons)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: options.map((option) {
-                          return RadioListTile<String>(
-                            title: Text(option),
-                            value: option,
-                            groupValue: selectedOption,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedOption = value;
-                              });
-                            },
-                            activeColor: AppColor.orangeColor, // Change active radio button color
-                          );
-                        }).toList(),
-                      ),
-                    ),
-
-                    // 🟠 Buttons (Close & Submit)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Close dialog
-                            },
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppColor.grey1,
-                              side: BorderSide(color: AppColor.grey2),
-                            ),
-                            child: Text("Close", style: TextStyle(color: AppColor.grey2)),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              String selectedValue = (selectedOption == "Interested") ? "4" : "5";
-                              String activeValue = (selectedOption == "Interested") ? "1" : "0";
-
-                              String selectedValueDoable = (selectedOption == "Doable") ? "6" : "7";
-                              String activeValueDoable = (selectedOption == "Doable") ? "1" : "0";
-                              if(leadListController.leadCode.value=="2"){
-                                print("for intrested");
-                                leadListController.updateLeadStageApi(
-                                  id: leadId.toString(),
-                                  stage: selectedValue,
-                                  active: activeValue,
-                                );
-                              }else  if(leadListController.leadCode.value=="4"){
-                                print("for doable");
-                                leadListController.updateLeadStageApi(
-                                  id: leadId.toString(),
-                                  stage: selectedValueDoable,
-                                  active: activeValueDoable,
-                                );
-                              }else{
-
-                              }
-
-                              Navigator.pop(context); // Close dialog after submission
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.orangeColor,
-                            ),
-                            child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void showChangeDialog({
-    required BuildContext context,
-    required leadId,
-  }) {
-    List<String> options=[];
-    if(leadListController.leadCode.value=="2"){
-      options = ["Interested", "Not Interested"];
-    }else  if(leadListController.leadCode.value=="4"){
-      options = ["Doable", "Not Doable"];
-    }else{
-
-    }
-
-    String? selectedOption = options[0]; // Default selection
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: double.infinity, // Makes it full width
-                padding: EdgeInsets.zero,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 🔵 Title in Blue Strip
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color:AppColor.secondaryColor, // Title background color
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                      ),
-
-                    ),
-
-                    // 📝 Content (Radio Buttons)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Are you sure?",
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w700,
-                              color: AppColor.black87, // Title text color
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-
-                          SizedBox(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.orange,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Get.back(); // Close dialog
-                                  // Handle Yes action
-                                },
-                                child: Text("Yes", style: TextStyle(color: Colors.white)),
-                              ),
-                              OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(color: Colors.orange),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Get.back(); // Close dialog
-                                },
-                                child: Text("No", style: TextStyle(color: Colors.black)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // 🟠 Buttons (Close & Submit)
-                    /*Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Close dialog
-                            },
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppColor.grey1,
-                              side: BorderSide(color: AppColor.grey2),
-                            ),
-                            child: Text("No", style: TextStyle(color: AppColor.grey2)),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              String selectedValue = (selectedOption == "Interested") ? "4" : "5";
-                              String activeValue = (selectedOption == "Interested") ? "1" : "0";
-
-                              String selectedValueDoable = (selectedOption == "Doable") ? "6" : "7";
-                              String activeValueDoable = (selectedOption == "Doable") ? "1" : "0";
-                              if(leadListController.leadCode.value=="2"){
-                                print("for intrested");
-                                leadListController.updateLeadStageApi(
-                                  id: leadId.toString(),
-                                  stage: selectedValue,
-                                  active: activeValue,
-                                );
-                              }else  if(leadListController.leadCode.value=="4"){
-                                print("for doable");
-                                leadListController.updateLeadStageApi(
-                                  id: leadId.toString(),
-                                  stage: selectedValueDoable,
-                                  active: activeValueDoable,
-                                );
-                              }else{
-
-                              }
-
-                              Navigator.pop(context); // Close dialog after submission
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.orangeColor,
-                            ),
-                            child: Text("Yes", style: TextStyle(color: AppColor.appWhite)),
-                          ),
-                        ],
-                      ),
-                    ),*/
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-
-  void showFilterDialog({
-    required BuildContext context,
-  }) {
-    List<String> options = ["Fresh Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
-    //String? selectedOption = options[0]; // Default selection
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: double.infinity, // Makes it full width
-                padding: EdgeInsets.zero,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 🔵 Title in Blue Strip
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                        color:AppColor.primaryColor, // Title background color
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                        gradient: LinearGradient(
-                          colors: [AppColor.primaryLight, AppColor.primaryDark],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                      ),
-                      child: const Text(
-                        "Filter",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white, // Title text color
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-
-                    // 📝 Content (Radio Buttons)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child:  Obx(()=>Column(
-                        children: options.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          String option = entry.value;
-
-                          return CheckboxListTile(
-                            activeColor: AppColor.secondaryColor,
-
-                            title: Text(option),
-                            value: leadListController.selectedIndex.value == index,
-                            onChanged: (value) => leadListController.selectCheckbox(index),
-                          );
-                        }).toList(),
-                      )),
-                    ),
-
-                    // 🟠 Buttons (Close & Submit)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(context); // Close dialog
-                            },
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: AppColor.grey1,
-                              side: BorderSide(color: AppColor.grey2),
-                            ),
-                            child: Text("Close", style: TextStyle(color: AppColor.grey2)),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              leadListController.filterSubmit();
-                              Navigator.pop(context); // Close dialog after submission
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.orangeColor,
-                            ),
-                            child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void showOpenPollDialog({
-    required BuildContext context,
-    required String leadId,
-  }) {
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: double.infinity, // Makes it full width
-                padding: EdgeInsets.zero,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                // 📝 Content (Radio Buttons)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  child:  Column(
                     children: [
-                      // 🔵 Title in Blue Strip
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: const BoxDecoration(
-                          color:AppColor.primaryColor, // Title background color
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                          gradient: LinearGradient(
-                            colors: [AppColor.primaryLight, AppColor.primaryDark],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: const Text(
-                          "Open Poll",
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Enter percent for leads",
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white, // Title text color
+                            color: AppColor.grey1, // Title text color
                           ),
-                          textAlign: TextAlign.center,
+
                         ),
                       ),
-
-                      // 📝 Content (Radio Buttons)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        child:  Column(
-                          children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Enter percent for leads",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColor.grey1, // Title text color
-                                ),
-
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            CustomTextFieldPrefix(
-                              inputType:  TextInputType.number,
-                              controller: leadListController.openPollPercentController,
-                              hintText: "like 2.0 %",
-                              validator: validatePercentage,
-                              isPassword: false,
-                              obscureText: false,
-                            ),
-                          ],
-                        ),
+                      const SizedBox(
+                        height: 20,
                       ),
-
-                      // 🟠 Buttons (Close & Submit)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OutlinedButton(
-                              onPressed: () {
-                                Navigator.pop(context); // Close dialog
-                              },
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColor.grey1,
-                                side: BorderSide(color: AppColor.grey2),
-                              ),
-                              child: Text("Close", style: TextStyle(color: AppColor.grey2)),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  leadListController.leadMoveToCommonTaskApi(
-                                      leadId: leadId,
-                                      percentage: leadListController.openPollPercentController.text.trim().toString()
-                                  );
-                                  Navigator.pop(context);
-                                }
-
-                                // Close dialog after submission
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.orangeColor,
-                              ),
-                              child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
-                            ),
-                          ],
-                        ),
+                      CustomTextFieldPrefix(
+                        inputType:  TextInputType.number,
+                        controller: leadListController.openPollPercentController,
+                        hintText: "Enter open poll percentage",
+                        validator: validatePercentage,
+                        isPassword: false,
+                        obscureText: false,
                       ),
                     ],
                   ),
                 ),
+/*
+                // 🟠 Buttons (Close & Submit)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close dialog
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColor.grey1,
+                          side: BorderSide(color: AppColor.grey2),
+                        ),
+                        child: Text("Close", style: TextStyle(color: AppColor.grey2)),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            leadListController.leadMoveToCommonTaskApi(
+                                leadId: leadId,
+                                percentage: leadListController.openPollPercentController.text.trim().toString()
+                            );
+                            Navigator.pop(context);
+                          }
+
+                          // Close dialog after submission
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.orangeColor,
+                        ),
+                        child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
+                      ),
+                    ],
+                  ),
+                ),*/
+              ],
+            ),
+          ),
+          onSubmit: () {
+            if (_formKey.currentState!.validate()) {
+              leadListController.leadMoveToCommonTaskApi(
+                  leadId: leadId,
+                  percentage: leadListController.openPollPercentController.text.trim().toString()
+              );
+              Navigator.pop(context);
+            }
+          },
+        );
+      },
+    );
+  }
+
+  void showCallFeedbackDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+    required callStatus,
+  }) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.addFAndF,
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.callFeedback,
+                      isRequired: false,
+                      controller: leadListController.callFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterCallFeedback,
+                      isTextArea: true,
+                    ),
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.leadFeedback,
+                      isRequired: false,
+                      controller: leadListController.leadFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterLeadFeedback,
+                      isTextArea: true,
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Obx(()=>Checkbox(
+                          activeColor: AppColor.secondaryColor,
+                          value: leadListController.isCallReminder.value,
+                          onChanged: (bool? value) {
+
+                            leadListController.isCallReminder.value = value ?? false;
+
+                          },
+                        )),
+                        Text(
+                          AppText.callReminder,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Obx(()=> CustomLabeledPickerTextField(
+                      label: AppText.selectDate,
+                      isRequired: false,
+                      controller: leadListController.followDateController,
+                      inputType: TextInputType.name,
+                      hintText: "MM/DD/YYYY",
+                      isDateField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                    Obx(()=>CustomLabeledTimePickerTextField(
+                      label: AppText.selectTime,
+                      isRequired: false,
+                      controller: leadListController.followTimeController,
+                      inputType: TextInputType.datetime,
+                      hintText: "HH:MM AM/PM",
+                      isTimeField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                  ],
+                ),
               ),
+            ),
+          ),
+          onSubmit: () {
+            if (leadListController.callFeedbackController.text.isEmpty &&
+                leadListController.leadFeedbackController.text.isEmpty) {
+              ToastMessage.msg(AppText.addFeedbackFirst);
+            } else {
+              var id=leadListController.workOnLeadModel!.data!.id.toString();
+              if(callStatus=="1"){
+                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
+                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
+                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
+
+              }
+
+              leadListController.callFeedbackSubmit(
+                  leadId: leadId,
+                  currentLeadStage: currentLeadStage,
+                  callStatus: callStatus,
+                  callDuration: callDuration,
+                  callStartTime: callStartTime,
+                  callEndTime: callEndTime,
+                  id: id,
+                  fromWhere: "call"
+
+              );
+              Get.back();
+            }
+
+          },
+        );
+      },
+    );
+  }
+
+
+  void showFollowupDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+    required callStatus,
+  }) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        leadListController.isCallReminder.value =true;
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.addFollowUp,
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.followupNote,
+                      isRequired: false,
+                      controller: leadListController.callFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterCallFeedback,
+                      isTextArea: true,
+                    ),
+
+                    Obx(()=> CustomLabeledPickerTextField(
+                      label: AppText.selectDate,
+                      isRequired: false,
+                      controller: leadListController.followDateController,
+                      inputType: TextInputType.name,
+                      hintText: "MM/DD/YYYY",
+                      isDateField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                    Obx(()=>CustomLabeledTimePickerTextField(
+                      label: AppText.selectTime,
+                      isRequired: false,
+                      controller: leadListController.followTimeController,
+                      inputType: TextInputType.datetime,
+                      hintText: "HH:MM AM/PM",
+                      isTimeField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onSubmit: () {
+            if (leadListController.callFeedbackController.text.isEmpty &&
+                leadListController.followDateController.text.isEmpty &&
+                leadListController.followTimeController.text.isEmpty
+            ) {
+              ToastMessage.msg(AppText.addDetailsFirst);
+            } else {
+              var id=0;
+
+              leadListController.callFeedbackSubmit(
+                  leadId: leadId,
+                  currentLeadStage: currentLeadStage,
+                  callStatus: callStatus,
+                  callDuration: callDuration,
+                  callStartTime: callStartTime,
+                  callEndTime: callEndTime,
+                  id: id.toString(),
+                  fromWhere: "follow_up"
+              );
+              Get.back();
+            }
+
+          },
+        );
+      },
+    );
+  }
+
+  void showFilterDialog({
+    required BuildContext context,
+    required leadId,
+    required leadStageId,
+  }) {
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        leadDDController.selectedStage.value=leadStageId;
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title: "Change Lead Status",
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              const SizedBox(
+                height: 10,
+              ),
+
+
+              SizedBox(height: 10),
+
+
+              Obx((){
+                if (leadDDController.isLeadStageLoading.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+
+
+                return CustomDropdown<stage.Data>(
+                  items: leadDDController.getAllLeadStageModel.value!.data!.where((lead) => lead.id != 1).toList(),
+                  getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.stageName.toString(),
+                  selectedValue: leadDDController.getAllLeadStageModel.value?.data?.firstWhereOrNull(
+                        (item) => item.id.toString() == leadDDController.selectedStage.value,
+                  ),
+                  onChanged: (value) {
+                    leadDDController.selectedStage.value =  value?.id?.toString();
+                    leadDDController.changeActiveStatus(leadDDController.selectedStage.value.toString());
+                  },
+                );
+              }),
+
+              const SizedBox(height: 20),
+
+
+
+
+            ],
+          ),
+
+          onSubmit: (){
+            leadListController.updateLeadStageApi(
+              id: leadId.toString(),
+              stage: leadDDController.selectedStage.value,
+              active:leadDDController.activeStatus.value,
             );
           },
         );

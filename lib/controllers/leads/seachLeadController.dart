@@ -22,16 +22,11 @@ class SearchLeadController extends GetxController{
 
   var getCommonLeadListFModel = Rxn<GetCommonLeadListFModel>(); //
   @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-   /* getCommonLeadListByFilterApi(
-      stateId: "0",
-      distId: "0",
-      cityId:  "0",
-      KsdplBranchId: "0",
-    );*/
-
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    Get.delete<LeadListController>(tag: 'search');
+    super.dispose();
   }
 
 

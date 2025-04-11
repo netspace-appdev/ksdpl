@@ -59,6 +59,9 @@ class LeadListController extends GetxController {
 
   final TextEditingController callFeedbackController = TextEditingController();
   final TextEditingController leadFeedbackController = TextEditingController();
+
+  final TextEditingController fromDateController = TextEditingController();
+  final TextEditingController toDateController = TextEditingController();
   GetEmployeeModel? getEmployeeModel;
   var isCallReminder=false.obs;
 
@@ -367,7 +370,9 @@ class LeadListController extends GetxController {
     required toDate,
     bool isLoadMore = false,
   }) async {
+
     try {
+
       if (isLoading.value || (!hasMore.value && isLoadMore)) return;
 
       isLoading(true);

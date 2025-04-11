@@ -1020,8 +1020,6 @@ class OpenPollFilter extends StatelessWidget {
     required leadId,
   }) {
 
-    // List<String> options = ["Fresh Leads","Working Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
-    List<String> options = ["All Leads","Fresh Leads","Could Not Connect", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
     showDialog(
       context: context,
       builder: (BuildContext context) {

@@ -280,6 +280,8 @@ class AppText{
   static const String toDate = "To Date";
   static const String ddmmyyyy = "dd/mm/yyyy";
   static const String searchedLeads = "Searched Leads";
+  static const String leadStage = "Lead Stage";
+  static const String changeLeadStatus = "Change Status";
 }
 
 class AppColor{

@@ -14,6 +14,7 @@ import '../models/dashboard/GetCityByDistrictIdModel.dart';
 import '../models/dashboard/GetDistrictByStateModel.dart';
 import '../models/dashboard/GetProductListByBank.dart';
 import '../models/leads/GetAllKsdplBranchModel.dart';
+import '../models/leads/GetAllLeadStageModel.dart';
 import '../services/drawer_api_service.dart';
 import '../services/home_service.dart';
 
@@ -27,6 +28,7 @@ class LeadDDController extends GetxController{
   var getAllKsdplProductModel = Rxn<GetAllKsdplProductModel>(); //
   var getProductListByBankModel = Rxn<GetProductListByBankModel>(); //
   var getAllKsdplBranchModel = Rxn<GetAllKsdplBranchModel>(); //
+  var getAllLeadStageModel = Rxn<GetAllLeadStageModel>(); //
   var selectedState = Rxn<String>();
   var selectedDistrict = Rxn<String>();
   var selectedCity = Rxn<String>();
@@ -37,6 +39,7 @@ class LeadDDController extends GetxController{
   var getCampaignNameModel = Rxn<GetCampaignNameModel>();
   var selectedCampaign = Rxn<String>();
   var selectedKsdplBr = Rxn<String>();
+  var selectedStage = Rxn<String>();
 
   var isStateLoading = false.obs;
   var isDistrictLoading = false.obs;
@@ -45,7 +48,8 @@ class LeadDDController extends GetxController{
   var isKSDPLBrLoading = false.obs;
   var isBankLoading = false.obs;
   var isProductLoading = false.obs;
-
+  var isLeadStageLoading = false.obs;
+  var activeStatus = "".obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -55,6 +59,23 @@ class LeadDDController extends GetxController{
     getAllKsdplProductApi();
     getCampaignNameApi();
     getAllKsdplBranchApi();
+    getAllLeadStageApi();
+  }
+
+  changeActiveStatus(String stage){
+    if(stage=="4"){
+      activeStatus.value="1";
+    }else if(stage=="5"){
+      activeStatus.value="0";
+    }else if(stage=="6"){
+      activeStatus.value="1";
+    }else if(stage=="7"){
+      activeStatus.value="0";
+    }else if(stage=="13"){
+      activeStatus.value="0";
+    }else{
+      activeStatus.value="0";
+    }
   }
 
   void  getAllStateApi() async {
@@ -376,6 +397,47 @@ class LeadDDController extends GetxController{
 
       isLoading(false);
       isKSDPLBrLoading(false);
+    }
+  }
+
+  void  getAllLeadStageApi() async {
+    try {
+      isLoading(true);
+      isLeadStageLoading(true);
+
+
+      var data = await DrawerApiService.getAllLeadStageApi();
+
+
+      if(data['success'] == true){
+
+        getAllLeadStageModel.value= GetAllLeadStageModel.fromJson(data);
+
+
+
+
+        isLoading(false);
+        isLeadStageLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAllLeadStageModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllLeadStageModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+      isLeadStageLoading(false);
+    } finally {
+
+      isLoading(false);
+      isLeadStageLoading(false);
     }
   }
 }
