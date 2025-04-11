@@ -69,6 +69,7 @@ class LeadListController extends GetxController {
   final int pageSize = 20;
   RxBool hasMore = true.obs;
   RxInt leadListLength = 0.obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -646,16 +647,23 @@ class LeadListController extends GetxController {
         isLoading(false);
         eId.value=StorageService.get(StorageService.EMPLOYEE_ID).toString();
 
+        print("fromWhere==>${fromWhere.value}");
+
         getAllLeadsApi(
-            leadStage: leadCode.value,
-            employeeId:eId.toString(),
-            stateId:stateIdMain.value,
-            distId: distIdMain.value,
-            cityId: cityIdMain.value,
-            campaign: campaignMain.value,
-            fromDate: fromDateMain.value,
-            toDate: toDateMain.value,
+          leadStage: leadCode.value,
+          employeeId:eId.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
         );
+
+
+
+
+
 
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);

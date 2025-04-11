@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/models/drawer/GetLeadDetailModel.dart';
 import '../controllers/bot_nav_controller.dart';
@@ -68,13 +69,13 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
         floatingActionButton: FloatingActionButton(
           backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {
-           /* OpenPollFilterController openPollFilterController=Get.put(OpenPollFilterController());
-            openPollFilterController.getCommonLeadListByFilterApi(
-              stateId: "0",
-              distId: "0",
-              cityId:  "0",
-              KsdplBranchId: "0",
-            );*/
+            /*LeadListController leadListController = Get.find<LeadListController>(tag: 'list');
+
+
+
+            leadListController.fromWhere.value="search";*/
+            LeadDDController leadDDController=Get.put(LeadDDController());
+            leadDDController.selectedStage.value="2";
             Get.toNamed("/leadSearchScreen");
           },
           shape: const CircleBorder(),

@@ -15,7 +15,7 @@ class BotNavController extends GetxController {
 
 
   void onItemTapped(int index) {
-    final LeadListController leadListController = Get.put(LeadListController());
+    final LeadListController leadListController = Get.put(LeadListController(),tag: 'list');
     final Addleadcontroller addleadcontroller = Get.put(Addleadcontroller());
     if (selectedIndex.value == index) return; // Prevent unnecessary state updates
 

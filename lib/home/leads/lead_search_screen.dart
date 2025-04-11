@@ -44,6 +44,7 @@ class LeadSearchScreen extends StatelessWidget {
   LeadDDController leadDDController = Get.put(LeadDDController());
 
   final _formKey = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
   LeadListController leadListController =Get.put(LeadListController(),tag: 'search');
   SearchLeadController searchLeadController=Get.put(SearchLeadController());
@@ -435,7 +436,10 @@ class LeadSearchScreen extends StatelessWidget {
               onTap: (){
                 Get.back();
               },
-              child: Image.asset(AppImage.arrowLeft,height: 24,)),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Image.asset(AppImage.arrowLeft,height: 24,),
+              )),
 
 
 
@@ -1363,58 +1367,71 @@ class LeadSearchScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        leadDDController.selectedStage.value=leadStageId;
+        Future.microtask(() {
+          leadDDController.selectedStage.value = leadStageId;
+          leadDDController.changeActiveStatus(leadStageId.toString());
+        });
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
 
           title: "Change Lead Status",
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          content: Form(
+            key: _formKey2,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-              const SizedBox(
-                height: 10,
-              ),
-
-
-              SizedBox(height: 10),
-
-
-              Obx((){
-                if (leadDDController.isLeadStageLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
+                const SizedBox(
+                  height: 10,
+                ),
 
 
-                return CustomDropdown<stage.Data>(
-                  items: leadDDController.getAllLeadStageModel.value!.data!.where((lead) => lead.id != 1).toList(),
-                  getId: (item) =>item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.stageName.toString(),
-                  selectedValue: leadDDController.getAllLeadStageModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedStage.value,
-                  ),
-                  onChanged: (value) {
-                    leadDDController.selectedStage.value =  value?.id?.toString();
-                    leadDDController.changeActiveStatus(leadDDController.selectedStage.value.toString());
-                  },
-                );
-              }),
-
-              const SizedBox(height: 20),
+                SizedBox(height: 10),
 
 
+                Obx((){
+                  if (leadDDController.isLeadStageLoading.value) {
+                    return  Center(child:CustomSkelton.leadShimmerList(context));
+                  }
 
 
-            ],
+                  return CustomDropdown<stage.Data>(
+                    items: leadDDController.getAllLeadStageModel.value!.data!.where((lead) => lead.id != 1).toList(),
+                    getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                    getName: (item) => item.stageName.toString(),
+                    selectedValue: leadDDController.getAllLeadStageModel.value?.data?.firstWhereOrNull(
+                          (item) => item.id.toString() == leadDDController.selectedStage.value,
+                    ),
+                    onChanged: (value) {
+                      leadDDController.selectedStage.value =  value?.id?.toString();
+                      leadDDController.changeActiveStatus(leadDDController.selectedStage.value.toString());
+                    },
+                  );
+                }),
+
+                const SizedBox(height: 20),
+
+
+
+
+              ],
+            ),
           ),
 
           onSubmit: (){
-            leadListController.updateLeadStageApi(
-              id: leadId.toString(),
-              stage: leadDDController.selectedStage.value,
-              active:leadDDController.activeStatus.value,
-            );
+            if (leadDDController.selectedStage.value!=null || leadDDController.selectedStage.value!="") {
+              leadListController.updateLeadStageApi(
+                id: leadId.toString(),
+                stage: leadDDController.selectedStage.value,
+                active:leadDDController.activeStatus.value,
+              );
+              Get.back();
+            }else{
+              ToastMessage.msg("Please select stage");
+            }
+
+
           },
         );
       },

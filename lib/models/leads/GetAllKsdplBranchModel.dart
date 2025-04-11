@@ -40,7 +40,7 @@ class Data {
   String? branchWhatsappNo;
   bool? active;
   String? branchAddress;
-  num? branchGeoLocation;
+  String? branchGeoLocation;
   num? pincode;
   num? stateId;
   num? districtId;

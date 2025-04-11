@@ -16,11 +16,20 @@ class SearchLeadController extends GetxController{
   var isLoading = false.obs;
 
 
-  LeadListController leadListController=Get.find();
+  LeadListController leadListController = Get.find<LeadListController>(tag: 'search');
   LeadDDController leadDDController=Get.find();
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
 
   var getCommonLeadListFModel = Rxn<GetCommonLeadListFModel>(); //
+
+/*  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    print("on delete list");
+    Get.delete<LeadListController>(tag: 'list');
+  }*/
+
   @override
   void onClose() {
     // TODO: implement onClose
