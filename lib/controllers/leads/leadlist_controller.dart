@@ -307,8 +307,10 @@ print("selectedTime ==>${selectedTime}");
       reminderStatus:  isCallReminder.value?"1":"0",
     ).then((_){
       if(fromWhere=="call"){
-        LeadHistoryController leadHistoryController = Get.put(LeadHistoryController());
+
+        LeadHistoryController leadHistoryController = Get.put(LeadHistoryController(),);
         leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId.toString());
+
       }
       DashboardController dashboardController=Get.find();
       dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());

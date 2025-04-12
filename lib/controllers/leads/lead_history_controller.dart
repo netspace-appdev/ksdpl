@@ -7,7 +7,7 @@ import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../services/drawer_api_service.dart';
 
 class LeadHistoryController extends GetxController{
-
+  String? leadId;
   var isLoading = false.obs;
   var getLeadWorkByLeadIdModel = Rxn<GetLeadWorkByLeadIdModel>(); //
   @override
@@ -16,7 +16,12 @@ class LeadHistoryController extends GetxController{
     super.onInit();
     print("lead histiry controller");
     dynamic arg= Get.arguments;
-    getLeadWorkByLeadIdApi(leadId:arg["leadId"] );
+    if(arg==null){
+      getLeadWorkByLeadIdApi(leadId:leadId.toString() );
+    }else{
+      getLeadWorkByLeadIdApi(leadId:arg["leadId"] );
+    }
+
 
   }
 
