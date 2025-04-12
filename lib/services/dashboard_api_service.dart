@@ -15,6 +15,7 @@ class DashboardApiService{
   static const String getUpcomingDateOfBirth = baseUrl + 'Employee/GetUpcomingDateOfBirth';
   static const String getReminderCallListTodayAndTomorrow = baseUrl + 'LeadDetail/GetReminderCallListTodayAndTomorrow';
   static const String getCampaignName = baseUrl + 'LeadDetail/GetCampaignName';
+  static const String getBreakingNewsById = baseUrl + 'UpdatedNews/GetBreakingNewsById';
 
   static Future<Map<String, dynamic>> getEmployeeByPhoneNumberApi({
     required String phone,
@@ -211,5 +212,46 @@ class DashboardApiService{
     }
   }
 
+  static Future<Map<String, dynamic>> getBreakingNewsByIdApi({
+    required newsId,
+  }) async {
 
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getBreakingNewsById),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      request.fields['Id'] =newsId.toString();
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("request===>  getBreakingNewsByIdApi==>");
+      print("request===>==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>getBreakingNewsByIdApi==>${response.body.toString()}");
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
 }

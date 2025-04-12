@@ -26,6 +26,7 @@ import '../home/leads/lead_history.dart';
 import '../home/leads/lead_list_main.dart';
 import '../home/leads/loan_application_screen.dart';
 import '../home/manage_branch.dart';
+import '../home/news/NewsDetailsScreen.dart';
 import '../home/notification_screen.dart';
 import '../home/leads/open_poll_filter.dart';
 import '../home/product.dart';
@@ -59,4 +60,5 @@ final routes = [
   GetPage(name: '/dashboardScreen', page: () => DashboardScreen()),
   GetPage(name: '/getAllReminder', page: () => GetAllReminderScreen()),
   GetPage(name: '/leadSearchScreen', page: () => LeadSearchScreen()),
+  GetPage(name: '/newsDetailsScreen', page: () => NewsDetailsScreen()),
 ];

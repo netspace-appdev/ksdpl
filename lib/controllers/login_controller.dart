@@ -15,7 +15,7 @@ class LoginController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   LoginModel? loginModel;
 
-  void loginApi(String phoneNumber, String password) async {
+ Future<void>loginApi(String phoneNumber, String password) async {
     try {
       isLoading(true);
 

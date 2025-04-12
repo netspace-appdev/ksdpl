@@ -1019,7 +1019,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: TextButton(
-                            onPressed: () => _launchURL(data.url.toString()),
+                            //onPressed: () => _launchURL(data.url.toString()),
+                            onPressed: (){
+                              Get.toNamed("/newsDetailsScreen", arguments: {
+                                "newsId":data.id.toString()
+                              });
+                            },
                             child: const Text(
                               "Read More",
                               style: TextStyle(color: Colors.blue),

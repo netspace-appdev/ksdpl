@@ -141,10 +141,15 @@ class LoginScreen extends StatelessWidget {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                controller.loginApi(controller.mobileController.text,
-                                    controller.passwordController.text);
+
+                              /*  controller.loginApi(controller.mobileController.text,
+                                    controller.passwordController.text);*/
+
+                                Helper.checkInternet(() => controller.loginApi(
+                                    controller.mobileController.text,
+                                    controller.passwordController.text));
                               }
-                              //Get.offAllNamed("/bottomNavbar");
+
 
                             },
                             child: const Text(

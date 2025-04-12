@@ -385,6 +385,7 @@ class AppImage{
   static const String poll_yellow="assets/images/poll_white.png";
   static const String lead_white="assets/images/lead_white.png";
   static const String lead_yellow="assets/images/lead_yellow.png";
+  static const String img_not_found="assets/images/img_not_found.jpg";
 
 }
 
@@ -400,29 +401,25 @@ class AppStyles {
   );
 }
 class Helper{
+  static Future<void> checkInternet(Future<void> Function() onConnected) async {
+    var connectivityResult = await Connectivity().checkConnectivity();
 
-  static void isConnected(Function apiCall) async {
-    if (!await _checkInternet()) {
-      Fluttertoast.showToast(msg: "Check Internet Connection", gravity: ToastGravity.BOTTOM);
-      return;
+    if (connectivityResult != ConnectivityResult.none) {
+      try {
+        final result = await InternetAddress.lookup('google.com');
+        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+          await onConnected(); // Internet is really available
+          return;
+        }
+      } on SocketException catch (_) {
+        // Still no real internet
+      }
     }
-    apiCall(); // Calls the function if internet is available
+
+    ToastMessage.msg("Please check your internet connection");
   }
 
-  /// ✅ Private function to check internet connectivity
-  static Future<bool> _checkInternet() async {
-    try {
-      var connectivityResult = await Connectivity().checkConnectivity();
-      if (connectivityResult == ConnectivityResult.none) return false;
-
-      // Further check if the internet is actually working
-      final result = await InternetAddress.lookup('google.com');
-      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
-    } catch (e) {
-      return false;
-    }
-  }
-
+///Ix
 /*  static Future<void> checkInternet(Future<dynamic> callback) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
@@ -467,6 +464,45 @@ class Helper{
           height: 80, // Must be 2 * radius to fit
           color: Colors.white,
           child: Icon(Icons.person, size: 40,),
+        ),
+      ),
+    );
+  }
+
+
+  static Widget CustomCNImageBig(String imageURL, double cHeight, double cWidth){
+    return CachedNetworkImage(
+      imageUrl: imageURL,//"",//"https://img.freepik.com/free-photo/close-up-portrait-brunette-smiling-woman-looking-confident-front-standing-hoodie-against-white-wall_176420-39066.jpg?t=st=1737785621~exp=1737789221~hmac=e5648802111562bfcb27f8ed3e9c8d2ca70f826e407a1b9007a98e326b455929&w=1380",
+      imageBuilder: (context, imageProvider) => Container(
+        width: cHeight, // Must be 2 * radius to fit
+        //height: cWidth, // Must be 2 * radius to fit
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover,
+            /*  colorFilter:
+                               ColorFilter.mode(Colors.red, BlendMode.colorBurn)*/
+          ),
+        ),
+      ),
+      placeholder: (context, url) => Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          width: 200,
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) =>Center(
+        child: Container(
+          width: 200, // Must be 2 * radius to fit
+          height: 200, // Must be 2 * radius to fit
+          color: Colors.white,
+          child: Image.asset(AppImage.img_not_found),
         ),
       ),
     );
