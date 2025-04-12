@@ -56,9 +56,26 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true // << Must be here!
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 
 }
 
 flutter {
     source = "../.."
+}
+dependencies {
+    // Important: this is needed for desugaring
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
+
+    // Add your other dependencies here
 }

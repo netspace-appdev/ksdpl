@@ -131,23 +131,20 @@ class NewsDetailsScreen extends StatelessWidget {
           // Static Image
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
-      /*      child: Image.network(
-              "https://yourcdn.com/images/samaj_gathering.jpg",
-              height: 200,
+            child: newsDetailsController.getNewsByIdModel.value!.data!.imageUrl.toString()==""?
+            Image.asset(
+              AppImage.noImage,
               width: double.infinity,
+              height: 100,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 200,
-                  color: Colors.grey[300],
-                  child: const Center(child: Text("Image not found")),
-                );
-              },
-            ),*/
-            child: Helper.CustomCNImageBig(
-                BaseUrl.imageBaseUrl+ newsDetailsController.getNewsByIdModel.value!.data!.imageUrl.toString(),
-                200,
-                200),
+            ):
+            Image.network(
+              BaseUrl.imageBaseUrl+ newsDetailsController.getNewsByIdModel.value!.data!.imageUrl.toString(),
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+
           ),
           const SizedBox(height: 20),
 

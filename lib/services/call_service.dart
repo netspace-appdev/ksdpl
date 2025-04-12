@@ -2,6 +2,7 @@
 import 'package:call_log/call_log.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:phone_state/phone_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
@@ -100,8 +101,9 @@ class CallService {
       leadListController.callFeedbackController.clear();
       leadListController.leadFeedbackController.clear();
       DateTime now = DateTime.now();
+      var td=DateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(now);
       leadListController.isCallReminder.value =false;
-      var formattedDateTime=now.toString();
+      var formattedDateTime=td.toString();
       if (lastCall.duration! > 0) {
         leadListController.workOnLeadApi(
           leadId: leadId.toString(),

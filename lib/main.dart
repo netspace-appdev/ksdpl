@@ -6,8 +6,17 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'common/notification_helper.dart';
 import 'common/routes.dart';
 import 'controllers/profile/them_controller.dart';
+
+///reminder
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+///rm end
 
 /*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
@@ -39,6 +48,18 @@ void main() async{
   await Permission.storage.request();
 
   Get.put(ThemeController());
+  ///reminder
+  /*tz.initializeTimeZones();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings =
+  InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);*/
+  await NotificationHelper.init();
+  ///rm end
   runApp(const MyApp());
 }
 

@@ -233,7 +233,8 @@ class LeadListController extends GetxController {
 
     String selectedDate = followDateController.text; // MM/DD/YYYY
     String selectedTime = followTimeController.text; // HH:MM AM/PM
-
+print("selectd data==>${selectedDate}");
+print("selectedTime ==>${selectedTime}");
 
     String formattedDateTime="";
 
@@ -243,7 +244,7 @@ class LeadListController extends GetxController {
         ToastMessage.msg("Date or Time is empty!");
         return;
       }
-
+/*
       DateTime parsedDate = DateFormat("MM-dd-yyyy").parse(selectedDate);
 
 
@@ -258,15 +259,25 @@ class LeadListController extends GetxController {
         parsedTime.minute,
       );
 
-      formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);
+      formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);*/
 
+      String combined = "$selectedDate $selectedTime";
 
+// Parse using the right pattern
+      DateTime parsedDateTime = DateFormat("yyyy-M-d h:mm a").parse(combined);
+
+// Format to desired output
+      String formatted = DateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(parsedDateTime);
+      formattedDateTime=formatted.toString();
+      print("selectedTime fianl ==>${formatted}");
+      print("selectedTime fianl ==>${formattedDateTime.toString()}");
     }else{
 
 
       DateTime now = DateTime.now();
-
-      formattedDateTime=now.toString();
+      print("fnow in real box==>${now.toString()}");
+      var td=DateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(now);
+      formattedDateTime=td.toString();
 
     }
 
@@ -278,6 +289,7 @@ class LeadListController extends GetxController {
 
     print("call status  in real box==>${callStatus}");
     print("id in real box==>${id}");
+    print("formattedDateTime in real box==>${formattedDateTime.toString()}");
 
 
     workOnLeadApi(
@@ -304,61 +316,6 @@ class LeadListController extends GetxController {
     });
   }
 
-
-/*  void  getAllLeadsApi({
-    required String employeeId,
-    required String leadStage,
-    required stateId,
-    required distId,
-    required cityId,
-    required campaign,
-
-  }) async {
-    try {
-      if (isLoading.value || !hasMore.value) return;
-
-      isLoading(true);
-
-
-      var data = await DrawerApiService.getAllLeadsApi(
-        employeeId:employeeId,
-        leadStage: leadStage,
-        stateId: stateId,
-        distId: distId,
-        cityId: cityId,
-        campaign: campaign,
-      );
-
-
-      if(data['success'] == true){
-
-        getAllLeadsModel.value= GetAllLeadsModel.fromJson(data);
-
-
-        leadStageName2.value=leadStageName.value;
-
-
-        isLoading(false);
-
-      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
-        leadStageName2.value=leadStageName.value;
-        getAllLeadsModel.value=null;
-      }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-
-
-    } catch (e) {
-      print("Error getAllLeadsApi: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
-    } finally {
-
-      isLoading(false);
-    }
-  }*/
 
   void getAllLeadsApi({
     required String employeeId,
@@ -593,7 +550,7 @@ class LeadListController extends GetxController {
 
         workOnLeadModel= WorkOnLeadModel.fromJson(data);
 
-
+        ToastMessage.msg(workOnLeadModel!.message.toString());
         isLoading(false);
 
       }else{

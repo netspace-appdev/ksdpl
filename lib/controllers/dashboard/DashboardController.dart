@@ -2,6 +2,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../../common/helper.dart';
+import '../../common/notification_helper.dart';
 import '../../common/storage_service.dart';
 import '../../models/dashboard/GetCountOfLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
@@ -140,8 +141,6 @@ class DashboardController extends GetxController {
 
 
 
-
-
         isLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -214,6 +213,55 @@ class DashboardController extends GetxController {
       if(data['success'] == true){
 
         getRemindersModel.value= GetRemindersModel.fromJson(data);
+
+        getRemindersModel.value!.data!.forEach((ele){
+
+        });
+
+       /* var rawDate="2025-04-12 17:52:00.000";
+        DateTime dateTime = DateTime.parse(rawDate);
+
+
+        if (dateTime.isAfter(DateTime.now())) {
+          print("alarm");
+          await NotificationHelper.scheduleReminder(
+            id:1, //reminder.id,
+            title: "test",//reminder.title,
+            body: "demo",//reminder.body,
+            scheduledDateTime: dateTime,
+          );
+        } else {
+          print('⏰ Skipped past reminder:test');
+        }*/
+
+        for (var i = 0; i < getRemindersModel.value!.data!.length; i++) {
+          final reminder = getRemindersModel.value!.data![i];
+
+          // Assuming your date is stored in reminder.date as a String
+          final rawDate = reminder.callReminder; // like "2025-04-12 17:38:00.000"
+
+          try {
+            final dateTime = DateTime.parse(rawDate!);
+
+            if (dateTime.isAfter(DateTime.now())) {
+              print("⏰ Scheduling alarm for $rawDate");
+
+              await NotificationHelper.scheduleReminder(
+                id: i + 1, // make sure ID is unique
+                title: "Important Call Reminder"?? "Reminder",
+                body: "Call to ${reminder.leadCustomerName}, you have set a reminder last time" ?? "Don't forget!",
+                scheduledDateTime: dateTime,
+              );
+            } else {
+              print("⏭️ Skipped past reminder: $rawDate");
+            }
+          } catch (e) {
+            print("❌ Error parsing/scheduling reminder: $e");
+          }
+        }
+
+
+
 
 
         isLoading(false);
