@@ -617,7 +617,7 @@ class LoanApplicationScreen extends StatelessWidget {
                             SizedBox(height: 20),
 
 
-                            /*Obx(() => Container(
+Obx(() => Container(
                               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -666,7 +666,8 @@ class LoanApplicationScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                            )),*/
+                            )),
+
                           ],
                         ),
                       ),
@@ -832,3 +833,162 @@ class MultiStepFormController extends GetxController {
     print("Form Saved!");
   }
 }
+
+/*import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class MultiStepFormController extends GetxController {
+  var currentIndex = 0.obs;
+
+  void next() {
+    if (currentIndex.value < 6) currentIndex.value++;
+  }
+
+  void previous() {
+    if (currentIndex.value > 0) currentIndex.value--;
+  }
+
+  void setIndex(int index) {
+    currentIndex.value = index;
+  }
+}
+
+class LoanApplicationScreen extends StatelessWidget {
+  final MultiStepFormController controller = Get.put(MultiStepFormController());
+
+  final List<String> steps = [
+    'Personal Info',
+    'Co-Applicant',
+    'Property Details',
+    'Family',
+    'Credit Cards',
+    'Financials',
+    'References'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: steps.length,
+      initialIndex: 0,
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        appBar: AppBar(
+          backgroundColor: Colors.deepPurple,
+          title: const Text("Loan Application"),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(4),
+            child: Obx(() {
+              double progress = (controller.currentIndex.value + 1) / steps.length;
+              return LinearProgressIndicator(
+                value: progress,
+                color: Colors.green,
+                backgroundColor: Colors.white24,
+              );
+            }),
+          ),
+        ),
+        body: Column(
+          children: [
+            // Tab Navigation (Mobile Optimized)
+            Container(
+              height: 50,
+              child: Obx(() {
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: steps.length,
+                  itemBuilder: (context, index) {
+                    final selected = controller.currentIndex.value == index;
+                    return GestureDetector(
+                      onTap: () {
+                        controller.setIndex(index);
+                        DefaultTabController.of(context).animateTo(index);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: selected ? Colors.deepPurple : Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.deepPurple),
+                        ),
+                        child: Center(
+                          child: Text(
+                            steps[index],
+                            style: TextStyle(
+                              color: selected ? Colors.white : Colors.deepPurple,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }),
+            ),
+
+            // Form Body
+            Expanded(
+              child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                children: steps.map((step) {
+                  return Center(
+                    child: Card(
+                      margin: const EdgeInsets.all(20),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "$step Form",
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 30),
+                            const Text("Form fields go here..."),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+
+            // Navigation Buttons
+            Obx(() {
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (controller.currentIndex.value > 0)
+                      ElevatedButton.icon(
+                        onPressed: controller.previous,
+                        icon: const Icon(Icons.arrow_back),
+                        label: const Text("Previous"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey,
+                        ),
+                      ),
+                    if (controller.currentIndex.value < steps.length - 1)
+                      ElevatedButton.icon(
+                        onPressed: controller.next,
+                        icon: const Icon(Icons.arrow_forward),
+                        label: const Text("Next"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+}*/

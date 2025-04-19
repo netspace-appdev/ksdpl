@@ -392,6 +392,7 @@ class DrawerApiService {
     required int pageSize,
     required fromDate,
     required toDate,
+    required branch,
   }) async {
     try {
       print("API called");
@@ -411,6 +412,7 @@ class DrawerApiService {
       request.fields['Campaign'] = campaign;
       request.fields['FromDate'] = fromDate;
       request.fields['ToDate'] = toDate;
+      request.fields['Branch'] = branch;
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);

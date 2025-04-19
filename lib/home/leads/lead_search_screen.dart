@@ -507,6 +507,7 @@ class LeadSearchScreen extends StatelessWidget {
       campaign: leadDDController.selectedCampaign.value??"",
       fromDate: leadListController.fromDateController.value.text,
       toDate: leadListController.toDateController.value.text,
+      branch: leadDDController.selectedKsdplBr.value??"0",
 
     );
   }
@@ -768,6 +769,7 @@ class LeadSearchScreen extends StatelessWidget {
                     campaign: leadListController.campaignMain.value.toString(),
                     fromDate: leadListController.fromDateMain.value,
                     toDate: leadListController.toDateMain.value,
+                    branch: leadListController.branchMain.value,
                     isLoadMore: true,
                   );
                 },

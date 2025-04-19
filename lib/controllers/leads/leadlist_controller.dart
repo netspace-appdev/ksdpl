@@ -47,6 +47,7 @@ class LeadListController extends GetxController {
   var campaignMain="".obs;
   var fromDateMain="".obs;
   var toDateMain="".obs;
+  var branchMain="0".obs;
 
   var selectedIndex = (1).obs;
   var leadId = RxnString();
@@ -216,6 +217,7 @@ class LeadListController extends GetxController {
         campaign: campaignMain.value,
         fromDate: fromDateMain.value,
         toDate: toDateMain.value,
+        branch: branchMain.value
     );
   }
 
@@ -328,6 +330,7 @@ print("selectedTime ==>${selectedTime}");
     required campaign,
     required fromDate,
     required toDate,
+    required branch,
     bool isLoadMore = false,
   }) async {
 
@@ -353,6 +356,7 @@ print("selectedTime ==>${selectedTime}");
         pageSize: pageSize,
         fromDate: fromDate,
         toDate: toDate,
+        branch: branch
       );
 
       if (data['success'] == true) {
@@ -443,6 +447,7 @@ print("selectedTime ==>${selectedTime}");
           campaign: campaignMain.value,
           fromDate: fromDateMain.value,
           toDate: toDateMain.value,
+          branch: branchMain.value
       );
 
       isLoading(false);
@@ -500,6 +505,7 @@ print("selectedTime ==>${selectedTime}");
           campaign: campaignMain.value,
           fromDate: fromDateMain.value,
           toDate: toDateMain.value,
+          branch: branchMain.value
       );
 
       isLoading(false);
@@ -579,6 +585,7 @@ print("selectedTime ==>${selectedTime}");
           campaign: campaignMain.value,
           fromDate: fromDateMain.value,
           toDate: toDateMain.value,
+          branch: branchMain.value
       );
 
       isLoading(false);
@@ -617,6 +624,7 @@ print("selectedTime ==>${selectedTime}");
           campaign: campaignMain.value,
           fromDate: fromDateMain.value,
           toDate: toDateMain.value,
+            branch: branchMain.value
         );
 
 
@@ -652,6 +660,7 @@ print("selectedTime ==>${selectedTime}");
         campaign: campaignMain.value,
         fromDate: fromDateMain.value,
         toDate: toDateMain.value,
+        branch: branchMain.value
     );
   }
 

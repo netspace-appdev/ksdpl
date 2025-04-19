@@ -69,11 +69,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
         floatingActionButton: FloatingActionButton(
           backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {
-            /*LeadListController leadListController = Get.find<LeadListController>(tag: 'list');
 
-
-
-            leadListController.fromWhere.value="search";*/
             LeadDDController leadDDController=Get.put(LeadDDController());
             leadDDController.selectedStage.value="2";
             Get.toNamed("/leadSearchScreen");
