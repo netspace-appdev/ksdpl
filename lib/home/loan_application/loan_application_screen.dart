@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
@@ -20,8 +21,11 @@ import '../../controllers/leads/loan_appl_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import 'Step1Form.dart';
+import 'Step2Form.dart';
 
 
+/*
 class LoanApplicationScreen extends StatelessWidget {
 
   LeadDDController leadDDController = Get.put(LeadDDController());
@@ -833,162 +837,327 @@ class MultiStepFormController extends GetxController {
     print("Form Saved!");
   }
 }
+*/
 
-/*import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-class MultiStepFormController extends GetxController {
-  var currentIndex = 0.obs;
-
-  void next() {
-    if (currentIndex.value < 6) currentIndex.value++;
-  }
-
-  void previous() {
-    if (currentIndex.value > 0) currentIndex.value--;
-  }
-
-  void setIndex(int index) {
-    currentIndex.value = index;
-  }
-}
 
 class LoanApplicationScreen extends StatelessWidget {
-  final MultiStepFormController controller = Get.put(MultiStepFormController());
 
-  final List<String> steps = [
-    'Personal Info',
-    'Co-Applicant',
-    'Property Details',
-    'Family',
-    'Credit Cards',
-    'Financials',
-    'References'
+  LeadDDController leadDDController = Get.put(LeadDDController());
+  GreetingController greetingController = Get.put(GreetingController());
+  InfoController infoController = Get.put(InfoController());
+  final TextEditingController _searchController = TextEditingController();
+
+
+  final _formKey = GlobalKey<FormState>();
+  final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());/// Remove it
+  final LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
+  final List<Widget> stepForms = [
+    Step1Form(),
+    Step2Form(),
+
   ];
-
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: steps.length,
-      initialIndex: 0,
+    return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey[100],
-        appBar: AppBar(
-          backgroundColor: Colors.deepPurple,
-          title: const Text("Loan Application"),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(4),
-            child: Obx(() {
-              double progress = (controller.currentIndex.value + 1) / steps.length;
-              return LinearProgressIndicator(
-                value: progress,
-                color: Colors.green,
-                backgroundColor: Colors.white24,
-              );
-            }),
-          ),
-        ),
-        body: Column(
-          children: [
-            // Tab Navigation (Mobile Optimized)
-            Container(
-              height: 50,
-              child: Obx(() {
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: steps.length,
-                  itemBuilder: (context, index) {
-                    final selected = controller.currentIndex.value == index;
-                    return GestureDetector(
-                      onTap: () {
-                        controller.setIndex(index);
-                        DefaultTabController.of(context).animateTo(index);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: selected ? Colors.deepPurple : Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.deepPurple),
-                        ),
-                        child: Center(
-                          child: Text(
-                            steps[index],
-                            style: TextStyle(
-                              color: selected ? Colors.white : Colors.deepPurple,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              }),
-            ),
 
-            // Form Body
-            Expanded(
-              child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: steps.map((step) {
-                  return Center(
-                    child: Card(
-                      margin: const EdgeInsets.all(20),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "$step Form",
-                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 30),
-                            const Text("Form fields go here..."),
-                          ],
-                        ),
+        backgroundColor: AppColor.backgroundColor,
+
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  // Gradient Background
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColor.primaryLight, AppColor.primaryDark],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
-            ),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        header(context),
+                      ],
+                    ),
+                  ),
 
-            // Navigation Buttons
-            Obx(() {
-              return Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (controller.currentIndex.value > 0)
-                      ElevatedButton.icon(
-                        onPressed: controller.previous,
-                        icon: const Icon(Icons.arrow_back),
-                        label: const Text("Previous"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey,
+                  // White Container
+                  Align(
+                    alignment: Alignment.topCenter,  // Centers it
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: 90 // MediaQuery.of(context).size.height * 0.22
+                      ), // <-- Moves it 30px from top
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                      decoration: const BoxDecoration(
+                        color: AppColor.backgroundColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(45),
+                          topRight: Radius.circular(45),
                         ),
                       ),
-                    if (controller.currentIndex.value < steps.length - 1)
-                      ElevatedButton.icon(
-                        onPressed: controller.next,
-                        icon: const Icon(Icons.arrow_forward),
-                        label: const Text("Next"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepPurple,
-                        ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 100,
+                            child: ListView.builder(
+                              controller: loanApplicationController.scrollController,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: loanApplicationController.titles.length,
+                              itemBuilder: (context, index) {
+                                return Obx(() {
+                                  Color circleColor;
+
+                                  if (loanApplicationController.currentStep.value == index) {
+                                    circleColor = AppColor.primaryColor;
+                                  } else if (loanApplicationController.stepCompleted[index]) {
+                                    circleColor = Colors.green;
+                                  } else {
+                                    circleColor = Colors.grey;
+                                  }
+
+                                  return GestureDetector(
+                                    onTap: () => loanApplicationController.jumpToStep(index),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        if (index != 0)
+                                          Container(
+                                            alignment: Alignment.center,
+                                            margin: const EdgeInsets.only(bottom: 25), // adjust vertically
+                                            child: SizedBox(
+                                              width: 30,
+                                              child: Divider(
+                                                thickness: 2,
+                                                color: loanApplicationController.stepCompleted[index - 1]
+                                                    ? Colors.green
+                                                    : Colors.grey[300],
+                                                height: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+
+                                          children: [
+                                            Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                CircleAvatar(
+                                                  radius: 20,
+                                                  backgroundColor: circleColor,
+                                                  child: Text(
+                                                    '${index + 1}',
+                                                    style: const TextStyle(color: Colors.white),
+                                                  ),
+                                                ),
+                                                if (loanApplicationController.stepCompleted[index])
+                                                   Positioned(
+                                                    right: 0,
+                                                    bottom: 0,
+                                                    child: Container(
+                                                      decoration:BoxDecoration(
+                                                        color:loanApplicationController.currentStep.value == index
+                                                            ? Colors.green // current step completed
+                                                            : Colors.blue,
+                                                        shape: BoxShape.circle,
+                                                          border: Border.all(color: Colors.white)
+                                                      ),
+                                                      padding: EdgeInsets.all(2.0),
+                                                      child: Icon(Icons.check, size: 12, color: Colors.white),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Align(
+                                              alignment: Alignment.center,
+                                              child: Container(
+                                                width: 100,
+                                                child: Text(
+                                                  _breakTwoWords(loanApplicationController.titles[index]),
+                                                  style: const TextStyle(fontSize: 12, ),
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 2,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Scrollable form
+                          SingleChildScrollView(
+                            child: Obx(() => Padding(
+                              padding: const EdgeInsets.only(bottom: 80),
+                              child: stepForms[loanApplicationController.currentStep.value],
+                            )),
+                          ),
+                        ],
                       ),
-                  ],
-                ),
-              );
-            }),
-          ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
+        bottomNavigationBar: Obx(() => Container(
+          color: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: loanApplicationController.currentStep.value > 0
+                    ? loanApplicationController.previousStep
+                    : null,
+                child: const Text('Prev'),
+              ),
+              ElevatedButton(
+                onPressed: () => loanApplicationController.markStepAsCompleted(),
+                child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: loanApplicationController.currentStep.value < 6
+                    ? loanApplicationController.nextStep
+                    : null,
+                child: const Text('Next',style: TextStyle(color: AppColor.appWhite),),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColor.primaryColor,
+                ),
+              ),
+            ],
+          ),
+        )),
+
+
       ),
     );
   }
-}*/
+
+  Widget header(context){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+
+          InkWell(
+              onTap: (){
+                Get.back();
+              },
+              child: Image.asset(AppImage.arrowLeft,height: 24,)),
+          const Text(
+            AppText.loanAppl,
+            style: TextStyle(
+                fontSize: 20,
+                color: AppColor.grey3,
+                fontWeight: FontWeight.w700
+
+
+            ),
+          ),
+
+          InkWell(
+            onTap: (){
+
+            },
+            child: Container(
+
+              width: 40,
+              height:40,
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              decoration:  const BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+
+            ),
+          )
+
+
+
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRadioOption(String gender) {
+    return Row(
+      children: [
+        Radio<String>(
+          value: gender,
+          groupValue: loanApplicationController.selectedGender.value,
+          onChanged: (value) {
+            loanApplicationController.selectedGender.value=value;
+          },
+        ),
+        Text(gender),
+      ],
+    );
+  }
+
+  void onPressed(){
+
+
+    if (_formKey.currentState!.validate()) {
+
+      if (addleadcontroller.selectedGender.value==null) {
+        ToastMessage.msg("Please select gender");
+      }else {
+        ToastMessage.msg("Form Submitted");
+      }
+    }
+  }
+
+  Widget percentBar(){
+    return Padding(
+      padding: EdgeInsets.all(15.0),
+      child: new LinearPercentIndicator(
+        //width: MediaQuery.of(context).size.width - 50,
+        animation: true,
+        lineHeight: 15.0,
+        animationDuration: 2500,
+        percent: 0.8,
+        //center: Text("80.0%"),
+        // linearStrokeCap: LinearStrokeCap.roundAll,
+        barRadius: Radius.circular(15),
+        progressColor:AppColor.greenColor,
+      ),
+    );
+  }
+  String _breakTwoWords(String title) {
+    final words = title.trim().split(' ');
+    if (words.length == 2) {
+      return '${words[0]}\n${words[1]}';
+    }
+    return title;
+  }
+
+}
+
+
+
