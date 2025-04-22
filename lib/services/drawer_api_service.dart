@@ -34,6 +34,8 @@ class DrawerApiService {
   static const String getCommonLeadListByFilter = baseUrl + 'LeadDetail/GetCommonLeadListByFilter';
   static const String getAllKsdplBranch = baseUrl + 'KsdplBranch/GetAllKsdplBranch';
   static const String getAllLeadStage = baseUrl + 'LeadStage/GetAllLeadStage';
+  static const String getAllBranchByBankId = baseUrl + 'Branch/GetAllBranchByBankId';
+  static const String getAllChannelList = baseUrl + 'ChannelMaster/GetAllChannelList';
 
   static Future<Map<String, dynamic>> getBankerByIdApi({
     required String bankerId,
@@ -1142,4 +1144,82 @@ class DrawerApiService {
       throw Exception('Error: $e');
     }
   }
+
+  static Future<Map<String, dynamic>> getAllBranchByBankIdApi({
+    required bankId
+  }) async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllBranchByBankId),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['bankId'] = bankId;
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> getAllChannelListApi() async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllChannelList),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
 }

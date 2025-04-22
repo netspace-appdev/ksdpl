@@ -17,8 +17,8 @@ class BotNavController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getFCMToken();
-    getDeviceId();
+   // getFCMToken();
+   // getDeviceId();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("New notification: ${message.notification?.title}");
       showLocalNotification(message);
@@ -29,6 +29,7 @@ class BotNavController extends GetxController {
 
   }
   void getFCMToken() async {
+    print('getFCMToken');
     String? token = await FirebaseMessaging.instance.getToken();
     print('🔑 FCM Token: $token');
 

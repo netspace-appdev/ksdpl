@@ -219,7 +219,7 @@ class AppText{
   static const String noBirhday="No upcoming birthdays";
   static const String loanAppl="Loan Application";
   static const String coApplDetails="Co-Applicant Details";
-  static const String fathersName="Father's Name";
+  static const String fathersName="Father's Full Name";
   static const String enterFathersName = "Enter Father's Name";
   static const String qualification = "Qualification";
   static const String enterQualification = "Enter Qualification";
@@ -282,6 +282,87 @@ class AppText{
   static const String searchedLeads = "Searched Leads";
   static const String leadStage = "Lead Stage";
   static const String changeLeadStatus = "Change Status";
+  static const String personInformation = "Person Information";
+  static const String applFNmae = "Applicant's Full Name";
+
+
+  static const String dsaCode = "DSA Code";
+  static const String enterDsaCode = "Enter DSA Code";
+  static const String loanApplicationNo = "Loan Application No";
+  static const String enterLoanApplicationNo = "Enter Loan Application No";
+  static const String bankNostar ="Bank";
+  static const String brNostar ="Branch";
+  static const String selectBank = "Select your Bank name";
+  static const String selectBranch = "Select your Branch";
+  static const String loanType = "Type of Loan";
+  static const String selectLoanType = "Select your Loan Type";
+  static const String panCardNo = "PAN Card Number";
+  static const String enterPanCardNo = "Enter PAN Card Number";
+  static const String aadharCardNo = "Aadhar Card Number";
+  static const String enterAadharCardNo = "Enter Aadhar Card Number";
+  static const String loanAmountApplied = "Loan Amount Applied";
+  static const String enterLoanAmountApplied = "Enter Loan Amount Applied";
+  static const String dsaStaffName = "DSA Staff Name";
+  static const String enterDsaStaffName = "Enter DSA Staff Name";
+  static const String uniqueLeadNumber = "Unique Lead Number";
+  static const String enterUniqueLeadNumber = "Enter Unique Lead Number";
+  static const String channel = "Channel";
+  static const String selectChannel = "Select your Channel";
+  static const String channelCode = "Channel Code";
+  static const String enterChannelCode = "Enter Channel Code";
+  static const String processingFee = "Processing Fee";
+  static const String enterProcessingFee = "Enter Processing Fee";
+  static const String chqDdSlipNo = "CHQ/DD Slip No";
+  static const String enterChqDdSlipNo = "Enter CHQ/DD Slip No";
+  static const String processingFeeDate = "Processing Fee Date";
+  static const String enterProcessingFeeDate = "mm/dd/yyyy";
+  static const String loanPurpose = "Loan Purpose";
+  static const String enterLoanPurpose = "Enter Loan Purpose";
+  static const String scheme = "Scheme";
+  static const String enterScheme = "Enter Scheme";
+  static const String repaymentType = "Repayment Type";
+  static const String enterRepaymentType = "Enter Repayment Type";
+  static const String loanTenure = "Loan Tenure (Years)";
+  static const String enterLoanTenure = "Enter Loan Tenure in Years";
+  static const String monthlyInstallment = "Monthly Installment";
+  static const String enterMonthlyInstallment = "Enter Monthly Installment";
+  static const String previousLoanApplied = "Previous Loan Applied";
+
+  static const String applicantEmployerDetails = "Applicant's Employer Details";
+  static const String organizationName = "Organization Name";
+  static const String enterOrganizationName = "Enter Organization Name";
+  static const String ownershipType = "Ownership Type";
+  static const String selectOwnershipType = "Select Ownership Type";
+  static const String natureOfBusiness = "Nature of Business";
+  static const String enterNatureOfBusiness = "Enter Nature of Business";
+  static const String staffStrength = "Staff Strength";
+  static const String enterStaffStrength = "Enter Staff Strength";
+  static const String salaryDate = "Salary Date";
+  static const String enterSalaryDate = "mm/dd/yyyy";
+  static const String presentAddress = "Present Address";
+  static const String houseFlatNo = "House/Flat No";
+  static const String enterHouseFlatNo = "Enter House/Flat No";
+  static const String buildingNo = "Building No";
+  static const String enterBuildingNo = "Enter Building No";
+  static const String societyName = "Society Name";
+  static const String enterSocietyName = "Enter Society Name";
+  static const String locality = "Locality";
+  static const String enterLocality = "Enter Locality";
+  static const String streetName = "Street Name";
+  static const String enterStreetName = "Enter Street Name";
+  static const String pinCode = "Pin Code";
+  static const String enterPinCode = "Enter Pin Code";
+
+  static const String selectState = "Select your State";
+
+  static const String selectDistrict = "Select your District";
+
+  static const String selectCity = "Select your City";
+  static const String taluka = "Taluka";
+  static const String enterTaluka = "Enter Taluka";
+  static const String country = "Country";
+  static const String presentAdd = "Present Address";
+  static const String permanentAdd = "Permanent Address";
 }
 
 class AppColor{

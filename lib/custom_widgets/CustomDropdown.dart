@@ -212,6 +212,7 @@ class CustomDropdown<T> extends StatefulWidget {
   final T? selectedValue;
   final Function(T?) onChanged;
   final bool isEnabled;
+  final VoidCallback? onClear;
 
   const CustomDropdown({
     Key? key,
@@ -222,6 +223,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.hintText = "Select an option",
     this.selectedValue,
     this.isEnabled = true,
+    this.onClear,
   }) : super(key: key);
 
   @override
@@ -276,6 +278,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
     });
 
     widget.onChanged(null);
+    widget.onClear?.call();
     _removeOverlay();
   }
 

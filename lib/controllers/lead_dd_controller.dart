@@ -8,6 +8,8 @@ import '../models/dashboard/GetAllBankModel.dart';
 import '../models/GetAllBranchByBankIdModel.dart';
 import '../models/GetBankerRoleByLevelAndBankIdModel.dart';
 import '../models/GetLevelOfBankerRoleModel.dart';
+import '../models/dashboard/GetAllBranchBIModel.dart';
+import '../models/dashboard/GetAllChannelModel.dart';
 import '../models/dashboard/GetAllKsdplProductModel.dart';
 import '../models/dashboard/GetAllStateModel.dart';
 import '../models/dashboard/GetCityByDistrictIdModel.dart';
@@ -17,6 +19,7 @@ import '../models/leads/GetAllKsdplBranchModel.dart';
 import '../models/leads/GetAllLeadStageModel.dart';
 import '../services/drawer_api_service.dart';
 import '../services/home_service.dart';
+import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 
 class LeadDDController extends GetxController{
   var isLoading=false.obs;
@@ -29,6 +32,8 @@ class LeadDDController extends GetxController{
   var getProductListByBankModel = Rxn<GetProductListByBankModel>(); //
   var getAllKsdplBranchModel = Rxn<GetAllKsdplBranchModel>(); //
   var getAllLeadStageModel = Rxn<GetAllLeadStageModel>(); //
+  var getAllBranchBIModel = Rxn<GetAllBranchBIModel>();
+  var getAllChannelModel = Rxn<GetAllChannelModel>();
   var selectedState = Rxn<String>();
   var selectedDistrict = Rxn<String>();
   var selectedCity = Rxn<String>();
@@ -40,6 +45,8 @@ class LeadDDController extends GetxController{
   var selectedCampaign = Rxn<String>();
   var selectedKsdplBr = Rxn<String>();
   var selectedStage = Rxn<String>();
+  var selectedBankBranch = Rxn<String>();
+  var selectedChannel = Rxn<String>();
 
   var isStateLoading = false.obs;
   var isDistrictLoading = false.obs;
@@ -49,7 +56,17 @@ class LeadDDController extends GetxController{
   var isBankLoading = false.obs;
   var isProductLoading = false.obs;
   var isLeadStageLoading = false.obs;
+  var isBranchLoading = false.obs;
+  var isChannelLoading = false.obs;
   var activeStatus = "".obs;
+
+  var selectedStatePerm = Rxn<String>();
+  var selectedDistrictPerm = Rxn<String>();
+  var selectedCityPerm = Rxn<String>();
+
+  RxList<dist.Data> districtListPerm = <dist.Data>[].obs;
+  RxList<dist.Data> districtListCurr = <dist.Data>[].obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -60,6 +77,7 @@ class LeadDDController extends GetxController{
     getCampaignNameApi();
     getAllKsdplBranchApi();
     getAllLeadStageApi();
+    getAllChannelListApi();
   }
 
   changeActiveStatus(String stage){
@@ -135,7 +153,9 @@ class LeadDDController extends GetxController{
 
         getDistrictByStateModel.value= GetDistrictByStateModel.fromJson(data);
 
-
+        final List<dist.Data> districts = getDistrictByStateModel.value?.data ?? [];
+        districtListCurr.value = List<dist.Data>.from(districts);
+        districtListPerm.value = List<dist.Data>.from(districts);
 
 
         isLoading(false);
@@ -440,4 +460,84 @@ class LeadDDController extends GetxController{
       isLeadStageLoading(false);
     }
   }
+
+
+  void  getAllBranchByBankIdApi({
+    required bankId
+  }) async {
+    try {
+      isLoading(true);
+      isBranchLoading(true);
+
+
+      var data = await DrawerApiService.getAllBranchByBankIdApi(bankId: bankId);
+
+
+      if(data['success'] == true){
+
+        getAllBranchBIModel.value= GetAllBranchBIModel.fromJson(data);
+
+        isLoading(false);
+        isBranchLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAllBranchBIModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllStateApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+      isBranchLoading(false);
+    } finally {
+
+      isLoading(false);
+      isBranchLoading(false);
+    }
+  }
+
+  void  getAllChannelListApi() async {
+    try {
+
+      isChannelLoading(true);
+
+
+      var data = await DrawerApiService.getAllChannelListApi();
+
+
+      if(data['success'] == true){
+
+        getAllChannelModel.value= GetAllChannelModel.fromJson(data);
+
+
+        isChannelLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAllChannelModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllChannel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isChannelLoading(false);
+    } finally {
+
+
+      isChannelLoading(false);
+    }
+  }
+
 }

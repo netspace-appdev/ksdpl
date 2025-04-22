@@ -12,7 +12,33 @@ class LoanApplicationController extends GetxController{
   var isLoading = false.obs;
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
   var selectedGender = Rxn<String>();
-  final TextEditingController fullNameController = TextEditingController();
+  List<String> optionsPrevLoanAppl = ["Yes", "No"];
+  var selectedPrevLoanAppl = (-1).obs;
+  var ownershipList=["Owned", "Rented","Leased", "Jointly Owned", "Other"];
+  var countryList=["India",];
+  var selectedOwnershipList = Rxn<String>();
+  var selectedCountry = Rxn<String>();
+  var selectedCountryPerm = Rxn<String>();
+  final TextEditingController dsaCodeController = TextEditingController();
+  final TextEditingController lanController = TextEditingController();
+  final TextEditingController panController = TextEditingController();
+  final TextEditingController aadharController = TextEditingController();
+  final TextEditingController laAppliedController = TextEditingController();
+  final TextEditingController dsaStaffNController = TextEditingController();
+  final TextEditingController ulnController = TextEditingController();
+  final TextEditingController chCodeController = TextEditingController();
+  final TextEditingController proFeeController = TextEditingController();
+  final TextEditingController chqDDSNController = TextEditingController();
+  final TextEditingController proFeeDateController = TextEditingController();
+  final TextEditingController loPurposeController = TextEditingController();
+  final TextEditingController schemeController = TextEditingController();
+  final TextEditingController repayTpeController = TextEditingController();
+  final TextEditingController loanTenureYController = TextEditingController();
+  final TextEditingController monthInstaController = TextEditingController();
+  final TextEditingController prevLoanApplController = TextEditingController();
+
+
+  final TextEditingController applFullNameController = TextEditingController();
   final TextEditingController fatherNameController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final TextEditingController qualiController = TextEditingController();
@@ -21,10 +47,29 @@ class LoanApplicationController extends GetxController{
   final TextEditingController nationalityController = TextEditingController();
   final TextEditingController occupationController = TextEditingController();
   final TextEditingController occSectorController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController mobController = TextEditingController();
+  final TextEditingController applEmailController = TextEditingController();
+  final TextEditingController applMobController = TextEditingController();
 
+  final TextEditingController orgNameController = TextEditingController();
+  final TextEditingController natureOfBizController = TextEditingController();
+  final TextEditingController staffStrengthController = TextEditingController();
+  final TextEditingController salaryDateController = TextEditingController();
 
+  final TextEditingController houseFlatController = TextEditingController();
+  final TextEditingController buildingNoController = TextEditingController();
+  final TextEditingController societyNameController = TextEditingController();
+  final TextEditingController localityController = TextEditingController();
+  final TextEditingController streetNameController = TextEditingController();
+  final TextEditingController pinCodeController = TextEditingController();
+  final TextEditingController talukaController = TextEditingController();
+
+  final TextEditingController houseFlatPermController = TextEditingController();
+  final TextEditingController buildingNoPermController = TextEditingController();
+  final TextEditingController societyNamePermController = TextEditingController();
+  final TextEditingController localityPermController = TextEditingController();
+  final TextEditingController streetNamePermController = TextEditingController();
+  final TextEditingController pinCodePermController = TextEditingController();
+  final TextEditingController talukaPermController = TextEditingController();
 
   var currentStep = 0.obs;
   var stepCompleted = List<bool>.filled(7, false).obs;
