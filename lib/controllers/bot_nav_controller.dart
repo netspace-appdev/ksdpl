@@ -17,8 +17,6 @@ class BotNavController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-   // getFCMToken();
-   // getDeviceId();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("New notification: ${message.notification?.title}");
       showLocalNotification(message);
@@ -28,28 +26,7 @@ class BotNavController extends GetxController {
     });
 
   }
-  void getFCMToken() async {
-    print('getFCMToken');
-    String? token = await FirebaseMessaging.instance.getToken();
-    print('🔑 FCM Token: $token');
 
-    // You can send this token to your backend API
-  }
-  Future<void> getDeviceId() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    String deviceId = 'unknown';
-
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceId = androidInfo.id ?? 'no-id';
-      print('📱deviceId: $deviceId');
-    } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceId = iosInfo.identifierForVendor ?? 'no-id';
-    }
-
-    print('📱 Device ID: $deviceId');
-  }
 
   void showLocalNotification(RemoteMessage message) async {
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(

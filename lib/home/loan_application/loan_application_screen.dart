@@ -216,7 +216,12 @@ class LoanApplicationScreen extends StatelessWidget {
                 child: const Text('Prev'),
               ),
               ElevatedButton(
-                onPressed: () => loanApplicationController.markStepAsCompleted(),
+                onPressed: (){
+                  loanApplicationController.markStepAsCompleted();
+                  if(loanApplicationController.currentStep.value < 6){
+                    loanApplicationController.nextStep;
+                  }
+                },
                 child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,

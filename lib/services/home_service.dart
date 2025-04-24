@@ -3,6 +3,7 @@ import 'package:ksdpl/common/helper.dart';
 import 'dart:convert';
 
 import '../common/base_url.dart';
+import '../common/get_header.dart';
 import '../common/storage_service.dart';
 
 class ApiService {
@@ -28,6 +29,7 @@ class ApiService {
   static const String bankersRegistration = baseUrl + 'BankerRegistration/BankersRegistration';
   static const String sendMailForVerification = baseUrl + 'BankerRegistration/SendMailForVerification';
   static const String sendMailToBankerAfterRegistration = baseUrl + 'BankerRegistration/SendMailToBankerAfterRegistration';
+  static const String updateFCMToken = baseUrl + 'Employee/UpdateFCMTokenApi';
 
   static Future<Map<String, String>> getHeaders() async {
     String? token = StorageService.get(StorageService.TOKEN);
@@ -647,6 +649,60 @@ class ApiService {
       print("response.statusCode===>${response.statusCode}");
       print("response==>${response.body.toString()}");
 
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> updateFCMTokenApi({
+    required String id,
+    required String deviceID,
+    required String fcmToken,
+    required String generalToken,
+} ) async {
+    try {
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(updateFCMToken),
+      );
+
+      var header={
+        'Authorization': 'Bearer $generalToken',
+        'accept': 'text/plain',
+        'Content-Type': 'multipart/form-data'
+      };
+
+      request.headers.addAll(header);
+
+      // Adding form data
+      request.fields['Id'] = id;
+      request.fields['DeviceID'] = deviceID;
+      request.fields['FCMToken'] = fcmToken;
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      // print("Response Status Code: ${response.statusCode}");
+      // print("Response Body: ${response.body}");
+      print("request===> updateFCMTokenApi==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>${response.body.toString()}");
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

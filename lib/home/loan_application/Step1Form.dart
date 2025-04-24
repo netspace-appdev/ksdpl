@@ -594,6 +594,9 @@ class Step1Form extends StatelessWidget {
             ],
           ),
 
+
+          ///Current AKA Present Address
+
           ExpansionTile(
             childrenPadding: EdgeInsets.symmetric(horizontal: 20),
             title:const Text( AppText.presentAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -679,15 +682,15 @@ class Step1Form extends StatelessWidget {
                             (item) => item.id.toString() == leadDDController.selectedState.value,
                       ),
                       onChanged: (value) {
-                        leadDDController.selectedState.value =  value?.id?.toString();
-                        leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+                        leadDDController.selectedStateCurr.value =  value?.id?.toString();
+                        leadDDController.getDistrictByStateIdCurrApi(stateId: leadDDController.selectedStateCurr.value);
                       },
                       onClear: (){
-                        leadDDController.selectedDistrict.value = null;
-                        leadDDController.getDistrictByStateModel.value?.data!.clear(); // reset dependent dropdown
+                        leadDDController.selectedDistrictCurr.value = null;
+                        leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
 
-                        leadDDController.selectedCity.value = null;
-                        leadDDController.getCityByDistrictIdModel.value?.data!.clear(); // reset dependent dropdown
+                        leadDDController.selectedCityCurr.value = null;
+                        leadDDController. cityListCurr.value.clear(); // reset dependent dropdown
                       },
                     );
                   }),
@@ -703,7 +706,7 @@ class Step1Form extends StatelessWidget {
 
 
                   Obx((){
-                    if (leadDDController.isDistrictLoading.value) {
+                    if (leadDDController.isDistrictLoadingCurr.value) {
                       return  Center(child:CustomSkelton.leadShimmerList(context));
                     }
 
@@ -713,14 +716,14 @@ class Step1Form extends StatelessWidget {
                       getId: (item) => item.id.toString(),  // Adjust based on your model structure
                       getName: (item) => item.districtName.toString(),
                       selectedValue: leadDDController.districtListCurr.value.firstWhereOrNull(
-                            (item) => item.id.toString() == leadDDController.selectedDistrict.value,
+                            (item) => item.id.toString() == leadDDController.selectedDistrictCurr.value,
                       ),
                       onChanged: (value) {
-                        leadDDController.selectedDistrict.value =  value?.id?.toString();
-                        leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+                        leadDDController.selectedDistrictCurr.value =  value?.id?.toString();
+                        leadDDController.getCityByDistrictIdCurrApi(districtId: leadDDController.selectedDistrictCurr.value);
                       },
                       onClear: (){
-                        leadDDController.selectedCity.value = null;
+                        leadDDController.selectedDistrictCurr.value = null;
                         leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
 
                       },
@@ -739,20 +742,20 @@ class Step1Form extends StatelessWidget {
 
 
                   Obx((){
-                    if (leadDDController.isCityLoading.value) {
+                    if (leadDDController.isCityLoadingCurr.value) {
                       return  Center(child:CustomSkelton.leadShimmerList(context));
                     }
 
 
                     return CustomDropdown<city.Data>(
-                      items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
+                      items: leadDDController. cityListCurr.value  ?? [],
                       getId: (item) => item.id.toString(),  // Adjust based on your model structure
                       getName: (item) => item.cityName.toString(),
-                      selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
-                            (item) => item.id.toString() == leadDDController.selectedCity.value,
+                      selectedValue: leadDDController. cityListCurr.value.firstWhereOrNull(
+                            (item) => item.id.toString() == leadDDController.selectedCityCurr.value,
                       ),
                       onChanged: (value) {
-                        leadDDController.selectedCity.value =  value?.id?.toString();
+                        leadDDController.selectedCityCurr.value =  value?.id?.toString();
                       },
                     );
                   }),
@@ -799,6 +802,8 @@ class Step1Form extends StatelessWidget {
             ],
           ),
 
+
+          ///Permanent Address
           ExpansionTile(
             childrenPadding: EdgeInsets.symmetric(horizontal: 20),
             title:const Text( AppText.permanentAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -872,7 +877,7 @@ class Step1Form extends StatelessWidget {
 
 
                   Obx((){
-                    if (leadDDController.isStateLoading.value) {
+                    if (leadDDController.isStateLoadingPerm.value) {
                       return  Center(child:CustomSkelton.leadShimmerList(context));
                     }
 
@@ -885,14 +890,15 @@ class Step1Form extends StatelessWidget {
                       ),
                       onChanged: (value) {
                         leadDDController.selectedStatePerm.value =  value?.id?.toString();
-                        leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedStatePerm.value);
+                        leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value);
                       },
                       onClear: (){
                         leadDDController.selectedDistrictPerm.value = null;
-                        leadDDController.getDistrictByStateModel.value?.data!.clear(); // reset dependent dropdown
+                        leadDDController. districtListPerm.value.clear(); // reset dependent dropdown
+
 
                         leadDDController.selectedCityPerm.value = null;
-                        leadDDController.getCityByDistrictIdModel.value?.data!.clear(); // reset dependent dropdown
+                        leadDDController. cityListPerm.value.clear(); // reset dependent dropdown
                       },
                     );
                   }),
@@ -908,7 +914,7 @@ class Step1Form extends StatelessWidget {
 
 
                   Obx((){
-                    if (leadDDController.isDistrictLoading.value) {
+                    if (leadDDController.isDistrictLoadingPerm.value) {
                       return  Center(child:CustomSkelton.leadShimmerList(context));
                     }
 
@@ -922,7 +928,7 @@ class Step1Form extends StatelessWidget {
                       ),
                       onChanged: (value) {
                         leadDDController.selectedDistrictPerm.value =  value?.id?.toString();
-                        leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrictPerm.value);
+                        leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value);
                       },
                       onClear: (){
                         leadDDController.selectedCityPerm.value = null;
@@ -944,16 +950,16 @@ class Step1Form extends StatelessWidget {
 
 
                   Obx((){
-                    if (leadDDController.isCityLoading.value) {
+                    if (leadDDController.isCityLoadingPerm.value) {
                       return  Center(child:CustomSkelton.leadShimmerList(context));
                     }
 
 
                     return CustomDropdown<city.Data>(
-                      items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
+                      items:  leadDDController. cityListPerm.value  ?? [],
                       getId: (item) => item.id.toString(),  // Adjust based on your model structure
                       getName: (item) => item.cityName.toString(),
-                      selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
+                      selectedValue: leadDDController. cityListPerm.value .firstWhereOrNull(
                             (item) => item.id.toString() == leadDDController.selectedCityPerm.value,
                       ),
                       onChanged: (value) {

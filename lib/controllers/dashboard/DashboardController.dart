@@ -1,9 +1,14 @@
 
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import '../../common/helper.dart';
 import '../../common/notification_helper.dart';
 import '../../common/storage_service.dart';
+import '../../models/UpdateFCMTokenModel.dart';
 import '../../models/dashboard/GetCountOfLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
 import '../../models/dashboard/GetRemindersModel.dart';
@@ -12,6 +17,8 @@ import '../../models/dashboard/getBreakingNewsModel.dart';
 import '../../services/dashboard_api_service.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
+
+import '../../services/home_service.dart';
 class DashboardController extends GetxController {
 
   var isLoading = false.obs;
@@ -21,6 +28,8 @@ class DashboardController extends GetxController {
   var getUpcomingDateOfBirthModel = Rxn<GetUpcomingDateOfBirthModel>(); //
   var getRemindersModel = Rxn<GetRemindersModel>(); //
   ScrollController scrollReminderController = ScrollController();
+  UpdateFCMTokenModel? updateFCMTokenModel;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -60,7 +69,18 @@ class DashboardController extends GetxController {
 
 
         StorageService.put(StorageService.EMPLOYEE_ID, getEmployeeModel!.data!.id.toString());
-        isLoading(false);
+        var genToekn=StorageService.get(StorageService.TOKEN);
+
+        String fcmToken = await getFCMToken();
+        String deviceId = await getDeviceId();
+
+        await updateFCMTokenApi(
+            id: getEmployeeModel!.data!.id.toString(),
+            fcmToken: fcmToken,
+            deviceID: deviceId,
+            generalToken: genToekn.toString()
+        );
+
         getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
         getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
 
@@ -296,5 +316,77 @@ class DashboardController extends GetxController {
     getBreakingNewsApi();
     getUpcomingDateOfBirthApi();
   }
+
+  Future<void>updateFCMTokenApi({
+    required String id,
+    required String deviceID,
+    required String fcmToken,
+    required String generalToken,
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await ApiService.updateFCMTokenApi(
+          id: id,
+          deviceID: deviceID,
+          fcmToken: fcmToken,
+          generalToken: generalToken
+
+      );
+      print("data in controller==>${data.toString()}");
+
+      if(data['success'] == true){
+        updateFCMTokenModel= UpdateFCMTokenModel.fromJson(data);
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error here: $e");
+      // Get.snackbar('Error', 'Failed to fetch data');
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+  Future<String> getFCMToken() async {
+    try {
+      String? token = await FirebaseMessaging.instance.getToken();
+      print('🔑 FCM Token: $token');
+      return token ?? "";
+    } catch (e) {
+      print("❌ Error fetching FCM token: $e");
+      return "";
+    }
+  }
+
+  Future<String> getDeviceId() async {
+    try {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        print('📱 Android Device ID: ${androidInfo.id}');
+        return androidInfo.id ?? "no-id";
+      } else if (Platform.isIOS) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        print('📱 iOS Device ID: ${iosInfo.identifierForVendor}');
+        return iosInfo.identifierForVendor ?? "no-id";
+      } else {
+        return "unsupported-platform";
+      }
+    } catch (e) {
+      print("❌ Error fetching device ID: $e");
+      return "unknown";
+    }
+  }
+
 
 }

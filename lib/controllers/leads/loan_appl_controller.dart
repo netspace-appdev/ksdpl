@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
+import 'package:ksdpl/controllers/lead_dd_controller.dart';
 
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
+import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,7 @@ class LoanApplicationController extends GetxController{
   var isLoading = false.obs;
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
   var selectedGender = Rxn<String>();
+  var selectedGenderCoAP = Rxn<String>();
   List<String> optionsPrevLoanAppl = ["Yes", "No"];
   var selectedPrevLoanAppl = (-1).obs;
   var ownershipList=["Owned", "Rented","Leased", "Jointly Owned", "Other"];
@@ -71,8 +74,11 @@ class LoanApplicationController extends GetxController{
   final TextEditingController pinCodePermController = TextEditingController();
   final TextEditingController talukaPermController = TextEditingController();
 
+  var coApplicantList = <CoApplicantDetailController>[].obs;
+
   var currentStep = 0.obs;
   var stepCompleted = List<bool>.filled(7, false).obs;
+  LeadDDController leadDController=Get.find();
   final List<String> titles = [
     'Personal Information', 'Co-Applicant Details', 'Property Details', 'Family Members', 'Credit Cards', 'Financial Details', 'References'
   ];
@@ -128,5 +134,113 @@ class LoanApplicationController extends GetxController{
 
   }
 
+  void addCoApplicant() {
+    coApplicantList.add(CoApplicantDetailController());
+  }
 
+ /* void removeCoApplicant(int index) {
+
+
+    if (index >= 0 && index < coApplicantList.length) {
+      // Optional: dispose controllers if needed
+      coApplicantList[index].coApFullNameController.dispose();
+      coApplicantList[index].coApFullNameController.dispose();
+      coApplicantList[index].coApFatherNameController.dispose();
+      coApplicantList[index].coApDobController.dispose();
+      coApplicantList[index].coApQqualiController.dispose();
+      coApplicantList[index].coApMaritalController.dispose();
+      coApplicantList[index].coApEmplStatusController.dispose();
+      coApplicantList[index].coApNationalityController.dispose();
+      coApplicantList[index].coApOccupationController.dispose();
+      coApplicantList[index].coApOccSectorController.dispose();
+      coApplicantList[index].coApEmailController.dispose();
+      coApplicantList[index].coApMobController.dispose();
+      coApplicantList[index].coApQualiController.dispose();
+
+      coApplicantList[index].coApCurrHouseFlatController.dispose();
+      coApplicantList[index].coApCurrBuildingNoController.dispose();
+      coApplicantList[index].coApCurrSocietyNameController.dispose();
+      coApplicantList[index].coApCurrLocalityController.dispose();
+      coApplicantList[index].coApCurrStreetNameController.dispose();
+      coApplicantList[index].coApCurrPinCodeController.dispose();
+      coApplicantList[index].coApCurrTalukaController.dispose();
+
+      coApplicantList[index].coApPermHouseFlatController.dispose();
+      coApplicantList[index].coApPermBuildingNoController.dispose();
+      coApplicantList[index].coApPermSocietyNameController.dispose();
+      coApplicantList[index].coApPermLocalityController.dispose();
+      coApplicantList[index].coApPermStreetNameController.dispose();
+      coApplicantList[index].coApPermPinCodeController.dispose();
+      coApplicantList[index].coApPermTalukaController.dispose();
+
+      // Now remove from the list
+      coApplicantList.removeAt(index);
+    } else {
+      print("🔥 Invalid index passed to removeCoApplicant: $index");
+    }
+  }*/
+
+  void removeCoApplicant(int index) {
+    if (coApplicantList.length <= 1) {
+      ToastMessage.msg("You can not delete this");
+      return;
+    }
+    if (index >= 0 && index < coApplicantList.length) {
+      // Hold reference to the item to be disposed
+      final removed = coApplicantList[index];
+
+      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
+      coApplicantList.removeAt(index);
+      coApplicantList.refresh(); // If you're using an RxList
+
+      // Dispose AFTER rebuild
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        removed.coApFullNameController.dispose();
+        removed.coApFatherNameController.dispose();
+        removed.coApDobController.dispose();
+        removed.coApQqualiController.dispose();
+        removed.coApMaritalController.dispose();
+        removed.coApEmplStatusController.dispose();
+        removed.coApNationalityController.dispose();
+        removed.coApOccupationController.dispose();
+        removed.coApOccSectorController.dispose();
+        removed.coApEmailController.dispose();
+        removed.coApMobController.dispose();
+        removed.coApQualiController.dispose();
+
+        removed.coApCurrHouseFlatController.dispose();
+        removed.coApCurrBuildingNoController.dispose();
+        removed.coApCurrSocietyNameController.dispose();
+        removed.coApCurrLocalityController.dispose();
+        removed.coApCurrStreetNameController.dispose();
+        removed.coApCurrPinCodeController.dispose();
+        removed.coApCurrTalukaController.dispose();
+
+        removed.coApPermHouseFlatController.dispose();
+        removed.coApPermBuildingNoController.dispose();
+        removed.coApPermSocietyNameController.dispose();
+        removed.coApPermLocalityController.dispose();
+        removed.coApPermStreetNameController.dispose();
+        removed.coApPermPinCodeController.dispose();
+        removed.coApPermTalukaController.dispose();
+      });
+    } else {
+      print("🧯 Invalid index passed to removeCoApplicant: $index");
+    }
+  }
+
+
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    leadDController.selectedStateCurr.value=null;
+    leadDController.selectedDistrictCurr.value=null;
+    leadDController.selectedCityCurr.value=null;
+    leadDController. selectedStatePerm.value=null;
+    leadDController.selectedDistrictPerm.value=null;
+    leadDController.selectedCityPerm.value=null;
+
+  }
 }

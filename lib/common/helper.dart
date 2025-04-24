@@ -363,6 +363,8 @@ class AppText{
   static const String country = "Country";
   static const String presentAdd = "Present Address";
   static const String permanentAdd = "Permanent Address";
+
+  static const String coApplicantDetails = "Co-Applicant Details";
 }
 
 class AppColor{
@@ -406,6 +408,7 @@ class AppColor{
   static const Color lightGreen=Color(0xFF00B383);
   static const Color lightBrown=Color(0xFF704F38);
   static const Color lightPrimary2=Color(0xFFDEE5FD);
+  static const Color lightRed=Color(0xFFf79999);
   static const Color greenColor= Colors.green;
 
 
