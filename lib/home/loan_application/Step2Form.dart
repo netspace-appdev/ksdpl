@@ -44,7 +44,7 @@ class Step2Form extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 20,),
-                  Text( AppText.coApplicantDetails +"${index + 1}", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                  Text( AppText.coApplicantDetails +" (${index + 1})", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                   SizedBox(height: 20,),
                   ExpansionTile(
                     initiallyExpanded: true,
@@ -296,14 +296,14 @@ class Step2Form extends StatelessWidget {
                               ),
                               onChanged: (value) {
                                 coAp.selectedStateCurr.value =  value?.id?.toString();
-                                leadDDController.getDistrictByStateIdCurrApi(stateId: coAp.selectedStateCurr.value);
+                                coAp.getDistrictByStateIdCurrApi(stateId: coAp.selectedStateCurr.value);
                               },
                               onClear: (){
                                 coAp.selectedDistrictCurr.value = null;
-                                leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
+                                coAp.districtListCurr.value.clear(); // reset dependent dropdown
 
                                 coAp.selectedCityCurr.value = null;
-                                leadDDController. cityListCurr.value.clear(); // reset dependent dropdown
+                                coAp. cityListCurr.value.clear(); // reset dependent dropdown
                               },
                             );
                           }),
@@ -319,25 +319,25 @@ class Step2Form extends StatelessWidget {
 
 
                           Obx((){
-                            if (leadDDController.isDistrictLoadingCurr.value) {
+                            if (coAp.isDistrictLoadingCurr.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
                             }
 
 
                             return CustomDropdown<dist.Data>(
-                              items: leadDDController.districtListCurr.value ?? [],
+                              items: coAp.districtListCurr.value ?? [],
                               getId: (item) => item.id.toString(),  // Adjust based on your model structure
                               getName: (item) => item.districtName.toString(),
-                              selectedValue: leadDDController.districtListCurr.value.firstWhereOrNull(
+                              selectedValue: coAp.districtListCurr.value.firstWhereOrNull(
                                     (item) => item.id.toString() == coAp.selectedDistrictCurr.value,
                               ),
                               onChanged: (value) {
-                                coAp..selectedDistrictCurr.value =  value?.id?.toString();
-                                leadDDController.getCityByDistrictIdCurrApi(districtId: coAp.selectedDistrictCurr.value);
+                                coAp.selectedDistrictCurr.value =  value?.id?.toString();
+                                coAp.getCityByDistrictIdCurrApi(districtId: coAp.selectedDistrictCurr.value);
                               },
                               onClear: (){
                                 coAp.selectedDistrictCurr.value = null;
-                                leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
+                                coAp.districtListCurr.value.clear(); // reset dependent dropdown
 
                               },
                             );
@@ -355,16 +355,16 @@ class Step2Form extends StatelessWidget {
 
 
                           Obx((){
-                            if (leadDDController.isCityLoadingCurr.value) {
+                            if (coAp.isCityLoadingCurr.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
                             }
 
 
                             return CustomDropdown<city.Data>(
-                              items: leadDDController. cityListCurr.value  ?? [],
+                              items: coAp.cityListCurr.value  ?? [],
                               getId: (item) => item.id.toString(),  // Adjust based on your model structure
                               getName: (item) => item.cityName.toString(),
-                              selectedValue: leadDDController. cityListCurr.value.firstWhereOrNull(
+                              selectedValue: coAp. cityListCurr.value.firstWhereOrNull(
                                     (item) => item.id.toString() == coAp.selectedCityCurr.value,
                               ),
                               onChanged: (value) {
@@ -415,8 +415,298 @@ class Step2Form extends StatelessWidget {
                     ],
                   ),
 
+                  ///co AP Permanent Address
+
+                  ExpansionTile(
+                    childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                    title: Text( AppText.permanentAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                    leading: Icon(Icons.list_alt, size: 20,),
+                    children: [
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          CustomLabeledTextField(
+                            label: AppText.houseFlatNo,
+                            isRequired: true,
+                            controller: coAp.coApPermHouseFlatController,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterHouseFlatNo,
+                            validator:  ValidationHelper.validateName,
+                          ),
+                          CustomLabeledTextField(
+                            label: AppText.buildingNo,
+                            isRequired: true,
+                            controller: coAp.coApPermBuildingNoController,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterBuildingNo,
+                            validator:  ValidationHelper.validateName,
+                          ),
+                          CustomLabeledTextField(
+                            label: AppText.societyName,
+                            isRequired: true,
+                            controller: coAp.coApPermSocietyNameController,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterSocietyName,
+                            validator:  ValidationHelper.validateName,
+                          ),
+
+                          CustomLabeledTextField(
+                            label: AppText.locality,
+                            isRequired: true,
+                            controller: coAp.coApPermLocalityController,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterLocality,
+                            validator: ValidationHelper.validateName,
+                          ),
+
+                          CustomLabeledTextField(
+                            label: AppText.streetName,
+                            isRequired: true,
+                            controller: coAp.coApPermStreetNameController,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterStreetName,
+                            validator: ValidationHelper.validateName,
+                          ),
+
+                          CustomLabeledTextField(
+                            label: AppText.pinCode,
+                            isRequired: true,
+                            controller: coAp.coApPermPinCodeController,
+                            inputType: TextInputType.number,
+                            hintText: AppText.enterPinCode,
+                            validator: ValidationHelper.validateName,
+                          ),
+
+                          CustomTextLabel(
+                            label: AppText.state,
+                            isRequired: true,
+                          ),
+
+                          SizedBox(height: 10),
+
+
+                          Obx((){
+                            if (leadDDController.isStateLoading.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+                            return CustomDropdown<Data>(
+                              items: leadDDController.getAllStateModel.value?.data ?? [],
+                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.stateName.toString(),
+                              selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                                    (item) => item.id.toString() == coAp.selectedStatePerm.value,
+                              ),
+                              onChanged: (value) {
+                                coAp.selectedStatePerm.value =  value?.id?.toString();
+                                coAp.getDistrictByStateIdPermApi(stateId: coAp.selectedStatePerm.value);
+                              },
+                              onClear: (){
+                                coAp.selectedDistrictPerm.value = null;
+                                coAp.districtListPerm.value.clear(); // reset dependent dropdown
+
+                                coAp.selectedCityPerm.value = null;
+                                coAp. cityListPerm.value.clear(); // reset dependent dropdown
+                              },
+                            );
+                          }),
+
+                          const SizedBox(height: 20),
+
+                          CustomTextLabel(
+                            label: AppText.district,
+                            isRequired: true,
+                          ),
+
+                          const SizedBox(height: 10),
+
+
+                          Obx((){
+                            if (coAp.isDistrictLoadingPerm.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<dist.Data>(
+                              items: coAp.districtListPerm.value ?? [],
+                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.districtName.toString(),
+                              selectedValue: coAp.districtListPerm.value.firstWhereOrNull(
+                                    (item) => item.id.toString() == coAp.selectedDistrictPerm.value,
+                              ),
+                              onChanged: (value) {
+                                coAp.selectedDistrictPerm.value =  value?.id?.toString();
+                                coAp.getCityByDistrictIdPermApi(districtId: coAp.selectedDistrictPerm.value);
+                              },
+                              onClear: (){
+                                coAp.selectedDistrictPerm.value = null;
+                                coAp.districtListPerm.value.clear(); // reset dependent dropdown
+
+                              },
+                            );
+                          }),
+
+                          const SizedBox(height: 20),
+
+
+                          CustomTextLabel(
+                            label: AppText.city,
+                            isRequired: true,
+                          ),
+
+                          const SizedBox(height: 10),
+
+
+                          Obx((){
+                            if (coAp.isCityLoadingPerm.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<city.Data>(
+                              items: coAp.cityListPerm.value  ?? [],
+                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.cityName.toString(),
+                              selectedValue: coAp. cityListPerm.value.firstWhereOrNull(
+                                    (item) => item.id.toString() == coAp.selectedCityPerm.value,
+                              ),
+                              onChanged: (value) {
+                                coAp.selectedCityPerm.value =  value?.id?.toString();
+                              },
+                            );
+                          }),
+
+                          const SizedBox(height: 20),
+
+                          CustomLabeledTextField(
+                            label: AppText.taluka,
+                            isRequired: true,
+                            controller: coAp.coApCurrTalukaController,
+                            inputType: TextInputType.number,
+                            hintText: AppText.enterTaluka,
+                            validator: ValidationHelper.validateName,
+                          ),
+
+                          CustomTextLabel(
+                            label: AppText.country,
+                            isRequired: true,
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Obx((){
+                            if (leadDDController.isLoading.value) {
+                              return  Center(child:CustomSkelton.productShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<String>(
+                              items: loanApplicationController.countryList,
+                              getId: (item) => item,  // Adjust based on your model structure
+                              getName: (item) => item,
+                              selectedValue: loanApplicationController.selectedCountry.value,
+                              onChanged: (value) {
+                                loanApplicationController.selectedCountry.value =  value;
+                              },
+                            );
+                          }),
+
+                          const SizedBox(height: 20),
+
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  ///co Ap Employer details
+                  ExpansionTile(
+                    childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                    title:const Text( AppText.applicantEmployerDetails, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                    leading: Icon(Icons.list_alt, size: 20,),
+                    children: [
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          CustomLabeledTextField(
+                            label: AppText.organizationName,
+                            isRequired: true,
+                            controller: coAp.coApOrgNameController,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterOrganizationName,
+                            validator:  ValidationHelper.validateName,
+                          ),
+
+                          CustomTextLabel(
+                            label: AppText.ownershipType,
+                            isRequired: true,
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Obx((){
+                            if (leadDDController.isLoading.value) {
+                              return  Center(child:CustomSkelton.productShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<String>(
+                              items: coAp.ownershipList,
+                              getId: (item) => item,  // Adjust based on your model structure
+                              getName: (item) => item,
+                              selectedValue: coAp.selectedOwnershipList.value,
+                              onChanged: (value) {
+                                coAp.selectedOwnershipList.value =  value;
+                              },
+                            );
+                          }),
+
+                          const SizedBox(height: 20),
+
+                          CustomLabeledTextField(
+                            label: AppText.natureOfBusiness,
+                            isRequired: true,
+                            controller: coAp.coApNatureOfBizController,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterNatureOfBusiness,
+                            validator:  ValidationHelper.validateName,
+                          ),
+
+                          CustomLabeledTextField(
+                            label: AppText.staffStrength,
+                            isRequired: true,
+                            controller: coAp.coApStaffStrengthController,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterStaffStrength,
+                            validator:  ValidationHelper.validateName,
+                          ),
+
+                          CustomLabeledPickerTextField(
+                            label: AppText.salaryDate,
+                            isRequired: true,
+                            controller: coAp.coApSalaryDateController,
+                            inputType: TextInputType.name,
+                            hintText: AppText.mmddyyyy,
+                            validator: ValidationHelper.validateDob,
+                            isDateField: true,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
                   SizedBox(height: 20),
 
+
+
+                  index== loanApplicationController.coApplicantList.length-1?
                   Obx((){
                     if(loanApplicationController.isLoading.value){
                       return const Align(
@@ -453,7 +743,8 @@ class Step2Form extends StatelessWidget {
                         ),
                       ),
                     );
-                  }),
+                  }):
+                  Container(),
 
                   SizedBox(height: 20),
 

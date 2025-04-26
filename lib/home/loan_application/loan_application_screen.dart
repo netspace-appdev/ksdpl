@@ -23,6 +23,11 @@ import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'Step1Form.dart';
 import 'Step2Form.dart';
+import 'Step3Form.dart';
+import 'Step4Form.dart';
+import 'Step5Form.dart';
+import 'Step6Form.dart';
+import 'Step7Form.dart';
 
 
 class LoanApplicationScreen extends StatelessWidget {
@@ -39,6 +44,11 @@ class LoanApplicationScreen extends StatelessWidget {
   final List<Widget> stepForms = [
     Step1Form(),
     Step2Form(),
+    Step3Form(),
+    Step4Form(),
+    Step5Form(),
+    Step6Form(),
+    Step7Form(),
 
   ];
   @override

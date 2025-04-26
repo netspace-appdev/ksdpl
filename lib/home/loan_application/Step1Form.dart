@@ -532,7 +532,7 @@ class Step1Form extends StatelessWidget {
                     isRequired: true,
                     controller: loanApplicationController.orgNameController,
                     inputType: TextInputType.name,
-                    hintText: AppText.enterDsaCode,
+                    hintText: AppText.enterOrganizationName,
                     validator:  ValidationHelper.validateName,
                   ),
 

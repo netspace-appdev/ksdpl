@@ -1,14 +1,14 @@
 import 'package:get/get.dart';
-import 'co_applicant_detail_mode_controllerl.dart';
 import '../leads/loan_appl_controller.dart';
+import 'family_member_model_controller.dart';
 
-class Step2Controller extends GetxController{
+class Step4Controller extends GetxController{
   LoanApplicationController loanApplicationController=Get.find();
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    loanApplicationController.coApplicantList.add(CoApplicantDetailController());
+    loanApplicationController.familyMemberApplList.add(FamilyMemberController());
 
   }
 

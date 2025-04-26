@@ -352,19 +352,66 @@ class AppText{
   static const String enterStreetName = "Enter Street Name";
   static const String pinCode = "Pin Code";
   static const String enterPinCode = "Enter Pin Code";
-
   static const String selectState = "Select your State";
-
   static const String selectDistrict = "Select your District";
-
   static const String selectCity = "Select your City";
   static const String taluka = "Taluka";
   static const String enterTaluka = "Enter Taluka";
   static const String country = "Country";
   static const String presentAdd = "Present Address";
   static const String permanentAdd = "Permanent Address";
-
   static const String coApplicantDetails = "Co-Applicant Details";
+  static const String propertyDetails = "Property Details";
+  static const String propertyId = "Property ID";
+  static const String enterPropertyId = "Enter Property ID";
+  static const String surveyNo = "Survey No";
+  static const String enterSurveyNo = "Enter Survey No";
+  static const String finalPlotNo = "Final Plot No";
+  static const String enterFinalPlotNo = "Enter Final Plot No";
+  static const String blockNo = "Block No";
+  static const String enterBlockNo = "Enter Block No";
+  static const String socBuildName = "Society/Building Name";
+  static const String familyMember = "Family Member";
+  static const String name = "Name";
+
+  static const String relWithAppl = "Relation with Applicant ";
+  static const String enterRelWithAppl = "Enter Relation with Applicant";
+  static const String dependent = "Dependent ";
+  static const String monthlyIncome  = "Monthly Income";
+  static const String enterMonthlyIncome = "Enter Monthly Income ";
+  static const String EmployedWith = "Employed with";
+  static const String enterEmployedWith = "Enter Employed with";
+
+  static const String creditCard = "Credit Card";
+  static const String companyBank = "Company Bank";
+  static const String enterCompanyBank = "Enter Company Bank";
+  static const String cardNumber = "Card Number";
+  static const String enterCardNumber = "Enter Card Number";
+  static const String havingSince = "Having Since";
+  static const String avgMonSpencing = "Average Monthly Spending";
+  static const String enterAvgMonSpencing = "Enter Average Monthly Spending";
+
+  static const String financialDetails = "Financial Details";
+  static const String grossMonthlySalary = "Gross Monthly Salary";
+  static const String enterGrossMonthlySalary = "Enter Gross Monthly Salary";
+  static const String netMonthlySalary = "Net Monthly Salary";
+  static const String enterNetMonthlySalary = "Enter Net Monthly Salary";
+  static const String annualBonus = "Annual Bonus";
+  static const String enterAnnualBonus = "Enter Annual Bonus";
+  static const String avgMonOvertime = "Average Monthly Overtime";
+  static const String enterAvgMonOvertime = "Enter Average Monthly Overtime";
+  static const String enterAvgMonCommission = "Enter Average Monthly Commission";
+  static const String avgMonCommission = "Average Monthly Commission";
+  static const String monthlyPfDeduction = "Monthly PF Deduction";
+  static const String enterMonthlyPfDeduction = "Enter Monthly PF Deduction";
+  static const String enterOtherMonthlyIncome = "Enter Other Monthly Monthly";
+  static const String otherMonthlyIncome = "Other Monthly Monthly";
+
+  static const String references = "References";
+  static const String enterReferenceName = "Enter Reference Name";
+  static const String enterReferenceAdd = "Enter Reference Address";
+  static const String enterReferencePhone = "Enter Reference Phone";
+
 }
 
 class AppColor{

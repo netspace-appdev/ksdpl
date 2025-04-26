@@ -76,6 +76,7 @@ class LeadDDController extends GetxController{
   RxList<city.Data> cityListPerm = <city.Data>[].obs;
   RxList<city.Data> cityListCurr = <city.Data>[].obs;
 
+
   var getDistrictByStateModelCurr = Rxn<GetDistrictByStateModel>(); //
   var getDistrictByStateModelPerm = Rxn<GetDistrictByStateModel>(); //
 

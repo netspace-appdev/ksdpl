@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
+import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
 
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
@@ -8,6 +9,9 @@ import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
 
+import '../loan_appl_controller/credit_cards_model_controller.dart';
+import '../loan_appl_controller/reference_model_controller.dart';
+
 class LoanApplicationController extends GetxController{
   var firstName="".obs;
   var email="".obs;
@@ -15,6 +19,7 @@ class LoanApplicationController extends GetxController{
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
   var selectedGender = Rxn<String>();
   var selectedGenderCoAP = Rxn<String>();
+  var selectedGenderDependent = Rxn<String>();
   List<String> optionsPrevLoanAppl = ["Yes", "No"];
   var selectedPrevLoanAppl = (-1).obs;
   var ownershipList=["Owned", "Rented","Leased", "Jointly Owned", "Other"];
@@ -74,7 +79,42 @@ class LoanApplicationController extends GetxController{
   final TextEditingController pinCodePermController = TextEditingController();
   final TextEditingController talukaPermController = TextEditingController();
 
+
+
+  final TextEditingController propPropIdController = TextEditingController();
+  final TextEditingController propSurveyNoController = TextEditingController();
+  final TextEditingController propFinalPlotNoNoController = TextEditingController();
+  final TextEditingController propBlockNoNoNoController = TextEditingController();
+
+  final TextEditingController propHouseFlatController = TextEditingController();
+  final TextEditingController propBuildingNameController = TextEditingController();
+  final TextEditingController propSocietyNameController = TextEditingController();
+  final TextEditingController propLocalityController = TextEditingController();
+  final TextEditingController propStreetNameController = TextEditingController();
+  final TextEditingController propPinCodeController = TextEditingController();
+  final TextEditingController propTalukaController = TextEditingController();
+
+  final TextEditingController fdGrossMonthlySalaryController = TextEditingController();
+  final TextEditingController fdnNtMonthlySalaryController = TextEditingController();
+  final TextEditingController fdAnnualBonusController = TextEditingController();
+  final TextEditingController fdAvgMonOvertimeController = TextEditingController();
+  final TextEditingController fdAvgMonCommissionController = TextEditingController();
+  final TextEditingController fdAMonthlyPfDeductionController = TextEditingController();
+  final TextEditingController fdOtherMonthlyIncomeController = TextEditingController();
+
+
+
+
+
+  var selectedStateProp = Rxn<String>();
+  var selectedDistrictProp = Rxn<String>();
+  var selectedCityProp = Rxn<String>();
+
+
   var coApplicantList = <CoApplicantDetailController>[].obs;
+  var familyMemberApplList = <FamilyMemberController>[].obs;
+  var creditCardsList = <CreditCardsController>[].obs;
+  var referencesList = <ReferenceController>[].obs;
 
   var currentStep = 0.obs;
   var stepCompleted = List<bool>.filled(7, false).obs;
@@ -137,48 +177,15 @@ class LoanApplicationController extends GetxController{
   void addCoApplicant() {
     coApplicantList.add(CoApplicantDetailController());
   }
-
- /* void removeCoApplicant(int index) {
-
-
-    if (index >= 0 && index < coApplicantList.length) {
-      // Optional: dispose controllers if needed
-      coApplicantList[index].coApFullNameController.dispose();
-      coApplicantList[index].coApFullNameController.dispose();
-      coApplicantList[index].coApFatherNameController.dispose();
-      coApplicantList[index].coApDobController.dispose();
-      coApplicantList[index].coApQqualiController.dispose();
-      coApplicantList[index].coApMaritalController.dispose();
-      coApplicantList[index].coApEmplStatusController.dispose();
-      coApplicantList[index].coApNationalityController.dispose();
-      coApplicantList[index].coApOccupationController.dispose();
-      coApplicantList[index].coApOccSectorController.dispose();
-      coApplicantList[index].coApEmailController.dispose();
-      coApplicantList[index].coApMobController.dispose();
-      coApplicantList[index].coApQualiController.dispose();
-
-      coApplicantList[index].coApCurrHouseFlatController.dispose();
-      coApplicantList[index].coApCurrBuildingNoController.dispose();
-      coApplicantList[index].coApCurrSocietyNameController.dispose();
-      coApplicantList[index].coApCurrLocalityController.dispose();
-      coApplicantList[index].coApCurrStreetNameController.dispose();
-      coApplicantList[index].coApCurrPinCodeController.dispose();
-      coApplicantList[index].coApCurrTalukaController.dispose();
-
-      coApplicantList[index].coApPermHouseFlatController.dispose();
-      coApplicantList[index].coApPermBuildingNoController.dispose();
-      coApplicantList[index].coApPermSocietyNameController.dispose();
-      coApplicantList[index].coApPermLocalityController.dispose();
-      coApplicantList[index].coApPermStreetNameController.dispose();
-      coApplicantList[index].coApPermPinCodeController.dispose();
-      coApplicantList[index].coApPermTalukaController.dispose();
-
-      // Now remove from the list
-      coApplicantList.removeAt(index);
-    } else {
-      print("🔥 Invalid index passed to removeCoApplicant: $index");
-    }
-  }*/
+  void addFamilyMember() {
+    familyMemberApplList.add(FamilyMemberController());
+  }
+  void addCreditCard() {
+    creditCardsList.add(CreditCardsController());
+  }
+  void addReference() {
+    referencesList.add(ReferenceController());
+  }
 
   void removeCoApplicant(int index) {
     if (coApplicantList.length <= 1) {
@@ -223,6 +230,26 @@ class LoanApplicationController extends GetxController{
         removed.coApPermStreetNameController.dispose();
         removed.coApPermPinCodeController.dispose();
         removed.coApPermTalukaController.dispose();
+
+
+        removed.selectedStateCurr.value = null;
+        removed.selectedDistrictCurr.value = null;
+        removed.selectedCityCurr.value = null;
+
+        removed.selectedStatePerm.value = null;
+        removed.selectedDistrictPerm.value = null;
+        removed.selectedCityPerm.value = null;
+
+        // Clear RxLists
+        removed.stateListPerm.clear();
+        removed.stateListCurr.clear();
+
+        removed.districtListPerm.clear();
+        removed.districtListCurr.clear();
+
+        removed.cityListPerm.clear();
+        removed.cityListCurr.clear();
+
       });
     } else {
       print("🧯 Invalid index passed to removeCoApplicant: $index");
@@ -230,7 +257,97 @@ class LoanApplicationController extends GetxController{
   }
 
 
+  void removeFamilyMember(int index) {
+    if (familyMemberApplList.length <= 1) {
+      ToastMessage.msg("You can not delete this");
+      return;
+    }
+    if (index >= 0 && index < familyMemberApplList.length) {
+      // Hold reference to the item to be disposed
+      final removed = familyMemberApplList[index];
 
+      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
+      familyMemberApplList.removeAt(index);
+      familyMemberApplList.refresh(); // If you're using an RxList
+
+      // Dispose AFTER rebuild
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        removed.famNameController.dispose();
+        removed.famDobController.dispose();
+        removed.famRelWithApplController.dispose();
+        removed.famMonthlyIncomeController.dispose();
+        removed.famEmployedWithController.dispose();
+
+        removed.selectedGenderFam.value = null;
+        removed.selectedGenderDependent.value = null;
+
+      });
+    } else {
+      print("🧯 Invalid index passed to removeCoApplicant: $index");
+    }
+  }
+
+
+  void removeCreditCard(int index) {
+    if (creditCardsList.length <= 1) {
+      ToastMessage.msg("You can not delete this");
+      return;
+    }
+    if (index >= 0 && index < creditCardsList.length) {
+      // Hold reference to the item to be disposed
+      final removed = creditCardsList[index];
+
+      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
+      creditCardsList.removeAt(index);
+      creditCardsList.refresh(); // If you're using an RxList
+
+      // Dispose AFTER rebuild
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        removed.ccCompBankController.dispose();
+        removed.ccCardNumberController.dispose();
+        removed.ccHavingSinceController.dispose();
+        removed.ccAvgMonSpendingController.dispose();
+      });
+    } else {
+      print("🧯 Invalid index passed to removeCoApplicant: $index");
+    }
+  }
+
+  void removeReference(int index) {
+    if (referencesList.length <= 1) {
+      ToastMessage.msg("You can not delete this");
+      return;
+    }
+    if (index >= 0 && index < referencesList.length) {
+      // Hold reference to the item to be disposed
+      final removed = referencesList[index];
+
+      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
+      referencesList.removeAt(index);
+      referencesList.refresh(); // If you're using an RxList
+
+      // Dispose AFTER rebuild
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        removed.refNameController.dispose();
+        removed.refAddController.dispose();
+        removed.refPhoneController.dispose();
+        removed.refRelWithApplController.dispose();
+        removed.refPincodeController.dispose();
+
+        removed.stateListPerm.clear();
+        removed.districtListPerm.clear();
+        removed.cityListPerm.clear();
+
+        removed.selectedStatePerm.value = null;
+        removed.selectedDistrictPerm.value = null;
+        removed.selectedCityPerm.value = null;
+        removed.selectedCountry.value = null;
+
+      });
+    } else {
+      print("🧯 Invalid index passed to removeCoApplicant: $index");
+    }
+  }
   @override
   void onClose() {
     // TODO: implement onClose
