@@ -411,6 +411,8 @@ class AppText{
   static const String enterReferenceName = "Enter Reference Name";
   static const String enterReferenceAdd = "Enter Reference Address";
   static const String enterReferencePhone = "Enter Reference Phone";
+  static const String loanApplicationForm = "Loan Application Form";
+  static const String dateOfBirth2="Date of Birth";
 
 }
 

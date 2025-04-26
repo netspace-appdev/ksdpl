@@ -41,7 +41,7 @@ class Step3Form extends StatelessWidget {
               ),
               CustomLabeledTextField(
                 label: AppText.propertyId,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.propPropIdController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterPropertyId,
@@ -49,7 +49,7 @@ class Step3Form extends StatelessWidget {
               ),
               CustomLabeledTextField(
                 label: AppText.surveyNo,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.propSurveyNoController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterSurveyNo,
@@ -57,7 +57,7 @@ class Step3Form extends StatelessWidget {
               ),
               CustomLabeledTextField(
                 label: AppText.finalPlotNo,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.propFinalPlotNoNoController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterFinalPlotNo,
@@ -65,7 +65,7 @@ class Step3Form extends StatelessWidget {
               ),
               CustomLabeledTextField(
                 label: AppText.blockNo,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.propBlockNoNoNoController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterBlockNo,
@@ -73,7 +73,7 @@ class Step3Form extends StatelessWidget {
               ),
               CustomLabeledTextField(
                 label: AppText.houseFlatNo,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.propHouseFlatController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterHouseFlatNo,
@@ -81,7 +81,7 @@ class Step3Form extends StatelessWidget {
               ),
               CustomLabeledTextField(
                 label: AppText.socBuildName,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.propBuildingNameController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterBuildingNo,
@@ -89,7 +89,7 @@ class Step3Form extends StatelessWidget {
               ),
               CustomLabeledTextField(
                 label: AppText.streetName,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.propStreetNameController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterStreetName,
@@ -98,7 +98,7 @@ class Step3Form extends StatelessWidget {
 
               CustomLabeledTextField(
                 label: AppText.locality,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.propLocalityController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterLocality,
@@ -108,7 +108,7 @@ class Step3Form extends StatelessWidget {
 
               CustomLabeledTextField(
                 label: AppText.pinCode,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.propPinCodeController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterPinCode,
@@ -117,7 +117,7 @@ class Step3Form extends StatelessWidget {
 
               CustomTextLabel(
                 label: AppText.state,
-                isRequired: true,
+                isRequired: false,
               ),
 
               SizedBox(height: 10),
@@ -153,7 +153,7 @@ class Step3Form extends StatelessWidget {
 
               CustomTextLabel(
                 label: AppText.district,
-                isRequired: true,
+                isRequired: false,
               ),
 
               const SizedBox(height: 10),
@@ -189,7 +189,7 @@ class Step3Form extends StatelessWidget {
 
               CustomTextLabel(
                 label: AppText.city,
-                isRequired: true,
+                isRequired: false,
               ),
 
               const SizedBox(height: 10),
@@ -218,7 +218,7 @@ class Step3Form extends StatelessWidget {
 
               CustomLabeledTextField(
                 label: AppText.taluka,
-                isRequired: true,
+                isRequired: false,
                 controller: loanApplicationController.talukaController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterTaluka,

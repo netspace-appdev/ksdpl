@@ -5,6 +5,8 @@ import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_contr
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
+import '../../models/loan_application/AddLoanApplicationModel.dart';
+import '../../services/loan_appl_service.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +15,13 @@ import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
 
 class LoanApplicationController extends GetxController{
+  var leadId="".obs;
   var firstName="".obs;
   var email="".obs;
   var isLoading = false.obs;
-  var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
+  var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
   var selectedGender = Rxn<String>();
+  String get selectedGenderValue => selectedGender.value ?? "";
   var selectedGenderCoAP = Rxn<String>();
   var selectedGenderDependent = Rxn<String>();
   List<String> optionsPrevLoanAppl = ["Yes", "No"];
@@ -122,6 +126,11 @@ class LoanApplicationController extends GetxController{
   final List<String> titles = [
     'Personal Information', 'Co-Applicant Details', 'Property Details', 'Family Members', 'Credit Cards', 'Financial Details', 'References'
   ];
+
+  var selectedBank = Rxn<String>();
+  var selectedBankBranch = Rxn<String>();
+  var selectedChannel = Rxn<String>();
+
   final scrollController = ScrollController();
   void nextStep() {
     if (currentStep.value < 6) {
@@ -139,9 +148,9 @@ class LoanApplicationController extends GetxController{
 
   void jumpToStep(int step) {
     // We only mark previous step completed if jumping forward
-    if (step > currentStep.value) {
+  /*  if (step > currentStep.value) {
       stepCompleted[currentStep.value] = true;
-    }
+    }*/
     currentStep.value = step;
     scrollToStep(step);
   }
@@ -359,5 +368,354 @@ class LoanApplicationController extends GetxController{
     leadDController.selectedDistrictPerm.value=null;
     leadDController.selectedCityPerm.value=null;
 
+    dsaCodeController.dispose();
+    lanController.dispose();
+    panController.dispose();
+    aadharController.dispose();
+    laAppliedController.dispose();
+    dsaStaffNController.dispose();
+    ulnController.dispose();
+    chCodeController.dispose();
+    proFeeController.dispose();
+    chqDDSNController.dispose();
+    proFeeDateController.dispose();
+    loPurposeController.dispose();
+    schemeController.dispose();
+    repayTpeController.dispose();
+    loanTenureYController.dispose();
+    monthInstaController.dispose();
+    prevLoanApplController.dispose();
+
+    applFullNameController.dispose();
+    fatherNameController.dispose();
+    dobController.dispose();
+    qualiController.dispose();
+    maritalController.dispose();
+    emplStatusController.dispose();
+    nationalityController.dispose();
+    occupationController.dispose();
+    occSectorController.dispose();
+    applEmailController.dispose();
+    applMobController.dispose();
+
+    orgNameController.dispose();
+    natureOfBizController.dispose();
+    staffStrengthController.dispose();
+    salaryDateController.dispose();
+
+    houseFlatController.dispose();
+    buildingNoController.dispose();
+    societyNameController.dispose();
+    localityController.dispose();
+    streetNameController.dispose();
+    pinCodeController.dispose();
+    talukaController.dispose();
+
+    houseFlatPermController.dispose();
+    buildingNoPermController.dispose();
+    societyNamePermController.dispose();
+    localityPermController.dispose();
+    streetNamePermController.dispose();
+    pinCodePermController.dispose();
+    talukaPermController.dispose();
+
+    propPropIdController.dispose();
+    propSurveyNoController.dispose();
+    propFinalPlotNoNoController.dispose();
+    propBlockNoNoNoController.dispose();
+
+    propHouseFlatController.dispose();
+    propBuildingNameController.dispose();
+    propSocietyNameController.dispose();
+    propLocalityController.dispose();
+    propStreetNameController.dispose();
+    propPinCodeController.dispose();
+    propTalukaController.dispose();
+
+    fdGrossMonthlySalaryController.dispose();
+    fdnNtMonthlySalaryController.dispose();
+    fdAnnualBonusController.dispose();
+    fdAvgMonOvertimeController.dispose();
+    fdAvgMonCommissionController.dispose();
+    fdAMonthlyPfDeductionController.dispose();
+    fdOtherMonthlyIncomeController.dispose();
+
+
+    // Clear Rx variables
+    selectedGender.value = null;
+    selectedGenderCoAP.value = null;
+    selectedGenderDependent.value = null;
+    selectedPrevLoanAppl.value = -1;
+    selectedOwnershipList.value = null;
+    selectedCountry.value = null;
+    selectedCountryPerm.value = null;
+    selectedStateProp.value = null;
+    selectedDistrictProp.value = null;
+    selectedCityProp.value = null;
+
+// Clear Lists (and dispose their controllers if needed)
+    coApplicantList.clear();
+    familyMemberApplList.clear();
+    creditCardsList.clear();
+    referencesList.clear();
+    referencesList.clear();
+
+  }
+
+  Future<void>addLoanApplicationApi({
+    required String id,
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await LoanApplService.addLoanApplicationApi(
+        body:[
+          {
+            "id": id,
+            "dsaCode": cleanText(dsaCodeController.text),
+            "loanApplicationNo": cleanText(lanController.text),
+            "bankId": selectedBank.value.toIntOrZero(),
+            "branchId": selectedBankBranch.value.toIntOrZero(),
+            "typeOfLoanId": 0,                                                 ///its static
+            "panCardNumber":  cleanText(panController.text),
+            "addharCardNumber":  cleanText(aadharController.text),
+            "loanAmountApplied": laAppliedController.toIntOrZero(),
+            "uniqueLeadNumber": cleanText(ulnController.text),
+            "channelId": selectedChannel.value.toIntOrZero(),
+            "channelCode": cleanText(chCodeController.text),
+            "detailForLoanApplication": {
+              "branch": 0,                                                  ///its static
+              "dsaCode": "string",                                          ///its static
+              "dsaStaffName": cleanText(dsaStaffNController.text),
+              "loanApplicationNo": "string",                                ///its static
+              "processingFee":proFeeController.toIntOrZero(),
+              "chqDdSlipNo": cleanText(chqDDSNController.text),
+              "processingFeeDate":"2025-04-26T10:21:07.889Z",                ///its static
+              "loanPurpose": cleanText(loPurposeController.text),
+              "scheme": cleanText(schemeController.text),
+              "repaymentType": cleanText(repayTpeController.text),
+              "typeOfLoan": cleanText(loanTenureYController.text),
+              "loanAmountApplied": 0,                                       ///its static
+              "loanTenureYears": loanTenureYController.toIntOrZero(),
+              "monthlyInstallment":monthInstaController.toIntOrZero() ,
+              "previousLoanApplied": isPreviousLoanApplied ?? false,
+              "applicant": {
+                "name": cleanText(applFullNameController.text),
+                "fatherName": cleanText(fatherNameController.text),
+                "gender": selectedGenderValue,
+                "dateOfBirth": "2025-04-26T10:21:07.889Z",                 ///its static
+                "qualification": "string",
+                "maritalStatus": "string",
+                "status": "string",
+                "nationality": "string",
+                "occupation": "string",
+                "occupationSector": "string",
+                "presentAddress": {
+                  "houseFlatNo": "string",
+                  "buildingNo": "string",
+                  "societyName": "string",
+                  "locality": "string",
+                  "streetName": "string",
+                  "city": "string",
+                  "taluka": "string",
+                  "district": "string",
+                  "state": "string",
+                  "country": "string",
+                  "pinCode": "string"
+                },
+                "permanentAddress": {
+                  "houseFlatNo": "string",
+                  "buildingNo": "string",
+                  "societyName": "string",
+                  "locality": "string",
+                  "streetName": "string",
+                  "city": "string",
+                  "taluka": "string",
+                  "district": "string",
+                  "state": "string",
+                  "country": "string",
+                  "pinCode": "string"
+                },
+                "emailID": "string",
+                "mobile": "string",
+                "employerDetails": {
+                  "organizationName": "string",
+                  "ownershipType": "string",
+                  "natureOfBusiness": "string",
+                  "staffStrength": 0,
+                  "dateOfSalary": "2025-04-26T10:21:07.889Z"
+                }
+              }
+            },
+            "coApplicant": [
+              {
+                "name": "string",
+                "fatherName": "string",
+                "gender": "string",
+                "dateOfBirth": "2025-04-26T10:21:07.889Z",
+                "qualification": "string",
+                "maritalStatus": "string",
+                "status": "string",
+                "nationality": "string",
+                "occupation": "string",
+                "occupationSector": "string",
+                "presentAddress": {
+                  "houseFlatNo": "string",
+                  "buildingNo": "string",
+                  "societyName": "string",
+                  "locality": "string",
+                  "streetName": "string",
+                  "city": "string",
+                  "taluka": "string",
+                  "district": "string",
+                  "state": "string",
+                  "country": "string",
+                  "pinCode": "string"
+                },
+                "permanentAddress": {
+                  "houseFlatNo": "string",
+                  "buildingNo": "string",
+                  "societyName": "string",
+                  "locality": "string",
+                  "streetName": "string",
+                  "city": "string",
+                  "taluka": "string",
+                  "district": "string",
+                  "state": "string",
+                  "country": "string",
+                  "pinCode": "string"
+                },
+                "emailID": "string",
+                "mobile": "string",
+                "employerDetails": {
+                  "organizationName": "string",
+                  "ownershipType": "string",
+                  "natureOfBusiness": "string",
+                  "staffStrength": 0,
+                  "dateOfSalary": "2025-04-26T10:21:07.889Z"
+                }
+              }
+            ],
+            "propertyDetails": {
+              "propertyId": "string",
+              "surveyNo": "string",
+              "finalPlotNo": "string",
+              "blockNo": "string",
+              "flatHouseNo": "string",
+              "societyBuildingName": "string",
+              "streetName": "string",
+              "locality": "string",
+              "city": "string",
+              "taluka": "string",
+              "district": "string",
+              "state": "string",
+              "pincode": "string"
+            },
+            "familyMembers": [
+              {
+                "name": "string",
+                "birthDate": "2025-04-26T10:21:07.889Z",
+                "gender": "string",
+                "relationWithApplicant": "string",
+                "dependent": true,
+                "monthlyIncome": 0,
+                "employedWith": "string"
+              }
+            ],
+            "creditCards": [
+              {
+                "companyBank": "string",
+                "cardNumber": "string",
+                "havingSince": "2025-04-26T10:21:07.889Z",
+                "avgMonthlySpending": 0
+              }
+            ],
+            "financialDetails": {
+              "grossMonthlySalary": 0,
+              "netMonthlySalary": 0,
+              "annualBonus": 0,
+              "avgMonthlyOvertime": 0,
+              "avgMonthlyCommission": 0,
+              "monthlyPFDeduction": 0,
+              "otherMonthlyIncome": 0
+            },
+            "references": [
+              {
+                "name": "string",
+                "address": "string",
+                "city": "string",
+                "district": "string",
+                "state": "string",
+                "country": "string",
+                "pinCode": "string",
+                "phone": "string",
+                "mobile": "string",
+                "relationWithApplicant": "string"
+              }
+            ]
+          }
+        ]
+      );
+
+
+      if(data['success'] == true){
+
+        addLoanApplicationModel.value= AddLoanApplicationModel.fromJson(data);
+        ToastMessage.msg( addLoanApplicationModel.value!.message!.toString());
+
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getLeadDetailByIdApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+
+
+  }
+
+  String cleanText(String text) {
+    return text.trim().isEmpty ? "" : text.trim();
+  }
+
+  int cleanInt(Rxn<String> rxnString) {
+    if (rxnString.value != null && rxnString.value!.isNotEmpty) {
+      return int.tryParse(rxnString.value!.trim()) ?? 0;
+    }
+    return 0;
+  }
+
+
+  bool? get isPreviousLoanApplied {
+    if (selectedPrevLoanAppl.value == -1) return null; // Means user didn't select anything
+    return selectedPrevLoanAppl.value == 0; // 0 index = "Yes", so true
+  }
+}
+
+extension ParseStringExtension on String? {
+  int toIntOrZero() {
+    if (this != null && this!.isNotEmpty) {
+      return int.tryParse(this!.trim()) ?? 0;
+    }
+    return 0;
+  }
+}
+extension TextEditingControllerExtension on TextEditingController {
+  int toIntOrZero() {
+    if (text.isNotEmpty) {
+      return int.tryParse(text.trim()) ?? 0;
+    }
+    return 0;
   }
 }

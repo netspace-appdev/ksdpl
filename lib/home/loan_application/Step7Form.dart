@@ -88,7 +88,7 @@ class Step7Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.relWithAppl,
-                            isRequired: true,
+                            isRequired: false,
                             controller: ref.refRelWithApplController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterRelWithAppl,
@@ -98,7 +98,7 @@ class Step7Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.state,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           SizedBox(height: 10),
@@ -134,7 +134,7 @@ class Step7Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.district,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           const SizedBox(height: 10),
@@ -170,7 +170,7 @@ class Step7Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.city,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           const SizedBox(height: 10),

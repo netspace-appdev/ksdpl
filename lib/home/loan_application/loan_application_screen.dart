@@ -227,10 +227,13 @@ class LoanApplicationScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: (){
-                  loanApplicationController.markStepAsCompleted();
-                  if(loanApplicationController.currentStep.value < 6){
+                  loanApplicationController.addLoanApplicationApi(id: loanApplicationController.leadId.toString()).then((_){
+                    loanApplicationController.markStepAsCompleted();
                     loanApplicationController.nextStep;
-                  }
+                  });
+                  /*if(loanApplicationController.currentStep.value < 6){
+                    loanApplicationController.nextStep;
+                  }*/
                 },
                 child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
                 style: ElevatedButton.styleFrom(

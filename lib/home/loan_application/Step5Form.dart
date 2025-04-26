@@ -44,7 +44,7 @@ class Step5Form extends StatelessWidget {
 
                       CustomLabeledTextField(
                         label: AppText.companyBank,
-                        isRequired: true,
+                        isRequired: false,
                         controller: cc.ccCompBankController,
                         inputType: TextInputType.name,
                         hintText: AppText.enterCompanyBank,
@@ -52,7 +52,7 @@ class Step5Form extends StatelessWidget {
                       ),
                       CustomLabeledTextField(
                         label: AppText.cardNumber,
-                        isRequired: true,
+                        isRequired: false,
                         controller: cc.ccCardNumberController,
                         inputType: TextInputType.name,
                         hintText: AppText.enterCardNumber,
@@ -61,7 +61,7 @@ class Step5Form extends StatelessWidget {
 
                       CustomLabeledPickerTextField(
                         label: AppText.havingSince,
-                        isRequired: true,
+                        isRequired: false,
                         controller: cc.ccHavingSinceController,
                         inputType: TextInputType.name,
                         hintText: AppText.mmddyyyy,
@@ -71,7 +71,7 @@ class Step5Form extends StatelessWidget {
 
                       CustomLabeledTextField(
                         label: AppText.avgMonSpencing,
-                        isRequired: true,
+                        isRequired: false,
                         controller: cc.ccAvgMonSpendingController,
                         inputType: TextInputType.name,
                         hintText: AppText.enterAvgMonSpencing,

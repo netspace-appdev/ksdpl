@@ -3,30 +3,21 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-
+import 'package:ksdpl/controllers/leads/loan_appl_controller.dart';
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
-import '../../common/storage_service.dart';
-import '../../common/validation_helper.dart';
-import '../../controllers/drawer_controller.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
-
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
-import '../../exp.dart';
 import '../../services/call_service.dart';
 import '../custom_drawer.dart';
 
@@ -565,7 +556,7 @@ class LeadListMain extends StatelessWidget {
                             label:AppText.fillLeadForm,
                             context: context,
                             color: Colors.purple,
-                            icon:  Icons.add_circle_outline_outlined,
+                            icon:  Icons.person_outline_outlined,
                             leadId: lead.id.toString(),
                             label_code: "add_lead_form",
                             currentLeadStage: lead.leadStage.toString(),
@@ -586,9 +577,31 @@ class LeadListMain extends StatelessWidget {
                     ),
 
 
+                    if(leadListController.leadCode.value=="6" )
+                      Column(
+                      children: [
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+
+                            if(leadListController.leadCode.value=="6" )
+                              _buildTextButton(
+                                label:AppText.loanApplicationForm,
+                                context: context,
+                                color: Colors.purple,
+                                icon:  Icons.list_alt_rounded,
+                                leadId: lead.id.toString(),
+                                label_code: "loan_appl_form",
+                                currentLeadStage: lead.leadStage.toString(),
+                              ),
+
+                          ],
+                        ),
+                      ],
+                    ),
+
                     SizedBox(height: 10),
-
-
 
                   ],
                 ),
@@ -842,6 +855,12 @@ class LeadListMain extends StatelessWidget {
               );
             },
           );
+        }else if (label_code == "loan_appl_form") {
+          LoanApplicationController loanApplicationController=Get.put(LoanApplicationController());
+          loanApplicationController.leadId.value=leadId;
+
+          Get.toNamed("/loanApplication",);
+
         }else{
 
         }
@@ -852,7 +871,9 @@ class LeadListMain extends StatelessWidget {
 
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            width:(label_code=="add_feedback" ) ?
+            width:
+            label_code=="loan_appl_form"?MediaQuery.of(context).size.width*0.82:
+            (label_code=="add_feedback" ) ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
 

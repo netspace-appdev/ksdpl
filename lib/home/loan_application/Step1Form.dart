@@ -50,7 +50,6 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.dsaCode,
-                    isRequired: true,
                     controller: loanApplicationController.dsaCodeController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterDsaCode,
@@ -58,7 +57,7 @@ class Step1Form extends StatelessWidget {
                   ),
                   CustomLabeledTextField(
                     label: AppText.loanApplicationNo,
-                    isRequired: true,
+
                     controller: loanApplicationController.lanController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterLoanApplicationNo,
@@ -68,7 +67,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.bankNostar,
-                    isRequired: true,
+
                   ),
 
                   const SizedBox(height: 10),
@@ -85,15 +84,15 @@ class Step1Form extends StatelessWidget {
                       getId: (item) => item.id.toString(),  // Adjust based on your model structure
                       getName: (item) => item.bankName.toString(),
                       selectedValue: leadDDController.getAllBankModel.value?.data?.firstWhereOrNull(
-                            (item) => item.id.toString() == leadDDController.selectedBank.value,
+                            (item) => item.id.toString() == loanApplicationController.selectedBank.value,
                       ),
                       onChanged: (value) {
 
-                        leadDDController.selectedBank.value =  value?.id?.toString();
-                        leadDDController.getAllBranchByBankIdApi(bankId: leadDDController.selectedBank.value);
+                        loanApplicationController.selectedBank.value =  value?.id?.toString();
+                        leadDDController.getAllBranchByBankIdApi(bankId: loanApplicationController.selectedBank.value);
                       },
                       onClear: (){
-                        leadDDController.selectedBankBranch.value = null;
+                        loanApplicationController.selectedBankBranch.value = null;
                         leadDDController.getAllBranchBIModel.value?.data!.clear(); // reset dependent dropdown
                       },
                     );
@@ -105,7 +104,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.brNostar,
-                    isRequired: true,
+
                   ),
 
                   const SizedBox(height: 10),
@@ -122,11 +121,11 @@ class Step1Form extends StatelessWidget {
                       getId: (item) => item.id.toString(),  // Adjust based on your model structure
                       getName: (item) => item.branchName.toString(),
                       selectedValue: leadDDController.getAllBranchBIModel.value?.data?.firstWhereOrNull(
-                            (item) => item.id.toString() == leadDDController.selectedBankBranch.value,
+                            (item) => item.id.toString() == loanApplicationController.selectedBankBranch.value,
                       ),
                       onChanged: (value) {
 
-                        leadDDController.selectedBankBranch.value =  value?.id?.toString();
+                        loanApplicationController.selectedBankBranch.value =  value?.id?.toString();
 
 
                       },
@@ -139,7 +138,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.loanType,
-                    isRequired: true,
+
                   ),
 
                   const SizedBox(height: 10),
@@ -171,7 +170,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.panCardNo,
-                    isRequired: true,
+
                     controller: loanApplicationController.panController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterPanCardNo,
@@ -180,7 +179,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.aadharCardNo,
-                    isRequired: true,
+
                     controller: loanApplicationController.aadharController,
                     inputType: TextInputType.number,
                     hintText: AppText.enterAadharCardNo,
@@ -189,7 +188,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.loanAmountApplied,
-                    isRequired: true,
+
                     controller: loanApplicationController.laAppliedController,
                     inputType: TextInputType.number,
                     hintText: AppText.enterLoanAmountApplied,
@@ -199,7 +198,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.dsaStaffName,
-                    isRequired: true,
+
                     controller: loanApplicationController.dsaStaffNController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterDsaStaffName,
@@ -208,7 +207,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.uniqueLeadNumber,
-                    isRequired: true,
+
                     controller: loanApplicationController.ulnController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterUniqueLeadNumber,
@@ -220,7 +219,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.channel,
-                    isRequired: true,
+
                   ),
 
                   const SizedBox(height: 10),
@@ -237,11 +236,11 @@ class Step1Form extends StatelessWidget {
                       getId: (item) => item.id.toString(),  // Adjust based on your model structure
                       getName: (item) => item.channelName.toString(),
                       selectedValue: leadDDController.getAllChannelModel.value?.data?.firstWhereOrNull(
-                            (item) => item.id.toString() == leadDDController.selectedChannel.value,
+                            (item) => item.id.toString() == loanApplicationController.selectedChannel.value,
                       ),
                       onChanged: (value) {
 
-                        leadDDController.selectedChannel.value =  value?.id?.toString();
+                        loanApplicationController.selectedChannel.value =  value?.id?.toString();
 
 
                       },
@@ -251,7 +250,7 @@ class Step1Form extends StatelessWidget {
                   const SizedBox(height: 20),
                   CustomLabeledTextField(
                     label: AppText.channelCode,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.chCodeController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterChannelCode,
@@ -261,7 +260,7 @@ class Step1Form extends StatelessWidget {
                   ),
                   CustomLabeledTextField(
                     label: AppText.processingFee,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.proFeeController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterProcessingFee,
@@ -272,7 +271,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.chqDdSlipNo,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.chqDDSNController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterChqDdSlipNo,
@@ -283,7 +282,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledPickerTextField(
                     label: AppText.processingFeeDate,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.proFeeDateController,
                     inputType: TextInputType.name,
                     hintText: AppText.mmddyyyy,
@@ -293,7 +292,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.loanPurpose,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.loPurposeController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterLoanPurpose,
@@ -302,7 +301,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.scheme,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.schemeController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterScheme,
@@ -311,7 +310,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.repaymentType,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.repayTpeController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterRepaymentType,
@@ -320,7 +319,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.loanTenure,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.loanTenureYController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterLoanTenure,
@@ -329,7 +328,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.monthlyInstallment,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.monthInstaController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterMonthlyInstallment,
@@ -372,7 +371,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.applFNmae,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.applFullNameController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterFullName,
@@ -381,7 +380,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.fathersName,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.fatherNameController,
                     inputType: TextInputType.phone,
                     hintText: AppText.enterFathersName,
@@ -399,14 +398,14 @@ class Step1Form extends StatelessWidget {
                           color: AppColor.grey2,
                         ),
                       ),
-                      Text(
+                    /*  Text(
                         " *",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: AppColor.redColor,
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
 
@@ -425,8 +424,8 @@ class Step1Form extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   CustomLabeledPickerTextField(
-                    label: AppText.dateOfBirth,
-                    isRequired: true,
+                    label: AppText.dateOfBirth2,
+                    isRequired: false,
                     controller: loanApplicationController.dobController,
                     inputType: TextInputType.name,
                     hintText: AppText.mmddyyyy,
@@ -436,7 +435,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.qualification,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.qualiController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterQualification,
@@ -445,7 +444,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.maritalStatus,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.maritalController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterMaritalStatus,
@@ -454,7 +453,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.nationality,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.nationalityController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterNationality,
@@ -464,7 +463,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.occupation,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.occupationController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterOccupation,
@@ -473,7 +472,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.occupationSector,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.occupationController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterOccupationSector,
@@ -492,7 +491,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.mobileNumber,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.applMobController,
                     inputType: TextInputType.phone,
                     hintText: AppText.enterPhNumber,
@@ -502,7 +501,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.employmentStatus,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.emplStatusController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterEmploymentStatus,
@@ -529,7 +528,7 @@ class Step1Form extends StatelessWidget {
                   ),
                   CustomLabeledTextField(
                     label: AppText.organizationName,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.orgNameController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterOrganizationName,
@@ -538,7 +537,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.ownershipType,
-                    isRequired: true,
+                    isRequired: false,
                   ),
 
                   const SizedBox(height: 10),
@@ -564,7 +563,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.natureOfBusiness,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.natureOfBizController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterNatureOfBusiness,
@@ -573,7 +572,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.staffStrength,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.staffStrengthController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterStaffStrength,
@@ -582,7 +581,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledPickerTextField(
                     label: AppText.salaryDate,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.salaryDateController,
                     inputType: TextInputType.name,
                     hintText: AppText.mmddyyyy,
@@ -611,7 +610,7 @@ class Step1Form extends StatelessWidget {
                   ),
                   CustomLabeledTextField(
                     label: AppText.houseFlatNo,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.houseFlatController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterHouseFlatNo,
@@ -619,7 +618,7 @@ class Step1Form extends StatelessWidget {
                   ),
                   CustomLabeledTextField(
                     label: AppText.buildingNo,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.buildingNoController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterBuildingNo,
@@ -627,7 +626,7 @@ class Step1Form extends StatelessWidget {
                   ),
                   CustomLabeledTextField(
                     label: AppText.societyName,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.societyNameController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterSocietyName,
@@ -636,7 +635,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.locality,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.localityController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterLocality,
@@ -645,7 +644,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.streetName,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.streetNameController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterStreetName,
@@ -654,7 +653,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.pinCode,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.pinCodeController,
                     inputType: TextInputType.number,
                     hintText: AppText.enterPinCode,
@@ -663,7 +662,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.state,
-                    isRequired: true,
+                    isRequired: false,
                   ),
 
                   SizedBox(height: 10),
@@ -699,7 +698,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.district,
-                    isRequired: true,
+                    isRequired: false,
                   ),
 
                   const SizedBox(height: 10),
@@ -735,7 +734,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.city,
-                    isRequired: true,
+                    isRequired: false,
                   ),
 
                   const SizedBox(height: 10),
@@ -764,7 +763,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.taluka,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.talukaController,
                     inputType: TextInputType.number,
                     hintText: AppText.enterTaluka,
@@ -773,7 +772,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.country,
-                    isRequired: true,
+                    isRequired: false,
                   ),
 
                   const SizedBox(height: 10),
@@ -818,7 +817,7 @@ class Step1Form extends StatelessWidget {
                   ),
                   CustomLabeledTextField(
                     label: AppText.houseFlatNo,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.houseFlatPermController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterHouseFlatNo,
@@ -826,7 +825,7 @@ class Step1Form extends StatelessWidget {
                   ),
                   CustomLabeledTextField(
                     label: AppText.buildingNo,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.buildingNoPermController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterBuildingNo,
@@ -834,7 +833,7 @@ class Step1Form extends StatelessWidget {
                   ),
                   CustomLabeledTextField(
                     label: AppText.societyName,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.societyNamePermController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterSocietyName,
@@ -843,7 +842,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.locality,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.localityPermController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterLocality,
@@ -852,7 +851,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.streetName,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.streetNamePermController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterStreetName,
@@ -861,7 +860,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.pinCode,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.pinCodePermController,
                     inputType: TextInputType.number,
                     hintText: AppText.enterPinCode,
@@ -870,7 +869,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.state,
-                    isRequired: true,
+                    isRequired: false,
                   ),
 
                   SizedBox(height: 10),
@@ -907,7 +906,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.district,
-                    isRequired: true,
+                    isRequired: false,
                   ),
 
                   const SizedBox(height: 10),
@@ -943,7 +942,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.city,
-                    isRequired: true,
+                    isRequired: false,
                   ),
 
                   const SizedBox(height: 10),
@@ -972,7 +971,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomLabeledTextField(
                     label: AppText.taluka,
-                    isRequired: true,
+                    isRequired: false,
                     controller: loanApplicationController.talukaController,
                     inputType: TextInputType.number,
                     hintText: AppText.enterTaluka,
@@ -981,7 +980,7 @@ class Step1Form extends StatelessWidget {
 
                   CustomTextLabel(
                     label: AppText.country,
-                    isRequired: true,
+                    isRequired: false,
                   ),
 
                   const SizedBox(height: 10),

@@ -45,7 +45,7 @@ class Step4Form extends StatelessWidget {
 
                       CustomLabeledTextField(
                         label: AppText.fullName,
-                        isRequired: true,
+                        isRequired: false,
                         controller: fam.famNameController,
                         inputType: TextInputType.name,
                         hintText: AppText.enterFullName,
@@ -54,7 +54,7 @@ class Step4Form extends StatelessWidget {
 
                       CustomLabeledPickerTextField(
                         label: AppText.dateOfBirth,
-                        isRequired: true,
+                        isRequired: false,
                         controller: fam.famDobController,
                         inputType: TextInputType.name,
                         hintText: AppText.mmddyyyy,
@@ -72,14 +72,14 @@ class Step4Form extends StatelessWidget {
                               color: AppColor.grey2,
                             ),
                           ),
-                          Text(
+                         /* Text(
                             " *",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: AppColor.redColor,
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
 
@@ -101,7 +101,7 @@ class Step4Form extends StatelessWidget {
 
                       CustomLabeledTextField(
                         label: AppText.relWithAppl,
-                        isRequired: true,
+                        isRequired: false,
                         controller: fam.famRelWithApplController,
                         inputType: TextInputType.name,
                         hintText: AppText.enterRelWithAppl,
@@ -119,14 +119,14 @@ class Step4Form extends StatelessWidget {
                               color: AppColor.grey2,
                             ),
                           ),
-                          Text(
+                         /* Text(
                             " *",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: AppColor.redColor,
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
 
@@ -144,7 +144,7 @@ class Step4Form extends StatelessWidget {
 
                       CustomLabeledTextField(
                         label: AppText.monthlyIncome,
-                        isRequired: true,
+                        isRequired: false,
                         controller: fam.famMonthlyIncomeController,
                         inputType: TextInputType.name,
                         hintText: AppText.enterMonthlyIncome,
@@ -153,7 +153,7 @@ class Step4Form extends StatelessWidget {
 
                       CustomLabeledTextField(
                         label: AppText.enterEmployedWith,
-                        isRequired: true,
+                        isRequired: false,
                         controller: fam.famEmployedWithController,
                         inputType: TextInputType.name,
                         hintText: AppText.enterEmployedWith,

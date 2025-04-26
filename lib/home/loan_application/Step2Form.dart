@@ -64,7 +64,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.fullName,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApFullNameController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterFullName,
@@ -73,7 +73,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.fathersName,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApFatherNameController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterFathersName,
@@ -91,14 +91,14 @@ class Step2Form extends StatelessWidget {
                                   color: AppColor.grey2,
                                 ),
                               ),
-                              Text(
+                              /*Text(
                                 " *",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: AppColor.redColor,
                                 ),
-                              ),
+                              ),*/
                             ],
                           ),
 
@@ -118,7 +118,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledPickerTextField(
                             label: AppText.dateOfBirth,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApDobController,
                             inputType: TextInputType.name,
                             hintText: AppText.mmddyyyy,
@@ -128,7 +128,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.qualification,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApQualiController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterQualification,
@@ -137,7 +137,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.maritalStatus,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApMaritalController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterMaritalStatus,
@@ -146,7 +146,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.employmentStatus,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApEmplStatusController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterEmploymentStatus,
@@ -155,7 +155,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.nationality,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApNationalityController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterNationality,
@@ -165,7 +165,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.occupation,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApOccupationController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterOccupation,
@@ -174,7 +174,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.occupationSector,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApOccSectorController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterOccupationSector,
@@ -193,7 +193,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.mobileNumber,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApMobController,
                             inputType: TextInputType.phone,
                             hintText: AppText.enterPhNumber,
@@ -224,7 +224,7 @@ class Step2Form extends StatelessWidget {
                           ),
                           CustomLabeledTextField(
                             label: AppText.houseFlatNo,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApCurrHouseFlatController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterHouseFlatNo,
@@ -232,7 +232,7 @@ class Step2Form extends StatelessWidget {
                           ),
                           CustomLabeledTextField(
                             label: AppText.buildingNo,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApCurrBuildingNoController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterBuildingNo,
@@ -240,7 +240,7 @@ class Step2Form extends StatelessWidget {
                           ),
                           CustomLabeledTextField(
                             label: AppText.societyName,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApCurrSocietyNameController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterSocietyName,
@@ -249,7 +249,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.locality,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApCurrLocalityController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterLocality,
@@ -258,7 +258,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.streetName,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApCurrStreetNameController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterStreetName,
@@ -267,7 +267,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.pinCode,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApCurrPinCodeController,
                             inputType: TextInputType.number,
                             hintText: AppText.enterPinCode,
@@ -276,7 +276,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.state,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           SizedBox(height: 10),
@@ -312,7 +312,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.district,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           const SizedBox(height: 10),
@@ -348,7 +348,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.city,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           const SizedBox(height: 10),
@@ -377,7 +377,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.taluka,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApCurrTalukaController,
                             inputType: TextInputType.number,
                             hintText: AppText.enterTaluka,
@@ -386,7 +386,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.country,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           const SizedBox(height: 10),
@@ -431,7 +431,7 @@ class Step2Form extends StatelessWidget {
                           ),
                           CustomLabeledTextField(
                             label: AppText.houseFlatNo,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApPermHouseFlatController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterHouseFlatNo,
@@ -439,7 +439,7 @@ class Step2Form extends StatelessWidget {
                           ),
                           CustomLabeledTextField(
                             label: AppText.buildingNo,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApPermBuildingNoController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterBuildingNo,
@@ -447,7 +447,7 @@ class Step2Form extends StatelessWidget {
                           ),
                           CustomLabeledTextField(
                             label: AppText.societyName,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApPermSocietyNameController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterSocietyName,
@@ -456,7 +456,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.locality,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApPermLocalityController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterLocality,
@@ -465,7 +465,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.streetName,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApPermStreetNameController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterStreetName,
@@ -474,7 +474,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.pinCode,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApPermPinCodeController,
                             inputType: TextInputType.number,
                             hintText: AppText.enterPinCode,
@@ -483,7 +483,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.state,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           SizedBox(height: 10),
@@ -519,7 +519,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.district,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           const SizedBox(height: 10),
@@ -555,7 +555,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.city,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           const SizedBox(height: 10),
@@ -584,7 +584,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.taluka,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApCurrTalukaController,
                             inputType: TextInputType.number,
                             hintText: AppText.enterTaluka,
@@ -593,7 +593,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.country,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           const SizedBox(height: 10),
@@ -637,7 +637,7 @@ class Step2Form extends StatelessWidget {
                           ),
                           CustomLabeledTextField(
                             label: AppText.organizationName,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApOrgNameController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterOrganizationName,
@@ -646,7 +646,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomTextLabel(
                             label: AppText.ownershipType,
-                            isRequired: true,
+                            isRequired: false,
                           ),
 
                           const SizedBox(height: 10),
@@ -672,7 +672,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.natureOfBusiness,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApNatureOfBizController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterNatureOfBusiness,
@@ -681,7 +681,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledTextField(
                             label: AppText.staffStrength,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApStaffStrengthController,
                             inputType: TextInputType.name,
                             hintText: AppText.enterStaffStrength,
@@ -690,7 +690,7 @@ class Step2Form extends StatelessWidget {
 
                           CustomLabeledPickerTextField(
                             label: AppText.salaryDate,
-                            isRequired: true,
+                            isRequired: false,
                             controller: coAp.coApSalaryDateController,
                             inputType: TextInputType.name,
                             hintText: AppText.mmddyyyy,

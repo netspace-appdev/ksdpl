@@ -29,4 +29,20 @@ class MyHeader{
       'Content-Type': 'multipart/form-data'
     };
   }
+
+
+
+  static Future<Map<String, String>> getHeaders3() async {
+    String? token = StorageService.get(StorageService.TOKEN);
+
+    if (token == null) {
+      throw Exception("No token found. Please login again.");
+    }
+
+    return {
+      'Authorization': 'Bearer $token',
+      'accept': 'text/plain',
+      'Content-Type': 'application/json'
+    };
+  }
 }
