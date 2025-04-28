@@ -762,23 +762,27 @@ class DrawerApiService {
   static Future<Map<String, dynamic>> getProductListByBankIdApi({
     required bankId
   }) async {
-
+print("getProductListByBankIdApi===>${bankId}");
     try {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(getProductListByBankId),
       );
-
+      print("getProductListByBankIdApi===>2");
       // Headers
 
       var header=await MyHeader.getHeaders2();
-
+      print("getProductListByBankIdApi===>3");
       request.headers.addAll(header);
+      print("getProductListByBankIdApi===>4");
       request.fields['BankId'] = bankId;
+      print("getProductListByBankIdApi===>5");
       // Sending request
       var streamedResponse = await request.send();
+      print("getProductListByBankIdApi===>6");
       var response = await http.Response.fromStream(streamedResponse);
-
+      print("req==>getProductListByBankIdApi==>${request.fields}");
+      print("resp==>getProductListByBankIdApi==>${response.body}");
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

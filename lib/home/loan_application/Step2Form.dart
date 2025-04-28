@@ -401,7 +401,7 @@ class Step2Form extends StatelessWidget {
                               items: loanApplicationController.countryList,
                               getId: (item) => item,  // Adjust based on your model structure
                               getName: (item) => item,
-                              selectedValue: loanApplicationController.selectedCountry.value,
+                              selectedValue: coAp.selectedCountrCurr.value,
                               onChanged: (value) {
                                 loanApplicationController.selectedCountry.value =  value;
                               },
@@ -608,9 +608,9 @@ class Step2Form extends StatelessWidget {
                               items: loanApplicationController.countryList,
                               getId: (item) => item,  // Adjust based on your model structure
                               getName: (item) => item,
-                              selectedValue: loanApplicationController.selectedCountry.value,
+                              selectedValue: coAp.selectedCountryPerm.value,
                               onChanged: (value) {
-                                loanApplicationController.selectedCountry.value =  value;
+                                coAp.selectedCountryPerm.value =  value;
                               },
                             );
                           }),

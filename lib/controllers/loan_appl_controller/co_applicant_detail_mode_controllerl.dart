@@ -51,7 +51,8 @@ class CoApplicantDetailController {
   final TextEditingController coApStaffStrengthController = TextEditingController();
   final TextEditingController coApSalaryDateController = TextEditingController();
 
-
+  var selectedCountrCurr = Rxn<String>();
+  var selectedCountryPerm = Rxn<String>();
 
 
   var ownershipList=["Owned", "Rented","Leased", "Jointly Owned", "Other"];

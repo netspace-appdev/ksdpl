@@ -13,7 +13,7 @@ import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
 import 'package:ksdpl/models/dashboard/GetAllChannelModel.dart' as channel;
-
+import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
@@ -90,6 +90,8 @@ class Step1Form extends StatelessWidget {
 
                         loanApplicationController.selectedBank.value =  value?.id?.toString();
                         leadDDController.getAllBranchByBankIdApi(bankId: loanApplicationController.selectedBank.value);
+
+                        leadDDController.getProductListByBankIdApi(bankId: leadDDController.selectedBank.value);
                       },
                       onClear: (){
                         loanApplicationController.selectedBankBranch.value = null;
@@ -142,10 +144,28 @@ class Step1Form extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 10),
-
-
+                  ///exp
                   Obx((){
-                    if (leadDDController.isBranchLoading.value) {
+                    if (leadDDController.isProductLoading.value) {
+                      return  Center(child:CustomSkelton.leadShimmerList(context));
+                    }
+
+
+                    return CustomDropdown<product.Data>(
+                      items: leadDDController.getAllKsdplProductModel.value?.data ?? [],
+                      getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                      getName: (item) => item.productName.toString(),
+                      selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
+                            (item) => item.id.toString() == leadDDController.selectedProdType.value,
+                      ),
+                      onChanged: (value) {
+                        leadDDController.selectedProdType.value =  value?.id?.toString();
+                      },
+                    );
+                  }),
+
+                 /* Obx((){
+                    if (leadDDController.isProductLoading.value) {
                       return  Center(child:CustomSkelton.leadShimmerList(context));
                     }
 
@@ -165,7 +185,7 @@ class Step1Form extends StatelessWidget {
                       },
                     );
                   }),
-
+*/
                   const SizedBox(height: 20),
 
                   CustomLabeledTextField(
@@ -473,7 +493,7 @@ class Step1Form extends StatelessWidget {
                   CustomLabeledTextField(
                     label: AppText.occupationSector,
                     isRequired: false,
-                    controller: loanApplicationController.occupationController,
+                    controller: loanApplicationController.occSectorController,
                     inputType: TextInputType.name,
                     hintText: AppText.enterOccupationSector,
                     validator: ValidationHelper.validatePhoneNumber,
@@ -678,7 +698,7 @@ class Step1Form extends StatelessWidget {
                       getId: (item) => item.id.toString(),  // Adjust based on your model structure
                       getName: (item) => item.stateName.toString(),
                       selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                            (item) => item.id.toString() == leadDDController.selectedState.value,
+                            (item) => item.id.toString() == leadDDController.selectedStateCurr.value,
                       ),
                       onChanged: (value) {
                         leadDDController.selectedStateCurr.value =  value?.id?.toString();
@@ -972,7 +992,7 @@ class Step1Form extends StatelessWidget {
                   CustomLabeledTextField(
                     label: AppText.taluka,
                     isRequired: false,
-                    controller: loanApplicationController.talukaController,
+                    controller: loanApplicationController.talukaPermController,
                     inputType: TextInputType.number,
                     hintText: AppText.enterTaluka,
                     validator: ValidationHelper.validateName,

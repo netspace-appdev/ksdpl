@@ -856,10 +856,12 @@ class LeadListMain extends StatelessWidget {
             },
           );
         }else if (label_code == "loan_appl_form") {
-          LoanApplicationController loanApplicationController=Get.put(LoanApplicationController());
-          loanApplicationController.leadId.value=leadId;
+          //LoanApplicationController loanApplicationController=Get.put(LoanApplicationController());
+          //loanApplicationController.leadId.value=leadId;
 
-          Get.toNamed("/loanApplication",);
+          Get.toNamed("/loanApplication", arguments: {
+          'leadId': leadId.toString(),
+          });
 
         }else{
 

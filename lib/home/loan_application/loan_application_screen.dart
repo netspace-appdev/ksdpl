@@ -227,10 +227,12 @@ class LoanApplicationScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: (){
-                  loanApplicationController.addLoanApplicationApi(id: loanApplicationController.leadId.toString()).then((_){
+                  loanApplicationController.onSaveLoanAppl();
+               /*   loanApplicationController.addLoanApplicationApi(id: loanApplicationController.leadId.toString()).then((_){
                     loanApplicationController.markStepAsCompleted();
                     loanApplicationController.nextStep;
-                  });
+                  });*/
+                  ///not imp
                   /*if(loanApplicationController.currentStep.value < 6){
                     loanApplicationController.nextStep;
                   }*/
