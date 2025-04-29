@@ -66,7 +66,7 @@ class Step3Form extends StatelessWidget {
               CustomLabeledTextField(
                 label: AppText.blockNo,
                 isRequired: false,
-                controller: loanApplicationController.propBlockNoNoNoController,
+                controller: loanApplicationController.propBlockNoController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterBlockNo,
                 validator:  ValidationHelper.validateName,

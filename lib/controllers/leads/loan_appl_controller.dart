@@ -7,6 +7,9 @@ import '../../common/storage_service.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
 import '../../models/loan_application/special_model/CoApplicantModel.dart';
+import '../../models/loan_application/special_model/CreditCardModel.dart';
+import '../../models/loan_application/special_model/FamilyMemberModel.dart';
+import '../../models/loan_application/special_model/ReferenceModel.dart';
 import '../../services/loan_appl_service.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
@@ -34,6 +37,7 @@ class LoanApplicationController extends GetxController{
   var selectedOwnershipList = Rxn<String>();
   var selectedCountry = Rxn<String>();
   var selectedCountryPerm = Rxn<String>();
+  var selectedProdTypeOrTypeLoan = Rxn<String>();
 
   LeadDDController leadDDController = Get.find();
 
@@ -94,7 +98,7 @@ class LoanApplicationController extends GetxController{
   final TextEditingController propPropIdController = TextEditingController();
   final TextEditingController propSurveyNoController = TextEditingController();
   final TextEditingController propFinalPlotNoNoController = TextEditingController();
-  final TextEditingController propBlockNoNoNoController = TextEditingController();
+  final TextEditingController propBlockNoController = TextEditingController();
 
   final TextEditingController propHouseFlatController = TextEditingController();
   final TextEditingController propBuildingNameController = TextEditingController();
@@ -294,7 +298,7 @@ class LoanApplicationController extends GetxController{
         removed.famEmployedWithController.dispose();
 
         removed.selectedGenderFam.value = null;
-        removed.selectedGenderDependent.value = null;
+        removed.selectedFamDependent.value = null;
 
       });
     } else {
@@ -428,7 +432,7 @@ class LoanApplicationController extends GetxController{
     propPropIdController.dispose();
     propSurveyNoController.dispose();
     propFinalPlotNoNoController.dispose();
-    propBlockNoNoNoController.dispose();
+    propBlockNoController.dispose();
 
     propHouseFlatController.dispose();
     propBuildingNameController.dispose();
@@ -470,10 +474,9 @@ class LoanApplicationController extends GetxController{
 
   void onSaveLoanAppl() {
     final List<CoApplicantModel> coApplicantModels = [];
-
-/*
-
-
+    final List<FamilyMemberModel> familyMembersModels = [];
+    final List<CreditCardModel> creditCardModel = [];
+    final List<ReferenceModel> referenceModel = [];
 
     for (var coAp in coApplicantList) {
       final AddressModel presentAddress = AddressModel(
@@ -487,7 +490,29 @@ class LoanApplicationController extends GetxController{
         district: cleanText(coAp.selectedDistrictCurr.value.toIntOrZero().toString()),
         state: cleanText(coAp.selectedStateCurr.value.toIntOrZero().toString()),
         country: cleanText(coAp.selectedCountrCurr.value.toIntOrZero().toString()),
-        ///pinCode: cleanText(coAp.coApPinc.text)
+        pinCode: cleanText(coAp.coApCurrPinCodeController.text)
+      );
+
+      final AddressModel permanentAddress = AddressModel(
+          houseFlatNo: cleanText(coAp.coApPermHouseFlatController.text),
+          buildingNo: cleanText(coAp.coApPermBuildingNoController.text),
+          societyName: cleanText(coAp.coApPermSocietyNameController.text),
+          locality: cleanText(coAp.coApPermLocalityController.text),
+          streetName: cleanText(coAp.coApPermStreetNameController.text),
+          city: cleanText(coAp.selectedCityPerm.value.toIntOrZero().toString()),
+          taluka: cleanText(coAp.coApPermTalukaController.text),
+          district: cleanText(coAp.selectedDistrictPerm.value.toIntOrZero().toString()),
+          state: cleanText(coAp.selectedStatePerm.value.toIntOrZero().toString()),
+          country: cleanText(coAp.selectedCountryPerm.value.toIntOrZero().toString()),
+          pinCode: cleanText(coAp.coApPermPinCodeController.text)
+      );
+
+      final EmployerDetailsModel employerDetails=EmployerDetailsModel(
+          organizationName: cleanText(coAp.coApOrgNameController.text),
+          ownershipType: coAp.selectedCityPerm.value.toIntOrZero().toString(),
+          natureOfBusiness:cleanText(coAp.coApNatureOfBizController.text),
+          staffStrength: coAp.coApStaffStrengthController.toIntOrZero(),
+          dateOfSalary:"2025-04-26T10:21:07.889Z",                ///its static
       );
 
 
@@ -503,30 +528,97 @@ class LoanApplicationController extends GetxController{
         nationality: cleanText(coAp.coApNationalityController.text),
         occupation: cleanText(coAp.coApOccupationController.text),
         occupationSector: cleanText(coAp.coApOccupationController.text),
+        mobile: cleanText(coAp.coApMobController.text),
         presentAddress:presentAddress,
-
-
+        permanentAddress:permanentAddress,
+        employerDetails:employerDetails,
       );
       coApplicantModels.add(coApModel);
     }
-    List<Map<String, dynamic>> payload = coApplicantModels.map((e) => e.toMap()).toList();
-    print("payload==>${payload}"); // List of Model objects*/
+
+
+    for (var fam in familyMemberApplList) {
+      final famModel = FamilyMemberModel(
+        name: cleanText(fam.famNameController.text),
+        birthDate: "2025-04-26T10:21:07.889Z",                ///its static
+        gender: fam.selectedGenderFam.value?? "",
+        relationWithApplicant: cleanText(fam.famRelWithApplController.text),
+        dependent: fam.isFamDependent ?? false,
+        monthlyIncome: fam.famMonthlyIncomeController.toIntOrZero(),
+        employedWith: cleanText(fam.famEmployedWithController.text)
+      );
+      familyMembersModels.add(famModel);
+    }
+
+    for (var cc in creditCardsList) {
+      final ccModel = CreditCardModel(
+        companyBank: cleanText(cc.ccCompBankController.text),
+        cardNumber: cleanText(cc.ccCardNumberController.text),
+        havingSince: "2025-04-29T09:38:11.038Z",                             ///its static
+        avgMonthlySpending: cc.ccAvgMonSpendingController.toIntOrZero(),
+      );
+      creditCardModel.add(ccModel);
+    }
+
+
+    for (var ref in referencesList) {
+      final refModel = ReferenceModel(
+      name:  cleanText(ref.refNameController.text),
+      address:  cleanText(ref.refAddController.text),
+      city: ref.selectedCityPerm.value.ddToString(),
+      district: ref.selectedDistrictPerm.value.ddToString(),
+      state: ref.selectedStatePerm.value.ddToString(),
+      country: ref.selectedCountry.value.ddToString(),
+      pinCode: cleanText(ref.refPincodeController.text),
+      phone: cleanText(ref.refPhoneController.text),
+      mobile: cleanText(ref.refMobController.text),
+      relationWithApplicant: cleanText(ref.refRelWithApplController.text),
+      );
+      referenceModel.add(refModel);
+    }
+    List<Map<String, dynamic>> coApPayload = coApplicantModels.map((e) => e.toMap()).toList();
+    List<Map<String, dynamic>> famPayload = familyMembersModels.map((e) => e.toJson()).toList();
+    List<Map<String, dynamic>>  ccPayload = creditCardModel.map((e) => e.toMap()).toList();
+    List<Map<String, dynamic>>  refPayload = referenceModel.map((e) => e.toMap()).toList();
+
+    print("payload==>${coApPayload.toString()}");
+    print("famPayload==>${famPayload.toString()}");
+    print("ccPayload==>${ccPayload.toString()}");
+    print("refPayload==>${refPayload.toString()}");
+    addLoanApplicationApi(
+      coApPayload:coApPayload,
+      famPayload: famPayload,
+      ccPayload: ccPayload,
+      refPayload: refPayload,
+    );
   }
 
-  Future<void>addLoanApplicationApi() async {
+  Future<void>addLoanApplicationApi({
+    required List<Map<String, dynamic>> coApPayload,
+    required List<Map<String, dynamic>> famPayload,
+    required List<Map<String, dynamic>> ccPayload,
+    required List<Map<String, dynamic>> refPayload,
+  }) async {
     try {
       isLoading(true);
 
-      leadId = Get.arguments['leadId'];
+print("addLoanApplicationApi");
+
+print("Helper.formatDate(proFeeDateController.text)===>${proFeeDateController.text.toString()}");
+print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFeeDateController.text)}");
+
+
+      leadId.value = Get.arguments['leadId'];
+      print("leadId==>${leadId.value}");
       var data = await LoanApplService.addLoanApplicationApi(
         body:[
           {
-            "id": leadId,
+            "id": leadId.value,
             "dsaCode": cleanText(dsaCodeController.text),
             "loanApplicationNo": cleanText(lanController.text),
             "bankId": selectedBank.value.toIntOrZero(),
             "branchId": selectedBankBranch.value.toIntOrZero(),
-            "typeOfLoanId": 0,                                                 ///its static
+            "typeOfLoanId": selectedProdTypeOrTypeLoan.value.toIntOrZero(),
             "panCardNumber":  cleanText(panController.text),
             "addharCardNumber":  cleanText(aadharController.text),
             "loanAmountApplied": laAppliedController.toIntOrZero(),
@@ -537,26 +629,26 @@ class LoanApplicationController extends GetxController{
               "branch":selectedBankBranch.value.toIntOrZero(),
               "dsaCode": cleanText(dsaCodeController.text),
               "dsaStaffName": cleanText(dsaStaffNController.text),
-              "loanApplicationNo": "string",                                ///its static
+              "loanApplicationNo":cleanText(lanController.text),
               "processingFee":proFeeController.toIntOrZero(),
               "chqDdSlipNo": cleanText(chqDDSNController.text),
-              "processingFeeDate":"2025-04-26T10:21:07.889Z",                ///its static
+              "processingFeeDate": "2025-04-29T13:36:29.953Z",                     ///its static
               "loanPurpose": cleanText(loPurposeController.text),
               "scheme": cleanText(schemeController.text),
               "repaymentType": cleanText(repayTpeController.text),
               "typeOfLoan": cleanText(loanTenureYController.text),
-              "loanAmountApplied": 0,                                       ///its static
+              "loanAmountApplied": laAppliedController.text.toIntOrZero(),
               "loanTenureYears": loanTenureYController.toIntOrZero(),
               "monthlyInstallment":monthInstaController.toIntOrZero() ,
               "previousLoanApplied": isPreviousLoanApplied ?? false,
               "applicant": {
                 "name": cleanText(applFullNameController.text),
                 "fatherName": cleanText(fatherNameController.text),
-                "gender": selectedGender.value.ddToString,
-                "dateOfBirth": "2025-04-26T10:21:07.889Z",                 ///its static
+                "gender": selectedGender.value.ddToString(),
+                "dateOfBirth": "2025-04-29T13:36:29.953Z",                 ///its static
                 "qualification": cleanText(qualiController.text),
                 "maritalStatus": cleanText(maritalController.text),
-                "status": "string",                                      ///its static
+                "status": cleanText(emplStatusController.text),
                 "nationality": cleanText(nationalityController.text),
                 "occupation":cleanText(occupationController.text),
                 "occupationSector": cleanText(occSectorController.text),
@@ -566,11 +658,11 @@ class LoanApplicationController extends GetxController{
                   "societyName": cleanText(societyNameController.text),
                   "locality": cleanText(localityController.text),
                   "streetName": cleanText(streetNameController.text),
-                  "city": leadDDController.selectedCityCurr.value.toIntOrZero(),
+                  "city": leadDDController.selectedCityCurr.value.ddToString(),
                   "taluka": cleanText(talukaController.text),
-                  "district": leadDDController.selectedDistrictCurr.value.toIntOrZero(),
-                  "state": leadDDController.selectedStateCurr.value.toIntOrZero(),
-                  "country": selectedCountry.value.toIntOrZero(),
+                  "district": leadDDController.selectedDistrictCurr.value.ddToString(),
+                  "state": leadDDController.selectedStateCurr.value.ddToString(),
+                  "country": selectedCountry.value.ddToString(),
                   "pinCode": cleanText(pinCodeController.text)
                 },
                 "permanentAddress": {
@@ -579,133 +671,59 @@ class LoanApplicationController extends GetxController{
                   "societyName": cleanText(societyNamePermController.text),
                   "locality": cleanText(localityPermController.text),
                   "streetName":cleanText(streetNamePermController.text),
-                  "city": leadDDController.selectedStatePerm.value.toIntOrZero(),
+                  "city": leadDDController.selectedStatePerm.value.ddToString(),
                   "taluka": cleanText(talukaPermController.text),
-                  "district": leadDDController.selectedDistrictPerm.value.toIntOrZero(),
-                  "state": leadDDController.selectedStatePerm.value.toIntOrZero(),
-                  "country": selectedCountryPerm.value.toIntOrZero(),
+                  "district": leadDDController.selectedDistrictPerm.value.ddToString(),
+                  "state": leadDDController.selectedStatePerm.value.ddToString(),
+                  "country": selectedCountryPerm.value.ddToString(),
                   "pinCode": cleanText(pinCodePermController.text)
                 },
                 "emailID": cleanText(applEmailController.text),
                 "mobile": cleanText(applMobController.text),
                 "employerDetails": {
                   "organizationName": cleanText(orgNameController.text),
-                  "ownershipType": selectedOwnershipList.value.ddToString,//"string",
+                  "ownershipType": selectedOwnershipList.value.ddToString(),//"string",
                   "natureOfBusiness": cleanText(natureOfBizController.text),
                   "staffStrength": staffStrengthController.toIntOrZero(),
                   "dateOfSalary": "2025-04-26T10:21:07.889Z"                  ///its static
                 }
               }
             },
-            "coApplicant": [
-              {
-                "name": "string",
-                "fatherName": "string",
-                "gender": "string",
-                "dateOfBirth": "2025-04-26T10:21:07.889Z",
-                "qualification": "string",
-                "maritalStatus": "string",
-                "status": "string",
-                "nationality": "string",
-                "occupation": "string",
-                "occupationSector": "string",
-                "presentAddress": {
-                  "houseFlatNo": "string",
-                  "buildingNo": "string",
-                  "societyName": "string",
-                  "locality": "string",
-                  "streetName": "string",
-                  "city": "string",
-                  "taluka": "string",
-                  "district": "string",
-                  "state": "string",
-                  "country": "string",
-                  "pinCode": "string"
-                },
-                "permanentAddress": {
-                  "houseFlatNo": "string",
-                  "buildingNo": "string",
-                  "societyName": "string",
-                  "locality": "string",
-                  "streetName": "string",
-                  "city": "string",
-                  "taluka": "string",
-                  "district": "string",
-                  "state": "string",
-                  "country": "string",
-                  "pinCode": "string"
-                },
-                "emailID": "string",
-                "mobile": "string",
-                "employerDetails": {
-                  "organizationName": "string",
-                  "ownershipType": "string",
-                  "natureOfBusiness": "string",
-                  "staffStrength": 0,
-                  "dateOfSalary": "2025-04-26T10:21:07.889Z"
-                }
-              }
-            ],
+            "coApplicant": coApPayload,
             "propertyDetails": {
-              "propertyId": "string",
-              "surveyNo": "string",
-              "finalPlotNo": "string",
-              "blockNo": "string",
-              "flatHouseNo": "string",
-              "societyBuildingName": "string",
-              "streetName": "string",
-              "locality": "string",
-              "city": "string",
-              "taluka": "string",
-              "district": "string",
-              "state": "string",
-              "pincode": "string"
+              "propertyId": cleanText(propPropIdController.text),
+              "surveyNo": cleanText(propSurveyNoController.text),
+              "finalPlotNo": cleanText(propFinalPlotNoNoController.text),
+              "blockNo": cleanText(propBlockNoController.text),
+              "flatHouseNo": cleanText(propHouseFlatController.text),
+              "societyBuildingName":  cleanText(propSocietyNameController.text),
+              "streetName":  cleanText(propStreetNameController.text),
+              "locality":  cleanText(propLocalityController.text),
+              "city": selectedCityProp.value.ddToString(),
+              "taluka":  cleanText(propTalukaController.text),
+              "district": selectedDistrictProp.value.ddToString(),
+              "state": selectedStateProp.value.ddToString(),
+              "pincode":  cleanText(propPinCodeController.text),
             },
-            "familyMembers": [
-              {
-                "name": "string",
-                "birthDate": "2025-04-26T10:21:07.889Z",
-                "gender": "string",
-                "relationWithApplicant": "string",
-                "dependent": true,
-                "monthlyIncome": 0,
-                "employedWith": "string"
-              }
-            ],
-            "creditCards": [
-              {
-                "companyBank": "string",
-                "cardNumber": "string",
-                "havingSince": "2025-04-26T10:21:07.889Z",
-                "avgMonthlySpending": 0
-              }
-            ],
+            "familyMembers":famPayload,
+            "creditCards": ccPayload,
             "financialDetails": {
-              "grossMonthlySalary": 0,
-              "netMonthlySalary": 0,
-              "annualBonus": 0,
-              "avgMonthlyOvertime": 0,
-              "avgMonthlyCommission": 0,
-              "monthlyPFDeduction": 0,
-              "otherMonthlyIncome": 0
+              "grossMonthlySalary": fdGrossMonthlySalaryController.toIntOrZero(),
+              "netMonthlySalary": fdnNtMonthlySalaryController.toIntOrZero(),
+              "annualBonus": fdAnnualBonusController.toIntOrZero(),
+              "avgMonthlyOvertime": fdAvgMonOvertimeController.toIntOrZero(),
+              "avgMonthlyCommission": fdAvgMonCommissionController.toIntOrZero(),
+              "monthlyPFDeduction": fdAMonthlyPfDeductionController.toIntOrZero(),
+              "otherMonthlyIncome": fdOtherMonthlyIncomeController.toIntOrZero(),
             },
-            "references": [
-              {
-                "name": "string",
-                "address": "string",
-                "city": "string",
-                "district": "string",
-                "state": "string",
-                "country": "string",
-                "pinCode": "string",
-                "phone": "string",
-                "mobile": "string",
-                "relationWithApplicant": "string"
-              }
-            ]
+            "references": refPayload
           }
+
+
         ]
       );
+print("data in API cot-->${data.toString()}");
+
 
 
       if(data['success'] == true){
@@ -750,6 +768,13 @@ class LoanApplicationController extends GetxController{
     if (selectedPrevLoanAppl.value == -1) return null; // Means user didn't select anything
     return selectedPrevLoanAppl.value == 0; // 0 index = "Yes", so true
   }
+
+
+
+  void debugPrintKeyVal(String key, dynamic value) {
+    print("$key: ${value ?? 'null'}");
+  }
+
 }
 
 extension ParseStringExtension on String? {

@@ -103,6 +103,7 @@ class AppText{
   static const String branchName="Branch Name";
   static const String IFSC="IFSC";
   static const String phoneNo="Phone No";
+  static const String mobNo="Mobile No";
   static const String eml="Email Address";
   static const String state="State";
   static const String district="District";
@@ -411,6 +412,7 @@ class AppText{
   static const String enterReferenceName = "Enter Reference Name";
   static const String enterReferenceAdd = "Enter Reference Address";
   static const String enterReferencePhone = "Enter Reference Phone";
+  static const String enterReferenceMob = "Enter Reference Mobile";
   static const String loanApplicationForm = "Loan Application Form";
   static const String dateOfBirth2="Date of Birth";
 

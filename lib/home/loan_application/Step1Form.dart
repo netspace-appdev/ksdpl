@@ -156,10 +156,10 @@ class Step1Form extends StatelessWidget {
                       getId: (item) => item.id.toString(),  // Adjust based on your model structure
                       getName: (item) => item.productName.toString(),
                       selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
-                            (item) => item.id.toString() == leadDDController.selectedProdType.value,
+                            (item) => item.id.toString() == loanApplicationController.selectedProdTypeOrTypeLoan.value,
                       ),
                       onChanged: (value) {
-                        leadDDController.selectedProdType.value =  value?.id?.toString();
+                        loanApplicationController.selectedProdTypeOrTypeLoan.value =  value?.id?.toString();
                       },
                     );
                   }),

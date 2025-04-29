@@ -17,6 +17,7 @@ class ReferenceController {
   final TextEditingController refNameController = TextEditingController();
   final TextEditingController refAddController = TextEditingController();
   final TextEditingController refPhoneController = TextEditingController();
+  final TextEditingController refMobController = TextEditingController();
   final TextEditingController refRelWithApplController = TextEditingController();
   final TextEditingController refPincodeController = TextEditingController();
 

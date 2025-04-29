@@ -279,9 +279,9 @@ class Step4Form extends StatelessWidget {
       children: [
         Radio<String>(
           value: dep,
-          groupValue: fam.selectedGenderDependent.value,
+          groupValue: fam.selectedFamDependent.value,
           onChanged: (value) {
-            fam.selectedGenderDependent.value=value;
+            fam.selectedFamDependent.value=value;
           },
         ),
         Text(dep),

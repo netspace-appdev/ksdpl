@@ -191,7 +191,7 @@ class Step5Form extends StatelessWidget {
     );
   }
 
-  Widget _buildRadioOptionDep(String dep, FamilyMemberController fam) {
+/*  Widget _buildRadioOptionDep(String dep, FamilyMemberController fam) {
     return Row(
       children: [
         Radio<String>(
@@ -204,5 +204,5 @@ class Step5Form extends StatelessWidget {
         Text(dep),
       ],
     );
-  }
+  }*/
 }

@@ -1,333 +1,73 @@
 /*
-class LoanApplicationScreen extends StatelessWidget {
+debugPrintKeyVal("leadId", leadId);
+debugPrintKeyVal("dsaCode", cleanText(dsaCodeController.text));
+debugPrintKeyVal("loanApplicationNo", cleanText(lanController.text));
+debugPrintKeyVal("bankId", selectedBank.value.toIntOrZero());
+debugPrintKeyVal("branchId", selectedBankBranch.value.toIntOrZero());
+debugPrintKeyVal("typeOfLoanId", 0);
+debugPrintKeyVal("panCardNumber", cleanText(panController.text));
+debugPrintKeyVal("addharCardNumber", cleanText(aadharController.text));
+debugPrintKeyVal("loanAmountApplied", laAppliedController.toIntOrZero());
+debugPrintKeyVal("uniqueLeadNumber", cleanText(ulnController.text));
+debugPrintKeyVal("channelId", selectedChannel.value.toIntOrZero());
+debugPrintKeyVal("channelCode", cleanText(chCodeController.text));
 
-  LeadDDController leadDDController = Get.put(LeadDDController());
-  GreetingController greetingController = Get.put(GreetingController());
-  InfoController infoController = Get.put(InfoController());
-  final TextEditingController _searchController = TextEditingController();
+// Inner object - detailForLoanApplication
+debugPrintKeyVal("detail.branch", selectedBankBranch.value.toIntOrZero());
+debugPrintKeyVal("detail.dsaCode", cleanText(dsaCodeController.text));
+debugPrintKeyVal("detail.dsaStaffName", cleanText(dsaStaffNController.text));
+debugPrintKeyVal("detail.processingFee", proFeeController.toIntOrZero());
+debugPrintKeyVal("detail.chqDdSlipNo", cleanText(chqDDSNController.text));
+debugPrintKeyVal("detail.loanPurpose", cleanText(loPurposeController.text));
+debugPrintKeyVal("detail.scheme", cleanText(schemeController.text));
+debugPrintKeyVal("detail.repaymentType", cleanText(repayTpeController.text));
+debugPrintKeyVal("detail.typeOfLoan", cleanText(loanTenureYController.text));
+debugPrintKeyVal("detail.loanTenureYears", loanTenureYController.toIntOrZero());
+debugPrintKeyVal("detail.monthlyInstallment", monthInstaController.toIntOrZero());
+debugPrintKeyVal("detail.previousLoanApplied", isPreviousLoanApplied ?? false);
 
+// Applicant Info
+debugPrintKeyVal("applicant.name", cleanText(applFullNameController.text));
+debugPrintKeyVal("applicant.fatherName", cleanText(fatherNameController.text));
+debugPrintKeyVal("applicant.gender", selectedGender.value.ddToString());
+debugPrintKeyVal("applicant.qualification", cleanText(qualiController.text));
+debugPrintKeyVal("applicant.maritalStatus", cleanText(maritalController.text));
+debugPrintKeyVal("applicant.nationality", cleanText(nationalityController.text));
+debugPrintKeyVal("applicant.occupation", cleanText(occupationController.text));
+debugPrintKeyVal("applicant.occupationSector", cleanText(occSectorController.text));
 
-  final _formKey = GlobalKey<FormState>();
-  final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());/// Remove it
-  final LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
+// Address (Present)
+debugPrintKeyVal("present.houseFlatNo", cleanText(houseFlatController.text));
+debugPrintKeyVal("present.buildingNo", cleanText(buildingNoController.text));
+debugPrintKeyVal("present.societyName", cleanText(societyNameController.text));
+debugPrintKeyVal("present.locality", cleanText(localityController.text));
+debugPrintKeyVal("present.streetName", cleanText(streetNameController.text));
+debugPrintKeyVal("present.city", leadDDController.selectedCityCurr.value.ddToString());
+debugPrintKeyVal("present.taluka", cleanText(talukaController.text));
+debugPrintKeyVal("present.district", leadDDController.selectedDistrictCurr.value.toIntOrZero());
+debugPrintKeyVal("present.state", leadDDController.selectedStateCurr.value.toIntOrZero());
+debugPrintKeyVal("present.country", selectedCountry.value.toIntOrZero());
+debugPrintKeyVal("present.pinCode", cleanText(pinCodeController.text));
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+// Address (Permanent)
+debugPrintKeyVal("perm.houseFlatNo", cleanText(houseFlatPermController.text));
+debugPrintKeyVal("perm.buildingNo", cleanText(buildingNoPermController.text));
+debugPrintKeyVal("perm.societyName", cleanText(societyNamePermController.text));
+debugPrintKeyVal("perm.locality", cleanText(localityPermController.text));
+debugPrintKeyVal("perm.streetName", cleanText(streetNamePermController.text));
+debugPrintKeyVal("perm.city", leadDDController.selectedStatePerm.value.toIntOrZero());
+debugPrintKeyVal("perm.taluka", cleanText(talukaPermController.text));
+debugPrintKeyVal("perm.district", leadDDController.selectedDistrictPerm.value.toIntOrZero());
+debugPrintKeyVal("perm.state", leadDDController.selectedStatePerm.value.toIntOrZero());
+debugPrintKeyVal("perm.country", selectedCountryPerm.value.toIntOrZero());
+debugPrintKeyVal("perm.pinCode", cleanText(pinCodePermController.text));
 
-        backgroundColor: AppColor.backgroundColor,
+debugPrintKeyVal("applicant.emailID", cleanText(applEmailController.text));
+debugPrintKeyVal("applicant.mobile", cleanText(applMobController.text));
 
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  // Gradient Background
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColor.primaryLight, AppColor.primaryDark],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        header(context),
-                      ],
-                    ),
-                  ),
-
-                  // White Container
-                  Align(
-                    alignment: Alignment.topCenter,  // Centers it
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          top: 90 // MediaQuery.of(context).size.height * 0.22
-                      ), // <-- Moves it 30px from top
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                      decoration: const BoxDecoration(
-                        color: AppColor.backgroundColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(45),
-                          topRight: Radius.circular(45),
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 100,
-                            child: ListView.builder(
-                              controller: loanApplicationController.scrollController,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: loanApplicationController.titles.length,
-                              itemBuilder: (context, index) {
-                                return Obx(() {
-                                  Color circleColor;
-
-                                  if (loanApplicationController.currentStep.value == index) {
-                                    circleColor = AppColor.primaryColor;
-                                  } else if (loanApplicationController.stepCompleted[index]) {
-                                    circleColor = Colors.green;
-                                  } else {
-                                    circleColor = Colors.grey;
-                                  }
-
-                                  return GestureDetector(
-                                    onTap: () => loanApplicationController.jumpToStep(index),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        if (index != 0)
-                                          Container(
-                                            alignment: Alignment.center,
-                                            margin: const EdgeInsets.only(bottom: 25), // adjust vertically
-                                            child: SizedBox(
-                                              width: 30,
-                                              child: Divider(
-                                                thickness: 2,
-                                                color: loanApplicationController.stepCompleted[index - 1]
-                                                    ? Colors.green
-                                                    : Colors.grey[300],
-                                                height: 2,
-                                              ),
-                                            ),
-                                          ),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-
-                                          children: [
-                                            Stack(
-                                              alignment: Alignment.center,
-                                              children: [
-                                                CircleAvatar(
-                                                  radius: 20,
-                                                  backgroundColor: circleColor,
-                                                  child: Text(
-                                                    '${index + 1}',
-                                                    style: const TextStyle(color: Colors.white),
-                                                  ),
-                                                ),
-                                                if (loanApplicationController.stepCompleted[index])
-                                                  Positioned(
-                                                    right: 0,
-                                                    bottom: 0,
-                                                    child: Container(
-                                                      decoration:BoxDecoration(
-                                                          color:loanApplicationController.currentStep.value == index
-                                                              ? Colors.green // current step completed
-                                                              : Colors.blue,
-                                                          shape: BoxShape.circle,
-                                                          border: Border.all(color: Colors.white)
-                                                      ),
-                                                      padding: EdgeInsets.all(2.0),
-                                                      child: Icon(Icons.check, size: 12, color: Colors.white),
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: Container(
-                                                width: 100,
-                                                child: Text(
-                                                  _breakTwoWords(loanApplicationController.titles[index]),
-                                                  style: const TextStyle(fontSize: 12),
-                                                  textAlign: TextAlign.center,
-                                                  maxLines: 2,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-
-                          // Scrollable form
-                          SingleChildScrollView(
-                            child: Obx(() => Padding(
-                              padding: const EdgeInsets.only(bottom: 80), // give space for bottom buttons
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Form Step ${loanApplicationController.currentStep.value + 1}',
-                                    style: const TextStyle(fontSize: 25),
-                                  ),
-
-                                  const SizedBox(height: 20),
-
-                                  // Placeholder: Replace with real form fields
-                                  for (int i = 0; i < 20; i++)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                      child: TextFormField(
-                                        decoration: InputDecoration(labelText: 'Field $i'),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            )),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: Obx(() => Container(
-          color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: loanApplicationController.currentStep.value > 0
-                    ? loanApplicationController.previousStep
-                    : null,
-                child: const Text('Prev'),
-              ),
-              ElevatedButton(
-                onPressed: () => loanApplicationController.markStepAsCompleted(),
-                child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: loanApplicationController.currentStep.value < 6
-                    ? loanApplicationController.nextStep
-                    : null,
-                child: const Text('Next',style: TextStyle(color: AppColor.appWhite),),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColor.primaryColor,
-                ),
-              ),
-            ],
-          ),
-        )),
-
-
-      ),
-    );
-  }
-
-  Widget header(context){
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-
-          InkWell(
-              onTap: (){
-                Get.back();
-              },
-              child: Image.asset(AppImage.arrowLeft,height: 24,)),
-          const Text(
-            AppText.loanAppl,
-            style: TextStyle(
-                fontSize: 20,
-                color: AppColor.grey3,
-                fontWeight: FontWeight.w700
-
-
-            ),
-          ),
-
-          InkWell(
-            onTap: (){
-
-            },
-            child: Container(
-
-              width: 40,
-              height:40,
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              decoration:  const BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-
-            ),
-          )
-
-
-
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRadioOption(String gender) {
-    return Row(
-      children: [
-        Radio<String>(
-          value: gender,
-          groupValue: loanApplicationController.selectedGender.value,
-          onChanged: (value) {
-            loanApplicationController.selectedGender.value=value;
-          },
-        ),
-        Text(gender),
-      ],
-    );
-  }
-
-  void onPressed(){
-
-
-    if (_formKey.currentState!.validate()) {
-
-      if (addleadcontroller.selectedGender.value==null) {
-        ToastMessage.msg("Please select gender");
-      }else {
-        ToastMessage.msg("Form Submitted");
-      }
-    }
-  }
-
-  Widget percentBar(){
-    return Padding(
-      padding: EdgeInsets.all(15.0),
-      child: new LinearPercentIndicator(
-        //width: MediaQuery.of(context).size.width - 50,
-        animation: true,
-        lineHeight: 15.0,
-        animationDuration: 2500,
-        percent: 0.8,
-        //center: Text("80.0%"),
-        // linearStrokeCap: LinearStrokeCap.roundAll,
-        barRadius: Radius.circular(15),
-        progressColor:AppColor.greenColor,
-      ),
-    );
-  }
-  String _breakTwoWords(String title) {
-    final words = title.trim().split(' ');
-    if (words.length == 2) {
-      return '${words[0]}\n${words[1]}';
-    }
-    return title;
-  }
-
-}*/
+// Employer
+debugPrintKeyVal("employer.organizationName", cleanText(orgNameController.text));
+debugPrintKeyVal("employer.ownershipType", selectedOwnershipList.value.ddToString());
+debugPrintKeyVal("employer.natureOfBusiness", cleanText(natureOfBizController.text));
+debugPrintKeyVal("employer.staffStrength", staffStrengthController.toIntOrZero());
+*/
