@@ -775,7 +775,7 @@ print("getProductListByBankIdApi===>${bankId}");
       print("getProductListByBankIdApi===>3");
       request.headers.addAll(header);
       print("getProductListByBankIdApi===>4");
-      request.fields['BankId'] = bankId;
+      request.fields['BankId'] = bankId.toString();
       print("getProductListByBankIdApi===>5");
       // Sending request
       var streamedResponse = await request.send();
@@ -924,7 +924,7 @@ print("getProductListByBankIdApi===>${bankId}");
 
       print("Request Fields: ${request.fields}");
       print("Response Status: ${response.statusCode}");
-      print("Response Body: ${response.body}");
+      print("Response Body work onlead: ${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -1169,6 +1169,9 @@ print("getProductListByBankIdApi===>${bankId}");
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      print("request---->${request.fields}");
+      print("response.bdy---->${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

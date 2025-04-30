@@ -42,21 +42,29 @@ class LoanApplService {
     }
   }
 
-/*  static Future<Map<String, dynamic>> getLoanApplicationDetailsByIdApi({
+  static Future<Map<String, dynamic>> getLoanApplicationDetailsByIdApi({
     required String id,
   }) async {
     try {
-      var headers = await MyHeader.getHeaders3(); // should return 'Authorization' and 'Content-Type: application/json'
-
-      var response = await http.post(
-        Uri.parse(addLoanApplicationDetails),
-        headers: headers,
-        body: jsonEncode(body),
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getLoanApplicationDetailsById),
       );
 
-      print("Request Body: ${jsonEncode(body)}");
-      print("Response Status: ${response.statusCode}");
-      print("Response Body: ${response.body}");
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['Id'] = id.toString();
+
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("===>  getLoanApplicationDetailsByIdApi==>");
+      print("request===>==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>getLoanApplicationDetailsByIdApi==>${response.body.toString()}");
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -67,6 +75,6 @@ class LoanApplService {
       print("Error: $e");
       throw Exception('Error while submitting: $e');
     }
-  }*/
+  }
 }
 

@@ -78,6 +78,9 @@ class DashboardApiService{
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      print("Request lead count api===>${request.fields}");
+      print("Response lead count api===>${response.body}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

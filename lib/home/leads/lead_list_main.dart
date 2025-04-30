@@ -492,7 +492,7 @@ class LeadListMain extends StatelessWidget {
                             label_code: "not_doable",
                           )
                         ]
-                        else if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="13")...[
+                        else if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="13" || leadListController.leadCode.value=="3" )...[
 
                           _buildTextButton(
                             label:AppText.interested,
@@ -523,7 +523,7 @@ class LeadListMain extends StatelessWidget {
                     Row(
                       mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
                       children: [
-                        if(leadListController.leadCode.value=="2")...[
+                        if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="3" )...[
 
                           _buildTextButton(
                             label:AppText.couldntConneect,
@@ -561,7 +561,9 @@ class LeadListMain extends StatelessWidget {
                             label_code: "add_lead_form",
                             currentLeadStage: lead.leadStage.toString(),
                           ),
-                        if(leadListController.leadCode.value!="2")...[
+                        if(leadListController.leadCode.value=="4" || leadListController.leadCode.value=="6" ||leadListController.leadCode.value=="0" ||
+                            leadListController.leadCode.value=="5" || leadListController.leadCode.value=="7"
+                        )...[
                           _buildTextButton(
                             label:AppText.addFollowUp,
                             context: context,
@@ -1186,7 +1188,7 @@ class LeadListMain extends StatelessWidget {
   }) {
 
     // List<String> options = ["Fresh Leads","Working Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
-    List<String> options = ["All Leads","Fresh Leads","Could Not Connect", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+    List<String> options = ["All Leads","Fresh Leads","Working Leads","Could Not Connect", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1531,6 +1533,9 @@ class LeadListMain extends StatelessWidget {
                       isTextArea: true,
                     ),
                     SizedBox(height: 10),
+
+                    
+
                     Row(
                       children: [
                         Obx(()=>Checkbox(

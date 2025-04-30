@@ -6,6 +6,7 @@ import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
@@ -169,15 +170,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  ],
                ),
 
-             /*  CustomListTile(
-                 title:  AppText.loanAppl,
+               CustomListTile(
+                 title:  "Web Panel",
                  imagePath:AppImage.manInBlack,
-                 onTap: () {
-                   Get.toNamed("/loanApplication");
+                 onTap: () => _launchURL("https://kanchaneshver.in/"),
 
-                 },
-
-               ),*/
+               ),
 
                // Logout Button
                CustomListTile(
@@ -204,5 +202,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
     email=StorageService.get(StorageService.EMAIL).toString();
     var rawRole = StorageService.get(StorageService.ROLE).toString();
     role = rawRole.replaceAll('[', '').replaceAll(']', '');
+  }
+
+  _launchURL(String url) async {
+    final Uri _url = Uri.parse(url);
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 }

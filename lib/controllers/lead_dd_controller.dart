@@ -324,7 +324,7 @@ class LeadDDController extends GetxController{
     }
   }
 
-  void  getProductListByBankIdApi({required bankId}) async {
+  Future<void>  getProductListByBankIdApi({required bankId}) async {
     try {
       isLoading(true);
       isProductLoading(true);
@@ -488,7 +488,7 @@ class LeadDDController extends GetxController{
   }
 
 
-  void  getAllBranchByBankIdApi({
+  Future<void>  getAllBranchByBankIdApi({
     required bankId
   }) async {
     try {
@@ -516,7 +516,7 @@ class LeadDDController extends GetxController{
 
 
     } catch (e) {
-      print("Error getAllStateApi: $e");
+      print("Error getAllBranchByBankIdApi: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);

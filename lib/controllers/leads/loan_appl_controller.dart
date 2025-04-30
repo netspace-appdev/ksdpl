@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
@@ -6,6 +8,7 @@ import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
+import '../../models/loan_application/GetLoanApplIdModel.dart';
 import '../../models/loan_application/special_model/CoApplicantModel.dart';
 import '../../models/loan_application/special_model/CreditCardModel.dart';
 import '../../models/loan_application/special_model/FamilyMemberModel.dart';
@@ -20,11 +23,12 @@ import '../loan_appl_controller/reference_model_controller.dart';
 
 class LoanApplicationController extends GetxController{
 
-
+  var getLoanApplIdModel = Rxn<GetLoanApplIdModel>();
   var leadId="".obs;
   var firstName="".obs;
   var email="".obs;
   var isLoading = false.obs;
+  var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
   var selectedGender = Rxn<String>();
   String get selectedGenderValue => selectedGender.value ?? "";
@@ -137,8 +141,8 @@ class LoanApplicationController extends GetxController{
     'Personal Information', 'Co-Applicant Details', 'Property Details', 'Family Members', 'Credit Cards', 'Financial Details', 'References'
   ];
 
-  var selectedBank = Rxn<String>();
-  var selectedBankBranch = Rxn<String>();
+  var selectedBank = Rxn<int>();
+  var selectedBankBranch = Rxn<int>();
   var selectedChannel = Rxn<String>();
 
   final scrollController = ScrollController();
@@ -189,7 +193,8 @@ class LoanApplicationController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-
+    leadId.value = Get.arguments['leadId'];
+    getLoanApplicationDetailsByIdApi(id:leadId.value);
 
   }
 
@@ -608,7 +613,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${proFeeDateController.te
 print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFeeDateController.text)}");
 
 
-      leadId.value = Get.arguments['leadId'];
+
       print("leadId==>${leadId.value}");
       var data = await LoanApplService.addLoanApplicationApi(
         body:[
@@ -616,8 +621,8 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
             "id": leadId.value,
             "dsaCode": cleanText(dsaCodeController.text),
             "loanApplicationNo": cleanText(lanController.text),
-            "bankId": selectedBank.value.toIntOrZero(),
-            "branchId": selectedBankBranch.value.toIntOrZero(),
+            "bankId": selectedBank.value,
+            "branchId": selectedBankBranch.value,
             "typeOfLoanId": selectedProdTypeOrTypeLoan.value.toIntOrZero(),
             "panCardNumber":  cleanText(panController.text),
             "addharCardNumber":  cleanText(aadharController.text),
@@ -626,7 +631,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
             "channelId": selectedChannel.value.toIntOrZero(),
             "channelCode": cleanText(chCodeController.text),
             "detailForLoanApplication": {
-              "branch":selectedBankBranch.value.toIntOrZero(),
+              "branch":selectedBankBranch.value,
               "dsaCode": cleanText(dsaCodeController.text),
               "dsaStaffName": cleanText(dsaStaffNController.text),
               "loanApplicationNo":cleanText(lanController.text),
@@ -752,6 +757,9 @@ print("data in API cot-->${data.toString()}");
 
   }
 
+
+
+
   String cleanText(String text) {
     return text.trim().isEmpty ? "" : text.trim();
   }
@@ -773,6 +781,61 @@ print("data in API cot-->${data.toString()}");
 
   void debugPrintKeyVal(String key, dynamic value) {
     print("$key: ${value ?? 'null'}");
+  }
+
+
+
+  Future<void>getLoanApplicationDetailsByIdApi({
+    required String id,
+  }) async {
+    try {
+      isLoadingMainScreen(true);
+
+
+      var req = await LoanApplService.getLoanApplicationDetailsByIdApi(id: id);
+
+
+      if(req['success'] == true){
+
+        getLoanApplIdModel.value= GetLoanApplIdModel.fromJson(req);
+        Map<String, dynamic>? detailMap;
+        if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
+          detailMap = jsonDecode(getLoanApplIdModel.value!.data!.detailForLoanApplication!);
+        }
+        final data = getLoanApplIdModel.value!.data;
+
+        dsaCodeController.text = data?.dsaCode ?? '';
+        lanController.text = data?.loanApplicationNo ?? '';
+        selectedBank.value =  data?.bankId ?? 0;
+
+        await leadDDController.getAllBranchByBankIdApi(bankId: data?.branchId ?? 0);
+        await leadDDController.getProductListByBankIdApi(bankId: data?.branchId ?? 0);
+
+        selectedBankBranch.value = data?.branchId ?? 0;
+        // selectedProdTypeOrTypeLoan.value = data?.typeOfLoan ?? 0;
+        // panController.text = data?.panCardNumber ?? '';
+        // aadharController.text = data?.addharCardNumber ?? '';
+        // laAppliedController.text = data?.loanAmountApplied?.toString() ?? '';
+        // ulnController.text = data?.uniqueLeadNumber ?? '';
+        // selectedChannel.value = data?.channelId ?? 0;
+        // chCodeController.text = data?.channelCode ?? '';
+
+        isLoadingMainScreen(false);
+
+      }else{
+        ToastMessage.msg(req['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getLeadDetailByIdApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoadingMainScreen(false);
+    } finally {
+
+      isLoadingMainScreen(false);
+    }
   }
 
 }

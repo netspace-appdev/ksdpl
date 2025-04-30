@@ -81,7 +81,7 @@ class DashboardController extends GetxController {
             generalToken: genToekn.toString()
         );
 
-        getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
+        getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "true");
         getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
 
       }else{

@@ -505,6 +505,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onTap: (){
                     int globalIndex = chunkIndex * 4 + ind;
 
+                    print("globalIndex===>${globalIndex.toString()}");
+
 
                     LeadListController leadListController=Get.find();
                     if(globalIndex==0){
@@ -512,23 +514,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       leadListController.filterSubmit();
                       botNavController.selectedIndex.value = 1;
                     }else if(globalIndex==2){
-                      leadListController.selectCheckbox(3);
-                      leadListController.filterSubmit();
-                      botNavController.selectedIndex.value = 1;
-                    }else if(globalIndex==3){
                       leadListController.selectCheckbox(4);
                       leadListController.filterSubmit();
                       botNavController.selectedIndex.value = 1;
-                    }else if(globalIndex==4){
+                    }else if(globalIndex==1){
+                      leadListController.selectCheckbox(2);
+                      leadListController.filterSubmit();
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==3){
                       leadListController.selectCheckbox(5);
                       leadListController.filterSubmit();
                       botNavController.selectedIndex.value = 1;
-                    }else if(globalIndex==5){
+                    }else if(globalIndex==4){
                       leadListController.selectCheckbox(6);
                       leadListController.filterSubmit();
                       botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==5){
+                      leadListController.selectCheckbox(7);
+                      leadListController.filterSubmit();
+                      botNavController.selectedIndex.value = 1;
                     }else if(globalIndex==11){
-                      leadListController.selectCheckbox(2);
+                      leadListController.selectCheckbox(3);
                       leadListController.filterSubmit();
                       botNavController.selectedIndex.value = 1;
                     }else{

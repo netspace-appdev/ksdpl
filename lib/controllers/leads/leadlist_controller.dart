@@ -158,21 +158,25 @@ class LeadListController extends GetxController {
       leadCode.value="2";
       leadStageName.value="Fresh Leads";
 
-    }else if(selectedIndex.value==2){
+    }else if( selectedIndex.value==2){
+      leadCode.value="3";
+      leadStageName.value="Working Leads";
+
+    }else if(selectedIndex.value==3){
       leadCode.value="13";
       leadStageName.value="Couldn't Connect";
-    }else if(selectedIndex.value==3){
+    }else if(selectedIndex.value==4){
       leadCode.value="4";
       leadStageName.value="Interested Leads";
-    }else if(selectedIndex.value==4){
+    }else if(selectedIndex.value==5){
       leadCode.value="5";
       leadStageName.value="Not Interested Leads";
     }
-    else if(selectedIndex.value==5){
+    else if(selectedIndex.value==6){
       leadCode.value="6";
       leadStageName.value="Doable Leads";
     }
-    else if(selectedIndex.value==6){
+    else if(selectedIndex.value==7){
       leadCode.value="7";
       leadStageName.value="Not Doable Leads";
     }
