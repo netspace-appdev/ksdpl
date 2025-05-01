@@ -3,17 +3,19 @@ import 'package:get/get.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../controllers/greeting_controller.dart';
+import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadDetailsController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomCard.dart';
+import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../services/call_service.dart';
 
-
+import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
 class LeadDetailsMain extends StatelessWidget {
 
   GreetingController greetingController = Get.put(GreetingController());
@@ -21,7 +23,7 @@ class LeadDetailsMain extends StatelessWidget {
 
   LeadListController leadListController = Get.put(LeadListController());
   LeadDetailController leadDetailController = Get.put(LeadDetailController());
-
+  LeadDDController leadDDController=Get.find();
   @override
   Widget build(BuildContext context) {
 
@@ -369,6 +371,7 @@ class LeadDetailsMain extends StatelessWidget {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
+        leadDDController.selectedStage.value=currentLeadStage;
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: AppText.addFAndF,
@@ -399,7 +402,85 @@ class LeadDetailsMain extends StatelessWidget {
                       hintText: AppText.enterLeadFeedback,
                       isTextArea: true,
                     ),
-                    SizedBox(height: 10),
+
+
+                    ///stage drodown
+                    ///  add this line in dialog at first leadDDController.selectedStage.value=currentLeadStage;
+                    const SizedBox(height: 20),
+
+                    const Text(
+                      AppText.leadStage,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.grey2,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+                    Obx((){
+                      if (leadDDController.isLeadStageLoading.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+                      int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
+
+                      // Allowed stage IDs based on leadCode
+                      List<int> allowedStageIds = [];
+
+                      if (leadCode == 2) {
+                        allowedStageIds = [4, 5,13];
+                      }else if (leadCode == 3) {
+                        allowedStageIds = [4, 5,13];
+                      } else if (leadCode == 4) {
+                        allowedStageIds = [6, 7];
+                      } else {
+                        allowedStageIds = [2, 3, 4, 5, 6, 7]; // Default to all or handle as needed
+                      }
+
+                      List<stage.Data> filteredStages = leadDDController
+                          .getAllLeadStageModel.value!.data!
+                          .where((lead) =>
+                      lead.id != 1 && allowedStageIds.contains(lead.id))
+                          .toList();
+
+                      return CustomDropdown<stage.Data>(
+                        items: filteredStages,
+                        getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.stageName.toString(),
+                        selectedValue: filteredStages.firstWhereOrNull(
+                              (item) => item.id.toString() == leadDDController.selectedStage.value,
+
+                        ),
+                        onChanged: (value) {
+                          leadDDController.selectedStage.value =  value?.id?.toString();
+
+                          if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else {
+
+                          }
+
+                          print("changed LeadStage==>${leadDDController.selectedStage.value}");
+                        },
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+
+
+                    ///stage dd end
+
+
                     Row(
                       children: [
                         Obx(()=>Checkbox(
@@ -467,7 +548,8 @@ class LeadDetailsMain extends StatelessWidget {
                   callStartTime: callStartTime,
                   callEndTime: callEndTime,
                   id: id,
-                  fromWhere: "call"
+                  fromWhere: "call",
+                  selectedStage: leadDDController.selectedStage.value
 
               );
               Get.back();

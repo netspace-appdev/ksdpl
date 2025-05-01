@@ -3,8 +3,9 @@ class GetAllLeadStageModel {
   bool? success;
   List<Data>? data;
   String? message;
+  int? activeStage; // <--- NEW FIELD
 
-  GetAllLeadStageModel({this.status, this.success, this.data, this.message});
+  GetAllLeadStageModel({this.status, this.success, this.data, this.message, this.activeStage});
 
   GetAllLeadStageModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -16,6 +17,7 @@ class GetAllLeadStageModel {
       });
     }
     message = json['message'];
+
   }
 
   Map<String, dynamic> toJson() {

@@ -423,7 +423,8 @@ class LeadHistory extends StatelessWidget {
                   callStartTime: callStartTime,
                   callEndTime: callEndTime,
                   id: id,
-                fromWhere: "call"
+                fromWhere: "call",
+                  selectedStage: "" ///Static
 
               );
               Get.back();

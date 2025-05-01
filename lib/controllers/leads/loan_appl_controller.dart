@@ -41,7 +41,7 @@ class LoanApplicationController extends GetxController{
   var selectedOwnershipList = Rxn<String>();
   var selectedCountry = Rxn<String>();
   var selectedCountryPerm = Rxn<String>();
-  var selectedProdTypeOrTypeLoan = Rxn<String>();
+  var selectedProdTypeOrTypeLoan = Rxn<int>();
 
   LeadDDController leadDDController = Get.find();
 
@@ -143,7 +143,7 @@ class LoanApplicationController extends GetxController{
 
   var selectedBank = Rxn<int>();
   var selectedBankBranch = Rxn<int>();
-  var selectedChannel = Rxn<String>();
+  var selectedChannel = Rxn<int>();
 
   final scrollController = ScrollController();
   void nextStep() {
@@ -623,12 +623,12 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
             "loanApplicationNo": cleanText(lanController.text),
             "bankId": selectedBank.value,
             "branchId": selectedBankBranch.value,
-            "typeOfLoanId": selectedProdTypeOrTypeLoan.value.toIntOrZero(),
+            "typeOfLoanId": selectedProdTypeOrTypeLoan.value,
             "panCardNumber":  cleanText(panController.text),
             "addharCardNumber":  cleanText(aadharController.text),
             "loanAmountApplied": laAppliedController.toIntOrZero(),
             "uniqueLeadNumber": cleanText(ulnController.text),
-            "channelId": selectedChannel.value.toIntOrZero(),
+            "channelId": selectedChannel.value,
             "channelCode": cleanText(chCodeController.text),
             "detailForLoanApplication": {
               "branch":selectedBankBranch.value,
@@ -800,7 +800,83 @@ print("data in API cot-->${data.toString()}");
         getLoanApplIdModel.value= GetLoanApplIdModel.fromJson(req);
         Map<String, dynamic>? detailMap;
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
+          print("det==>${getLoanApplIdModel.value!.data!.detailForLoanApplication!}");
           detailMap = jsonDecode(getLoanApplIdModel.value!.data!.detailForLoanApplication!);
+          print("detailMap===>${detailMap}");
+          print("dsastaff===>${detailMap?['dsaStaffName']}");
+
+          dsaStaffNController.text = detailMap?['DsaStaffName'] ?? '';
+          proFeeController.text = detailMap?['ProcessingFee']?.toString() ?? '';
+          chqDDSNController.text = detailMap?['ChqDdSlipNo'] ?? '';
+          loPurposeController.text = detailMap?['LoanPurpose'] ?? '';
+          schemeController.text = detailMap?['Scheme'] ?? '';
+          repayTpeController.text = detailMap?['RepaymentType'] ?? '';
+          loanTenureYController.text = detailMap?['LoanTenureYears']?.toString() ?? '';
+          monthInstaController.text = detailMap?['MonthlyInstallment']?.toString() ?? '';
+          selectedPrevLoanAppl.value = detailMap?['PreviousLoanApplied']?.toString()=="null"?-1:
+          detailMap?['PreviousLoanApplied']?.toString()=="true"?0:1;
+// For applicant
+          final applicant = detailMap?['Applicant'];
+          applFullNameController.text = applicant?['Name'] ?? '';
+          fatherNameController.text = applicant?['FatherName'] ?? '';
+          selectedGender.value = applicant?['Gender']?? '-1';
+          dobController.text = applicant?['DateOfBirth']?? '';
+          qualiController.text = applicant?['Qualification'] ?? '';
+          maritalController.text = applicant?['MaritalStatus'] ?? '';
+          emplStatusController.text = applicant?['Status'] ?? '';
+          nationalityController.text = applicant?['Nationality'] ?? '';
+          occupationController.text = applicant?['Occupation'] ?? '';
+          occSectorController.text = applicant?['OccupationSector'] ?? '';
+          applEmailController.text = applicant?['EmailID'] ?? '';
+          applMobController.text = applicant?['Mobile'] ?? '';
+
+// Employer
+          final employer = applicant?['EmployerDetails'];
+          orgNameController.text = employer?['OrganizationName'] ?? '';
+          selectedOwnershipList.value = employer?['OwnershipType']?? 'null';
+          natureOfBizController.text = employer?['NatureOfBusiness'] ?? '';
+          staffStrengthController.text = employer?['StaffStrength']?.toString() ?? '0';
+          salaryDateController.text = employer?['DateOfSalary']?.toString() ?? '';
+ // Present Add
+          final presentAdd = applicant?['PresentAddress'];
+          houseFlatController.text = presentAdd?['HouseFlatNo'] ?? '';
+          buildingNoController.text = presentAdd?['BuildingNo'] ?? '';
+          societyNameController.text = presentAdd?['SocietyName'] ?? '';
+          localityController.text = presentAdd?['Locality'] ?? '';
+          streetNameController.text = presentAdd?['StreetName'] ?? '';
+          leadDDController.selectedStateCurr.value = presentAdd?['State']==""?"0":presentAdd?['State'] ?? '0';
+          print("yaha state-->${leadDDController.selectedStateCurr.value}");
+          await leadDDController.getDistrictByStateIdCurrApi(stateId: leadDDController.selectedStateCurr.value);
+          leadDDController.selectedDistrictCurr.value =presentAdd?['District']==""?"0": presentAdd?['District'] ?? '0';
+          print("yaha district-->${leadDDController.selectedDistrictCurr.value}");
+          await leadDDController.getCityByDistrictIdCurrApi(districtId: leadDDController.selectedDistrictCurr.value);
+          leadDDController.selectedCityCurr.value = presentAdd?['City']==""?"0":presentAdd?['City'] ?? '0';
+          print("yaha city-->${leadDDController.selectedCityCurr.value}");
+          talukaController.text = presentAdd?['Taluka'] ?? '';
+          selectedCountry.value= presentAdd?['Country'] ?? '0';
+          pinCodeController.text = presentAdd?['PinCode'] ?? '';
+
+// Permanet Add
+          final permanentAdd = applicant?['PermanentAddress'];
+          houseFlatPermController.text = permanentAdd?['HouseFlatNo'] ?? '';
+          buildingNoPermController.text = permanentAdd?['BuildingNo'] ?? '';
+          societyNamePermController.text = permanentAdd?['SocietyName'] ?? '';
+          localityPermController.text = permanentAdd?['Locality'] ?? '';
+          streetNamePermController.text = permanentAdd?['StreetName'] ?? '';
+          leadDDController.selectedStatePerm.value = permanentAdd?['State']==""?"0":permanentAdd?['State'] ?? '0';
+          print("yaha state-->Perm${leadDDController.selectedStatePerm.value}");
+          await leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value);
+          leadDDController.selectedDistrictPerm.value =permanentAdd?['District']==""?"0": permanentAdd?['District'] ?? '0';
+          print("yaha district-->Perm${leadDDController.selectedDistrictPerm.value}");
+          await leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value);
+          print("what===>${permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0'}");
+
+          leadDDController.selectedCityPerm.value = permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0';
+          print("yaha city--Perm>${leadDDController.selectedCityPerm.value}");
+          talukaPermController.text = permanentAdd?['Taluka'] ?? '';
+          selectedCountryPerm.value= permanentAdd?['Country'] ?? '0';
+          pinCodePermController.text = permanentAdd?['PinCode'] ?? '';
+
         }
         final data = getLoanApplIdModel.value!.data;
 
@@ -808,17 +884,21 @@ print("data in API cot-->${data.toString()}");
         lanController.text = data?.loanApplicationNo ?? '';
         selectedBank.value =  data?.bankId ?? 0;
 
-        await leadDDController.getAllBranchByBankIdApi(bankId: data?.branchId ?? 0);
-        await leadDDController.getProductListByBankIdApi(bankId: data?.branchId ?? 0);
-
+        await leadDDController.getAllBranchByBankIdApi(bankId: data?.bankId.toString() ?? "0");
+        print("ab chalega");
         selectedBankBranch.value = data?.branchId ?? 0;
-        // selectedProdTypeOrTypeLoan.value = data?.typeOfLoan ?? 0;
-        // panController.text = data?.panCardNumber ?? '';
-        // aadharController.text = data?.addharCardNumber ?? '';
-        // laAppliedController.text = data?.loanAmountApplied?.toString() ?? '';
-        // ulnController.text = data?.uniqueLeadNumber ?? '';
-        // selectedChannel.value = data?.channelId ?? 0;
-        // chCodeController.text = data?.channelCode ?? '';
+        print(" selectedBankBranch.value===>${ selectedBankBranch.value}");
+        if(data?.bankId!=0){
+          await leadDDController.getProductListByBankIdApi(bankId: data?.branchId ?? 0);
+        }
+        selectedProdTypeOrTypeLoan.value=data?.typeOfLoan ?? 0;
+
+        panController.text = data?.panCardNumber ?? '';
+        aadharController.text = data?.addharCardNumber ?? '';
+        laAppliedController.text = data?.loanAmountApplied.toString()?? "0";
+        ulnController.text = data?.uniqueLeadNumber ?? '';
+        selectedChannel.value = data?.channelId ?? 0;
+        chCodeController.text = data?.channelCode ?? '';
 
         isLoadingMainScreen(false);
 

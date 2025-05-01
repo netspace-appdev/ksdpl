@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../common/helper.dart';
 import '../models/AdminSupervisorModel.dart';
@@ -48,6 +49,7 @@ class LeadDDController extends GetxController{
   var selectedStage = Rxn<String>();
   var selectedBankBranch = Rxn<String>();
   var selectedChannel = Rxn<String>();
+  var selectedStageActive = RxnInt();
 
   var isStateLoading = false.obs;
   var isDistrictLoading = false.obs;
@@ -330,7 +332,7 @@ class LeadDDController extends GetxController{
       isProductLoading(true);
 
       var data = await DrawerApiService.getProductListByBankIdApi(
-          bankId: bankId
+          bankId: bankId.toString()
       );
 
 
@@ -459,6 +461,25 @@ class LeadDDController extends GetxController{
 
         getAllLeadStageModel.value= GetAllLeadStageModel.fromJson(data);
 
+      /*  getAllLeadStageModel.value!.data?.forEach((stage) {
+          if (stage.id == 3) {
+            selectedStageActive.value = 1;
+          } else if (stage.id == 4) {
+            selectedStageActive.value = 1;
+          } else if (stage.id == 5) {
+            selectedStageActive.value = 0;
+          }  else if (stage.id == 6) {
+            selectedStageActive.value = 1;
+          } else if (stage.id == 7) {
+            selectedStageActive.value = 0;
+          }else if (stage.id == 13) {
+            selectedStageActive.value = 0;
+          }else {
+
+          }
+        });*/
+
+
 
 
 
@@ -568,10 +589,11 @@ class LeadDDController extends GetxController{
 
 
   ///I am doing it for current and permanent address
-  void  getDistrictByStateIdCurrApi({
+  Future<void> getDistrictByStateIdCurrApi({
     required stateId
   }) async {
     try {
+      print("stateId___>${stateId}");
 
       isDistrictLoadingCurr(true);
 
@@ -599,7 +621,7 @@ class LeadDDController extends GetxController{
 
 
     } catch (e) {
-      print("Error getAllStateApi: $e");
+      print("Error getDistrictByStateIdCurrApi: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
 
@@ -611,7 +633,7 @@ class LeadDDController extends GetxController{
     }
   }
 
-  void  getDistrictByStateIdPermApi({
+ Future<void>  getDistrictByStateIdPermApi({
     required stateId
   }) async {
     try {
@@ -654,7 +676,7 @@ class LeadDDController extends GetxController{
     }
   }
 
-  void  getCityByDistrictIdCurrApi({
+ Future<void>   getCityByDistrictIdCurrApi({
     required districtId
   }) async {
     try {
@@ -669,6 +691,8 @@ class LeadDDController extends GetxController{
 
         getCityByDistrictIdModelCurr.value= GetCityByDistrictIdModel.fromJson(data);
 
+        final List<city.Data> cities = getCityByDistrictIdModelCurr.value?.data ?? [];
+        cityListCurr.value = List<city.Data>.from(cities);
 
 
         isCityLoadingCurr(false);
@@ -695,7 +719,7 @@ class LeadDDController extends GetxController{
     }
   }
 
-  void  getCityByDistrictIdPermApi({
+  Future<void>  getCityByDistrictIdPermApi({
     required districtId
   }) async {
     try {
@@ -710,7 +734,8 @@ class LeadDDController extends GetxController{
 
         getCityByDistrictIdModelPerm.value= GetCityByDistrictIdModel.fromJson(data);
 
-
+        final List<city.Data> cities = getCityByDistrictIdModelPerm.value?.data ?? [];
+        cityListPerm.value = List<city.Data>.from(cities);
 
         isCityLoadingPerm(false);
 

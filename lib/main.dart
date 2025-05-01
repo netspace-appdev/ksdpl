@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ksdpl/services/root_binding.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'common/notification_helper.dart';
@@ -94,6 +95,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find();
     return Obx(()=>GetMaterialApp(
+      initialBinding: RootBinding(),
       debugShowCheckedModeBanner: false,
       title: 'KSDPL',
       theme: ThemeData.light(

@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
+import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
@@ -70,7 +71,7 @@ class LeadListController extends GetxController {
   final int pageSize = 20;
   RxBool hasMore = true.obs;
   RxInt leadListLength = 0.obs;
-
+  LeadDDController leadDDController=Get.find();
   @override
   void onInit() {
     // TODO: implement onInit
@@ -234,6 +235,7 @@ class LeadListController extends GetxController {
     required callEndTime,
     String? id,
     required fromWhere,
+    required selectedStage,
   }){
 
 
@@ -298,29 +300,38 @@ print("selectedTime ==>${selectedTime}");
     print("formattedDateTime in real box==>${formattedDateTime.toString()}");
 
 
-    workOnLeadApi(
-      // id:callStatus=="1"?id.toString():"0",
-      id:id.toString(),
-      leadId: leadId.toString(),
-      leadStageStatus: currentLeadStage,
-      feedbackRelatedToCall: callFeedbackController.text.trim(),
-      feedbackRelatedToLead: leadFeedbackController.text.trim(),
-      callStatus: callStatus,
-      callDuration: callDuration,
-      callStartTime: callStartTime,
-      callEndTime: callEndTime,
-      callReminder: formattedDateTime,
-      reminderStatus:  isCallReminder.value?"1":"0",
+
+    updateLeadStageApiForCall(
+      id:leadId.toString(),
+      active: leadDDController.selectedStageActive.value.toString(),
+      stage: selectedStage
     ).then((_){
-      if(fromWhere=="call"){
+      workOnLeadApi(
+        // id:callStatus=="1"?id.toString():"0",
+        id:id.toString(),
+        leadId: leadId.toString(),
+        leadStageStatus: selectedStage,
+        feedbackRelatedToCall: callFeedbackController.text.trim(),
+        feedbackRelatedToLead: leadFeedbackController.text.trim(),
+        callStatus: callStatus,
+        callDuration: callDuration,
+        callStartTime: callStartTime,
+        callEndTime: callEndTime,
+        callReminder: formattedDateTime,
+        reminderStatus:  isCallReminder.value?"1":"0",
+      ).then((_){
+        if(fromWhere=="call"){
 
-        LeadHistoryController leadHistoryController = Get.put(LeadHistoryController(),);
-        leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId.toString());
+          LeadHistoryController leadHistoryController = Get.put(LeadHistoryController(),);
+          leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId.toString());
 
-      }
-      DashboardController dashboardController=Get.find();
-      dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
-      print("only followup");
+        }
+        DashboardController dashboardController=Get.find();
+        dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
+        print("only followup");
+
+
+      });
     });
   }
 
@@ -424,6 +435,61 @@ print("selectedTime ==>${selectedTime}");
           leadId: id,
           leadStageStatus:stage,
         );
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error updateLeadStageApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+      print("run hua");
+
+
+
+      getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
+          branch: branchMain.value
+      );
+
+      isLoading(false);
+    }
+  }
+
+  Future<void>  updateLeadStageApiForCall({
+    required id,
+    required stage,
+    required active,
+
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await DrawerApiService.updateLeadStageApi(
+          id:id,
+          stage: stage,
+          active: active
+      );
+
+
+      if(data['success'] == true){
+
+        updateLeadStageModel= UpdateLeadStageModel.fromJson(data);
+
 
         isLoading(false);
 

@@ -1,6 +1,3 @@
-
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,26 +5,23 @@ import 'package:get/get.dart';
 import 'package:ksdpl/common/skelton.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
-
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../common/helper.dart';
-
 import '../common/base_url.dart';
 import '../common/circl_graph_class.dart';
-
 import '../controllers/bot_nav_controller.dart';
 import '../controllers/greeting_controller.dart';
+import '../controllers/lead_dd_controller.dart';
 import '../controllers/leads/infoController.dart';
-
 import '../custom_widgets/CustomBigDialogBox.dart';
+import '../custom_widgets/CustomDropdown.dart';
 import '../custom_widgets/CustomLabelPickerTextField.dart';
 import '../custom_widgets/CustomLabeledTextField.dart';
 import '../custom_widgets/CustomLabeledTimePicker.dart';
 import '../custom_widgets/line_chart.dart';
 import '../services/call_service.dart';
 import 'custom_drawer.dart';
-
+import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
 
 
 class DashboardScreen extends StatefulWidget {
@@ -47,7 +41,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   InfoController infoController = Get.put(InfoController());
   double maxGraphValue = 1000;
   BotNavController botNavController=Get.find();
-
+  LeadDDController leadDDController=Get.find();
 /*  @override
   void initState() {
     // TODO: implement initState
@@ -1323,10 +1317,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required callEndTime,
     required callStatus,
   }) {
+
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
+        leadDDController.selectedStage.value=currentLeadStage;
         LeadListController leadListController =Get.find();
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
@@ -1358,7 +1354,83 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       hintText: AppText.enterLeadFeedback,
                       isTextArea: true,
                     ),
-                    SizedBox(height: 10),
+                    ///stage drodown
+                    ///  add this line in dialog at first leadDDController.selectedStage.value=currentLeadStage;
+                    const SizedBox(height: 20),
+
+                    const Text(
+                      AppText.leadStage,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.grey2,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+                    Obx((){
+                      if (leadDDController.isLeadStageLoading.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+                      int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
+
+                      // Allowed stage IDs based on leadCode
+                      List<int> allowedStageIds = [];
+
+                      if (leadCode == 2) {
+                        allowedStageIds = [4, 5,13];
+                      }else if (leadCode == 3) {
+                        allowedStageIds = [4, 5,13];
+                      } else if (leadCode == 4) {
+                        allowedStageIds = [6, 7];
+                      } else {
+                        allowedStageIds = [2, 3, 4, 5, 6, 7]; // Default to all or handle as needed
+                      }
+
+                      List<stage.Data> filteredStages = leadDDController
+                          .getAllLeadStageModel.value!.data!
+                          .where((lead) =>
+                      lead.id != 1 && allowedStageIds.contains(lead.id))
+                          .toList();
+
+                      return CustomDropdown<stage.Data>(
+                        items: filteredStages,
+                        getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.stageName.toString(),
+                        selectedValue: filteredStages.firstWhereOrNull(
+                              (item) => item.id.toString() == leadDDController.selectedStage.value,
+
+                        ),
+                        onChanged: (value) {
+                          leadDDController.selectedStage.value =  value?.id?.toString();
+
+                          if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else {
+
+                          }
+
+                          print("changed LeadStage==>${leadDDController.selectedStage.value}");
+                        },
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+
+
+                    ///stage dd end
+
+
                     Row(
                       children: [
                         Obx(()=>Checkbox(
@@ -1426,7 +1498,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   callStartTime: callStartTime,
                   callEndTime: callEndTime,
                   id: id,
-                  fromWhere: "call"
+                  fromWhere: "call",
+                  selectedStage: leadDDController.selectedStage.value
 
               );
               Get.back();

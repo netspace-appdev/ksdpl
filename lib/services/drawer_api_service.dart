@@ -624,7 +624,8 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-
+      print("Req--->getDistrictByStateIdApi==>${request.fields}");
+      print("Res--->${response.body}");
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -664,6 +665,9 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      print("getCityByDistrictIdApi req===>${request.fields}");
+      print("getCityByDistrictIdApi res===>${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -738,6 +742,9 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+
+      print("res====>getAllKsdplProductApi==>${response.body.toString()}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

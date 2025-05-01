@@ -95,13 +95,23 @@ class Step1Form extends StatelessWidget {
                         onChanged: (value) {
 
                           loanApplicationController.selectedBank.value =  value?.id;
-                          leadDDController.getAllBranchByBankIdApi(bankId: loanApplicationController.selectedBank.value);
 
-                          leadDDController.getProductListByBankIdApi(bankId: leadDDController.selectedBank.value);
+
+                          if( loanApplicationController.selectedBank.value!=null){
+                            leadDDController.getAllBranchByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
+                            leadDDController.getProductListByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
+                          }
+
+
                         },
                         onClear: (){
-                          loanApplicationController.selectedBankBranch.value = null;
-                          leadDDController.getAllBranchBIModel.value?.data!.clear(); // reset dependent dropdown
+                          loanApplicationController.selectedBank.value =  0;
+                          loanApplicationController.selectedBankBranch.value = 0;
+                          loanApplicationController.selectedProdTypeOrTypeLoan.value=0;
+                          leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
+                          leadDDController.getAllKsdplProductModel.value?.data?.clear();
+                          leadDDController.getAllKsdplProductApi();
+
                         },
                       );
                     }),
@@ -134,6 +144,10 @@ class Step1Form extends StatelessWidget {
                         onChanged: (value) {
                           loanApplicationController.selectedBankBranch.value =  value?.id;
                         },
+                        onClear: (){
+                          loanApplicationController.selectedBankBranch.value = 0;
+                          leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
+                        },
                       );
                     }),
 
@@ -159,10 +173,10 @@ class Step1Form extends StatelessWidget {
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
                         getName: (item) => item.productName.toString(),
                         selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
-                              (item) => item.id.toString() == loanApplicationController.selectedProdTypeOrTypeLoan.value,
+                              (item) => item.id == loanApplicationController.selectedProdTypeOrTypeLoan.value,
                         ),
                         onChanged: (value) {
-                          loanApplicationController.selectedProdTypeOrTypeLoan.value =  value?.id?.toString();
+                          loanApplicationController.selectedProdTypeOrTypeLoan.value =  value?.id;
                         },
                       );
                     }),
@@ -259,11 +273,11 @@ class Step1Form extends StatelessWidget {
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
                         getName: (item) => item.channelName.toString(),
                         selectedValue: leadDDController.getAllChannelModel.value?.data?.firstWhereOrNull(
-                              (item) => item.id.toString() == loanApplicationController.selectedChannel.value,
+                              (item) => item.id == loanApplicationController.selectedChannel.value,
                         ),
                         onChanged: (value) {
 
-                          loanApplicationController.selectedChannel.value =  value?.id?.toString();
+                          loanApplicationController.selectedChannel.value =  value?.id;
 
 
                         },
@@ -405,7 +419,7 @@ class Step1Form extends StatelessWidget {
                       label: AppText.fathersName,
                       isRequired: false,
                       controller: loanApplicationController.fatherNameController,
-                      inputType: TextInputType.phone,
+                      inputType: TextInputType.name,
                       hintText: AppText.enterFathersName,
                       validator: ValidationHelper.validateName,
                     ),
@@ -635,7 +649,7 @@ class Step1Form extends StatelessWidget {
                       label: AppText.houseFlatNo,
                       isRequired: false,
                       controller: loanApplicationController.houseFlatController,
-                      inputType: TextInputType.name,
+                      inputType: TextInputType.number,
                       hintText: AppText.enterHouseFlatNo,
                       validator:  ValidationHelper.validateName,
                     ),
@@ -643,7 +657,7 @@ class Step1Form extends StatelessWidget {
                       label: AppText.buildingNo,
                       isRequired: false,
                       controller: loanApplicationController.buildingNoController,
-                      inputType: TextInputType.name,
+                      inputType: TextInputType.number,
                       hintText: AppText.enterBuildingNo,
                       validator:  ValidationHelper.validateName,
                     ),
@@ -705,14 +719,19 @@ class Step1Form extends StatelessWidget {
                         ),
                         onChanged: (value) {
                           leadDDController.selectedStateCurr.value =  value?.id?.toString();
-                          leadDDController.getDistrictByStateIdCurrApi(stateId: leadDDController.selectedStateCurr.value);
+                          if(leadDDController.selectedStateCurr.value!=null){
+                            leadDDController.getDistrictByStateIdCurrApi(stateId: leadDDController.selectedStateCurr.value);
+                          }
                         },
                         onClear: (){
-                          leadDDController.selectedDistrictCurr.value = null;
-                          leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
 
-                          leadDDController.selectedCityCurr.value = null;
+                          leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
                           leadDDController. cityListCurr.value.clear(); // reset dependent dropdown
+                          leadDDController.selectedDistrictCurr.value = "0";
+                          leadDDController.selectedCityCurr.value = "0";
+                          leadDDController.selectedStateCurr.value = "0";
+
+
                         },
                       );
                     }),
@@ -742,10 +761,13 @@ class Step1Form extends StatelessWidget {
                         ),
                         onChanged: (value) {
                           leadDDController.selectedDistrictCurr.value =  value?.id?.toString();
-                          leadDDController.getCityByDistrictIdCurrApi(districtId: leadDDController.selectedDistrictCurr.value);
+                          if( leadDDController.selectedDistrictCurr.value!=null){
+                            leadDDController.getCityByDistrictIdCurrApi(districtId: leadDDController.selectedDistrictCurr.value);
+                          }
+
                         },
                         onClear: (){
-                          leadDDController.selectedDistrictCurr.value = null;
+                          leadDDController.selectedDistrictCurr.value = "0";
                           leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
 
                         },
@@ -778,6 +800,11 @@ class Step1Form extends StatelessWidget {
                         ),
                         onChanged: (value) {
                           leadDDController.selectedCityCurr.value =  value?.id?.toString();
+                        },
+                        onClear: (){
+                          leadDDController.selectedCityCurr.value = "0";
+                          leadDDController.cityListCurr.value.clear(); // reset dependent dropdown
+
                         },
                       );
                     }),
@@ -842,7 +869,7 @@ class Step1Form extends StatelessWidget {
                       label: AppText.houseFlatNo,
                       isRequired: false,
                       controller: loanApplicationController.houseFlatPermController,
-                      inputType: TextInputType.name,
+                      inputType: TextInputType.number,
                       hintText: AppText.enterHouseFlatNo,
                       validator:  ValidationHelper.validateName,
                     ),
@@ -850,7 +877,7 @@ class Step1Form extends StatelessWidget {
                       label: AppText.buildingNo,
                       isRequired: false,
                       controller: loanApplicationController.buildingNoPermController,
-                      inputType: TextInputType.name,
+                      inputType: TextInputType.number,
                       hintText: AppText.enterBuildingNo,
                       validator:  ValidationHelper.validateName,
                     ),
@@ -912,15 +939,19 @@ class Step1Form extends StatelessWidget {
                         ),
                         onChanged: (value) {
                           leadDDController.selectedStatePerm.value =  value?.id?.toString();
-                          leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value);
+                          if( leadDDController.selectedStatePerm.value!=null){
+                            leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value);
+                          }
+
                         },
                         onClear: (){
-                          leadDDController.selectedDistrictPerm.value = null;
-                          leadDDController. districtListPerm.value.clear(); // reset dependent dropdown
 
-
-                          leadDDController.selectedCityPerm.value = null;
                           leadDDController. cityListPerm.value.clear(); // reset dependent dropdown
+                          leadDDController. districtListPerm.value.clear(); // reset dependent dropdown
+                          leadDDController.selectedDistrictPerm.value = "0";
+                          leadDDController.selectedCityPerm.value = "0";
+                          leadDDController.selectedStatePerm.value = "0";
+
                         },
                       );
                     }),
@@ -950,10 +981,13 @@ class Step1Form extends StatelessWidget {
                         ),
                         onChanged: (value) {
                           leadDDController.selectedDistrictPerm.value =  value?.id?.toString();
-                          leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value);
+                          if( leadDDController.selectedDistrictPerm.value!=null){
+                            leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value);
+                          }
+
                         },
                         onClear: (){
-                          leadDDController.selectedCityPerm.value = null;
+                          leadDDController.selectedCityPerm.value = "0";
                           leadDDController.districtListPerm.value.clear(); // reset dependent dropdown
 
                         },
@@ -987,6 +1021,11 @@ class Step1Form extends StatelessWidget {
                         onChanged: (value) {
                           leadDDController.selectedCityPerm.value =  value?.id?.toString();
                         },
+                        onClear: (){
+                          leadDDController.selectedCityPerm.value = "0";
+                          leadDDController.cityListPerm.value.clear(); // reset dependent dropdown
+
+                        },
                       );
                     }),
 
@@ -996,7 +1035,7 @@ class Step1Form extends StatelessWidget {
                       label: AppText.taluka,
                       isRequired: false,
                       controller: loanApplicationController.talukaPermController,
-                      inputType: TextInputType.number,
+                      inputType: TextInputType.name,
                       hintText: AppText.enterTaluka,
                       validator: ValidationHelper.validateName,
                     ),

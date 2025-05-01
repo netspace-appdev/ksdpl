@@ -10,16 +10,19 @@ import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../controllers/greeting_controller.dart';
+import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
+import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 import '../../services/call_service.dart';
 import '../custom_drawer.dart';
+import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
 
 class LeadListMain extends StatelessWidget {
   GreetingController greetingController = Get.put(GreetingController());
@@ -29,6 +32,7 @@ class LeadListMain extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());
+  LeadDDController leadDDController=Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -797,10 +801,7 @@ class LeadListMain extends StatelessWidget {
                       stage: "4",
                       active: "1",
                     );
-                    /* leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"4",
-                    );*/
+
 
                   }else if(label_code == "not_interested"){
                     leadListController.updateLeadStageApi(
@@ -808,10 +809,7 @@ class LeadListMain extends StatelessWidget {
                       stage: "5",
                       active: "0",
                     );
-                    /*  leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"5",
-                    );*/
+
 
                   }else if(label_code == "doable"){
                     leadListController.updateLeadStageApi(
@@ -819,10 +817,6 @@ class LeadListMain extends StatelessWidget {
                       stage: "6",
                       active: "1",
                     );
-                    /* leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"6",
-                    );*/
 
                   }else if(label_code == "not_doable"){
                     leadListController.updateLeadStageApi(
@@ -830,10 +824,6 @@ class LeadListMain extends StatelessWidget {
                       stage: "7",
                       active: "0",
                     );
-                    /*leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"7",
-                    );*/
 
                   }else if(label_code == "cc"){
                     leadListController.updateLeadStageApi(
@@ -841,10 +831,6 @@ class LeadListMain extends StatelessWidget {
                       stage: "13",
                       active: "0",
                     );
-                    /*leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"13",
-                    );*/
 
                   }
 
@@ -1501,6 +1487,7 @@ class LeadListMain extends StatelessWidget {
     required callEndTime,
     required callStatus,
   }) {
+    leadDDController.selectedStage.value=currentLeadStage;
     Get.dialog(
         CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
@@ -1532,9 +1519,83 @@ class LeadListMain extends StatelessWidget {
                       hintText: AppText.enterLeadFeedback,
                       isTextArea: true,
                     ),
-                    SizedBox(height: 10),
+                    ///stage drodown
+                    ///  add this line in dialog at first leadDDController.selectedStage.value=currentLeadStage;
+                    const SizedBox(height: 20),
 
-                    
+                    const Text(
+                      AppText.leadStage,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.grey2,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+                    Obx((){
+                      if (leadDDController.isLeadStageLoading.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+                      int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
+
+                      // Allowed stage IDs based on leadCode
+                      List<int> allowedStageIds = [];
+
+                      if (leadCode == 2) {
+                        allowedStageIds = [4, 5,13];
+                      }else if (leadCode == 3) {
+                        allowedStageIds = [4, 5,13];
+                      } else if (leadCode == 4) {
+                        allowedStageIds = [6, 7];
+                      } else {
+                        allowedStageIds = [2, 3, 4, 5, 6, 7]; // Default to all or handle as needed
+                      }
+
+                      List<stage.Data> filteredStages = leadDDController
+                          .getAllLeadStageModel.value!.data!
+                          .where((lead) =>
+                      lead.id != 1 && allowedStageIds.contains(lead.id))
+                          .toList();
+
+                      return CustomDropdown<stage.Data>(
+                        items: filteredStages,
+                        getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.stageName.toString(),
+                        selectedValue: filteredStages.firstWhereOrNull(
+                              (item) => item.id.toString() == leadDDController.selectedStage.value,
+
+                        ),
+                        onChanged: (value) {
+                          leadDDController.selectedStage.value =  value?.id?.toString();
+
+                          if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else {
+
+                          }
+
+                          print("changed LeadStage==>${leadDDController.selectedStage.value}");
+                        },
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+
+
+                    ///stage dd end
+
+
 
                     Row(
                       children: [
@@ -1603,8 +1664,8 @@ class LeadListMain extends StatelessWidget {
                   callStartTime: callStartTime,
                   callEndTime: callEndTime,
                   id: id,
-                  fromWhere: "call"
-
+                  fromWhere: "call",
+                  selectedStage: leadDDController.selectedStage.value
               );
               Get.back();
             }
@@ -1629,7 +1690,11 @@ class LeadListMain extends StatelessWidget {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
+
         leadListController.isCallReminder.value =true;
+        leadDDController.selectedStage.value=currentLeadStage;
+        print("currentLeadStage==>${currentLeadStage}");
+        print("currentLeadStage==>${leadDDController.selectedStage.value}");
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: AppText.addFollowUp,
@@ -1651,6 +1716,8 @@ class LeadListMain extends StatelessWidget {
                       hintText: AppText.enterCallFeedback,
                       isTextArea: true,
                     ),
+
+
 
                     Obx(()=> CustomLabeledPickerTextField(
                       label: AppText.selectDate,
@@ -1692,7 +1759,8 @@ class LeadListMain extends StatelessWidget {
                   callStartTime: callStartTime,
                   callEndTime: callEndTime,
                   id: id.toString(),
-                  fromWhere: "follow_up"
+                  fromWhere: "follow_up",
+                  selectedStage:  leadDDController.selectedStage.value.toString(),
               );
               Get.back();
             }
