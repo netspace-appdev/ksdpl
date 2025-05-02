@@ -42,7 +42,7 @@ class LoanApplicationController extends GetxController{
   var selectedCountry = Rxn<String>();
   var selectedCountryPerm = Rxn<String>();
   var selectedProdTypeOrTypeLoan = Rxn<int>();
-
+  var isSameAddressApl = false.obs;
   LeadDDController leadDDController = Get.find();
 
   final TextEditingController dsaCodeController = TextEditingController();
@@ -196,6 +196,32 @@ class LoanApplicationController extends GetxController{
     leadId.value = Get.arguments['leadId'];
     getLoanApplicationDetailsByIdApi(id:leadId.value);
 
+  }
+  void copyPresentToPermanentAddress() {
+    // Text field values
+    houseFlatPermController.text = houseFlatController.text;
+    buildingNoPermController.text = buildingNoController.text;
+    societyNamePermController.text = societyNameController.text;
+    localityPermController.text = localityController.text;
+    streetNamePermController.text = streetNameController.text;
+    pinCodePermController.text = pinCodeController.text;
+    talukaPermController.text = talukaController.text;
+    selectedCountryPerm.value = selectedCountry.value;
+
+    // Copy state
+    leadDDController.selectedStatePerm.value = leadDDController.selectedStateCurr.value;
+
+    // Now fetch districts and wait for the lists to update
+    leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value).then((_) {
+      leadDDController.districtListPerm.value = List.from(leadDDController.districtListCurr);
+      leadDDController.selectedDistrictPerm.value = leadDDController.selectedDistrictCurr.value;
+
+      // Now fetch cities and wait for the city list to update
+      leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value).then((_) {
+        leadDDController.cityListPerm.value = List.from(leadDDController.cityListCurr);
+        leadDDController.selectedCityPerm.value = leadDDController.selectedCityCurr.value;
+      });
+    });
   }
 
   void addCoApplicant() {
@@ -637,7 +663,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
               "loanApplicationNo":cleanText(lanController.text),
               "processingFee":proFeeController.toIntOrZero(),
               "chqDdSlipNo": cleanText(chqDDSNController.text),
-              "processingFeeDate": "2025-04-29T13:36:29.953Z",                     ///its static
+              "processingFeeDate":cleanDateText(Helper.convertToIso8601(proFeeDateController.text)),
               "loanPurpose": cleanText(loPurposeController.text),
               "scheme": cleanText(schemeController.text),
               "repaymentType": cleanText(repayTpeController.text),
@@ -650,7 +676,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
                 "name": cleanText(applFullNameController.text),
                 "fatherName": cleanText(fatherNameController.text),
                 "gender": selectedGender.value.ddToString(),
-                "dateOfBirth": "2025-04-29T13:36:29.953Z",                 ///its static
+                "dateOfBirth": cleanDateText(Helper.convertToIso8601(dobController.text)),
                 "qualification": cleanText(qualiController.text),
                 "maritalStatus": cleanText(maritalController.text),
                 "status": cleanText(emplStatusController.text),
@@ -690,7 +716,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
                   "ownershipType": selectedOwnershipList.value.ddToString(),//"string",
                   "natureOfBusiness": cleanText(natureOfBizController.text),
                   "staffStrength": staffStrengthController.toIntOrZero(),
-                  "dateOfSalary": "2025-04-26T10:21:07.889Z"                  ///its static
+                  "dateOfSalary": cleanDateText(Helper.convertToIso8601(salaryDateController.text)),              ///its static
                 }
               }
             },
@@ -770,6 +796,11 @@ print("data in API cot-->${data.toString()}");
     }
     return 0;
   }
+  String cleanDateText(String? controller) {
+    if (controller == null) return "null";
+    final text = controller.trim();
+    return text.isEmpty ? "" : text;
+  }
 
 
   bool? get isPreviousLoanApplied {
@@ -815,12 +846,15 @@ print("data in API cot-->${data.toString()}");
           monthInstaController.text = detailMap?['MonthlyInstallment']?.toString() ?? '';
           selectedPrevLoanAppl.value = detailMap?['PreviousLoanApplied']?.toString()=="null"?-1:
           detailMap?['PreviousLoanApplied']?.toString()=="true"?0:1;
+          proFeeDateController.text = Helper.convertFromIso8601(detailMap?['ProcessingFeeDate']) ?? 'null';
 // For applicant
           final applicant = detailMap?['Applicant'];
           applFullNameController.text = applicant?['Name'] ?? '';
           fatherNameController.text = applicant?['FatherName'] ?? '';
           selectedGender.value = applicant?['Gender']?? '-1';
-          dobController.text = applicant?['DateOfBirth']?? '';
+          print("dob-->${applicant?['DateOfBirth']}");
+          print("dob-->${Helper.convertFromIso8601(applicant?['DateOfBirth']) ?? 'null'}");
+          dobController.text = Helper.convertFromIso8601(applicant?['DateOfBirth']) ?? 'null';
           qualiController.text = applicant?['Qualification'] ?? '';
           maritalController.text = applicant?['MaritalStatus'] ?? '';
           emplStatusController.text = applicant?['Status'] ?? '';
@@ -836,7 +870,7 @@ print("data in API cot-->${data.toString()}");
           selectedOwnershipList.value = employer?['OwnershipType']?? 'null';
           natureOfBizController.text = employer?['NatureOfBusiness'] ?? '';
           staffStrengthController.text = employer?['StaffStrength']?.toString() ?? '0';
-          salaryDateController.text = employer?['DateOfSalary']?.toString() ?? '';
+          salaryDateController.text =  Helper.convertFromIso8601(applicant?['DateOfSalary']) ?? 'null';
  // Present Add
           final presentAdd = applicant?['PresentAddress'];
           houseFlatController.text = presentAdd?['HouseFlatNo'] ?? '';
@@ -892,14 +926,24 @@ print("data in API cot-->${data.toString()}");
           await leadDDController.getProductListByBankIdApi(bankId: data?.branchId ?? 0);
         }
         selectedProdTypeOrTypeLoan.value=data?.typeOfLoan ?? 0;
-
         panController.text = data?.panCardNumber ?? '';
         aadharController.text = data?.addharCardNumber ?? '';
         laAppliedController.text = data?.loanAmountApplied.toString()?? "0";
         ulnController.text = data?.uniqueLeadNumber ?? '';
         selectedChannel.value = data?.channelId ?? 0;
         chCodeController.text = data?.channelCode ?? '';
+//CoApplicant details
+     /*   Map<String, dynamic>? coApplicantMap;
+        if (getLoanApplIdModel.value!.data!.coApplicantDetail != null) {
+          print(".coApplicantDetail==>${getLoanApplIdModel.value!.data!.coApplicantDetail!}");
+          coApplicantMap = jsonDecode(getLoanApplIdModel.value!.data!.coApplicantDetail!);
+          print("coApplicantMap===>${coApplicantMap}");
+          print("Name===>${coApplicantMap?['Name']}");
 
+
+
+        }*/
+        populateCoApplicantControllers();
         isLoadingMainScreen(false);
 
       }else{
@@ -917,6 +961,32 @@ print("data in API cot-->${data.toString()}");
       isLoadingMainScreen(false);
     }
   }
+
+  void populateCoApplicantControllers() {
+    coApplicantList.clear();
+    final jsonStr = getLoanApplIdModel.value!.data!.coApplicantDetail;
+
+    if (jsonStr != null) {
+      final decoded = jsonDecode(jsonStr);
+
+      // Check if it's actually a List of Maps
+      if (decoded is List) {
+        for (var item in decoded) {
+          final coApController = CoApplicantDetailController();
+
+          coApController.coApFullNameController.text = item["Name"] ?? '';
+          coApController.coApFatherNameController.text = item["FatherName"] ?? '';
+          coApController.selectedGenderCoAP.value = item["Gender"] ?? '';
+
+
+          coApplicantList.add(coApController);
+        }
+      } else {
+        print("Expected a List but got: ${decoded.runtimeType}");
+      }
+    }
+  }
+
 
 }
 

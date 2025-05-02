@@ -845,6 +845,33 @@ class Step1Form extends StatelessWidget {
                     }),
 
                     const SizedBox(height: 20),
+                    Obx(() => Row(
+                      children: [
+                        Checkbox(
+                          activeColor: AppColor.secondaryColor,
+                          value: loanApplicationController.isSameAddressApl.value,
+                          onChanged: (val) {
+                            loanApplicationController.isSameAddressApl.value = val ?? false;
+
+                            if (val == true) {
+                              loanApplicationController.copyPresentToPermanentAddress();
+                            }
+                          },
+                        ),
+                        Expanded(
+                          child: Text(
+                            "Use Present Address as Permanent Address",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.secondaryColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+                    const SizedBox(height: 20),
+
 
                   ],
                 ),

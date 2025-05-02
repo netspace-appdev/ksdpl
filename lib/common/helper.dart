@@ -684,14 +684,6 @@ class Helper{
   }
   static String formatDate(String dateTime) {
 
-   /* // Split the string at 'T' to get the date part
-    String datePart = dateTime.split('T')[0];
-
-    // Split the date into year, month, and day
-    List<String> parts = datePart.split('-');
-
-    // Rearrange into DD-MM-YYYY format
-    return '${parts[2]}-${parts[1]}-${parts[0]}';*/
 
     try {
       // Parse the input date-time string
@@ -701,6 +693,28 @@ class Helper{
       return DateFormat("dd-MM-yyyy, HH:mm a").format(parsedDateTime);
     } catch (e) {
       return "Invalid Date Format";
+    }
+  }
+  static String convertToIso8601(String dateString) {
+    try {
+      // Parse the input date in "MM/dd/yyyy" format
+      DateTime parsedDate = DateFormat("MM/dd/yyyy").parse(dateString);
+
+      // Convert to ISO 8601 format with UTC
+      return parsedDate.toUtc().toIso8601String(); // returns "2025-04-01T00:00:00.000Z"
+    } catch (e) {
+      return "Invalid Date Format";
+    }
+  }
+  static String convertFromIso8601(String isoDateString) {
+    try {
+      // Parse the ISO 8601 string into a DateTime object
+      DateTime parsedDate = DateTime.parse(isoDateString);
+
+      // Format to "MM/dd/yyyy"
+      return DateFormat("MM/dd/yyyy").format(parsedDate.toLocal());
+    } catch (e) {
+      return "Invalid ISO Date";
     }
   }
 

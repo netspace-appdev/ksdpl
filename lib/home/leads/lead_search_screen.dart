@@ -335,7 +335,7 @@ class LeadSearchScreen extends StatelessWidget {
                                       isRequired: false,
                                       controller: leadListController.fromDateController,
                                       inputType: TextInputType.name,
-                                      hintText: AppText.ddmmyyyy,
+                                      hintText: AppText.mmddyyyy,
                                       validator: ValidationHelper.validateFromDate,
                                       isDateField: true,
                                     ),
@@ -345,7 +345,7 @@ class LeadSearchScreen extends StatelessWidget {
                                       isRequired: false,
                                       controller: leadListController.toDateController,
                                       inputType: TextInputType.name,
-                                      hintText: AppText.ddmmyyyy,
+                                      hintText: AppText.mmddyyyy,
                                       validator: ValidationHelper.validateFromDate,
                                       isDateField: true,
                                     ),
@@ -399,12 +399,26 @@ class LeadSearchScreen extends StatelessWidget {
 
                             const SizedBox(height: 20),
 
-                            Text(
-                              AppText.searchedLeads,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  AppText.searchedLeads,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                               /* Text(
+                                  leadListController.getAllLeadsModel.value == null ||
+                                      leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty?"(0)":
+
+                                  " (${ leadListController.leadListLength.value.toString()})",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                ),*/
+                              ],
                             ),
                             const SizedBox(height: 20),
                             leadSection(context)
@@ -496,6 +510,13 @@ class LeadSearchScreen extends StatelessWidget {
   }
 
   void onPressed(){
+    print("froom-->${Helper.convertToIso8601(leadListController.fromDateController.value.text)}");
+    print("todate-->${Helper.convertToIso8601(leadListController.toDateController.value.text)}");
+
+
+
+    print("todate-->${leadListController.fromDateController.value.text}");
+    print("todate-->${leadListController.toDateController.value.text}");
 
 
     leadListController.getAllLeadsApi(
@@ -505,8 +526,8 @@ class LeadSearchScreen extends StatelessWidget {
       distId: leadDDController.selectedDistrict.value??"0",
       cityId:leadDDController.selectedCity.value??"0",
       campaign: leadDDController.selectedCampaign.value??"",
-      fromDate: leadListController.fromDateController.value.text,
-      toDate: leadListController.toDateController.value.text,
+      fromDate: Helper.convertToIso8601(leadListController.fromDateController.value.text),
+      toDate: Helper.convertToIso8601(leadListController.toDateController.value.text),
       branch: leadDDController.selectedKsdplBr.value??"0",
 
     );
