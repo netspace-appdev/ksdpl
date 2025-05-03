@@ -132,6 +132,24 @@ class LeadSearchScreen extends StatelessWidget {
                                       height: 10,
                                     ),
 
+                                    CustomLabeledTextField(
+                                      label: AppText.uniqueLeadNumber,
+                                      isRequired: false,
+                                      controller: searchLeadController.uniqueLeadNumberController ,
+                                      inputType: TextInputType.name,
+                                      hintText: AppText.enterUniqueLeadNumber,
+
+                                    ),
+
+                                    CustomLabeledTextField(
+                                      label: AppText.leadMobileNUmber,
+                                      isRequired: false,
+                                      controller: searchLeadController.leadMobileNumberController ,
+                                      inputType: TextInputType.name,
+                                      hintText: AppText.enterLeadMobileNUmber,
+
+                                    ),
+
                                     const Text(
                                       AppText.state,
                                       style: TextStyle(
@@ -519,17 +537,18 @@ class LeadSearchScreen extends StatelessWidget {
     print("todate-->${leadListController.toDateController.value.text}");
 
 
-    leadListController.getAllLeadsApi(
+    leadListController.getFilteredLeadsApi(
       employeeId: leadListController.eId.value.toString(),
       leadStage:leadDDController.selectedStage.value??"0",
       stateId: leadDDController.selectedState.value??"0",
       distId: leadDDController.selectedDistrict.value??"0",
       cityId:leadDDController.selectedCity.value??"0",
       campaign: leadDDController.selectedCampaign.value??"",
-      fromDate: Helper.convertToIso8601(leadListController.fromDateController.value.text),
-      toDate: Helper.convertToIso8601(leadListController.toDateController.value.text),
+      fromDate: leadListController.fromDateController.value.text.isEmpty?"":Helper.convertToIso8601(leadListController.fromDateController.value.text),
+      toDate: leadListController.toDateController.value.text.isEmpty?"":Helper.convertToIso8601(leadListController.toDateController.value.text),
       branch: leadDDController.selectedKsdplBr.value??"0",
-
+      uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
+      leadMobileNumber: searchLeadController.leadMobileNumberController.text,
     );
   }
   Widget leadSection(BuildContext context){
@@ -537,8 +556,8 @@ class LeadSearchScreen extends StatelessWidget {
       if (leadListController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-      if (leadListController.getAllLeadsModel.value == null ||
-          leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty) {
+      if (leadListController.filteredGetAllLeadsModel.value == null ||
+          leadListController.filteredGetAllLeadsModel.value!.data == null || leadListController.filteredGetAllLeadsModel.value!.data!.isEmpty) {
         return  Container(
           height: MediaQuery.of(context).size.height*0.50,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -577,12 +596,12 @@ class LeadSearchScreen extends StatelessWidget {
       return  Column(
         children: [
           ListView.builder(
-            itemCount: leadListController.getAllLeadsModel.value!.data!.length,
+            itemCount: leadListController.filteredGetAllLeadsModel.value!.data!.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
 
-              final lead = leadListController.getAllLeadsModel.value!.data![index];
+              final lead = leadListController.filteredGetAllLeadsModel.value!.data![index];
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -776,7 +795,7 @@ class LeadSearchScreen extends StatelessWidget {
 
             },
           ),
-          if (leadListController.hasMore.value)
+          if (leadListController.filteredHasMore.value)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
@@ -791,6 +810,8 @@ class LeadSearchScreen extends StatelessWidget {
                     fromDate: leadListController.fromDateMain.value,
                     toDate: leadListController.toDateMain.value,
                     branch: leadListController.branchMain.value,
+                    uniqueLeadNumber: leadListController.uniqueLeadNumberMain.value,
+                    leadMobileNumber: leadListController.leadMobileNumberMain.value,
                     isLoadMore: true,
                   );
                 },

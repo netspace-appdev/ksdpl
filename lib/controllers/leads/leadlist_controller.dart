@@ -31,6 +31,13 @@ class LeadListController extends GetxController {
   // GetAllLeadsModel? getAllLeadsModel;
 
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
+  ///newly added for filter
+  var filteredGetAllLeadsModel = Rxn<GetAllLeadsModel>();
+  var isFilteredLoading = false.obs;
+  var filteredHasMore = true.obs;
+  var filteredCurrentPage = 1.obs;
+  ///newly added for filter end
+
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
   UpdateLeadStageModel? updateLeadStageModel;
   LeadMoveToCommonTaskModel? leadMoveToCommonTaskModel;
@@ -49,6 +56,8 @@ class LeadListController extends GetxController {
   var fromDateMain="".obs;
   var toDateMain="".obs;
   var branchMain="0".obs;
+  var uniqueLeadNumberMain="".obs;
+  var leadMobileNumberMain="".obs;
 
   var selectedIndex = (1).obs;
   var leadId = RxnString();
@@ -71,7 +80,7 @@ class LeadListController extends GetxController {
   final int pageSize = 20;
   RxBool hasMore = true.obs;
   RxInt leadListLength = 0.obs;
-  LeadDDController leadDDController=Get.find();
+  LeadDDController leadDDController=Get.put(LeadDDController());
   @override
   void onInit() {
     // TODO: implement onInit
@@ -222,7 +231,10 @@ class LeadListController extends GetxController {
         campaign: campaignMain.value,
         fromDate: fromDateMain.value,
         toDate: toDateMain.value,
-        branch: branchMain.value
+        branch: branchMain.value,
+        uniqueLeadNumber: uniqueLeadNumberMain.value,
+        leadMobileNumber:leadMobileNumberMain.value
+
     );
   }
 
@@ -346,6 +358,8 @@ print("selectedTime ==>${selectedTime}");
     required fromDate,
     required toDate,
     required branch,
+    required leadMobileNumber,
+    required uniqueLeadNumber,
     bool isLoadMore = false,
   }) async {
 
@@ -371,7 +385,9 @@ print("selectedTime ==>${selectedTime}");
         pageSize: pageSize,
         fromDate: fromDate,
         toDate: toDate,
-        branch: branch
+        branch: branch,
+        leadMobileNumber: leadMobileNumber,
+        uniqueLeadNumber: uniqueLeadNumber
       );
 
       if (data['success'] == true) {
@@ -408,7 +424,134 @@ print("selectedTime ==>${selectedTime}");
   }
 
 
+///new code for filter
+  void getFilteredLeadsApi({
+    required String employeeId,
+    required String leadStage,
+    required stateId,
+    required distId,
+    required cityId,
+    required campaign,
+    required fromDate,
+    required toDate,
+    required branch,
+    required leadMobileNumber,
+    required uniqueLeadNumber,
+    bool isLoadMore = false,
+  }) async {
+    try {
+      if (isFilteredLoading.value || (!filteredHasMore.value && isLoadMore)) return;
 
+      isFilteredLoading(true);
+
+      if (!isLoadMore) {
+        filteredCurrentPage.value = 1;
+        filteredHasMore.value = true;
+      }
+
+      var data = await DrawerApiService.getAllLeadsApi(
+        employeeId: employeeId,
+        leadStage: leadStage,
+        stateId: stateId,
+        distId: distId,
+        cityId: cityId,
+        campaign: campaign,
+        pageNumber: filteredCurrentPage.value,
+        pageSize: pageSize,
+        fromDate: fromDate,
+        toDate: toDate,
+        branch: branch,
+        leadMobileNumber: leadMobileNumber,
+        uniqueLeadNumber: uniqueLeadNumber,
+      );
+
+      if (data['success'] == true) {
+        var newLeads = GetAllLeadsModel.fromJson(data);
+
+        if (isLoadMore) {
+          filteredGetAllLeadsModel.value!.data!.addAll(newLeads.data!);
+        } else {
+          filteredGetAllLeadsModel.value = newLeads;
+        }
+
+        if (newLeads.data!.length < pageSize) {
+          filteredHasMore.value = false;
+        } else {
+          filteredCurrentPage.value++;
+        }
+
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getFilteredLeadsApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isFilteredLoading(false);
+    }
+  }
+
+
+/*  void  updateLeadStageApi({
+    required id,
+    required stage,
+    required active,
+
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await DrawerApiService.updateLeadStageApi(
+          id:id,
+          stage: stage,
+          active: active
+      );
+
+
+      if(data['success'] == true){
+
+        updateLeadStageModel= UpdateLeadStageModel.fromJson(data);
+
+        workOnLeadApi(
+          leadId: id,
+          leadStageStatus:stage,
+        );
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error updateLeadStageApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+      print("run hua");
+
+
+
+      getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value
+      );
+
+      isLoading(false);
+    }
+  }*/
 
   void  updateLeadStageApi({
     required id,
@@ -462,7 +605,9 @@ print("selectedTime ==>${selectedTime}");
           campaign: campaignMain.value,
           fromDate: fromDateMain.value,
           toDate: toDateMain.value,
-          branch: branchMain.value
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value
       );
 
       isLoading(false);
@@ -517,7 +662,9 @@ print("selectedTime ==>${selectedTime}");
           campaign: campaignMain.value,
           fromDate: fromDateMain.value,
           toDate: toDateMain.value,
-          branch: branchMain.value
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value
       );
 
       isLoading(false);
@@ -575,7 +722,9 @@ print("selectedTime ==>${selectedTime}");
           campaign: campaignMain.value,
           fromDate: fromDateMain.value,
           toDate: toDateMain.value,
-          branch: branchMain.value
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value
       );
 
       isLoading(false);
@@ -629,6 +778,26 @@ print("selectedTime ==>${selectedTime}");
         workOnLeadModel= WorkOnLeadModel.fromJson(data);
 
         ToastMessage.msg(workOnLeadModel!.message.toString());
+       /* if (int.parse(leadStageStatus) == 3) {
+          leadDDController.selectedStageActive.value = 1;
+        } else if (int.parse(leadStageStatus) == 4) {
+          leadDDController.selectedStageActive.value = 1;
+        } else if (int.parse(leadStageStatus) == 5) {
+          leadDDController.selectedStageActive.value = 0;
+        }  else if (int.parse(leadStageStatus) == 6) {
+          leadDDController.selectedStageActive.value = 1;
+        } else if (int.parse(leadStageStatus) == 7) {
+          leadDDController.selectedStageActive.value = 0;
+        }else if (int.parse(leadStageStatus) == 13) {
+          leadDDController.selectedStageActive.value = 0;
+        }else {
+
+        }
+        updateLeadStageApi(
+            id: leadId,
+            stage: leadStageStatus,
+            active: leadDDController.selectedStageActive.value.toString()
+        );*/
         isLoading(false);
 
       }else{
@@ -655,7 +824,9 @@ print("selectedTime ==>${selectedTime}");
           campaign: campaignMain.value,
           fromDate: fromDateMain.value,
           toDate: toDateMain.value,
-          branch: branchMain.value
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value
       );
 
       isLoading(false);
@@ -694,7 +865,9 @@ print("selectedTime ==>${selectedTime}");
           campaign: campaignMain.value,
           fromDate: fromDateMain.value,
           toDate: toDateMain.value,
-            branch: branchMain.value
+          branch: branchMain.value,
+           uniqueLeadNumber: uniqueLeadNumberMain.value,
+         leadMobileNumber:leadMobileNumberMain.value
         );
 
 
@@ -730,7 +903,9 @@ print("selectedTime ==>${selectedTime}");
         campaign: campaignMain.value,
         fromDate: fromDateMain.value,
         toDate: toDateMain.value,
-        branch: branchMain.value
+        branch: branchMain.value,
+        uniqueLeadNumber: uniqueLeadNumberMain.value,
+        leadMobileNumber:leadMobileNumberMain.value
     );
   }
 

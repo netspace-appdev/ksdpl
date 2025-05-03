@@ -70,8 +70,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
           backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {
 
-            LeadDDController leadDDController=Get.put(LeadDDController());
-            leadDDController.selectedStage.value="2";
+
             Get.toNamed("/leadSearchScreen");
           },
           shape: const CircleBorder(),

@@ -1,3 +1,4 @@
+/*
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,7 +43,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double maxGraphValue = 1000;
   BotNavController botNavController=Get.find();
   LeadDDController leadDDController=Get.find();
+*/
+/*  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("New notification: ${message.notification?.title}");
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("User tapped on notification: ${message.notification?.title}");
+    });
 
+  }*//*
 
   @override
   Widget build(BuildContext context) {
@@ -110,11 +123,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                       children: [
 
-                        todayWorkStatus(),
-
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        //customGrid(),
 
                         birthday(),
 
@@ -136,13 +145,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 
 
-                        /*  curveChart(),
+                        */
+/*  curveChart(),
 
                   const SizedBox(height: 30),
 
                   circleChart(),
 
-                  const SizedBox(height: 30),*/
+                  const SizedBox(height: 30),*//*
+
 
 
 
@@ -208,7 +219,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
 
 
-              /*  InkWell(
+              */
+/*  InkWell(
                 onTap:(){
                   Get.toNamed("/notificationScreen");
                 },
@@ -216,7 +228,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   AppImage.bellIcon, // Replace with your image path
                   height: 22,
                 ),
-              ),*/
+              ),*//*
+
               InkWell(
                 onTap: (){
 
@@ -242,103 +255,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  */
+/*Widget offerContainer(){
+    return  SizedBox(
 
-
-  Widget offerContainer() {
-    return Obx(() {
-      if (dashboardController.isLoading.value) {
-        return Center(child: CustomSkelton.dashboardShimmerList(context));
-      }
-
-      if (dashboardController.getCountOfLeadsModel.value == null ||
-          dashboardController.getCountOfLeadsModel.value!.data == null) {
-        return Center(
-          child: Container(
-            height: 160,
-            width: MediaQuery.of(context).size.width * 0.80,
-            decoration: BoxDecoration(
-              color: AppColor.appWhite,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: const Center(
-              child: Text(
-                AppText.noDataFound,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.grey1,
-                ),
-              ),
-            ),
-          ),
-        );
-      }
-
-      // ✅ Updated fixed stages as per latest API
-      List<Map<String, dynamic>> fixedLeadStages = [
-
-        {"id": 2, "stageName": "Assigned"},
-        {"id": 3, "stageName": "Working"},
-        {"id": 4, "stageName": "Interested"},
-        {"id": 5, "stageName": "Not Interested"},
-        {"id": 6, "stageName": "Doable"},
-        {"id": 7, "stageName": "Not Doable"},
-        {"id": 8, "stageName": "Logged In"},
-        {"id": 9, "stageName": "Under Review"},
-        {"id": 10, "stageName": "Sanction"},
-        {"id": 11, "stageName": "Partial Disbursed"},
-        {"id": 12, "stageName": "Fully Disbursed"},
-        {"id": 13, "stageName": "Could not connect"},
-      ];
-
-      var apiLeads = dashboardController.getCountOfLeadsModel.value!.data!;
-      Map<int, dynamic> apiMap = {for (var lead in apiLeads) lead.id!: lead};
-
-      // 🎯 Build final list with fallback
-      List<dynamic> fixedLeads = fixedLeadStages.map((item) {
-        var match = apiMap[item['id']];
-        if (match != null) {
-          return match;
-        } else {
-          return {
-            "id": item['id'],
-            "stageName": item['stageName'],
-            "leadCount": 0,
-          };
-        }
-      }).toList();
-
-      // 🔄 Chunk list in groups of 4
-      List<List<dynamic>> leadChunks = [];
-      for (var i = 0; i < fixedLeads.length; i += 4) {
-        leadChunks.add(fixedLeads.sublist(
-          i,
-          (i + 4 > fixedLeads.length) ? fixedLeads.length : i + 4,
-        ));
-      }
-
-      return SizedBox(
-        height: 180,
-        child: ListView.builder(
+      height: 150,
+      child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: leadChunks.length,
+          itemCount: 2,
+          //physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemBuilder: (context, index) {
-            var chunk = leadChunks[index];
-
+          itemBuilder: (context,index){
             return Container(
-              width: MediaQuery.of(context).size.width * 0.80,
+              width: MediaQuery.of(context).size.width*0.80,
               padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.symmetric(horizontal: 5),
+              margin: EdgeInsets.symmetric(horizontal: 5),
+
               decoration: BoxDecoration(
-                color: index % 2 == 0 ? AppColor.appWhite : AppColor.secondaryColor,
+                color: index==0?AppColor.appWhite:AppColor.secondaryColor,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
@@ -347,32 +281,217 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     spreadRadius: 2,
                   ),
                 ],
+                *//*
+*/
+/* image: DecorationImage(
+                            image: AssetImage(AppImage.offerImage), // Use your image path
+                            fit: BoxFit.cover, // Cover the entire container
+                            opacity: 0.2, // Adjust transparency if needed
+                          ),*//*
+*/
+/*
+
               ),
-              child: customGrid(chunk, index),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Left Section (Icon + Text)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Icon
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: index==0?AppColor.amberVersion:AppColor.appWhite, // Light yellow background
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            // child: const Icon(Icons.groups, color:  AppColor.secondaryColor, size: 30),
+                            child: index==0? Image.asset(AppImage.peopleGroup,height: 23,):Image.asset(AppImage.faq,height: 23,),
+                          ),
+                          SizedBox(width: 10),
+
+                          // Main Number
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "2256",
+                                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                              ),
+
+                              // Subtitle
+                              const Text(
+                                "Total Learners",
+                                style: TextStyle(fontSize: 14, color: AppColor.black1),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      // Second Number
+                      const Text(
+                        "300",
+                        style: TextStyle(fontSize: 18, fontWeight:  FontWeight.w900),
+                      ),
+
+                      // Updated Time
+                      const Text(
+                        "Updated hour ago",
+                        style: TextStyle(fontSize: 12, color:  AppColor.black1),
+                      ),
+                    ],
+                  ),
+
+                  // Right Section (Chart)
+                  SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: LineChart(
+                      LineChartData(
+                        gridData: FlGridData(show: false),
+                        titlesData: FlTitlesData(show: false),
+                        borderData: FlBorderData(show: false),
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: [
+                              const FlSpot(0, 1),
+                              const FlSpot(1, 1.5),
+                              const FlSpot(2, 1.2),
+                              const FlSpot(3, 1.8),
+                              const FlSpot(4, 1.6),
+                            ],
+                            isCurved: true,
+                            color: Colors.red,
+                            barWidth: 3,
+                            isStrokeCapRound: true,
+                            dotData: FlDotData(show: false),
+                            belowBarData: BarAreaData(show: false),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             );
-          },
+
+          }
+      ),
+    );
+  }*//*
+
+
+  Widget offerContainer(){
+    return  Obx((){
+
+      if (dashboardController.isLoading.value) {
+        return  Center(child: CustomSkelton.dashboardShimmerList(context));
+      }
+      if (dashboardController.getCountOfLeadsModel.value == null ||
+          dashboardController.getCountOfLeadsModel.value!.data == null) {
+        return Center(child: Container(
+          height: 160,
+          width: MediaQuery.of(context).size.width*0.80,
+          decoration: BoxDecoration(
+            color: AppColor.appWhite,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
+
+          ),
+          child: const Center(
+            child: Text(
+              AppText.noDataFound,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColor.grey1,
+              ),
+            ),
+          ),
+        )); // Handle the null case
+      }
+      var allLeads = dashboardController.getCountOfLeadsModel.value!.data!;
+
+      // Filter out the "Fresh" lead
+      var filteredLeads = allLeads.where((lead) => lead.id != 1).toList();
+
+      // Group the leads into chunks of 4
+      List<List<dynamic>> leadChunks = [];
+      for (var i = 0; i < filteredLeads.length; i += 4) {
+        leadChunks.add(filteredLeads.sublist(i, (i + 4 > filteredLeads.length) ? filteredLeads.length : i + 4));
+      }
+      return SizedBox(
+
+        height: 180,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: leadChunks.length,
+            shrinkWrap: true,
+            itemBuilder: (context,index){
+              var chunk = leadChunks[index];
+
+
+              return Container(
+                width: MediaQuery.of(context).size.width*0.80,
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+
+                decoration: BoxDecoration(
+                  color: index%2==0?AppColor.appWhite:AppColor.secondaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                  */
+/* image: DecorationImage(
+                            image: AssetImage(AppImage.offerImage), // Use your image path
+                            fit: BoxFit.cover, // Cover the entire container
+                            opacity: 0.2, // Adjust transparency if needed
+                          ),*//*
+
+
+                ),
+                child: customGrid(chunk,index),
+              );
+
+            }
         ),
       );
     });
   }
 
-  Widget customGrid(List<dynamic> chunk, int chunkIndex) {
-    return SizedBox(
+
+  Widget customGrid( List<dynamic> chunk, int chunkIndex){
+    return  SizedBox(
+
       height: 145,
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 1.9,
+          crossAxisCount: 2, // 2 columns
+          crossAxisSpacing: 10, // Space between columns
+          mainAxisSpacing: 10, // Space between rows
+          childAspectRatio: 1.9, // Adjust height
+
         ),
         itemCount: chunk.length,
         itemBuilder: (context, ind) {
-          final item = chunk[ind];
-          final leadCount = item is Map ? item['leadCount'] ?? 0 : item.leadCount ?? 0;
-          final stageName = item is Map ? item['stageName'] ?? '' : item.stageName ?? '';
-          final stageId = item is Map ? item['id'] ?? 0 : item.id ?? 0;
 
           return Container(
             padding: const EdgeInsets.all(8),
@@ -380,15 +499,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColor.grey4),
+              */
+/* boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 3,
+                                  spreadRadius: 2,
+                                ),
+                              ],*//*
+
             ),
             child: Row(
+
               children: [
                 InkWell(
-                  onTap: () {
-                   /* LeadListController leadListController = Get.find();
-                    leadListController.selectCheckbox(stageId);
-                    leadListController.filterSubmit();
-                    botNavController.selectedIndex.value = 1;*/
+                  onTap: (){
                     int globalIndex = chunkIndex * 4 + ind;
 
                     print("globalIndex===>${globalIndex.toString()}");
@@ -430,12 +555,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColor.amberVersion,
+                      color: AppColor.amberVersion, // Light yellow background
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    // child: const Icon(Icons.groups, color:  AppColor.secondaryColor, size: 30),
                     child: Image.asset(AppImage.doc, height: 20),
                   ),
                 ),
+
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -443,7 +570,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Row(
                       children: [
                         Text(
-                          leadCount.toString(),
+                          chunk[ind].leadCount.toString(),
                           style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
                         ),
                         const SizedBox(width: 5),
@@ -451,10 +578,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                     const SizedBox(height: 5),
-                    SizedBox(
-                      width: 50,
+                    Container(
+                      width: 40,
                       child: Text(
-                        stageName,
+                        chunk[ind].stageName.toString(),
                         style: const TextStyle(fontSize: 8, color: AppColor.blackColor),
                       ),
                     ),
@@ -467,8 +594,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
-
 
   Widget barChart(){
     return Column(
@@ -1141,131 +1266,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget todayWorkStatus() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding:  EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Today's Work Status",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Obx((){
-          if (dashboardController.isLoading.value) {
-            return  Center(child: CustomSkelton.dashboardShimmerList(context));
-          }
-          if (dashboardController.todayWorkStatusRBModel.value == null ||
-              dashboardController.todayWorkStatusRBModel.value!.data == null) {
-            return Center(child: Container(
-              height: 160,
-              width: MediaQuery.of(context).size.width*0.80,
-              decoration: BoxDecoration(
-                color: AppColor.appWhite,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                  ),
-                ],
-
-              ),
-              child: const Center(
-                child: Text(
-                  "No work status",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.grey1,
-                  ),
-                ),
-              ),
-            )); // Handle the null case
-          }
-          return  SizedBox(
-            height: 170,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount:1, //dataList.length,
-              itemBuilder: (context, index) {
-                //   var item = dataList[index];
-                List<Color> colors = [AppColor.secondaryColor, AppColor.lightGreen, AppColor.lightBrown];
-                var cardColor = colors[index % colors.length];
-               var data=dashboardController.todayWorkStatusRBModel.value!.data![0];
-                return Container(
-                  width: 300,
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColor.appWhite,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: cardColor, width: 1),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 6,
-                        spreadRadius: 1,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _statusBadge("Total Calls today", data.todayCall.toString(), cardColor, "total"),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          _statusBadge("Converted\n to Interested", data.todayConvertToInterested.toString(), cardColor, "interested"),
-                          const SizedBox(width: 6),
-                          _statusBadge("Connected Calls\n",data.todayConnectedCall.toString(), cardColor,"connected"),
-                        ],
-                      ),
-
-
-                    ],
-                  ),
-                );
-              },
-            ),
-          );
-        }),
-      ],
-    );
-  }
-
-  Widget _statusBadge(String title, String value, Color color, String label) {
-    return Expanded(
-      child: Container(
-        width: label=="total"?280:40,
-
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: color, width: 1),
-        ),
-        child: Column(
-          children: [
-            Text(value, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color, )),
-            Text(title, style: TextStyle(fontSize: 12, color: AppColor.blackColor), textAlign: TextAlign.center,),
-          ],
-        ),
-      ),
-    );
-  }
-
-
+*/
 /*  Widget _buildDetailRow(String label, String value) {
 
     return Container(
@@ -1294,7 +1295,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
     );
-  }*/
+  }*//*
+
   Widget _buildDetailRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -1528,3 +1530,4 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 }
+*/

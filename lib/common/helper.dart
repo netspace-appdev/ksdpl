@@ -415,6 +415,8 @@ class AppText{
   static const String enterReferenceMob = "Enter Reference Mobile";
   static const String loanApplicationForm = "Loan Application Form";
   static const String dateOfBirth2="Date of Birth";
+  static const String leadMobileNUmber="Lead Mobile Number";
+  static const String enterLeadMobileNUmber="Enter Lead Mobile Number";
 
 }
 
@@ -706,15 +708,16 @@ class Helper{
       return "Invalid Date Format";
     }
   }
-  static String convertFromIso8601(String isoDateString) {
+  static String convertFromIso8601(String? isoDateString) {
     try {
-      // Parse the ISO 8601 string into a DateTime object
-      DateTime parsedDate = DateTime.parse(isoDateString);
+      if (isoDateString == null || isoDateString.isEmpty) {
+        return ""; // or whatever fallback you want
+      }
 
-      // Format to "MM/dd/yyyy"
+      DateTime parsedDate = DateTime.parse(isoDateString);
       return DateFormat("MM/dd/yyyy").format(parsedDate.toLocal());
     } catch (e) {
-      return "Invalid ISO Date";
+      return "Invalid Date";
     }
   }
 

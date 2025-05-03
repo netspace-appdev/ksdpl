@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find();
     return Obx(()=>GetMaterialApp(
-      initialBinding: RootBinding(),
+      //initialBinding: RootBinding(),
       debugShowCheckedModeBanner: false,
       title: 'KSDPL',
       theme: ThemeData.light(

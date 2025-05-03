@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:ksdpl/common/get_header.dart';
 import 'package:ksdpl/common/helper.dart';
 import 'dart:convert';
@@ -16,6 +17,7 @@ class DashboardApiService{
   static const String getReminderCallListTodayAndTomorrow = baseUrl + 'LeadDetail/GetReminderCallListTodayAndTomorrow';
   static const String getCampaignName = baseUrl + 'LeadDetail/GetCampaignName';
   static const String getBreakingNewsById = baseUrl + 'UpdatedNews/GetBreakingNewsById';
+  static const String todayWorkStatusOfRoBm = baseUrl + 'EmployeeDashboard/TodayWorkStatusOfRoBm';
 
   static Future<Map<String, dynamic>> getEmployeeByPhoneNumberApi({
     required String phone,
@@ -153,6 +155,60 @@ class DashboardApiService{
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> todayWorkStatusOfRoBmApi() async {
+print("todayWorkStatusOfRoBmApi");
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(todayWorkStatusOfRoBm),
+      );
+
+
+    // Step 1: Get current DateTime
+    DateTime now = DateTime.now();
+
+    // Step 2: Format it to match your expected input
+    String dateString = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SS").format(now);
+
+    // Step 3: Call your method
+    String formatted = Helper.formatDate(dateString);
+
+    print("Formatted: $formatted");
+
+      // Headers
+      var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['FromDate'] = formatted;
+      request.fields['ToDate'] =formatted;
+      request.fields['EmployeeId'] =empId;
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("request===>${request.fields.toString()}");
+      print("resp===>${response.body.toString()}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

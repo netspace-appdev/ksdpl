@@ -73,6 +73,8 @@ class LeadHistory extends StatelessWidget {
       if (leadHistoryController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
+      print("history===>${leadHistoryController.getLeadWorkByLeadIdModel.value}");
+
       if (leadHistoryController.getLeadWorkByLeadIdModel.value == null ||
           leadHistoryController.getLeadWorkByLeadIdModel.value!.data == null || leadHistoryController.getLeadWorkByLeadIdModel.value!.data=="") {
         return  Container(

@@ -13,6 +13,7 @@ import '../../models/dashboard/GetCountOfLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
 import '../../models/dashboard/GetRemindersModel.dart';
 import '../../models/dashboard/GetUpcomingDateOfBirthModel.dart';
+import '../../models/dashboard/TodayWorkStatusRBModel.dart';
 import '../../models/dashboard/getBreakingNewsModel.dart';
 import '../../services/dashboard_api_service.dart';
 import '../../services/drawer_api_service.dart';
@@ -26,10 +27,11 @@ class DashboardController extends GetxController {
   var getCountOfLeadsModel = Rxn<GetCountOfLeadsModel>(); //
   var getBreakingNewsModel = Rxn<GetBreakingNewsModel>(); //
   var getUpcomingDateOfBirthModel = Rxn<GetUpcomingDateOfBirthModel>(); //
+  var todayWorkStatusRBModel = Rxn<TodayWorkStatusRBModel>(); //
   var getRemindersModel = Rxn<GetRemindersModel>(); //
   ScrollController scrollReminderController = ScrollController();
   UpdateFCMTokenModel? updateFCMTokenModel;
-
+  List<int> fixedLeadIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   @override
   void onInit() {
     // TODO: implement onInit
@@ -39,7 +41,7 @@ class DashboardController extends GetxController {
 
     getBreakingNewsApi();
     getUpcomingDateOfBirthApi();
-
+    todayWorkStatusOfRoBmApi();
   }
   void scrollToLatestItem() {
     Future.delayed(Duration(milliseconds: 100), () {
@@ -81,7 +83,7 @@ class DashboardController extends GetxController {
             generalToken: genToekn.toString()
         );
 
-        getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "true");
+        getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
         getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
 
       }else{
@@ -209,6 +211,41 @@ class DashboardController extends GetxController {
 
     } catch (e) {
       print("Error getUpcomingDateOfBirthModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+  void  todayWorkStatusOfRoBmApi() async {
+    try {
+      isLoading(true);
+
+
+      var data = await DashboardApiService.todayWorkStatusOfRoBmApi();
+
+
+      if(data['success'] == true){
+
+        todayWorkStatusRBModel.value= TodayWorkStatusRBModel.fromJson(data);
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        todayWorkStatusRBModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error todayWorkStatusOfRoBmApi: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);

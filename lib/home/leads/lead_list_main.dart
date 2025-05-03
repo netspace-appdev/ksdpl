@@ -630,6 +630,8 @@ class LeadListMain extends StatelessWidget {
                     fromDate: leadListController.fromDateMain.value,
                     toDate: leadListController.toDateMain.value,
                     branch: leadListController.branchMain.value.toString(),
+                    uniqueLeadNumber:leadListController.uniqueLeadNumberMain.value.toString(),
+                    leadMobileNumber:leadListController.leadMobileNumberMain.value.toString(),
                     isLoadMore: true,
                   );
                 },
@@ -707,7 +709,7 @@ class LeadListMain extends StatelessWidget {
 
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//"+919399299880",//phoneNumber
+            phoneNumber:"+919399299880",//phoneNumber
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -795,6 +797,43 @@ class LeadListMain extends StatelessWidget {
                 title: "Are you sure?",
 
                 onYes: () {
+                  /*if(label_code == "interested"){
+                    leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus: "4",
+
+                    );
+
+
+                  }else if(label_code == "not_interested"){
+                    leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus: "5",
+
+                    );
+
+                  }else if(label_code == "doable"){
+                    leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus: "6",
+
+                    );
+                  }else if(label_code == "not_doable"){
+                    leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus: "7",
+
+                    );
+
+                  }else if(label_code == "cc"){
+
+                    leadListController.workOnLeadApi(
+                        leadId: leadId.toString(),
+                      leadStageStatus: "13",
+
+                    );
+
+                  }*/
                   if(label_code == "interested"){
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
@@ -825,17 +864,14 @@ class LeadListMain extends StatelessWidget {
                       active: "0",
                     );
 
-                  }else if(label_code == "cc"){
-                    leadListController.updateLeadStageApi(
+                  }else if(label_code == "cc") {
+                      leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "13",
                       active: "0",
                     );
 
                   }
-
-
-
                 },
                 onNo: () {
 
@@ -1568,24 +1604,28 @@ class LeadListMain extends StatelessWidget {
                         ),
                         onChanged: (value) {
                           leadDDController.selectedStage.value =  value?.id?.toString();
+                          print("here check--->${leadDDController.selectedStage.value}");
+                          if( leadDDController.selectedStage.value!=null){
+                            if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                              leadDDController.selectedStageActive.value = 1;
+                            } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                              leadDDController.selectedStageActive.value = 1;
+                            } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                              leadDDController.selectedStageActive.value = 0;
+                            }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                              leadDDController.selectedStageActive.value = 1;
+                            } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                              leadDDController.selectedStageActive.value = 0;
+                            }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                              leadDDController.selectedStageActive.value = 0;
+                            }else {
 
-                          if (int.parse(leadDDController.selectedStage.value!) == 3) {
-                            leadDDController.selectedStageActive.value = 1;
-                          } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
-                            leadDDController.selectedStageActive.value = 1;
-                          } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
-                            leadDDController.selectedStageActive.value = 0;
-                          }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
-                            leadDDController.selectedStageActive.value = 1;
-                          } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
-                            leadDDController.selectedStageActive.value = 0;
-                          }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
-                            leadDDController.selectedStageActive.value = 0;
-                          }else {
+                            }
 
+                            print("changed LeadStage==>${leadDDController.selectedStage.value}");
                           }
 
-                          print("changed LeadStage==>${leadDDController.selectedStage.value}");
+
                         },
                       );
                     }),

@@ -641,6 +641,8 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
 
 
       print("leadId==>${leadId.value}");
+      print("salarydate==>${cleanDateText(Helper.convertToIso8601(salaryDateController.text))}");
+      print("salaryDateController.text==>${salaryDateController.text}");
       var data = await LoanApplService.addLoanApplicationApi(
         body:[
           {
@@ -716,7 +718,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
                   "ownershipType": selectedOwnershipList.value.ddToString(),//"string",
                   "natureOfBusiness": cleanText(natureOfBizController.text),
                   "staffStrength": staffStrengthController.toIntOrZero(),
-                  "dateOfSalary": cleanDateText(Helper.convertToIso8601(salaryDateController.text)),              ///its static
+                  "dateOfSalary":salaryDateController.text.isEmpty?"": cleanDateText(Helper.convertToIso8601(salaryDateController.text)),              ///its static
                 }
               }
             },
@@ -870,6 +872,8 @@ print("data in API cot-->${data.toString()}");
           selectedOwnershipList.value = employer?['OwnershipType']?? 'null';
           natureOfBizController.text = employer?['NatureOfBusiness'] ?? '';
           staffStrengthController.text = employer?['StaffStrength']?.toString() ?? '0';
+          print("here===>${applicant?['DateOfSalary']}");
+          print("here===>${ Helper.convertFromIso8601(applicant?['DateOfSalary'])}");
           salaryDateController.text =  Helper.convertFromIso8601(applicant?['DateOfSalary']) ?? 'null';
  // Present Add
           final presentAdd = applicant?['PresentAddress'];

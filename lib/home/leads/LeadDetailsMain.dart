@@ -212,7 +212,7 @@ class LeadDetailsMain extends StatelessWidget {
                 ),
 
                 SizedBox(height: 10),
-
+                DetailRow(label: "Unique Lead Number", value:leadDetailController.getLeadDetailModel.value!.data!.uniqueLeadNumber.toString()),
                 DetailRow(label: "Date", value:Helper.formatDate(leadDetailController.getLeadDetailModel.value!.data!.assignedEmployeeDate.toString()) ),
                 DetailRow(label: "Full Name", value: data.name.toString()),
                 DetailRow(label: "Gender", value:  data.gender.toString()=="null"?AppText.customdash:data.gender.toString()),

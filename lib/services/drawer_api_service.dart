@@ -395,6 +395,8 @@ class DrawerApiService {
     required fromDate,
     required toDate,
     required branch,
+    required uniqueLeadNumber,
+    required leadMobileNumber,
   }) async {
     try {
       print("API called");
@@ -415,6 +417,8 @@ class DrawerApiService {
       request.fields['FromDate'] = fromDate;
       request.fields['ToDate'] = toDate;
       request.fields['Branch'] = branch;
+      request.fields['UniqueLeadNumber'] = uniqueLeadNumber;
+      request.fields['LeadMobileNumber'] = leadMobileNumber;
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
