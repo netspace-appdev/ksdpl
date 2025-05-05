@@ -80,6 +80,7 @@ class LeadListController extends GetxController {
   final int pageSize = 20;
   RxBool hasMore = true.obs;
   RxInt leadListLength = 0.obs;
+  RxInt filteredLeadListLength = 0.obs;
   LeadDDController leadDDController=Get.put(LeadDDController());
   @override
   void onInit() {
@@ -264,27 +265,12 @@ print("selectedTime ==>${selectedTime}");
         ToastMessage.msg("Date or Time is empty!");
         return;
       }
-/*
-      DateTime parsedDate = DateFormat("MM-dd-yyyy").parse(selectedDate);
 
-
-      DateTime parsedTime = DateFormat("hh:mm a").parse(selectedTime);
-
-
-      DateTime combinedDateTime = DateTime(
-        parsedDate.year,
-        parsedDate.month,
-        parsedDate.day,
-        parsedTime.hour,
-        parsedTime.minute,
-      );
-
-      formattedDateTime = DateFormat("yyyy-MM-dd' 'HH:mm:ss.SS").format(combinedDateTime);*/
 
       String combined = "$selectedDate $selectedTime";
 
 // Parse using the right pattern
-      DateTime parsedDateTime = DateFormat("yyyy-M-d h:mm a").parse(combined);
+      DateTime parsedDateTime = DateFormat("yyyy-MM-dd h:mm a").parse(combined);
 
 // Format to desired output
       String formatted = DateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(parsedDateTime);
@@ -473,6 +459,12 @@ print("selectedTime ==>${selectedTime}");
         } else {
           filteredGetAllLeadsModel.value = newLeads;
         }
+        if (newLeads.data!.length < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++; // Ready for next page
+        }
+        filteredLeadListLength.value=filteredGetAllLeadsModel.value!.data!.length;
 
         if (newLeads.data!.length < pageSize) {
           filteredHasMore.value = false;
@@ -480,6 +472,10 @@ print("selectedTime ==>${selectedTime}");
           filteredCurrentPage.value++;
         }
 
+      }else if (data['success'] == false && (data['data'] as List).isEmpty) {
+
+        filteredGetAllLeadsModel.value = null;
+        filteredHasMore.value = false;
       } else {
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
@@ -492,66 +488,6 @@ print("selectedTime ==>${selectedTime}");
   }
 
 
-/*  void  updateLeadStageApi({
-    required id,
-    required stage,
-    required active,
-
-  }) async {
-    try {
-      isLoading(true);
-
-
-      var data = await DrawerApiService.updateLeadStageApi(
-          id:id,
-          stage: stage,
-          active: active
-      );
-
-
-      if(data['success'] == true){
-
-        updateLeadStageModel= UpdateLeadStageModel.fromJson(data);
-
-        workOnLeadApi(
-          leadId: id,
-          leadStageStatus:stage,
-        );
-
-        isLoading(false);
-
-      }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-
-
-    } catch (e) {
-      print("Error updateLeadStageApi: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
-    } finally {
-      print("run hua");
-
-
-
-      getAllLeadsApi(
-          leadStage: leadCode.value,
-          employeeId:eId.value.toString(),
-          stateId:stateIdMain.value,
-          distId: distIdMain.value,
-          cityId: cityIdMain.value,
-          campaign: campaignMain.value,
-          fromDate: fromDateMain.value,
-          toDate: toDateMain.value,
-          branch: branchMain.value,
-          uniqueLeadNumber: uniqueLeadNumberMain.value,
-          leadMobileNumber:leadMobileNumberMain.value
-      );
-
-      isLoading(false);
-    }
-  }*/
 
   void  updateLeadStageApi({
     required id,
@@ -834,6 +770,164 @@ print("selectedTime ==>${selectedTime}");
   }
 
 
+  Future<void> workOnLeadAndStageUpdateApi({
+    required String leadId,
+    String leadStageStatus = "0",
+    String leadPercent = "0",
+    String employeeId = "0",
+    String? callEndTime,
+    String callStatus = "0",
+    String? callStartTime,
+    String? feedbackRelatedToLead,
+    String? callDuration,
+    String? callReminder,
+    String? feedbackRelatedToCall,
+    String moveToCommon = "0",
+    File? callRecordingPathUrl, // File upload
+    String reminderStatus = "0",
+    String id = "0",
+  }) async {
+    try {
+        print("workOnLeadAndStageUpdateApi");
+      isLoading(true);
+
+      var eId=StorageService.get(StorageService.EMPLOYEE_ID);
+
+      var data = await DrawerApiService.workOnLeadApi(
+        leadId:leadId,
+        leadStageStatus: leadStageStatus,
+        leadPercent: leadPercent,
+        employeeId: eId.toString(),
+        callEndTime: callEndTime,
+        callStatus: callStatus,
+        callStartTime: callStartTime,
+        feedbackRelatedToLead: feedbackRelatedToLead,
+        callDuration: callDuration,
+        callReminder: callReminder,
+        feedbackRelatedToCall: feedbackRelatedToCall,
+        moveToCommon: moveToCommon,
+        callRecordingPathUrl: callRecordingPathUrl,
+        reminderStatus: reminderStatus,
+        id: id,
+      );
+
+
+      if(data['success'] == true){
+
+        workOnLeadModel= WorkOnLeadModel.fromJson(data);
+
+        ToastMessage.msg(workOnLeadModel!.message.toString());
+         if (int.parse(leadStageStatus) == 3) {
+          leadDDController.selectedStageActive.value = 1;
+        } else if (int.parse(leadStageStatus) == 4) {
+          leadDDController.selectedStageActive.value = 1;
+        } else if (int.parse(leadStageStatus) == 5) {
+          leadDDController.selectedStageActive.value = 0;
+        }  else if (int.parse(leadStageStatus) == 6) {
+          leadDDController.selectedStageActive.value = 1;
+        } else if (int.parse(leadStageStatus) == 7) {
+          leadDDController.selectedStageActive.value = 0;
+        }else if (int.parse(leadStageStatus) == 13) {
+          leadDDController.selectedStageActive.value = 0;
+        }else {
+
+        }
+        updateLeadStageNewApi(
+            id: leadId,
+            stage: leadStageStatus,
+            active: leadDDController.selectedStageActive.value.toString()
+        );
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error workOnLeadModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+      print("run hua");
+
+
+
+      getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value
+      );
+
+      isLoading(false);
+    }
+  }
+
+  void  updateLeadStageNewApi({
+    required id,
+    required stage,
+    required active,
+
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await DrawerApiService.updateLeadStageApi(
+          id:id,
+          stage: stage,
+          active: active
+      );
+
+
+      if(data['success'] == true){
+
+        updateLeadStageModel= UpdateLeadStageModel.fromJson(data);
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error updateLeadStageApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+      print("run hua");
+
+
+
+      getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value
+      );
+
+      isLoading(false);
+    }
+  }
   void  getEmployeeByPhoneNumberApi({
     required String phone,
 

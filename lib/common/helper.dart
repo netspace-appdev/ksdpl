@@ -700,7 +700,7 @@ class Helper{
   static String convertToIso8601(String dateString) {
     try {
       // Parse the input date in "MM/dd/yyyy" format
-      DateTime parsedDate = DateFormat("MM/dd/yyyy").parse(dateString);
+      DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(dateString);
 
       // Convert to ISO 8601 format with UTC
       return parsedDate.toUtc().toIso8601String(); // returns "2025-04-01T00:00:00.000Z"
@@ -715,7 +715,7 @@ class Helper{
       }
 
       DateTime parsedDate = DateTime.parse(isoDateString);
-      return DateFormat("MM/dd/yyyy").format(parsedDate.toLocal());
+      return DateFormat("yyyy-MM-dd").format(parsedDate.toLocal());
     } catch (e) {
       return "Invalid Date";
     }

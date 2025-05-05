@@ -353,7 +353,7 @@ class LeadSearchScreen extends StatelessWidget {
                                       isRequired: false,
                                       controller: leadListController.fromDateController,
                                       inputType: TextInputType.name,
-                                      hintText: AppText.mmddyyyy,
+                                      hintText: "YYYY-MM-DD",
                                       validator: ValidationHelper.validateFromDate,
                                       isDateField: true,
                                     ),
@@ -426,16 +426,16 @@ class LeadSearchScreen extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                               /* Text(
-                                  leadListController.getAllLeadsModel.value == null ||
-                                      leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty?"(0)":
+                               Obx(()=> Text(
+                                 leadListController.filteredGetAllLeadsModel.value == null ||
+                                     leadListController.filteredGetAllLeadsModel.value!.data == null || leadListController.filteredGetAllLeadsModel.value!.data!.isEmpty?"(0)":
 
-                                  " (${ leadListController.leadListLength.value.toString()})",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                                ),*/
+                                 " (${ leadListController.filteredLeadListLength.value.toString()})",
+                                 style: TextStyle(
+                                   fontSize: 20,
+                                   // fontWeight: FontWeight.bold,
+                                 ),
+                               )),
                               ],
                             ),
                             const SizedBox(height: 20),
@@ -873,63 +873,6 @@ class LeadSearchScreen extends StatelessWidget {
                 title: "Are you sure?",
 
                 onYes: () {
-                  if(label_code == "interested"){
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "4",
-                      active: "1",
-                    );
-                    /* leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"4",
-                    );*/
-
-                  }else if(label_code == "not_interested"){
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "5",
-                      active: "0",
-                    );
-                    /*  leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"5",
-                    );*/
-
-                  }else if(label_code == "doable"){
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "6",
-                      active: "1",
-                    );
-                    /* leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"6",
-                    );*/
-
-                  }else if(label_code == "not_doable"){
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "7",
-                      active: "0",
-                    );
-                    /*leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"7",
-                    );*/
-
-                  }else if(label_code == "cc"){
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "13",
-                      active: "0",
-                    );
-                    /*leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"13",
-                    );*/
-
-                  }
-
 
 
                 },
@@ -1450,7 +1393,26 @@ class LeadSearchScreen extends StatelessWidget {
                     ),
                     onChanged: (value) {
                       leadDDController.selectedStage.value =  value?.id?.toString();
-                      leadDDController.changeActiveStatus(leadDDController.selectedStage.value.toString());
+                      if( leadDDController.selectedStage.value!=null){
+                        if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                          leadDDController.selectedStageActive.value = 1;
+                        } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                          leadDDController.selectedStageActive.value = 1;
+                        } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                          leadDDController.selectedStageActive.value = 0;
+                        }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                          leadDDController.selectedStageActive.value = 1;
+                        } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                          leadDDController.selectedStageActive.value = 0;
+                        }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                          leadDDController.selectedStageActive.value = 0;
+                        }else {
+
+                        }
+
+                        print("changed LeadStage==>${leadDDController.selectedStage.value}");
+                      }
+
                     },
                   );
                 }),
@@ -1466,10 +1428,24 @@ class LeadSearchScreen extends StatelessWidget {
 
           onSubmit: (){
             if (leadDDController.selectedStage.value!=null || leadDDController.selectedStage.value!="") {
-              leadListController.updateLeadStageApi(
-                id: leadId.toString(),
-                stage: leadDDController.selectedStage.value,
-                active:leadDDController.activeStatus.value,
+
+              leadListController.workOnLeadAndStageUpdateApi(
+                leadId: leadId.toString(),
+                leadStageStatus:leadDDController.selectedStage.value.toString(),
+
+              );
+              leadListController.getFilteredLeadsApi(
+                employeeId: leadListController.eId.value.toString(),
+                leadStage:leadDDController.selectedStage.value??"0",
+                stateId: leadDDController.selectedState.value??"0",
+                distId: leadDDController.selectedDistrict.value??"0",
+                cityId:leadDDController.selectedCity.value??"0",
+                campaign: leadDDController.selectedCampaign.value??"",
+                fromDate: leadListController.fromDateController.value.text.isEmpty?"":Helper.convertToIso8601(leadListController.fromDateController.value.text),
+                toDate: leadListController.toDateController.value.text.isEmpty?"":Helper.convertToIso8601(leadListController.toDateController.value.text),
+                branch: leadDDController.selectedKsdplBr.value??"0",
+                uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
+                leadMobileNumber: searchLeadController.leadMobileNumberController.text,
               );
               Get.back();
             }else{

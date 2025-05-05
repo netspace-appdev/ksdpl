@@ -709,7 +709,7 @@ class LeadListMain extends StatelessWidget {
 
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//"+919399299880",//phoneNumber
+            phoneNumber:"+919238513910",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -797,43 +797,7 @@ class LeadListMain extends StatelessWidget {
                 title: "Are you sure?",
 
                 onYes: () {
-                  /*if(label_code == "interested"){
-                    leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus: "4",
-
-                    );
-
-
-                  }else if(label_code == "not_interested"){
-                    leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus: "5",
-
-                    );
-
-                  }else if(label_code == "doable"){
-                    leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus: "6",
-
-                    );
-                  }else if(label_code == "not_doable"){
-                    leadListController.workOnLeadApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus: "7",
-
-                    );
-
-                  }else if(label_code == "cc"){
-
-                    leadListController.workOnLeadApi(
-                        leadId: leadId.toString(),
-                      leadStageStatus: "13",
-
-                    );
-
-                  }*/
+/*
                   if (label_code == "interested") {
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
@@ -865,6 +829,38 @@ class LeadListMain extends StatelessWidget {
                       active: "0",
                     );
 
+                  }*/
+
+                  if (label_code == "interested") {
+                    leadListController.workOnLeadAndStageUpdateApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"4",
+
+                    );
+                  } else if (label_code == "not_interested") {
+                    leadListController.workOnLeadAndStageUpdateApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"5",
+
+                    );
+                  } else if (label_code == "doable") {
+                    leadListController.workOnLeadAndStageUpdateApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"6",
+
+                    );
+                  } else if (label_code == "not_doable") {
+                    leadListController.workOnLeadAndStageUpdateApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"7",
+
+                    );
+                  } else if (label_code == "cc") {
+                    leadListController.workOnLeadAndStageUpdateApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:"13",
+
+                    );
                   }
                 },
                 onNo: () {

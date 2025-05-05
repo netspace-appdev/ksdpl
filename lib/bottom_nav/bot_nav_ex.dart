@@ -69,8 +69,9 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
         floatingActionButton: FloatingActionButton(
           backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {
+            LeadDDController leadDDController=Get.find();
 
-
+            leadDDController.selectedStage.value="0";
             Get.toNamed("/leadSearchScreen");
           },
           shape: const CircleBorder(),

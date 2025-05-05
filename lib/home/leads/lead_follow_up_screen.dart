@@ -1,5 +1,5 @@
 
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
@@ -200,7 +200,7 @@ class LeadFollowupScreen extends StatelessWidget {
 
     if (_formKey.currentState!.validate()) {
 
-      /* if (leadDDController.selectedState.value==null) {
+      *//* if (leadDDController.selectedState.value==null) {
         ToastMessage.msg("Please select state");
       }else  if (leadDDController.selectedDistrict.value==null) {
         ToastMessage.msg("Please select district");
@@ -209,7 +209,7 @@ class LeadFollowupScreen extends StatelessWidget {
       } {
         openPollFilterController.pollFilterSubmit();
         ToastMessage.msg("Form Submitted");
-      }*/
+      }*//*
       openPollFilterController.pollFilterSubmit();
     }
   }
@@ -727,7 +727,7 @@ class LeadFollowupScreen extends StatelessWidget {
                     ),
 
                     // 🟠 Buttons (Close & Submit)
-                    /*Padding(
+                    *//*Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -776,7 +776,7 @@ class LeadFollowupScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ),*/
+                    ),*//*
                   ],
                 ),
               ),
@@ -1024,6 +1024,6 @@ class LeadFollowupScreen extends StatelessWidget {
   }
 
 
-}
+}*/
 
 

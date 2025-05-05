@@ -138,6 +138,24 @@ class LeadDDController extends GetxController{
 
 
 
+          if (int.parse(getAllStateModel.value!.data![0].id.toString()) == 3) {
+            selectedStageActive.value = 1;
+          } else if (int.parse(getAllStateModel.value!.data![0].id.toString()) == 4) {
+            selectedStageActive.value = 1;
+          } else if (int.parse(getAllStateModel.value!.data![0].id.toString()) == 5) {
+            selectedStageActive.value = 0;
+          }  else if (int.parse(getAllStateModel.value!.data![0].id.toString()) == 6) {
+            selectedStageActive.value = 1;
+          } else if (int.parse(getAllStateModel.value!.data![0].id.toString()) == 7) {
+            selectedStageActive.value = 0;
+          }else if (int.parse(getAllStateModel.value!.data![0].id.toString()) == 13) {
+           selectedStageActive.value = 0;
+          }else {
+            selectedStageActive.value = 0;
+          }
+
+
+
         isLoading(false);
         isStateLoading(false);
 

@@ -103,7 +103,7 @@ class CustomLabeledPickerTextField extends StatelessWidget {
     );
 
     if (pickedDate != null) {
-      controller.text = DateFormat("MM/dd/yyyy").format(pickedDate);
+      controller.text = DateFormat("yyyy-MM-dd").format(pickedDate);
     }
   }
 }
