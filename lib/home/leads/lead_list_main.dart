@@ -709,7 +709,7 @@ class LeadListMain extends StatelessWidget {
 
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:"+919399299880",//phoneNumber
+            phoneNumber:phoneNumber,//"+919399299880",//phoneNumber
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -834,38 +834,32 @@ class LeadListMain extends StatelessWidget {
                     );
 
                   }*/
-                  if(label_code == "interested"){
+                  if (label_code == "interested") {
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "4",
                       active: "1",
                     );
-
-
-                  }else if(label_code == "not_interested"){
+                  } else if (label_code == "not_interested") {
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "5",
                       active: "0",
                     );
-
-
-                  }else if(label_code == "doable"){
+                  } else if (label_code == "doable") {
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "6",
                       active: "1",
                     );
-
-                  }else if(label_code == "not_doable"){
+                  } else if (label_code == "not_doable") {
                     leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "7",
                       active: "0",
                     );
-
-                  }else if(label_code == "cc") {
-                      leadListController.updateLeadStageApi(
+                  } else if (label_code == "cc") {
+                    leadListController.updateLeadStageApi(
                       id: leadId.toString(),
                       stage: "13",
                       active: "0",
