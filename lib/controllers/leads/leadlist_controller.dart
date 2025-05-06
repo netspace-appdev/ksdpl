@@ -296,19 +296,21 @@ print("selectedTime ==>${selectedTime}");
     print("call status  in real box==>${callStatus}");
     print("id in real box==>${id}");
     print("formattedDateTime in real box==>${formattedDateTime.toString()}");
+    print("currentLeadStage in real box==>${currentLeadStage.toString()}");
+    print("selectedStage in real box==>${selectedStage.toString()}");
 
 
 
     updateLeadStageApiForCall(
       id:leadId.toString(),
       active: leadDDController.selectedStageActive.value.toString(),
-      stage: selectedStage
+      stage:selectedStage==""?currentLeadStage: selectedStage
     ).then((_){
       workOnLeadApi(
         // id:callStatus=="1"?id.toString():"0",
         id:id.toString(),
         leadId: leadId.toString(),
-        leadStageStatus: selectedStage,
+        leadStageStatus:selectedStage==""?currentLeadStage: selectedStage,
         feedbackRelatedToCall: callFeedbackController.text.trim(),
         feedbackRelatedToLead: leadFeedbackController.text.trim(),
         callStatus: callStatus,
@@ -459,11 +461,7 @@ print("selectedTime ==>${selectedTime}");
         } else {
           filteredGetAllLeadsModel.value = newLeads;
         }
-        if (newLeads.data!.length < pageSize) {
-          hasMore.value = false;
-        } else {
-          currentPage.value++; // Ready for next page
-        }
+        print("len==>${filteredGetAllLeadsModel.value!.data!.length}");
         filteredLeadListLength.value=filteredGetAllLeadsModel.value!.data!.length;
 
         if (newLeads.data!.length < pageSize) {

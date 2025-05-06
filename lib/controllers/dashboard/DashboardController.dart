@@ -41,7 +41,7 @@ class DashboardController extends GetxController {
 
     getBreakingNewsApi();
     getUpcomingDateOfBirthApi();
-    todayWorkStatusOfRoBmApi();
+
   }
   void scrollToLatestItem() {
     Future.delayed(Duration(milliseconds: 100), () {
@@ -85,7 +85,7 @@ class DashboardController extends GetxController {
 
         getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
         getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
-
+        todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
@@ -220,12 +220,14 @@ class DashboardController extends GetxController {
     }
   }
 
-  void  todayWorkStatusOfRoBmApi() async {
+  void  todayWorkStatusOfRoBmApi({
+    required employeeId
+}) async {
     try {
       isLoading(true);
 
 
-      var data = await DashboardApiService.todayWorkStatusOfRoBmApi();
+      var data = await DashboardApiService.todayWorkStatusOfRoBmApi(employeeId: employeeId);
 
 
       if(data['success'] == true){

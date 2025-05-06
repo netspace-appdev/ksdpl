@@ -175,7 +175,9 @@ class DashboardApiService{
   }
 
 
-  static Future<Map<String, dynamic>> todayWorkStatusOfRoBmApi() async {
+  static Future<Map<String, dynamic>> todayWorkStatusOfRoBmApi({
+    required employeeId
+}) async {
 print("todayWorkStatusOfRoBmApi");
     try {
       var request = http.MultipartRequest(
@@ -196,19 +198,19 @@ print("todayWorkStatusOfRoBmApi");
     print("Formatted: $formatted");
 
       // Headers
-      var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+
       var header=await MyHeader.getHeaders2();
 
       request.headers.addAll(header);
       request.fields['FromDate'] = formatted;
       request.fields['ToDate'] =formatted;
-      request.fields['EmployeeId'] =empId;
+      request.fields['EmployeeId'] =employeeId;
 
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>${request.fields.toString()}");
-      print("resp===>${response.body.toString()}");
+      print("request===>todayWorkStatusOfRoBmApi==>${request.fields.toString()}");
+      print("resp===>todayWorkStatusOfRoBmApi======>${response.body.toString()}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

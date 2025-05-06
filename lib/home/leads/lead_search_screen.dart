@@ -800,7 +800,7 @@ class LeadSearchScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
                 onPressed: () {
-                  leadListController.getAllLeadsApi(
+                  leadListController.getFilteredLeadsApi(
                     employeeId: leadListController.eId.value.toString(),
                     leadStage:leadListController.leadCode.value.toString(),
                     stateId: leadListController.stateIdMain.value.toString(),
@@ -815,7 +815,7 @@ class LeadSearchScreen extends StatelessWidget {
                     isLoadMore: true,
                   );
                 },
-                child: leadListController.isLoading.value
+                child: leadListController.isFilteredLoading.value
                     ? CircularProgressIndicator(color: Colors.white)
                     : Text("Load More"),
               ),
