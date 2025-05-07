@@ -284,7 +284,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // ✅ Updated fixed stages as per latest API
       List<Map<String, dynamic>> fixedLeadStages = [
 
-        {"id": 2, "stageName": "Assigned"},
+        {"id": 2, "stageName": "Fresh"},
         {"id": 3, "stageName": "Working"},
         {"id": 4, "stageName": "Interested"},
         {"id": 5, "stageName": "Not Interested"},
@@ -1016,6 +1016,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
               itemBuilder: (context, index) {
                 var data = dashboardController.getRemindersModel.value!.data![index];
+                print("remiinder===>${data.callReminder.toString()}");
+                print("remiinder date===>${Helper.convertDateTime(data.callReminder.toString())}");
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   margin: const EdgeInsets.symmetric(horizontal: 10),

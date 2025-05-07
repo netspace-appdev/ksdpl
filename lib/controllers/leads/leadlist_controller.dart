@@ -36,6 +36,7 @@ class LeadListController extends GetxController {
   var isFilteredLoading = false.obs;
   var filteredHasMore = true.obs;
   var filteredCurrentPage = 1.obs;
+  var isMainListMoreLoading = false.obs;
   ///newly added for filter end
 
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
@@ -335,7 +336,7 @@ print("selectedTime ==>${selectedTime}");
     });
   }
 
-
+/*
   void getAllLeadsApi({
     required String employeeId,
     required String leadStage,
@@ -356,6 +357,83 @@ print("selectedTime ==>${selectedTime}");
       if (isLoading.value || (!hasMore.value && isLoadMore)) return;
 
       isLoading(true);
+
+      if (!isLoadMore) {
+        currentPage.value = 1; // Reset to first page on fresh load
+        hasMore.value = true;
+      }
+
+      var data = await DrawerApiService.getAllLeadsApi(
+          employeeId: employeeId,
+          leadStage: leadStage,
+          stateId: stateId,
+          distId: distId,
+          cityId: cityId,
+          campaign: campaign,
+          pageNumber: currentPage.value,
+          pageSize: pageSize,
+          fromDate: fromDate,
+          toDate: toDate,
+          branch: branch,
+          leadMobileNumber: leadMobileNumber,
+          uniqueLeadNumber: uniqueLeadNumber
+      );
+
+      if (data['success'] == true) {
+        var newLeads = GetAllLeadsModel.fromJson(data);
+
+        if (isLoadMore) {
+          getAllLeadsModel.value!.data!.addAll(newLeads.data!);
+        } else {
+          getAllLeadsModel.value = newLeads;
+        }
+
+        leadStageName2.value = leadStageName.value;
+
+        // If less data returned than requested pageSize, mark as no more
+        if (newLeads.data!.length < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++; // Ready for next page
+        }
+        leadListLength.value=getAllLeadsModel.value!.data!.length;
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        leadStageName2.value = leadStageName.value;
+        getAllLeadsModel.value = null;
+        hasMore.value = false;
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getAllLeadsApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }
+*/
+
+
+  void getAllLeadsApi({
+    required String employeeId,
+    required String leadStage,
+    required stateId,
+    required distId,
+    required cityId,
+    required campaign,
+    required fromDate,
+    required toDate,
+    required branch,
+    required leadMobileNumber,
+    required uniqueLeadNumber,
+    bool isLoadMore = false,
+  }) async {
+
+    try {
+
+      if (isMainListMoreLoading.value || (!hasMore.value && isLoadMore)) return;
+
+      isMainListMoreLoading(true);
 
       if (!isLoadMore) {
         currentPage.value = 1; // Reset to first page on fresh load
@@ -407,7 +485,7 @@ print("selectedTime ==>${selectedTime}");
       print("Error getAllLeadsApi: $e");
       ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
-      isLoading(false);
+      isMainListMoreLoading(false);
     }
   }
 

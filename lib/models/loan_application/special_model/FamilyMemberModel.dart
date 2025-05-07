@@ -32,7 +32,8 @@ class FamilyMemberModel {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'birthDate': birthDate,
+
+      if (birthDate != null && birthDate!.isNotEmpty)  "birthDate": birthDate,
       'gender': gender,
       'relationWithApplicant': relationWithApplicant,
       'dependent': dependent,

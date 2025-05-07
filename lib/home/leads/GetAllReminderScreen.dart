@@ -18,13 +18,18 @@ import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
+import '../../controllers/leads/leadlist_controller.dart';
+import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomLabeledTimePicker.dart';
+import '../../services/call_service.dart';
 import '../custom_drawer.dart';
-
+import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
 
 class GetAllReminderScreen extends StatelessWidget {
+  LeadDDController leadDDController=Get.find();
 
   DashboardController dashboardController = Get.put(DashboardController());
   @override
@@ -302,47 +307,16 @@ class GetAllReminderScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
 
-                /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
-                /*Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-
-                      _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
-                      _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
-                      _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
-                      //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
-                      InkWell(
-                        onTap: () {
-                          //Get.toNamed("/leadDetailsMain", arguments: {"leadId":lead.id.toString()});
-                          Get.toNamed("/leadDetailsTab", arguments: {"leadId":lead.id.toString()});
-
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
-                          decoration: BoxDecoration(
-                            color: AppColor.orangeColor, // Button background color
-                            borderRadius: BorderRadius.circular(2), // Rounded corners
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
-                              SizedBox(width: 5,),
-                              Text(
-                                AppText.details,
-                                style: TextStyle(color: AppColor.appWhite),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-
-                    ],
-                  ),
-                ),*/
-                SizedBox(height: 10),
-
+                _buildTextButton(
+                  label:"Call Now",
+                  context: context,
+                  color: Colors.purple,
+                  icon:  Icons.call,
+                  leadId: lead.leadId.toString(),
+                  label_code: "call",
+                  leadMobileNo:  lead.leadMobileNo.toString(),
+                  leadStageStatus: lead.leadStageStatus.toString(),
+                ),
 
               ],
             ),
@@ -383,6 +357,265 @@ class GetAllReminderScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTextButton({
+    required String label,
+    required BuildContext context,
+    required Color color,
+    required IconData icon,
+    required String leadId,
+    required String label_code,
+    required String leadMobileNo,
+    required String leadStageStatus,
+    String? currentLeadStage
+  }) {
+
+    return InkWell(
+      onTap: () {
+        CallService callService = CallService();
+        callService.makePhoneCall(
+          phoneNumber: "+919399299880",//leadMobileNo.toString(),//"+919399299880"
+          leadId:  leadId.toString(),
+          currentLeadStage:  leadStageStatus.toString(),
+          context: context,
+          showFeedbackDialog:showCallFeedbackDialog,
+        );
+
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            width:
+            MediaQuery.of(context).size.width*0.82,
+
+            decoration: BoxDecoration(
+              //color: color,
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: AppColor.grey700)
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
+                SizedBox(width: 6),
+                Text(
+                  label,
+                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: AppColor.grey700),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showCallFeedbackDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+    required callStatus,
+  }) {
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        leadDDController.selectedStage.value=currentLeadStage;
+        LeadListController leadListController =Get.find();
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.addFAndF,
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.callFeedback,
+                      isRequired: false,
+                      controller: leadListController.callFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterCallFeedback,
+                      isTextArea: true,
+                    ),
+                    SizedBox(height: 15),
+                    CustomLabeledTextField(
+                      label: AppText.leadFeedback,
+                      isRequired: false,
+                      controller: leadListController.leadFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterLeadFeedback,
+                      isTextArea: true,
+                    ),
+                    ///stage drodown
+                    ///  add this line in dialog at first leadDDController.selectedStage.value=currentLeadStage;
+                    const SizedBox(height: 20),
+
+                    const Text(
+                      AppText.leadStage,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.grey2,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+                    Obx((){
+                      if (leadDDController.isLeadStageLoading.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+                      int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
+
+                      // Allowed stage IDs based on leadCode
+                      List<int> allowedStageIds = [];
+
+                      if (leadCode == 2) {
+                        allowedStageIds = [4, 5,13];
+                      }else if (leadCode == 3) {
+                        allowedStageIds = [4, 5,13];
+                      } else if (leadCode == 4) {
+                        allowedStageIds = [6, 7];
+                      } else {
+                        allowedStageIds = [2, 3, 4, 5, 6, 7]; // Default to all or handle as needed
+                      }
+
+                      List<stage.Data> filteredStages = leadDDController
+                          .getAllLeadStageModel.value!.data!
+                          .where((lead) =>
+                      lead.id != 1 && allowedStageIds.contains(lead.id))
+                          .toList();
+
+                      return CustomDropdown<stage.Data>(
+                        items: filteredStages,
+                        getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.stageName.toString(),
+                        selectedValue: filteredStages.firstWhereOrNull(
+                              (item) => item.id.toString() == leadDDController.selectedStage.value,
+
+                        ),
+                        onChanged: (value) {
+                          leadDDController.selectedStage.value =  value?.id?.toString();
+
+                          if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else {
+
+                          }
+
+                          print("changed LeadStage==>${leadDDController.selectedStage.value}");
+                        },
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+
+
+                    ///stage dd end
+
+
+                    Row(
+                      children: [
+                        Obx(()=>Checkbox(
+                          activeColor: AppColor.secondaryColor,
+                          value: leadListController.isCallReminder.value,
+                          onChanged: (bool? value) {
+
+                            leadListController.isCallReminder.value = value ?? false;
+
+                          },
+                        )),
+                        Text(
+                          AppText.callReminder,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Obx(()=> CustomLabeledPickerTextField(
+                      label: AppText.selectDate,
+                      isRequired: false,
+                      controller: leadListController.followDateController,
+                      inputType: TextInputType.name,
+                      hintText: "MM/DD/YYYY",
+                      isDateField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                    Obx(()=>CustomLabeledTimePickerTextField(
+                      label: AppText.selectTime,
+                      isRequired: false,
+                      controller: leadListController.followTimeController,
+                      inputType: TextInputType.datetime,
+                      hintText: "HH:MM AM/PM",
+                      isTimeField: true,
+                      enabled: leadListController.isCallReminder.value,
+                    )),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onSubmit: () {
+            if (leadListController.callFeedbackController.text.isEmpty &&
+                leadListController.leadFeedbackController.text.isEmpty) {
+              ToastMessage.msg(AppText.addFeedbackFirst);
+            } else {
+              var id=leadListController.workOnLeadModel!.data!.id.toString();
+              if(callStatus=="1"){
+                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
+                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
+                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
+
+              }
+
+              leadListController.callFeedbackSubmit(
+                  leadId: leadId,
+                  currentLeadStage: currentLeadStage,
+                  callStatus: callStatus,
+                  callDuration: callDuration,
+                  callStartTime: callStartTime,
+                  callEndTime: callEndTime,
+                  id: id,
+                  fromWhere: "call",
+                  selectedStage: leadDDController.selectedStage.value
+
+              );
+              Get.back();
+            }
+
+          },
+        );
+      },
     );
   }
 }

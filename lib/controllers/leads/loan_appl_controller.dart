@@ -543,7 +543,7 @@ class LoanApplicationController extends GetxController{
           ownershipType: coAp.selectedCityPerm.value.toIntOrZero().toString(),
           natureOfBusiness:cleanText(coAp.coApNatureOfBizController.text),
           staffStrength: coAp.coApStaffStrengthController.toIntOrZero(),
-          dateOfSalary:"2025-04-26T10:21:07.889Z",                ///its static
+          dateOfSalary:"",                ///its static
       );
 
 
@@ -551,7 +551,7 @@ class LoanApplicationController extends GetxController{
         name: cleanText(coAp.coApFullNameController.text),
         fatherName:cleanText(coAp.coApFatherNameController.text),
         gender: coAp.selectedGenderCoAP.value?? "",
-        dateOfBirth:"2025-04-26T10:21:07.889Z",                ///its static
+        dateOfBirth:"",                ///its static
         qualification: cleanText(qualiController.text),
         emailID:  cleanText(coAp.coApEmailController.text),
         maritalStatus: cleanText(coAp.coApMaritalController.text),
@@ -571,7 +571,7 @@ class LoanApplicationController extends GetxController{
     for (var fam in familyMemberApplList) {
       final famModel = FamilyMemberModel(
         name: cleanText(fam.famNameController.text),
-        birthDate: "2025-04-26T10:21:07.889Z",                ///its static
+        birthDate: "",                ///its static
         gender: fam.selectedGenderFam.value?? "",
         relationWithApplicant: cleanText(fam.famRelWithApplController.text),
         dependent: fam.isFamDependent ?? false,
@@ -585,7 +585,7 @@ class LoanApplicationController extends GetxController{
       final ccModel = CreditCardModel(
         companyBank: cleanText(cc.ccCompBankController.text),
         cardNumber: cleanText(cc.ccCardNumberController.text),
-        havingSince: "2025-04-29T09:38:11.038Z",                             ///its static
+        havingSince: "",                             ///its static
         avgMonthlySpending: cc.ccAvgMonSpendingController.toIntOrZero(),
       );
       creditCardModel.add(ccModel);
@@ -665,7 +665,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
               "loanApplicationNo":cleanText(lanController.text),
               "processingFee":proFeeController.toIntOrZero(),
               "chqDdSlipNo": cleanText(chqDDSNController.text),
-              "processingFeeDate":cleanDateText(Helper.convertToIso8601(proFeeDateController.text)),
+              "processingFeeDate":proFeeDateController.text.isNotEmpty?Helper.convertToIso8601(proFeeDateController.text):null,//cleanDateText(Helper.convertToIso8601(proFeeDateController.text)),
               "loanPurpose": cleanText(loPurposeController.text),
               "scheme": cleanText(schemeController.text),
               "repaymentType": cleanText(repayTpeController.text),
@@ -678,7 +678,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
                 "name": cleanText(applFullNameController.text),
                 "fatherName": cleanText(fatherNameController.text),
                 "gender": selectedGender.value.ddToString(),
-                "dateOfBirth": cleanDateText(Helper.convertToIso8601(dobController.text)),
+                "dateOfBirth": null,//cleanDateText(Helper.convertToIso8601(dobController.text)),
                 "qualification": cleanText(qualiController.text),
                 "maritalStatus": cleanText(maritalController.text),
                 "status": cleanText(emplStatusController.text),
@@ -718,7 +718,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
                   "ownershipType": selectedOwnershipList.value.ddToString(),//"string",
                   "natureOfBusiness": cleanText(natureOfBizController.text),
                   "staffStrength": staffStrengthController.toIntOrZero(),
-                  "dateOfSalary":salaryDateController.text.isEmpty?"": cleanDateText(Helper.convertToIso8601(salaryDateController.text)),              ///its static
+                  "dateOfSalary":null,//salaryDateController.text.isEmpty?"null": cleanDateText(Helper.convertToIso8601(salaryDateController.text)),              ///its static
                 }
               }
             },
@@ -755,7 +755,6 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
 
         ]
       );
-print("data in API cot-->${data.toString()}");
 
 
 

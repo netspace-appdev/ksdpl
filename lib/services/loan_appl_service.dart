@@ -10,7 +10,7 @@ import '../common/storage_service.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter/material.dart';
 class LoanApplService {
   static const String addLoanApplicationDetails = BaseUrl.baseUrl + 'LeadDetail/AddLoanApplicationDetails';
   static const String getLoanApplicationDetailsById = BaseUrl.baseUrl + 'LeadDetail/GetLoanApplicationDetailsById';
@@ -26,8 +26,9 @@ class LoanApplService {
         headers: headers,
         body: jsonEncode(body),
       );
+      const JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
-      print("Request Body: ${jsonEncode(body)}");
+      printInChunks("Req body 1===> ${jsonEncode(body)}");
       print("Response Status: ${response.statusCode}");
       print("Response Body: ${response.body}");
 
@@ -74,6 +75,13 @@ class LoanApplService {
     } catch (e) {
       print("Error: $e");
       throw Exception('Error while submitting: $e');
+    }
+  }
+
+  static void printInChunks(String text, {int chunkSize = 2048}) {
+    final pattern = RegExp('.{1,$chunkSize}', dotAll: true);
+    for (final match in pattern.allMatches(text)) {
+      print(match.group(0));
     }
   }
 }

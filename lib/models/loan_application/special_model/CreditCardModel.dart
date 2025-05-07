@@ -1,7 +1,7 @@
 class CreditCardModel {
   final String companyBank;
   final String cardNumber;
-  final String havingSince;
+  final String? havingSince;
   final int avgMonthlySpending;
 
   CreditCardModel({
@@ -15,7 +15,8 @@ class CreditCardModel {
     return {
       "companyBank": companyBank,
       "cardNumber": cardNumber,
-      "havingSince": havingSince,
+      if (havingSince != null && havingSince!.isNotEmpty)  "havingSince": havingSince,
+
       "avgMonthlySpending": avgMonthlySpending,
     };
   }

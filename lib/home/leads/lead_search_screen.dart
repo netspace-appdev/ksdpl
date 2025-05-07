@@ -816,7 +816,10 @@ class LeadSearchScreen extends StatelessWidget {
                   );
                 },
                 child: leadListController.isFilteredLoading.value
-                    ? CircularProgressIndicator(color: Colors.white)
+                    ? Container(
+                    width: 15,
+                    height: 15,
+                    child: Center(child: CircularProgressIndicator(color: AppColor.primaryColor, strokeWidth: 2,)))
                     : Text("Load More"),
               ),
             ),

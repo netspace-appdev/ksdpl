@@ -59,7 +59,7 @@ class Step3Form extends StatelessWidget {
                 label: AppText.finalPlotNo,
                 isRequired: false,
                 controller: loanApplicationController.propFinalPlotNoNoController,
-                inputType: TextInputType.name,
+                inputType: TextInputType.number,
                 hintText: AppText.enterFinalPlotNo,
                 validator:  ValidationHelper.validateName,
               ),
@@ -219,7 +219,7 @@ class Step3Form extends StatelessWidget {
               CustomLabeledTextField(
                 label: AppText.taluka,
                 isRequired: false,
-                controller: loanApplicationController.talukaController,
+                controller: loanApplicationController.propTalukaController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterTaluka,
                 validator: ValidationHelper.validateName,

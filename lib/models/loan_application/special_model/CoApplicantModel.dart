@@ -2,7 +2,7 @@ class CoApplicantModel {
   final String name;
   final String fatherName;
   final String gender;
-  final String dateOfBirth;
+  final String? dateOfBirth;
   final String qualification;
   final String maritalStatus;
   final String status;
@@ -38,7 +38,7 @@ class CoApplicantModel {
       "name": name,
       "fatherName": fatherName,
       "gender": gender,
-      "dateOfBirth": dateOfBirth,
+    if (dateOfBirth != null && dateOfBirth!.isNotEmpty)  "dateOfBirth": dateOfBirth,
       "qualification": qualification,
       "maritalStatus": maritalStatus,
       "status": status,
@@ -103,7 +103,7 @@ class EmployerDetailsModel {
   final String ownershipType;
   final String natureOfBusiness;
   final int staffStrength;
-  final String dateOfSalary;
+  final String? dateOfSalary;
 
   EmployerDetailsModel({
     required this.organizationName,
@@ -119,7 +119,8 @@ class EmployerDetailsModel {
       "ownershipType": ownershipType,
       "natureOfBusiness": natureOfBusiness,
       "staffStrength": staffStrength,
-      "dateOfSalary": dateOfSalary,
+      if (dateOfSalary != null && dateOfSalary!.isNotEmpty)  "dateOfSalary": dateOfSalary,
+
     };
   }
 }

@@ -635,8 +635,11 @@ class LeadListMain extends StatelessWidget {
                     isLoadMore: true,
                   );
                 },
-                child: leadListController.isLoading.value
-                    ? CircularProgressIndicator(color: Colors.white)
+                child: leadListController.isMainListMoreLoading.value
+                    ? Container(
+                  width: 15,
+                    height: 15,
+                    child: Center(child: CircularProgressIndicator(color: AppColor.primaryColor, strokeWidth: 2,)))
                     : Text("Load More"),
               ),
             ),

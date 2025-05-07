@@ -277,21 +277,6 @@ class DashboardController extends GetxController {
 
         });
 
-       /* var rawDate="2025-04-12 17:52:00.000";
-        DateTime dateTime = DateTime.parse(rawDate);
-
-
-        if (dateTime.isAfter(DateTime.now())) {
-          print("alarm");
-          await NotificationHelper.scheduleReminder(
-            id:1, //reminder.id,
-            title: "test",//reminder.title,
-            body: "demo",//reminder.body,
-            scheduledDateTime: dateTime,
-          );
-        } else {
-          print('⏰ Skipped past reminder:test');
-        }*/
 
         for (var i = 0; i < getRemindersModel.value!.data!.length; i++) {
           final reminder = getRemindersModel.value!.data![i];
@@ -319,16 +304,13 @@ class DashboardController extends GetxController {
           }
         }
 
-
-
-
-
         isLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
         getRemindersModel.value=null;
+
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }

@@ -727,7 +727,7 @@ class Helper{
       DateTime parsedDateTime = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(dateTimeStr);
 
       // Subtract one day
-      parsedDateTime = parsedDateTime.subtract(Duration(days: 1));
+     // parsedDateTime = parsedDateTime.subtract(Duration(days: 1));
 
       // Format to "dd-MM-yyyy, HH:mm a"
       return DateFormat("dd-MM-yyyy, HH:mm a").format(parsedDateTime);
