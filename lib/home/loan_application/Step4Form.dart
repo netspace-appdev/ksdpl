@@ -146,7 +146,7 @@ class Step4Form extends StatelessWidget {
                         label: AppText.monthlyIncome,
                         isRequired: false,
                         controller: fam.famMonthlyIncomeController,
-                        inputType: TextInputType.name,
+                        inputType: TextInputType.number,
                         hintText: AppText.enterMonthlyIncome,
                         validator: ValidationHelper.validatePhoneNumber,
                       ),

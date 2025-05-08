@@ -1,73 +1,108 @@
-/*
-debugPrintKeyVal("leadId", leadId);
-debugPrintKeyVal("dsaCode", cleanText(dsaCodeController.text));
-debugPrintKeyVal("loanApplicationNo", cleanText(lanController.text));
-debugPrintKeyVal("bankId", selectedBank.value.toIntOrZero());
-debugPrintKeyVal("branchId", selectedBankBranch.value.toIntOrZero());
-debugPrintKeyVal("typeOfLoanId", 0);
-debugPrintKeyVal("panCardNumber", cleanText(panController.text));
-debugPrintKeyVal("addharCardNumber", cleanText(aadharController.text));
-debugPrintKeyVal("loanAmountApplied", laAppliedController.toIntOrZero());
-debugPrintKeyVal("uniqueLeadNumber", cleanText(ulnController.text));
-debugPrintKeyVal("channelId", selectedChannel.value.toIntOrZero());
-debugPrintKeyVal("channelCode", cleanText(chCodeController.text));
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-// Inner object - detailForLoanApplication
-debugPrintKeyVal("detail.branch", selectedBankBranch.value.toIntOrZero());
-debugPrintKeyVal("detail.dsaCode", cleanText(dsaCodeController.text));
-debugPrintKeyVal("detail.dsaStaffName", cleanText(dsaStaffNController.text));
-debugPrintKeyVal("detail.processingFee", proFeeController.toIntOrZero());
-debugPrintKeyVal("detail.chqDdSlipNo", cleanText(chqDDSNController.text));
-debugPrintKeyVal("detail.loanPurpose", cleanText(loPurposeController.text));
-debugPrintKeyVal("detail.scheme", cleanText(schemeController.text));
-debugPrintKeyVal("detail.repaymentType", cleanText(repayTpeController.text));
-debugPrintKeyVal("detail.typeOfLoan", cleanText(loanTenureYController.text));
-debugPrintKeyVal("detail.loanTenureYears", loanTenureYController.toIntOrZero());
-debugPrintKeyVal("detail.monthlyInstallment", monthInstaController.toIntOrZero());
-debugPrintKeyVal("detail.previousLoanApplied", isPreviousLoanApplied ?? false);
+class BeautifulScreen extends StatelessWidget {
+  final List<String> imageUrls = [
+    'https://via.placeholder.com/400x200.png?text=Banner+1',
+    'https://via.placeholder.com/400x200.png?text=Banner+2',
+    'https://via.placeholder.com/400x200.png?text=Banner+3',
+  ];
 
-// Applicant Info
-debugPrintKeyVal("applicant.name", cleanText(applFullNameController.text));
-debugPrintKeyVal("applicant.fatherName", cleanText(fatherNameController.text));
-debugPrintKeyVal("applicant.gender", selectedGender.value.ddToString());
-debugPrintKeyVal("applicant.qualification", cleanText(qualiController.text));
-debugPrintKeyVal("applicant.maritalStatus", cleanText(maritalController.text));
-debugPrintKeyVal("applicant.nationality", cleanText(nationalityController.text));
-debugPrintKeyVal("applicant.occupation", cleanText(occupationController.text));
-debugPrintKeyVal("applicant.occupationSector", cleanText(occSectorController.text));
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      builder: (_, __) => Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text(
+            'Pro UI Screen',
+            style: GoogleFonts.poppins(fontSize: 20.sp, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.deepPurple,
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CarouselSlider(
+                items: imageUrls.map((url) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(16.r),
+                    child: CachedNetworkImage(
+                      imageUrl: url,
+                      placeholder: (_, __) => shimmerBox(),
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  );
+                }).toList(),
+                options: CarouselOptions(
+                  height: 180.h,
+                  enlargeCenterPage: true,
+                  autoPlay: true,
+                  aspectRatio: 16 / 9,
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enableInfiniteScroll: true,
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                ),
+              ),
+              SizedBox(height: 24.h),
+              Text(
+                'Featured Section',
+                style: GoogleFonts.poppins(fontSize: 18.sp, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(height: 12.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(3, (index) => featureCard(index + 1)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-// Address (Present)
-debugPrintKeyVal("present.houseFlatNo", cleanText(houseFlatController.text));
-debugPrintKeyVal("present.buildingNo", cleanText(buildingNoController.text));
-debugPrintKeyVal("present.societyName", cleanText(societyNameController.text));
-debugPrintKeyVal("present.locality", cleanText(localityController.text));
-debugPrintKeyVal("present.streetName", cleanText(streetNameController.text));
-debugPrintKeyVal("present.city", leadDDController.selectedCityCurr.value.ddToString());
-debugPrintKeyVal("present.taluka", cleanText(talukaController.text));
-debugPrintKeyVal("present.district", leadDDController.selectedDistrictCurr.value.toIntOrZero());
-debugPrintKeyVal("present.state", leadDDController.selectedStateCurr.value.toIntOrZero());
-debugPrintKeyVal("present.country", selectedCountry.value.toIntOrZero());
-debugPrintKeyVal("present.pinCode", cleanText(pinCodeController.text));
+  Widget shimmerBox() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Container(
+        width: double.infinity,
+        height: 180.h,
+        color: Colors.white,
+      ),
+    );
+  }
 
-// Address (Permanent)
-debugPrintKeyVal("perm.houseFlatNo", cleanText(houseFlatPermController.text));
-debugPrintKeyVal("perm.buildingNo", cleanText(buildingNoPermController.text));
-debugPrintKeyVal("perm.societyName", cleanText(societyNamePermController.text));
-debugPrintKeyVal("perm.locality", cleanText(localityPermController.text));
-debugPrintKeyVal("perm.streetName", cleanText(streetNamePermController.text));
-debugPrintKeyVal("perm.city", leadDDController.selectedStatePerm.value.toIntOrZero());
-debugPrintKeyVal("perm.taluka", cleanText(talukaPermController.text));
-debugPrintKeyVal("perm.district", leadDDController.selectedDistrictPerm.value.toIntOrZero());
-debugPrintKeyVal("perm.state", leadDDController.selectedStatePerm.value.toIntOrZero());
-debugPrintKeyVal("perm.country", selectedCountryPerm.value.toIntOrZero());
-debugPrintKeyVal("perm.pinCode", cleanText(pinCodePermController.text));
-
-debugPrintKeyVal("applicant.emailID", cleanText(applEmailController.text));
-debugPrintKeyVal("applicant.mobile", cleanText(applMobController.text));
-
-// Employer
-debugPrintKeyVal("employer.organizationName", cleanText(orgNameController.text));
-debugPrintKeyVal("employer.ownershipType", selectedOwnershipList.value.ddToString());
-debugPrintKeyVal("employer.natureOfBusiness", cleanText(natureOfBizController.text));
-debugPrintKeyVal("employer.staffStrength", staffStrengthController.toIntOrZero());
-*/
+  Widget featureCard(int index) {
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 4.w),
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: Colors.deepPurple.shade100,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Column(
+          children: [
+            Icon(Icons.star, size: 32.sp, color: Colors.deepPurple),
+            SizedBox(height: 8.h),
+            Text(
+              'Feature $index',
+              style: GoogleFonts.poppins(fontSize: 14.sp, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

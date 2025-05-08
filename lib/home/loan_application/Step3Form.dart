@@ -220,7 +220,7 @@ class Step3Form extends StatelessWidget {
                 label: AppText.taluka,
                 isRequired: false,
                 controller: loanApplicationController.propTalukaController,
-                inputType: TextInputType.number,
+                inputType: TextInputType.name,
                 hintText: AppText.enterTaluka,
                 validator: ValidationHelper.validateName,
               ),

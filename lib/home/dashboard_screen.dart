@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/common/skelton.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
@@ -181,7 +182,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   Obx(()=>  Text(
                     greetingController.greetingMsg.value.toString(),
-                    style: const TextStyle(
+                    style:  GoogleFonts.poppins(
                         fontSize: 12,
 
                         color: AppColor.grey3
@@ -189,7 +190,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   )),
                   Text(
                     infoController.firstName.value.toString(),
-                    style: const TextStyle(
+                    style:  GoogleFonts.roboto(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
 
@@ -676,14 +677,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+         Padding(
           padding:  EdgeInsets.symmetric(vertical: 10),
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 AppText.upcomingBirthdays,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: GoogleFonts.merriweather(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -815,11 +816,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+         Padding(
           padding:  EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: Text(
             "Latest News",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: GoogleFonts.merriweather(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
         const SizedBox(height: 10),
@@ -947,13 +948,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding:  EdgeInsets.symmetric(vertical: 10),
+          padding:  EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 AppText.upcomingFollowUp,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: GoogleFonts.merriweather(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               InkWell(
                 onTap: (){
@@ -1147,14 +1148,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+         Padding(
           padding:  EdgeInsets.symmetric(vertical: 10),
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "Today's Work Status",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:  GoogleFonts.merriweather(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),

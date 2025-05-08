@@ -50,7 +50,7 @@ class CoApplicantDetailController {
   final TextEditingController coApNatureOfBizController = TextEditingController();
   final TextEditingController coApStaffStrengthController = TextEditingController();
   final TextEditingController coApSalaryDateController = TextEditingController();
-
+  var isSameAddressApl = false.obs;
   var selectedCountrCurr = Rxn<String>();
   var selectedCountryPerm = Rxn<String>();
 
@@ -94,7 +94,7 @@ class CoApplicantDetailController {
   RxList<city.Data> cityListCurr = <city.Data>[].obs;
 
 
-  void  getDistrictByStateIdCurrApi({
+  Future<void>   getDistrictByStateIdCurrApi({
     required stateId
   }) async {
     try {
@@ -137,7 +137,7 @@ class CoApplicantDetailController {
     }
   }
 
-  void  getDistrictByStateIdPermApi({
+ Future<void>  getDistrictByStateIdPermApi({
     required stateId
   }) async {
     try {
@@ -180,7 +180,7 @@ class CoApplicantDetailController {
     }
   }
 
-  void  getCityByDistrictIdCurrApi({
+  Future<void>   getCityByDistrictIdCurrApi({
     required districtId
   }) async {
     try {
@@ -195,7 +195,8 @@ class CoApplicantDetailController {
 
         getCityByDistrictIdModelCurr.value= city.GetCityByDistrictIdModel.fromJson(data);
 
-
+        final List<city.Data> cities = getCityByDistrictIdModelCurr.value?.data ?? [];
+        cityListCurr.value = List<city.Data>.from(cities);
 
         isCityLoadingCurr(false);
 
@@ -221,7 +222,7 @@ class CoApplicantDetailController {
     }
   }
 
-  void  getCityByDistrictIdPermApi({
+  Future<void>   getCityByDistrictIdPermApi({
     required districtId
   }) async {
     try {
@@ -262,6 +263,31 @@ class CoApplicantDetailController {
     }
   }
 
+  void copyPresentToPermanentAddress() {
+    // Text field values
+    coApPermHouseFlatController.text = coApCurrHouseFlatController.text;
+    coApPermBuildingNoController.text = coApCurrBuildingNoController.text;
+    coApPermSocietyNameController.text = coApCurrSocietyNameController.text;
+    coApPermLocalityController.text = coApCurrLocalityController.text;
+    coApPermStreetNameController.text = coApCurrStreetNameController.text;
+    coApPermPinCodeController.text = coApCurrPinCodeController.text;
+    coApPermTalukaController.text = coApCurrTalukaController.text;
 
+
+    // Copy state
+    selectedStatePerm.value = selectedStateCurr.value;
+
+    // Now fetch districts and wait for the lists to update
+    getDistrictByStateIdPermApi(stateId: selectedStatePerm.value).then((_) {
+     districtListPerm.value = List.from(districtListCurr);
+      selectedDistrictPerm.value = selectedDistrictCurr.value;
+
+      // Now fetch cities and wait for the city list to update
+      getCityByDistrictIdPermApi(districtId: selectedDistrictPerm.value).then((_) {
+        cityListPerm.value = List.from(cityListCurr);
+        selectedCityPerm.value = selectedCityCurr.value;
+      });
+    });
+  }
 
 }

@@ -543,19 +543,21 @@ class LoanApplicationController extends GetxController{
           ownershipType: coAp.selectedCityPerm.value.toIntOrZero().toString(),
           natureOfBusiness:cleanText(coAp.coApNatureOfBizController.text),
           staffStrength: coAp.coApStaffStrengthController.toIntOrZero(),
-          dateOfSalary:"",                ///its static
+          dateOfSalary:coAp.coApSalaryDateController.text.isNotEmpty?Helper.convertToIso8601(coAp.coApSalaryDateController.text):"",                ///its static
       );
 
+
+      print("coap gender--->${coAp.selectedGenderCoAP.value}");
 
       final coApModel = CoApplicantModel(
         name: cleanText(coAp.coApFullNameController.text),
         fatherName:cleanText(coAp.coApFatherNameController.text),
         gender: coAp.selectedGenderCoAP.value?? "",
-        dateOfBirth:"",                ///its static
-        qualification: cleanText(qualiController.text),
+        dateOfBirth:coAp.coApDobController.text.isNotEmpty?Helper.convertToIso8601(coAp.coApDobController.text):"",                ///its static
+        qualification: cleanText(coAp.coApQualiController.text),
         emailID:  cleanText(coAp.coApEmailController.text),
         maritalStatus: cleanText(coAp.coApMaritalController.text),
-        status: "",                                            ///its static
+        status:cleanText(coAp.coApEmplStatusController.text),                                            ///its static
         nationality: cleanText(coAp.coApNationalityController.text),
         occupation: cleanText(coAp.coApOccupationController.text),
         occupationSector: cleanText(coAp.coApOccupationController.text),
@@ -571,7 +573,7 @@ class LoanApplicationController extends GetxController{
     for (var fam in familyMemberApplList) {
       final famModel = FamilyMemberModel(
         name: cleanText(fam.famNameController.text),
-        birthDate: "",                ///its static
+        birthDate: fam.famDobController.text.isNotEmpty?Helper.convertToIso8601(fam.famDobController.text):"",                      ///its static
         gender: fam.selectedGenderFam.value?? "",
         relationWithApplicant: cleanText(fam.famRelWithApplController.text),
         dependent: fam.isFamDependent ?? false,
@@ -635,23 +637,16 @@ class LoanApplicationController extends GetxController{
 
 print("addLoanApplicationApi");
 
-print("Helper.formatDate(proFeeDateController.text)===>${proFeeDateController.text.toString()}");
-print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFeeDateController.text)}");
-
-
-
-      print("leadId==>${leadId.value}");
-      print("salarydate==>${cleanDateText(Helper.convertToIso8601(salaryDateController.text))}");
-      print("salaryDateController.text==>${salaryDateController.text}");
+      print("here propid===>${cleanText(propPropIdController.text)}");
       var data = await LoanApplService.addLoanApplicationApi(
         body:[
           {
             "id": leadId.value,
             "dsaCode": cleanText(dsaCodeController.text),
             "loanApplicationNo": cleanText(lanController.text),
-            "bankId": selectedBank.value,
-            "branchId": selectedBankBranch.value,
-            "typeOfLoanId": selectedProdTypeOrTypeLoan.value,
+            "bankId": selectedBank.value??0,
+            "branchId": selectedBankBranch.value??0,
+            "typeOfLoanId": selectedProdTypeOrTypeLoan.value??0,
             "panCardNumber":  cleanText(panController.text),
             "addharCardNumber":  cleanText(aadharController.text),
             "loanAmountApplied": laAppliedController.toIntOrZero(),
@@ -665,7 +660,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
               "loanApplicationNo":cleanText(lanController.text),
               "processingFee":proFeeController.toIntOrZero(),
               "chqDdSlipNo": cleanText(chqDDSNController.text),
-              "processingFeeDate":proFeeDateController.text.isNotEmpty?Helper.convertToIso8601(proFeeDateController.text):null,//cleanDateText(Helper.convertToIso8601(proFeeDateController.text)),
+              "processingFeeDate":proFeeDateController.text.isNotEmpty?Helper.convertToIso8601(proFeeDateController.text):null,
               "loanPurpose": cleanText(loPurposeController.text),
               "scheme": cleanText(schemeController.text),
               "repaymentType": cleanText(repayTpeController.text),
@@ -678,7 +673,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
                 "name": cleanText(applFullNameController.text),
                 "fatherName": cleanText(fatherNameController.text),
                 "gender": selectedGender.value.ddToString(),
-                "dateOfBirth": null,//cleanDateText(Helper.convertToIso8601(dobController.text)),
+                "dateOfBirth": dobController.text.isNotEmpty?Helper.convertToIso8601(dobController.text):null,
                 "qualification": cleanText(qualiController.text),
                 "maritalStatus": cleanText(maritalController.text),
                 "status": cleanText(emplStatusController.text),
@@ -718,18 +713,19 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
                   "ownershipType": selectedOwnershipList.value.ddToString(),//"string",
                   "natureOfBusiness": cleanText(natureOfBizController.text),
                   "staffStrength": staffStrengthController.toIntOrZero(),
-                  "dateOfSalary":null,//salaryDateController.text.isEmpty?"null": cleanDateText(Helper.convertToIso8601(salaryDateController.text)),              ///its static
+                  "dateOfSalary":salaryDateController.text.isNotEmpty?Helper.convertToIso8601(salaryDateController.text):null,             ///its static
                 }
               }
             },
             "coApplicant": coApPayload,
             "propertyDetails": {
+
               "propertyId": cleanText(propPropIdController.text),
               "surveyNo": cleanText(propSurveyNoController.text),
               "finalPlotNo": cleanText(propFinalPlotNoNoController.text),
               "blockNo": cleanText(propBlockNoController.text),
               "flatHouseNo": cleanText(propHouseFlatController.text),
-              "societyBuildingName":  cleanText(propSocietyNameController.text),
+              "societyBuildingName":  cleanText(propBuildingNameController.text),
               "streetName":  cleanText(propStreetNameController.text),
               "locality":  cleanText(propLocalityController.text),
               "city": selectedCityProp.value.ddToString(),
@@ -919,6 +915,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
 
         dsaCodeController.text = data?.dsaCode ?? '';
         lanController.text = data?.loanApplicationNo ?? '';
+        print("bank Id==>${data?.bankId}");
         selectedBank.value =  data?.bankId ?? 0;
 
         await leadDDController.getAllBranchByBankIdApi(bankId: data?.bankId.toString() ?? "0");
@@ -935,18 +932,11 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
         ulnController.text = data?.uniqueLeadNumber ?? '';
         selectedChannel.value = data?.channelId ?? 0;
         chCodeController.text = data?.channelCode ?? '';
-//CoApplicant details
-     /*   Map<String, dynamic>? coApplicantMap;
-        if (getLoanApplIdModel.value!.data!.coApplicantDetail != null) {
-          print(".coApplicantDetail==>${getLoanApplIdModel.value!.data!.coApplicantDetail!}");
-          coApplicantMap = jsonDecode(getLoanApplIdModel.value!.data!.coApplicantDetail!);
-          print("coApplicantMap===>${coApplicantMap}");
-          print("Name===>${coApplicantMap?['Name']}");
 
-
-
-        }*/
         populateCoApplicantControllers();
+        populatePropertyDetails();
+        populateFinancialDetails();
+        populateFamilyControllers();
         isLoadingMainScreen(false);
 
       }else{
@@ -965,7 +955,7 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
     }
   }
 
-  void populateCoApplicantControllers() {
+  void populateCoApplicantControllers() async{
     coApplicantList.clear();
     final jsonStr = getLoanApplIdModel.value!.data!.coApplicantDetail;
 
@@ -980,7 +970,48 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
           coApController.coApFullNameController.text = item["Name"] ?? '';
           coApController.coApFatherNameController.text = item["FatherName"] ?? '';
           coApController.selectedGenderCoAP.value = item["Gender"] ?? '';
+          coApController.coApDobController.text =item["DateOfBirth"]==""?"": Helper.convertFromIso8601(item["DateOfBirth"]) ?? '';
+          coApController.coApQualiController.text = item["Qualification"] ?? '';
+          coApController.coApMaritalController.text = item["MaritalStatus"] ?? '';
+          coApController.coApEmplStatusController.text = item["Status"] ?? '';
+          coApController.coApNationalityController.text = item["Nationality"] ?? '';
+          coApController.coApOccupationController.text = item["Occupation"] ?? '';
+          coApController.coApOccSectorController.text = item["OccupationSector"] ?? '';
+          coApController.coApEmailController.text = item["EmailID"] ?? '';
+          coApController.coApMobController.text = item["Mobile"] ?? '';
 
+          final presentAdd = item?['PresentAddress'];
+          coApController.coApCurrHouseFlatController.text = presentAdd?["HouseFlatNo"] ?? '';
+          coApController.coApCurrBuildingNoController.text = presentAdd?["BuildingNo"] ?? '';
+          coApController.coApCurrSocietyNameController.text = presentAdd?["SocietyName"] ?? '';
+          coApController.coApCurrLocalityController.text = presentAdd?["Locality"] ?? '';
+          coApController.coApCurrStreetNameController.text = presentAdd?["StreetName"] ?? '';
+          coApController.coApCurrPinCodeController.text = presentAdd?["PinCode"] ?? '';
+          coApController.selectedStateCurr.value =presentAdd?['State']==""?"0":presentAdd?['State'] ?? '0';
+          await coApController.getDistrictByStateIdCurrApi(stateId:  coApController.selectedStateCurr.value);
+          coApController.selectedDistrictCurr.value =presentAdd?['District']==""?"0":presentAdd?['District'] ?? '0';
+          await coApController.getCityByDistrictIdCurrApi(districtId: coApController.selectedDistrictCurr.value);
+          coApController.selectedCityCurr.value =presentAdd?['City']==""?"0":presentAdd?['City'] ?? '0';
+          coApController.coApCurrTalukaController.text = presentAdd?["Taluka"] ?? '';
+          print("country___curr-->${presentAdd?['Country']}");
+          coApController.selectedCountrCurr.value =presentAdd?['Country']==""?"":countryList[int.parse(presentAdd?['Country'])] ?? '0';
+
+
+          final permanentAdd = item?['PermanentAddress'];
+          coApController.coApPermHouseFlatController.text = permanentAdd?["HouseFlatNo"] ?? '';
+          coApController.coApPermBuildingNoController.text = permanentAdd?["BuildingNo"] ?? '';
+          coApController.coApPermSocietyNameController.text = permanentAdd?["SocietyName"] ?? '';
+          coApController.coApPermLocalityController.text = permanentAdd?["Locality"] ?? '';
+          coApController.coApPermStreetNameController.text = permanentAdd?["StreetName"] ?? '';
+          coApController.coApPermPinCodeController.text = permanentAdd?["PinCode"] ?? '';
+          coApController.selectedStatePerm.value =permanentAdd?['State']==""?"0":permanentAdd?['State'] ?? '0';
+          await coApController.getDistrictByStateIdPermApi(stateId:  coApController.selectedStatePerm.value);
+          coApController.selectedDistrictPerm.value =permanentAdd?['District']==""?"0":permanentAdd?['District'] ?? '0';
+          await coApController.getCityByDistrictIdPermApi(districtId: coApController.selectedDistrictPerm.value);
+          coApController.selectedCityPerm.value =permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0';
+          coApController.coApPermTalukaController.text = permanentAdd?["Taluka"] ?? '';
+          print("country___curr-->${permanentAdd?['Country']}");
+          coApController.selectedCountryPerm.value =permanentAdd?['Country']==""?"":countryList[int.parse(permanentAdd?['Country'])] ?? '0';
 
           coApplicantList.add(coApController);
         }
@@ -990,7 +1021,81 @@ print("Helper.formatDate(proFeeDateController.text)===>${Helper.formatDate(proFe
     }
   }
 
+  void populatePropertyDetails() async{
+    Map<String, dynamic>? propDetails;
+    if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
+      print("det==>${getLoanApplIdModel.value!.data!.loanDetails!}");
+      propDetails = jsonDecode(getLoanApplIdModel.value!.data!.loanDetails!);
+      print("detailMap===>${propDetails}");
+      print("dsastaff===>${propDetails?['PropertyId']}");
 
+      propPropIdController.text = propDetails?['PropertyId'] ?? '';
+      propSurveyNoController.text = propDetails?['SurveyNo'] ?? '';
+      propFinalPlotNoNoController.text = propDetails?['FinalPlotNo'] ?? '';
+      propBlockNoController.text = propDetails?['BlockNo'] ?? '';
+      propHouseFlatController.text = propDetails?['FlatHouseNo'] ?? '';
+      propBuildingNameController.text = propDetails?['SocietyBuildingName'] ?? '';
+      propStreetNameController.text = propDetails?['StreetName'] ?? '';
+      propLocalityController.text = propDetails?['Locality'] ?? '';
+      propLocalityController.text = propDetails?['Locality'] ?? '';
+      propTalukaController.text = propDetails?['Taluka'] ?? '';
+      propPinCodeController.text = propDetails?['Pincode'] ?? '';
+      selectedStateProp.value = propDetails?['State']==""?"0":propDetails?['State'] ?? '0';
+      await leadDDController.getDistrictByStateIdCurrApi(stateId: selectedStateProp.value);
+      selectedDistrictProp.value =propDetails?['District']==""?"0":propDetails?['District'] ?? '0';
+      await leadDDController.getCityByDistrictIdCurrApi(districtId: selectedDistrictProp.value);
+      selectedCityProp.value = propDetails?['City']==""?"0":propDetails?['City'] ?? '0';
+    }
+  }
+
+  void populateFinancialDetails() async{
+    Map<String, dynamic>? finDetails;
+    if (getLoanApplIdModel.value!.data!.financialDetails != null) {
+      print("det==>${getLoanApplIdModel.value!.data!.financialDetails!}");
+      finDetails = jsonDecode(getLoanApplIdModel.value!.data!.financialDetails!);
+
+      print("GrossMonthlySalary===>${finDetails?['GrossMonthlySalary']}");
+
+      fdGrossMonthlySalaryController.text = finDetails?['GrossMonthlySalary'].toString() ?? '';
+      fdnNtMonthlySalaryController.text = finDetails?['NetMonthlySalary'].toString() ?? '';
+      fdAnnualBonusController.text = finDetails?['AnnualBonus'].toString() ?? '';
+      fdAvgMonOvertimeController.text = finDetails?['AvgMonthlyOvertime'].toString() ?? '';
+      fdAvgMonCommissionController.text = finDetails?['AvgMonthlyCommission'].toString() ?? '';
+      fdAMonthlyPfDeductionController.text = finDetails?['MonthlyPFDeduction'].toString() ?? '';
+      fdOtherMonthlyIncomeController.text = finDetails?['OtherMonthlyIncome'].toString() ?? '';
+
+    }
+  }
+
+  void populateFamilyControllers() async{
+    familyMemberApplList.clear();
+    final jsonStr = getLoanApplIdModel.value!.data!.familyMembers;
+
+    if (jsonStr != null) {
+      final decoded = jsonDecode(jsonStr);
+
+      // Check if it's actually a List of Maps
+      if (decoded is List) {
+        for (var item in decoded) {
+          final famController = FamilyMemberController();
+          print("dob===>${item["BirthDate"]}");
+
+          // famController.coApFullNameController.text = item["Name"] ?? '';
+          famController.famNameController.text= item["Name"] ?? '';
+          famController.famDobController.text =item["BirthDate"]==""?"": Helper.convertFromIso8601(item["BirthDate"]) ?? '';
+          famController.selectedGenderFam.value = item["Gender"] ?? '';
+          famController.famRelWithApplController.text= item["RelationWithApplicant"] ?? '';
+          famController.selectedFamDependent.value= item["Dependent"]==true?"0":"1";
+          famController.famMonthlyIncomeController.text= item["MonthlyIncome"].toString() ?? '';
+          famController.famEmployedWithController.text= item["EmployedWith"] ?? '';
+
+          familyMemberApplList.add(famController);
+        }
+      } else {
+        print("Expected a List but got: ${decoded.runtimeType}");
+      }
+    }
+  }
 }
 
 extension ParseStringExtension on String? {

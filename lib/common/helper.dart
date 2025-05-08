@@ -406,7 +406,7 @@ class AppText{
   static const String monthlyPfDeduction = "Monthly PF Deduction";
   static const String enterMonthlyPfDeduction = "Enter Monthly PF Deduction";
   static const String enterOtherMonthlyIncome = "Enter Other Monthly Monthly";
-  static const String otherMonthlyIncome = "Other Monthly Monthly";
+  static const String otherMonthlyIncome = "Other Monthly Income";
 
   static const String references = "References";
   static const String enterReferenceName = "Enter Reference Name";

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ksdpl/services/root_binding.dart';
@@ -48,6 +49,9 @@ Future<void> requestPermission() async {
 ///push end
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   await Firebase.initializeApp();
   ///Push
 
@@ -93,22 +97,30 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     final ThemeController themeController = Get.find();
-    return Obx(()=>GetMaterialApp(
-      //initialBinding: RootBinding(),
-      debugShowCheckedModeBanner: false,
-      title: 'KSDPL',
-      theme: ThemeData.light(
-        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+        padding: EdgeInsets.zero,
+        viewInsets: EdgeInsets.zero,
+        viewPadding: EdgeInsets.zero,
       ),
-
-      darkTheme: ThemeData.dark(),
-      themeMode: themeController.themeMode.value,
-      getPages: routes,
-      initialRoute:"/",
-    ));
+      child: Obx(()=>GetMaterialApp(
+        //initialBinding: RootBinding(),
+        debugShowCheckedModeBanner: false,
+        title: 'KSDPL',
+        theme: ThemeData.light(
+          //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+      
+        ),
+      
+        darkTheme: ThemeData.dark(),
+        themeMode: themeController.themeMode.value,
+        getPages: routes,
+        initialRoute:"/",
+      )),
+    );
   }
 }
 

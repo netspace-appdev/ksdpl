@@ -112,9 +112,9 @@ class Step2Form extends StatelessWidget {
 
                             Obx(()=>  Row(
                               children: [
-                                _buildRadioOption("Male"),
-                                _buildRadioOption("Female"),
-                                _buildRadioOption("Other"),
+                                _buildRadioOption("Male",coAp ),
+                                _buildRadioOption("Female",coAp),
+                                _buildRadioOption("Other",coAp),
                               ],
                             )
                             ),
@@ -206,6 +206,7 @@ class Step2Form extends StatelessWidget {
 
                             ),
 
+
                           ],
                         ),
 
@@ -231,7 +232,7 @@ class Step2Form extends StatelessWidget {
                               label: AppText.houseFlatNo,
                               isRequired: false,
                               controller: coAp.coApCurrHouseFlatController,
-                              inputType: TextInputType.name,
+                              inputType: TextInputType.number,
                               hintText: AppText.enterHouseFlatNo,
                               validator:  ValidationHelper.validateName,
                             ),
@@ -239,7 +240,7 @@ class Step2Form extends StatelessWidget {
                               label: AppText.buildingNo,
                               isRequired: false,
                               controller: coAp.coApCurrBuildingNoController,
-                              inputType: TextInputType.name,
+                              inputType: TextInputType.number,
                               hintText: AppText.enterBuildingNo,
                               validator:  ValidationHelper.validateName,
                             ),
@@ -384,7 +385,7 @@ class Step2Form extends StatelessWidget {
                               label: AppText.taluka,
                               isRequired: false,
                               controller: coAp.coApCurrTalukaController,
-                              inputType: TextInputType.number,
+                              inputType: TextInputType.name,
                               hintText: AppText.enterTaluka,
                               validator: ValidationHelper.validateName,
                             ),
@@ -408,13 +409,39 @@ class Step2Form extends StatelessWidget {
                                 getName: (item) => item,
                                 selectedValue: coAp.selectedCountrCurr.value,
                                 onChanged: (value) {
-                                  loanApplicationController.selectedCountry.value =  value;
+                                  coAp.selectedCountrCurr.value =  value;
                                 },
                               );
                             }),
 
                             const SizedBox(height: 20),
 
+                            Obx(() => Row(
+                              children: [
+                                Checkbox(
+                                  activeColor: AppColor.secondaryColor,
+                                  value: coAp.isSameAddressApl.value,
+                                  onChanged: (val) {
+                                    coAp.isSameAddressApl.value = val ?? false;
+
+                                    if (val == true) {
+                                      coAp.copyPresentToPermanentAddress();
+                                    }
+                                  },
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "Use Present Address as Permanent Address",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.secondaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                            const SizedBox(height: 20),
                           ],
                         ),
                       ],
@@ -438,7 +465,7 @@ class Step2Form extends StatelessWidget {
                               label: AppText.houseFlatNo,
                               isRequired: false,
                               controller: coAp.coApPermHouseFlatController,
-                              inputType: TextInputType.name,
+                              inputType: TextInputType.number,
                               hintText: AppText.enterHouseFlatNo,
                               validator:  ValidationHelper.validateName,
                             ),
@@ -446,7 +473,7 @@ class Step2Form extends StatelessWidget {
                               label: AppText.buildingNo,
                               isRequired: false,
                               controller: coAp.coApPermBuildingNoController,
-                              inputType: TextInputType.name,
+                              inputType: TextInputType.number,
                               hintText: AppText.enterBuildingNo,
                               validator:  ValidationHelper.validateName,
                             ),
@@ -590,8 +617,8 @@ class Step2Form extends StatelessWidget {
                             CustomLabeledTextField(
                               label: AppText.taluka,
                               isRequired: false,
-                              controller: coAp.coApCurrTalukaController,
-                              inputType: TextInputType.number,
+                              controller: coAp.coApPermTalukaController,
+                              inputType: TextInputType.name,
                               hintText: AppText.enterTaluka,
                               validator: ValidationHelper.validateName,
                             ),
@@ -621,7 +648,6 @@ class Step2Form extends StatelessWidget {
                             }),
 
                             const SizedBox(height: 20),
-
                           ],
                         ),
                       ],
@@ -801,14 +827,14 @@ class Step2Form extends StatelessWidget {
       ),
     );
   }
-  Widget _buildRadioOption(String gender) {
+  Widget _buildRadioOption(String gender, CoApplicantDetailController coAp) {
     return Row(
       children: [
         Radio<String>(
           value: gender,
-          groupValue: loanApplicationController.selectedGenderCoAP.value,
+          groupValue: coAp.selectedGenderCoAP.value,
           onChanged: (value) {
-            loanApplicationController.selectedGenderCoAP.value=value;
+            coAp.selectedGenderCoAP.value=value;
           },
         ),
         Text(gender),
