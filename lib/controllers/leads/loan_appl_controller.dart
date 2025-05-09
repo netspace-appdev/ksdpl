@@ -576,7 +576,7 @@ class LoanApplicationController extends GetxController{
         birthDate: fam.famDobController.text.isNotEmpty?Helper.convertToIso8601(fam.famDobController.text):"",                      ///its static
         gender: fam.selectedGenderFam.value?? "",
         relationWithApplicant: cleanText(fam.famRelWithApplController.text),
-        dependent: fam.isFamDependent ?? false,
+        dependent: fam.isFamDependent,
         monthlyIncome: fam.famMonthlyIncomeController.toIntOrZero(),
         employedWith: cleanText(fam.famEmployedWithController.text)
       );
@@ -587,7 +587,7 @@ class LoanApplicationController extends GetxController{
       final ccModel = CreditCardModel(
         companyBank: cleanText(cc.ccCompBankController.text),
         cardNumber: cleanText(cc.ccCardNumberController.text),
-        havingSince: "",                             ///its static
+        havingSince:cc.ccHavingSinceController.text.isNotEmpty?Helper.convertToIso8601(cc.ccHavingSinceController.text):"",                                   ///its static
         avgMonthlySpending: cc.ccAvgMonSpendingController.toIntOrZero(),
       );
       creditCardModel.add(ccModel);
@@ -937,6 +937,8 @@ print("addLoanApplicationApi");
         populatePropertyDetails();
         populateFinancialDetails();
         populateFamilyControllers();
+        populateCreditCardControllers();
+        populateReferenceControllers();
         isLoadingMainScreen(false);
 
       }else{
@@ -1085,11 +1087,74 @@ print("addLoanApplicationApi");
           famController.famDobController.text =item["BirthDate"]==""?"": Helper.convertFromIso8601(item["BirthDate"]) ?? '';
           famController.selectedGenderFam.value = item["Gender"] ?? '';
           famController.famRelWithApplController.text= item["RelationWithApplicant"] ?? '';
-          famController.selectedFamDependent.value= item["Dependent"]==true?"0":"1";
+          famController.selectedFamDependent.value= item["Dependent"]== true ? "Yes" : "No";
           famController.famMonthlyIncomeController.text= item["MonthlyIncome"].toString() ?? '';
           famController.famEmployedWithController.text= item["EmployedWith"] ?? '';
 
           familyMemberApplList.add(famController);
+        }
+      } else {
+        print("Expected a List but got: ${decoded.runtimeType}");
+      }
+    }
+  }
+
+  void populateCreditCardControllers() async{
+    creditCardsList.clear();
+    final jsonStr = getLoanApplIdModel.value!.data!.creditCards;
+
+    if (jsonStr != null) {
+      final decoded = jsonDecode(jsonStr);
+
+      // Check if it's actually a List of Maps
+      if (decoded is List) {
+        for (var item in decoded) {
+          final ccController = CreditCardsController();
+          print("dob===>${item["BirthDate"]}");
+
+
+           ccController.ccCompBankController.text= item["CompanyBank"] ?? '';
+           ccController.ccCardNumberController.text= item["CardNumber"] ?? '';
+           ccController.ccHavingSinceController.text=item["HavingSince"]==""?"": Helper.convertFromIso8601(item["HavingSince"]) ?? '';
+           ccController.ccAvgMonSpendingController.text= item["AvgMonthlySpending"].toString() ?? '';
+
+
+          creditCardsList.add(ccController);
+        }
+      } else {
+        print("Expected a List but got: ${decoded.runtimeType}");
+      }
+    }
+  }
+
+
+  void populateReferenceControllers() async{
+    referencesList.clear();
+    final jsonStr = getLoanApplIdModel.value!.data!.referenceDetails;
+
+    if (jsonStr != null) {
+      final decoded = jsonDecode(jsonStr);
+
+      // Check if it's actually a List of Maps
+      if (decoded is List) {
+        for (var item in decoded) {
+          final refController = ReferenceController();
+          print("dob===>${item["BirthDate"]}");
+
+
+          refController.refNameController.text= item["Name"] ?? '';
+          refController.refAddController.text= item["Address"] ?? '';
+          refController.refMobController.text= item["Mobile"] ?? '';
+          refController.refPhoneController.text= item["Phone"] ?? '';
+          refController.refRelWithApplController.text= item["RelationWithApplicant"] ?? '';
+          refController.selectedStatePerm.value = item?['State']==""?"0":item?['State'] ?? '0';
+          await refController.getDistrictByStateIdPermApi(stateId:   refController.selectedStatePerm.value);
+          refController.selectedDistrictPerm.value  =item?['District']==""?"0":item?['District'] ?? '0';
+          await refController.getCityByDistrictIdPermApi(districtId:  refController.selectedDistrictPerm.value );
+          refController.selectedCityPerm.value = item?['City']==""?"0":item?['City'] ?? '0';
+          refController.refPincodeController.text= item?["PinCode"] ?? '';
+          refController.selectedCountry.value =item?['Country']==""?"":item?['Country'] ?? '0';
+          referencesList.add(refController);
         }
       } else {
         print("Expected a List but got: ${decoded.runtimeType}");

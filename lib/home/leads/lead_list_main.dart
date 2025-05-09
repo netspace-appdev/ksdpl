@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/leads/loan_appl_controller.dart';
 import '../../common/CustomSearchBar.dart';
@@ -119,7 +120,7 @@ class LeadListMain extends StatelessWidget {
 
                                   Text(
                                     leadListController.leadStageName2.value.toString(),
-                                    style: TextStyle(
+                                    style: GoogleFonts.roboto(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -202,7 +203,7 @@ class LeadListMain extends StatelessWidget {
 
           Text(
             "Leads",
-            style: TextStyle(
+            style:  GoogleFonts.merriweather(
                 fontSize: 20,
                 color: AppColor.grey3,
                 fontWeight: FontWeight.w700
@@ -364,8 +365,8 @@ class LeadListMain extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
 
                                       // lead.name.toString(),
-                                      style: TextStyle(
-                                        fontSize: 16,
+                                      style: GoogleFonts.merriweather(
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),

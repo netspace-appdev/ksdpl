@@ -16,12 +16,12 @@ class LeadHistoryController extends GetxController{
     super.onInit();
 
     print("lead histiry controller");
-    dynamic arg= Get.arguments;
+  /*  dynamic arg= Get.arguments;
     if(arg==null){
       getLeadWorkByLeadIdApi(leadId:leadId.toString() );
     }else{
       getLeadWorkByLeadIdApi(leadId:arg["leadId"] );
-    }
+    }*/
 
 
   }

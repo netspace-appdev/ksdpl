@@ -44,6 +44,7 @@ import '../../common/skelton.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadDetailsController.dart';
+import '../../controllers/leads/lead_history_controller.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
@@ -127,12 +128,20 @@ class LeadDetailsTab extends StatelessWidget {
                               height: 10,
                             ),
 
-                            const TabBar(
+                             TabBar(
                               indicatorSize: TabBarIndicatorSize.tab,
                               indicatorColor: AppColor.secondaryColor, // Yellow Indicator
                               labelColor: AppColor.secondaryColor, // Yellow when selected
                               unselectedLabelColor: AppColor.grey700, // Grey when unselected
-                              tabs: [
+                              onTap: (val){
+                                if(val==1){
+                                  LeadHistoryController leadHistoryController=Get.put(LeadHistoryController());
+                                  dynamic arg= Get.arguments;
+                                  var leadId=arg["leadId"];
+                                  leadHistoryController.getLeadWorkByLeadIdApi(leadId:leadId );
+                                }
+                              },
+                              tabs: const [
                                 CustomTab(icon: Icons.list_alt, text: "Details"),
                                 CustomTab(icon: Icons.history, text: "History"),
                                 //CustomTab(icon: Icons.content_paste_search_outlined, text: "Followup"),
@@ -238,6 +247,7 @@ class CustomTab extends StatelessWidget {
     return Tab(
       icon: Icon(icon),
       text: text,
+
     );
   }
 }

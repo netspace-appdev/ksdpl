@@ -7,8 +7,8 @@ class FamilyMemberController {
   var selectedGenderFam = Rxn<String>();
   var selectedFamDependent = Rxn<String>();
   bool? get isFamDependent {
-    if (selectedFamDependent.value == -1) return null; // Means user didn't select anything
-    return selectedFamDependent.value == 0; // 0 index = "Yes", so true
+    if (selectedFamDependent.value == null || selectedFamDependent.value == "") return null;
+    return selectedFamDependent.value == "Yes";
   }
   // Text controllers
   final TextEditingController famNameController = TextEditingController();

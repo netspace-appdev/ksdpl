@@ -73,7 +73,7 @@ class Step5Form extends StatelessWidget {
                         label: AppText.avgMonSpencing,
                         isRequired: false,
                         controller: cc.ccAvgMonSpendingController,
-                        inputType: TextInputType.name,
+                        inputType: TextInputType.number,
                         hintText: AppText.enterAvgMonSpencing,
                         validator: ValidationHelper.validatePhoneNumber,
                       ),

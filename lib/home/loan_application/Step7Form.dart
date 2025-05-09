@@ -81,7 +81,7 @@ class Step7Form extends StatelessWidget {
                             label: AppText.mobNo,
                             isRequired: false,
                             controller: ref.refMobController,
-                            inputType: TextInputType.name,
+                            inputType: TextInputType.number,
                             hintText: AppText.enterReferenceMob,
                             validator:  ValidationHelper.validatePhoneNumber,
                           ),
@@ -89,7 +89,7 @@ class Step7Form extends StatelessWidget {
                             label: AppText.phoneNo,
                             isRequired: false,
                             controller: ref.refPhoneController,
-                            inputType: TextInputType.name,
+                            inputType: TextInputType.number,
                             hintText: AppText.enterReferencePhone,
                             validator:  ValidationHelper.validateName,
                           ),
@@ -199,6 +199,33 @@ class Step7Form extends StatelessWidget {
                               ),
                               onChanged: (value) {
                                 ref.selectedCityPerm.value =  value?.id?.toString();
+                              },
+                            );
+                          }),
+
+                          const SizedBox(height: 20),
+
+
+                          CustomTextLabel(
+                            label: AppText.country,
+                            isRequired: false,
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Obx((){
+                            if (leadDDController.isLoading.value) {
+                              return  Center(child:CustomSkelton.productShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<String>(
+                              items:  ref.countryList,
+                              getId: (item) => item,  // Adjust based on your model structure
+                              getName: (item) => item,
+                              selectedValue: ref.selectedCountry.value,
+                              onChanged: (value) {
+                                ref.selectedCountry.value =  value;
                               },
                             );
                           }),

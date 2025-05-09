@@ -1171,7 +1171,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               dashboardController.todayWorkStatusRBModel.value!.data == null) {
             return Center(child: Container(
               height: 160,
-              width: MediaQuery.of(context).size.width*0.80,
+              width: MediaQuery.of(context).size.width*0.85,
               decoration: BoxDecoration(
                 color: AppColor.appWhite,
                 borderRadius: BorderRadius.circular(10),
@@ -1207,7 +1207,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 var cardColor = colors[index % colors.length];
                var data=dashboardController.todayWorkStatusRBModel.value!.data![0];
                 return Container(
-                  width: 300,
+                  width: MediaQuery.of(context).size.width*0.85,
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -1250,7 +1250,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _statusBadge(String title, String value, Color color, String label) {
     return Expanded(
       child: Container(
-        width: label=="total"?280:40,
+        width: label=="total"?MediaQuery.of(context).size.width*0.80:40,
 
         padding: const EdgeInsets.symmetric(vertical: 6),
         decoration: BoxDecoration(

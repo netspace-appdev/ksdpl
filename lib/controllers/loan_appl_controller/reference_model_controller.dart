@@ -41,7 +41,7 @@ class ReferenceController {
   RxList<dist.Data> districtListPerm = <dist.Data>[].obs;
   RxList<city.Data> cityListPerm = <city.Data>[].obs;
 
-  void  getDistrictByStateIdPermApi({
+  Future<void>  getDistrictByStateIdPermApi({
     required stateId
   }) async {
     try {
@@ -84,7 +84,7 @@ class ReferenceController {
     }
   }
 
-  void  getCityByDistrictIdPermApi({
+  Future<void>   getCityByDistrictIdPermApi({
     required districtId
   }) async {
     try {
@@ -99,6 +99,8 @@ class ReferenceController {
 
         getCityByDistrictIdModelPerm.value= city.GetCityByDistrictIdModel.fromJson(data);
 
+        final List<city.Data> cities = getCityByDistrictIdModelPerm.value?.data ?? [];
+        cityListPerm.value = List<city.Data>.from(cities);
 
 
         isCityLoadingPerm(false);

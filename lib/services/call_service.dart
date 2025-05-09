@@ -93,11 +93,18 @@ class CallService {
       print("Call Type: ${lastCall.callType}");
       print("Duration: ${lastCall.duration} seconds");
 
-      print("✅ Call started at ${lastCall.timestamp}");
+
+
+
       var callDuration=Helper.formatCallDuration(lastCall.duration!.toInt());
-      var callStartTime=Helper.convertUnixTo12HourFormat(lastCall.timestamp!+19800 );
-      var callEndTime=Helper.convertUnixTo12HourFormat((lastCall.timestamp!+19800) +lastCall.duration!.toInt());
+      var callStartTime = Helper.convertUnixTo12HourFormat(lastCall.timestamp!);
+      var callEndTime = Helper.convertUnixTo12HourFormat(
+          lastCall.timestamp! + (lastCall.duration!.toInt() * 1000)
+      );
+
       print("✅ Call was connected and lasted ${lastCall.duration} seconds. which is ${callDuration} ");
+      print("✅ callStartTime ${callStartTime} seconds. ");
+      print("✅ callEndTime ${callEndTime} seconds. ");
       leadListController.callFeedbackController.clear();
       leadListController.leadFeedbackController.clear();
       DateTime now = DateTime.now();
