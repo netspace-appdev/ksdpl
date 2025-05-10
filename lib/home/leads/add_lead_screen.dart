@@ -13,6 +13,7 @@ import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/storage_service.dart';
 import '../../common/validation_helper.dart';
+import '../../controllers/bot_nav_controller.dart';
 import '../../controllers/drawer_controller.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
@@ -777,7 +778,10 @@ class AddLeadScreen extends StatelessWidget {
             noOfExistingLoans: addleadcontroller.noOfExistingLoansController.text.toString(),
           ).then((_){
             if(addleadcontroller.fromWhere.value=="drawer"){
-              Get.back();
+             // Get.back();
+              BotNavController botNavController=Get.put(BotNavController());
+              botNavController.selectedIndex.value = 1;
+              Get.offAllNamed("/bottomNavbar");
             }
           });
         }

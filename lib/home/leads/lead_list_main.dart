@@ -404,7 +404,7 @@ class LeadListMain extends StatelessWidget {
                               leadId: lead.id.toString(),
                               label_code: "open_poll",
                             ),
-                          //Icon(Icons.more_vert, color: AppColor.grey1,), // Three dots menu icon
+
                         ],
                       ),
                     ),
@@ -415,9 +415,8 @@ class LeadListMain extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
                         children: [
-                          _buildDetailRow("Email", lead.email.toString()),
+                          _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString()),
                           _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
-                          //_buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
                           _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  "),
                           _buildDetailRow("Status", lead.stageName.toString()??""),
                         ],
@@ -435,10 +434,10 @@ class LeadListMain extends StatelessWidget {
                           _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
                           _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
                           _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
-                          //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
+
                           InkWell(
                             onTap: () {
-                              //Get.toNamed("/leadDetailsMain", arguments: {"leadId":lead.id.toString()});
+
                               Get.toNamed("/leadDetailsTab", arguments: {"leadId":lead.id.toString()});
 
                             },
@@ -470,15 +469,7 @@ class LeadListMain extends StatelessWidget {
                     Row(
                       mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
                       children: [
-                        /*if(leadListController.leadCode.value=="2" ||leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6")
-                        _buildTextButton(
-                          label:AppText.followup,
-                          context: context,
-                          color: Colors.purple,
-                          icon:  Icons.feedback,
-                          leadId: lead.id.toString(),
-                          label_code: "follow_up",
-                        ),*/
+
                         if(leadListController.leadCode.value=="4")...[
                           _buildTextButton(
                             label:AppText.doable,
@@ -517,10 +508,6 @@ class LeadListMain extends StatelessWidget {
 
                           ),
                         ]
-
-
-
-                        //_buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,lead.id.toString()),
                       ],
                     ),
                     SizedBox(height: 10),
@@ -709,8 +696,9 @@ class LeadListMain extends StatelessWidget {
       onPressed: () {
 
         if(label=="call"){
-
-
+          leadListController.isFBDetailsShow.value=false;
+          leadListController.followDateController.text="";
+          leadListController.followTimeController.text="";
           CallService callService = CallService();
           callService.makePhoneCall(
             phoneNumber:phoneNumber,//"+919238513910",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
@@ -783,6 +771,7 @@ class LeadListMain extends StatelessWidget {
           leadListController.leadFeedbackController.clear();
           leadListController.followDateController.clear();
           leadListController.followTimeController.clear();
+          leadListController.isCallReminder.value=false;
           showFollowupDialog(
               context: context,
               leadId: leadId,
@@ -801,39 +790,6 @@ class LeadListMain extends StatelessWidget {
                 title: "Are you sure?",
 
                 onYes: () {
-/*
-                  if (label_code == "interested") {
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "4",
-                      active: "1",
-                    );
-                  } else if (label_code == "not_interested") {
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "5",
-                      active: "0",
-                    );
-                  } else if (label_code == "doable") {
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "6",
-                      active: "1",
-                    );
-                  } else if (label_code == "not_doable") {
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "7",
-                      active: "0",
-                    );
-                  } else if (label_code == "cc") {
-                    leadListController.updateLeadStageApi(
-                      id: leadId.toString(),
-                      stage: "13",
-                      active: "0",
-                    );
-
-                  }*/
 
                   if (label_code == "interested") {
                     leadListController.workOnLeadAndStageUpdateApi(
@@ -874,8 +830,7 @@ class LeadListMain extends StatelessWidget {
             },
           );
         }else if (label_code == "loan_appl_form") {
-          //LoanApplicationController loanApplicationController=Get.put(LoanApplicationController());
-          //loanApplicationController.leadId.value=leadId;
+
 
           Get.toNamed("/loanApplication", arguments: {
           'leadId': leadId.toString(),
@@ -1063,132 +1018,6 @@ class LeadListMain extends StatelessWidget {
   }
 
 
-
-/*  void showOpenPollDialog({
-    required BuildContext context,
-    required String leadId,
-  }) {
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: double.infinity, // Makes it full width
-                padding: EdgeInsets.zero,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // 🔵 Title in Blue Strip
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: const BoxDecoration(
-                          color:AppColor.primaryColor, // Title background color
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                          gradient: LinearGradient(
-                            colors: [AppColor.primaryLight, AppColor.primaryDark],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: const Text(
-                          "Open Poll",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white, // Title text color
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-
-                      // 📝 Content (Radio Buttons)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        child:  Column(
-                          children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Enter percent for leads",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColor.grey1, // Title text color
-                                ),
-
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            CustomTextFieldPrefix(
-                              inputType:  TextInputType.number,
-                              controller: leadListController.openPollPercentController,
-                              hintText: "like 2.0 %",
-                              validator: validatePercentage,
-                              isPassword: false,
-                              obscureText: false,
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // 🟠 Buttons (Close & Submit)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OutlinedButton(
-                              onPressed: () {
-                                Navigator.pop(context); // Close dialog
-                              },
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColor.grey1,
-                                side: BorderSide(color: AppColor.grey2),
-                              ),
-                              child: Text("Close", style: TextStyle(color: AppColor.grey2)),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  leadListController.leadMoveToCommonTaskApi(
-                                      leadId: leadId,
-                                      percentage: leadListController.openPollPercentController.text.trim().toString()
-                                  );
-                                  Navigator.pop(context);
-                                }
-
-                               // Close dialog after submission
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.orangeColor,
-                              ),
-                              child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }*/
-
   String? validatePercentage(String? value) {
     if (value == null || value.isEmpty) {
       return AppText.percentageRequired;
@@ -1203,7 +1032,7 @@ class LeadListMain extends StatelessWidget {
     required leadId,
   }) {
 
-    // List<String> options = ["Fresh Leads","Working Leads", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+
     List<String> options = ["All Leads","Fresh Leads","Working Leads","Could Not Connect", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
     showDialog(
       context: context,
@@ -1234,35 +1063,6 @@ class LeadListMain extends StatelessWidget {
                 )),
               ),
 
-              // 🟠 Buttons (Close & Submit)
-              /* Padding(
-                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Close dialog
-                      },
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColor.grey1,
-                        side: BorderSide(color: AppColor.grey2),
-                      ),
-                      child: Text("Close", style: TextStyle(color: AppColor.grey2)),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        leadListController.filterSubmit();
-                        Navigator.pop(context); // Close dialog after submission
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.orangeColor,
-                      ),
-                      child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
-                    ),
-                  ],
-                ),
-              ),*/
             ],
           ),
           onSubmit: () {
@@ -1330,43 +1130,7 @@ class LeadListMain extends StatelessWidget {
                     ],
                   ),
                 ),
-/*
-                // 🟠 Buttons (Close & Submit)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context); // Close dialog
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColor.grey1,
-                          side: BorderSide(color: AppColor.grey2),
-                        ),
-                        child: Text("Close", style: TextStyle(color: AppColor.grey2)),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            leadListController.leadMoveToCommonTaskApi(
-                                leadId: leadId,
-                                percentage: leadListController.openPollPercentController.text.trim().toString()
-                            );
-                            Navigator.pop(context);
-                          }
 
-                          // Close dialog after submission
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.orangeColor,
-                        ),
-                        child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
-                      ),
-                    ],
-                  ),
-                ),*/
               ],
             ),
           ),
@@ -1384,7 +1148,8 @@ class LeadListMain extends StatelessWidget {
     );
   }
 
- /* void showCallFeedbackDialog({
+
+  void showCallFeedbackDialog({
     required BuildContext context,
     required leadId,
     required currentLeadStage,
@@ -1397,281 +1162,212 @@ class LeadListMain extends StatelessWidget {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
+        leadDDController.selectedStage.value=currentLeadStage;
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: AppText.addFAndF,
           content: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+              maxHeight: MediaQuery.of(Get.context!).size.height * 0.7, // Prevents overflow
             ),
             child: SingleChildScrollView(
               child: Form(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 15),
-                    CustomLabeledTextField(
-                      label: AppText.callFeedback,
-                      isRequired: false,
-                      controller: leadListController.callFeedbackController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterCallFeedback,
-                      isTextArea: true,
-                    ),
-                    SizedBox(height: 15),
-                    CustomLabeledTextField(
-                      label: AppText.leadFeedback,
-                      isRequired: false,
-                      controller: leadListController.leadFeedbackController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterLeadFeedback,
-                      isTextArea: true,
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Obx(()=>Checkbox(
-                          activeColor: AppColor.secondaryColor,
-                          value: leadListController.isCallReminder.value,
-                          onChanged: (bool? value) {
+                    ///Call and lead FB
 
-                            leadListController.isCallReminder.value = value ?? false;
-
-                          },
-                        )),
-                        Text(
-                          AppText.callReminder,
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black87,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Obx(()=> CustomLabeledPickerTextField(
-                      label: AppText.selectDate,
-                      isRequired: false,
-                      controller: leadListController.followDateController,
-                      inputType: TextInputType.name,
-                      hintText: "MM/DD/YYYY",
-                      isDateField: true,
-                      enabled: leadListController.isCallReminder.value,
-                    )),
-                    Obx(()=>CustomLabeledTimePickerTextField(
-                      label: AppText.selectTime,
-                      isRequired: false,
-                      controller: leadListController.followTimeController,
-                      inputType: TextInputType.datetime,
-                      hintText: "HH:MM AM/PM",
-                      isTimeField: true,
-                      enabled: leadListController.isCallReminder.value,
-                    )),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          onSubmit: () {
-            if (leadListController.callFeedbackController.text.isEmpty &&
-                leadListController.leadFeedbackController.text.isEmpty) {
-              ToastMessage.msg(AppText.addFeedbackFirst);
-            } else {
-              var id=leadListController.workOnLeadModel!.data!.id.toString();
-              if(callStatus=="1"){
-                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
-                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
-                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
-
-              }
-
-              leadListController.callFeedbackSubmit(
-                  leadId: leadId,
-                  currentLeadStage: currentLeadStage,
-                  callStatus: callStatus,
-                  callDuration: callDuration,
-                  callStartTime: callStartTime,
-                  callEndTime: callEndTime,
-                  id: id,
-                  fromWhere: "call"
-
-              );
-              Get.back();
-            }
-
-          },
-        );
-      },
-    );
-  }
-*/
-
-  void showCallFeedbackDialog({
-    required BuildContext context,
-    required leadId,
-    required currentLeadStage,
-    required callDuration,
-    required callStartTime,
-    required callEndTime,
-    required callStatus,
-  }) {
-    leadDDController.selectedStage.value=currentLeadStage;
-    Get.dialog(
-        CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-          title: AppText.addFAndF,
-          content: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
-            ),
-            child: SingleChildScrollView(
-              child: Form(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 15),
-                    CustomLabeledTextField(
-                      label: AppText.callFeedback,
-                      isRequired: false,
-                      controller: leadListController.callFeedbackController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterCallFeedback,
-                      isTextArea: true,
-                    ),
-                    SizedBox(height: 15),
-                    CustomLabeledTextField(
-                      label: AppText.leadFeedback,
-                      isRequired: false,
-                      controller: leadListController.leadFeedbackController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterLeadFeedback,
-                      isTextArea: true,
-                    ),
-                    ///stage drodown
-                    ///  add this line in dialog at first leadDDController.selectedStage.value=currentLeadStage;
                     const SizedBox(height: 20),
 
-                    const Text(
-                      AppText.leadStage,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColor.grey2,
+                    if(callStatus=="0" && (currentLeadStage=="13" || currentLeadStage=="4" || currentLeadStage=="5" || currentLeadStage=="6" || currentLeadStage=="7"))
+                      CustomLabeledPickerTextField(
+                        label: AppText.leadStage,
+                        isRequired: false,
+                        controller: leadListController.couldNotController,
+                        inputType:TextInputType.name,
+                        hintText: "",
+                        enabled: false,
                       ),
-                    ),
 
-                    const SizedBox(height: 10),
-                    Obx((){
-                      if (leadDDController.isLeadStageLoading.value) {
-                        return  Center(child:CustomSkelton.leadShimmerList(context));
-                      }
-                      int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
 
-                      // Allowed stage IDs based on leadCode
-                      List<int> allowedStageIds = [];
+                    ///Status change
+                    if(callStatus=="1")
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            AppText.leadStage,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.grey2,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Obx((){
+                            if (leadDDController.isLeadStageLoading.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+                            int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
 
-                      if (leadCode == 2) {
-                        allowedStageIds = [4, 5,13];
-                      }else if (leadCode == 3) {
-                        allowedStageIds = [4, 5,13];
-                      } else if (leadCode == 4) {
-                        allowedStageIds = [6, 7];
-                      } else {
-                        allowedStageIds = [2, 3, 4, 5, 6, 7]; // Default to all or handle as needed
-                      }
+                            // Allowed stage IDs based on leadCode
+                            List<int> allowedStageIds = [];
 
-                      List<stage.Data> filteredStages = leadDDController
-                          .getAllLeadStageModel.value!.data!
-                          .where((lead) =>
-                      lead.id != 1 && allowedStageIds.contains(lead.id))
-                          .toList();
-
-                      return CustomDropdown<stage.Data>(
-                        items: filteredStages,
-                        getId: (item) =>item.id.toString(),  // Adjust based on your model structure
-                        getName: (item) => item.stageName.toString(),
-                        selectedValue: filteredStages.firstWhereOrNull(
-                              (item) => item.id.toString() == leadDDController.selectedStage.value,
-
-                        ),
-                        onChanged: (value) {
-                          leadDDController.selectedStage.value =  value?.id?.toString();
-                          print("here check--->${leadDDController.selectedStage.value}");
-                          if( leadDDController.selectedStage.value!=null){
-                            if (int.parse(leadDDController.selectedStage.value!) == 3) {
-                              leadDDController.selectedStageActive.value = 1;
-                            } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
-                              leadDDController.selectedStageActive.value = 1;
-                            } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
-                              leadDDController.selectedStageActive.value = 0;
-                            }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
-                              leadDDController.selectedStageActive.value = 1;
-                            } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
-                              leadDDController.selectedStageActive.value = 0;
-                            }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
-                              leadDDController.selectedStageActive.value = 0;
-                            }else {
-
+                            if (leadCode == 2) {
+                              allowedStageIds = [4, 5];
+                            }else if (leadCode == 3) {
+                              allowedStageIds = [4, 5,];
+                            } else if (leadCode == 4) {
+                              allowedStageIds = [6, 7,];
+                            }else if (leadCode == 5) {
+                              allowedStageIds = [4, 5,];
+                            }else if (leadCode == 6) {
+                              allowedStageIds = [6, 7];
+                            }else if (leadCode == 7) {
+                              allowedStageIds = [6, 7];
+                            }else if (leadCode == 13) {
+                              allowedStageIds = [4, 5,];
+                            } else {
+                              allowedStageIds = [4,5]; // Default to all or handle as needed
                             }
 
-                            print("changed LeadStage==>${leadDDController.selectedStage.value}");
-                          }
+                            List<stage.Data> filteredStages = leadDDController
+                                .getAllLeadStageModel.value!.data!
+                                .where((lead) =>
+                            lead.id != 1 && allowedStageIds.contains(lead.id))
+                                .toList();
+
+                            return CustomDropdown<stage.Data>(
+                              items: filteredStages,
+                              getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.stageName.toString(),
+                              selectedValue: filteredStages.firstWhereOrNull(
+                                    (item) => item.id.toString() == leadDDController.selectedStage.value,
+
+                              ),
+                              onChanged: (value) {
+                                leadDDController.selectedStage.value =  value?.id?.toString();
+                                print("here check--->${leadDDController.selectedStage.value}");
+                                if( leadDDController.selectedStage.value!=null){
+                                  if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                                    leadDDController.selectedStageActive.value = 1;
+
+                                  } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                                    leadDDController.selectedStageActive.value = 1;
+                                    leadListController.isFBDetailsShow.value=true;
+                                    print("this one===>${leadListController.isFBDetailsShow.value}");
+                                  } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                                    leadDDController.selectedStageActive.value = 0;
+                                    leadListController.isFBDetailsShow.value=false;
+                                  }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                                    leadDDController.selectedStageActive.value = 1;
+                                    leadListController.isFBDetailsShow.value=true;
+                                  } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                                    leadDDController.selectedStageActive.value = 0;
+                                    leadListController.isFBDetailsShow.value=false;
+                                  }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                                    leadDDController.selectedStageActive.value = 0;
+                                  }else {
+
+                                  }
+
+                                  print("changed LeadStage==>${leadDDController.selectedStage.value}");
+                                }
 
 
-                        },
-                      );
-                    }),
+                              },
+                            );
+                          }),
+                          const SizedBox(height: 20),
+                          Obx(()=> Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (leadListController.isFBDetailsShow.value==true) ...[
+                                SizedBox(height: 15),
+                                CustomLabeledTextField(
+                                  label: AppText.callFeedback,
+                                  isRequired: false,
+                                  controller: leadListController.callFeedbackController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.enterCallFeedback,
+                                  isTextArea: true,
+                                ),
+                                SizedBox(height: 15),
+                                CustomLabeledTextField(
+                                  label: AppText.leadFeedback,
+                                  isRequired: false,
+                                  controller: leadListController.leadFeedbackController,
+                                  inputType: TextInputType.name,
+                                  hintText: AppText.enterLeadFeedback,
+                                  isTextArea: true,
+                                ),
+                                const SizedBox(height: 20),
+                              ]
+                            ],
+                          ))
+                        ],
+                      ),
 
-                    const SizedBox(height: 20),
 
-
-                    ///stage dd end
-
-
-
-                    Row(
+                    /// rest is cal reminder
+                    Obx(()=>Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Obx(()=>Checkbox(
-                          activeColor: AppColor.secondaryColor,
-                          value: leadListController.isCallReminder.value,
-                          onChanged: (bool? value) {
+                        if(leadListController.isFBDetailsShow.value==true || callStatus=="0")...[
+                          Text(
+                            "Need to set a reminder? select the checkbox",
+                            style:  GoogleFonts.poppins(
+                              fontSize: 14,
+                              color: Colors.black54,
+                              //fontWeight: FontWeight.w700
 
-                            leadListController.isCallReminder.value = value ?? false;
 
-                          },
-                        )),
-                        Text(
-                          AppText.callReminder,
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black87,
+                            ),
                           ),
-                          textAlign: TextAlign.center,
-                        ),
+                          Row(
+                            children: [
+                              Obx(()=>Checkbox(
+                                activeColor: AppColor.secondaryColor,
+                                value: leadListController.isCallReminder.value,
+                                onChanged: (bool? value) {
+
+                                  leadListController.isCallReminder.value = value ?? false;
+
+                                },
+                              )),
+                              Text(
+                                AppText.callReminder,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black87,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Obx(()=> CustomLabeledPickerTextField(
+                            label: AppText.selectDate,
+                            isRequired: false,
+                            controller: leadListController.followDateController,
+                            inputType: TextInputType.name,
+                            hintText: "MM/DD/YYYY",
+                            isDateField: true,
+                            enabled: leadListController.isCallReminder.value,
+                          )),
+                          Obx(()=>CustomLabeledTimePickerTextField(
+                            label: AppText.selectTime,
+                            isRequired: false,
+                            controller: leadListController.followTimeController,
+                            inputType: TextInputType.datetime,
+                            hintText: "HH:MM AM/PM",
+                            isTimeField: true,
+                            enabled: leadListController.isCallReminder.value,
+                          )),
+                        ]
                       ],
-                    ),
-                    SizedBox(height: 10),
-                    Obx(()=> CustomLabeledPickerTextField(
-                      label: AppText.selectDate,
-                      isRequired: false,
-                      controller: leadListController.followDateController,
-                      inputType: TextInputType.name,
-                      hintText: "MM/DD/YYYY",
-                      isDateField: true,
-                      enabled: leadListController.isCallReminder.value,
-                    )),
-                    Obx(()=>CustomLabeledTimePickerTextField(
-                      label: AppText.selectTime,
-                      isRequired: false,
-                      controller: leadListController.followTimeController,
-                      inputType: TextInputType.datetime,
-                      hintText: "HH:MM AM/PM",
-                      isTimeField: true,
-                      enabled: leadListController.isCallReminder.value,
-                    )),
+                    ))
                   ],
                 ),
               ),
@@ -1700,15 +1396,220 @@ class LeadListMain extends StatelessWidget {
                   id: id,
                   fromWhere: "call",
                   selectedStage: leadDDController.selectedStage.value
+
               );
               Get.back();
             }
 
           },
-        ),
-      barrierDismissible: false,
+        );
+      },
     );
   }
+
+
+///backup call feedback popup
+/*  void showCallFeedbackDialog({
+    required BuildContext context,
+    required leadId,
+    required currentLeadStage,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+    required callStatus,
+  }) {
+    leadDDController.selectedStage.value=currentLeadStage;
+    Get.dialog(
+      CustomBigDialogBox(
+        titleBackgroundColor: AppColor.secondaryColor,
+        title: AppText.addFAndF,
+        content: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+          ),
+          child: SingleChildScrollView(
+            child: Form(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 15),
+                  CustomLabeledTextField(
+                    label: AppText.callFeedback,
+                    isRequired: false,
+                    controller: leadListController.callFeedbackController,
+                    inputType: TextInputType.name,
+                    hintText: AppText.enterCallFeedback,
+                    isTextArea: true,
+                  ),
+                  SizedBox(height: 15),
+                  CustomLabeledTextField(
+                    label: AppText.leadFeedback,
+                    isRequired: false,
+                    controller: leadListController.leadFeedbackController,
+                    inputType: TextInputType.name,
+                    hintText: AppText.enterLeadFeedback,
+                    isTextArea: true,
+                  ),
+                  ///stage drodown
+                  ///  add this line in dialog at first leadDDController.selectedStage.value=currentLeadStage;
+                  const SizedBox(height: 20),
+
+                  const Text(
+                    AppText.leadStage,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.grey2,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+                  Obx((){
+                    if (leadDDController.isLeadStageLoading.value) {
+                      return  Center(child:CustomSkelton.leadShimmerList(context));
+                    }
+                    int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
+
+                    // Allowed stage IDs based on leadCode
+                    List<int> allowedStageIds = [];
+
+                    if (leadCode == 2) {
+                      allowedStageIds = [4, 5,13];
+                    }else if (leadCode == 3) {
+                      allowedStageIds = [4, 5,13];
+                    } else if (leadCode == 4) {
+                      allowedStageIds = [6, 7];
+                    } else {
+                      allowedStageIds = [2, 3, 4, 5, 6, 7]; // Default to all or handle as needed
+                    }
+
+                    List<stage.Data> filteredStages = leadDDController
+                        .getAllLeadStageModel.value!.data!
+                        .where((lead) =>
+                    lead.id != 1 && allowedStageIds.contains(lead.id))
+                        .toList();
+
+                    return CustomDropdown<stage.Data>(
+                      items: filteredStages,
+                      getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                      getName: (item) => item.stageName.toString(),
+                      selectedValue: filteredStages.firstWhereOrNull(
+                            (item) => item.id.toString() == leadDDController.selectedStage.value,
+
+                      ),
+                      onChanged: (value) {
+                        leadDDController.selectedStage.value =  value?.id?.toString();
+                        print("here check--->${leadDDController.selectedStage.value}");
+                        if( leadDDController.selectedStage.value!=null){
+                          if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                            leadDDController.selectedStageActive.value = 1;
+                          } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                            leadDDController.selectedStageActive.value = 0;
+                          }else {
+
+                          }
+
+                          print("changed LeadStage==>${leadDDController.selectedStage.value}");
+                        }
+
+
+                      },
+                    );
+                  }),
+
+                  const SizedBox(height: 20),
+
+
+                  ///stage dd end
+
+
+
+                  Row(
+                    children: [
+                      Obx(()=>Checkbox(
+                        activeColor: AppColor.secondaryColor,
+                        value: leadListController.isCallReminder.value,
+                        onChanged: (bool? value) {
+
+                          leadListController.isCallReminder.value = value ?? false;
+
+                        },
+                      )),
+                      Text(
+                        AppText.callReminder,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Obx(()=> CustomLabeledPickerTextField(
+                    label: AppText.selectDate,
+                    isRequired: false,
+                    controller: leadListController.followDateController,
+                    inputType: TextInputType.name,
+                    hintText: "MM/DD/YYYY",
+                    isDateField: true,
+                    enabled: leadListController.isCallReminder.value,
+                  )),
+                  Obx(()=>CustomLabeledTimePickerTextField(
+                    label: AppText.selectTime,
+                    isRequired: false,
+                    controller: leadListController.followTimeController,
+                    inputType: TextInputType.datetime,
+                    hintText: "HH:MM AM/PM",
+                    isTimeField: true,
+                    enabled: leadListController.isCallReminder.value,
+                  )),
+                ],
+              ),
+            ),
+          ),
+        ),
+        onSubmit: () {
+          if (leadListController.callFeedbackController.text.isEmpty &&
+              leadListController.leadFeedbackController.text.isEmpty) {
+            ToastMessage.msg(AppText.addFeedbackFirst);
+          } else {
+            var id=leadListController.workOnLeadModel!.data!.id.toString();
+            if(callStatus=="1"){
+              callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
+              callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
+              callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
+
+            }
+
+            leadListController.callFeedbackSubmit(
+                leadId: leadId,
+                currentLeadStage: currentLeadStage,
+                callStatus: callStatus,
+                callDuration: callDuration,
+                callStartTime: callStartTime,
+                callEndTime: callEndTime,
+                id: id,
+                fromWhere: "call",
+                selectedStage: leadDDController.selectedStage.value
+            );
+            Get.back();
+          }
+
+        },
+      ),
+      barrierDismissible: false,
+    );
+  }*/
 
 
   void showFollowupDialog({
@@ -1725,7 +1626,7 @@ class LeadListMain extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
 
-        leadListController.isCallReminder.value =true;
+
         leadDDController.selectedStage.value=currentLeadStage;
         print("currentLeadStage==>${currentLeadStage}");
         print("currentLeadStage==>${leadDDController.selectedStage.value}");
@@ -1750,8 +1651,39 @@ class LeadListMain extends StatelessWidget {
                       hintText: AppText.enterCallFeedback,
                       isTextArea: true,
                     ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Need to set a reminder? select the checkbox",
+                      style:  GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.black54,
+                        //fontWeight: FontWeight.w700
 
 
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Obx(()=>Checkbox(
+                          activeColor: AppColor.secondaryColor,
+                          value: leadListController.isCallReminder.value,
+                          onChanged: (bool? value) {
+
+                            leadListController.isCallReminder.value = value ?? false;
+
+                          },
+                        )),
+                        Text(
+                          AppText.callReminder,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
 
                     Obx(()=> CustomLabeledPickerTextField(
                       label: AppText.selectDate,

@@ -74,8 +74,10 @@ class LeadListController extends GetxController {
 
   final TextEditingController fromDateController = TextEditingController();
   final TextEditingController toDateController = TextEditingController();
+  final TextEditingController couldNotController = TextEditingController();
   GetEmployeeModel? getEmployeeModel;
   var isCallReminder=false.obs;
+  var isFBDetailsShow=false.obs;
 
   RxInt currentPage = 1.obs;
   final int pageSize = 20;
@@ -156,9 +158,6 @@ class LeadListController extends GetxController {
     }
   }
 
-
-
-
   void selectCheckbox(int index) {
 
     selectedIndex.value = index;
@@ -195,32 +194,7 @@ class LeadListController extends GetxController {
   }
 
 
-/*  void selectCheckbox(int index) {
 
-    selectedIndex.value = index;
-    if( selectedIndex.value==0){
-      leadCode.value="2";
-      leadStageName.value="Fresh Leads";
-
-    }else if(selectedIndex.value==1){
-      leadCode.value="3";
-      leadStageName.value="Working Leads";
-    }else if(selectedIndex.value==2){
-      leadCode.value="4";
-      leadStageName.value="Interested Leads";
-    }else if(selectedIndex.value==3){
-      leadCode.value="5";
-      leadStageName.value="Not Interested Leads";
-    }
-    else if(selectedIndex.value==4){
-      leadCode.value="6";
-      leadStageName.value="Doable Leads";
-    }
-    else if(selectedIndex.value==5){
-      leadCode.value="7";
-      leadStageName.value="Not Doable Leads";
-    }
-  }*/
 
   void filterSubmit(){
     var eId=StorageService.get(StorageService.EMPLOYEE_ID);
@@ -321,12 +295,7 @@ print("selectedTime ==>${selectedTime}");
         callReminder: formattedDateTime,
         reminderStatus:  isCallReminder.value?"1":"0",
       ).then((_){
-        /*if(fromWhere=="call"){
 
-          LeadHistoryController leadHistoryController = Get.put(LeadHistoryController(),);
-          leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId.toString());
-
-        }*/
         DashboardController dashboardController=Get.find();
         dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
         print("only followup");
@@ -334,84 +303,10 @@ print("selectedTime ==>${selectedTime}");
 
       });
     });
+
+
   }
 
-/*
-  void getAllLeadsApi({
-    required String employeeId,
-    required String leadStage,
-    required stateId,
-    required distId,
-    required cityId,
-    required campaign,
-    required fromDate,
-    required toDate,
-    required branch,
-    required leadMobileNumber,
-    required uniqueLeadNumber,
-    bool isLoadMore = false,
-  }) async {
-
-    try {
-
-      if (isLoading.value || (!hasMore.value && isLoadMore)) return;
-
-      isLoading(true);
-
-      if (!isLoadMore) {
-        currentPage.value = 1; // Reset to first page on fresh load
-        hasMore.value = true;
-      }
-
-      var data = await DrawerApiService.getAllLeadsApi(
-          employeeId: employeeId,
-          leadStage: leadStage,
-          stateId: stateId,
-          distId: distId,
-          cityId: cityId,
-          campaign: campaign,
-          pageNumber: currentPage.value,
-          pageSize: pageSize,
-          fromDate: fromDate,
-          toDate: toDate,
-          branch: branch,
-          leadMobileNumber: leadMobileNumber,
-          uniqueLeadNumber: uniqueLeadNumber
-      );
-
-      if (data['success'] == true) {
-        var newLeads = GetAllLeadsModel.fromJson(data);
-
-        if (isLoadMore) {
-          getAllLeadsModel.value!.data!.addAll(newLeads.data!);
-        } else {
-          getAllLeadsModel.value = newLeads;
-        }
-
-        leadStageName2.value = leadStageName.value;
-
-        // If less data returned than requested pageSize, mark as no more
-        if (newLeads.data!.length < pageSize) {
-          hasMore.value = false;
-        } else {
-          currentPage.value++; // Ready for next page
-        }
-        leadListLength.value=getAllLeadsModel.value!.data!.length;
-      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
-        leadStageName2.value = leadStageName.value;
-        getAllLeadsModel.value = null;
-        hasMore.value = false;
-      } else {
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-    } catch (e) {
-      print("Error getAllLeadsApi: $e");
-      ToastMessage.msg(AppText.somethingWentWrong);
-    } finally {
-      isLoading(false);
-    }
-  }
-*/
 
 
   void getAllLeadsApi({
@@ -790,26 +685,7 @@ print("selectedTime ==>${selectedTime}");
         workOnLeadModel= WorkOnLeadModel.fromJson(data);
 
         ToastMessage.msg(workOnLeadModel!.message.toString());
-       /* if (int.parse(leadStageStatus) == 3) {
-          leadDDController.selectedStageActive.value = 1;
-        } else if (int.parse(leadStageStatus) == 4) {
-          leadDDController.selectedStageActive.value = 1;
-        } else if (int.parse(leadStageStatus) == 5) {
-          leadDDController.selectedStageActive.value = 0;
-        }  else if (int.parse(leadStageStatus) == 6) {
-          leadDDController.selectedStageActive.value = 1;
-        } else if (int.parse(leadStageStatus) == 7) {
-          leadDDController.selectedStageActive.value = 0;
-        }else if (int.parse(leadStageStatus) == 13) {
-          leadDDController.selectedStageActive.value = 0;
-        }else {
 
-        }
-        updateLeadStageApi(
-            id: leadId,
-            stage: leadStageStatus,
-            active: leadDDController.selectedStageActive.value.toString()
-        );*/
         isLoading(false);
 
       }else{

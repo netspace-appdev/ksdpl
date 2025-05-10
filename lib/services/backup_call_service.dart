@@ -1,3 +1,4 @@
+/*
 
 import 'package:call_log/call_log.dart';
 import 'package:get/get.dart';
@@ -56,7 +57,7 @@ class CallService {
               leadId: leadId,
               currentLeadStage: currentLeadStage,
               context: context,
-            showFeedbackDialog: showFeedbackDialog
+              showFeedbackDialog: showFeedbackDialog
           ));
         }
       });
@@ -137,8 +138,6 @@ class CallService {
 
 
       } else {
-        leadListController.couldNotController.text="Could not Connect";
-        print("lead state not connnected===>${currentLeadStage}");
         leadListController.workOnLeadApi(
           leadId: leadId.toString(),
           leadStageStatus: currentLeadStage,
@@ -150,7 +149,7 @@ class CallService {
         ).then((_){
           showFeedbackDialog(
             leadId: leadId,
-            currentLeadStage: (currentLeadStage=="2" || currentLeadStage=="3")?"13":leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),
+            currentLeadStage:leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),
             context: context,
             callDuration: callDuration.toString(),
             callStartTime:callStartTime.toString(),
@@ -173,4 +172,4 @@ class CallService {
     _hasHandledCall = false;
   }
 
-}
+}*/
