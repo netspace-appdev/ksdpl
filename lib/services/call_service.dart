@@ -105,6 +105,7 @@ class CallService {
       print("✅ Call was connected and lasted ${lastCall.duration} seconds. which is ${callDuration} ");
       print("✅ callStartTime ${callStartTime} seconds. ");
       print("✅ callEndTime ${callEndTime} seconds. ");
+      print("Good");
       leadListController.callFeedbackController.clear();
       leadListController.leadFeedbackController.clear();
       DateTime now = DateTime.now();
