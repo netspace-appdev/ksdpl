@@ -295,8 +295,9 @@ class LeadDetailsMain extends StatelessWidget {
         if(label=="call"){
           //leadListController.makePhoneCall(phoneNumber);
           CallService callService = CallService();
+          leadDDController.selectedStage.value=leadStage;
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//"+919399299880",//phoneNumber,
+            phoneNumber:"+919238513910",//"+919399299880",//phoneNumber,
             leadId: leadId,
             currentLeadStage: leadStage,//newLeadStage,
             context: context,
@@ -548,7 +549,7 @@ class LeadDetailsMain extends StatelessWidget {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        leadDDController.selectedStage.value=currentLeadStage;
+
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: AppText.addFAndF,

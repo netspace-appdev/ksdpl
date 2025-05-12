@@ -699,6 +699,7 @@ class LeadListMain extends StatelessWidget {
           leadListController.isFBDetailsShow.value=false;
           leadListController.followDateController.text="";
           leadListController.followTimeController.text="";
+          leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
             phoneNumber:phoneNumber,//"+919238513910",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
@@ -772,6 +773,7 @@ class LeadListMain extends StatelessWidget {
           leadListController.followDateController.clear();
           leadListController.followTimeController.clear();
           leadListController.isCallReminder.value=false;
+          leadDDController.selectedStage.value=currentLeadStage;
           showFollowupDialog(
               context: context,
               leadId: leadId,
@@ -1162,7 +1164,7 @@ class LeadListMain extends StatelessWidget {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        leadDDController.selectedStage.value=currentLeadStage;
+
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: AppText.addFAndF,
@@ -1374,32 +1376,29 @@ class LeadListMain extends StatelessWidget {
             ),
           ),
           onSubmit: () {
-            if (leadListController.callFeedbackController.text.isEmpty &&
-                leadListController.leadFeedbackController.text.isEmpty) {
-              ToastMessage.msg(AppText.addFeedbackFirst);
-            } else {
-              var id=leadListController.workOnLeadModel!.data!.id.toString();
-              if(callStatus=="1"){
-                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
-                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
-                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
+            var id=leadListController.workOnLeadModel!.data!.id.toString();
+            if(callStatus=="1"){
+              callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
+              callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
+              callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
 
-              }
-
-              leadListController.callFeedbackSubmit(
-                  leadId: leadId,
-                  currentLeadStage: currentLeadStage,
-                  callStatus: callStatus,
-                  callDuration: callDuration,
-                  callStartTime: callStartTime,
-                  callEndTime: callEndTime,
-                  id: id,
-                  fromWhere: "call",
-                  selectedStage: leadDDController.selectedStage.value
-
-              );
-              Get.back();
             }
+            print("currentLeadStage at leadlist===>${currentLeadStage}");
+            print("selectedStage at selectedStage===>${leadDDController.selectedStage.value}");
+
+            leadListController.callFeedbackSubmit(
+                leadId: leadId,
+                currentLeadStage: currentLeadStage,
+                callStatus: callStatus,
+                callDuration: callDuration,
+                callStartTime: callStartTime,
+                callEndTime: callEndTime,
+                id: id,
+                fromWhere: "call",
+                selectedStage: leadDDController.selectedStage.value
+
+            );
+            Get.back();
 
           },
         );
@@ -1627,7 +1626,7 @@ class LeadListMain extends StatelessWidget {
       builder: (BuildContext context) {
 
 
-        leadDDController.selectedStage.value=currentLeadStage;
+
         print("currentLeadStage==>${currentLeadStage}");
         print("currentLeadStage==>${leadDDController.selectedStage.value}");
         return CustomBigDialogBox(

@@ -273,19 +273,22 @@ print("selectedTime ==>${selectedTime}");
     print("formattedDateTime in real box==>${formattedDateTime.toString()}");
     print("currentLeadStage in real box==>${currentLeadStage.toString()}");
     print("selectedStage in real box==>${selectedStage.toString()}");
+    print("whats change in real box==>${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
+   // callStatus=="0" && currentLeadStage=="13"
 
 
 
     updateLeadStageApiForCall(
       id:leadId.toString(),
       active: leadDDController.selectedStageActive.value.toString(),
-      stage:selectedStage==""?currentLeadStage: selectedStage
+      // stage:selectedStage==""?currentLeadStage: selectedStage
+      stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage
     ).then((_){
       workOnLeadApi(
         // id:callStatus=="1"?id.toString():"0",
         id:id.toString(),
         leadId: leadId.toString(),
-        leadStageStatus:selectedStage==""?currentLeadStage: selectedStage,
+        leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
         feedbackRelatedToCall: callFeedbackController.text.trim(),
         feedbackRelatedToLead: leadFeedbackController.text.trim(),
         callStatus: callStatus,
