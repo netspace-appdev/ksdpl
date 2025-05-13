@@ -297,7 +297,7 @@ class LeadDetailsMain extends StatelessWidget {
           CallService callService = CallService();
           leadDDController.selectedStage.value=leadStage;
           callService.makePhoneCall(
-            phoneNumber:"+919238513910",//"+919399299880",//phoneNumber,
+            phoneNumber:phoneNumber,//"+919399299880",//phoneNumber,
             leadId: leadId,
             currentLeadStage: leadStage,//newLeadStage,
             context: context,
@@ -555,7 +555,7 @@ class LeadDetailsMain extends StatelessWidget {
           title: AppText.addFAndF,
           content: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+              maxHeight: MediaQuery.of(Get.context!).size.height * 0.7, // Prevents overflow
             ),
             child: SingleChildScrollView(
               child: Form(
@@ -761,38 +761,36 @@ class LeadDetailsMain extends StatelessWidget {
             ),
           ),
           onSubmit: () {
-            if (leadListController.callFeedbackController.text.isEmpty &&
-                leadListController.leadFeedbackController.text.isEmpty) {
-              ToastMessage.msg(AppText.addFeedbackFirst);
-            } else {
-              var id=leadListController.workOnLeadModel!.data!.id.toString();
-              if(callStatus=="1"){
-                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
-                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
-                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
+            var id=leadListController.workOnLeadModel!.data!.id.toString();
+            if(callStatus=="1"){
+              callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
+              callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
+              callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
 
-              }
-
-              leadListController.callFeedbackSubmit(
-                  leadId: leadId,
-                  currentLeadStage: currentLeadStage,
-                  callStatus: callStatus,
-                  callDuration: callDuration,
-                  callStartTime: callStartTime,
-                  callEndTime: callEndTime,
-                  id: id,
-                  fromWhere: "call",
-                  selectedStage: leadDDController.selectedStage.value
-
-              );
-              Get.back();
             }
+            print("currentLeadStage at leadlist===>${currentLeadStage}");
+            print("selectedStage at selectedStage===>${leadDDController.selectedStage.value}");
+
+            leadListController.callFeedbackSubmit(
+                leadId: leadId,
+                currentLeadStage: currentLeadStage,
+                callStatus: callStatus,
+                callDuration: callDuration,
+                callStartTime: callStartTime,
+                callEndTime: callEndTime,
+                id: id,
+                fromWhere: "call",
+                selectedStage: leadDDController.selectedStage.value
+
+            );
+            Get.offAllNamed("/bottomNavbar");
 
           },
         );
       },
     );
   }
+
 }
 
 

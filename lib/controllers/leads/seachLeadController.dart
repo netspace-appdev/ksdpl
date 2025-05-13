@@ -16,7 +16,7 @@ class SearchLeadController extends GetxController{
   var isLoading = false.obs;
 
 
-  LeadListController leadListController = Get.find<LeadListController>(tag: 'search');
+  LeadListController leadListController = Get.find<LeadListController>();
   LeadDDController leadDDController=Get.find();
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
 

@@ -60,10 +60,13 @@ class DashboardController extends GetxController {
   }) async {
     try {
       isLoading(true);
+      print("getEmployeeByPhoneNumberApi==>");
 
 
       var data = await DashboardApiService.getEmployeeByPhoneNumberApi(phone: phone,);
 
+
+      print("getEmployeeByPhoneNumberApi==>data===>${data.toString()}");
 
       if(data['success'] == true){
 
@@ -86,7 +89,16 @@ class DashboardController extends GetxController {
         getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
         getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
         todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
+      }else if (data['StatusCode'] == "You are not authorized" || data['Message'] == "401") {
+        // Clear user datd
+        StorageService.clear();
+        ToastMessage.msg("Session expired. Please log in again.");
+
+        // Navigate to login screen
+        Get.offAllNamed("/login");
+        return;
       }else{
+        print("data here===>${data.toString()}");
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 

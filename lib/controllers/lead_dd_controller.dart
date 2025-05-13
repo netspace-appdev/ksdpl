@@ -47,6 +47,7 @@ class LeadDDController extends GetxController{
   var selectedCampaign = Rxn<String>();
   var selectedKsdplBr = Rxn<String>();
   var selectedStage = Rxn<String>();
+
   var selectedBankBranch = Rxn<String>();
   var selectedChannel = Rxn<String>();
   var selectedStageActive = RxnInt();

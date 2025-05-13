@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
+import 'package:ksdpl/controllers/leads/seachLeadController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
@@ -26,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'lead_history_controller.dart';
 
 class LeadListController extends GetxController {
-
+  var selectedPrevStage = Rxn<String>();
   var isLoading = false.obs;
   // GetAllLeadsModel? getAllLeadsModel;
 
@@ -299,6 +300,21 @@ print("selectedTime ==>${selectedTime}");
         reminderStatus:  isCallReminder.value?"1":"0",
       ).then((_){
 
+        SearchLeadController searchLeadController=Get.find();
+        print("selectedPrevStage on second-->${selectedPrevStage.value}");
+        getFilteredLeadsApi(
+          employeeId: eId.value.toString(),
+          leadStage: selectedPrevStage.value??"0",
+          stateId: leadDDController.selectedState.value??"0",
+          distId: leadDDController.selectedDistrict.value??"0",
+          cityId:leadDDController.selectedCity.value??"0",
+          campaign: leadDDController.selectedCampaign.value??"",
+          fromDate:fromDateController.value.text.isEmpty?"":Helper.convertToIso8601(fromDateController.value.text),
+          toDate: toDateController.value.text.isEmpty?"":Helper.convertToIso8601(toDateController.value.text),
+          branch: leadDDController.selectedKsdplBr.value??"0",
+          uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
+          leadMobileNumber: searchLeadController.leadMobileNumberController.text,
+        );
         DashboardController dashboardController=Get.find();
         dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
         print("only followup");

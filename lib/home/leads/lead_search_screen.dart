@@ -47,7 +47,7 @@ class LeadSearchScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
-  LeadListController leadListController =Get.put(LeadListController(),tag: 'search');
+  LeadListController leadListController =Get.put(LeadListController());
   SearchLeadController searchLeadController=Get.put(SearchLeadController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());
@@ -529,18 +529,15 @@ class LeadSearchScreen extends StatelessWidget {
   }
 
   void onPressed(){
-    print("froom-->${Helper.convertToIso8601(leadListController.fromDateController.value.text)}");
-    print("todate-->${Helper.convertToIso8601(leadListController.toDateController.value.text)}");
-
-
-
-    print("todate-->${leadListController.fromDateController.value.text}");
-    print("todate-->${leadListController.toDateController.value.text}");
-
-
+    var dt=leadDDController.selectedStage.value??"0";
+    leadListController.selectedPrevStage.value=dt;
+    print("on press==>leadListController.selectedPrevStage.value==>${leadListController.selectedPrevStage.value}");
+    var temp=leadDDController.selectedStage.value??"0";
+    leadListController.leadCode.value=temp;
+    print("on press==>leadcode==>${leadListController.leadCode.value}");
     leadListController.getFilteredLeadsApi(
       employeeId: leadListController.eId.value.toString(),
-      leadStage:leadDDController.selectedStage.value??"0",
+      leadStage:temp,
       stateId: leadDDController.selectedState.value??"0",
       distId: leadDDController.selectedDistrict.value??"0",
       cityId:leadDDController.selectedCity.value??"0",
@@ -647,13 +644,19 @@ class LeadSearchScreen extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    Helper.capitalizeEachWord(lead.name.toString()),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width*0.39,
+                                    child: Text(
+                                      Helper.capitalizeEachWord(lead.name.toString()),
 
-                                    // lead.name.toString(),
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+
+                                      // lead.name.toString(),
+                                      style: GoogleFonts.merriweather(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   Row(
@@ -1157,7 +1160,7 @@ class LeadSearchScreen extends StatelessWidget {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        LeadListController leadListController =Get.find();
+        //LeadListController leadListController =Get.find();
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: AppText.addFAndF,
@@ -1203,6 +1206,7 @@ class LeadSearchScreen extends StatelessWidget {
                             if (leadDDController.isLeadStageLoading.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
                             }
+                            print("lead coe==>${leadListController.leadCode.value}");
                             int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
 
                             // Allowed stage IDs based on leadCode

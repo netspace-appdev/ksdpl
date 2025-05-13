@@ -641,7 +641,7 @@ print("addLoanApplicationApi");
       var data = await LoanApplService.addLoanApplicationApi(
         body:[
           {
-            "id": leadId.value,
+            "id":0,
             "dsaCode": cleanText(dsaCodeController.text),
             "loanApplicationNo": cleanText(lanController.text),
             "bankId": selectedBank.value??0,

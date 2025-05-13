@@ -19,6 +19,7 @@ class DashboardApiService{
   static const String getBreakingNewsById = baseUrl + 'UpdatedNews/GetBreakingNewsById';
   static const String todayWorkStatusOfRoBm = baseUrl + 'EmployeeDashboard/TodayWorkStatusOfRoBm';
 
+/*
   static Future<Map<String, dynamic>> getEmployeeByPhoneNumberApi({
     required String phone,
   }) async {
@@ -52,6 +53,42 @@ class DashboardApiService{
       } else {
         throw Exception('Failed to load data: ${response.statusCode}');
       }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+*/
+
+  static Future<Map<String, dynamic>> getEmployeeByPhoneNumberApi({
+    required String phone,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getEmployeeByPhoneNumber),
+      );
+
+      var headers = await MyHeader.getHeaders();
+      request.headers.addAll(headers);
+      request.fields['PhoneNumber'] = phone;
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      final jsonResponse = jsonDecode(response.body);
+      print("jsonResponse===>${jsonResponse}");
+
+      if (response.statusCode == 200) {
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+          return jsonResponse;
+        } else {
+          return jsonResponse; // error but 200
+        }
+      } else {
+        // Still return the error JSON body even if not 200
+        return jsonResponse;
+      }
+
     } catch (e) {
       throw Exception('Error: $e');
     }
