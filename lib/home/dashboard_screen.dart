@@ -243,9 +243,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  ///old working code
 
 
-  Widget offerContainer() {
+/*  Widget offerContainer() {
     return Obx(() {
       if (dashboardController.isLoading.value) {
         return Center(child: CustomSkelton.dashboardShimmerList(context));
@@ -386,10 +387,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                   /* LeadListController leadListController = Get.find();
+                   *//* LeadListController leadListController = Get.find();
                     leadListController.selectCheckbox(stageId);
                     leadListController.filterSubmit();
-                    botNavController.selectedIndex.value = 1;*/
+                    botNavController.selectedIndex.value = 1;*//*
                     int globalIndex = chunkIndex * 4 + ind;
 
                     print("globalIndex===>${globalIndex.toString()}");
@@ -467,9 +468,220 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
       ),
     );
+  }*/
+
+
+///new code and experiment for lead count
+  Widget offerContainer() {
+    return Obx(() {
+      if (dashboardController.isLoading.value) {
+        return Center(child: CustomSkelton.dashboardShimmerList(context));
+      }
+
+      if (dashboardController.getDetailsCountOfLeads.value == null ||
+          dashboardController.getDetailsCountOfLeads.value!.data == null) {
+        return Center(
+          child: Container(
+            height: 160,
+            width: MediaQuery.of(context).size.width * 0.80,
+            decoration: BoxDecoration(
+              color: AppColor.appWhite,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: const Center(
+              child: Text(
+                AppText.noDataFound,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.grey1,
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+
+      // ✅ Updated fixed stages as per latest API
+      List<Map<String, dynamic>> fixedLeadStages = [
+
+        {"id": 1, "stageName": "Total Assigned"},
+        {"id": 2, "stageName": "Self Sourced Leads"},
+        {"id": 3, "stageName": "Total Leads"},
+        {"id": 4, "stageName": "Fresh Leads"},
+        {"id": 5, "stageName": "Total Working"},
+        {"id": 6, "stageName": "Ongoing Calls"},
+        {"id": 7, "stageName": "Not Interested"},
+        {"id": 8, "stageName": "Could Not Connect"},
+        {"id": 9, "stageName": "Interested"},
+        {"id": 10, "stageName": "Not Doable"},
+        {"id": 11, "stageName": "Hold"},
+        {"id": 12, "stageName": "Rejected"},
+        {"id": 13, "stageName": "Logged In"},
+        {"id": 14, "stageName": "Sanction"},
+        {"id": 15, "stageName": "Partial Disbursed"},
+        {"id": 16, "stageName": "Fully Disbursed"},
+      ];
+
+      var apiLeads = dashboardController.getDetailsCountOfLeads.value!.data!;
+      Map<String, dynamic> apiMap = {for (var lead in apiLeads) lead.headingName!: lead};
+
+      // 🎯 Build final list with fallback
+      List<dynamic> fixedLeads = fixedLeadStages.map((item) {
+        var match = apiMap[item['stageName']];
+        if (match != null) {
+          return match;
+        } else {
+          return {
+            "id": item['id'],
+            "stageName": item['stageName'],
+            "count": 0,
+          };
+        }
+      }).toList();
+
+      // 🔄 Chunk list in groups of 4
+      List<List<dynamic>> leadChunks = [];
+      for (var i = 0; i < fixedLeads.length; i += 4) {
+        leadChunks.add(fixedLeads.sublist(
+          i,
+          (i + 4 > fixedLeads.length) ? fixedLeads.length : i + 4,
+        ));
+      }
+
+      return SizedBox(
+        height: 180,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: leadChunks.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            var chunk = leadChunks[index];
+
+            return Container(
+              width: MediaQuery.of(context).size.width * 0.80,
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                color: index % 2 == 0 ? AppColor.appWhite : AppColor.secondaryColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: customGrid(chunk, index),
+            );
+          },
+        ),
+      );
+    });
   }
 
+  Widget customGrid(List<dynamic> chunk, int chunkIndex) {
+    return SizedBox(
+      height: 145,
+      child: GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 1.9,
+        ),
+        itemCount: chunk.length,
+        itemBuilder: (context, ind) {
+          final item = chunk[ind];
+          final leadCount = item is Map ? item['count'] ?? 0 : item.count ?? 0;
+          final stageName = item is Map ? item['stageName'] ?? '' : item.headingName ?? '';
+         // final stageId = item is Map ? item['id'] ?? 0 : item.id ?? 0;
 
+          return Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColor.grey4),
+            ),
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+
+                    int globalIndex = chunkIndex * 4 + ind;
+
+                    print("globalIndex===>${globalIndex.toString()}");
+
+                    var stageId=0;
+                    LeadListController leadListController=Get.find();
+                    if(globalIndex==8){
+                      stageId=9;
+                      leadListController.selectCheckbox(4);
+
+                      botNavController.selectedIndex.value = 1;
+                    } else if(globalIndex==1){
+                      stageId=2;
+                      leadListController.selectCheckbox(-1);
+
+                      botNavController.selectedIndex.value = 1;
+                    }else{
+
+                    }
+                    leadListController.getDetailsListOfLeadsForDashboardApi(
+                      applyDateFilter: "false",
+                      stageId: stageId.toString(),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColor.amberVersion,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Image.asset(AppImage.doc, height: 20),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          leadCount.toString(),
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
+                        ),
+                        const SizedBox(width: 5),
+                        Image.asset(AppImage.arrow, height: 8),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    SizedBox(
+                      width: 50,
+                      child: Text(
+                        stageName,
+                        style: const TextStyle(fontSize: 8, color: AppColor.blackColor),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   Widget barChart(){
     return Column(

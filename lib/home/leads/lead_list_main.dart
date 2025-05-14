@@ -118,11 +118,15 @@ class LeadListMain extends StatelessWidget {
                                     ),
                                   ),
 
-                                  Text(
-                                    leadListController.leadStageName2.value.toString(),
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                  Container(
+                                   // width: MediaQuery.of(context).size.width*0.50,
+                                    child: Text(
+                                      leadListController.leadStageName2.value.toString(),
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   Text(
@@ -702,7 +706,7 @@ class LeadListMain extends StatelessWidget {
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//"+919238513910",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
+            phoneNumber:"+919238513910",//"+919238513910",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,

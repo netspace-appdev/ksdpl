@@ -37,6 +37,8 @@ class DrawerApiService {
   static const String getAllBranchByBankId = baseUrl + 'Branch/GetAllBranchByBankId';
   static const String getAllChannelList = baseUrl + 'ChannelMaster/GetAllChannelList';
 
+  static const String getDetailsListOfLeadsForDashboard = baseUrl + 'LeadDetail/GetDetailsListOfLeadsForDashboard';
+
   static Future<Map<String, dynamic>> getBankerByIdApi({
     required String bankerId,
   }) async {
@@ -329,60 +331,7 @@ class DrawerApiService {
     }
   }
 
-/*
-  static Future<Map<String, dynamic>> getAllLeadsApi({
-    required leadStage,
-    required employeeId,
-    required stateId,
-    required distId,
-    required cityId,
-    required campaign,
 
-
-  }) async {
-    print("request===>  getAllLeadsApi in leadlist==>${getAllLeads.toString()}");
-    try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(getAllLeads),
-      );
-
-      // Headers
-
-      var header=await MyHeader.getHeaders2();
-
-      request.headers.addAll(header);
-      request.fields['LeadStage'] = leadStage.toString();
-      request.fields['AssignedEmployeeId'] =employeeId.toString();
-      request.fields['StateId'] =stateId;
-      request.fields['DistrictId'] =distId;
-      request.fields['CityId'] =cityId;
-      request.fields['Campaign'] =campaign;
-      // Sending request
-      var streamedResponse = await request.send();
-      var response = await http.Response.fromStream(streamedResponse);
-      print("request===>  getAllLeadsApi==>${getAllLeads.toString()}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-
-        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
-
-          return jsonResponse;
-        } else {
-          //throw Exception('Invalid API response');
-          return jsonResponse;
-        }
-      } else {
-        throw Exception('Failed to load data: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
-  }
-*/
   static Future<Map<String, dynamic>> getAllLeadsApi({
     required leadStage,
     required employeeId,
@@ -437,6 +386,42 @@ class DrawerApiService {
   }
 
 
+  static Future<Map<String, dynamic>> getDetailsListOfLeadsForDashboardApi({
+    required stageId,
+    required applyDateFilter,
+    required int pageNumber,
+    required int pageSize,
+  }) async {
+    try {
+      print("API called");
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse("$getDetailsListOfLeadsForDashboard?pageNumber=$pageNumber&pageSize=$pageSize"),
+      );
+      var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      request.fields['StageId'] ="2"; //stageId;
+      request.fields['EmployeeId'] ="16"; //empId;
+      request.fields['ApplyDateFilter'] =applyDateFilter;
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("link===>  getDetailsListOfLeadsForDashboardApi==>$getDetailsListOfLeadsForDashboard?pageNumber=$pageNumber&pageSize=$pageSize");
+      print("request===>  getDetailsListOfLeadsForDashboardApi==>${request.fields}");
+      print("response===> getDetailsListOfLeadsForDashboardApi ==>${response.statusCode}");
+      print("response===>getAllLeadsApi ==>${response.body}");
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        return jsonResponse;
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
 
   static Future<Map<String, dynamic>> updateLeadStageApi({
     required id,

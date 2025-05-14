@@ -19,6 +19,8 @@ class DashboardApiService{
   static const String getBreakingNewsById = baseUrl + 'UpdatedNews/GetBreakingNewsById';
   static const String todayWorkStatusOfRoBm = baseUrl + 'EmployeeDashboard/TodayWorkStatusOfRoBm';
 
+  static const String GetDetailsCountOfLeadsForDashboard = baseUrl + 'LeadDetail/GetDetailsCountOfLeadsForDashboard';
+
 /*
   static Future<Map<String, dynamic>> getEmployeeByPhoneNumberApi({
     required String phone,
@@ -138,6 +140,49 @@ class DashboardApiService{
     }
   }
 
+  static Future<Map<String, dynamic>> getDetailsCountOfLeadsForDashboardApi({
+    required employeeId,
+    required applyDateFilter,
+  }) async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(GetDetailsCountOfLeadsForDashboard),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['EmployeeId'] = employeeId;
+      request.fields['ApplyDateFilter'] =applyDateFilter;
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("Request getDetailsCountOfLeadsForDashboardApi===>${request.fields}");
+      print("Response getDetailsCountOfLeadsForDashboardApi===>${response.body}");
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
 
   static Future<Map<String, dynamic>> getBreakingNewsApi() async {
 
@@ -156,6 +201,8 @@ class DashboardApiService{
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

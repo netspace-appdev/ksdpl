@@ -10,6 +10,7 @@ import '../../common/notification_helper.dart';
 import '../../common/storage_service.dart';
 import '../../models/UpdateFCMTokenModel.dart';
 import '../../models/dashboard/GetCountOfLeadsModel.dart';
+import '../../models/dashboard/GetDetailsCountOfLeadsForDashboardModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
 import '../../models/dashboard/GetRemindersModel.dart';
 import '../../models/dashboard/GetUpcomingDateOfBirthModel.dart';
@@ -25,6 +26,7 @@ class DashboardController extends GetxController {
   var isLoading = false.obs;
   GetEmployeeModel? getEmployeeModel;
   var getCountOfLeadsModel = Rxn<GetCountOfLeadsModel>(); //
+  var getDetailsCountOfLeads = Rxn<GetDetailsCountOfLeadsForDashboardModel>(); //
   var getBreakingNewsModel = Rxn<GetBreakingNewsModel>(); //
   var getUpcomingDateOfBirthModel = Rxn<GetUpcomingDateOfBirthModel>(); //
   var todayWorkStatusRBModel = Rxn<TodayWorkStatusRBModel>(); //
@@ -87,6 +89,7 @@ class DashboardController extends GetxController {
         );
 
         getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
+        getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
         getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
         todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
       }else if (data['StatusCode'] == "You are not authorized" || data['Message'] == "401") {
@@ -145,6 +148,51 @@ class DashboardController extends GetxController {
 
 
         getCountOfLeadsModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllLeadsApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+  void  getDetailsCountOfLeadsForDashboardApi({
+    required employeeId,
+    required applyDateFilter,
+
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await DashboardApiService.getDetailsCountOfLeadsForDashboardApi(
+        employeeId:employeeId,
+        applyDateFilter:applyDateFilter,
+      );
+
+
+      if(data['success'] == true){
+
+        getDetailsCountOfLeads.value= GetDetailsCountOfLeadsForDashboardModel.fromJson(data);
+
+
+
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getDetailsCountOfLeads.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
