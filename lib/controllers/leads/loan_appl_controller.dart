@@ -42,6 +42,7 @@ class LoanApplicationController extends GetxController{
   var selectedCountry = Rxn<String>();
   var selectedCountryPerm = Rxn<String>();
   var selectedProdTypeOrTypeLoan = Rxn<int>();
+  var loanApplId = 0;
   var isSameAddressApl = false.obs;
   LeadDDController leadDDController = Get.find();
 
@@ -121,7 +122,10 @@ class LoanApplicationController extends GetxController{
   final TextEditingController fdOtherMonthlyIncomeController = TextEditingController();
 
 
-
+  final TextEditingController bankerNameController = TextEditingController();
+  final TextEditingController bankerMobileController = TextEditingController();
+  final TextEditingController bankerWhatsappController = TextEditingController();
+  final TextEditingController bankerEmailController = TextEditingController();
 
 
   var selectedStateProp = Rxn<String>();
@@ -135,10 +139,10 @@ class LoanApplicationController extends GetxController{
   var referencesList = <ReferenceController>[].obs;
 
   var currentStep = 0.obs;
-  var stepCompleted = List<bool>.filled(7, false).obs;
+  var stepCompleted = List<bool>.filled(8, false).obs;
   LeadDDController leadDController=Get.find();
   final List<String> titles = [
-    'Personal Information', 'Co-Applicant Details', 'Property Details', 'Family Members', 'Credit Cards', 'Financial Details', 'References'
+    'Personal Information', 'Co-Applicant Details', 'Property Details', 'Family Members', 'Credit Cards', 'Financial Details', 'References\n', "Banker Details"
   ];
 
   var selectedBank = Rxn<int>();
@@ -193,7 +197,8 @@ class LoanApplicationController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    leadId.value = Get.arguments['leadId'];
+    leadId.value = Get.arguments['uln'];
+    ulnController.text =  leadId.value;
     getLoanApplicationDetailsByIdApi(id:leadId.value);
 
   }
@@ -634,14 +639,14 @@ class LoanApplicationController extends GetxController{
   }) async {
     try {
       isLoading(true);
-
+      var uln = Get.arguments['uln'];
 print("addLoanApplicationApi");
 
       print("here propid===>${cleanText(propPropIdController.text)}");
       var data = await LoanApplService.addLoanApplicationApi(
         body:[
           {
-            "id":0,
+            "id":loanApplId,
             "dsaCode": cleanText(dsaCodeController.text),
             "loanApplicationNo": cleanText(lanController.text),
             "bankId": selectedBank.value??0,
@@ -650,7 +655,7 @@ print("addLoanApplicationApi");
             "panCardNumber":  cleanText(panController.text),
             "addharCardNumber":  cleanText(aadharController.text),
             "loanAmountApplied": laAppliedController.toIntOrZero(),
-            "uniqueLeadNumber": cleanText(ulnController.text),
+            "uniqueLeadNumber": uln,
             "channelId": selectedChannel.value,
             "channelCode": cleanText(chCodeController.text),
             "detailForLoanApplication": {
@@ -745,7 +750,11 @@ print("addLoanApplicationApi");
               "monthlyPFDeduction": fdAMonthlyPfDeductionController.toIntOrZero(),
               "otherMonthlyIncome": fdOtherMonthlyIncomeController.toIntOrZero(),
             },
-            "references": refPayload
+            "references": refPayload,
+            "bankerName": cleanText(bankerNameController.text),
+            "bankerMobile": cleanText(bankerMobileController.text),
+            "bankerWatsapp": cleanText(bankerWhatsappController.text),
+            "bankerEmail": cleanText(bankerEmailController.text)
           }
 
 
@@ -758,6 +767,8 @@ print("addLoanApplicationApi");
 
         addLoanApplicationModel.value= AddLoanApplicationModel.fromJson(data);
         ToastMessage.msg( addLoanApplicationModel.value!.message!.toString());
+
+
 
 
         isLoading(false);
@@ -822,7 +833,7 @@ print("addLoanApplicationApi");
 
       var req = await LoanApplService.getLoanApplicationDetailsByIdApi(id: id);
 
-
+      var uln = Get.arguments['uln'];
       if(req['success'] == true){
 
         getLoanApplIdModel.value= GetLoanApplIdModel.fromJson(req);
@@ -910,6 +921,8 @@ print("addLoanApplicationApi");
           selectedCountryPerm.value= permanentAdd?['Country'] ?? '0';
           pinCodePermController.text = permanentAdd?['PinCode'] ?? '';
 
+
+
         }
         final data = getLoanApplIdModel.value!.data;
 
@@ -929,9 +942,14 @@ print("addLoanApplicationApi");
         panController.text = data?.panCardNumber ?? '';
         aadharController.text = data?.addharCardNumber ?? '';
         laAppliedController.text = data?.loanAmountApplied.toString()?? "0";
-        ulnController.text = data?.uniqueLeadNumber ?? '';
+        ulnController.text = uln;
         selectedChannel.value = data?.channelId ?? 0;
         chCodeController.text = data?.channelCode ?? '';
+        bankerNameController.text=data?.bankerName ?? '';
+        bankerMobileController.text=data?.bankerMobile ?? '';
+        bankerWhatsappController.text=data?.bankerWatsapp ?? '';
+        bankerEmailController.text=data?.bankerEmail ?? '';
+        loanApplId=data?.id ?? 0;
 
         populateCoApplicantControllers();
         populatePropertyDetails();
@@ -940,6 +958,7 @@ print("addLoanApplicationApi");
         populateCreditCardControllers();
         populateReferenceControllers();
         isLoadingMainScreen(false);
+
 
       }else{
         ToastMessage.msg(req['message'] ?? AppText.somethingWentWrong);
@@ -996,7 +1015,7 @@ print("addLoanApplicationApi");
           coApController.selectedCityCurr.value =presentAdd?['City']==""?"0":presentAdd?['City'] ?? '0';
           coApController.coApCurrTalukaController.text = presentAdd?["Taluka"] ?? '';
           print("country___curr-->${presentAdd?['Country']}");
-          coApController.selectedCountrCurr.value =presentAdd?['Country']==""?"":countryList[int.parse(presentAdd?['Country'])] ?? '0';
+          coApController.selectedCountrCurr.value =presentAdd?['Country']==""?"":presentAdd?['Country'];
 
 
           final permanentAdd = item?['PermanentAddress'];
@@ -1013,7 +1032,7 @@ print("addLoanApplicationApi");
           coApController.selectedCityPerm.value =permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0';
           coApController.coApPermTalukaController.text = permanentAdd?["Taluka"] ?? '';
           print("country___curr-->${permanentAdd?['Country']}");
-          coApController.selectedCountryPerm.value =permanentAdd?['Country']==""?"":countryList[int.parse(permanentAdd?['Country'])] ?? '0';
+          coApController.selectedCountryPerm.value =permanentAdd?['Country']==""?"":permanentAdd?['Country'];
 
           coApplicantList.add(coApController);
         }
@@ -1161,6 +1180,8 @@ print("addLoanApplicationApi");
       }
     }
   }
+
+
 }
 
 extension ParseStringExtension on String? {

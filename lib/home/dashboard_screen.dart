@@ -246,7 +246,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ///old working code
 
 
-/*  Widget offerContainer() {
+  Widget offerContainer() {
     return Obx(() {
       if (dashboardController.isLoading.value) {
         return Center(child: CustomSkelton.dashboardShimmerList(context));
@@ -387,16 +387,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                   *//* LeadListController leadListController = Get.find();
+                    LeadListController leadListController = Get.find();
                     leadListController.selectCheckbox(stageId);
                     leadListController.filterSubmit();
-                    botNavController.selectedIndex.value = 1;*//*
+                    botNavController.selectedIndex.value = 1;
                     int globalIndex = chunkIndex * 4 + ind;
 
                     print("globalIndex===>${globalIndex.toString()}");
 
 
-                    LeadListController leadListController=Get.find();
+
                     if(globalIndex==0){
                       leadListController.selectCheckbox(1);
                       leadListController.filterSubmit();
@@ -468,11 +468,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
       ),
     );
-  }*/
+  }
 
 
 ///new code and experiment for lead count
-  Widget offerContainer() {
+/*  Widget offerContainer() {
     return Obx(() {
       if (dashboardController.isLoading.value) {
         return Center(child: CustomSkelton.dashboardShimmerList(context));
@@ -617,22 +617,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 InkWell(
                   onTap: () {
+                    leadListController.fromWhereLeads.value="dashboard";
 
                     int globalIndex = chunkIndex * 4 + ind;
 
                     print("globalIndex===>${globalIndex.toString()}");
 
                     var stageId=0;
-                    LeadListController leadListController=Get.find();
-                    if(globalIndex==8){
-                      stageId=9;
-                      leadListController.selectCheckbox(4);
-
+                   // LeadListController leadListController=Get.find();
+                    if(globalIndex==0){
+                      stageId=1;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Total Assigned";
                       botNavController.selectedIndex.value = 1;
                     } else if(globalIndex==1){
                       stageId=2;
                       leadListController.selectCheckbox(-1);
-
+                      leadListController.leadStageName2.value ="Self Sourced Leads";
                       botNavController.selectedIndex.value = 1;
                     }else{
 
@@ -681,7 +682,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
       ),
     );
-  }
+  }*/
 
   Widget barChart(){
     return Column(
@@ -1337,7 +1338,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             CallService callService = CallService();
 
                             callService.makePhoneCall(
-                              phoneNumber:data.leadMobileNo.toString(),//data.leadMobileNo.toString(),//"+919399299880"
+                              phoneNumber:"+919238513910",//data.leadMobileNo.toString(),//data.leadMobileNo.toString(),//"+919399299880"
                               leadId:  data.leadId.toString(),
                               currentLeadStage:  data.leadStageStatus.toString(),
                               context: context,

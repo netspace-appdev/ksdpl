@@ -13,7 +13,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 class LoanApplService {
   static const String addLoanApplicationDetails = BaseUrl.baseUrl + 'LeadDetail/AddLoanApplicationDetails';
-  static const String getLoanApplicationDetailsById = BaseUrl.baseUrl + 'LeadDetail/GetLoanApplicationDetailsById';
+  // static const String getLoanApplicationDetailsById = BaseUrl.baseUrl + 'LeadDetail/GetLoanApplicationDetailsById';
+  static const String getLoanApplicationDetailsByUniqueLeadNumber = BaseUrl.baseUrl + 'LeadDetail/GetLoanApplicationDetailsByUniqueLeadNumber';
 
   static Future<Map<String, dynamic>> addLoanApplicationApi({
     required List<Map<String, dynamic>> body,
@@ -49,7 +50,7 @@ class LoanApplService {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(getLoanApplicationDetailsById),
+        Uri.parse(getLoanApplicationDetailsByUniqueLeadNumber),
       );
 
       // Headers
@@ -57,15 +58,15 @@ class LoanApplService {
       var header=await MyHeader.getHeaders2();
 
       request.headers.addAll(header);
-      request.fields['Id'] = id.toString();
+      request.fields['UniqueLeadNumber'] = id.toString();
 
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("===>  getLoanApplicationDetailsByIdApi==>");
+      print("===>  getLoanApplicationDetailsByUniqueLeadNumber==>url+++?${Uri.parse(getLoanApplicationDetailsByUniqueLeadNumber)}");
       print("request===>==>${request.fields.toString()}");
       print("response.statusCode===>${response.statusCode}");
-      print("response==>getLoanApplicationDetailsByIdApi==>${response.body.toString()}");
+      print("response==>getLoanApplicationDetailsByUniqueLeadNumber==>${response.body.toString()}");
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

@@ -98,8 +98,10 @@ class LeadDDController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    print("here KSD prod");
     getAllStateApi();
     getAllBankApi();
+
     getAllKsdplProductApi();
     getCampaignNameApi();
     getAllKsdplBranchApi();

@@ -402,8 +402,8 @@ class DrawerApiService {
       var header = await MyHeader.getHeaders2();
       request.headers.addAll(header);
 
-      request.fields['StageId'] ="2"; //stageId;
-      request.fields['EmployeeId'] ="16"; //empId;
+      request.fields['StageId'] =stageId;
+      request.fields['EmployeeId'] =empId;
       request.fields['ApplyDateFilter'] =applyDateFilter;
 
       var streamedResponse = await request.send();
@@ -715,7 +715,7 @@ class DrawerApiService {
 
 
   static Future<Map<String, dynamic>> getAllKsdplProductApi() async {
-
+    print("====>getAllKsdplProductApi==>");
     try {
       var request = http.MultipartRequest(
         'POST',

@@ -407,6 +407,8 @@ class LeadListMain extends StatelessWidget {
                               icon:  Icons.lock_open,
                               leadId: lead.id.toString(),
                               label_code: "open_poll",
+                              uln: lead.uniqueLeadNumber.toString()
+
                             ),
 
                         ],
@@ -482,6 +484,7 @@ class LeadListMain extends StatelessWidget {
                             icon:  Icons.thumb_up_alt_outlined,
                             leadId: lead.id.toString(),
                             label_code: "doable",
+                              uln: lead.uniqueLeadNumber.toString()
                           ),
                           _buildTextButton(
                             label:AppText.notDoable,
@@ -490,6 +493,7 @@ class LeadListMain extends StatelessWidget {
                             icon:  Icons.thumb_down_alt_outlined,
                             leadId: lead.id.toString(),
                             label_code: "not_doable",
+                              uln: lead.uniqueLeadNumber.toString()
                           )
                         ]
                         else if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="13" || leadListController.leadCode.value=="3" )...[
@@ -501,6 +505,7 @@ class LeadListMain extends StatelessWidget {
                             icon:  Icons.thumb_up_alt_outlined,
                             leadId: lead.id.toString(),
                             label_code: "interested",
+                              uln: lead.uniqueLeadNumber.toString()
                           ),
                           _buildTextButton(
                             label:AppText.notInterested,
@@ -509,6 +514,7 @@ class LeadListMain extends StatelessWidget {
                             icon:  Icons.thumb_down_alt_outlined,
                             leadId: lead.id.toString(),
                             label_code: "not_interested",
+                              uln: lead.uniqueLeadNumber.toString()
 
                           ),
                         ]
@@ -529,6 +535,7 @@ class LeadListMain extends StatelessWidget {
                             leadId: lead.id.toString(),
                             label_code: "cc",
                             currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
                           ),
                           _buildTextButton(
                             label:AppText.addFollowUp,
@@ -538,6 +545,7 @@ class LeadListMain extends StatelessWidget {
                             leadId: lead.id.toString(),
                             label_code: "add_feedback",
                             currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
                           ),
                         ],
                       ],
@@ -556,6 +564,7 @@ class LeadListMain extends StatelessWidget {
                             leadId: lead.id.toString(),
                             label_code: "add_lead_form",
                             currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
                           ),
                         if(leadListController.leadCode.value=="4" || leadListController.leadCode.value=="6" ||leadListController.leadCode.value=="0" ||
                             leadListController.leadCode.value=="5" || leadListController.leadCode.value=="7"
@@ -568,6 +577,7 @@ class LeadListMain extends StatelessWidget {
                             leadId: lead.id.toString(),
                             label_code: "add_feedback",
                             currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
                           ),
 
                         ],
@@ -592,6 +602,7 @@ class LeadListMain extends StatelessWidget {
                                 leadId: lead.id.toString(),
                                 label_code: "loan_appl_form",
                                 currentLeadStage: lead.leadStage.toString(),
+                                  uln: lead.uniqueLeadNumber.toString()
                               ),
 
                           ],
@@ -626,6 +637,12 @@ class LeadListMain extends StatelessWidget {
                     leadMobileNumber:leadListController.leadMobileNumberMain.value.toString(),
                     isLoadMore: true,
                   );
+
+/*
+                  leadListController.getDetailsListOfLeadsForDashboardApi(
+                    applyDateFilter: "false",
+                    stageId: "1",
+                  );*/
                 },
                 child: leadListController.isMainListMoreLoading.value
                     ? Container(
@@ -753,6 +770,7 @@ class LeadListMain extends StatelessWidget {
     required IconData icon,
     required String leadId,
     required String label_code,
+    required String uln,
     String? currentLeadStage
   }) {
 
@@ -840,6 +858,7 @@ class LeadListMain extends StatelessWidget {
 
           Get.toNamed("/loanApplication", arguments: {
           'leadId': leadId.toString(),
+          'uln': uln.toString(),
           });
 
         }else{

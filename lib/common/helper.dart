@@ -418,6 +418,17 @@ class AppText{
   static const String leadMobileNUmber="Lead Mobile Number";
   static const String enterLeadMobileNUmber="Enter Lead Mobile Number";
 
+  static const String bankerDetails="Banker Details";
+  static const String bankerName="Banker Name";
+  static const String bankerMobile="Banker Mobile";
+  static const String bankerWhatsapp="Banker Whatsapp";
+  static const String bankerEmail="Banker Email";
+
+  static const String enterBankerName = "Enter Banker Name";
+  static const String enterBankerMobile = "Enter Banker Mobile";
+  static const String enterBankerWhatsapp = "Enter Banker Whatsapp";
+  static const String enterBankerEmail = "Enter Banker Email";
+
 }
 
 class AppColor{

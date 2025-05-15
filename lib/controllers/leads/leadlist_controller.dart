@@ -38,6 +38,7 @@ class LeadListController extends GetxController {
   var filteredHasMore = true.obs;
   var filteredCurrentPage = 1.obs;
   var isMainListMoreLoading = false.obs;
+  var isDashboardLeadListMoreLoading = false.obs;
   ///newly added for filter end
 
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
@@ -51,6 +52,7 @@ class LeadListController extends GetxController {
   var leadStageName="Fresh Leads".obs;
   var leadStageName2="Fresh Leads".obs;
   var fromWhere="".obs;
+  var fromWhereLeads="main".obs;
   var stateIdMain="0".obs;
   var distIdMain="0".obs;
   var cityIdMain="0".obs;
@@ -487,9 +489,9 @@ print("selectedTime ==>${selectedTime}");
 
     try {
 
-      if (isMainListMoreLoading.value || (!hasMore.value && isLoadMore)) return;
+      if (isDashboardLeadListMoreLoading.value || (!hasMore.value && isLoadMore)) return;
 
-      isMainListMoreLoading(true);
+      isDashboardLeadListMoreLoading(true);
 
       if (!isLoadMore) {
         currentPage.value = 1; // Reset to first page on fresh load
@@ -513,7 +515,7 @@ print("selectedTime ==>${selectedTime}");
           getAllLeadsModel.value = newLeads;
         }
 
-        leadStageName2.value = leadStageName.value;
+        //leadStageName2.value = leadStageName.value;
 
         // If less data returned than requested pageSize, mark as no more
         if (newLeads.data!.length < pageSize) {
@@ -523,7 +525,67 @@ print("selectedTime ==>${selectedTime}");
         }
         leadListLength.value=getAllLeadsModel.value!.data!.length;
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
-        leadStageName2.value = leadStageName.value;
+        //leadStageName2.value = leadStageName.value;
+        getAllLeadsModel.value = null;
+        hasMore.value = false;
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getAllLeadsApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isDashboardLeadListMoreLoading(false);
+    }
+  }
+
+  ///backup
+/*
+  void getDetailsListOfLeadsForDashboardApi({
+    required stageId,
+    required applyDateFilter,
+    bool isLoadMore = false,
+  }) async {
+
+    try {
+
+      if (isMainListMoreLoading.value || (!hasMore.value && isLoadMore)) return;
+
+      isMainListMoreLoading(true);
+
+      if (!isLoadMore) {
+        currentPage.value = 1; // Reset to first page on fresh load
+        hasMore.value = true;
+      }
+
+      var data = await DrawerApiService.getDetailsListOfLeadsForDashboardApi(
+        stageId: stageId,
+        applyDateFilter:applyDateFilter ,
+        pageNumber: currentPage.value,
+        pageSize: pageSize,
+
+      );
+
+      if (data['success'] == true) {
+        var newLeads = GetAllLeadsModel.fromJson(data);
+
+        if (isLoadMore) {
+          getAllLeadsModel.value!.data!.addAll(newLeads.data!);
+        } else {
+          getAllLeadsModel.value = newLeads;
+        }
+
+        //leadStageName2.value = leadStageName.value;
+
+        // If less data returned than requested pageSize, mark as no more
+        if (newLeads.data!.length < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++; // Ready for next page
+        }
+        leadListLength.value=getAllLeadsModel.value!.data!.length;
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        //leadStageName2.value = leadStageName.value;
         getAllLeadsModel.value = null;
         hasMore.value = false;
       } else {
@@ -536,6 +598,8 @@ print("selectedTime ==>${selectedTime}");
       isMainListMoreLoading(false);
     }
   }
+*/
+
 
 
   void  updateLeadStageApi({
