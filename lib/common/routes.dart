@@ -30,6 +30,7 @@ import '../home/news/NewsDetailsScreen.dart';
 import '../home/notification_screen.dart';
 import '../home/leads/open_poll_filter.dart';
 import '../home/product.dart';
+import '../home/product/add_product_screen.dart';
 import '../home/splash.dart';
 import '../registration/login.dart';
 import '../registration/registration.dart';
@@ -61,4 +62,5 @@ final routes = [
   GetPage(name: '/getAllReminder', page: () => GetAllReminderScreen()),
   GetPage(name: '/leadSearchScreen', page: () => LeadSearchScreen()),
   GetPage(name: '/newsDetailsScreen', page: () => NewsDetailsScreen()),
+  GetPage(name: '/addProductScreen', page: () => AddProductScreen()),
 ];

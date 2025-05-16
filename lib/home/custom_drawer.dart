@@ -170,12 +170,41 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  ],
                ),
 
+
+               ExpansionTile(
+
+
+                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                 title:const Text(AppText.manageProducts, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                 leading: Image.asset(AppImage.product, height: 20,),
+                 children: [
+                   ListTile(
+
+                     leading:  Icon(Icons.add_task,color: AppColor.blackColor),
+                     title:  Text("Add Product", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                     onTap: () {
+                       Get.toNamed("/addProductScreen");
+
+                     },
+                   ),
+                   ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
+                     leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
+                     title:  Text("View Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                     onTap: () {
+
+                     },
+                   ),
+                 ],
+               ),
+
                CustomListTile(
                  title:  "Web Panel",
-                 imagePath:AppImage.manInBlack,
+                 imagePath:AppImage.webImg,
                  onTap: () => _launchURL("https://kanchaneshver.in/"),
 
                ),
+
+
 
                // Logout Button
                CustomListTile(

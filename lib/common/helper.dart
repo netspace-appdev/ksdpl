@@ -428,6 +428,84 @@ class AppText{
   static const String enterBankerMobile = "Enter Banker Mobile";
   static const String enterBankerWhatsapp = "Enter Banker Whatsapp";
   static const String enterBankerEmail = "Enter Banker Email";
+  static const String manageProducts = "Manage Products";
+
+  ///product
+  static const String addProduct = "Add Product";
+  static const String collateralSecurityExcluded = "Collateral Security Excluded";
+  static const String enterCollateralSecurityExcluded = "Enter Collateral Security Excluded";
+
+  static const String profileExcluded = "Profile Excluded";
+  static const String enterProfileExcluded = "Enter Profile Excluded";
+
+  static const String ageLimitEarningApplicants = "Age Limit Earning Applicants";
+  static const String enterAgeLimitEarningApplicants = "Enter Age Limit Earning Applicants";
+  static const String ageLimitNonEarningCoApplicant = "Age Limit Non-Earning Co-Applicant";
+  static const String enterAgeLimitNonEarningCoApplicant = "Enter Age Limit Non-Earning Co-Applicant";
+  static const String minAgeEarningApplicants = "Minimum Age Earning Applicants";
+  static const String enterMinAgeEarningApplicants = "Enter Minimum Age Earning Applicants";
+  static const String minAgeNonEarningApplicants = "Minimum Age Non-Earning Applicants";
+  static const String enterMinAgeNonEarningApplicants = "Enter Minimum Age Non-Earning Applicants";
+  static const String minIncomeCriteria = "Minimum Income Criteria";
+  static const String enterMinIncomeCriteria = "Enter Minimum Income Criteria";
+
+  static const String minLoanAmount = "Minimum Loan Amount";
+  static const String maxLoanAmount = "Maximum Loan Amount";
+
+  static const String profitPercentage = "Profit Percentage";
+  static const String minCibil = "Minimum CIBIL";
+  static const String minTenor = "Minimum Tenor";
+  static const String maxTenor = "Maximum Tenor";
+
+  static const String minRoi = "Minimum ROI";
+  static const String maxRoi = "Maximum ROI";
+
+  static const String maxTenorEligibilityCriteria = "Maximum Tenor Eligibility Criteria";
+
+  static const String geoLimit = "Geo Limit";
+  static const String enterGeoLimit = "Enter Geo Limit";
+
+  static const String negativeProfiles = "Negative Profiles";
+  static const String negativeProfilesHint = "Type and press Enter to add";
+
+  static const String negativeAreas = "Negative Areas";
+  static const String negativeAreasHint = "Type and press Enter to add";
+
+  static const String minPropertyValue = "Minimum Property Value";
+  static const String maxIir = "Maximum IIR";
+  static const String maxFoir = "Maximum FOIR";
+  static const String maxLtv = "Maximum LTV";
+
+  static const String legalFee = "Legal Fee";
+  static const String technicalFee = "Technical Fee";
+  static const String adminFee = "Admin Fee";
+  static const String foreclosureCharges = "Foreclosure Charges";
+  static const String otherCharges = "Other Charges";
+  static const String stampDuty = "Stamp Duty";
+
+  static const String tsrYears = "TSR Years";
+  static const String tsrCharges = "TSR Charges";
+  static const String valuationCharges = "Valuation Charges";
+
+  static const String ksdplProduct = "KSDPL Product";
+  static const String selectKsdplProduct = "Select KSDPL Product";
+
+  static const String productValidateFrom = "Product Validate From";
+  static const String productValidateTo = "Product Validate To";
+
+  static const String maxTat = "Maximum TAT";
+
+  static const String documentDescriptions = "Document Descriptions";
+  static const String documentDescriptionsHint = "Type and press Enter to add";
+
+  static const String productDescriptions = "Product Descriptions";
+  static const String productSegment = "Product Segment";
+
+  static const String prodName = "Product Name";
+  static const String selectCustomerCategory = "Select Customer Category";
+  static const String selectCollateralSecurityCategory = "Select Collateral Security Category";
+  static const String selectIncomeType = "Select Income Type";
+
 
 }
 
@@ -534,6 +612,8 @@ class AppImage{
   static const String lead_white="assets/images/lead_white.png";
   static const String lead_yellow="assets/images/lead_yellow.png";
   static const String img_not_found="assets/images/img_not_found.jpg";
+  static const String webImg="assets/images/webImg.png";
+  static const String product="assets/images/product.png";
 
 }
 
