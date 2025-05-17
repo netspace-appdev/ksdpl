@@ -69,126 +69,92 @@ class Step2FormProduct extends StatelessWidget {
             ),
 
             CustomLabeledTextField(
-              label: AppText.minAgeNonEarningApplicants,
+              label: AppText.minIncomeCriteria,
 
-              controller: addProductController.prodMinAgeNonEarningApplicantsController,
+              controller: addProductController.prodMinIncomeCriteriaController,
               inputType: TextInputType.number,
-              hintText: AppText.enterMinAgeNonEarningApplicants,
+              hintText: AppText.enterMinIncomeCriteria,
               validator:  ValidationHelper.validatePhoneNumber,
             ),
 
             CustomLabeledTextField(
-              label: AppText.minAgeNonEarningApplicants,
-
-              controller: addProductController.prodMinAgeNonEarningApplicantsController,
+              label: AppText.minLoanAmount,
+              controller: addProductController.prodMinLoanAmountController,
               inputType: TextInputType.number,
-              hintText: AppText.enterMinAgeNonEarningApplicants,
+              hintText: AppText.enterMinLoanAmount,
               validator:  ValidationHelper.validatePhoneNumber,
             ),
-            const SizedBox(
-              height: 20,
-            ),
-
-            CustomTextLabel(
-              label: AppText.selectCollateralSecurityCategory,
-
-
-            ),
-
-            const SizedBox(height: 10),
-
-
-            Obx((){
-              if (leadDDController.isBranchLoading.value) {
-                return  Center(child:CustomSkelton.leadShimmerList(context));
-              }
-
-
-              return CustomDropdown<bankBrach.Data>(
-                items: leadDDController.getAllBranchBIModel.value?.data ?? [],
-                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                getName: (item) => item.branchName.toString(),
-                selectedValue: leadDDController.getAllBranchBIModel.value?.data?.firstWhereOrNull(
-                      (item) => item.id== addProductController.selectedBankBranch.value,
-                ),
-                onChanged: (value) {
-                  addProductController.selectedBankBranch.value =  value?.id;
-                },
-                onClear: (){
-                  addProductController.selectedBankBranch.value = 0;
-                  leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
-                },
-              );
-            }),
-
-
-            const SizedBox(height: 20),
 
             CustomLabeledTextField(
-              label: AppText.collateralSecurityExcluded,
-
-              controller: addProductController.prodCollateralSecurityExcludedController,
-              inputType: TextInputType.name,
-              hintText: AppText.enterCollateralSecurityExcluded,
-              validator:  ValidationHelper.validateName,
-            ),
-
-
-            const SizedBox(
-              height: 20,
-            ),
-
-            CustomTextLabel(
-              label: AppText.selectIncomeType,
-
-
-            ),
-
-            const SizedBox(height: 10),
-
-
-            Obx((){
-              if (leadDDController.isBranchLoading.value) {
-                return  Center(child:CustomSkelton.leadShimmerList(context));
-              }
-
-
-              return CustomDropdown<bankBrach.Data>(
-                items: leadDDController.getAllBranchBIModel.value?.data ?? [],
-                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                getName: (item) => item.branchName.toString(),
-                selectedValue: leadDDController.getAllBranchBIModel.value?.data?.firstWhereOrNull(
-                      (item) => item.id== addProductController.selectedBankBranch.value,
-                ),
-                onChanged: (value) {
-                  addProductController.selectedBankBranch.value =  value?.id;
-                },
-                onClear: (){
-                  addProductController.selectedBankBranch.value = 0;
-                  leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
-                },
-              );
-            }),
-
-
-            const SizedBox(height: 20),
-
-            CustomLabeledTextField(
-              label: AppText.profileExcluded,
-
-              controller: addProductController.prodProfileExcludedController,
-              inputType: TextInputType.name,
-              hintText: AppText.enterProfileExcluded,
-              validator:  ValidationHelper.validateName,
+              label: AppText.maxLoanAmount,
+              controller: addProductController.prodMaxLoanAmountController,
+              inputType: TextInputType.number,
+              hintText: AppText.enterMaxLoanAmount,
+              validator:  ValidationHelper.validatePhoneNumber,
             ),
 
             CustomLabeledTextField(
-              label: AppText.profileExcluded,
+              label: AppText.profitPercentage,
+              controller: addProductController.prodProfitPercentageController,
+              inputType: TextInputType.number,
+              hintText: AppText.enterProfitPercentage,
+              validator:  ValidationHelper.validatePhoneNumber,
+            ),
 
-              controller: addProductController.prodProfileExcludedController,
-              inputType: TextInputType.name,
-              hintText: AppText.enterProfileExcluded,
-              validator:  ValidationHelper.validateName,
+            CustomLabeledTextField(
+              label: AppText.minTenor,
+              controller: addProductController.prodMinTenorController,
+              inputType: TextInputType.number,
+              hintText: AppText.enterMinTenor,
+              validator:  ValidationHelper.validatePhoneNumber,
+            ),
+
+            CustomLabeledTextField(
+              label: AppText.minTenor,
+              controller: addProductController.prodMinTenorController,
+              inputType: TextInputType.number,
+              hintText: AppText.enterMinTenor,
+              validator:  ValidationHelper.validatePhoneNumber,
+            ),
+
+            CustomLabeledTextField(
+              label: AppText.maxTenor,
+              controller: addProductController.prodMaxTenorController,
+              inputType: TextInputType.number,
+              hintText: AppText.enterMaxTenor,
+              validator:  ValidationHelper.validatePhoneNumber,
+            ),
+
+            CustomLabeledTextField(
+              label: AppText.minRoi,
+              controller: addProductController.prodMinRoiController,
+              inputType: TextInputType.number,
+              hintText: AppText.enterMinRoi,
+              validator:  ValidationHelper.validatePhoneNumber,
+            ),
+
+            CustomLabeledTextField(
+              label: AppText.maxRoi,
+              controller: addProductController.prodMaxRoiController,
+              inputType: TextInputType.number,
+              hintText: AppText.enterMaxRoi,
+              validator:  ValidationHelper.validatePhoneNumber,
+            ),
+
+            CustomLabeledTextField(
+              label: AppText.maxTenorEligibilityCriteria,
+              controller: addProductController.prodMaxTenorEligibilityCriteriaController,
+              inputType: TextInputType.number,
+              hintText: AppText.enterMaxTenorEligibilityCriteria,
+              validator:  ValidationHelper.validatePhoneNumber,
+            ),
+
+            CustomLabeledTextField(
+              label: AppText.geoLimit,
+              controller: addProductController.prodGeoLimitController,
+              inputType: TextInputType.number,
+              hintText: AppText.enterGeoLimit,
+              validator:  ValidationHelper.validatePhoneNumber,
             ),
           ],
         );

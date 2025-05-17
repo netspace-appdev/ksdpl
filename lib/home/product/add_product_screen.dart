@@ -12,6 +12,8 @@ import '../../controllers/leads/loan_appl_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import 'Step1FormProduct.dart';
 import 'Step2FormProduct.dart';
+import 'Step3FormProduct.dart';
+import 'Step4FormProduct.dart';
 
 
 class AddProductScreen extends StatelessWidget {
@@ -24,7 +26,10 @@ class AddProductScreen extends StatelessWidget {
   final AddProductController addProductController =Get.put(AddProductController());
   final List<Widget> stepForms = [
     Step1FormProduct(),
-    Step2FormProduct()
+    Step2FormProduct(),
+    Step3FormProduct(),
+    Step4FormProduct(),
+
   ];
   @override
   Widget build(BuildContext context) {

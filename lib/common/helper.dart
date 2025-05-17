@@ -450,42 +450,68 @@ class AppText{
   static const String enterMinIncomeCriteria = "Enter Minimum Income Criteria";
 
   static const String minLoanAmount = "Minimum Loan Amount";
-  static const String maxLoanAmount = "Maximum Loan Amount";
+  static const String enterMinLoanAmount = "Enter Minimum Loan Amount";
+  static const String maxLoanAmount = "Enter Maximum Loan Amount";
+  static const String enterMaxLoanAmount = "Maximum Loan Amount";
 
   static const String profitPercentage = "Profit Percentage";
+  static const String enterProfitPercentage = "Enter Profit Percentage";
   static const String minCibil = "Minimum CIBIL";
+  static const String enterMinCibil = "Enter Minimum CIBIL";
   static const String minTenor = "Minimum Tenor";
+  static const String enterMinTenor = "Enter Minimum Tenor";
   static const String maxTenor = "Maximum Tenor";
+  static const String enterMaxTenor = "Enter Maximum Tenor";
 
   static const String minRoi = "Minimum ROI";
+  static const String enterMinRoi = "Enter Minimum ROI";
   static const String maxRoi = "Maximum ROI";
+  static const String enterMaxRoi = "Enter Maximum ROI";
 
   static const String maxTenorEligibilityCriteria = "Maximum Tenor Eligibility Criteria";
+  static const String  enterMaxTenorEligibilityCriteria = "EnterMaximum Tenor Eligibility Criteria";
 
   static const String geoLimit = "Geo Limit";
   static const String enterGeoLimit = "Enter Geo Limit";
 
   static const String negativeProfiles = "Negative Profiles";
+  static const String enterNegativeProfiles = "Enter Negative Profiles";
   static const String negativeProfilesHint = "Type and press Enter to add";
+
 
   static const String negativeAreas = "Negative Areas";
   static const String negativeAreasHint = "Type and press Enter to add";
 
   static const String minPropertyValue = "Minimum Property Value";
+  static const String enterMinPropertyValue = "Enter Minimum Property Value";
   static const String maxIir = "Maximum IIR";
+  static const String enterMaxIir = "Enter Maximum IIR";
   static const String maxFoir = "Maximum FOIR";
+  static const String enterMaxFoir = "Enter Maximum FOIR";
   static const String maxLtv = "Maximum LTV";
+  static const String enterMaxLtv = "Enter Maximum LTV";
 
   static const String legalFee = "Legal Fee";
+  static const String enterLegalFee = "EnterLegal Fee";
   static const String technicalFee = "Technical Fee";
+  static const String enterTechnicalFee = "EnterTechnical Fee";
   static const String adminFee = "Admin Fee";
+  static const String enterAdminFee = "Enter Admin Fee";
   static const String foreclosureCharges = "Foreclosure Charges";
+  static const String enterForeclosureCharges = "Enter Foreclosure Charges";
   static const String otherCharges = "Other Charges";
+  static const String enterOtherCharges = "Enter Other Charges";
   static const String stampDuty = "Stamp Duty";
+  static const String tampDuty = "Stamp Duty";
+  static const String enterStampDuty = "Enter Stamp Duty";
 
   static const String tsrYears = "TSR Years";
+  static const String enterTsrYears = "Enter TSR Charges";
+
   static const String tsrCharges = "TSR Charges";
+  static const String enterTsrCharges = "Enter TSR Charges";
   static const String valuationCharges = "Valuation Charges";
+  static const String enterValuationCharges = "Enter Valuation Charges";
 
   static const String ksdplProduct = "KSDPL Product";
   static const String selectKsdplProduct = "Select KSDPL Product";
@@ -494,12 +520,15 @@ class AppText{
   static const String productValidateTo = "Product Validate To";
 
   static const String maxTat = "Maximum TAT";
+  static const String enterMaxTat = "Enter Maximum TAT";
 
   static const String documentDescriptions = "Document Descriptions";
   static const String documentDescriptionsHint = "Type and press Enter to add";
 
   static const String productDescriptions = "Product Descriptions";
+  static const String enterProductDescriptions = "Enter Product Descriptions";
   static const String productSegment = "Product Segment";
+  static const String enterProductSegment = "Enter Product Segment";
 
   static const String prodName = "Product Name";
   static const String selectCustomerCategory = "Select Customer Category";
