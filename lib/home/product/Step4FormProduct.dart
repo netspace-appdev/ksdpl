@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -6,6 +8,7 @@ import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
+import '../../custom_widgets/CustomChipTextfield.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
@@ -26,35 +29,100 @@ class Step4FormProduct extends StatelessWidget {
           return Center(
             child: CustomSkelton.productShimmerList(context),
           );
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        return Form(
+          key: addProductController.stepFormKeys[3],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
 
-            const SizedBox(
-              height: 20,
-            ),
+              const SizedBox(
+                height: 20,
+              ),
 
-            CustomTextLabel(
-              label: AppText.documentDescriptions,
-              isRequired: true,
-
-
-            ),
-
-            const SizedBox(height: 20),
-
-            CustomTextArea(
-              label: AppText.documentDescriptionsHint,
-              controller: addProductController.prodAgeLimitEarningApplicantsController,
-              maxLines: 5, // Increase lines if needed
-              validator: (value) => value!.isEmpty ? "Please enter some text" : null,
-
-            ),
-
-            const SizedBox(height: 20),
+              CustomTextLabel(
+                label: AppText.documentDescriptions,
 
 
-          ],
+
+              ),
+
+              const SizedBox(height: 10),
+
+              CustomChipTextField(
+                textController: addProductController.chipText3Controller,
+                initialTags: [],
+                hintText:  AppText.negativeProfilesHint,
+                onChanged: (tags) {
+                  print("Updated tags: $tags");
+                },
+              ),
+
+
+              const SizedBox(
+                height: 20,
+              ),
+
+              const SizedBox(height: 20),
+              CustomTextLabel(
+                label: AppText.productDescriptions,
+
+
+
+              ),
+
+              const SizedBox(height: 20),
+              CustomTextArea(
+                label: AppText.writeYourContent,
+                controller: addProductController.prodProductDescriptionsController,
+                maxLines: 5, // Increase lines if needed
+                validator: (value) => value!.isEmpty ? "Please enter some text" : null,
+
+              ),
+
+             /* Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                  *//*  QuillToolbar.basic(
+                      controller: _controller,
+                      multiRowsDisplay: false,
+                      showAlignmentButtons: true,
+                      showFontSize: true,
+                      showCodeBlock: true,
+                      showColorButton: true,
+                      showBackgroundColorButton: true,
+                      showImageButton: true,
+                      showVideoButton: false, // optional
+                    ),*//*
+                    SizedBox(height: 10),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: QuillEditor.basic(
+                          controller: _controller,
+                          // readOnly: false,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        final content = jsonEncode(_controller.document.toDelta().toJson());
+                        print("🔹 Saved Content (Delta):\n$content");
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Content saved to console!")));
+                      },
+                      child: Text('Save Description'),
+                    )
+                  ],
+                ),
+              )*/
+
+            ],
+          ),
         );
       }),
     );

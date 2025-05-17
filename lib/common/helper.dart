@@ -476,11 +476,8 @@ class AppText{
 
   static const String negativeProfiles = "Negative Profiles";
   static const String enterNegativeProfiles = "Enter Negative Profiles";
-  static const String negativeProfilesHint = "Type and press Enter to add";
-
-
+  static const String negativeProfilesHint = "Type & press Enter to add";
   static const String negativeAreas = "Negative Areas";
-  static const String negativeAreasHint = "Type and press Enter to add";
 
   static const String minPropertyValue = "Minimum Property Value";
   static const String enterMinPropertyValue = "Enter Minimum Property Value";
@@ -529,11 +526,17 @@ class AppText{
   static const String enterProductDescriptions = "Enter Product Descriptions";
   static const String productSegment = "Product Segment";
   static const String enterProductSegment = "Enter Product Segment";
+  static const String writeYourContent = "Write your content";
 
   static const String prodName = "Product Name";
   static const String selectCustomerCategory = "Select Customer Category";
   static const String selectCollateralSecurityCategory = "Select Collateral Security Category";
   static const String selectIncomeType = "Select Income Type";
+  static const String productName = "Product Name";
+  static const String enterProductName = "enter product name";
+
+
+
 
 
 }
@@ -904,6 +907,12 @@ class Helper{
   }
 
 
+  static String convertListToCsvSafe(List<String?> items) {
+    return items
+        .where((item) => item != null && item.trim().isNotEmpty)
+        .map((e) => e!.trim())
+        .join(',');
+  }
 
 
 
@@ -934,4 +943,31 @@ class ToastMessage {
         backgroundColor: AppColor.primaryColor,
         textColor: Colors.white);
   }
+}
+
+class MultipartFieldHelper {
+  /// Adds a field if [value] is not null and not equal to "string"
+  /// If invalid, assigns "null" (as string)
+  static void addField(Map<String, String> fields, String key, String? value) {
+    if (value != null && value != "string") {
+      fields[key] = value;
+    } else {
+      fields[key] = "null";
+    }
+  }
+
+  /// Overloaded version with default fallback (optional)
+  static void addFieldWithDefault(
+      Map<String, String> fields,
+      String key,
+      String? value, {
+        String fallback = "0",
+      }) {
+    if (value != null && value != "") {
+      fields[key] = value;
+    } else {
+      fields[key] = fallback;
+    }
+  }
+
 }

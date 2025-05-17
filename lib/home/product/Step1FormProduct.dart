@@ -10,7 +10,9 @@ import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
+import '../../custom_widgets/CustomMultiSelectDropdown.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
+import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 
 class Step1FormProduct extends StatelessWidget {
   final addProductController = Get.find<AddProductController>();
@@ -25,191 +27,232 @@ class Step1FormProduct extends StatelessWidget {
           return Center(
             child: CustomSkelton.productShimmerList(context),
           );
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomTextLabel(
-              label: AppText.bankNostar,
-
-            ),
-
-            const SizedBox(height: 10),
+        return Form(
+          key: addProductController.stepFormKeys[0],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomTextLabel(
+                label: AppText.bankNostar,
 
 
-            Obx((){
-              if (leadDDController.isBankLoading.value) {
-                return  Center(child:CustomSkelton.leadShimmerList(context));
-              }
+              ),
+
+              const SizedBox(height: 10),
 
 
-              return CustomDropdown<bank.Data>(
-                items: leadDDController.getAllBankModel.value?.data ?? [],
-                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                getName: (item) => item.bankName.toString(),
-                selectedValue: leadDDController.getAllBankModel.value?.data?.firstWhereOrNull(
-                      (item) => item.id == addProductController.selectedBank.value,
-                ),
-                onChanged: (value) {
-
-                  addProductController.selectedBank.value =  value?.id;
+              Obx((){
+                if (leadDDController.isBankLoading.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
 
 
-                  if( addProductController.selectedBank.value!=null){
-                    leadDDController.getAllBranchByBankIdApi(bankId: addProductController.selectedBank.value.toString());
-                    leadDDController.getProductListByBankIdApi(bankId: addProductController.selectedBank.value.toString());
-                  }
+                return CustomDropdown<bank.Data>(
+                  items: leadDDController.getAllBankModel.value?.data ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.bankName.toString(),
+                  selectedValue: leadDDController.getAllBankModel.value?.data?.firstWhereOrNull(
+                        (item) => item.id == addProductController.selectedBank.value,
+                  ),
+                  onChanged: (value) {
+
+                    addProductController.selectedBank.value =  value?.id;
 
 
+                    if( addProductController.selectedBank.value!=null){
+                      leadDDController.getAllBranchByBankIdApi(bankId: addProductController.selectedBank.value.toString());
+                      leadDDController.getProductListByBankIdApi(bankId: addProductController.selectedBank.value.toString());
+                    }
+
+
+                  },
+                  onClear: (){
+                    addProductController.selectedBank.value =  0;
+                    addProductController.selectedBankBranch.value = 0;
+                    addProductController.selectedProdTypeOrTypeLoan.value=0;
+                    leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
+                    leadDDController.getAllKsdplProductModel.value?.data?.clear();
+                    leadDDController.getAllKsdplProductApi();
+
+                  },
+                );
+              }),
+              const SizedBox(
+                height: 20,
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.bankerName,
+                controller: addProductController.prodBankersNameController,
+                inputType: TextInputType.name,
+                hintText: AppText.enterBankerName,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.bankerMobile,
+
+                controller: addProductController.prodBankersMobController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterBankerMobile,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.bankerWhatsapp,
+
+                controller: addProductController.prodBankersWhatsappController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterBankerWhatsapp,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.minCibil,
+
+                controller: addProductController.prodMinCibilController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterBankerWhatsapp,
+
+              ),
+
+
+              CustomTextLabel(
+                label: AppText.productSegment,
+
+              ),
+
+              const SizedBox(height: 10),
+
+
+              Obx((){
+                if (addProductController.isLoadingProductCategory.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+
+
+                return CustomDropdown<productCat.Data>(
+                  items: addProductController.productCategoryList  ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.productCategoryName.toString(),
+                  selectedValue: addProductController.productCategoryList.firstWhereOrNull(
+                        (item) => item.id.toString() == addProductController.selectedProductCategory.value,
+                  ),
+                  onChanged: (value) {
+                    addProductController.selectedProductCategory.value =  value?.id?.toString();
+                  },
+                  onClear: (){
+                    addProductController.selectedProductCategory.value = "0";
+                    addProductController.productCategoryList.clear(); // reset dependent dropdown
+
+                  },
+                );
+              }),
+
+              const SizedBox(height: 20),
+
+
+              CustomLabeledTextField(
+                label: AppText.productName,
+
+                controller: addProductController.prodProductNameController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterProductName,
+
+              ),
+
+              CustomTextLabel(
+                label: AppText.selectCustomerCategory,
+
+
+              ),
+
+              const SizedBox(height: 10),
+
+
+              MultiSelectDropdown<String>(
+                items: addProductController.customerCategoryList,
+                getId: (e) => e,
+                getName: (e) => e,
+                selectedValues: [], // or preselected values
+                onChanged: (selectedList) {
+                  addProductController.selectedCustomerCategories.value=selectedList;
                 },
-                onClear: (){
-                  addProductController.selectedBank.value =  0;
-                  addProductController.selectedBankBranch.value = 0;
-                  addProductController.selectedProdTypeOrTypeLoan.value=0;
-                  leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
-                  leadDDController.getAllKsdplProductModel.value?.data?.clear();
-                  leadDDController.getAllKsdplProductApi();
+              ),
 
+
+              const SizedBox(height: 20),
+
+              CustomTextLabel(
+                label: AppText.selectCollateralSecurityCategory,
+
+
+              ),
+
+              const SizedBox(height: 10),
+
+
+              MultiSelectDropdown<String>(
+                items: addProductController.collSecCatList,
+                getId: (e) => e,
+                getName: (e) => e,
+                selectedValues: [], // or preselected values
+                onChanged: (selectedList) {
+                  addProductController.selectedCollSecCat.value=selectedList;
                 },
-              );
-            }),
-            const SizedBox(
-              height: 20,
-            ),
-
-            CustomLabeledTextField(
-              label: AppText.bankerName,
-              controller: addProductController.prodBankersNameController,
-              inputType: TextInputType.name,
-              hintText: AppText.enterBankerName,
-              validator:  ValidationHelper.validateName,
-            ),
-
-            CustomLabeledTextField(
-              label: AppText.bankerMobile,
-
-              controller: addProductController.prodBankersMobController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterBankerMobile,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
-
-            CustomLabeledTextField(
-              label: AppText.bankerWhatsapp,
-
-              controller: addProductController.prodBankersWhatsappController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterBankerWhatsapp,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
-
-            CustomLabeledTextField(
-              label: AppText.minCibil,
-
-              controller: addProductController.prodMinCibilController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterBankerWhatsapp,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
-
-            const SizedBox(
-              height: 20,
-            ),
-
-            CustomTextLabel(
-              label: AppText.selectCollateralSecurityCategory,
+              ),
 
 
-            ),
+              const SizedBox(height: 20),
 
-            const SizedBox(height: 10),
+              CustomLabeledTextField(
+                label: AppText.collateralSecurityExcluded,
+
+                controller: addProductController.prodCollateralSecurityExcludedController,
+                inputType: TextInputType.name,
+                hintText: AppText.enterCollateralSecurityExcluded,
+
+              ),
 
 
-            Obx((){
-              if (leadDDController.isBranchLoading.value) {
-                return  Center(child:CustomSkelton.leadShimmerList(context));
-              }
+              const SizedBox(
+                height: 20,
+              ),
+
+              CustomTextLabel(
+                label: AppText.selectIncomeType,
 
 
-              return CustomDropdown<bankBrach.Data>(
-                items: leadDDController.getAllBranchBIModel.value?.data ?? [],
-                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                getName: (item) => item.branchName.toString(),
-                selectedValue: leadDDController.getAllBranchBIModel.value?.data?.firstWhereOrNull(
-                      (item) => item.id== addProductController.selectedBankBranch.value,
-                ),
-                onChanged: (value) {
-                  addProductController.selectedBankBranch.value =  value?.id;
+              ),
+
+              const SizedBox(height: 10),
+
+
+              MultiSelectDropdown<String>(
+                items: addProductController.incomeTypeList,
+                getId: (e) => e,
+                getName: (e) => e,
+                selectedValues: [], // or preselected values
+                onChanged: (selectedList) {
+                  addProductController.selectedIncomeType.value=selectedList;
                 },
-                onClear: (){
-                  addProductController.selectedBankBranch.value = 0;
-                  leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
-                },
-              );
-            }),
+              ),
 
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            CustomLabeledTextField(
-              label: AppText.collateralSecurityExcluded,
+              CustomLabeledTextField(
+                label: AppText.profileExcluded,
 
-              controller: addProductController.prodCollateralSecurityExcludedController,
-              inputType: TextInputType.name,
-              hintText: AppText.enterCollateralSecurityExcluded,
-              validator:  ValidationHelper.validateName,
-            ),
+                controller: addProductController.prodProfileExcludedController,
+                inputType: TextInputType.name,
+                hintText: AppText.enterProfileExcluded,
 
-
-            const SizedBox(
-              height: 20,
-            ),
-
-            CustomTextLabel(
-              label: AppText.selectIncomeType,
+              ),
 
 
-            ),
-
-            const SizedBox(height: 10),
-
-
-            Obx((){
-              if (leadDDController.isBranchLoading.value) {
-                return  Center(child:CustomSkelton.leadShimmerList(context));
-              }
-
-
-              return CustomDropdown<bankBrach.Data>(
-                items: leadDDController.getAllBranchBIModel.value?.data ?? [],
-                getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                getName: (item) => item.branchName.toString(),
-                selectedValue: leadDDController.getAllBranchBIModel.value?.data?.firstWhereOrNull(
-                      (item) => item.id== addProductController.selectedBankBranch.value,
-                ),
-                onChanged: (value) {
-                  addProductController.selectedBankBranch.value =  value?.id;
-                },
-                onClear: (){
-                  addProductController.selectedBankBranch.value = 0;
-                  leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
-                },
-              );
-            }),
-
-
-            const SizedBox(height: 20),
-
-            CustomLabeledTextField(
-              label: AppText.profileExcluded,
-
-              controller: addProductController.prodProfileExcludedController,
-              inputType: TextInputType.name,
-              hintText: AppText.enterProfileExcluded,
-              validator:  ValidationHelper.validateName,
-            ),
-
-
-          ],
+            ],
+          ),
         );
       }),
     );

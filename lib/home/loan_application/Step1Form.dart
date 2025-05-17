@@ -181,28 +181,6 @@ class Step1Form extends StatelessWidget {
                       );
                     }),
 
-                    /* Obx((){
-                    if (leadDDController.isProductLoading.value) {
-                      return  Center(child:CustomSkelton.leadShimmerList(context));
-                    }
-
-
-                    return CustomDropdown<bankBrach.Data>(
-                      items: leadDDController.getAllBranchBIModel.value?.data ?? [],
-                      getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                      getName: (item) => item.branchName.toString(),
-                      selectedValue: leadDDController.getAllBranchBIModel.value?.data?.firstWhereOrNull(
-                            (item) => item.id.toString() == leadDDController.selectedBankBranch.value,
-                      ),
-                      onChanged: (value) {
-
-                        leadDDController.selectedBankBranch.value =  value?.id?.toString();
-
-
-                      },
-                    );
-                  }),
-*/
                     const SizedBox(height: 20),
 
                     CustomLabeledTextField(

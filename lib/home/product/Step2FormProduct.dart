@@ -25,138 +25,135 @@ class Step2FormProduct extends StatelessWidget {
           return Center(
             child: CustomSkelton.productShimmerList(context),
           );
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        return Form(
+          key: addProductController.stepFormKeys[1],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
 
-            const SizedBox(
-              height: 20,
-            ),
+              const SizedBox(
+                height: 20,
+              ),
 
-            CustomLabeledTextField(
-              label: AppText.ageLimitEarningApplicants,
-              controller: addProductController.prodAgeLimitEarningApplicantsController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterAgeLimitEarningApplicants,
-              validator:  ValidationHelper.validateName,
-            ),
+              CustomLabeledTextField(
+                label: AppText.ageLimitEarningApplicants,
+                controller: addProductController.prodAgeLimitEarningApplicantsController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterAgeLimitEarningApplicants,
 
-            CustomLabeledTextField(
-              label: AppText.ageLimitNonEarningCoApplicant,
+              ),
 
-              controller: addProductController.prodAgeLimitNonEarningCoApplicantController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterAgeLimitNonEarningCoApplicant,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              CustomLabeledTextField(
+                label: AppText.ageLimitNonEarningCoApplicant,
 
-            CustomLabeledTextField(
-              label: AppText.minAgeEarningApplicants,
+                controller: addProductController.prodAgeLimitNonEarningCoApplicantController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterAgeLimitNonEarningCoApplicant,
 
-              controller: addProductController.prodMinAgeEarningApplicantsController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMinAgeEarningApplicants,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              ),
 
-            CustomLabeledTextField(
-              label: AppText.minAgeNonEarningApplicants,
+              CustomLabeledTextField(
+                label: AppText.minAgeEarningApplicants,
 
-              controller: addProductController.prodMinAgeNonEarningApplicantsController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMinAgeNonEarningApplicants,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+                controller: addProductController.prodMinAgeEarningApplicantsController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMinAgeEarningApplicants,
 
-            CustomLabeledTextField(
-              label: AppText.minIncomeCriteria,
+              ),
 
-              controller: addProductController.prodMinIncomeCriteriaController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMinIncomeCriteria,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              CustomLabeledTextField(
+                label: AppText.minAgeNonEarningApplicants,
 
-            CustomLabeledTextField(
-              label: AppText.minLoanAmount,
-              controller: addProductController.prodMinLoanAmountController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMinLoanAmount,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+                controller: addProductController.prodMinAgeNonEarningApplicantsController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMinAgeNonEarningApplicants,
 
-            CustomLabeledTextField(
-              label: AppText.maxLoanAmount,
-              controller: addProductController.prodMaxLoanAmountController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMaxLoanAmount,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              ),
 
-            CustomLabeledTextField(
-              label: AppText.profitPercentage,
-              controller: addProductController.prodProfitPercentageController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterProfitPercentage,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              CustomLabeledTextField(
+                label: AppText.minIncomeCriteria,
 
-            CustomLabeledTextField(
-              label: AppText.minTenor,
-              controller: addProductController.prodMinTenorController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMinTenor,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+                controller: addProductController.prodMinIncomeCriteriaController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMinIncomeCriteria,
 
-            CustomLabeledTextField(
-              label: AppText.minTenor,
-              controller: addProductController.prodMinTenorController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMinTenor,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              ),
 
-            CustomLabeledTextField(
-              label: AppText.maxTenor,
-              controller: addProductController.prodMaxTenorController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMaxTenor,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              CustomLabeledTextField(
+                label: AppText.minLoanAmount,
+                controller: addProductController.prodMinLoanAmountController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMinLoanAmount,
 
-            CustomLabeledTextField(
-              label: AppText.minRoi,
-              controller: addProductController.prodMinRoiController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMinRoi,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              ),
 
-            CustomLabeledTextField(
-              label: AppText.maxRoi,
-              controller: addProductController.prodMaxRoiController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMaxRoi,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              CustomLabeledTextField(
+                label: AppText.maxLoanAmount,
+                controller: addProductController.prodMaxLoanAmountController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMaxLoanAmount,
 
-            CustomLabeledTextField(
-              label: AppText.maxTenorEligibilityCriteria,
-              controller: addProductController.prodMaxTenorEligibilityCriteriaController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterMaxTenorEligibilityCriteria,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
+              ),
 
-            CustomLabeledTextField(
-              label: AppText.geoLimit,
-              controller: addProductController.prodGeoLimitController,
-              inputType: TextInputType.number,
-              hintText: AppText.enterGeoLimit,
-              validator:  ValidationHelper.validatePhoneNumber,
-            ),
-          ],
+              CustomLabeledTextField(
+                label: AppText.profitPercentage,
+                controller: addProductController.prodProfitPercentageController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterProfitPercentage,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.minTenor,
+                controller: addProductController.prodMinTenorController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMinTenor,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.minTenor,
+                controller: addProductController.prodMaxTenorController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMinTenor,
+
+              ),
+
+
+
+              CustomLabeledTextField(
+                label: AppText.minRoi,
+                controller: addProductController.prodMinRoiController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMinRoi,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.maxRoi,
+                controller: addProductController.prodMaxRoiController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMaxRoi,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.maxTenorEligibilityCriteria,
+                controller: addProductController.prodMaxTenorEligibilityCriteriaController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMaxTenorEligibilityCriteria,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.geoLimit,
+                controller: addProductController.prodGeoLimitController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterGeoLimit,
+
+              ),
+            ],
+          ),
         );
       }),
     );

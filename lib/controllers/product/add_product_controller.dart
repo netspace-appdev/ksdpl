@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
+import 'package:ksdpl/services/product_service.dart';
 
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
@@ -13,6 +14,8 @@ import '../../models/loan_application/special_model/CoApplicantModel.dart';
 import '../../models/loan_application/special_model/CreditCardModel.dart';
 import '../../models/loan_application/special_model/FamilyMemberModel.dart';
 import '../../models/loan_application/special_model/ReferenceModel.dart';
+import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
+import '../../models/product/GetAllProductCategoryModel.dart';
 import '../../services/loan_appl_service.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
@@ -215,8 +218,72 @@ class AddProductController extends GetxController{
 // Descriptions
   final TextEditingController prodDocumentDescriptionsController = TextEditingController();
   final TextEditingController prodProductDescriptionsController = TextEditingController();
+  var prodSegmentList=["Insurance", "Secured","Unsecured", ];
+  var selectedprodSegment = Rxn<String>();
+  var customerCategoryList=["Salaried", "Salaried NRI","Self Employed Professional", "Self Employed Non Professional", "Non-Individual","Others"];
+  var selectedCustomerCategories = <String>[].obs;
+  var getAllProductCategoryModel = Rxn<productCat.GetAllProductCategoryModel>(); //
+  RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
+  var isLoadingProductCategory = false.obs;
+  var isProductLoading = false.obs;
+  var selectedKsdplProduct = Rxn<int>();
 
+  var selectedProductCategory = Rxn<String>();
+  var collSecCatList=[
+    "Residential Plot",
+    "Self Occupied Residential Property",
+    "Rented Residential Property",
+    "Self Occupied Property with tenant",
+    "Self Occupied Commercial Property",
+    "Rented Commercial Property",
+    "Agriculture Land",
+    "House on Agriculture Land",
+    "Volatility Risk Premium",
+    "Industrial",
+    "Gold",
+    "Legally Defective Title",
+    "Property with Technical issues",
+    "Others",
+  ];
+  var incomeTypeList=[
+    "Bank Salary with PF",
+    "Bank Salary without PF",
+    "Cash Salary",
+    "Regular 3 years ITR",
+    "Regular Two Years ITR",
+    "Irregular 3 years ITR",
+    "Same date Two Years ITR",
+    "One Year ITR",
+    "GST Turnover Based Income Assessment",
+    "Average Banking Balance Income Assessment",
+    "PD Based Cash Flow Assessment",
+    "Loan against rental receivables",
+    "Other",
+  ];
+  var selectedCollSecCat = <String>[].obs;
+  var selectedIncomeType = <String>[].obs;
+  var selectedNegProfile = <String>[].obs;
+  var selectedNegArea = <String>[].obs;
 
+  RxList<String> chips = <String>[].obs;
+  TextEditingController chipTextController = TextEditingController();
+  TextEditingController chipText2Controller = TextEditingController();
+  TextEditingController chipText3Controller = TextEditingController();
+
+  void addChip(String value) {
+    if (value.trim().isNotEmpty && !chips.contains(value.trim())) {
+      chips.add(value.trim());
+      chipTextController.clear();
+    }
+  }
+  void removeChip(String value) {
+    chips.remove(value);
+  }
+
+  void clearAllChips() {
+    chips.clear();
+    chipTextController.clear();
+  }
   void nextStep() {
     if (currentStep.value < 6) {
       currentStep.value++;
@@ -260,13 +327,95 @@ class AddProductController extends GetxController{
   void saveForm() {
     print("Form Saved!");
   }
+  List<GlobalKey<FormState>> stepFormKeys = List.generate(4, (_) => GlobalKey<FormState>());
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    getAllProductCategoryApi();
+
   /*  leadId.value = Get.arguments['uln'];
     ulnController.text =  leadId.value;
     getLoanApplicationDetailsByIdApi(id:leadId.value);*/
+
+  }
+
+  void validateAndSubmit() {
+
+  /*  for (int i = 0; i < stepFormKeys.length; i++) {
+      final isValid = stepFormKeys[i].currentState?.validate() ?? false;
+
+      if (!isValid) {
+        // Jump to that step
+        jumpToStep(i);
+        // Optionally show a snackbar or toast
+        Get.snackbar("Incomplete Step", "Please complete Step ${i + 1}");
+        return; // Stop submission
+      }
+    }
+*/
+    if(selectedKsdplProduct.value==null){
+      jumpToStep(2);
+      // Optionally show a snackbar or toast
+      Get.snackbar("Incomplete Step 3", "Please Select KSDPL Product");
+    }else{
+
+      addProductListApi(
+        Id: "0",
+        BankId:selectedBank.value?.toString(),
+        bankers_Name:prodBankersNameController.text,
+        Bankers_Mobile_Number:prodBankersMobController.text,
+        Bankers_WhatsApp_Number:prodBankersWhatsappController.text,
+        BankersEmailId:prodBankersEmailController.text,
+        Min_CIBIL:prodMinCibilController.text,
+        Segment_Vertical:selectedProductCategory.value,
+        Product:prodProductNameController.text,
+        ProductDescription:prodProductDescriptionsController.text,
+        Customer_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
+        Collateral_Security_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
+        Collateral_Security_Excluded:prodCollateralSecurityExcludedController.text,
+        Income_Types:Helper.convertListToCsvSafe(selectedIncomeType.value),
+        Profile_Excluded:prodProfileExcludedController.text,
+        Age_limit_Earning_Applicants:prodAgeLimitEarningApplicantsController.text,
+        Age_limit_Non_Earning_Co_Applicant:prodAgeLimitNonEarningCoApplicantController.text,
+        Minimum_age_earning_applicants:prodMinAgeEarningApplicantsController.text,
+        Minimum_age_non_earning_applicants:prodMinAgeNonEarningApplicantsController.text,
+        Minimum_Income_Criteria:prodMinIncomeCriteriaController.text,
+         Minimum_Loan_Amount:prodMinLoanAmountController.text,
+         Maximum_Loan_Amount:prodMinLoanAmountController.text,
+         Min_Tenor:prodMinTenorController.text,
+         Maximum_Tenor:prodMaxTenorController.text,
+         Minimum_ROI: prodMinRoiController.text,
+         Maximum_ROI:prodMaxRoiController.text,
+         Maximum_Tenor_Eligibility_Criteria:prodMaxTenorEligibilityCriteriaController.text,
+         Geo_Limit:prodGeoLimitController.text,
+         Negative_Profiles:Helper.convertListToCsvSafe(selectedNegProfile.value),
+         Negative_Areas:Helper.convertListToCsvSafe(selectedNegArea.value),
+         Maximum_TAT:prodMaxTatController.text,
+         Minimum_Property_Value:prodMinPropertyValueController.text,
+         Maximum_IIR:prodMaxIirController.text,
+         Maximum_FOIR:prodMaxFoirController.text,
+         Maximum_LTV:prodMaxLtvController.text,
+         Processing_Fee:prodProcessingFeeController.text,
+         Legal_Fee:prodLegalFeeController.text,
+         Technical_Fee:prodTechnicalFeeController.text,
+         Admin_Fee:prodAdminFeeController.text,
+         Foreclosure_Charges:prodForeclosureChargesController.text,
+         Other_Charges:prodOtherChargesController.text,
+         Stamp_Duty:prodStampDutyController.text,
+         TSR_Years:prodTsrYearsController.text,
+         TSR_Charges:prodTsrChargesController.text,
+         Valuation_Charges:prodValuationChargesController.text,
+         NoOfDocument:"1",                                                    ///Static,
+         Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
+         Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
+         Profit_Percentage:prodProfitPercentageController.text,
+         KSDPLProductId: selectedKsdplProduct.value.toString()
+      );
+
+      print("All steps valid! Submitting form...");
+    }
+
 
   }
   void copyPresentToPermanentAddress() {
@@ -1249,6 +1398,200 @@ class AddProductController extends GetxController{
   }
 
 
+  ///product
+
+  void  getAllProductCategoryApi() async {
+    try {
+      isLoadingProductCategory(true);
+
+
+      var data = await ProductService.getAllProductCategoryApi();
+
+
+      if(data['success'] == true){
+
+
+        getAllProductCategoryModel.value= GetAllProductCategoryModel.fromJson(data);
+
+
+        final List<productCat.Data> allCategories = getAllProductCategoryModel.value?.data ?? [];
+
+        final List<productCat.Data> activeCategories = allCategories.where((cat) => cat.active == true).toList();
+
+        productCategoryList.value = activeCategories;
+
+
+
+
+
+        isLoadingProductCategory(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAllProductCategoryModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllLeadsApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoadingProductCategory(false);
+    } finally {
+
+      isLoadingProductCategory(false);
+    }
+  }
+
+  void  addProductListApi({
+    required String KSDPLProductId,
+    String? Id,
+    String? BankId,
+    String? bankers_Name,
+    String? Bankers_Mobile_Number,
+    String? Bankers_WhatsApp_Number,
+    String? BankersEmailId,
+    String? Min_CIBIL,
+    String? Segment_Vertical,
+    String? Product,
+    String? ProductDescription,
+    String? Customer_Category,
+    String? Collateral_Security_Category,
+    String? Collateral_Security_Excluded,
+    String? Income_Types,
+    String? Profile_Excluded,
+    String? Age_limit_Earning_Applicants,
+    String? Age_limit_Non_Earning_Co_Applicant,
+    String? Minimum_age_earning_applicants,
+    String? Minimum_age_non_earning_applicants,
+    String? Minimum_Income_Criteria,
+    String? Minimum_Loan_Amount,
+    String? Maximum_Loan_Amount,
+    String? Min_Tenor,
+    String? Maximum_Tenor,
+    String? Minimum_ROI,
+    String? Maximum_ROI,
+    String? Maximum_Tenor_Eligibility_Criteria,
+    String? Geo_Limit,
+    String? Negative_Profiles,
+    String? Negative_Areas,
+    String? Maximum_TAT,
+    String? Minimum_Property_Value,
+    String? Maximum_IIR,
+    String? Maximum_FOIR,
+    String? Maximum_LTV,
+    String? Processing_Fee,
+    String? Legal_Fee,
+    String? Technical_Fee,
+    String? Admin_Fee,
+    String? Foreclosure_Charges,
+    String? Other_Charges,
+    String? Stamp_Duty,
+    String? TSR_Years,
+    String? TSR_Charges,
+    String? Valuation_Charges,
+    String? NoOfDocument,
+    String? Product_Validate_From_date,
+    String? Product_Validate_To_date,
+    String? Profit_Percentage,
+}) async {
+    try {
+      isLoading(true);
+
+
+      var data = await ProductService.addProductListApi(
+        KSDPLProductId: KSDPLProductId,
+        Id: Id,
+        BankId: BankId,
+        bankers_Name: bankers_Name,
+        Bankers_Mobile_Number: Bankers_Mobile_Number,
+        Bankers_WhatsApp_Number: Bankers_WhatsApp_Number,
+        BankersEmailId: BankersEmailId,
+        Min_CIBIL: Min_CIBIL,
+        Segment_Vertical: Segment_Vertical,
+        Product: Product,
+        ProductDescription: ProductDescription,
+        Customer_Category: Customer_Category,
+        Collateral_Security_Category: Collateral_Security_Category,
+        Collateral_Security_Excluded: Collateral_Security_Excluded,
+        Income_Types: Income_Types,
+        Profile_Excluded: Profile_Excluded,
+        Age_limit_Earning_Applicants: Age_limit_Earning_Applicants,
+        Age_limit_Non_Earning_Co_Applicant: Age_limit_Non_Earning_Co_Applicant,
+        Minimum_age_earning_applicants: Minimum_age_earning_applicants,
+        Minimum_age_non_earning_applicants: Minimum_age_non_earning_applicants,
+        Minimum_Income_Criteria: Minimum_Income_Criteria,
+        Minimum_Loan_Amount: Minimum_Loan_Amount,
+        Min_Tenor: Min_Tenor,
+        Maximum_Tenor: Maximum_Tenor,
+        Minimum_ROI: Minimum_ROI,
+        Maximum_ROI: Maximum_ROI,
+        Maximum_Tenor_Eligibility_Criteria: Maximum_Tenor_Eligibility_Criteria,
+        Geo_Limit: Geo_Limit,
+        Negative_Profiles: Negative_Profiles,
+        Negative_Areas: Negative_Areas,
+        Maximum_TAT: Maximum_TAT,
+        Minimum_Property_Value: Minimum_Property_Value,
+        Maximum_IIR: Maximum_IIR,
+        Maximum_FOIR: Maximum_FOIR,
+        Maximum_LTV: Maximum_LTV,
+        Processing_Fee: Processing_Fee,
+        Legal_Fee: Legal_Fee,
+        Technical_Fee: Technical_Fee,
+        Admin_Fee: Admin_Fee,
+        Foreclosure_Charges: Foreclosure_Charges,
+        Other_Charges: Other_Charges,
+        Stamp_Duty: Stamp_Duty,
+        TSR_Years: TSR_Years,
+        TSR_Charges: TSR_Charges,
+        Valuation_Charges: Valuation_Charges,
+        NoOfDocument: NoOfDocument,
+        Product_Validate_From_date: Product_Validate_From_date,
+        Product_Validate_To_date: Product_Validate_To_date,
+        Profit_Percentage: Profit_Percentage,
+      );
+
+
+      if(data['success'] == true){
+
+
+        getAllProductCategoryModel.value= GetAllProductCategoryModel.fromJson(data);
+
+
+        final List<productCat.Data> allCategories = getAllProductCategoryModel.value?.data ?? [];
+
+        final List<productCat.Data> activeCategories = allCategories.where((cat) => cat.active == true).toList();
+
+        productCategoryList.value = activeCategories;
+
+
+
+
+
+        isLoadingProductCategory(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAllProductCategoryModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllLeadsApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoadingProductCategory(false);
+    } finally {
+
+      isLoadingProductCategory(false);
+    }
+  }
 }
 
 extension ParseStringExtension on String? {
