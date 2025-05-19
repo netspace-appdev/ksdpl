@@ -6,8 +6,8 @@ class SnackbarHelper {
   static void showSnackbar({
     required String title,
     required String message,
-    Color backgroundColor = AppColor.primaryColor,
-    Color textColor = AppColor.appWhite,
+    Color backgroundColor = AppColor.appWhite,
+    Color textColor = AppColor.primaryColor,
     SnackPosition position = SnackPosition.TOP,
     Duration duration = const Duration(seconds: 3),
     IconData? icon,
@@ -22,6 +22,13 @@ class SnackbarHelper {
       margin: const EdgeInsets.all(10),
       borderRadius: 8,
       icon: icon != null ? Icon(icon, color: textColor) : null,
+      boxShadows: [
+        BoxShadow(
+          color: Colors.black26,
+          blurRadius: 8,
+          offset: Offset(0, 4),
+        ),
+      ],
     );
   }
 }

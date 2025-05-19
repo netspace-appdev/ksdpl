@@ -13,7 +13,7 @@ import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
 import '../../custom_widgets/CustomTextLabel.dart';
-import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
+
 
 
 class Step3FormProduct extends StatelessWidget {
@@ -200,45 +200,6 @@ class Step3FormProduct extends StatelessWidget {
                 hintText: AppText.enterValuationCharges,
                 validator:  ValidationHelper.validateName,
               ),
-
-              const SizedBox(
-                height: 20,
-              ),
-
-              CustomTextLabel(
-                label: AppText.ksdplProduct,
-                isRequired: true,
-
-
-              ),
-
-              const SizedBox(height: 10),
-
-
-              Obx((){
-                if (leadDDController.isProductLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
-
-
-                return CustomDropdown<product.Data>(
-                  items: leadDDController.getAllKsdplProductModel.value?.data ?? [],
-                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.productName.toString(),
-                  selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id == addProductController.selectedKsdplProduct.value,
-                  ),
-                  onChanged: (value) {
-                    addProductController.selectedKsdplProduct.value =  value?.id;
-                  },
-                  onClear: (){
-                    addProductController.selectedKsdplProduct.value =  null;
-                  },
-                );
-              }),
-
-
-              const SizedBox(height: 20),
 
               CustomLabeledPickerTextField(
                 label: AppText.productValidateFrom,

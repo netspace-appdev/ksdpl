@@ -1,0 +1,510 @@
+
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
+import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
+import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
+import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
+import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
+import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
+import 'package:ksdpl/models/GetCampaignNameModel.dart' as campaign;
+import 'package:ksdpl/models/leads/GetAllKsdplBranchModel.dart' as ksdplBranch;
+import '../../../common/CustomSearchBar.dart';
+import '../../../common/helper.dart';
+import '../../../common/skelton.dart';
+import '../../../common/validation_helper.dart';
+import '../../../controllers/drawer_controller.dart';
+import '../../../controllers/greeting_controller.dart';
+import '../../../controllers/lead_dd_controller.dart';
+import '../../../controllers/leads/addLeadController.dart';
+import '../../../controllers/leads/infoController.dart';
+import '../../../custom_widgets/CustomDropdown.dart';
+import '../../../custom_widgets/CustomLabelPickerTextField.dart';
+import '../../../custom_widgets/CustomLabeledTextField.dart';
+import '../../common/storage_service.dart';
+import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/open_poll_filter_controller.dart';
+import '../../controllers/product/product_detail_controller.dart';
+import '../../controllers/product/view_product_controller.dart';
+import '../../custom_widgets/CustomBigDialogBox.dart';
+import '../../custom_widgets/CustomCard.dart';
+import '../../custom_widgets/CustomDialogBox.dart';
+import '../../custom_widgets/CustomTextFieldPrefix.dart';
+import '../custom_drawer.dart';
+
+
+
+class ProductDetailScreen extends StatelessWidget {
+
+
+
+
+
+  ProductDetailsController productDetailsController = Get.put(ProductDetailsController());
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColor.backgroundColor,
+        drawer:   CustomDrawer(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  // Gradient Background
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColor.primaryLight, AppColor.primaryDark],
+                        begin: Alignment.centerRight,
+                        end: Alignment.centerLeft,
+                      ),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child:Column(
+                      children: [
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+
+                        header(context),
+
+                      ],
+                    ),
+                  ),
+
+                  // White Container
+                  Align(
+                    alignment: Alignment.topCenter,  // Centers it
+                    child: Container(
+                      margin:  EdgeInsets.only(
+                          top:90 // MediaQuery.of(context).size.height * 0.22
+                      ), // <-- Moves it 30px from top
+                      width: double.infinity,
+                      //height: MediaQuery.of(context).size.height,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                      decoration: const BoxDecoration(
+                        color: AppColor.backgroundColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(45),
+                          topRight: Radius.circular(45),
+                        ),
+
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                        children: [
+                          const SizedBox(height: 20),
+                          productSection(context)
+                        ],
+                      ),
+                    ),
+                  ),
+
+
+                ],
+              ),
+            ],
+          ),
+        ),
+
+      ),
+    );
+  }
+  Widget header(context){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+              onTap: (){
+                Get.back();
+              },
+              child: Image.asset(AppImage.arrowLeft,height: 24,)),
+
+          const Text(
+            AppText.productDetails,
+            style: TextStyle(
+                fontSize: 20,
+                color: AppColor.grey3,
+                fontWeight: FontWeight.w700
+            ),
+          ),
+
+          InkWell(
+            onTap: (){
+
+            },
+            child: Container(
+
+              width: 40,
+              height:40,
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              decoration:  BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+
+            ),
+          )
+
+
+
+        ],
+      ),
+    );
+  }
+
+
+
+  Widget productSection(BuildContext context){
+    return Obx((){
+      if (productDetailsController.isLoading.value) {
+        return  Center(child: CustomSkelton.productShimmerList(context));
+      }
+      if (productDetailsController.getProductListById.value == null ||
+          productDetailsController.getProductListById.value!.data == null || productDetailsController.getProductListById.value!.data=="") {
+        return  Container(
+          height: MediaQuery.of(context).size.height*0.50,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          decoration:  BoxDecoration(
+            border: Border.all(color: AppColor.grey200),
+            color: AppColor.appWhite,
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+
+          ),
+          child: const Column(
+            children: [
+              /// Header with profile and menu icon
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "No data found",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.grey700
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+        );
+      }
+
+      var data=productDetailsController.getProductListById.value!.data!;
+
+
+      return  Column(// height: MediaQuery.of(context).size.height*1.6, //magic
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Lead Details Card
+
+
+          CustomCard(
+            borderColor: AppColor.grey200,
+            backgroundColor: AppColor.appWhite,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Lead Details",
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
+
+                SizedBox(height: 10),
+
+                // Status Tags
+                Row(
+                  children: [
+                    Container(
+                      width: 120,
+                      child: Text("Min Cibil",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,color:AppColor.primaryColor)),
+                    ),
+                    Wrap(
+                      spacing: 8,
+                      children: [
+                        StatusChip(label: data.minCIBIL.toString(), color: Colors.orange),
+
+                      ],
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 10),
+                DetailRow(label: "Product", value:data.product.toString()),
+                DetailRow(label: "Bank Namer", value:data.bankName.toString()),
+                DetailRow(label: "Bankers Name", value:Helper.formatDate(data.bankersName.toString()) ),
+                DetailRow(label: "Bankers Mobile Number", value:data.bankersMobileNumber.toString()),
+                DetailRow(label: "Bankers Whatsapp Number", value:data.bankersWhatsAppNumber.toString()),
+                DetailRow(label: "Bankers Email ID", value:data.bankersEmailID.toString()),
+                DetailRow(label: "Segment Vertical", value: data.segmentVertical.toString()),
+                DetailRow(label: "customer_Category", value: data.customerCategory.toString()),
+                DetailRow(label: "collateral Security Category", value: data.collateralSecurityCategory.toString()),
+                DetailRow(label: "collateral Security Excluded", value: data.collateralSecurityExcluded.toString()),
+                DetailRow(label: "Income Types", value: data.incomeTypes.toString()),
+                DetailRow(label: "Profile Excluded", value: data.profileExcluded.toString()),
+                DetailRow(label: "Age Limit Earning Applicants", value: data.ageLimitEarningApplicants.toString()),
+                DetailRow(label: "Age Limit Non Earning Co-Applicant", value: data.ageLimitNonEarningCoApplicant.toString()),
+                DetailRow(label: "Minimum Age Earning Applicants", value: data.ageLimitNonEarningCoApplicant.toString()),
+                DetailRow(label: "Minimum Age Non Earning Applicants", value: data.minimumAgeNonEarningApplicants.toString()),
+                DetailRow(label: "Minimum Income Criteria", value: data.minimumIncomeCriteria.toString()),
+                DetailRow(label: "Minimum Loan Amount", value: data.minimumLoanAmount.toString()),
+                DetailRow(label: "Maximum Loan Amount", value: data.maximumLoanAmount.toString()),
+                DetailRow(label: "Min Tenor", value: data.minTenor.toString()),
+                DetailRow(label: "Maximum Tenor", value: data.maximumTenor.toString()),
+                DetailRow(label: "Minimum ROI", value: data.minimumROI.toString()),
+                DetailRow(label: "Maximum ROI", value: data.maximumROI.toString()),
+                DetailRow(label: "Maximum Tenor Eligibility Criteria", value: data.maximumTenorEligibilityCriteria.toString()),
+                DetailRow(label: "Geo Limit", value: data.geoLimit.toString()),
+                DetailRow(label: "Negative Profiles", value: data.negativeProfiles.toString()),
+                DetailRow(label: "Negative Areas", value: data.negativeAreas.toString()),
+                DetailRow(label: "Maximum TAT", value: data.maximumTAT.toString()),
+                DetailRow(label: "Minimum Property Value", value: data.minimumPropertyValue.toString()),
+                DetailRow(label: "Maximum IIR", value: data.maximumIIR.toString()),
+                DetailRow(label: "Maximum FOIR", value: data.maximumFOIR.toString()),
+                DetailRow(label: "Maximum LTV", value: data.maximumLTV.toString()),
+                DetailRow(label: "Processing Fee", value: data.processingFee.toString()),
+                DetailRow(label: "Legal Fee", value: data.legalFee.toString()),
+                DetailRow(label: "Technical Fee", value: data.technicalFee.toString()),
+                DetailRow(label: "Admin Fee", value: data.adminFee.toString()),
+                DetailRow(label: "Foreclosure Charges", value: data.foreclosureCharges.toString()),
+                DetailRow(label: "Other Charges", value: data.otherCharges.toString()),
+                DetailRow(label: "Stamp Duty", value: data.stampDuty.toString()),
+                DetailRow(label: "TSR Years", value: data.tsRYears.toString()),
+                DetailRow(label: "TSR Charges", value: data.tsRCharges.toString()),
+                DetailRow(label: "Valuation Charges", value: data.valuationCharges.toString()),
+                DetailRow(label: "No of Documents", value: data.noOfDocument.toString()),
+                DetailRow(label: "KSDPL Product ID", value: data.ksdplProductId.toString()),
+                DetailRow(label: "Profit Percentage", value: data.profitPercentage.toString()),
+                DetailRow(label: "Active", value: data.active.toString()),
+                DetailRow(label: "Created Date", value: Helper.formatDate(data.createdDate.toString())),
+                DetailRow(label: "Created By", value: data.createdBy.toString()),
+                DetailRow(label: "Product Category Name", value: data.productCategoryName.toString()),
+
+              ],
+            ),
+          ),
+          SizedBox(height: 16),
+
+          // Phone Number Card
+
+          CustomCard(
+            borderColor: AppColor.grey200,
+            backgroundColor: AppColor.appWhite,
+            child:  Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Phone Number",
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
+                SizedBox(height: 10),
+             /*   Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold,color: AppColor.black54)),
+                    ),
+                    const SizedBox(height: 10),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                        _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "call",
+                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
+                            context: context),
+                        _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber:leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "whatsapp",
+                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
+                            context: context),
+                        _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "message",
+                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
+                            context: context),
+
+
+                      ],
+                    )
+                  ],
+                )*/
+              ],
+            ),
+          ),
+
+
+
+          SizedBox(height: 20),
+        ],
+      );
+
+
+    });
+
+  }
+
+/*
+  Widget _buildIconButton({
+    required String icon,
+    required Color color,
+    required String phoneNumber,
+    required String label,
+    required String leadId,
+    required String leadStage,
+    required BuildContext context,
+  }) {
+    return IconButton(
+      onPressed: () {
+        if(label=="call"){
+          //leadListController.makePhoneCall(phoneNumber);
+          CallService callService = CallService();
+          leadDDController.selectedStage.value=leadStage;
+          callService.makePhoneCall(
+            phoneNumber:phoneNumber,//"+919399299880",//phoneNumber,
+            leadId: leadId,
+            currentLeadStage: leadStage,//newLeadStage,
+            context: context,
+            showFeedbackDialog:showCallFeedbackDialog,
+          );
+
+        }
+        if(label=="whatsapp"){
+          leadListController.openWhatsApp(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
+        }
+        if(label=="message"){
+          leadListController.sendSMS(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
+        }
+
+      },
+
+      icon: Container(
+
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration:  BoxDecoration(
+          border: Border.all(color: AppColor.grey200),
+          color: AppColor.appWhite,
+          borderRadius: BorderRadius.all(
+            Radius.circular(2),
+          ),
+
+        ),
+        child: Center(
+          // child: Icon(icon, color: color),
+          child: Image.asset(icon, height: 12,),
+        ),
+      ),
+    );
+  }
+*/
+
+
+
+
+}
+
+
+//details
+
+// Helper Widget for Status Chips
+class StatusChip extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  StatusChip({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColor.primaryColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(label, style: TextStyle(color: AppColor.appWhite, fontSize: 12)),
+    );
+  }
+}
+
+// Helper Widget for Detail Rows
+class DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  DetailRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+
+        children: [
+          Container(
+
+            width: 120,
+            child: Text("$label",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor)),
+          ),
+          Text(":", style: TextStyle(fontSize: 14),),
+          Expanded(
+              child: value==AppText.customdash?
+              Row(
+
+
+                children: [
+                  Icon(Icons.horizontal_rule, size: 15,),
+                ],):
+              Text(" "+value, style: TextStyle(fontSize: 14), maxLines: 2)),
+        ],
+      ),
+    );
+  }
+}
+
+// Helper Widget for Icon Buttons
+class IconButtonWidget extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+
+  IconButtonWidget({required this.icon, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 10),
+      child: Container(
+        height: 27,
+        width: 27,
+        // color: color.withOpacity(0.2),
+        decoration: BoxDecoration(
+
+        ),
+        child: Center(child: Icon(icon, color: color,size: 16,)),
+      ),
+    );
+  }
+}
+
+
+
+
+

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
+import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
 import '../controllers/leads/leadlist_controller.dart';
+import '../controllers/product/view_product_controller.dart';
 import '../custom_widgets/RoundedInitialContainer.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -151,6 +153,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                      leading:  Icon(Icons.add_task,color: AppColor.blackColor),
                      title:  Text("Add", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                      onTap: () {
+
                        addLeadController.fromWhere.value="drawer";
                         Get.toNamed("/addLeadScreen");
                      },
@@ -183,15 +186,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
                      leading:  Icon(Icons.add_task,color: AppColor.blackColor),
                      title:  Text("Add Product", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                      onTap: () {
+                       LeadDDController leadDDController=Get.find();
+                       leadDDController.getAllKsdplProductApi();
                        Get.toNamed("/addProductScreen");
 
                      },
                    ),
                    ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
                      leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
-                     title:  Text("View Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                     title:  Text("Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
                      onTap: () {
-
+                       ViewProductController viewProductController=Get.put(ViewProductController());
+                       viewProductController.getAllProductListApi();
+                       Get.toNamed("/viewProductScreen");
                      },
                    ),
                  ],

@@ -12,6 +12,8 @@ class ProductService {
 
   static const String getAllProductCategory = BaseUrl.baseUrl + 'ProductCategory/GetAllProductCategory';
   static const String addProductList = BaseUrl.baseUrl + 'ProductList/AddProductList';
+  static const String getAllProductList = BaseUrl.baseUrl + 'ProductList/GetAllProductList';
+  static const String getProductListById = BaseUrl.baseUrl + 'ProductList/GetProductListById';
 
 
   static Future<Map<String, dynamic>> getAllProductCategoryApi() async {
@@ -106,7 +108,7 @@ class ProductService {
       );
 
       // Headers
-      print("Min_CIBIL---->${Min_CIBIL}");
+      print("bankers_Name---->${bankers_Name}");
 
       var header=await MyHeader.getHeaders2();
 
@@ -179,6 +181,72 @@ class ProductService {
     }
   }
 
+
+  static Future<Map<String, dynamic>> getAllProductListApi() async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllProductList),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("===>  getAllProductList==>url+++?${Uri.parse(getAllProductCategory)}");
+      print("request===>==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>getAllProductList==>${response.body.toString()}");
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+
+  static Future<Map<String, dynamic>>getProductListByIdApi({
+    required String id
+}) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getProductListById),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['Id'] = id.toString();
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("===>  getProductListById==>url+++?${Uri.parse(getProductListById)}");
+      print("request===>==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>getProductListById==>${response.body.toString()}");
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
   static void printInChunks(String text, {int chunkSize = 2048}) {
     final pattern = RegExp('.{1,$chunkSize}', dotAll: true);
     for (final match in pattern.allMatches(text)) {

@@ -39,6 +39,16 @@ class Step4FormProduct extends StatelessWidget {
                 height: 20,
               ),
 
+              CustomLabeledTextField(
+                label: AppText.noOfDocuments,
+                controller: addProductController.prodNoOfDocController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterNoOfDocuments,
+                validator:  ValidationHelper.validateName,
+                isInputEnabled: false,
+              ),
+
+
               CustomTextLabel(
                 label: AppText.documentDescriptions,
 
@@ -57,10 +67,6 @@ class Step4FormProduct extends StatelessWidget {
                 },
               ),
 
-
-              const SizedBox(
-                height: 20,
-              ),
 
               const SizedBox(height: 20),
               CustomTextLabel(

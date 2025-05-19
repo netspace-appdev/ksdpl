@@ -3,22 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
-import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
-import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
-import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
-import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
-import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
-import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
-import '../../common/validation_helper.dart';
 import '../../controllers/dashboard/DashboardController.dart';
-import '../../controllers/drawer_controller.dart';
-import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
-import '../../controllers/leads/addLeadController.dart';
-import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
@@ -384,7 +372,7 @@ class GetAllReminderScreen extends StatelessWidget {
         leadListController.leadCode.value=temp;
         CallService callService = CallService();
         callService.makePhoneCall(
-          phoneNumber:"+919399299880",//leadMobileNo.toString(),//leadMobileNo.toString(),//"+919399299880"
+          phoneNumber:leadMobileNo.toString(),//leadMobileNo.toString(),//leadMobileNo.toString(),//"+919399299880"
           leadId:  leadId.toString(),
           currentLeadStage:  leadStageStatus.toString(),
           context: context,

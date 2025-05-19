@@ -13,7 +13,7 @@ import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
 import '../../custom_widgets/CustomMultiSelectDropdown.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
-
+import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 class Step1FormProduct extends StatelessWidget {
   final addProductController = Get.find<AddProductController>();
   LeadDDController leadDDController = Get.put(LeadDDController());
@@ -32,6 +32,46 @@ class Step1FormProduct extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
+              const SizedBox(
+                height: 20,
+              ),
+
+              CustomTextLabel(
+                label: AppText.ksdplProduct,
+                isRequired: true,
+
+
+              ),
+
+              const SizedBox(height: 10),
+
+
+              Obx((){
+                if (leadDDController.isProductLoading.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+
+
+                return CustomDropdown<product.Data>(
+                  items: leadDDController.getAllKsdplProductModel.value?.data ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.productName.toString(),
+                  selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
+                        (item) => item.id == addProductController.selectedKsdplProduct.value,
+                  ),
+                  onChanged: (value) {
+                    addProductController.selectedKsdplProduct.value =  value?.id;
+                  },
+                  onClear: (){
+                    addProductController.selectedKsdplProduct.value =  null;
+                  },
+                );
+              }),
+
+
+              const SizedBox(height: 20),
+
               CustomTextLabel(
                 label: AppText.bankNostar,
 
@@ -61,7 +101,7 @@ class Step1FormProduct extends StatelessWidget {
 
                     if( addProductController.selectedBank.value!=null){
                       leadDDController.getAllBranchByBankIdApi(bankId: addProductController.selectedBank.value.toString());
-                      leadDDController.getProductListByBankIdApi(bankId: addProductController.selectedBank.value.toString());
+
                     }
 
 
@@ -71,8 +111,6 @@ class Step1FormProduct extends StatelessWidget {
                     addProductController.selectedBankBranch.value = 0;
                     addProductController.selectedProdTypeOrTypeLoan.value=0;
                     leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
-                    leadDDController.getAllKsdplProductModel.value?.data?.clear();
-                    leadDDController.getAllKsdplProductApi();
 
                   },
                 );
@@ -106,6 +144,16 @@ class Step1FormProduct extends StatelessWidget {
                 hintText: AppText.enterBankerWhatsapp,
 
               ),
+
+              CustomLabeledTextField(
+                label: AppText.bankerEmail,
+
+                controller: addProductController.prodBankersEmailController,
+                inputType: TextInputType.emailAddress,
+                hintText: AppText.enterBankerEmail,
+
+              ),
+
 
               CustomLabeledTextField(
                 label: AppText.minCibil,
@@ -156,7 +204,7 @@ class Step1FormProduct extends StatelessWidget {
                 label: AppText.productName,
 
                 controller: addProductController.prodProductNameController,
-                inputType: TextInputType.number,
+                inputType: TextInputType.name,
                 hintText: AppText.enterProductName,
 
               ),

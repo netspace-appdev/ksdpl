@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
+import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
 import 'package:ksdpl/services/product_service.dart';
 
 import '../../common/helper.dart';
@@ -14,6 +15,7 @@ import '../../models/loan_application/special_model/CoApplicantModel.dart';
 import '../../models/loan_application/special_model/CreditCardModel.dart';
 import '../../models/loan_application/special_model/FamilyMemberModel.dart';
 import '../../models/loan_application/special_model/ReferenceModel.dart';
+import '../../models/product/AddProductListModel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../models/product/GetAllProductCategoryModel.dart';
 import '../../services/loan_appl_service.dart';
@@ -218,11 +220,13 @@ class AddProductController extends GetxController{
 // Descriptions
   final TextEditingController prodDocumentDescriptionsController = TextEditingController();
   final TextEditingController prodProductDescriptionsController = TextEditingController();
+  final TextEditingController prodNoOfDocController = TextEditingController();
   var prodSegmentList=["Insurance", "Secured","Unsecured", ];
   var selectedprodSegment = Rxn<String>();
   var customerCategoryList=["Salaried", "Salaried NRI","Self Employed Professional", "Self Employed Non Professional", "Non-Individual","Others"];
   var selectedCustomerCategories = <String>[].obs;
   var getAllProductCategoryModel = Rxn<productCat.GetAllProductCategoryModel>(); //
+  var addProductListModel = Rxn<AddProductListModel>(); //
   RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
   var isLoadingProductCategory = false.obs;
   var isProductLoading = false.obs;
@@ -355,9 +359,9 @@ class AddProductController extends GetxController{
     }
 */
     if(selectedKsdplProduct.value==null){
-      jumpToStep(2);
-      // Optionally show a snackbar or toast
-      Get.snackbar("Incomplete Step 3", "Please Select KSDPL Product");
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select KSDPL Product");
     }else{
 
       addProductListApi(
@@ -406,11 +410,11 @@ class AddProductController extends GetxController{
          TSR_Years:prodTsrYearsController.text,
          TSR_Charges:prodTsrChargesController.text,
          Valuation_Charges:prodValuationChargesController.text,
-         NoOfDocument:"1",                                                    ///Static,
+         NoOfDocument:prodNoOfDocController.text,
          Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
          Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
          Profit_Percentage:prodProfitPercentageController.text,
-         KSDPLProductId: selectedKsdplProduct.value.toString()
+         KSDPLProductId:selectedKsdplProduct.value.toString()
       );
 
       print("All steps valid! Submitting form...");
@@ -1558,38 +1562,30 @@ class AddProductController extends GetxController{
       if(data['success'] == true){
 
 
-        getAllProductCategoryModel.value= GetAllProductCategoryModel.fromJson(data);
+        addProductListModel.value= AddProductListModel.fromJson(data);
+        ToastMessage.msg(addProductListModel.value!.message!);
 
 
-        final List<productCat.Data> allCategories = getAllProductCategoryModel.value?.data ?? [];
-
-        final List<productCat.Data> activeCategories = allCategories.where((cat) => cat.active == true).toList();
-
-        productCategoryList.value = activeCategories;
-
-
-
-
-
-        isLoadingProductCategory(false);
+        isLoading(false);
+        Get.back();
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
-        getAllProductCategoryModel.value=null;
+        addProductListModel.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 
 
     } catch (e) {
-      print("Error getAllLeadsApi: $e");
+      print("Error addProductListModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
-      isLoadingProductCategory(false);
+      isLoading(false);
     } finally {
 
-      isLoadingProductCategory(false);
+      isLoading(false);
     }
   }
 }

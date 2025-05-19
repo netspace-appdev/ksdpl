@@ -535,7 +535,11 @@ class AppText{
   static const String productName = "Product Name";
   static const String enterProductName = "enter product name";
 
+  static const String noOfDocuments = "No. of Documents";
+  static const String enterNoOfDocuments = "Enter No. of Documents";
 
+  static const String showProducts = "Products";
+  static const String productDetails = "Product Details";
 
 
 

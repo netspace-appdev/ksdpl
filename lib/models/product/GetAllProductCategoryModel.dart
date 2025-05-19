@@ -39,8 +39,8 @@ class Data {
   String? createdBy;
   String? updatedDate;
   String? updatedBy;
-  Null? deletedDate;
-  Null? deletedBy;
+  String? deletedDate;
+  String? deletedBy;
 
   Data(
       {this.id,
