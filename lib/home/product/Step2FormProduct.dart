@@ -112,10 +112,10 @@ class Step2FormProduct extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.minTenor,
+                label: AppText.maxTenor,
                 controller: addProductController.prodMaxTenorController,
                 inputType: TextInputType.number,
-                hintText: AppText.enterMinTenor,
+                hintText: AppText.enterMaxTenor,
 
               ),
 

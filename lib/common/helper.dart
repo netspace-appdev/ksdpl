@@ -205,6 +205,7 @@ class AppText{
   static const String enterConMob="Enter Connector Mobile";
   static const String enterConShare="Enter Connector Share %";
   static const String mmddyyyy="mm/dd/yyyy";
+  static const String yyyyMmDd="YYYY-MM-DD";
   static const String preferredBank="Preferred Bank for Loan";
   static const String connector="Connector";
   static const String gender="Gender";
@@ -541,6 +542,7 @@ class AppText{
   static const String showProducts = "Products";
   static const String productDetails = "Product Details";
 
+  static const String editProduct = "Edit Product";
 
 
 }

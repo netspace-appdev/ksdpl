@@ -184,13 +184,13 @@ class Step1FormProduct extends StatelessWidget {
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.productCategoryName.toString(),
                   selectedValue: addProductController.productCategoryList.firstWhereOrNull(
-                        (item) => item.id.toString() == addProductController.selectedProductCategory.value,
+                        (item) => item.id == addProductController.selectedProductCategory.value,
                   ),
                   onChanged: (value) {
-                    addProductController.selectedProductCategory.value =  value?.id?.toString();
+                    addProductController.selectedProductCategory.value =  value?.id;
                   },
                   onClear: (){
-                    addProductController.selectedProductCategory.value = "0";
+                    addProductController.selectedProductCategory.value = 0;
                     addProductController.productCategoryList.clear(); // reset dependent dropdown
 
                   },
@@ -222,9 +222,10 @@ class Step1FormProduct extends StatelessWidget {
                 items: addProductController.customerCategoryList,
                 getId: (e) => e,
                 getName: (e) => e,
-                selectedValues: [], // or preselected values
+                selectedValues: addProductController.selectedCustomerCategories.toList(), // or preselected values
                 onChanged: (selectedList) {
-                  addProductController.selectedCustomerCategories.value=selectedList;
+
+                  addProductController.selectedCustomerCategories.assignAll(selectedList);
                 },
               ),
 
@@ -244,9 +245,10 @@ class Step1FormProduct extends StatelessWidget {
                 items: addProductController.collSecCatList,
                 getId: (e) => e,
                 getName: (e) => e,
-                selectedValues: [], // or preselected values
+                selectedValues: addProductController.selectedCollSecCat.toList(), // or preselected values
                 onChanged: (selectedList) {
-                  addProductController.selectedCollSecCat.value=selectedList;
+                 // addProductController.selectedCollSecCat.value=selectedList;
+                  addProductController.selectedCollSecCat.assignAll(selectedList);
                 },
               ),
 

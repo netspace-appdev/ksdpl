@@ -31,6 +31,7 @@ import '../home/notification_screen.dart';
 import '../home/leads/open_poll_filter.dart';
 import '../home/product.dart';
 import '../home/product/add_product_screen.dart';
+import '../home/product/edit_product/edit_product_screen.dart';
 import '../home/product/product_detail_screen.dart';
 import '../home/product/view_product_screen.dart';
 import '../home/splash.dart';
@@ -67,4 +68,5 @@ final routes = [
   GetPage(name: '/addProductScreen', page: () => AddProductScreen()),
   GetPage(name: '/viewProductScreen', page: () => ViewProductScreen()),
   GetPage(name: '/productDetailScreen', page: () => ProductDetailScreen()),
+  GetPage(name: '/editProductScreen', page: () => EditProductScreen()),
 ];

@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
 import '../controllers/leads/leadlist_controller.dart';
+import '../controllers/product/add_product_controller.dart';
 import '../controllers/product/view_product_controller.dart';
 import '../custom_widgets/RoundedInitialContainer.dart';
 
@@ -188,6 +189,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                      onTap: () {
                        LeadDDController leadDDController=Get.find();
                        leadDDController.getAllKsdplProductApi();
+                       AddProductController addProductController =Get.put(AddProductController());
+                       addProductController.getAllProductCategoryApi();
                        Get.toNamed("/addProductScreen");
 
                      },

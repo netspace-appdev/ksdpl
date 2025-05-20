@@ -3,27 +3,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import '../../common/helper.dart';
-import '../../controllers/greeting_controller.dart';
-import '../../controllers/lead_dd_controller.dart';
-import '../../controllers/leads/addLeadController.dart';
-import '../../controllers/leads/infoController.dart';
-import '../../controllers/leads/loan_appl_controller.dart';
-import '../../controllers/product/add_product_controller.dart';
-import 'Step1FormProduct.dart';
-import 'Step2FormProduct.dart';
-import 'Step3FormProduct.dart';
-import 'Step4FormProduct.dart';
+
+import '../../../common/helper.dart';
+import '../../../controllers/greeting_controller.dart';
+import '../../../controllers/lead_dd_controller.dart';
+import '../../../controllers/leads/infoController.dart';
+import '../../../controllers/product/add_product_controller.dart';
+import '../Step1FormProduct.dart';
+import '../Step2FormProduct.dart';
+import '../Step3FormProduct.dart';
+import '../Step4FormProduct.dart';
 
 
-class AddProductScreen extends StatelessWidget {
 
-  LeadDDController leadDDController = Get.put(LeadDDController());
-  GreetingController greetingController = Get.put(GreetingController());
-  InfoController infoController = Get.put(InfoController());
+class EditProductScreen extends StatelessWidget {
+  EditProductScreen({super.key});
+
+  final LeadDDController leadDDController = Get.put(LeadDDController());
+  final GreetingController greetingController = Get.put(GreetingController());
+  final InfoController infoController = Get.put(InfoController());
 
   final _formKey = GlobalKey<FormState>();
-  final AddProductController addProductController =Get.find();
+  final AddProductController addProductController =Get.put(AddProductController());
   final List<Widget> stepForms = [
     Step1FormProduct(),
     Step2FormProduct(),
@@ -31,6 +32,7 @@ class AddProductScreen extends StatelessWidget {
     Step4FormProduct(),
 
   ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -243,7 +245,7 @@ class AddProductScreen extends StatelessWidget {
               },
               child: Image.asset(AppImage.arrowLeft,height: 24,)),
           const Text(
-            AppText.addProduct,
+            AppText.editProduct,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,

@@ -43,7 +43,7 @@ class Step4FormProduct extends StatelessWidget {
                 label: AppText.noOfDocuments,
                 controller: addProductController.prodNoOfDocController,
                 inputType: TextInputType.number,
-                hintText: AppText.enterNoOfDocuments,
+                hintText: AppText.noOfDocuments,
                 validator:  ValidationHelper.validateName,
                 isInputEnabled: false,
               ),

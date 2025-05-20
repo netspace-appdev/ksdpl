@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ksdpl/controllers/product/add_product_controller.dart';
 import 'package:ksdpl/controllers/product/product_detail_controller.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
@@ -356,6 +357,12 @@ class ViewProductScreen extends StatelessWidget {
           ProductDetailsController productDetailsController = Get.put(ProductDetailsController());
           productDetailsController.getProductListByIdApi(id: id);
           Get.toNamed("/productDetailScreen");
+
+        }else  if (label == "Edit") {
+         AddProductController addProductController = Get.put(AddProductController());
+         addProductController.getProductListByIdApi(id: id);
+         addProductController.getAllProductCategoryApi();
+          Get.toNamed("/editProductScreen");
 
         }else{
 

@@ -18,6 +18,7 @@ import '../../models/loan_application/special_model/ReferenceModel.dart';
 import '../../models/product/AddProductListModel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../models/product/GetAllProductCategoryModel.dart';
+import '../../models/product/GetProductListById.dart';
 import '../../services/loan_appl_service.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
@@ -232,7 +233,7 @@ class AddProductController extends GetxController{
   var isProductLoading = false.obs;
   var selectedKsdplProduct = Rxn<int>();
 
-  var selectedProductCategory = Rxn<String>();
+  var selectedProductCategory = Rxn<int>();
   var collSecCatList=[
     "Residential Plot",
     "Self Occupied Residential Property",
@@ -273,6 +274,8 @@ class AddProductController extends GetxController{
   TextEditingController chipTextController = TextEditingController();
   TextEditingController chipText2Controller = TextEditingController();
   TextEditingController chipText3Controller = TextEditingController();
+
+  var getProductListById = Rxn<GetProductListById>(); //
 
   void addChip(String value) {
     if (value.trim().isNotEmpty && !chips.contains(value.trim())) {
@@ -336,12 +339,6 @@ class AddProductController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getAllProductCategoryApi();
-
-  /*  leadId.value = Get.arguments['uln'];
-    ulnController.text =  leadId.value;
-    getLoanApplicationDetailsByIdApi(id:leadId.value);*/
-
   }
 
   void validateAndSubmit() {
@@ -372,7 +369,7 @@ class AddProductController extends GetxController{
         Bankers_WhatsApp_Number:prodBankersWhatsappController.text,
         BankersEmailId:prodBankersEmailController.text,
         Min_CIBIL:prodMinCibilController.text,
-        Segment_Vertical:selectedProductCategory.value,
+        Segment_Vertical:selectedProductCategory.value.toString(),
         Product:prodProductNameController.text,
         ProductDescription:prodProductDescriptionsController.text,
         Customer_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
@@ -1587,6 +1584,127 @@ class AddProductController extends GetxController{
 
       isLoading(false);
     }
+  }
+
+
+  void  getProductListByIdApi({
+    required String id
+  }) async {
+    try {
+      isLoading(true);
+
+      var data = await ProductService.getProductListByIdApi(id: id);
+
+      if(data['success'] == true){
+
+        print("here 1");
+
+        getProductListById.value= GetProductListById.fromJson(data);
+
+        populateStep1Info();
+        populateStep2Info();
+        populateStep3Info();
+        populateStep4Info();
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllProductListModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+  void populateStep1Info() async{
+    selectedKsdplProduct.value=int.parse(getProductListById.value!.data!.ksdplProductId.toString());
+    selectedBank.value=int.parse(getProductListById.value!.data!.bankId.toString());
+    prodBankersNameController.text=getProductListById.value!.data!.bankersName??"";
+    prodBankersMobController.text=getProductListById.value!.data!.bankersMobileNumber??"";
+    prodBankersWhatsappController.text=getProductListById.value!.data!.bankersWhatsAppNumber??"";
+    prodBankersEmailController.text=getProductListById.value!.data!.bankersEmailID??"";
+    prodMinCibilController.text=(getProductListById.value!.data!.minCIBIL ?? 0).toStringAsFixed(0);
+    selectedProductCategory.value=int.parse(getProductListById.value!.data!.segmentVertical.toString());
+    prodProductNameController.text=getProductListById.value!.data!.product??"";
+    selectedCustomerCategories.value=(getProductListById.value!.data!.customerCategory ?? "")
+        .split(',')
+        .map((e) => e.trim())
+        .toList();
+    selectedCollSecCat.value=(getProductListById.value!.data!.collateralSecurityCategory ?? "")
+        .split(',')
+        .map((e) => e.trim())
+        .toList();
+    prodCollateralSecurityExcludedController.text=getProductListById.value!.data!.collateralSecurityExcluded??"";
+    prodProfileExcludedController.text=getProductListById.value!.data!.profileExcluded??"";
+
+    print("customerCategory res===>${getProductListById.value!.data!.customerCategory}");
+    print("selectedCustomerCategories res===>${ selectedCustomerCategories.value}");
+
+    print("collateralSecurityCategory res===>${getProductListById.value!.data!.collateralSecurityCategory}");
+    print("selectedCollSecCat res===>${ selectedCollSecCat.value}");
+   /* print("customerCategory res2===>${(getProductListById.value!.data!.customerCategory ?? "")
+        .split(',')
+        .map((e) => e.trim())
+        .toList()}");*/
+  }
+
+  void populateStep2Info() async{
+
+    prodAgeLimitEarningApplicantsController.text=(getProductListById.value!.data!.ageLimitEarningApplicants ?? 0).toStringAsFixed(0);
+    prodAgeLimitNonEarningCoApplicantController.text=(getProductListById.value!.data!.ageLimitNonEarningCoApplicant ?? 0).toStringAsFixed(0);
+    prodMinAgeEarningApplicantsController.text=(getProductListById.value!.data!.minimumAgeEarningApplicants ?? 0).toStringAsFixed(0);
+    prodMinAgeNonEarningApplicantsController.text=(getProductListById.value!.data!.minimumAgeNonEarningApplicants ?? 0).toStringAsFixed(0);
+    prodMinIncomeCriteriaController.text=(getProductListById.value!.data!.minimumIncomeCriteria ?? 0).toStringAsFixed(2);
+    prodMinLoanAmountController.text=(getProductListById.value!.data!.minimumLoanAmount ?? 0).toStringAsFixed(2);
+    prodMaxLoanAmountController.text=(getProductListById.value!.data!.maximumLoanAmount ?? 0).toStringAsFixed(2);
+    prodProfitPercentageController.text=(getProductListById.value!.data!.profitPercentage ?? 0).toStringAsFixed(2);
+    prodMinTenorController.text=(getProductListById.value!.data!.minTenor ?? 0).toStringAsFixed(0);
+    prodMaxTenorController.text=(getProductListById.value!.data!.maximumTenor ?? 0).toStringAsFixed(0);
+    prodMinRoiController.text=(getProductListById.value!.data!.minimumROI ?? 0).toStringAsFixed(2);
+    prodMaxRoiController.text=(getProductListById.value!.data!.maximumROI ?? 0).toStringAsFixed(2);
+    prodMaxTenorEligibilityCriteriaController.text=(getProductListById.value!.data!.maximumTenorEligibilityCriteria ?? 0).toStringAsFixed(0);
+    prodGeoLimitController.text=getProductListById.value!.data!.geoLimit??"0";
+
+
+
+  }
+
+  void populateStep3Info() async{
+
+    prodMinPropertyValueController.text=(getProductListById.value!.data!.minimumPropertyValue ?? 0).toStringAsFixed(2);
+    prodMaxIirController.text=(getProductListById.value!.data!.maximumIIR ?? 0).toStringAsFixed(2);
+    prodMaxFoirController.text=(getProductListById.value!.data!.maximumFOIR ?? 0).toStringAsFixed(2);
+    prodMaxLtvController.text=(getProductListById.value!.data!.maximumLTV ?? 0).toStringAsFixed(2);
+    prodProcessingFeeController.text=(getProductListById.value!.data!.processingFee ?? 0).toStringAsFixed(2);
+    prodLegalFeeController.text=(getProductListById.value!.data!.legalFee ?? 0).toStringAsFixed(2);
+    prodTechnicalFeeController.text=(getProductListById.value!.data!.technicalFee ?? 0).toStringAsFixed(2);
+    prodAdminFeeController.text=(getProductListById.value!.data!.adminFee ?? 0).toStringAsFixed(2);
+    prodForeclosureChargesController.text=(getProductListById.value!.data!.foreclosureCharges ?? 0).toStringAsFixed(2);
+    prodOtherChargesController.text=(getProductListById.value!.data!.otherCharges ?? 0).toStringAsFixed(2);
+    prodStampDutyController.text=(getProductListById.value!.data!.stampDuty ?? 0).toStringAsFixed(2);
+    prodTsrYearsController.text=(getProductListById.value!.data!.tsRYears ?? 0).toStringAsFixed(2);
+    prodTsrChargesController.text=(getProductListById.value!.data!.tsRCharges ?? 0).toStringAsFixed(2);
+    prodValuationChargesController.text=(getProductListById.value!.data!.valuationCharges ?? 0).toStringAsFixed(2);
+    prodProductValidateFromController.text=Helper.convertFromIso8601(getProductListById.value!.data!.productValidateFromDate);
+    prodProductValidateToController.text=Helper.convertFromIso8601(getProductListById.value!.data!.productValidateToDate);
+    prodMaxTatController.text=(getProductListById.value!.data!.maximumTAT ?? 0).toStringAsFixed(2);
+
+  }
+
+  void populateStep4Info() async{
+
+    prodProductDescriptionsController.text=getProductListById.value!.data!.productDescription??"";
+
+
+
+
   }
 }
 

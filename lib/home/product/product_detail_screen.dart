@@ -168,7 +168,7 @@ class ProductDetailScreen extends StatelessWidget {
 
 
 
-  Widget productSection(BuildContext context){
+/*  Widget productSection(BuildContext context){
     return Obx((){
       if (productDetailsController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
@@ -315,7 +315,7 @@ class ProductDetailScreen extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold)),
                 SizedBox(height: 10),
-             /*   Row(
+             *//*   Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
@@ -343,7 +343,7 @@ class ProductDetailScreen extends StatelessWidget {
                       ],
                     )
                   ],
-                )*/
+                )*//*
               ],
             ),
           ),
@@ -357,62 +357,120 @@ class ProductDetailScreen extends StatelessWidget {
 
     });
 
+  }*/
+
+  Widget productSection(BuildContext context) {
+    return Obx(() {
+      if (productDetailsController.isLoading.value) {
+        return Center(child: CustomSkelton.productShimmerList(context));
+      }
+
+      final data = productDetailsController.getProductListById.value?.data;
+      if (data == null || data == "") {
+        return /// Header with profile and menu icon
+          Align(
+              alignment: Alignment.center,
+              child: Text(
+                  "No data found",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.grey700
+                  )));
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          buildCard("Basic Product Info", [
+            DetailRow(label: "Product", value: data.product.toString()),
+            DetailRow(label: "Product Category Name", value: data.productCategoryName.toString()),
+            DetailRow(label: "Segment Vertical", value: data.segmentVertical.toString()),
+            DetailRow(label: "Customer Category", value: data.customerCategory.toString()),
+          ]),
+
+          buildCard("Bank & Contact Info", [
+            DetailRow(label: "Bank Name", value: data.bankName.toString()),
+            DetailRow(label: "Bankers Name", value: data.bankersName.toString()),
+            DetailRow(label: "Bankers Mobile Number", value: data.bankersMobileNumber.toString()),
+            DetailRow(label: "Bankers Whatsapp Number", value: data.bankersWhatsAppNumber.toString()),
+            DetailRow(label: "Bankers Email ID", value: data.bankersEmailID.toString()),
+          ]),
+
+          buildCard("Collateral & Profile Restrictions", [
+            DetailRow(label: "Collateral Security Category", value: data.collateralSecurityCategory.toString()),
+            DetailRow(label: "Collateral Security Excluded", value: data.collateralSecurityExcluded.toString()),
+            DetailRow(label: "Profile Excluded", value: data.profileExcluded.toString()),
+            DetailRow(label: "Negative Profiles", value: data.negativeProfiles.toString()),
+            DetailRow(label: "Negative Areas", value: data.negativeAreas.toString()),
+            DetailRow(label: "Geo Limit", value: data.geoLimit.toString()),
+          ]),
+
+          buildCard("Eligibility Criteria", [
+            DetailRow(label: "Income Types", value: data.incomeTypes.toString()),
+            DetailRow(label: "Age Limit Earning Applicants", value: data.ageLimitEarningApplicants.toString()),
+            DetailRow(label: "Age Limit Non Earning Co-Applicant", value: data.ageLimitNonEarningCoApplicant.toString()),
+            DetailRow(label: "Minimum Age Earning Applicants", value: data.ageLimitNonEarningCoApplicant.toString()),
+            DetailRow(label: "Minimum Age Non Earning Applicants", value: data.minimumAgeNonEarningApplicants.toString()),
+            DetailRow(label: "Minimum Income Criteria", value: data.minimumIncomeCriteria.toString()),
+            DetailRow(label: "Minimum Loan Amount", value: data.minimumLoanAmount.toString()),
+            DetailRow(label: "Maximum Loan Amount", value: data.maximumLoanAmount.toString()),
+            DetailRow(label: "Minimum ROI", value: data.minimumROI.toString()),
+            DetailRow(label: "Maximum ROI", value: data.maximumROI.toString()),
+            DetailRow(label: "Min Tenor", value: data.minTenor.toString()),
+            DetailRow(label: "Maximum Tenor", value: data.maximumTenor.toString()),
+            DetailRow(label: "Maximum Tenor Eligibility Criteria", value: data.maximumTenorEligibilityCriteria.toString()),
+          ]),
+
+          buildCard("Financial Limits", [
+            DetailRow(label: "Minimum Property Value", value: data.minimumPropertyValue.toString()),
+            DetailRow(label: "Maximum IIR", value: data.maximumIIR.toString()),
+            DetailRow(label: "Maximum FOIR", value: data.maximumFOIR.toString()),
+            DetailRow(label: "Maximum LTV", value: data.maximumLTV.toString()),
+          ]),
+
+          buildCard("Charges & Fees", [
+            DetailRow(label: "Processing Fee", value: data.processingFee.toString()),
+            DetailRow(label: "Legal Fee", value: data.legalFee.toString()),
+            DetailRow(label: "Technical Fee", value: data.technicalFee.toString()),
+            DetailRow(label: "Admin Fee", value: data.adminFee.toString()),
+            DetailRow(label: "Foreclosure Charges", value: data.foreclosureCharges.toString()),
+            DetailRow(label: "Other Charges", value: data.otherCharges.toString()),
+            DetailRow(label: "Stamp Duty", value: data.stampDuty.toString()),
+            DetailRow(label: "TSR Years", value: data.tsRYears.toString()),
+            DetailRow(label: "TSR Charges", value: data.tsRCharges.toString()),
+            DetailRow(label: "Valuation Charges", value: data.valuationCharges.toString()),
+          ]),
+
+          buildCard("Administrative Info", [
+            DetailRow(label: "No of Documents", value: data.noOfDocument.toString()),
+            DetailRow(label: "KSDPL Product ID", value: data.ksdplProductId.toString()),
+            DetailRow(label: "Profit Percentage", value: data.profitPercentage.toString()),
+            DetailRow(label: "Maximum TAT", value: data.maximumTAT.toString()),
+          ]),
+
+        
+
+          SizedBox(height: 20),
+        ],
+      );
+    });
   }
-
-/*
-  Widget _buildIconButton({
-    required String icon,
-    required Color color,
-    required String phoneNumber,
-    required String label,
-    required String leadId,
-    required String leadStage,
-    required BuildContext context,
-  }) {
-    return IconButton(
-      onPressed: () {
-        if(label=="call"){
-          //leadListController.makePhoneCall(phoneNumber);
-          CallService callService = CallService();
-          leadDDController.selectedStage.value=leadStage;
-          callService.makePhoneCall(
-            phoneNumber:phoneNumber,//"+919399299880",//phoneNumber,
-            leadId: leadId,
-            currentLeadStage: leadStage,//newLeadStage,
-            context: context,
-            showFeedbackDialog:showCallFeedbackDialog,
-          );
-
-        }
-        if(label=="whatsapp"){
-          leadListController.openWhatsApp(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
-        }
-        if(label=="message"){
-          leadListController.sendSMS(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
-        }
-
-      },
-
-      icon: Container(
-
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        decoration:  BoxDecoration(
-          border: Border.all(color: AppColor.grey200),
-          color: AppColor.appWhite,
-          borderRadius: BorderRadius.all(
-            Radius.circular(2),
-          ),
-
-        ),
-        child: Center(
-          // child: Icon(icon, color: color),
-          child: Image.asset(icon, height: 12,),
-        ),
+  Widget buildCard(String title, List<Widget> children) {
+    return CustomCard(
+      borderColor: AppColor.grey200,
+      backgroundColor: AppColor.appWhite,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
+          ...children,
+        ],
       ),
     );
   }
-*/
-
 
 
 
