@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
+import 'package:ksdpl/controllers/product/view_product_controller.dart';
 import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
 import 'package:ksdpl/services/product_service.dart';
 
@@ -359,7 +360,12 @@ class AddProductController extends GetxController{
       jumpToStep(0);
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select KSDPL Product");
+    }else if(selectedProductCategory.value==null){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Product Segment");
     }else{
+
 
       addProductListApi(
         Id: "0",
@@ -373,7 +379,7 @@ class AddProductController extends GetxController{
         Product:prodProductNameController.text,
         ProductDescription:prodProductDescriptionsController.text,
         Customer_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
-        Collateral_Security_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
+        Collateral_Security_Category:Helper.convertListToCsvSafe(selectedCollSecCat.value),
         Collateral_Security_Excluded:prodCollateralSecurityExcludedController.text,
         Income_Types:Helper.convertListToCsvSafe(selectedIncomeType.value),
         Profile_Excluded:prodProfileExcludedController.text,
@@ -412,6 +418,77 @@ class AddProductController extends GetxController{
          Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
          Profit_Percentage:prodProfitPercentageController.text,
          KSDPLProductId:selectedKsdplProduct.value.toString()
+      );
+
+      print("All steps valid! Submitting form...");
+    }
+
+
+  }
+  void validateAndUpdate() {
+
+    print("prodMaxRoiController.text===>${prodMaxLoanAmountController.text}");
+    print("prodMinRoiController===>${ prodMinRoiController.text}");
+    print("prodMaxRoiController===>${prodMaxRoiController.text}");
+
+
+    if(selectedKsdplProduct.value==null){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select KSDPL Product");
+    }else{
+      print("FD---->${prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):""}");
+      updateProductListApi(
+          Id: getProductListById.value!.data!.id.toString(),
+          BankId:selectedBank.value?.toString(),
+          bankers_Name:prodBankersNameController.text,
+          Bankers_Mobile_Number:prodBankersMobController.text,
+          Bankers_WhatsApp_Number:prodBankersWhatsappController.text,
+          BankersEmailId:prodBankersEmailController.text,
+          Min_CIBIL:prodMinCibilController.text,
+          Segment_Vertical:selectedProductCategory.value.toString(),
+          Product:prodProductNameController.text,
+          ProductDescription:prodProductDescriptionsController.text,
+          Customer_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
+          Collateral_Security_Category:Helper.convertListToCsvSafe(selectedCollSecCat.value),
+          Collateral_Security_Excluded:prodCollateralSecurityExcludedController.text,
+          Income_Types:Helper.convertListToCsvSafe(selectedIncomeType.value),
+          Profile_Excluded:prodProfileExcludedController.text,
+          Age_limit_Earning_Applicants:prodAgeLimitEarningApplicantsController.text,
+          Age_limit_Non_Earning_Co_Applicant:prodAgeLimitNonEarningCoApplicantController.text,
+          Minimum_age_earning_applicants:prodMinAgeEarningApplicantsController.text,
+          Minimum_age_non_earning_applicants:prodMinAgeNonEarningApplicantsController.text,
+          Minimum_Income_Criteria:prodMinIncomeCriteriaController.text,
+          Minimum_Loan_Amount:prodMinLoanAmountController.text,
+          Maximum_Loan_Amount:prodMaxLoanAmountController.text,
+          Min_Tenor:prodMinTenorController.text,
+          Maximum_Tenor:prodMaxTenorController.text,
+          Minimum_ROI: prodMinRoiController.text,
+          Maximum_ROI:prodMaxRoiController.text,
+          Maximum_Tenor_Eligibility_Criteria:prodMaxTenorEligibilityCriteriaController.text,
+          Geo_Limit:prodGeoLimitController.text,
+          Negative_Profiles:Helper.convertListToCsvSafe(selectedNegProfile.value),
+          Negative_Areas:Helper.convertListToCsvSafe(selectedNegArea.value),
+          Maximum_TAT:prodMaxTatController.text,
+          Minimum_Property_Value:prodMinPropertyValueController.text,
+          Maximum_IIR:prodMaxIirController.text,
+          Maximum_FOIR:prodMaxFoirController.text,
+          Maximum_LTV:prodMaxLtvController.text,
+          Processing_Fee:prodProcessingFeeController.text,
+          Legal_Fee:prodLegalFeeController.text,
+          Technical_Fee:prodTechnicalFeeController.text,
+          Admin_Fee:prodAdminFeeController.text,
+          Foreclosure_Charges:prodForeclosureChargesController.text,
+          Other_Charges:prodOtherChargesController.text,
+          Stamp_Duty:prodStampDutyController.text,
+          TSR_Years:prodTsrYearsController.text,
+          TSR_Charges:prodTsrChargesController.text,
+          Valuation_Charges:prodValuationChargesController.text,
+          NoOfDocument:prodNoOfDocController.text,
+          Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
+          Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
+          Profit_Percentage:prodProfitPercentageController.text,
+          KSDPLProductId:selectedKsdplProduct.value.toString()
       );
 
       print("All steps valid! Submitting form...");
@@ -723,290 +800,84 @@ class AddProductController extends GetxController{
     referencesList.clear();
     referencesList.clear();
 
-  }
 
-  void onSaveLoanAppl() {
-    final List<CoApplicantModel> coApplicantModels = [];
-    final List<FamilyMemberModel> familyMembersModels = [];
-    final List<CreditCardModel> creditCardModel = [];
-    final List<ReferenceModel> referenceModel = [];
+    ///product
+    selectedprodSegment.value = null;
+    selectedCustomerCategories.clear();
+    selectedKsdplProduct.value = null;
+    selectedProductCategory.value = null;
+    selectedCollSecCat.clear();
+    selectedIncomeType.clear();
+    selectedNegProfile.clear();
+    selectedNegArea.clear();
 
-    for (var coAp in coApplicantList) {
-      final AddressModel presentAddress = AddressModel(
-          houseFlatNo: cleanText(coAp.coApCurrHouseFlatController.text),
-          buildingNo: cleanText(coAp.coApCurrBuildingNoController.text),
-          societyName: cleanText(coAp.coApCurrSocietyNameController.text),
-          locality: cleanText(coAp.coApCurrLocalityController.text),
-          streetName: cleanText(coAp.coApCurrStreetNameController.text),
-          city: cleanText(coAp.selectedCityCurr.value.toIntOrZero().toString()),
-          taluka: cleanText(coAp.coApCurrTalukaController.text),
-          district: cleanText(coAp.selectedDistrictCurr.value.toIntOrZero().toString()),
-          state: cleanText(coAp.selectedStateCurr.value.toIntOrZero().toString()),
-          country: cleanText(coAp.selectedCountrCurr.value.toIntOrZero().toString()),
-          pinCode: cleanText(coAp.coApCurrPinCodeController.text)
-      );
+    // Clear chips
+    chips.clear();
+    chipTextController.dispose();
+    chipText2Controller.dispose();
+    chipText3Controller.dispose();
 
-      final AddressModel permanentAddress = AddressModel(
-          houseFlatNo: cleanText(coAp.coApPermHouseFlatController.text),
-          buildingNo: cleanText(coAp.coApPermBuildingNoController.text),
-          societyName: cleanText(coAp.coApPermSocietyNameController.text),
-          locality: cleanText(coAp.coApPermLocalityController.text),
-          streetName: cleanText(coAp.coApPermStreetNameController.text),
-          city: cleanText(coAp.selectedCityPerm.value.toIntOrZero().toString()),
-          taluka: cleanText(coAp.coApPermTalukaController.text),
-          district: cleanText(coAp.selectedDistrictPerm.value.toIntOrZero().toString()),
-          state: cleanText(coAp.selectedStatePerm.value.toIntOrZero().toString()),
-          country: cleanText(coAp.selectedCountryPerm.value.toIntOrZero().toString()),
-          pinCode: cleanText(coAp.coApPermPinCodeController.text)
-      );
+    // Dispose all TextEditingControllers
+    prodBankersNameController.dispose();
+    prodBankersMobController.dispose();
+    prodBankersWhatsappController.dispose();
+    prodBankersEmailController.dispose();
+    prodMinCibilController.dispose();
+    prodProductNameController.dispose();
 
-      final EmployerDetailsModel employerDetails=EmployerDetailsModel(
-        organizationName: cleanText(coAp.coApOrgNameController.text),
-        ownershipType: coAp.selectedCityPerm.value.toIntOrZero().toString(),
-        natureOfBusiness:cleanText(coAp.coApNatureOfBizController.text),
-        staffStrength: coAp.coApStaffStrengthController.toIntOrZero(),
-        dateOfSalary:coAp.coApSalaryDateController.text.isNotEmpty?Helper.convertToIso8601(coAp.coApSalaryDateController.text):"",                ///its static
-      );
+    prodCollateralSecurityExcludedController.dispose();
+    prodProfileExcludedController.dispose();
 
+    prodAgeLimitEarningApplicantsController.dispose();
+    prodAgeLimitNonEarningCoApplicantController.dispose();
+    prodMinAgeEarningApplicantsController.dispose();
+    prodMinAgeNonEarningApplicantsController.dispose();
 
-      print("coap gender--->${coAp.selectedGenderCoAP.value}");
+    prodMinIncomeCriteriaController.dispose();
+    prodMinLoanAmountController.dispose();
+    prodMaxLoanAmountController.dispose();
+    prodProfitPercentageController.dispose();
+    prodMinTenorController.dispose();
+    prodMaxTenorController.dispose();
+    prodMinRoiController.dispose();
+    prodMaxRoiController.dispose();
+    prodMaxTenorEligibilityCriteriaController.dispose();
 
-      final coApModel = CoApplicantModel(
-        name: cleanText(coAp.coApFullNameController.text),
-        fatherName:cleanText(coAp.coApFatherNameController.text),
-        gender: coAp.selectedGenderCoAP.value?? "",
-        dateOfBirth:coAp.coApDobController.text.isNotEmpty?Helper.convertToIso8601(coAp.coApDobController.text):"",                ///its static
-        qualification: cleanText(coAp.coApQualiController.text),
-        emailID:  cleanText(coAp.coApEmailController.text),
-        maritalStatus: cleanText(coAp.coApMaritalController.text),
-        status:cleanText(coAp.coApEmplStatusController.text),                                            ///its static
-        nationality: cleanText(coAp.coApNationalityController.text),
-        occupation: cleanText(coAp.coApOccupationController.text),
-        occupationSector: cleanText(coAp.coApOccupationController.text),
-        mobile: cleanText(coAp.coApMobController.text),
-        presentAddress:presentAddress,
-        permanentAddress:permanentAddress,
-        employerDetails:employerDetails,
-      );
-      coApplicantModels.add(coApModel);
-    }
+    prodGeoLimitController.dispose();
+    prodNegativeProfilesController.dispose();
+    prodNegativeAreasController.dispose();
 
+    prodMinPropertyValueController.dispose();
+    prodMaxIirController.dispose();
+    prodMaxFoirController.dispose();
+    prodMaxLtvController.dispose();
 
-    for (var fam in familyMemberApplList) {
-      final famModel = FamilyMemberModel(
-          name: cleanText(fam.famNameController.text),
-          birthDate: fam.famDobController.text.isNotEmpty?Helper.convertToIso8601(fam.famDobController.text):"",                      ///its static
-          gender: fam.selectedGenderFam.value?? "",
-          relationWithApplicant: cleanText(fam.famRelWithApplController.text),
-          dependent: fam.isFamDependent,
-          monthlyIncome: fam.famMonthlyIncomeController.toIntOrZero(),
-          employedWith: cleanText(fam.famEmployedWithController.text)
-      );
-      familyMembersModels.add(famModel);
-    }
+    prodProcessingFeeController.dispose();
+    prodLegalFeeController.dispose();
+    prodTechnicalFeeController.dispose();
+    prodAdminFeeController.dispose();
+    prodForeclosureChargesController.dispose();
+    prodOtherChargesController.dispose();
+    prodStampDutyController.dispose();
 
-    for (var cc in creditCardsList) {
-      final ccModel = CreditCardModel(
-        companyBank: cleanText(cc.ccCompBankController.text),
-        cardNumber: cleanText(cc.ccCardNumberController.text),
-        havingSince:cc.ccHavingSinceController.text.isNotEmpty?Helper.convertToIso8601(cc.ccHavingSinceController.text):"",                                   ///its static
-        avgMonthlySpending: cc.ccAvgMonSpendingController.toIntOrZero(),
-      );
-      creditCardModel.add(ccModel);
-    }
+    prodTsrYearsController.dispose();
+    prodTsrChargesController.dispose();
+    prodValuationChargesController.dispose();
 
+    prodProductValidateFromController.dispose();
+    prodProductValidateToController.dispose();
+    prodMaxTatController.dispose();
 
-    for (var ref in referencesList) {
-      final refModel = ReferenceModel(
-        name:  cleanText(ref.refNameController.text),
-        address:  cleanText(ref.refAddController.text),
-        city: ref.selectedCityPerm.value.ddToString(),
-        district: ref.selectedDistrictPerm.value.ddToString(),
-        state: ref.selectedStatePerm.value.ddToString(),
-        country: ref.selectedCountry.value.ddToString(),
-        pinCode: cleanText(ref.refPincodeController.text),
-        phone: cleanText(ref.refPhoneController.text),
-        mobile: cleanText(ref.refMobController.text),
-        relationWithApplicant: cleanText(ref.refRelWithApplController.text),
-      );
-      referenceModel.add(refModel);
-    }
-    List<Map<String, dynamic>> coApPayload = coApplicantModels.map((e) => e.toMap()).toList();
-    List<Map<String, dynamic>> famPayload = familyMembersModels.map((e) => e.toJson()).toList();
-    List<Map<String, dynamic>>  ccPayload = creditCardModel.map((e) => e.toMap()).toList();
-    List<Map<String, dynamic>>  refPayload = referenceModel.map((e) => e.toMap()).toList();
-
-    print("payload==>${coApPayload.toString()}");
-    print("famPayload==>${famPayload.toString()}");
-    print("ccPayload==>${ccPayload.toString()}");
-    print("refPayload==>${refPayload.toString()}");
-    addLoanApplicationApi(
-      coApPayload:coApPayload,
-      famPayload: famPayload,
-      ccPayload: ccPayload,
-      refPayload: refPayload,
-    );
-  }
-
-  Future<void>addLoanApplicationApi({
-    required List<Map<String, dynamic>> coApPayload,
-    required List<Map<String, dynamic>> famPayload,
-    required List<Map<String, dynamic>> ccPayload,
-    required List<Map<String, dynamic>> refPayload,
-  }) async {
-    try {
-      isLoading(true);
-      var uln = Get.arguments['uln'];
-      print("addLoanApplicationApi");
-
-      print("here propid===>${cleanText(propPropIdController.text)}");
-      var data = await LoanApplService.addLoanApplicationApi(
-          body:[
-            {
-              "id":loanApplId,
-              "dsaCode": cleanText(dsaCodeController.text),
-              "loanApplicationNo": cleanText(lanController.text),
-              "bankId": selectedBank.value??0,
-              "branchId": selectedBankBranch.value??0,
-              "typeOfLoanId": selectedProdTypeOrTypeLoan.value??0,
-              "panCardNumber":  cleanText(panController.text),
-              "addharCardNumber":  cleanText(aadharController.text),
-              "loanAmountApplied": laAppliedController.toIntOrZero(),
-              "uniqueLeadNumber": uln,
-              "channelId": selectedChannel.value,
-              "channelCode": cleanText(chCodeController.text),
-              "detailForLoanApplication": {
-                "branch":selectedBankBranch.value,
-                "dsaCode": cleanText(dsaCodeController.text),
-                "dsaStaffName": cleanText(dsaStaffNController.text),
-                "loanApplicationNo":cleanText(lanController.text),
-                "processingFee":proFeeController.toIntOrZero(),
-                "chqDdSlipNo": cleanText(chqDDSNController.text),
-                "processingFeeDate":proFeeDateController.text.isNotEmpty?Helper.convertToIso8601(proFeeDateController.text):null,
-                "loanPurpose": cleanText(loPurposeController.text),
-                "scheme": cleanText(schemeController.text),
-                "repaymentType": cleanText(repayTpeController.text),
-                "typeOfLoan": cleanText(loanTenureYController.text),
-                "loanAmountApplied": laAppliedController.text.toIntOrZero(),
-                "loanTenureYears": loanTenureYController.toIntOrZero(),
-                "monthlyInstallment":monthInstaController.toIntOrZero() ,
-                "previousLoanApplied": isPreviousLoanApplied ?? false,
-                "applicant": {
-                  "name": cleanText(applFullNameController.text),
-                  "fatherName": cleanText(fatherNameController.text),
-                  "gender": selectedGender.value.ddToString(),
-                  "dateOfBirth": dobController.text.isNotEmpty?Helper.convertToIso8601(dobController.text):null,
-                  "qualification": cleanText(qualiController.text),
-                  "maritalStatus": cleanText(maritalController.text),
-                  "status": cleanText(emplStatusController.text),
-                  "nationality": cleanText(nationalityController.text),
-                  "occupation":cleanText(occupationController.text),
-                  "occupationSector": cleanText(occSectorController.text),
-                  "presentAddress": {
-                    "houseFlatNo": cleanText(houseFlatController.text),
-                    "buildingNo": cleanText(buildingNoController.text),
-                    "societyName": cleanText(societyNameController.text),
-                    "locality": cleanText(localityController.text),
-                    "streetName": cleanText(streetNameController.text),
-                    "city": leadDDController.selectedCityCurr.value.ddToString(),
-                    "taluka": cleanText(talukaController.text),
-                    "district": leadDDController.selectedDistrictCurr.value.ddToString(),
-                    "state": leadDDController.selectedStateCurr.value.ddToString(),
-                    "country": selectedCountry.value.ddToString(),
-                    "pinCode": cleanText(pinCodeController.text)
-                  },
-                  "permanentAddress": {
-                    "houseFlatNo": cleanText(houseFlatPermController.text),
-                    "buildingNo": cleanText(buildingNoPermController.text),
-                    "societyName": cleanText(societyNamePermController.text),
-                    "locality": cleanText(localityPermController.text),
-                    "streetName":cleanText(streetNamePermController.text),
-                    "city": leadDDController.selectedStatePerm.value.ddToString(),
-                    "taluka": cleanText(talukaPermController.text),
-                    "district": leadDDController.selectedDistrictPerm.value.ddToString(),
-                    "state": leadDDController.selectedStatePerm.value.ddToString(),
-                    "country": selectedCountryPerm.value.ddToString(),
-                    "pinCode": cleanText(pinCodePermController.text)
-                  },
-                  "emailID": cleanText(applEmailController.text),
-                  "mobile": cleanText(applMobController.text),
-                  "employerDetails": {
-                    "organizationName": cleanText(orgNameController.text),
-                    "ownershipType": selectedOwnershipList.value.ddToString(),//"string",
-                    "natureOfBusiness": cleanText(natureOfBizController.text),
-                    "staffStrength": staffStrengthController.toIntOrZero(),
-                    "dateOfSalary":salaryDateController.text.isNotEmpty?Helper.convertToIso8601(salaryDateController.text):null,             ///its static
-                  }
-                }
-              },
-              "coApplicant": coApPayload,
-              "propertyDetails": {
-
-                "propertyId": cleanText(propPropIdController.text),
-                "surveyNo": cleanText(propSurveyNoController.text),
-                "finalPlotNo": cleanText(propFinalPlotNoNoController.text),
-                "blockNo": cleanText(propBlockNoController.text),
-                "flatHouseNo": cleanText(propHouseFlatController.text),
-                "societyBuildingName":  cleanText(propBuildingNameController.text),
-                "streetName":  cleanText(propStreetNameController.text),
-                "locality":  cleanText(propLocalityController.text),
-                "city": selectedCityProp.value.ddToString(),
-                "taluka":  cleanText(propTalukaController.text),
-                "district": selectedDistrictProp.value.ddToString(),
-                "state": selectedStateProp.value.ddToString(),
-                "pincode":  cleanText(propPinCodeController.text),
-              },
-              "familyMembers":famPayload,
-              "creditCards": ccPayload,
-              "financialDetails": {
-                "grossMonthlySalary": fdGrossMonthlySalaryController.toIntOrZero(),
-                "netMonthlySalary": fdnNtMonthlySalaryController.toIntOrZero(),
-                "annualBonus": fdAnnualBonusController.toIntOrZero(),
-                "avgMonthlyOvertime": fdAvgMonOvertimeController.toIntOrZero(),
-                "avgMonthlyCommission": fdAvgMonCommissionController.toIntOrZero(),
-                "monthlyPFDeduction": fdAMonthlyPfDeductionController.toIntOrZero(),
-                "otherMonthlyIncome": fdOtherMonthlyIncomeController.toIntOrZero(),
-              },
-              "references": refPayload,
-              "bankerName": cleanText(bankerNameController.text),
-              "bankerMobile": cleanText(bankerMobileController.text),
-              "bankerWatsapp": cleanText(bankerWhatsappController.text),
-              "bankerEmail": cleanText(bankerEmailController.text)
-            }
-
-
-          ]
-      );
-
-
-
-      if(data['success'] == true){
-
-        addLoanApplicationModel.value= AddLoanApplicationModel.fromJson(data);
-        ToastMessage.msg( addLoanApplicationModel.value!.message!.toString());
-
-
-
-
-        isLoading(false);
-
-      }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-
-
-    } catch (e) {
-      print("Error getLeadDetailByIdApi: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
-    } finally {
-
-      isLoading(false);
-    }
-
+    prodDocumentDescriptionsController.dispose();
+    prodProductDescriptionsController.dispose();
+    prodNoOfDocController.dispose();
 
   }
+
+
+
+
+
 
 
 
@@ -1041,365 +912,94 @@ class AddProductController extends GetxController{
 
 
 
-  Future<void>getLoanApplicationDetailsByIdApi({
-    required String id,
-  }) async {
-    try {
-      isLoadingMainScreen(true);
-
-
-      var req = await LoanApplService.getLoanApplicationDetailsByIdApi(id: id);
-
-      var uln = Get.arguments['uln'];
-      if(req['success'] == true){
-
-        getLoanApplIdModel.value= GetLoanApplIdModel.fromJson(req);
-        Map<String, dynamic>? detailMap;
-        if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
-          print("det==>${getLoanApplIdModel.value!.data!.detailForLoanApplication!}");
-          detailMap = jsonDecode(getLoanApplIdModel.value!.data!.detailForLoanApplication!);
-          print("detailMap===>${detailMap}");
-          print("dsastaff===>${detailMap?['dsaStaffName']}");
-
-          dsaStaffNController.text = detailMap?['DsaStaffName'] ?? '';
-          proFeeController.text = detailMap?['ProcessingFee']?.toString() ?? '';
-          chqDDSNController.text = detailMap?['ChqDdSlipNo'] ?? '';
-          loPurposeController.text = detailMap?['LoanPurpose'] ?? '';
-          schemeController.text = detailMap?['Scheme'] ?? '';
-          repayTpeController.text = detailMap?['RepaymentType'] ?? '';
-          loanTenureYController.text = detailMap?['LoanTenureYears']?.toString() ?? '';
-          monthInstaController.text = detailMap?['MonthlyInstallment']?.toString() ?? '';
-          selectedPrevLoanAppl.value = detailMap?['PreviousLoanApplied']?.toString()=="null"?-1:
-          detailMap?['PreviousLoanApplied']?.toString()=="true"?0:1;
-          proFeeDateController.text = Helper.convertFromIso8601(detailMap?['ProcessingFeeDate']) ?? 'null';
-// For applicant
-          final applicant = detailMap?['Applicant'];
-          applFullNameController.text = applicant?['Name'] ?? '';
-          fatherNameController.text = applicant?['FatherName'] ?? '';
-          selectedGender.value = applicant?['Gender']?? '-1';
-          print("dob-->${applicant?['DateOfBirth']}");
-          print("dob-->${Helper.convertFromIso8601(applicant?['DateOfBirth']) ?? 'null'}");
-          dobController.text = Helper.convertFromIso8601(applicant?['DateOfBirth']) ?? 'null';
-          qualiController.text = applicant?['Qualification'] ?? '';
-          maritalController.text = applicant?['MaritalStatus'] ?? '';
-          emplStatusController.text = applicant?['Status'] ?? '';
-          nationalityController.text = applicant?['Nationality'] ?? '';
-          occupationController.text = applicant?['Occupation'] ?? '';
-          occSectorController.text = applicant?['OccupationSector'] ?? '';
-          applEmailController.text = applicant?['EmailID'] ?? '';
-          applMobController.text = applicant?['Mobile'] ?? '';
-
-// Employer
-          final employer = applicant?['EmployerDetails'];
-          orgNameController.text = employer?['OrganizationName'] ?? '';
-          selectedOwnershipList.value = employer?['OwnershipType']?? 'null';
-          natureOfBizController.text = employer?['NatureOfBusiness'] ?? '';
-          staffStrengthController.text = employer?['StaffStrength']?.toString() ?? '0';
-          print("here===>${applicant?['DateOfSalary']}");
-          print("here===>${ Helper.convertFromIso8601(applicant?['DateOfSalary'])}");
-          salaryDateController.text =  Helper.convertFromIso8601(applicant?['DateOfSalary']) ?? 'null';
-          // Present Add
-          final presentAdd = applicant?['PresentAddress'];
-          houseFlatController.text = presentAdd?['HouseFlatNo'] ?? '';
-          buildingNoController.text = presentAdd?['BuildingNo'] ?? '';
-          societyNameController.text = presentAdd?['SocietyName'] ?? '';
-          localityController.text = presentAdd?['Locality'] ?? '';
-          streetNameController.text = presentAdd?['StreetName'] ?? '';
-          leadDDController.selectedStateCurr.value = presentAdd?['State']==""?"0":presentAdd?['State'] ?? '0';
-          print("yaha state-->${leadDDController.selectedStateCurr.value}");
-          await leadDDController.getDistrictByStateIdCurrApi(stateId: leadDDController.selectedStateCurr.value);
-          leadDDController.selectedDistrictCurr.value =presentAdd?['District']==""?"0": presentAdd?['District'] ?? '0';
-          print("yaha district-->${leadDDController.selectedDistrictCurr.value}");
-          await leadDDController.getCityByDistrictIdCurrApi(districtId: leadDDController.selectedDistrictCurr.value);
-          leadDDController.selectedCityCurr.value = presentAdd?['City']==""?"0":presentAdd?['City'] ?? '0';
-          print("yaha city-->${leadDDController.selectedCityCurr.value}");
-          talukaController.text = presentAdd?['Taluka'] ?? '';
-          selectedCountry.value= presentAdd?['Country'] ?? '0';
-          pinCodeController.text = presentAdd?['PinCode'] ?? '';
-
-// Permanet Add
-          final permanentAdd = applicant?['PermanentAddress'];
-          houseFlatPermController.text = permanentAdd?['HouseFlatNo'] ?? '';
-          buildingNoPermController.text = permanentAdd?['BuildingNo'] ?? '';
-          societyNamePermController.text = permanentAdd?['SocietyName'] ?? '';
-          localityPermController.text = permanentAdd?['Locality'] ?? '';
-          streetNamePermController.text = permanentAdd?['StreetName'] ?? '';
-          leadDDController.selectedStatePerm.value = permanentAdd?['State']==""?"0":permanentAdd?['State'] ?? '0';
-          print("yaha state-->Perm${leadDDController.selectedStatePerm.value}");
-          await leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value);
-          leadDDController.selectedDistrictPerm.value =permanentAdd?['District']==""?"0": permanentAdd?['District'] ?? '0';
-          print("yaha district-->Perm${leadDDController.selectedDistrictPerm.value}");
-          await leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value);
-          print("what===>${permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0'}");
-
-          leadDDController.selectedCityPerm.value = permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0';
-          print("yaha city--Perm>${leadDDController.selectedCityPerm.value}");
-          talukaPermController.text = permanentAdd?['Taluka'] ?? '';
-          selectedCountryPerm.value= permanentAdd?['Country'] ?? '0';
-          pinCodePermController.text = permanentAdd?['PinCode'] ?? '';
 
 
 
-        }
-        final data = getLoanApplIdModel.value!.data;
-
-        dsaCodeController.text = data?.dsaCode ?? '';
-        lanController.text = data?.loanApplicationNo ?? '';
-        print("bank Id==>${data?.bankId}");
-        selectedBank.value =  data?.bankId ?? 0;
-
-        await leadDDController.getAllBranchByBankIdApi(bankId: data?.bankId.toString() ?? "0");
-        print("ab chalega");
-        selectedBankBranch.value = data?.branchId ?? 0;
-        print(" selectedBankBranch.value===>${ selectedBankBranch.value}");
-        if(data?.bankId!=0){
-          await leadDDController.getProductListByBankIdApi(bankId: data?.branchId ?? 0);
-        }
-        selectedProdTypeOrTypeLoan.value=data?.typeOfLoan ?? 0;
-        panController.text = data?.panCardNumber ?? '';
-        aadharController.text = data?.addharCardNumber ?? '';
-        laAppliedController.text = data?.loanAmountApplied.toString()?? "0";
-        ulnController.text = uln;
-        selectedChannel.value = data?.channelId ?? 0;
-        chCodeController.text = data?.channelCode ?? '';
-        bankerNameController.text=data?.bankerName ?? '';
-        bankerMobileController.text=data?.bankerMobile ?? '';
-        bankerWhatsappController.text=data?.bankerWatsapp ?? '';
-        bankerEmailController.text=data?.bankerEmail ?? '';
-        loanApplId=data?.id ?? 0;
-
-        populateCoApplicantControllers();
-        populatePropertyDetails();
-        populateFinancialDetails();
-        populateFamilyControllers();
-        populateCreditCardControllers();
-        populateReferenceControllers();
-        isLoadingMainScreen(false);
 
 
-      }else{
-        ToastMessage.msg(req['message'] ?? AppText.somethingWentWrong);
-      }
 
 
-    } catch (e) {
-      print("Error getLeadDetailByIdApi: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoadingMainScreen(false);
-    } finally {
-
-      isLoadingMainScreen(false);
-    }
-  }
-
-  void populateCoApplicantControllers() async{
-    coApplicantList.clear();
-    final jsonStr = getLoanApplIdModel.value!.data!.coApplicantDetail;
-
-    if (jsonStr != null) {
-      final decoded = jsonDecode(jsonStr);
-
-      // Check if it's actually a List of Maps
-      if (decoded is List) {
-        for (var item in decoded) {
-          final coApController = CoApplicantDetailController();
-
-          coApController.coApFullNameController.text = item["Name"] ?? '';
-          coApController.coApFatherNameController.text = item["FatherName"] ?? '';
-          coApController.selectedGenderCoAP.value = item["Gender"] ?? '';
-          coApController.coApDobController.text =item["DateOfBirth"]==""?"": Helper.convertFromIso8601(item["DateOfBirth"]) ?? '';
-          coApController.coApQualiController.text = item["Qualification"] ?? '';
-          coApController.coApMaritalController.text = item["MaritalStatus"] ?? '';
-          coApController.coApEmplStatusController.text = item["Status"] ?? '';
-          coApController.coApNationalityController.text = item["Nationality"] ?? '';
-          coApController.coApOccupationController.text = item["Occupation"] ?? '';
-          coApController.coApOccSectorController.text = item["OccupationSector"] ?? '';
-          coApController.coApEmailController.text = item["EmailID"] ?? '';
-          coApController.coApMobController.text = item["Mobile"] ?? '';
-
-          final presentAdd = item?['PresentAddress'];
-          coApController.coApCurrHouseFlatController.text = presentAdd?["HouseFlatNo"] ?? '';
-          coApController.coApCurrBuildingNoController.text = presentAdd?["BuildingNo"] ?? '';
-          coApController.coApCurrSocietyNameController.text = presentAdd?["SocietyName"] ?? '';
-          coApController.coApCurrLocalityController.text = presentAdd?["Locality"] ?? '';
-          coApController.coApCurrStreetNameController.text = presentAdd?["StreetName"] ?? '';
-          coApController.coApCurrPinCodeController.text = presentAdd?["PinCode"] ?? '';
-          coApController.selectedStateCurr.value =presentAdd?['State']==""?"0":presentAdd?['State'] ?? '0';
-          await coApController.getDistrictByStateIdCurrApi(stateId:  coApController.selectedStateCurr.value);
-          coApController.selectedDistrictCurr.value =presentAdd?['District']==""?"0":presentAdd?['District'] ?? '0';
-          await coApController.getCityByDistrictIdCurrApi(districtId: coApController.selectedDistrictCurr.value);
-          coApController.selectedCityCurr.value =presentAdd?['City']==""?"0":presentAdd?['City'] ?? '0';
-          coApController.coApCurrTalukaController.text = presentAdd?["Taluka"] ?? '';
-          print("country___curr-->${presentAdd?['Country']}");
-          coApController.selectedCountrCurr.value =presentAdd?['Country']==""?"":presentAdd?['Country'];
 
 
-          final permanentAdd = item?['PermanentAddress'];
-          coApController.coApPermHouseFlatController.text = permanentAdd?["HouseFlatNo"] ?? '';
-          coApController.coApPermBuildingNoController.text = permanentAdd?["BuildingNo"] ?? '';
-          coApController.coApPermSocietyNameController.text = permanentAdd?["SocietyName"] ?? '';
-          coApController.coApPermLocalityController.text = permanentAdd?["Locality"] ?? '';
-          coApController.coApPermStreetNameController.text = permanentAdd?["StreetName"] ?? '';
-          coApController.coApPermPinCodeController.text = permanentAdd?["PinCode"] ?? '';
-          coApController.selectedStatePerm.value =permanentAdd?['State']==""?"0":permanentAdd?['State'] ?? '0';
-          await coApController.getDistrictByStateIdPermApi(stateId:  coApController.selectedStatePerm.value);
-          coApController.selectedDistrictPerm.value =permanentAdd?['District']==""?"0":permanentAdd?['District'] ?? '0';
-          await coApController.getCityByDistrictIdPermApi(districtId: coApController.selectedDistrictPerm.value);
-          coApController.selectedCityPerm.value =permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0';
-          coApController.coApPermTalukaController.text = permanentAdd?["Taluka"] ?? '';
-          print("country___curr-->${permanentAdd?['Country']}");
-          coApController.selectedCountryPerm.value =permanentAdd?['Country']==""?"":permanentAdd?['Country'];
-
-          coApplicantList.add(coApController);
-        }
-      } else {
-        print("Expected a List but got: ${decoded.runtimeType}");
-      }
-    }
-  }
-
-  void populatePropertyDetails() async{
-    Map<String, dynamic>? propDetails;
-    if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
-      print("det==>${getLoanApplIdModel.value!.data!.loanDetails!}");
-      propDetails = jsonDecode(getLoanApplIdModel.value!.data!.loanDetails!);
-      print("detailMap===>${propDetails}");
-      print("dsastaff===>${propDetails?['PropertyId']}");
-
-      propPropIdController.text = propDetails?['PropertyId'] ?? '';
-      propSurveyNoController.text = propDetails?['SurveyNo'] ?? '';
-      propFinalPlotNoNoController.text = propDetails?['FinalPlotNo'] ?? '';
-      propBlockNoController.text = propDetails?['BlockNo'] ?? '';
-      propHouseFlatController.text = propDetails?['FlatHouseNo'] ?? '';
-      propBuildingNameController.text = propDetails?['SocietyBuildingName'] ?? '';
-      propStreetNameController.text = propDetails?['StreetName'] ?? '';
-      propLocalityController.text = propDetails?['Locality'] ?? '';
-      propLocalityController.text = propDetails?['Locality'] ?? '';
-      propTalukaController.text = propDetails?['Taluka'] ?? '';
-      propPinCodeController.text = propDetails?['Pincode'] ?? '';
-      selectedStateProp.value = propDetails?['State']==""?"0":propDetails?['State'] ?? '0';
-      await leadDDController.getDistrictByStateIdCurrApi(stateId: selectedStateProp.value);
-      selectedDistrictProp.value =propDetails?['District']==""?"0":propDetails?['District'] ?? '0';
-      await leadDDController.getCityByDistrictIdCurrApi(districtId: selectedDistrictProp.value);
-      selectedCityProp.value = propDetails?['City']==""?"0":propDetails?['City'] ?? '0';
-    }
-  }
-
-  void populateFinancialDetails() async{
-    Map<String, dynamic>? finDetails;
-    if (getLoanApplIdModel.value!.data!.financialDetails != null) {
-      print("det==>${getLoanApplIdModel.value!.data!.financialDetails!}");
-      finDetails = jsonDecode(getLoanApplIdModel.value!.data!.financialDetails!);
-
-      print("GrossMonthlySalary===>${finDetails?['GrossMonthlySalary']}");
-
-      fdGrossMonthlySalaryController.text = finDetails?['GrossMonthlySalary'].toString() ?? '';
-      fdnNtMonthlySalaryController.text = finDetails?['NetMonthlySalary'].toString() ?? '';
-      fdAnnualBonusController.text = finDetails?['AnnualBonus'].toString() ?? '';
-      fdAvgMonOvertimeController.text = finDetails?['AvgMonthlyOvertime'].toString() ?? '';
-      fdAvgMonCommissionController.text = finDetails?['AvgMonthlyCommission'].toString() ?? '';
-      fdAMonthlyPfDeductionController.text = finDetails?['MonthlyPFDeduction'].toString() ?? '';
-      fdOtherMonthlyIncomeController.text = finDetails?['OtherMonthlyIncome'].toString() ?? '';
-
-    }
-  }
-
-  void populateFamilyControllers() async{
-    familyMemberApplList.clear();
-    final jsonStr = getLoanApplIdModel.value!.data!.familyMembers;
-
-    if (jsonStr != null) {
-      final decoded = jsonDecode(jsonStr);
-
-      // Check if it's actually a List of Maps
-      if (decoded is List) {
-        for (var item in decoded) {
-          final famController = FamilyMemberController();
-          print("dob===>${item["BirthDate"]}");
-
-          // famController.coApFullNameController.text = item["Name"] ?? '';
-          famController.famNameController.text= item["Name"] ?? '';
-          famController.famDobController.text =item["BirthDate"]==""?"": Helper.convertFromIso8601(item["BirthDate"]) ?? '';
-          famController.selectedGenderFam.value = item["Gender"] ?? '';
-          famController.famRelWithApplController.text= item["RelationWithApplicant"] ?? '';
-          famController.selectedFamDependent.value= item["Dependent"]== true ? "Yes" : "No";
-          famController.famMonthlyIncomeController.text= item["MonthlyIncome"].toString() ?? '';
-          famController.famEmployedWithController.text= item["EmployedWith"] ?? '';
-
-          familyMemberApplList.add(famController);
-        }
-      } else {
-        print("Expected a List but got: ${decoded.runtimeType}");
-      }
-    }
-  }
-
-  void populateCreditCardControllers() async{
-    creditCardsList.clear();
-    final jsonStr = getLoanApplIdModel.value!.data!.creditCards;
-
-    if (jsonStr != null) {
-      final decoded = jsonDecode(jsonStr);
-
-      // Check if it's actually a List of Maps
-      if (decoded is List) {
-        for (var item in decoded) {
-          final ccController = CreditCardsController();
-          print("dob===>${item["BirthDate"]}");
 
 
-          ccController.ccCompBankController.text= item["CompanyBank"] ?? '';
-          ccController.ccCardNumberController.text= item["CardNumber"] ?? '';
-          ccController.ccHavingSinceController.text=item["HavingSince"]==""?"": Helper.convertFromIso8601(item["HavingSince"]) ?? '';
-          ccController.ccAvgMonSpendingController.text= item["AvgMonthlySpending"].toString() ?? '';
 
-
-          creditCardsList.add(ccController);
-        }
-      } else {
-        print("Expected a List but got: ${decoded.runtimeType}");
-      }
-    }
-  }
-
-
-  void populateReferenceControllers() async{
-    referencesList.clear();
-    final jsonStr = getLoanApplIdModel.value!.data!.referenceDetails;
-
-    if (jsonStr != null) {
-      final decoded = jsonDecode(jsonStr);
-
-      // Check if it's actually a List of Maps
-      if (decoded is List) {
-        for (var item in decoded) {
-          final refController = ReferenceController();
-          print("dob===>${item["BirthDate"]}");
-
-
-          refController.refNameController.text= item["Name"] ?? '';
-          refController.refAddController.text= item["Address"] ?? '';
-          refController.refMobController.text= item["Mobile"] ?? '';
-          refController.refPhoneController.text= item["Phone"] ?? '';
-          refController.refRelWithApplController.text= item["RelationWithApplicant"] ?? '';
-          refController.selectedStatePerm.value = item?['State']==""?"0":item?['State'] ?? '0';
-          await refController.getDistrictByStateIdPermApi(stateId:   refController.selectedStatePerm.value);
-          refController.selectedDistrictPerm.value  =item?['District']==""?"0":item?['District'] ?? '0';
-          await refController.getCityByDistrictIdPermApi(districtId:  refController.selectedDistrictPerm.value );
-          refController.selectedCityPerm.value = item?['City']==""?"0":item?['City'] ?? '0';
-          refController.refPincodeController.text= item?["PinCode"] ?? '';
-          refController.selectedCountry.value =item?['Country']==""?"":item?['Country'] ?? '0';
-          referencesList.add(refController);
-        }
-      } else {
-        print("Expected a List but got: ${decoded.runtimeType}");
-      }
-    }
-  }
 
 
   ///product
+  void clearForm() {
+    // Clear text fields
+    prodBankersNameController.clear();
+    prodBankersMobController.clear();
+    prodBankersWhatsappController.clear();
+    prodBankersEmailController.clear();
+    prodMinCibilController.clear();
+    prodProductNameController.clear();
+
+    prodCollateralSecurityExcludedController.clear();
+    prodProfileExcludedController.clear();
+
+    prodAgeLimitEarningApplicantsController.clear();
+    prodAgeLimitNonEarningCoApplicantController.clear();
+    prodMinAgeEarningApplicantsController.clear();
+    prodMinAgeNonEarningApplicantsController.clear();
+
+    prodMinIncomeCriteriaController.clear();
+    prodMinLoanAmountController.clear();
+    prodMaxLoanAmountController.clear();
+    prodProfitPercentageController.clear();
+    prodMinTenorController.clear();
+    prodMaxTenorController.clear();
+    prodMinRoiController.clear();
+    prodMaxRoiController.clear();
+    prodMaxTenorEligibilityCriteriaController.clear();
+
+    prodGeoLimitController.clear();
+    prodNegativeProfilesController.clear();
+    prodNegativeAreasController.clear();
+
+    prodMinPropertyValueController.clear();
+    prodMaxIirController.clear();
+    prodMaxFoirController.clear();
+    prodMaxLtvController.clear();
+
+    prodProcessingFeeController.clear();
+    prodLegalFeeController.clear();
+    prodTechnicalFeeController.clear();
+    prodAdminFeeController.clear();
+    prodForeclosureChargesController.clear();
+    prodOtherChargesController.clear();
+    prodStampDutyController.clear();
+
+    prodTsrYearsController.clear();
+    prodTsrChargesController.clear();
+    prodValuationChargesController.clear();
+
+    prodProductValidateFromController.clear();
+    prodProductValidateToController.clear();
+    prodMaxTatController.clear();
+
+    prodDocumentDescriptionsController.clear();
+    prodProductDescriptionsController.clear();
+    prodNoOfDocController.clear();
+
+    // Reset reactive values
+    selectedprodSegment.value = null;
+    selectedCustomerCategories.clear();
+    selectedKsdplProduct.value = null;
+    selectedProductCategory.value = null;
+    selectedBank.value=null;
+    selectedCollSecCat.clear();
+    selectedIncomeType.clear();
+    selectedNegProfile.clear();
+    selectedNegArea.clear();
+
+    // Clear chips
+    chips.clear();
+    chipTextController.clear();
+    chipText2Controller.clear();
+    chipText3Controller.clear();
+  }
 
   void  getAllProductCategoryApi() async {
     try {
@@ -1564,6 +1164,151 @@ class AddProductController extends GetxController{
 
 
         isLoading(false);
+        clearForm();
+        Get.back();
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        addProductListModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error addProductListModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+      clearForm();
+      isLoading(false);
+    }
+  }
+
+  void  updateProductListApi({
+    required String KSDPLProductId,
+    String? Id,
+    String? BankId,
+    String? bankers_Name,
+    String? Bankers_Mobile_Number,
+    String? Bankers_WhatsApp_Number,
+    String? BankersEmailId,
+    String? Min_CIBIL,
+    String? Segment_Vertical,
+    String? Product,
+    String? ProductDescription,
+    String? Customer_Category,
+    String? Collateral_Security_Category,
+    String? Collateral_Security_Excluded,
+    String? Income_Types,
+    String? Profile_Excluded,
+    String? Age_limit_Earning_Applicants,
+    String? Age_limit_Non_Earning_Co_Applicant,
+    String? Minimum_age_earning_applicants,
+    String? Minimum_age_non_earning_applicants,
+    String? Minimum_Income_Criteria,
+    String? Minimum_Loan_Amount,
+    String? Maximum_Loan_Amount,
+    String? Min_Tenor,
+    String? Maximum_Tenor,
+    String? Minimum_ROI,
+    String? Maximum_ROI,
+    String? Maximum_Tenor_Eligibility_Criteria,
+    String? Geo_Limit,
+    String? Negative_Profiles,
+    String? Negative_Areas,
+    String? Maximum_TAT,
+    String? Minimum_Property_Value,
+    String? Maximum_IIR,
+    String? Maximum_FOIR,
+    String? Maximum_LTV,
+    String? Processing_Fee,
+    String? Legal_Fee,
+    String? Technical_Fee,
+    String? Admin_Fee,
+    String? Foreclosure_Charges,
+    String? Other_Charges,
+    String? Stamp_Duty,
+    String? TSR_Years,
+    String? TSR_Charges,
+    String? Valuation_Charges,
+    String? NoOfDocument,
+    String? Product_Validate_From_date,
+    String? Product_Validate_To_date,
+    String? Profit_Percentage,
+  }) async {
+    try {
+      isLoading(true);
+      print("Minimum_ROI---->Controller----${Minimum_ROI}");
+      print("Maximum_ROI---->${Maximum_ROI}");
+      var data = await ProductService.updateProductListApi(
+        KSDPLProductId: KSDPLProductId,
+        Id: Id,
+        BankId: BankId,
+        bankers_Name: bankers_Name,
+        Bankers_Mobile_Number: Bankers_Mobile_Number,
+        Bankers_WhatsApp_Number: Bankers_WhatsApp_Number,
+        BankersEmailId: BankersEmailId,
+        Min_CIBIL: Min_CIBIL,
+        Segment_Vertical: Segment_Vertical,
+        Product: Product,
+        ProductDescription: ProductDescription,
+        Customer_Category: Customer_Category,
+        Collateral_Security_Category: Collateral_Security_Category,
+        Collateral_Security_Excluded: Collateral_Security_Excluded,
+        Income_Types: Income_Types,
+        Profile_Excluded: Profile_Excluded,
+        Age_limit_Earning_Applicants: Age_limit_Earning_Applicants,
+        Age_limit_Non_Earning_Co_Applicant: Age_limit_Non_Earning_Co_Applicant,
+        Minimum_age_earning_applicants: Minimum_age_earning_applicants,
+        Minimum_age_non_earning_applicants: Minimum_age_non_earning_applicants,
+        Minimum_Income_Criteria: Minimum_Income_Criteria,
+        Minimum_Loan_Amount: Minimum_Loan_Amount,
+        Maximum_Loan_Amount: Maximum_Loan_Amount,
+        Min_Tenor: Min_Tenor,
+        Maximum_Tenor: Maximum_Tenor,
+        Minimum_ROI: Minimum_ROI,
+        Maximum_ROI: Maximum_ROI,
+        Maximum_Tenor_Eligibility_Criteria: Maximum_Tenor_Eligibility_Criteria,
+        Geo_Limit: Geo_Limit,
+        Negative_Profiles: Negative_Profiles,
+        Negative_Areas: Negative_Areas,
+        Maximum_TAT: Maximum_TAT,
+        Minimum_Property_Value: Minimum_Property_Value,
+        Maximum_IIR: Maximum_IIR,
+        Maximum_FOIR: Maximum_FOIR,
+        Maximum_LTV: Maximum_LTV,
+        Processing_Fee: Processing_Fee,
+        Legal_Fee: Legal_Fee,
+        Technical_Fee: Technical_Fee,
+        Admin_Fee: Admin_Fee,
+        Foreclosure_Charges: Foreclosure_Charges,
+        Other_Charges: Other_Charges,
+        Stamp_Duty: Stamp_Duty,
+        TSR_Years: TSR_Years,
+        TSR_Charges: TSR_Charges,
+        Valuation_Charges: Valuation_Charges,
+        NoOfDocument: NoOfDocument,
+        Product_Validate_From_date: Product_Validate_From_date,
+        Product_Validate_To_date: Product_Validate_To_date,
+        Profit_Percentage: Profit_Percentage,
+      );
+
+
+      if(data['success'] == true){
+
+
+        addProductListModel.value= AddProductListModel.fromJson(data);
+
+        ToastMessage.msg(addProductListModel.value!.message!);
+        ViewProductController viewProductController=Get.find();
+        viewProductController.getAllProductListApi();
+
+
+        isLoading(false);
+        clearForm();
         Get.back();
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -1630,6 +1375,7 @@ class AddProductController extends GetxController{
     prodBankersMobController.text=getProductListById.value!.data!.bankersMobileNumber??"";
     prodBankersWhatsappController.text=getProductListById.value!.data!.bankersWhatsAppNumber??"";
     prodBankersEmailController.text=getProductListById.value!.data!.bankersEmailID??"";
+
     prodMinCibilController.text=(getProductListById.value!.data!.minCIBIL ?? 0).toStringAsFixed(0);
     selectedProductCategory.value=int.parse(getProductListById.value!.data!.segmentVertical.toString());
     prodProductNameController.text=getProductListById.value!.data!.product??"";
@@ -1644,15 +1390,17 @@ class AddProductController extends GetxController{
     prodCollateralSecurityExcludedController.text=getProductListById.value!.data!.collateralSecurityExcluded??"";
     prodProfileExcludedController.text=getProductListById.value!.data!.profileExcluded??"";
 
+    selectedIncomeType.value=(getProductListById.value!.data!.incomeTypes ?? "")
+        .split(',')
+        .map((e) => e.trim())
+        .toList();
+
     print("customerCategory res===>${getProductListById.value!.data!.customerCategory}");
     print("selectedCustomerCategories res===>${ selectedCustomerCategories.value}");
 
     print("collateralSecurityCategory res===>${getProductListById.value!.data!.collateralSecurityCategory}");
     print("selectedCollSecCat res===>${ selectedCollSecCat.value}");
-   /* print("customerCategory res2===>${(getProductListById.value!.data!.customerCategory ?? "")
-        .split(',')
-        .map((e) => e.trim())
-        .toList()}");*/
+
   }
 
   void populateStep2Info() async{

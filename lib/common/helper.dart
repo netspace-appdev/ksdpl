@@ -452,7 +452,7 @@ class AppText{
 
   static const String minLoanAmount = "Minimum Loan Amount";
   static const String enterMinLoanAmount = "Enter Minimum Loan Amount";
-  static const String maxLoanAmount = "Enter Maximum Loan Amount";
+  static const String maxLoanAmount = "Maximum Loan Amount";
   static const String enterMaxLoanAmount = "Maximum Loan Amount";
 
   static const String profitPercentage = "Profit Percentage";
@@ -832,7 +832,7 @@ class Helper{
       DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(dateString);
 
       // Convert to ISO 8601 format with UTC
-      return parsedDate.toUtc().toIso8601String(); // returns "2025-04-01T00:00:00.000Z"
+      return parsedDate.toIso8601String(); // returns "2025-04-01T00:00:00.000Z"
     } catch (e) {
       return "Invalid Date Format";
     }

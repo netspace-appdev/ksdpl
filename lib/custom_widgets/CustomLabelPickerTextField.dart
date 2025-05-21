@@ -104,6 +104,7 @@ class CustomLabeledPickerTextField extends StatelessWidget {
 
     if (pickedDate != null) {
       controller.text = DateFormat("yyyy-MM-dd").format(pickedDate);
+      print("pick date===>${controller.text}");
     }
   }
 }

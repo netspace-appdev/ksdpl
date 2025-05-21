@@ -208,7 +208,7 @@ class EditProductScreen extends StatelessWidget {
                 child: const Text('Prev'),
               ),
               ElevatedButton(
-                onPressed: addProductController.validateAndSubmit,
+                onPressed: addProductController.validateAndUpdate,
                 child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,

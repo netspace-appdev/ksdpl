@@ -193,13 +193,7 @@ class Step3FormProduct extends StatelessWidget {
                 validator:  ValidationHelper.validateName,
               ),
 
-              CustomLabeledTextField(
-                label: AppText.valuationCharges,
-                controller: addProductController.prodValuationChargesController,
-                inputType: TextInputType.number,
-                hintText: AppText.enterValuationCharges,
-                validator:  ValidationHelper.validateName,
-              ),
+
 
               CustomLabeledPickerTextField(
                 label: AppText.productValidateFrom,
