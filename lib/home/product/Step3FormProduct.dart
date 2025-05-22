@@ -48,11 +48,11 @@ class Step3FormProduct extends StatelessWidget {
               const SizedBox(height: 10),
               CustomChipTextField(
                 textController: addProductController.chipTextController,
-                initialTags: [],
+                initialTags: addProductController.selectedNegProfile.toList(),
                 hintText:  AppText.negativeProfilesHint,
                 onChanged: (tags) {
                   print("Updated tags: $tags");
-                  addProductController.selectedNegProfile.value=tags;
+                  addProductController.selectedNegProfile.assignAll(tags);
                 },
               ),
 
@@ -70,11 +70,11 @@ class Step3FormProduct extends StatelessWidget {
               const SizedBox(height: 10),
               CustomChipTextField(
                 textController: addProductController.chipText2Controller,
-                initialTags: [],
+                initialTags: addProductController.selectedNegArea.toList(),
                 hintText:  AppText.negativeProfilesHint,
                 onChanged: (tags) {
                   print("Updated tags: $tags");
-                  addProductController.selectedNegArea.value=tags;
+                  addProductController.selectedNegArea.assignAll(tags);
                 },
               ),
               const SizedBox(height: 20),

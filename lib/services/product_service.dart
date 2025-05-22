@@ -15,6 +15,8 @@ class ProductService {
   static const String getAllProductList = BaseUrl.baseUrl + 'ProductList/GetAllProductList';
   static const String getProductListById = BaseUrl.baseUrl + 'ProductList/GetProductListById';
   static const String updateProductList = BaseUrl.baseUrl + 'ProductList/UpdateProductList';
+  static const String addProductDocument = BaseUrl.baseUrl + 'ProductList/AddProductDocument';
+  static const String getDocumentListByProductId = BaseUrl.baseUrl + 'ProductList/GetDocumentListByProductId';
 
 
   static Future<Map<String, dynamic>> getAllProductCategoryApi() async {
@@ -101,6 +103,7 @@ class ProductService {
     String? Product_Validate_From_date,
     String? Product_Validate_To_date,
     String? Profit_Percentage,
+    String? docDescr,
 }) async {
     try {
       var request = http.MultipartRequest(
@@ -237,6 +240,7 @@ class ProductService {
     String? Product_Validate_From_date,
     String? Product_Validate_To_date,
     String? Profit_Percentage,
+    String? docDescr,
   }) async {
 
     try {
@@ -388,11 +392,79 @@ class ProductService {
       throw Exception('Error while submitting: $e');
     }
   }
+
+
+
+  static Future<Map<String, dynamic>> addProductDocumentApi({
+    required List<Map<String, dynamic>> body,
+  }) async {
+    try {
+      var headers = await MyHeader.getHeaders3(); // should return 'Authorization' and 'Content-Type: application/json'
+
+      var response = await http.post(
+        Uri.parse(addProductDocument),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+      const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+
+      printInChunks("Req body AddProductDocumentApi===> ${jsonEncode(body)}");
+      print("Response Status: ${response.statusCode}");
+      print("Response Body AddProductDocumentApi: ${response.body}");
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>>getDocumentListByProductIdApi({
+    required String productId
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getDocumentListByProductId),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['productId'] = productId.toString();
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print("===>  getDocumentListByProductIdApi==>url+++?${Uri.parse(getProductListById)}");
+      print("request===>==>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>getDocumentListByProductIdApi==>${response.body.toString()}");
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
   static void printInChunks(String text, {int chunkSize = 2048}) {
     final pattern = RegExp('.{1,$chunkSize}', dotAll: true);
     for (final match in pattern.allMatches(text)) {
       print(match.group(0));
     }
   }
+
+
 }
 

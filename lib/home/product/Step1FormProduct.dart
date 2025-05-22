@@ -167,6 +167,7 @@ class Step1FormProduct extends StatelessWidget {
 
               CustomTextLabel(
                 label: AppText.productSegment,
+                isRequired: true,
 
               ),
 
@@ -202,6 +203,7 @@ class Step1FormProduct extends StatelessWidget {
 
               CustomLabeledTextField(
                 label: AppText.productName,
+                isRequired: true,
 
                 controller: addProductController.prodProductNameController,
                 inputType: TextInputType.name,
@@ -247,7 +249,7 @@ class Step1FormProduct extends StatelessWidget {
                 getName: (e) => e,
                 selectedValues: addProductController.selectedCollSecCat.toList(), // or preselected values
                 onChanged: (selectedList) {
-                 // addProductController.selectedCollSecCat.value=selectedList;
+
                   addProductController.selectedCollSecCat.assignAll(selectedList);
                 },
               ),
@@ -282,9 +284,10 @@ class Step1FormProduct extends StatelessWidget {
                 items: addProductController.incomeTypeList,
                 getId: (e) => e,
                 getName: (e) => e,
-                selectedValues: [], // or preselected values
+                selectedValues: addProductController.selectedIncomeType.toList(),
                 onChanged: (selectedList) {
-                  addProductController.selectedIncomeType.value=selectedList;
+
+                  addProductController.selectedIncomeType.assignAll(selectedList);
                 },
               ),
 

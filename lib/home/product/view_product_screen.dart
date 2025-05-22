@@ -360,8 +360,13 @@ class ViewProductScreen extends StatelessWidget {
 
         }else  if (label == "Edit") {
          AddProductController addProductController = Get.put(AddProductController());
+
+
          addProductController.getProductListByIdApi(id: id);
+         addProductController.getDocumentListByProductIdApi(productId: id);
          addProductController.getAllProductCategoryApi();
+         addProductController.clearForm();
+         addProductController.currentStep.value=0;
           Get.toNamed("/editProductScreen");
 
         }else{

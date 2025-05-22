@@ -271,7 +271,7 @@ class LeadDDController extends GetxController{
     }
   }
 
-  void  getAllBankApi() async {
+  Future<void>  getAllBankApi() async {
     try {
       isLoading(true);
       isBankLoading(true);
@@ -308,7 +308,7 @@ class LeadDDController extends GetxController{
     }
   }
 
-  void  getAllKsdplProductApi() async {
+  Future<void>  getAllKsdplProductApi() async {
     try {
       isLoading(true);
       isProductLoading(true);

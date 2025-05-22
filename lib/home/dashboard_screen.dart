@@ -117,6 +117,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: 20,
                         ),
 
+
+                        reminders(),
+
+                        const  SizedBox(
+                          height: 50,//20
+                        ),
                         birthday(),
 
                         const SizedBox(
@@ -129,11 +135,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: 20,
                         ),
 
-                        reminders(),
 
-                        const  SizedBox(
-                          height: 50,//20
-                        ),
 
 
 
@@ -244,7 +246,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   ///old working code
-
 
   Widget offerContainer() {
     return Obx(() {
@@ -472,7 +473,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 
 ///new code and experiment for lead count
-/*  Widget offerContainer() {
+/*
+  Widget offerContainer() {
     return Obx(() {
       if (dashboardController.isLoading.value) {
         return Center(child: CustomSkelton.dashboardShimmerList(context));
@@ -682,7 +684,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
       ),
     );
-  }*/
+  }
+*/
 
   Widget barChart(){
     return Column(
@@ -1368,7 +1371,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
          Padding(
-          padding:  EdgeInsets.symmetric(vertical: 10),
+           padding:  EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [

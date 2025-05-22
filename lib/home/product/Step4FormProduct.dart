@@ -39,7 +39,7 @@ class Step4FormProduct extends StatelessWidget {
                 height: 20,
               ),
 
-              CustomLabeledTextField(
+             /* CustomLabeledTextField(
                 label: AppText.noOfDocuments,
                 controller: addProductController.prodNoOfDocController,
                 inputType: TextInputType.number,
@@ -47,7 +47,7 @@ class Step4FormProduct extends StatelessWidget {
                 validator:  ValidationHelper.validateName,
                 isInputEnabled: false,
               ),
-
+*/
 
               CustomTextLabel(
                 label: AppText.documentDescriptions,
@@ -60,10 +60,11 @@ class Step4FormProduct extends StatelessWidget {
 
               CustomChipTextField(
                 textController: addProductController.chipText3Controller,
-                initialTags: [],
+                initialTags: addProductController.selectedProdDescr.toList(),
                 hintText:  AppText.negativeProfilesHint,
                 onChanged: (tags) {
-                  print("Updated tags: $tags");
+
+                  addProductController.selectedProdDescr.assignAll(tags);
                 },
               ),
 
@@ -82,6 +83,7 @@ class Step4FormProduct extends StatelessWidget {
                 controller: addProductController.prodProductDescriptionsController,
                 maxLines: 5, // Increase lines if needed
                 validator: (value) => value!.isEmpty ? "Please enter some text" : null,
+
 
               ),
 

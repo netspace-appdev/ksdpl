@@ -24,6 +24,7 @@ class CustomTextArea extends StatelessWidget {
       validator: validator,
       onChanged: onChanged,
       keyboardType: TextInputType.multiline,
+      textInputAction: TextInputAction.done,
       decoration: InputDecoration(
         labelText: label,
         alignLabelWithHint: true, // Align label to the top-left for multiline

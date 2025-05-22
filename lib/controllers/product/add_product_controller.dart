@@ -19,7 +19,9 @@ import '../../models/loan_application/special_model/ReferenceModel.dart';
 import '../../models/product/AddProductListModel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../models/product/GetAllProductCategoryModel.dart';
+import '../../models/product/GetDocumentProductIdModel.dart';
 import '../../models/product/GetProductListById.dart';
+import '../../models/product/AddProductDocumentModel.dart';
 import '../../services/loan_appl_service.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
@@ -229,6 +231,7 @@ class AddProductController extends GetxController{
   var selectedCustomerCategories = <String>[].obs;
   var getAllProductCategoryModel = Rxn<productCat.GetAllProductCategoryModel>(); //
   var addProductListModel = Rxn<AddProductListModel>(); //
+  var addProductDocumentModel = Rxn<AddProductDocumentModel>(); //
   RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
   var isLoadingProductCategory = false.obs;
   var isProductLoading = false.obs;
@@ -269,6 +272,7 @@ class AddProductController extends GetxController{
   var selectedCollSecCat = <String>[].obs;
   var selectedIncomeType = <String>[].obs;
   var selectedNegProfile = <String>[].obs;
+  var selectedProdDescr = <String>[].obs;
   var selectedNegArea = <String>[].obs;
 
   RxList<String> chips = <String>[].obs;
@@ -277,6 +281,7 @@ class AddProductController extends GetxController{
   TextEditingController chipText3Controller = TextEditingController();
 
   var getProductListById = Rxn<GetProductListById>(); //
+  var getDocumentProductIdModel = Rxn<GetDocumentProductIdModel>(); //
 
   void addChip(String value) {
     if (value.trim().isNotEmpty && !chips.contains(value.trim())) {
@@ -344,18 +349,7 @@ class AddProductController extends GetxController{
 
   void validateAndSubmit() {
 
-  /*  for (int i = 0; i < stepFormKeys.length; i++) {
-      final isValid = stepFormKeys[i].currentState?.validate() ?? false;
 
-      if (!isValid) {
-        // Jump to that step
-        jumpToStep(i);
-        // Optionally show a snackbar or toast
-        Get.snackbar("Incomplete Step", "Please complete Step ${i + 1}");
-        return; // Stop submission
-      }
-    }
-*/
     if(selectedKsdplProduct.value==null){
       jumpToStep(0);
 
@@ -364,8 +358,12 @@ class AddProductController extends GetxController{
       jumpToStep(0);
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Product Segment");
-    }else{
+    }else if(prodProductNameController.text.isEmpty){
+      jumpToStep(0);
 
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please name the product");
+    }else{
+      print("pdocDescr===>${ Helper.convertListToCsvSafe(selectedProdDescr.value)}");
 
       addProductListApi(
         Id: "0",
@@ -413,11 +411,12 @@ class AddProductController extends GetxController{
          TSR_Years:prodTsrYearsController.text,
          TSR_Charges:prodTsrChargesController.text,
          Valuation_Charges:prodValuationChargesController.text,
-         NoOfDocument:prodNoOfDocController.text,
+         NoOfDocument:"${selectedProdDescr.value?.length ?? 0}",
          Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
          Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
          Profit_Percentage:prodProfitPercentageController.text,
-         KSDPLProductId:selectedKsdplProduct.value.toString()
+         KSDPLProductId:selectedKsdplProduct.value.toString(),
+         docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
       );
 
       print("All steps valid! Submitting form...");
@@ -427,9 +426,8 @@ class AddProductController extends GetxController{
   }
   void validateAndUpdate() {
 
-    print("prodMaxRoiController.text===>${prodMaxLoanAmountController.text}");
-    print("prodMinRoiController===>${ prodMinRoiController.text}");
-    print("prodMaxRoiController===>${prodMaxRoiController.text}");
+
+
 
 
     if(selectedKsdplProduct.value==null){
@@ -488,7 +486,8 @@ class AddProductController extends GetxController{
           Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
           Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
           Profit_Percentage:prodProfitPercentageController.text,
-          KSDPLProductId:selectedKsdplProduct.value.toString()
+          KSDPLProductId:selectedKsdplProduct.value.toString(),
+        docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
       );
 
       print("All steps valid! Submitting form...");
@@ -1001,7 +1000,7 @@ class AddProductController extends GetxController{
     chipText3Controller.clear();
   }
 
-  void  getAllProductCategoryApi() async {
+  Future<void>  getAllProductCategoryApi() async {
     try {
       isLoadingProductCategory(true);
 
@@ -1098,6 +1097,7 @@ class AddProductController extends GetxController{
     String? Product_Validate_From_date,
     String? Product_Validate_To_date,
     String? Profit_Percentage,
+    String? docDescr,
 }) async {
     try {
       isLoading(true);
@@ -1153,7 +1153,10 @@ class AddProductController extends GetxController{
         Product_Validate_From_date: Product_Validate_From_date,
         Product_Validate_To_date: Product_Validate_To_date,
         Profit_Percentage: Profit_Percentage,
+        docDescr: docDescr
       );
+
+      print("Income_Types in API controller===>${Income_Types}");
 
 
       if(data['success'] == true){
@@ -1164,6 +1167,25 @@ class AddProductController extends GetxController{
 
 
         isLoading(false);
+        if(docDescr!.isNotEmpty){
+          String productDocument = docDescr.toString();
+
+          int productId = int.parse(addProductListModel.value!.data!.id.toString()); // replace with your actual productId
+          String documentType = "O";
+
+          List<Map<String, dynamic>> documentPayload = productDocument
+              .split(',')
+              .map((doc) => {
+            "productId": productId,
+            "documentName": doc.trim(),
+            "documentType": documentType,
+          })
+              .toList();
+          print("productDocument===>${documentPayload}");
+          await ProductService.addProductDocumentApi(body: documentPayload);
+        }
+
+
         clearForm();
         Get.back();
 
@@ -1238,11 +1260,11 @@ class AddProductController extends GetxController{
     String? Product_Validate_From_date,
     String? Product_Validate_To_date,
     String? Profit_Percentage,
+    String? docDescr,
   }) async {
     try {
       isLoading(true);
-      print("Minimum_ROI---->Controller----${Minimum_ROI}");
-      print("Maximum_ROI---->${Maximum_ROI}");
+      print("Income_Types in API controlle updateProductListApir===>${Income_Types}");
       var data = await ProductService.updateProductListApi(
         KSDPLProductId: KSDPLProductId,
         Id: Id,
@@ -1294,6 +1316,7 @@ class AddProductController extends GetxController{
         Product_Validate_From_date: Product_Validate_From_date,
         Product_Validate_To_date: Product_Validate_To_date,
         Profit_Percentage: Profit_Percentage,
+        docDescr: docDescr
       );
 
 
@@ -1306,9 +1329,26 @@ class AddProductController extends GetxController{
         ViewProductController viewProductController=Get.find();
         viewProductController.getAllProductListApi();
 
+        if(docDescr!.isNotEmpty){
+          String productDocument = docDescr.toString();
 
-        isLoading(false);
+          int productId = int.parse(addProductListModel.value!.data!.id.toString()); // replace with your actual productId
+          String documentType = "O";
+
+          List<Map<String, dynamic>> documentPayload = productDocument
+              .split(',')
+              .map((doc) => {
+            "productId": productId,
+            "documentName": doc.trim(),
+            "documentType": documentType,
+          })
+              .toList();
+          print("productDocument===>${documentPayload}");
+          await ProductService.addProductDocumentApi(body: documentPayload);
+        }
+
         clearForm();
+        isLoading(false);
         Get.back();
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -1336,7 +1376,7 @@ class AddProductController extends GetxController{
     required String id
   }) async {
     try {
-      isLoading(true);
+      isLoadingMainScreen(true);
 
       var data = await ProductService.getProductListByIdApi(id: id);
 
@@ -1346,12 +1386,12 @@ class AddProductController extends GetxController{
 
         getProductListById.value= GetProductListById.fromJson(data);
 
-        populateStep1Info();
-        populateStep2Info();
-        populateStep3Info();
-        populateStep4Info();
+       await populateStep1Info();
+        await populateStep2Info();
+        await populateStep3Info();
+        await populateStep4Info();
 
-        isLoading(false);
+        isLoadingMainScreen(false);
 
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
@@ -1362,14 +1402,17 @@ class AddProductController extends GetxController{
       print("Error getAllProductListModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
+      isLoadingMainScreen(false);
     } finally {
 
-      isLoading(false);
+      isLoadingMainScreen(false);
     }
   }
-  void populateStep1Info() async{
+  Future <void> populateStep1Info() async{
+    await leadDDController.getAllKsdplProductApi();
     selectedKsdplProduct.value=int.parse(getProductListById.value!.data!.ksdplProductId.toString());
+
+    await leadDDController.getAllBankApi();
     selectedBank.value=int.parse(getProductListById.value!.data!.bankId.toString());
     prodBankersNameController.text=getProductListById.value!.data!.bankersName??"";
     prodBankersMobController.text=getProductListById.value!.data!.bankersMobileNumber??"";
@@ -1377,23 +1420,26 @@ class AddProductController extends GetxController{
     prodBankersEmailController.text=getProductListById.value!.data!.bankersEmailID??"";
 
     prodMinCibilController.text=(getProductListById.value!.data!.minCIBIL ?? 0).toStringAsFixed(0);
+    await getAllProductCategoryApi();
     selectedProductCategory.value=int.parse(getProductListById.value!.data!.segmentVertical.toString());
     prodProductNameController.text=getProductListById.value!.data!.product??"";
-    selectedCustomerCategories.value=(getProductListById.value!.data!.customerCategory ?? "")
-        .split(',')
-        .map((e) => e.trim())
-        .toList();
-    selectedCollSecCat.value=(getProductListById.value!.data!.collateralSecurityCategory ?? "")
-        .split(',')
-        .map((e) => e.trim())
-        .toList();
+    selectedCustomerCategories.assignAll(
+        (getProductListById.value!.data!.customerCategory ?? "")
+            .split(',')
+            .map((e) => e.trim())
+            .toList());
+    selectedCollSecCat.assignAll(
+        (getProductListById.value!.data!.collateralSecurityCategory ?? "")
+            .split(',')
+            .map((e) => e.trim())
+            .toList());
     prodCollateralSecurityExcludedController.text=getProductListById.value!.data!.collateralSecurityExcluded??"";
     prodProfileExcludedController.text=getProductListById.value!.data!.profileExcluded??"";
-
-    selectedIncomeType.value=(getProductListById.value!.data!.incomeTypes ?? "")
-        .split(',')
-        .map((e) => e.trim())
-        .toList();
+    selectedIncomeType.assignAll(
+        (getProductListById.value!.data!.incomeTypes ?? "")
+            .split(',')
+            .map((e) => e.trim())
+            .toList());
 
     print("customerCategory res===>${getProductListById.value!.data!.customerCategory}");
     print("selectedCustomerCategories res===>${ selectedCustomerCategories.value}");
@@ -1401,9 +1447,12 @@ class AddProductController extends GetxController{
     print("collateralSecurityCategory res===>${getProductListById.value!.data!.collateralSecurityCategory}");
     print("selectedCollSecCat res===>${ selectedCollSecCat.value}");
 
+
+    print("incomeTypes res===>${getProductListById.value!.data!.incomeTypes}");
+    print("selectedIncomeType res===>${ selectedIncomeType.value}");
   }
 
-  void populateStep2Info() async{
+  Future <void> populateStep2Info() async{
 
     prodAgeLimitEarningApplicantsController.text=(getProductListById.value!.data!.ageLimitEarningApplicants ?? 0).toStringAsFixed(0);
     prodAgeLimitNonEarningCoApplicantController.text=(getProductListById.value!.data!.ageLimitNonEarningCoApplicant ?? 0).toStringAsFixed(0);
@@ -1424,7 +1473,7 @@ class AddProductController extends GetxController{
 
   }
 
-  void populateStep3Info() async{
+  Future <void> populateStep3Info() async{
 
     prodMinPropertyValueController.text=(getProductListById.value!.data!.minimumPropertyValue ?? 0).toStringAsFixed(2);
     prodMaxIirController.text=(getProductListById.value!.data!.maximumIIR ?? 0).toStringAsFixed(2);
@@ -1444,9 +1493,22 @@ class AddProductController extends GetxController{
     prodProductValidateToController.text=Helper.convertFromIso8601(getProductListById.value!.data!.productValidateToDate);
     prodMaxTatController.text=(getProductListById.value!.data!.maximumTAT ?? 0).toStringAsFixed(2);
 
+    selectedNegProfile.assignAll(
+        (getProductListById.value!.data!.negativeProfiles ?? "")
+            .split(',')
+            .map((e) => e.trim())
+            .toList());
+
+    selectedNegArea.assignAll(
+        (getProductListById.value!.data!.negativeAreas ?? "")
+            .split(',')
+            .map((e) => e.trim())
+            .toList());
+
   }
 
-  void populateStep4Info() async{
+  Future <void> populateStep4Info() async{
+
 
     prodProductDescriptionsController.text=getProductListById.value!.data!.productDescription??"";
 
@@ -1454,6 +1516,94 @@ class AddProductController extends GetxController{
 
 
   }
+
+
+  Future<void>addProductDocumentApi({
+    required List<Map<String, dynamic>> coApPayload,
+
+  }) async {
+    try {
+      isLoading(true);
+      var uln = Get.arguments['uln'];
+      print("addLoanApplicationApi");
+
+      print("here propid===>${cleanText(propPropIdController.text)}");
+      var data = await ProductService.addProductDocumentApi(
+          body:[
+            {
+              "id":loanApplId,
+              "coApplicant": coApPayload,
+              "bankerName": cleanText(bankerNameController.text),
+            }
+          ]
+      );
+
+
+
+      if(data['success'] == true){
+
+        addProductDocumentModel.value= AddProductDocumentModel.fromJson(data);
+        print("sucess addprodoc==>${addProductDocumentModel.value!.message!.toString()}");
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getLeadDetailByIdApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+
+
+  }
+
+  void  getDocumentListByProductIdApi({
+    required String productId
+  }) async {
+    try {
+      isLoadingMainScreen(true);
+
+      var data = await ProductService.getDocumentListByProductIdApi(productId: productId);
+
+      if(data['success'] == true){
+
+        print("here 1");
+
+        getDocumentProductIdModel.value= GetDocumentProductIdModel.fromJson(data);
+        selectedProdDescr.assignAll(
+          getDocumentProductIdModel.value!.data!
+              .map((e) => e.documentName?.toString().trim())
+              .where((name) => name != null && name.isNotEmpty)
+              .cast<String>()
+              .toList(),
+        );
+
+        isLoadingMainScreen(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllProductListModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoadingMainScreen(false);
+    } finally {
+
+      isLoadingMainScreen(false);
+    }
+  }
+
 }
 
 extension ParseStringExtension on String? {
