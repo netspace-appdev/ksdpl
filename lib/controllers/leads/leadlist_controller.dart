@@ -489,9 +489,9 @@ print("selectedTime ==>${selectedTime}");
 
     try {
 
-      if (isDashboardLeadListMoreLoading.value || (!hasMore.value && isLoadMore)) return;
+      if (isMainListMoreLoading.value || (!hasMore.value && isLoadMore)) return;
 
-      isDashboardLeadListMoreLoading(true);
+      isMainListMoreLoading(true);
 
       if (!isLoadMore) {
         currentPage.value = 1; // Reset to first page on fresh load
@@ -535,7 +535,7 @@ print("selectedTime ==>${selectedTime}");
       print("Error getAllLeadsApi: $e");
       ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
-      isDashboardLeadListMoreLoading(false);
+      isMainListMoreLoading(false);
     }
   }
 

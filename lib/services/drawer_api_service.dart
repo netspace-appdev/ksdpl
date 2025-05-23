@@ -371,6 +371,7 @@ class DrawerApiService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+      print("link===>  getDetailsListOfLeadsForDashboardApi==>$getAllLeads?pageNumber=$pageNumber&pageSize=$pageSize");
       print("request===> getAllLeadsApi==>${request.fields}");
       print("response===>getAllLeadsApi ==>${response.statusCode}");
       print("response===>getAllLeadsApi ==>${response.body}");

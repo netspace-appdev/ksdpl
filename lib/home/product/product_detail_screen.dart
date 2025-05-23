@@ -166,199 +166,6 @@ class ProductDetailScreen extends StatelessWidget {
     );
   }
 
-
-
-/*  Widget productSection(BuildContext context){
-    return Obx((){
-      if (productDetailsController.isLoading.value) {
-        return  Center(child: CustomSkelton.productShimmerList(context));
-      }
-      if (productDetailsController.getProductListById.value == null ||
-          productDetailsController.getProductListById.value!.data == null || productDetailsController.getProductListById.value!.data=="") {
-        return  Container(
-          height: MediaQuery.of(context).size.height*0.50,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          margin: EdgeInsets.symmetric(vertical: 10),
-          decoration:  BoxDecoration(
-            border: Border.all(color: AppColor.grey200),
-            color: AppColor.appWhite,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-
-          ),
-          child: const Column(
-            children: [
-              /// Header with profile and menu icon
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "No data found",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.grey700
-                  ),
-                ),
-              ),
-
-            ],
-          ),
-        );
-      }
-
-      var data=productDetailsController.getProductListById.value!.data!;
-
-
-      return  Column(// height: MediaQuery.of(context).size.height*1.6, //magic
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Lead Details Card
-
-
-          CustomCard(
-            borderColor: AppColor.grey200,
-            backgroundColor: AppColor.appWhite,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Lead Details",
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
-
-                SizedBox(height: 10),
-
-                // Status Tags
-                Row(
-                  children: [
-                    Container(
-                      width: 120,
-                      child: Text("Min Cibil",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,color:AppColor.primaryColor)),
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      children: [
-                        StatusChip(label: data.minCIBIL.toString(), color: Colors.orange),
-
-                      ],
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 10),
-                DetailRow(label: "Product", value:data.product.toString()),
-                DetailRow(label: "Bank Namer", value:data.bankName.toString()),
-                DetailRow(label: "Bankers Name", value:Helper.formatDate(data.bankersName.toString()) ),
-                DetailRow(label: "Bankers Mobile Number", value:data.bankersMobileNumber.toString()),
-                DetailRow(label: "Bankers Whatsapp Number", value:data.bankersWhatsAppNumber.toString()),
-                DetailRow(label: "Bankers Email ID", value:data.bankersEmailID.toString()),
-                DetailRow(label: "Segment Vertical", value: data.segmentVertical.toString()),
-                DetailRow(label: "customer_Category", value: data.customerCategory.toString()),
-                DetailRow(label: "collateral Security Category", value: data.collateralSecurityCategory.toString()),
-                DetailRow(label: "collateral Security Excluded", value: data.collateralSecurityExcluded.toString()),
-                DetailRow(label: "Income Types", value: data.incomeTypes.toString()),
-                DetailRow(label: "Profile Excluded", value: data.profileExcluded.toString()),
-                DetailRow(label: "Age Limit Earning Applicants", value: data.ageLimitEarningApplicants.toString()),
-                DetailRow(label: "Age Limit Non Earning Co-Applicant", value: data.ageLimitNonEarningCoApplicant.toString()),
-                DetailRow(label: "Minimum Age Earning Applicants", value: data.ageLimitNonEarningCoApplicant.toString()),
-                DetailRow(label: "Minimum Age Non Earning Applicants", value: data.minimumAgeNonEarningApplicants.toString()),
-                DetailRow(label: "Minimum Income Criteria", value: data.minimumIncomeCriteria.toString()),
-                DetailRow(label: "Minimum Loan Amount", value: data.minimumLoanAmount.toString()),
-                DetailRow(label: "Maximum Loan Amount", value: data.maximumLoanAmount.toString()),
-                DetailRow(label: "Min Tenor", value: data.minTenor.toString()),
-                DetailRow(label: "Maximum Tenor", value: data.maximumTenor.toString()),
-                DetailRow(label: "Minimum ROI", value: data.minimumROI.toString()),
-                DetailRow(label: "Maximum ROI", value: data.maximumROI.toString()),
-                DetailRow(label: "Maximum Tenor Eligibility Criteria", value: data.maximumTenorEligibilityCriteria.toString()),
-                DetailRow(label: "Geo Limit", value: data.geoLimit.toString()),
-                DetailRow(label: "Negative Profiles", value: data.negativeProfiles.toString()),
-                DetailRow(label: "Negative Areas", value: data.negativeAreas.toString()),
-                DetailRow(label: "Maximum TAT", value: data.maximumTAT.toString()),
-                DetailRow(label: "Minimum Property Value", value: data.minimumPropertyValue.toString()),
-                DetailRow(label: "Maximum IIR", value: data.maximumIIR.toString()),
-                DetailRow(label: "Maximum FOIR", value: data.maximumFOIR.toString()),
-                DetailRow(label: "Maximum LTV", value: data.maximumLTV.toString()),
-                DetailRow(label: "Processing Fee", value: data.processingFee.toString()),
-                DetailRow(label: "Legal Fee", value: data.legalFee.toString()),
-                DetailRow(label: "Technical Fee", value: data.technicalFee.toString()),
-                DetailRow(label: "Admin Fee", value: data.adminFee.toString()),
-                DetailRow(label: "Foreclosure Charges", value: data.foreclosureCharges.toString()),
-                DetailRow(label: "Other Charges", value: data.otherCharges.toString()),
-                DetailRow(label: "Stamp Duty", value: data.stampDuty.toString()),
-                DetailRow(label: "TSR Years", value: data.tsRYears.toString()),
-                DetailRow(label: "TSR Charges", value: data.tsRCharges.toString()),
-                DetailRow(label: "Valuation Charges", value: data.valuationCharges.toString()),
-                DetailRow(label: "No of Documents", value: data.noOfDocument.toString()),
-                DetailRow(label: "KSDPL Product ID", value: data.ksdplProductId.toString()),
-                DetailRow(label: "Profit Percentage", value: data.profitPercentage.toString()),
-                DetailRow(label: "Active", value: data.active.toString()),
-                DetailRow(label: "Created Date", value: Helper.formatDate(data.createdDate.toString())),
-                DetailRow(label: "Created By", value: data.createdBy.toString()),
-                DetailRow(label: "Product Category Name", value: data.productCategoryName.toString()),
-
-              ],
-            ),
-          ),
-          SizedBox(height: 16),
-
-          // Phone Number Card
-
-          CustomCard(
-            borderColor: AppColor.grey200,
-            backgroundColor: AppColor.appWhite,
-            child:  Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Phone Number",
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
-             *//*   Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold,color: AppColor.black54)),
-                    ),
-                    const SizedBox(height: 10),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-
-                        _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "call",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context),
-                        _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber:leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "whatsapp",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context),
-                        _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "message",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context),
-
-
-                      ],
-                    )
-                  ],
-                )*//*
-              ],
-            ),
-          ),
-
-
-
-          SizedBox(height: 20),
-        ],
-      );
-
-
-    });
-
-  }*/
-
   Widget productSection(BuildContext context) {
     return Obx(() {
       if (productDetailsController.isLoading.value) {
@@ -456,7 +263,7 @@ class ProductDetailScreen extends StatelessWidget {
       );
     });
   }
-  Widget buildCard(String title, List<Widget> children) {
+/*  Widget buildCard(String title, List<Widget> children) {
     return CustomCard(
       borderColor: AppColor.grey200,
       backgroundColor: AppColor.appWhite,
@@ -470,7 +277,50 @@ class ProductDetailScreen extends StatelessWidget {
         ],
       ),
     );
+  }*/
+
+  Widget buildCard(String title, List<Widget> children) {
+    return CustomCard(
+      borderColor: AppColor.grey200,
+      backgroundColor: AppColor.appWhite,
+
+
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            decoration: BoxDecoration(
+              color: AppColor.primaryColor, // Blue background
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
+          // Content section
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: children,
+            ),
+          ),
+        ],
+      ),
+    );
   }
+
 
 
 
@@ -524,7 +374,7 @@ class DetailRow extends StatelessWidget {
           ),
           Text(":", style: TextStyle(fontSize: 14),),
           Expanded(
-              child: value==AppText.customdash?
+              child: value=="null" || value==AppText.customdash?
               Row(
 
 

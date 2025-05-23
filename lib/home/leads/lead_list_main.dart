@@ -623,6 +623,16 @@ class LeadListMain extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
                 onPressed: () {
+                  print("leadListController.fromWhereLeads.value===>${leadListController.fromWhereLeads.value}");
+
+
+                  leadListController.fromWhereLeads.value=="dashboard"?
+                  leadListController.getDetailsListOfLeadsForDashboardApi(
+                    applyDateFilter: "false",
+                    stageId: "1",
+                    isLoadMore: true
+                  ):
+
                   leadListController.getAllLeadsApi(
                     employeeId: leadListController.eId.value.toString(),
                     leadStage:leadListController.leadCode.value.toString(),
@@ -638,13 +648,10 @@ class LeadListMain extends StatelessWidget {
                     isLoadMore: true,
                   );
 
-/*
-                  leadListController.getDetailsListOfLeadsForDashboardApi(
-                    applyDateFilter: "false",
-                    stageId: "1",
-                  );*/
                 },
-                child: leadListController.isMainListMoreLoading.value
+                child:
+
+                leadListController.isMainListMoreLoading.value //isDashboardLeadListMoreLoading
                     ? Container(
                   width: 15,
                     height: 15,
@@ -1058,7 +1065,7 @@ class LeadListMain extends StatelessWidget {
   }) {
 
 
-    List<String> options = ["All Leads","Fresh Leads","Working Leads","Could Not Connect", "Interested Leads", "Not Interested Leads", "Doable Leads","Not Doable Leads"];
+    List<String> options = ["All Leads","Fresh Leads","Working Leads","Could Not Connect", "Interested Leads", "Not Interested", "Doable Leads","Not Doable"];
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1091,6 +1098,8 @@ class LeadListMain extends StatelessWidget {
             ],
           ),
           onSubmit: () {
+            leadListController.fromWhereLeads.value="main";
+
             leadListController.filterSubmit();
             Navigator.pop(context); // Close dialog after submission
             // Handle submission logic

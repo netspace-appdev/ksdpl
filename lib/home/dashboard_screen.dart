@@ -121,7 +121,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         reminders(),
 
                         const  SizedBox(
-                          height: 50,//20
+                          height: 30,//20
                         ),
                         birthday(),
 
@@ -247,6 +247,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   ///old working code
 
+/*
   Widget offerContainer() {
     return Obx(() {
       if (dashboardController.isLoading.value) {
@@ -470,10 +471,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+*/
 
 
 ///new code and experiment for lead count
-/*
   Widget offerContainer() {
     return Obx(() {
       if (dashboardController.isLoading.value) {
@@ -525,7 +526,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         {"id": 9, "stageName": "Interested"},
         {"id": 10, "stageName": "Not Doable"},
         {"id": 11, "stageName": "Hold"},
-        {"id": 12, "stageName": "Rejected"},
+        {"id": 12, "stageName": "Doable"},
         {"id": 13, "stageName": "Logged In"},
         {"id": 14, "stageName": "Sanction"},
         {"id": 15, "stageName": "Partial Disbursed"},
@@ -572,7 +573,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: const EdgeInsets.all(16),
               margin: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
-                color: index % 2 == 0 ? AppColor.appWhite : AppColor.secondaryColor,
+               // color: index % 2 == 0 ? AppColor.appWhite : AppColor.secondaryColor,
+                gradient:
+                index % 2 == 0 ?
+                LinearGradient(
+                  colors: [AppColor.appWhite, AppColor.appWhite],
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                ):
+
+                LinearGradient(
+                  colors: [AppColor.secondaryColorLight, AppColor.secondaryColor],
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                ),
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
@@ -637,6 +651,76 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       leadListController.selectCheckbox(-1);
                       leadListController.leadStageName2.value ="Self Sourced Leads";
                       botNavController.selectedIndex.value = 1;
+                    } else if(globalIndex==2){
+                      stageId=3;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Total Leads";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==3){
+                      stageId=4;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Fresh Leads";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==4){
+                      stageId=5;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Total Working Leads";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==5){
+                      stageId=6;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Ongoing Calls";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==6){
+                      stageId=7;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Not Interested";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==7){
+                      stageId=8;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Could Not Connect";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==8){
+                      stageId=9;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Interested";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==9){
+                      stageId=10;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Not Doable";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==10){
+                      stageId=11;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Hold";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==11){
+                      stageId=12;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Doable";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==12){
+                      stageId=13;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Logged In";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==13){
+                      stageId=14;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Sanction";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==14){
+                      stageId=15;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Partial Disbursed";
+                      botNavController.selectedIndex.value = 1;
+                    }else if(globalIndex==15){
+                      stageId=16;
+                      leadListController.selectCheckbox(-1);
+                      leadListController.leadStageName2.value ="Fully Disbursed";
+                      botNavController.selectedIndex.value = 1;
                     }else{
 
                     }
@@ -685,7 +769,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-*/
 
   Widget barChart(){
     return Column(
@@ -1159,309 +1242,226 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  Widget reminders(){
+
+
+  Widget reminders() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding:  EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppText.upcomingFollowUp,
-                style: GoogleFonts.merriweather(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              InkWell(
-                onTap: (){
-                  Get.toNamed("/getAllReminder");
-                },
-                child: Text(
-                  "View All",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Obx((){
 
+        Obx(() {
           if (dashboardController.isLoading.value) {
-            return  Center(child: CustomSkelton.dashboardShimmerList(context));
+            return Center(child: CustomSkelton.dashboardShimmerList(context));
           }
-          if (dashboardController.getRemindersModel.value == null ||
-              dashboardController.getRemindersModel.value!.data == null ||dashboardController.getRemindersModel.value!.data!.isEmpty) {
-            return Center(child: Container(
-              height: 160,
-              width: MediaQuery.of(context).size.width*0.80,
-              decoration: BoxDecoration(
-                color: AppColor.appWhite,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColor.grey4, width: 1),
 
-              ),
-              child: const Center(
-                child: Text(
-                  AppText.noDataFound,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.grey1,
-                  ),
-                ),
-              ),
-            )); // Handle the null case
+          if (dashboardController.getRemindersModel.value == null ||
+              dashboardController.getRemindersModel.value!.data == null ||
+              dashboardController.getRemindersModel.value!.data!.isEmpty) {
+            return _noReminderCard();
           }
+
           if (dashboardController.getRemindersModel.value?.data?.isNotEmpty ?? false) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               dashboardController.scrollToLatestItem();
             });
           }
 
-          return SizedBox(
-            height: 230,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: dashboardController.getRemindersModel.value!.data!.length > 5
-                  ? 5
-                  : dashboardController.getRemindersModel.value!.data!.length,
-              //reverse: true,
-
-
-              itemBuilder: (context, index) {
-                var data = dashboardController.getRemindersModel.value!.data![index];
-                print("remiinder===>${data.callReminder.toString()}");
-                print("remiinder date===>${Helper.convertDateTime(data.callReminder.toString())}");
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration:  BoxDecoration(
-                    border: Border.all(color: AppColor.grey200),
-                    color: AppColor.appWhite,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Column(
-
-
-                    children: [
-                      /// Header with profile and menu icon
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              // mainAxisAlignment: MainAxisAlignment.center,
-
-                              children: [
-                                Container(
-                                  height: 40,
-                                  width: 40,
-
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColor.primaryColor,
-                                    border: Border.all(color: AppColor.secondaryColor),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      data.leadCustomerName!.isNotEmpty ? data.leadCustomerName![0].toUpperCase() : "U", // Initial Letter
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-
-                                  children: [
-                                    Text(
-                                      Helper.capitalizeEachWord(data.leadCustomerName!.toString()),
-
-                                      // lead.name.toString(),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          height: 10,
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                          decoration:  BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(color: AppColor.grey200),
-                                            color: AppColor.grey1,
-                                          ),
-                                        ),
-                                        Text(
-                                          data.leadMobileNo.toString(),
-                                          style: TextStyle(
-                                            color: AppColor.grey700,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 10),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            _buildDetailRow("Next Followup Date", Helper.convertDateTime(data.callReminder.toString())),
-                          ],
-                        ),
-                      ),
-                      //SizedBox(height: 10),
-
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: TextButton(
-                          onPressed: () {
-                            leadListController.isFBDetailsShow.value=false;
-                            leadListController.followDateController.text="";
-                            leadListController.followTimeController.text="";
-                            leadDDController.selectedStage.value=data.leadStageStatus.toString();
-                            var temp=leadDDController.selectedStage.value??"0";
-                            leadListController.leadCode.value=temp;
-                            CallService callService = CallService();
-
-                            callService.makePhoneCall(
-                              phoneNumber:data.leadMobileNo.toString(),//data.leadMobileNo.toString(),//data.leadMobileNo.toString(),//"+919399299880"
-                              leadId:  data.leadId.toString(),
-                              currentLeadStage:  data.leadStageStatus.toString(),
-                              context: context,
-                              showFeedbackDialog:showCallFeedbackDialog,
-                            );
-                          },
-                          child: const Text(
-                            "Call Now",
-                            style: TextStyle(color: AppColor.secondaryColor, fontSize: 14),
-                          ),
-                        ),
-                      ),
-
-                    ],
-                  ),
-                );
-              },
-            ),
-          );
-        })
-      ],
-    );
-  }
-
-  Widget todayWorkStatus() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-         Padding(
-           padding:  EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Today's Work Status",
-                style:  GoogleFonts.merriweather(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Obx((){
-          if (dashboardController.isLoading.value) {
-            return  Center(child: CustomSkelton.dashboardShimmerList(context));
-          }
-          if (dashboardController.todayWorkStatusRBModel.value == null ||
-              dashboardController.todayWorkStatusRBModel.value!.data == null) {
-            return Center(child: Container(
-              height: 160,
-              width: MediaQuery.of(context).size.width*0.85,
+          return Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColor.appWhite,
-                borderRadius: BorderRadius.circular(10),
+
+                gradient: LinearGradient(
+                  colors: [AppColor.primaryLight, AppColor.primaryDark],
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                ),
+                borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withOpacity(0.08),
                     blurRadius: 10,
                     spreadRadius: 2,
                   ),
                 ],
-
               ),
-              child: const Center(
-                child: Text(
-                  "No work status",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.grey1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppText.upcomingFollowUp,
+                          style: GoogleFonts.merriweather(
+                            fontSize: 15,
+                            color: AppColor.appWhite,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed("/getAllReminder");
+                          },
+                          child: Text(
+                            "View All",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.appWhite,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 20),
+
+                  SizedBox(
+                    height: 120,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: dashboardController.getRemindersModel.value!.data!.length > 5
+                          ? 5
+                          : dashboardController.getRemindersModel.value!.data!.length,
+                      itemBuilder: (context, index) {
+                        var data = dashboardController.getRemindersModel.value!.data![index];
+                        return Container(
+                          width: 250,
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.grey200),
+                            color: AppColor.appWhite,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              /// Top Row: Avatar + Name & Number
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      leadListController.isFBDetailsShow.value = false;
+                                      leadListController.followDateController.text = "";
+                                      leadListController.followTimeController.text = "";
+                                      leadDDController.selectedStage.value = data.leadStageStatus.toString();
+                                      leadListController.leadCode.value =
+                                          leadDDController.selectedStage.value ?? "0";
+
+                                      CallService callService = CallService();
+                                      callService.makePhoneCall(
+                                        phoneNumber: data.leadMobileNo.toString(),
+                                        leadId: data.leadId.toString(),
+                                        currentLeadStage: data.leadStageStatus.toString(),
+                                        context: context,
+                                        showFeedbackDialog: showCallFeedbackDialog,
+                                      );
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundColor: AppColor.secondaryColor,
+                                      radius: 24,
+                                     /* child: Text(
+                                        data.leadCustomerName!.isNotEmpty
+                                            ? data.leadCustomerName![0].toUpperCase()
+                                            : "U",
+                                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                      ),*/
+                                      child: Icon(Icons.phone, color: AppColor.appWhite,),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          Helper.capitalizeEachWord(data.leadCustomerName!),
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight:FontWeight.w900,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                           
+                                            Flexible(
+                                              child: Text(
+                                                data.leadMobileNo ?? '',
+                                                style: TextStyle(
+                                                  color: AppColor.grey700,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: 10,),
+
+
+
+                              /// Follow-up date
+                              _buildDetailRow2(
+                                "Followup on",
+                                Helper.convertDateTime(data.callReminder.toString()),
+                              ),
+
+                            /*  SizedBox(height: 10,),
+
+                              /// Call Now button
+                              ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColor.secondaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                ),
+                                icon: const Icon(Icons.phone,color: AppColor.appWhite),
+                                label:  Text(
+                                  "Call Now",
+                                  style: TextStyle(fontSize: 14, color: AppColor.appWhite),
+                                ),
+                                onPressed: () {
+                                  leadListController.isFBDetailsShow.value = false;
+                                  leadListController.followDateController.text = "";
+                                  leadListController.followTimeController.text = "";
+                                  leadDDController.selectedStage.value = data.leadStageStatus.toString();
+                                  leadListController.leadCode.value =
+                                      leadDDController.selectedStage.value ?? "0";
+
+                                  CallService callService = CallService();
+                                  callService.makePhoneCall(
+                                    phoneNumber: data.leadMobileNo.toString(),
+                                    leadId: data.leadId.toString(),
+                                    currentLeadStage: data.leadStageStatus.toString(),
+                                    context: context,
+                                    showFeedbackDialog: showCallFeedbackDialog,
+                                  );
+                                },
+                              ),*/
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
               ),
-            )); // Handle the null case
-          }
-          return  SizedBox(
-            height: 170,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount:1, //dataList.length,
-              itemBuilder: (context, index) {
-                //   var item = dataList[index];
-                List<Color> colors = [AppColor.secondaryColor, AppColor.lightGreen, AppColor.lightBrown];
-                var cardColor = colors[index % colors.length];
-               var data=dashboardController.todayWorkStatusRBModel.value!.data![0];
-                return Container(
-                  width: MediaQuery.of(context).size.width*0.85,
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColor.appWhite,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: cardColor, width: 1),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 6,
-                        spreadRadius: 1,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _statusBadge("Total Calls today", data.todayCall.toString(), cardColor, "total"),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          _statusBadge("Converted\n to Interested", data.todayConvertToInterested.toString(), cardColor, "interested"),
-                          const SizedBox(width: 6),
-                          _statusBadge("Connected Calls\n",data.todayConnectedCall.toString(), cardColor,"connected"),
-                        ],
-                      ),
-
-
-                    ],
-                  ),
-                );
-              },
             ),
           );
         }),
@@ -1469,260 +1469,217 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _statusBadge(String title, String value, Color color, String label) {
-    return Expanded(
-      child: Container(
-        width: label=="total"?MediaQuery.of(context).size.width*0.80:40,
+  Widget _buildDetailRow2(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(left:8.0),
+      child: Row(
+        //mainAxisAlignment: MainAxisAlignment.center,
+        children: [
 
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: color, width: 1),
+          Icon(Icons.watch_later_outlined, color: AppColor.grey1,),
+            const SizedBox(width: 6),
+            Text(
+              "$value",
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String title, String value) {
+    return Row(
+      children: [
+        const Icon(Icons.calendar_today, size: 14),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(
+            "$title: $value",
+            style: const TextStyle(fontSize: 14),
+          ),
         ),
-        child: Column(
-          children: [
-            Text(value, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color, )),
-            Text(title, style: TextStyle(fontSize: 12, color: AppColor.blackColor), textAlign: TextAlign.center,),
-          ],
+      ],
+    );
+  }
+
+  Widget _noReminderCard() {
+    return Center(
+      child: Container(
+        height: 160,
+        width: MediaQuery.of(context).size.width * 0.85,
+        decoration: BoxDecoration(
+          color: AppColor.appWhite,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: AppColor.grey4, width: 1),
+        ),
+        child: const Center(
+          child: Text(
+            AppText.noDataFound,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppColor.grey1,
+            ),
+          ),
         ),
       ),
     );
   }
 
 
-  Widget _buildDetailRow(String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+  Widget todayWorkStatus() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Obx(() {
+          if (dashboardController.isLoading.value) {
+            return Center(child: CustomSkelton.dashboardShimmerList(context));
+          }
+
+          var model = dashboardController.todayWorkStatusRBModel.value;
+          var data = model?.data?.isNotEmpty == true ? model!.data![0] : null;
+
+          if (data == null) {
+            return _noDataCard();
+          }
+
+          return Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [AppColor.secondaryColorLight, AppColor.secondaryColor],
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                    child: Text(
+                      "Today's Work Status",
+
+                      style: GoogleFonts.merriweather(
+                        fontSize: 15,
+                        color: AppColor.primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _statusMiniCard(
+                    icon: Icons.phone_android,
+                    label: "Today's Calls",
+                    value: data.todayCall.toString(),
+                    color: AppColor.primaryColor,
+                  ),
+                  const SizedBox(height: 12),
+                  _statusMiniCard(
+                    icon: Icons.thumb_up,
+                    label: "Converted to Interested",
+                    value: data.todayConvertToInterested.toString(),
+                    color: AppColor.lightGreen,
+                  ),
+                  const SizedBox(height: 12),
+                  _statusMiniCard(
+                    icon: Icons.call,
+                    label: "Connected Calls",
+                    value: data.todayConnectedCall.toString(),
+                    color: Colors.lightBlue,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  /// Mini-card for each row inside the big card
+  Widget _statusMiniCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColor.appWhite,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Row(
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColor.primaryLight,
+          Icon(icon, size: 28, color: color),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                //fontWeight: FontWeight.w500,
+                color: AppColor.blackColor,
+              ),
             ),
           ),
-          const SizedBox(height: 2),
           Text(
-            value,
+            value,// value,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.black54,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
     );
   }
 
-
-/*  void showCallFeedbackDialog({
-    required BuildContext context,
-    required leadId,
-    required currentLeadStage,
-    required callDuration,
-    required callStartTime,
-    required callEndTime,
-    required callStatus,
-  }) {
-
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        leadDDController.selectedStage.value=currentLeadStage;
-        LeadListController leadListController =Get.find();
-        return CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-          title: AppText.addFAndF,
-          content: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+  Widget _noDataCard() {
+    return Center(
+      child: Container(
+        height: 160,
+        width: MediaQuery.of(context).size.width * 0.85,
+        decoration: BoxDecoration(
+          color: AppColor.appWhite,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              spreadRadius: 2,
             ),
-            child: SingleChildScrollView(
-              child: Form(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 15),
-                    CustomLabeledTextField(
-                      label: AppText.callFeedback,
-                      isRequired: false,
-                      controller: leadListController.callFeedbackController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterCallFeedback,
-                      isTextArea: true,
-                    ),
-                    SizedBox(height: 15),
-                    CustomLabeledTextField(
-                      label: AppText.leadFeedback,
-                      isRequired: false,
-                      controller: leadListController.leadFeedbackController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterLeadFeedback,
-                      isTextArea: true,
-                    ),
-                    ///stage drodown
-                    ///  add this line in dialog at first leadDDController.selectedStage.value=currentLeadStage;
-                    const SizedBox(height: 20),
-
-                    const Text(
-                      AppText.leadStage,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColor.grey2,
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-                    Obx((){
-                      if (leadDDController.isLeadStageLoading.value) {
-                        return  Center(child:CustomSkelton.leadShimmerList(context));
-                      }
-                      int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
-
-                      // Allowed stage IDs based on leadCode
-                      List<int> allowedStageIds = [];
-
-                      if (leadCode == 2) {
-                        allowedStageIds = [4, 5,13];
-                      }else if (leadCode == 3) {
-                        allowedStageIds = [4, 5,13];
-                      } else if (leadCode == 4) {
-                        allowedStageIds = [6, 7];
-                      } else {
-                        allowedStageIds = [2, 3, 4, 5, 6, 7]; // Default to all or handle as needed
-                      }
-
-                      List<stage.Data> filteredStages = leadDDController
-                          .getAllLeadStageModel.value!.data!
-                          .where((lead) =>
-                      lead.id != 1 && allowedStageIds.contains(lead.id))
-                          .toList();
-
-                      return CustomDropdown<stage.Data>(
-                        items: filteredStages,
-                        getId: (item) =>item.id.toString(),  // Adjust based on your model structure
-                        getName: (item) => item.stageName.toString(),
-                        selectedValue: filteredStages.firstWhereOrNull(
-                              (item) => item.id.toString() == leadDDController.selectedStage.value,
-
-                        ),
-                        onChanged: (value) {
-                          leadDDController.selectedStage.value =  value?.id?.toString();
-
-                          if (int.parse(leadDDController.selectedStage.value!) == 3) {
-                            leadDDController.selectedStageActive.value = 1;
-                          } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
-                            leadDDController.selectedStageActive.value = 1;
-                          } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
-                            leadDDController.selectedStageActive.value = 0;
-                          }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
-                            leadDDController.selectedStageActive.value = 1;
-                          } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
-                            leadDDController.selectedStageActive.value = 0;
-                          }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
-                            leadDDController.selectedStageActive.value = 0;
-                          }else {
-
-                          }
-
-                          print("changed LeadStage==>${leadDDController.selectedStage.value}");
-                        },
-                      );
-                    }),
-
-                    const SizedBox(height: 20),
-
-
-                    ///stage dd end
-
-
-                    Row(
-                      children: [
-                        Obx(()=>Checkbox(
-                          activeColor: AppColor.secondaryColor,
-                          value: leadListController.isCallReminder.value,
-                          onChanged: (bool? value) {
-
-                            leadListController.isCallReminder.value = value ?? false;
-
-                          },
-                        )),
-                        Text(
-                          AppText.callReminder,
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black87,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Obx(()=> CustomLabeledPickerTextField(
-                      label: AppText.selectDate,
-                      isRequired: false,
-                      controller: leadListController.followDateController,
-                      inputType: TextInputType.name,
-                      hintText: "MM/DD/YYYY",
-                      isDateField: true,
-                      enabled: leadListController.isCallReminder.value,
-                    )),
-                    Obx(()=>CustomLabeledTimePickerTextField(
-                      label: AppText.selectTime,
-                      isRequired: false,
-                      controller: leadListController.followTimeController,
-                      inputType: TextInputType.datetime,
-                      hintText: "HH:MM AM/PM",
-                      isTimeField: true,
-                      enabled: leadListController.isCallReminder.value,
-                    )),
-                  ],
-                ),
-              ),
+          ],
+        ),
+        child: const Center(
+          child: Text(
+            "No work status",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppColor.grey1,
             ),
           ),
-          onSubmit: () {
-            if (leadListController.callFeedbackController.text.isEmpty &&
-                leadListController.leadFeedbackController.text.isEmpty) {
-              ToastMessage.msg(AppText.addFeedbackFirst);
-            } else {
-              var id=leadListController.workOnLeadModel!.data!.id.toString();
-              if(callStatus=="1"){
-                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
-                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
-                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
-
-              }
-
-              leadListController.callFeedbackSubmit(
-                  leadId: leadId,
-                  currentLeadStage: currentLeadStage,
-                  callStatus: callStatus,
-                  callDuration: callDuration,
-                  callStartTime: callStartTime,
-                  callEndTime: callEndTime,
-                  id: id,
-                  fromWhere: "call",
-                  selectedStage: leadDDController.selectedStage.value
-
-              );
-              Get.back();
-            }
-
-          },
-        );
-      },
+        ),
+      ),
     );
-  }*/
+  }
+
+
 ///new
   void showCallFeedbackDialog({
     required BuildContext context,

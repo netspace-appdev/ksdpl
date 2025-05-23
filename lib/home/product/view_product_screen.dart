@@ -336,7 +336,7 @@ class ViewProductScreen extends StatelessWidget {
           SizedBox(width: 10),
           Expanded(
             child: Text(
-              label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ": ${value}",
+              label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ":  ${value=="null"?"":value}",
 
               style: TextStyle(color: Colors.black87),
             ),

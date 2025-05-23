@@ -66,7 +66,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
+       /* floatingActionButton: FloatingActionButton(
           backgroundColor:AppColor.secondaryColor, // Yellow color
           onPressed: () {
             LeadDDController leadDDController=Get.find();
@@ -77,7 +77,36 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
           shape: const CircleBorder(),
           // child: const Icon(Icons.add, size: 30, color: Colors.white),
           child:  Image.asset(AppImage.searchIcon, height: 20,),//addIcon
+        ),*/
+        floatingActionButton: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              colors: [AppColor.secondaryColorLight, AppColor.secondaryColor],
+              begin: Alignment.centerRight,
+              end: Alignment.centerLeft,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: FloatingActionButton(
+            backgroundColor: Colors.transparent, // Make FAB background transparent
+            elevation: 0, // Remove default shadow
+            onPressed: () {
+              LeadDDController leadDDController = Get.find();
+              leadDDController.selectedStage.value = "0";
+              Get.toNamed("/leadSearchScreen");
+            },
+            shape: const CircleBorder(),
+            child: Image.asset(AppImage.searchIcon, height: 20),
+          ),
         ),
+
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
