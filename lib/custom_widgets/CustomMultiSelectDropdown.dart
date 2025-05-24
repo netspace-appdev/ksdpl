@@ -132,7 +132,7 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
             borderRadius: BorderRadius.circular(8.0),
             color: widget.isEnabled ? Colors.white : Colors.grey.shade200,
           ),
-          child: Column(
+         /* child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (selectedItems.isEmpty)
@@ -167,6 +167,40 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
                   onPressed: widget.isEnabled ? _showOverlay : null,
                 ),
               )
+            ],
+          ),*/
+          child:  Row(
+            children: [
+              Expanded(
+                child: selectedItems.isEmpty
+                    ? Text(
+                  widget.hintText,
+                  style: TextStyle(color: Colors.grey),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Wrap(
+                    spacing: 6,
+                    children: selectedItems.map((item) {
+                      return InputChip(
+                        label: Text(widget.getName(item)),
+                        onDeleted: widget.isEnabled
+                            ? () {
+                          setState(() {
+                            selectedItems.remove(item);
+                          });
+                          widget.onChanged(selectedItems);
+                        }
+                            : null,
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.arrow_drop_down),
+                onPressed: widget.isEnabled ? _showOverlay : null,
+              ),
             ],
           ),
         ),

@@ -277,17 +277,19 @@ print("todayWorkStatusOfRoBmApi");
     String dateString = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SS").format(now);
 
     // Step 3: Call your method
-    String formatted = Helper.formatDate(dateString);
+    //String formatted = Helper.formatDate(dateString);
+    print("dateString===>${dateString}");
+    /*print("formatted===>${formatted}");
 
     print("Formatted: $formatted");
-
+*/
       // Headers
 
       var header=await MyHeader.getHeaders2();
 
       request.headers.addAll(header);
-      request.fields['FromDate'] = formatted;
-      request.fields['ToDate'] =formatted;
+      request.fields['FromDate'] = dateString;
+      request.fields['ToDate'] =dateString;
       request.fields['EmployeeId'] =employeeId;
 
       // Sending request

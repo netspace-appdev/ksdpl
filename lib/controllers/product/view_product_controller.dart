@@ -7,7 +7,7 @@ import 'package:ksdpl/services/product_service.dart';
 import '../../common/helper.dart';
 import '../../models/IndividualLeadUploadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
-import '../../models/product/GetAllProductListModel.dart';
+import '../../models/product/GetAllProductListModel.dart' as prod;
 import '../../services/drawer_api_service.dart';
 import '../../services/lead_api_service.dart';
 import '../registration_dd_controller.dart';
@@ -15,23 +15,65 @@ import '../registration_dd_controller.dart';
 class ViewProductController extends GetxController{
 
   var isLoading = false.obs;
-  var getAllProductListModel = Rxn<GetAllProductListModel>(); //
+  var getAllProductListModel = Rxn<prod.GetAllProductListModel>(); //
+  var isMainListMoreLoading = false.obs;
+  RxBool hasMore = true.obs;
+  RxInt currentPage = 1.obs;
+  final int pageSize = 20;
+  RxString searchQuery = "".obs;
 
-  void  getAllProductListApi() async {
+
+  List<prod.Data> get filteredProducts {
+    final query = searchQuery.value.toLowerCase();
+    final allProducts = getAllProductListModel.value?.data ?? [];
+    if (query.isEmpty) return allProducts;
+
+    return allProducts.where((product) {
+      return (product.product?.toLowerCase().contains(query) ?? false) ||
+          (product.bankName?.toLowerCase().contains(query) ?? false) ||
+          (product.minCIBIL?.toString().contains(query) ?? false) ||
+          (product.productCategoryName?.toLowerCase().contains(query) ?? false);
+    }).toList();
+  }
+  void  getAllProductListApi({
+    bool isLoadMore = false,
+}) async {
     try {
-      isLoading(true);
 
-      var data = await ProductService.getAllProductListApi();
+      if (isMainListMoreLoading.value || (!hasMore.value && isLoadMore)) return;
 
-      if(data['success'] == true){
+      isMainListMoreLoading(true);
 
-        print("here 1");
+      if (!isLoadMore) {
+        currentPage.value = 1; // Reset to first page on fresh load
+        hasMore.value = true;
+      }
+      var data = await ProductService.getAllProductListApi(
+        pageNumber: currentPage.value,
+        pageSize: pageSize,
+      );
 
-        getAllProductListModel.value= GetAllProductListModel.fromJson(data);
+      if (data['success'] == true) {
+        var newLeads = prod.GetAllProductListModel.fromJson(data);
 
-        isLoading(false);
+        if (isLoadMore) {
+          getAllProductListModel.value!.data!.addAll(newLeads.data!);
+        } else {
+          getAllProductListModel.value = newLeads;
+        }
 
-      }else{
+
+        if (newLeads.data!.length < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++; // Ready for next page
+        }
+       // leadListLength.value=getAllLeadsModel.value!.data!.length;
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+
+        getAllProductListModel.value = null;
+        hasMore.value = false;
+      } else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 
@@ -40,13 +82,11 @@ class ViewProductController extends GetxController{
       print("Error getAllProductListModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
+      isMainListMoreLoading(false);
     } finally {
 
-      isLoading(false);
+      isMainListMoreLoading(false);
     }
   }
-
-
 
 }

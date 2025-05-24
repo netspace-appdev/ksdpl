@@ -327,11 +327,15 @@ class ProductService {
   }
 
 
-  static Future<Map<String, dynamic>> getAllProductListApi() async {
+  static Future<Map<String, dynamic>> getAllProductListApi({
+    required int pageNumber,
+    required int pageSize,
+}) async {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(getAllProductList),
+         //Uri.parse(getAllProductList),
+        Uri.parse("$getAllProductList?pageNumber=$pageNumber&pageSize=$pageSize"),
       );
 
       // Headers

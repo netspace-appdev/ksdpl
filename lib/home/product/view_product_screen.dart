@@ -12,6 +12,7 @@ import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
 import 'package:ksdpl/models/GetCampaignNameModel.dart' as campaign;
 import 'package:ksdpl/models/leads/GetAllKsdplBranchModel.dart' as ksdplBranch;
+import 'package:lottie/lottie.dart';
 import '../../../common/CustomSearchBar.dart';
 import '../../../common/helper.dart';
 import '../../../common/skelton.dart';
@@ -166,6 +167,41 @@ class ViewProductScreen extends StatelessWidget {
     );
   }
 
+  Widget _noDataCard(BuildContext context) {
+    return Center(
+      child: Container(
+        height: 160,
+        width: MediaQuery.of(context).size.width * 0.85,
+        decoration: BoxDecoration(
+          color: AppColor.appWhite,
+          borderRadius: BorderRadius.circular(10),
+          //   border: Border.all(color: AppColor.grey4, width: 1),
+
+        ),
+        child:  Center(
+
+          child: Column(
+            children: [
+              Container(
+                  height: 120,
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  child: Lottie.asset(
+                      AppImage.moneyStack,
+                      repeat: false
+                  )),
+              Text(
+                  "No Products Found",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey1,
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget productSection(BuildContext context){
     return Obx((){
@@ -175,7 +211,7 @@ class ViewProductScreen extends StatelessWidget {
       if (viewProductController.getAllProductListModel.value == null ||
           viewProductController.getAllProductListModel.value!.data == null || viewProductController.getAllProductListModel.value!.data!.isEmpty) {
         return  Container(
-          height: MediaQuery.of(context).size.height*0.50,
+          height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           margin: EdgeInsets.symmetric(vertical: 10),
           decoration:  BoxDecoration(
@@ -186,129 +222,148 @@ class ViewProductScreen extends StatelessWidget {
             ),
 
           ),
-          child: const Column(
+          child:  Column(
 
             children: [
               /// Header with profile and menu icon
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "No data found",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.grey700
-                  ),
-                ),
-              ),
+              _noDataCard(context)
 
             ],
           ),
         );
       }
 
-      return  ListView.builder(
-        itemCount:viewProductController.getAllProductListModel.value!.data!.length,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          final product = viewProductController.getAllProductListModel.value!.data![index];
-
-
-
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            decoration:  BoxDecoration(
-              border: Border.all(color: AppColor.grey200),
-              color: AppColor.appWhite,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
+      return  Column(
+        children: [
+/*
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search Products...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
-
+              onChanged: (value) {
+                viewProductController.searchQuery.value = value;
+              },
             ),
-            child: Column(
+          ),
 
-              children: [
-                /// Header with profile and menu icon
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+          SizedBox(height: 20,),*/
+
+          ListView.builder(
+            itemCount:viewProductController.filteredProducts.length,//viewProductController.getAllProductListModel.value!.data!.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              // final product = viewProductController.getAllProductListModel.value!.data![index];
+              final product =  viewProductController.filteredProducts[index];
+
+
+
+             /* return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration:  BoxDecoration(
+                  border: Border.all(color: AppColor.grey200),
+                  color: AppColor.appWhite,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    /// Header with profile and menu icon
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        Helper.capitalizeEachWord( product.product.toString()),
+
+                        // lead.name.toString(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                          color: AppColor.primaryColor
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    /// Lead details
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
                         children: [
-                          Container(
-                            height: 40,
-                            width: 40,
-
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColor.primaryColor,
-                              border: Border.all(color: AppColor.secondaryColor),
-                            ),
-                            child: Center(
-                              child: Text(
-                                product.product==null?"N":  product.product!.isNotEmpty ?  product.product![0].toUpperCase() : "U", // Initial Letter
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                Helper.capitalizeEachWord( product.product.toString()),
-
-                                // lead.name.toString(),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                            ],
-                          ),
+                          _buildDetailRow("Bank Name", product.bankName.toString()),
+                          _buildDetailRow("Min. CIBIL", product.minCIBIL.toString()),
+                          _buildDetailRow("Product Categorry", product.productCategoryName.toString()),
+                          // _buildDetailRow("Uploaded by", lead.uploadedBy.toString()),
+                          // _buildDetailRow("City", "Sagwada"),
                         ],
                       ),
-                      //Icon(Icons.more_vert, color: AppColor.grey1,), // Three dots menu icon
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
+                    ),
 
-                /// Lead details
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: [
-                      _buildDetailRow("Bank Name", product.bankName.toString()),
-                      _buildDetailRow("Min. CIBIL", product.minCIBIL.toString()),
-                      _buildDetailRow("Product Categorry", product.productCategoryName.toString()),
-                      // _buildDetailRow("Uploaded by", lead.uploadedBy.toString()),
-                      // _buildDetailRow("City", "Sagwada"),
-                    ],
-                  ),
-                ),
+                    SizedBox(height: 10),
 
-                SizedBox(height: 10),
-
-                /// Bottom Row Buttons (Assigned, Follow Up, Call Back, Employment)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildTextButton("Edit", context, Colors.purple, Icons.edit, product.id.toString()),
+                    /// Bottom Row Buttons (Assigned, Follow Up, Call Back, Employment)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildTextButton("Edit", context, Colors.purple, Icons.edit, product.id.toString()),
 
 
-                    _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,product.id.toString()),
+                        _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,product.id.toString()),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
-          );
+              );*/
 
-        },
+              return buildCard(
+                Helper.capitalizeEachWord(product.product.toString()), // title
+                [
+                  _buildDetailRow("Bank Name", product.bankName.toString()),
+                  _buildDetailRow("Min. CIBIL", product.minCIBIL.toString()),
+                  _buildDetailRow("Product Category", product.productCategoryName.toString()),
+
+                  const SizedBox(height: 10),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildTextButton("Edit", context, Colors.purple, Icons.edit, product.id.toString()),
+                      _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file, product.id.toString()),
+                    ],
+                  ),
+                ],
+              );
+
+            },
+          ),
+
+          if (viewProductController.hasMore.value && viewProductController.filteredProducts.length > 1)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: ElevatedButton(
+                onPressed: () {
+                  viewProductController.getAllProductListApi(
+                      isLoadMore: true
+                  );
+                },
+                child:
+                viewProductController.isMainListMoreLoading.value //isDashboardLeadListMoreLoading
+                    ? Container(
+                    width: 15,
+                    height: 15,
+                    child: Center(child: CircularProgressIndicator(color: AppColor.primaryColor, strokeWidth: 2,)))
+                    : Text("Load More"),
+              ),
+            ),
+        ],
       );
     });
   }
@@ -346,7 +401,54 @@ class ViewProductScreen extends StatelessWidget {
     );
   }
 
+  Widget buildCard(String title, List<Widget> children) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        border: Border.all(color: AppColor.grey4, width: 1),
 
+
+      ),
+      margin: EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            decoration: BoxDecoration(
+              color: AppColor.primaryColor, // Blue background
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+
+            ),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
+          // Content section
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: children,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
 
 

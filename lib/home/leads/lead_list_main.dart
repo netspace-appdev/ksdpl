@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/leads/loan_appl_controller.dart';
+import 'package:lottie/lottie.dart';
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
@@ -274,7 +275,7 @@ class LeadListMain extends StatelessWidget {
       if (leadListController.getAllLeadsModel.value == null ||
           leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty) {
         return  Container(
-          height: MediaQuery.of(context).size.height*0.50,
+          height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           margin: EdgeInsets.symmetric(vertical: 10),
           decoration:  BoxDecoration(
@@ -285,21 +286,11 @@ class LeadListMain extends StatelessWidget {
             ),
 
           ),
-          child: const Column(
+          child:  Column(
 
             children: [
               /// Header with profile and menu icon
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "No data found",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.grey700
-                  ),
-                ),
-              ),
+              _noDataCard(context)
 
             ],
           ),
@@ -690,11 +681,12 @@ class LeadListMain extends StatelessWidget {
                 style: TextStyle(color: Colors.black87),
               ):
           Container(
+            width: 160,
             color: AppColor.lightPrimary2,
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
             child: Text(
              "${value}",
-
+overflow: TextOverflow.ellipsis,
               style: TextStyle(color: AppColor.primaryColor),
             ),
           ):
@@ -730,7 +722,7 @@ class LeadListMain extends StatelessWidget {
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//"+919238513910",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
+            phoneNumber:phoneNumber,//"+919179317427",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -909,7 +901,41 @@ class LeadListMain extends StatelessWidget {
 
 
 
+  Widget _noDataCard(BuildContext context) {
+    return Center(
+      child: Container(
+        height: 160,
+        width: MediaQuery.of(context).size.width * 0.85,
+        decoration: BoxDecoration(
+          color: AppColor.appWhite,
+          borderRadius: BorderRadius.circular(10),
+       //   border: Border.all(color: AppColor.grey4, width: 1),
 
+        ),
+        child:  Center(
+
+          child: Column(
+            children: [
+              Container(
+                  height: 120,
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  child: Lottie.asset(
+                      AppImage.handshake,
+                      repeat: false
+                  )),
+              Text(
+                  "No Leads Found",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey1,
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
 
 

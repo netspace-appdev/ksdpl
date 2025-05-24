@@ -108,14 +108,11 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
-
                 ],
               ),
             ],
           ),
         ),
-
       ),
     );
   }
@@ -194,7 +191,10 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: "Product Category Name", value: data.productCategoryName.toString()),
             DetailRow(label: "Segment Vertical", value: data.segmentVertical.toString()),
             DetailRow(label: "Customer Category", value: data.customerCategory.toString()),
-          ]),
+          ],
+            Icons.info_outline
+
+          ),
 
           buildCard("Bank & Contact Info", [
             DetailRow(label: "Bank Name", value: data.bankName.toString()),
@@ -202,7 +202,9 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: "Bankers Mobile Number", value: data.bankersMobileNumber.toString()),
             DetailRow(label: "Bankers Whatsapp Number", value: data.bankersWhatsAppNumber.toString()),
             DetailRow(label: "Bankers Email ID", value: data.bankersEmailID.toString()),
-          ]),
+          ],
+              Icons.phone
+          ),
 
           buildCard("Collateral & Profile Restrictions", [
             DetailRow(label: "Collateral Security Category", value: data.collateralSecurityCategory.toString()),
@@ -211,7 +213,9 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: "Negative Profiles", value: data.negativeProfiles.toString()),
             DetailRow(label: "Negative Areas", value: data.negativeAreas.toString()),
             DetailRow(label: "Geo Limit", value: data.geoLimit.toString()),
-          ]),
+          ],
+              Icons.security
+          ),
 
           buildCard("Eligibility Criteria", [
             DetailRow(label: "Income Types", value: data.incomeTypes.toString()),
@@ -227,14 +231,18 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: "Min Tenor", value: data.minTenor.toString()),
             DetailRow(label: "Maximum Tenor", value: data.maximumTenor.toString()),
             DetailRow(label: "Maximum Tenor Eligibility Criteria", value: data.maximumTenorEligibilityCriteria.toString()),
-          ]),
+          ],
+              Icons.rule
+          ),
 
           buildCard("Financial Limits", [
             DetailRow(label: "Minimum Property Value", value: data.minimumPropertyValue.toString()),
             DetailRow(label: "Maximum IIR", value: data.maximumIIR.toString()),
             DetailRow(label: "Maximum FOIR", value: data.maximumFOIR.toString()),
             DetailRow(label: "Maximum LTV", value: data.maximumLTV.toString()),
-          ]),
+          ],
+              Icons.radar
+          ),
 
           buildCard("Charges & Fees", [
             DetailRow(label: "Processing Fee", value: data.processingFee.toString()),
@@ -247,14 +255,18 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: "TSR Years", value: data.tsRYears.toString()),
             DetailRow(label: "TSR Charges", value: data.tsRCharges.toString()),
             DetailRow(label: "Valuation Charges", value: data.valuationCharges.toString()),
-          ]),
+          ],
+              Icons.attach_money
+          ),
 
           buildCard("Administrative Info", [
             DetailRow(label: "No of Documents", value: data.noOfDocument.toString()),
             DetailRow(label: "KSDPL Product ID", value: data.ksdplProductId.toString()),
             DetailRow(label: "Profit Percentage", value: data.profitPercentage.toString()),
             DetailRow(label: "Maximum TAT", value: data.maximumTAT.toString()),
-          ]),
+          ],
+              Icons.admin_panel_settings_sharp
+          ),
 
         
 
@@ -263,28 +275,20 @@ class ProductDetailScreen extends StatelessWidget {
       );
     });
   }
-/*  Widget buildCard(String title, List<Widget> children) {
-    return CustomCard(
-      borderColor: AppColor.grey200,
-      backgroundColor: AppColor.appWhite,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
-          ...children,
-        ],
+
+
+  Widget buildCard(String title, List<Widget> children, IconData icon) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        border: Border.all(color: AppColor.grey4, width: 1),
+
+
       ),
-    );
-  }*/
-
-  Widget buildCard(String title, List<Widget> children) {
-    return CustomCard(
-      borderColor: AppColor.grey200,
-      backgroundColor: AppColor.appWhite,
-
-
+      margin: EdgeInsets.only(bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -298,14 +302,21 @@ class ProductDetailScreen extends StatelessWidget {
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
+
             ),
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Row(
+              children: [
+                Icon(icon, color: Colors.white,),
+                SizedBox(width: 5,),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
 

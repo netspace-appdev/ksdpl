@@ -13,6 +13,7 @@ import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank
 import 'package:ksdpl/models/GetCampaignNameModel.dart' as campaign;
 import 'package:ksdpl/models/leads/GetAllKsdplBranchModel.dart' as ksdplBranch;
 import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
+import 'package:lottie/lottie.dart';
 import '../../../common/CustomSearchBar.dart';
 import '../../../common/helper.dart';
 import '../../../common/skelton.dart';
@@ -549,6 +550,43 @@ class LeadSearchScreen extends StatelessWidget {
       leadMobileNumber: searchLeadController.leadMobileNumberController.text,
     );
   }
+
+  Widget _noDataCard(BuildContext context) {
+    return Center(
+      child: Container(
+        height: 160,
+        width: MediaQuery.of(context).size.width * 0.85,
+        decoration: BoxDecoration(
+          color: AppColor.appWhite,
+          borderRadius: BorderRadius.circular(10),
+          //   border: Border.all(color: AppColor.grey4, width: 1),
+
+        ),
+        child:  Center(
+
+          child: Column(
+            children: [
+              Container(
+                  height: 120,
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  child: Lottie.asset(
+                      AppImage.searchLotie,
+                      repeat: false
+                  )),
+              Text(
+                  "No Leads Found",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey1,
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget leadSection(BuildContext context){
     return Obx((){
       if (leadListController.isLoading.value) {
@@ -568,21 +606,11 @@ class LeadSearchScreen extends StatelessWidget {
             ),
 
           ),
-          child: const Column(
+          child:  Column(
 
             children: [
               /// Header with profile and menu icon
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "No data found",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.grey700
-                  ),
-                ),
-              ),
+              _noDataCard(context)
 
             ],
           ),

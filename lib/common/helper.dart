@@ -557,6 +557,7 @@ class AppColor{
   static const Color appBlue=Color(0xfff9ffff);
   static const Color appBlue2=Color(0xffd0fffc);
   static const Color appWhite=Colors.white;
+  static const Color appOffWhite=Color(0xffdee3f0);
   static const Color backgroundColor=Color(0xffF9F8F8);
   static const Color buttonSelectedColor=Color(0xff65558f);
   static const Color black45=Colors.black45;
@@ -606,7 +607,17 @@ class AppFSize{
 class AppImage{
 
   static const String ok="assets/lottie/ok.json";
+  static const String noDataGirl="assets/lottie/nodata_girl.json";
+  static const String nodataCofee="assets/lottie/nodata_cofee.json";
+  static const String noBirthday="assets/lottie/no_birthday.json";
+  static const String noNews="assets/lottie/no_news.json";
+  static const String noTreasure="assets/lottie/no_treasure.json";
+  static const String handshake="assets/lottie/handshake.json";
+  static const String searchLotie="assets/lottie/search_glass.json";
+  static const String moneyStack="assets/lottie/money_stack.json";
+
   static const String drawerIcon="assets/svgIcon/drawerIcon.svg";
+
   static const String splash="assets/images/logo.png";
   static const String logo1="assets/images/logo1.png";
   static const String intro1="assets/images/intro1.png";
