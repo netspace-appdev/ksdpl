@@ -153,6 +153,15 @@ class Step3FormProduct extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
+                label: AppText.processingCharges,
+                controller: addProductController.prodProcessingChargesController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterProcessingCharges,
+                validator:  ValidationHelper.validateName,
+              ),
+
+
+              CustomLabeledTextField(
                 label: AppText.otherCharges,
                 controller: addProductController.prodOtherChargesController,
                 inputType: TextInputType.number,

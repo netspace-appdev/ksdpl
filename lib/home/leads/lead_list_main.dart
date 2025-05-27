@@ -15,6 +15,8 @@ import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/product/add_product_controller.dart';
+import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
@@ -546,7 +548,7 @@ class LeadListMain extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        if(leadListController.leadCode.value=="4" || leadListController.leadCode.value=="6" )
+                        if(leadListController.leadCode.value=="4" )
                           _buildTextButton(
                             label:AppText.fillLeadForm,
                             context: context,
@@ -785,7 +787,13 @@ overflow: TextOverflow.ellipsis,
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
           print("leadId===>${leadId}");
           print("leadId===>${ addLeadController.getLeadId.value}");
-          Get.toNamed("/addLeadScreen",);
+          AddProductController addProductController = Get.put(AddProductController());
+          addProductController.getAllProductCategoryApi();
+
+          ViewProductController viewProductController=Get.put(ViewProductController());
+          viewProductController.getAllProductListApi();
+
+          Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {
 

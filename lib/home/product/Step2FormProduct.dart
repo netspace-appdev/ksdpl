@@ -96,10 +96,10 @@ class Step2FormProduct extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.profitPercentage,
+                label: AppText.eligibleProfitPercent, ///previous it was named Profit Percentage
                 controller: addProductController.prodProfitPercentageController,
                 inputType: TextInputType.number,
-                hintText: AppText.enterProfitPercentage,
+                hintText: AppText.enterEligibleProfitPercent,
 
               ),
 
@@ -138,10 +138,10 @@ class Step2FormProduct extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.maxTenorEligibilityCriteria,
+                label: AppText.ageAtMaturity, ///previously it was named Max Tenor Eligibility Criteria
                 controller: addProductController.prodMaxTenorEligibilityCriteriaController,
                 inputType: TextInputType.number,
-                hintText: AppText.enterMaxTenorEligibilityCriteria,
+                hintText: AppText.enterAgeAtMaturity,
 
               ),
 

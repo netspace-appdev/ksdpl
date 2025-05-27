@@ -21,7 +21,7 @@ class ViewProductController extends GetxController{
   RxInt currentPage = 1.obs;
   final int pageSize = 20;
   RxString searchQuery = "".obs;
-
+  RxList<prod.Data> loanProductList = <prod.Data>[].obs;
 
   List<prod.Data> get filteredProducts {
     final query = searchQuery.value.toLowerCase();
@@ -61,6 +61,14 @@ class ViewProductController extends GetxController{
         } else {
           getAllProductListModel.value = newLeads;
         }
+
+        ///only for dropdown data
+        final List<prod.Data> allLoanProd =  getAllProductListModel.value?.data ?? [];
+
+        final List<prod.Data> loanProds = allLoanProd.where((cat) => cat.active == true).toList();
+
+        loanProductList.value = loanProds;
+        ///dd end
 
 
         if (newLeads.data!.length < pageSize) {

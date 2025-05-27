@@ -456,6 +456,8 @@ class AppText{
   static const String enterMaxLoanAmount = "Maximum Loan Amount";
 
   static const String profitPercentage = "Profit Percentage";
+  static const String eligibleProfitPercent = "Eligible Profit Percent";
+  static const String enterEligibleProfitPercent = "Enter Eligible Profit Percent";
   static const String enterProfitPercentage = "Enter Profit Percentage";
   static const String minCibil = "Minimum CIBIL";
   static const String enterMinCibil = "Enter Minimum CIBIL";
@@ -470,7 +472,9 @@ class AppText{
   static const String enterMaxRoi = "Enter Maximum ROI";
 
   static const String maxTenorEligibilityCriteria = "Maximum Tenor Eligibility Criteria";
+  static const String ageAtMaturity = "Age at Maturity";
   static const String  enterMaxTenorEligibilityCriteria = "EnterMaximum Tenor Eligibility Criteria";
+  static const String enterAgeAtMaturity = "EnterMaximum Age at Maturity";
 
   static const String geoLimit = "Geo Limit";
   static const String enterGeoLimit = "Enter Geo Limit";
@@ -543,8 +547,98 @@ class AppText{
   static const String productDetails = "Product Details";
 
   static const String editProduct = "Edit Product";
+  static const String leadform_camnote = "Lead Form & Cam Note";
+
+  static const String processingCharges = "Processing Charges";
+  static const String enterProcessingCharges = "Enter Processing Charges";
 
 
+  /// cam note
+  static const String totalLoanAvaileCibil = "Total Loan Availed On CIBIL";
+  static const String enterTotalLoanAvaileCibil = "Enter Total Loan Availed";
+
+  static const String totalLiveLoan = "Total Live Loan";
+  static const String enterTotalLiveLoan = "Enter Total Live Loan";
+
+  static const String cibil = "CIBIL    Need to generate ?";
+  static const String enterCibilScore = "Enter CIBIL Score";
+
+  static const String totalEmi = "Total EMI";
+  static const String enterTotalEmi = "Enter Total EMI";
+
+  static const String emiStoppedBefore = "EMI Stopped On Before This Loan";
+  static const String enterEmiStoppedBefore = "Enter Value";
+
+  static const String emiWillContinue = "EMI Will Continue";
+  static const String enterEmiWillContinue = "Enter Value";
+
+  static const String totalOverdueCases = "Total Overdue Cases As Per CIBIL";
+  static const String enterOverdueCases = "Enter Overdue Cases";
+
+  static const String totalOverdueAmountCibil = "Total Overdue Amount As Per CIBIL";
+  static const String enterOverdueAmountCibil = "Enter Overdue Amount";
+
+  static const String totalEnquiries = "Total Enquiries Made As Per CIBIL";
+  static const String enterTotalEnquiries = "Enter Number of Enquiries";
+
+  static const String loanSegment = "Loan Segment";
+  static const String selectLoanSegment = "Select Product Segment";
+
+  static const String loanProduct = "Loan Product";
+  static const String selectLoanProduct = "Select Product Segment";
+
+  static const String offeredSecurityType = "Offered Security Type";
+  static const String enterSecurityType = "Enter Security Type";
+
+  static const String geoLocationProperty = "Geo Location Of Property";
+  static const String enterGeoLocationProperty = "Enter Geo Location Of Property";
+
+  static const String geoLocationResidence = "Geo Location Of Residence";
+  static const String enterGeoLocationResidence = "Enter Geo Location Of Residence";
+
+  static const String geoLocationOffice = "Geo Location Of Office";
+  static const String enterGeoLocationOffice = "Enter Geo Location Of Office";
+
+  static const String photosOfProperty = "Photos Of Property";
+  static const String photosOfResidence = "Photos Of Residence";
+  static const String photosOfOffice = "Photos Of Office";
+
+  static const String incomeType = "Income Type";
+  static const String pleaseSelectIncomeType = "Please Select";
+
+  static const String earningCustomerAge = "Earning Customer Age";
+  static const String enterEarningCustomerAge = "Enter Age";
+
+  static const String nonEarningCustomerAge = "Non-Earning Customer Age";
+  static const String enterNonEarningCustomerAge = "Enter Age";
+
+  static const String totalFamilyIncome = "Total Family Income";
+  static const String enterTotalFamilyIncome = "Enter Total Income";
+
+  static const String incomeCanBeConsidered = "Income Can Be Considered";
+  static const String enterConsideredIncome = "Enter Considered Income";
+
+  static const String loanAmountRequested = "Loan Amount Requested";
+  static const String enterLoanAmountRequested = "Enter Loan Amount";
+
+  static const String loanTenorRequested = "Loan Tenor Requested (In Month)";
+  static const String enterLoanTenorRequested = "Enter Tenor in Month";
+
+  static const String rateOfInterest = "Rate of Interest (ROI)";
+  static const String enterRateOfInterest = "Enter ROI";
+
+  static const String proposedEmi = "Proposed EMI";
+  static const String autoCalculatedProposedEmi = "Auto-calculated Proposed EMI";
+
+  static const String propertyValue = "Property Value As Per Customer";
+  static const String enterPropertyValue = "Enter Property Value";
+
+  static const String foir = "FOIR";
+  static const String autoCalculatedFoir = "Auto-calculated FOIR";
+
+  static const String ltv = "LTV";
+  static const String sectionA = "Section A";
+  static const String sectionB = "Section B";
 }
 
 class AppColor{

@@ -14,6 +14,7 @@ import '../../custom_widgets/CustomMultiSelectDropdown.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
+
 class Step1FormProduct extends StatelessWidget {
   final addProductController = Get.find<AddProductController>();
   LeadDDController leadDDController = Get.put(LeadDDController());
@@ -294,14 +295,14 @@ class Step1FormProduct extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              CustomLabeledTextField(
-                label: AppText.profileExcluded,
+             /* CustomLabeledTextField(
+                label: AppText.profileExcluded, ///Previously it was named Profile Excluded
 
                 controller: addProductController.prodProfileExcludedController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterProfileExcluded,
 
-              ),
+              ),*/
 
 
             ],

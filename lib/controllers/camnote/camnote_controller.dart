@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
 import 'package:ksdpl/controllers/product/view_product_controller.dart';
@@ -9,6 +11,7 @@ import 'package:ksdpl/services/product_service.dart';
 
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
+import '../../custom_widgets/ImagePickerMixin.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
 import '../../models/loan_application/GetLoanApplIdModel.dart';
@@ -30,7 +33,7 @@ import 'package:flutter/material.dart';
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
 
-class AddProductController extends GetxController{
+class CamNoteController extends GetxController with ImagePickerMixin{
 
   var getLoanApplIdModel = Rxn<GetLoanApplIdModel>();
   var leadId="".obs;
@@ -55,86 +58,7 @@ class AddProductController extends GetxController{
   var isSameAddressApl = false.obs;
   LeadDDController leadDDController = Get.find();
 
-  final TextEditingController dsaCodeController = TextEditingController();
-  final TextEditingController lanController = TextEditingController();
-  final TextEditingController panController = TextEditingController();
-  final TextEditingController aadharController = TextEditingController();
-  final TextEditingController laAppliedController = TextEditingController();
-  final TextEditingController dsaStaffNController = TextEditingController();
-  final TextEditingController ulnController = TextEditingController();
-  final TextEditingController chCodeController = TextEditingController();
-  final TextEditingController proFeeController = TextEditingController();
-  final TextEditingController chqDDSNController = TextEditingController();
-  final TextEditingController proFeeDateController = TextEditingController();
-  final TextEditingController loPurposeController = TextEditingController();
-  final TextEditingController schemeController = TextEditingController();
-  final TextEditingController repayTpeController = TextEditingController();
-  final TextEditingController loanTenureYController = TextEditingController();
-  final TextEditingController monthInstaController = TextEditingController();
-  final TextEditingController prevLoanApplController = TextEditingController();
 
-
-  final TextEditingController applFullNameController = TextEditingController();
-  final TextEditingController fatherNameController = TextEditingController();
-  final TextEditingController dobController = TextEditingController();
-  final TextEditingController qualiController = TextEditingController();
-  final TextEditingController maritalController = TextEditingController();
-  final TextEditingController emplStatusController = TextEditingController();
-  final TextEditingController nationalityController = TextEditingController();
-  final TextEditingController occupationController = TextEditingController();
-  final TextEditingController occSectorController = TextEditingController();
-  final TextEditingController applEmailController = TextEditingController();
-  final TextEditingController applMobController = TextEditingController();
-
-  final TextEditingController orgNameController = TextEditingController();
-  final TextEditingController natureOfBizController = TextEditingController();
-  final TextEditingController staffStrengthController = TextEditingController();
-  final TextEditingController salaryDateController = TextEditingController();
-
-  final TextEditingController houseFlatController = TextEditingController();
-  final TextEditingController buildingNoController = TextEditingController();
-  final TextEditingController societyNameController = TextEditingController();
-  final TextEditingController localityController = TextEditingController();
-  final TextEditingController streetNameController = TextEditingController();
-  final TextEditingController pinCodeController = TextEditingController();
-  final TextEditingController talukaController = TextEditingController();
-
-  final TextEditingController houseFlatPermController = TextEditingController();
-  final TextEditingController buildingNoPermController = TextEditingController();
-  final TextEditingController societyNamePermController = TextEditingController();
-  final TextEditingController localityPermController = TextEditingController();
-  final TextEditingController streetNamePermController = TextEditingController();
-  final TextEditingController pinCodePermController = TextEditingController();
-  final TextEditingController talukaPermController = TextEditingController();
-
-
-
-  final TextEditingController propPropIdController = TextEditingController();
-  final TextEditingController propSurveyNoController = TextEditingController();
-  final TextEditingController propFinalPlotNoNoController = TextEditingController();
-  final TextEditingController propBlockNoController = TextEditingController();
-
-  final TextEditingController propHouseFlatController = TextEditingController();
-  final TextEditingController propBuildingNameController = TextEditingController();
-  final TextEditingController propSocietyNameController = TextEditingController();
-  final TextEditingController propLocalityController = TextEditingController();
-  final TextEditingController propStreetNameController = TextEditingController();
-  final TextEditingController propPinCodeController = TextEditingController();
-  final TextEditingController propTalukaController = TextEditingController();
-
-  final TextEditingController fdGrossMonthlySalaryController = TextEditingController();
-  final TextEditingController fdnNtMonthlySalaryController = TextEditingController();
-  final TextEditingController fdAnnualBonusController = TextEditingController();
-  final TextEditingController fdAvgMonOvertimeController = TextEditingController();
-  final TextEditingController fdAvgMonCommissionController = TextEditingController();
-  final TextEditingController fdAMonthlyPfDeductionController = TextEditingController();
-  final TextEditingController fdOtherMonthlyIncomeController = TextEditingController();
-
-
-  final TextEditingController bankerNameController = TextEditingController();
-  final TextEditingController bankerMobileController = TextEditingController();
-  final TextEditingController bankerWhatsappController = TextEditingController();
-  final TextEditingController bankerEmailController = TextEditingController();
 
 
   var selectedStateProp = Rxn<String>();
@@ -148,10 +72,10 @@ class AddProductController extends GetxController{
   var referencesList = <ReferenceController>[].obs;
 
   var currentStep = 0.obs;
-  var stepCompleted = List<bool>.filled(8, false).obs;
+  var stepCompleted = List<bool>.filled(3, false).obs;
   LeadDDController leadDController=Get.find();
   final List<String> titles = [
-    'Step 1', 'Step 2', 'Step 3', 'Step 4',
+    "Basic Details", "CAM Note", "Bank Details"
   ];
 
   var selectedBank = Rxn<int>();
@@ -193,7 +117,7 @@ class AddProductController extends GetxController{
   final TextEditingController prodMaxTenorEligibilityCriteriaController = TextEditingController();
 
 // Geographical & Profile Restrictions
-    final TextEditingController prodGeoLimitController = TextEditingController();
+  final TextEditingController prodGeoLimitController = TextEditingController();
   final TextEditingController prodNegativeProfilesController = TextEditingController();
   final TextEditingController prodNegativeAreasController = TextEditingController();
 
@@ -240,6 +164,7 @@ class AddProductController extends GetxController{
   var selectedKsdplProduct = Rxn<int>();
 
   var selectedProductCategory = Rxn<int>();
+  var selectedLoanProduct = Rxn<int>();
   var collSecCatList=[
     "Residential Plot",
     "Self Occupied Residential Property",
@@ -285,22 +210,64 @@ class AddProductController extends GetxController{
   var getProductListById = Rxn<GetProductListById>(); //
   var getDocumentProductIdModel = Rxn<GetDocumentProductIdModel>(); //
 
-  void addChip(String value) {
-    if (value.trim().isNotEmpty && !chips.contains(value.trim())) {
-      chips.add(value.trim());
-      chipTextController.clear();
+///cam note
+  final TextEditingController camTotalLoanAvailedController = TextEditingController();
+  final TextEditingController camTotalLiveLoanController = TextEditingController();
+  final TextEditingController camCibilController = TextEditingController();
+  final TextEditingController camTotalEmiController = TextEditingController();
+  final TextEditingController camEmiStoppedBeforeController = TextEditingController();
+  final TextEditingController camEmiWillContinueController = TextEditingController();
+  final TextEditingController camTotalOverdueCasesController = TextEditingController();
+  final TextEditingController camTotalOverdueAmountController = TextEditingController();
+  final TextEditingController camTotalEnquiriesController = TextEditingController();
+  final TextEditingController camLoanSegmentController = TextEditingController();
+  final TextEditingController camLoanProductController = TextEditingController();
+  final TextEditingController camOfferedSecurityTypeController = TextEditingController();
+  final TextEditingController camGeoLocationPropertyController = TextEditingController();
+  final TextEditingController camGeoLocationResidenceController = TextEditingController();
+  final TextEditingController camGeoLocationOfficeController = TextEditingController();
+  final TextEditingController camPhotosOfPropertyController = TextEditingController();
+  final TextEditingController camPhotosOfResidenceController = TextEditingController();
+  final TextEditingController camPhotosOfOfficeController = TextEditingController();
+  final TextEditingController camIncomeTypeController = TextEditingController();
+  final TextEditingController camEarningCustomerAgeController = TextEditingController();
+  final TextEditingController camNonEarningCustomerAgeController = TextEditingController();
+  final TextEditingController camTotalFamilyIncomeController = TextEditingController();
+  final TextEditingController camIncomeCanBeConsideredController = TextEditingController();
+  final TextEditingController camLoanAmountRequestedController = TextEditingController();
+  final TextEditingController camLoanTenorRequestedController = TextEditingController();
+  final TextEditingController camRateOfInterestController = TextEditingController();
+  final TextEditingController camProposedEmiController = TextEditingController();
+  final TextEditingController camPropertyValueController = TextEditingController();
+  final TextEditingController camFoirController = TextEditingController();
+  final TextEditingController camLtvController = TextEditingController();
+
+
+
+  final ImagePicker _picker = ImagePicker();
+  @override
+  final Map<String, Rx<File?>> imageMap = {};
+
+  @override
+  Future<void> pickImage(String key, ImageSource source) async {
+    final XFile? image = await _picker.pickImage(source: source, imageQuality: 75);
+    if (image != null) {
+      if (!imageMap.containsKey(key)) {
+        imageMap[key] = Rx<File?>(null);
+      }
+      imageMap[key]!.value = File(image.path);
     }
   }
-  void removeChip(String value) {
-    chips.remove(value);
+
+  @override
+  void clearImage(String key) {
+    imageMap[key]?.value = null;
   }
 
-  void clearAllChips() {
-    chips.clear();
-    chipTextController.clear();
-  }
+
+
   void nextStep() {
-    if (currentStep.value < 6) {
+    if (currentStep.value < 2) {
       currentStep.value++;
       scrollToStep(currentStep.value);
     }
@@ -388,37 +355,37 @@ class AddProductController extends GetxController{
         Minimum_age_earning_applicants:prodMinAgeEarningApplicantsController.text,
         Minimum_age_non_earning_applicants:prodMinAgeNonEarningApplicantsController.text,
         Minimum_Income_Criteria:prodMinIncomeCriteriaController.text,
-         Minimum_Loan_Amount:prodMinLoanAmountController.text,
-         Maximum_Loan_Amount:prodMinLoanAmountController.text,
-         Min_Tenor:prodMinTenorController.text,
-         Maximum_Tenor:prodMaxTenorController.text,
-         Minimum_ROI: prodMinRoiController.text,
-         Maximum_ROI:prodMaxRoiController.text,
-         Maximum_Tenor_Eligibility_Criteria:prodMaxTenorEligibilityCriteriaController.text,
-         Geo_Limit:prodGeoLimitController.text,
-         Negative_Profiles:Helper.convertListToCsvSafe(selectedNegProfile.value),
-         Negative_Areas:Helper.convertListToCsvSafe(selectedNegArea.value),
-         Maximum_TAT:prodMaxTatController.text,
-         Minimum_Property_Value:prodMinPropertyValueController.text,
-         Maximum_IIR:prodMaxIirController.text.isEmpty?prodMaxFoirController.text:prodMaxIirController.text,
-         Maximum_FOIR:prodMaxFoirController.text,
-         Maximum_LTV:prodMaxLtvController.text,
-         Processing_Fee:prodProcessingFeeController.text,
-         Legal_Fee:prodLegalFeeController.text,
-         Technical_Fee:prodTechnicalFeeController.text,
-         Admin_Fee:prodAdminFeeController.text,
-         Foreclosure_Charges:prodForeclosureChargesController.text,
-         Other_Charges:prodOtherChargesController.text,
-         Stamp_Duty:prodStampDutyController.text,
-         TSR_Years:prodTsrYearsController.text,
-         TSR_Charges:prodTsrChargesController.text,
-         Valuation_Charges:prodValuationChargesController.text,
-         NoOfDocument:"${selectedProdDescr.value?.length ?? 0}",
-         Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
-         Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
-         Profit_Percentage:prodProfitPercentageController.text,
-         KSDPLProductId:selectedKsdplProduct.value.toString(),
-         docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
+        Minimum_Loan_Amount:prodMinLoanAmountController.text,
+        Maximum_Loan_Amount:prodMinLoanAmountController.text,
+        Min_Tenor:prodMinTenorController.text,
+        Maximum_Tenor:prodMaxTenorController.text,
+        Minimum_ROI: prodMinRoiController.text,
+        Maximum_ROI:prodMaxRoiController.text,
+        Maximum_Tenor_Eligibility_Criteria:prodMaxTenorEligibilityCriteriaController.text,
+        Geo_Limit:prodGeoLimitController.text,
+        Negative_Profiles:Helper.convertListToCsvSafe(selectedNegProfile.value),
+        Negative_Areas:Helper.convertListToCsvSafe(selectedNegArea.value),
+        Maximum_TAT:prodMaxTatController.text,
+        Minimum_Property_Value:prodMinPropertyValueController.text,
+        Maximum_IIR:prodMaxIirController.text.isEmpty?prodMaxFoirController.text:prodMaxIirController.text,
+        Maximum_FOIR:prodMaxFoirController.text,
+        Maximum_LTV:prodMaxLtvController.text,
+        Processing_Fee:prodProcessingFeeController.text,
+        Legal_Fee:prodLegalFeeController.text,
+        Technical_Fee:prodTechnicalFeeController.text,
+        Admin_Fee:prodAdminFeeController.text,
+        Foreclosure_Charges:prodForeclosureChargesController.text,
+        Other_Charges:prodOtherChargesController.text,
+        Stamp_Duty:prodStampDutyController.text,
+        TSR_Years:prodTsrYearsController.text,
+        TSR_Charges:prodTsrChargesController.text,
+        Valuation_Charges:prodValuationChargesController.text,
+        NoOfDocument:"${selectedProdDescr.value?.length ?? 0}",
+        Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
+        Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
+        Profit_Percentage:prodProfitPercentageController.text,
+        KSDPLProductId:selectedKsdplProduct.value.toString(),
+        docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
       );
 
       print("All steps valid! Submitting form...");
@@ -439,56 +406,56 @@ class AddProductController extends GetxController{
     }else{
       print("FD---->${prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):""}");
       updateProductListApi(
-          Id: getProductListById.value!.data!.id.toString(),
-          BankId:selectedBank.value?.toString(),
-          bankers_Name:prodBankersNameController.text,
-          Bankers_Mobile_Number:prodBankersMobController.text,
-          Bankers_WhatsApp_Number:prodBankersWhatsappController.text,
-          BankersEmailId:prodBankersEmailController.text,
-          Min_CIBIL:prodMinCibilController.text,
-          Segment_Vertical:selectedProductCategory.value.toString(),
-          Product:prodProductNameController.text,
-          ProductDescription:prodProductDescriptionsController.text,
-          Customer_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
-          Collateral_Security_Category:Helper.convertListToCsvSafe(selectedCollSecCat.value),
-          Collateral_Security_Excluded:prodCollateralSecurityExcludedController.text,
-          Income_Types:Helper.convertListToCsvSafe(selectedIncomeType.value),
-          Profile_Excluded:prodProfileExcludedController.text,
-          Age_limit_Earning_Applicants:prodAgeLimitEarningApplicantsController.text,
-          Age_limit_Non_Earning_Co_Applicant:prodAgeLimitNonEarningCoApplicantController.text,
-          Minimum_age_earning_applicants:prodMinAgeEarningApplicantsController.text,
-          Minimum_age_non_earning_applicants:prodMinAgeNonEarningApplicantsController.text,
-          Minimum_Income_Criteria:prodMinIncomeCriteriaController.text,
-          Minimum_Loan_Amount:prodMinLoanAmountController.text,
-          Maximum_Loan_Amount:prodMaxLoanAmountController.text,
-          Min_Tenor:prodMinTenorController.text,
-          Maximum_Tenor:prodMaxTenorController.text,
-          Minimum_ROI: prodMinRoiController.text,
-          Maximum_ROI:prodMaxRoiController.text,
-          Maximum_Tenor_Eligibility_Criteria:prodMaxTenorEligibilityCriteriaController.text,
-          Geo_Limit:prodGeoLimitController.text,
-          Negative_Profiles:Helper.convertListToCsvSafe(selectedNegProfile.value),
-          Negative_Areas:Helper.convertListToCsvSafe(selectedNegArea.value),
-          Maximum_TAT:prodMaxTatController.text,
-          Minimum_Property_Value:prodMinPropertyValueController.text,
-          Maximum_IIR:prodMaxIirController.text,
-          Maximum_FOIR:prodMaxFoirController.text,
-          Maximum_LTV:prodMaxLtvController.text,
-          Processing_Fee:prodProcessingFeeController.text,
-          Legal_Fee:prodLegalFeeController.text,
-          Technical_Fee:prodTechnicalFeeController.text,
-          Admin_Fee:prodAdminFeeController.text,
-          Foreclosure_Charges:prodForeclosureChargesController.text,
-          Other_Charges:prodOtherChargesController.text,
-          Stamp_Duty:prodStampDutyController.text,
-          TSR_Years:prodTsrYearsController.text,
-          TSR_Charges:prodTsrChargesController.text,
-          Valuation_Charges:prodValuationChargesController.text,
-          NoOfDocument:prodNoOfDocController.text,
-          Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
-          Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
-          Profit_Percentage:prodProfitPercentageController.text,
-          KSDPLProductId:selectedKsdplProduct.value.toString(),
+        Id: getProductListById.value!.data!.id.toString(),
+        BankId:selectedBank.value?.toString(),
+        bankers_Name:prodBankersNameController.text,
+        Bankers_Mobile_Number:prodBankersMobController.text,
+        Bankers_WhatsApp_Number:prodBankersWhatsappController.text,
+        BankersEmailId:prodBankersEmailController.text,
+        Min_CIBIL:prodMinCibilController.text,
+        Segment_Vertical:selectedProductCategory.value.toString(),
+        Product:prodProductNameController.text,
+        ProductDescription:prodProductDescriptionsController.text,
+        Customer_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
+        Collateral_Security_Category:Helper.convertListToCsvSafe(selectedCollSecCat.value),
+        Collateral_Security_Excluded:prodCollateralSecurityExcludedController.text,
+        Income_Types:Helper.convertListToCsvSafe(selectedIncomeType.value),
+        Profile_Excluded:prodProfileExcludedController.text,
+        Age_limit_Earning_Applicants:prodAgeLimitEarningApplicantsController.text,
+        Age_limit_Non_Earning_Co_Applicant:prodAgeLimitNonEarningCoApplicantController.text,
+        Minimum_age_earning_applicants:prodMinAgeEarningApplicantsController.text,
+        Minimum_age_non_earning_applicants:prodMinAgeNonEarningApplicantsController.text,
+        Minimum_Income_Criteria:prodMinIncomeCriteriaController.text,
+        Minimum_Loan_Amount:prodMinLoanAmountController.text,
+        Maximum_Loan_Amount:prodMaxLoanAmountController.text,
+        Min_Tenor:prodMinTenorController.text,
+        Maximum_Tenor:prodMaxTenorController.text,
+        Minimum_ROI: prodMinRoiController.text,
+        Maximum_ROI:prodMaxRoiController.text,
+        Maximum_Tenor_Eligibility_Criteria:prodMaxTenorEligibilityCriteriaController.text,
+        Geo_Limit:prodGeoLimitController.text,
+        Negative_Profiles:Helper.convertListToCsvSafe(selectedNegProfile.value),
+        Negative_Areas:Helper.convertListToCsvSafe(selectedNegArea.value),
+        Maximum_TAT:prodMaxTatController.text,
+        Minimum_Property_Value:prodMinPropertyValueController.text,
+        Maximum_IIR:prodMaxIirController.text,
+        Maximum_FOIR:prodMaxFoirController.text,
+        Maximum_LTV:prodMaxLtvController.text,
+        Processing_Fee:prodProcessingFeeController.text,
+        Legal_Fee:prodLegalFeeController.text,
+        Technical_Fee:prodTechnicalFeeController.text,
+        Admin_Fee:prodAdminFeeController.text,
+        Foreclosure_Charges:prodForeclosureChargesController.text,
+        Other_Charges:prodOtherChargesController.text,
+        Stamp_Duty:prodStampDutyController.text,
+        TSR_Years:prodTsrYearsController.text,
+        TSR_Charges:prodTsrChargesController.text,
+        Valuation_Charges:prodValuationChargesController.text,
+        NoOfDocument:prodNoOfDocController.text,
+        Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
+        Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
+        Profit_Percentage:prodProfitPercentageController.text,
+        KSDPLProductId:selectedKsdplProduct.value.toString(),
         docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
       );
 
@@ -497,32 +464,7 @@ class AddProductController extends GetxController{
 
 
   }
-  void copyPresentToPermanentAddress() {
-    // Text field values
-    houseFlatPermController.text = houseFlatController.text;
-    buildingNoPermController.text = buildingNoController.text;
-    societyNamePermController.text = societyNameController.text;
-    localityPermController.text = localityController.text;
-    streetNamePermController.text = streetNameController.text;
-    pinCodePermController.text = pinCodeController.text;
-    talukaPermController.text = talukaController.text;
-    selectedCountryPerm.value = selectedCountry.value;
 
-    // Copy state
-    leadDDController.selectedStatePerm.value = leadDDController.selectedStateCurr.value;
-
-    // Now fetch districts and wait for the lists to update
-    leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value).then((_) {
-      leadDDController.districtListPerm.value = List.from(leadDDController.districtListCurr);
-      leadDDController.selectedDistrictPerm.value = leadDDController.selectedDistrictCurr.value;
-
-      // Now fetch cities and wait for the city list to update
-      leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value).then((_) {
-        leadDDController.cityListPerm.value = List.from(leadDDController.cityListCurr);
-        leadDDController.selectedCityPerm.value = leadDDController.selectedCityCurr.value;
-      });
-    });
-  }
 
   void addCoApplicant() {
     coApplicantList.add(CoApplicantDetailController());
@@ -709,77 +651,7 @@ class AddProductController extends GetxController{
     leadDController.selectedDistrictPerm.value=null;
     leadDController.selectedCityPerm.value=null;
 
-    dsaCodeController.dispose();
-    lanController.dispose();
-    panController.dispose();
-    aadharController.dispose();
-    laAppliedController.dispose();
-    dsaStaffNController.dispose();
-    ulnController.dispose();
-    chCodeController.dispose();
-    proFeeController.dispose();
-    chqDDSNController.dispose();
-    proFeeDateController.dispose();
-    loPurposeController.dispose();
-    schemeController.dispose();
-    repayTpeController.dispose();
-    loanTenureYController.dispose();
-    monthInstaController.dispose();
-    prevLoanApplController.dispose();
 
-    applFullNameController.dispose();
-    fatherNameController.dispose();
-    dobController.dispose();
-    qualiController.dispose();
-    maritalController.dispose();
-    emplStatusController.dispose();
-    nationalityController.dispose();
-    occupationController.dispose();
-    occSectorController.dispose();
-    applEmailController.dispose();
-    applMobController.dispose();
-
-    orgNameController.dispose();
-    natureOfBizController.dispose();
-    staffStrengthController.dispose();
-    salaryDateController.dispose();
-
-    houseFlatController.dispose();
-    buildingNoController.dispose();
-    societyNameController.dispose();
-    localityController.dispose();
-    streetNameController.dispose();
-    pinCodeController.dispose();
-    talukaController.dispose();
-
-    houseFlatPermController.dispose();
-    buildingNoPermController.dispose();
-    societyNamePermController.dispose();
-    localityPermController.dispose();
-    streetNamePermController.dispose();
-    pinCodePermController.dispose();
-    talukaPermController.dispose();
-
-    propPropIdController.dispose();
-    propSurveyNoController.dispose();
-    propFinalPlotNoNoController.dispose();
-    propBlockNoController.dispose();
-
-    propHouseFlatController.dispose();
-    propBuildingNameController.dispose();
-    propSocietyNameController.dispose();
-    propLocalityController.dispose();
-    propStreetNameController.dispose();
-    propPinCodeController.dispose();
-    propTalukaController.dispose();
-
-    fdGrossMonthlySalaryController.dispose();
-    fdnNtMonthlySalaryController.dispose();
-    fdAnnualBonusController.dispose();
-    fdAvgMonOvertimeController.dispose();
-    fdAvgMonCommissionController.dispose();
-    fdAMonthlyPfDeductionController.dispose();
-    fdOtherMonthlyIncomeController.dispose();
 
 
     // Clear Rx variables
@@ -1002,51 +874,7 @@ class AddProductController extends GetxController{
     chipText3Controller.clear();
   }
 
-  Future<void>  getAllProductCategoryApi() async {
-    try {
-      isLoadingProductCategory(true);
 
-
-      var data = await ProductService.getAllProductCategoryApi();
-
-
-      if(data['success'] == true){
-
-
-        getAllProductCategoryModel.value= GetAllProductCategoryModel.fromJson(data);
-
-
-        final List<productCat.Data> allCategories = getAllProductCategoryModel.value?.data ?? [];
-
-        final List<productCat.Data> activeCategories = allCategories.where((cat) => cat.active == true).toList();
-
-        productCategoryList.value = activeCategories;
-
-
-
-
-
-        isLoadingProductCategory(false);
-
-      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
-
-        getAllProductCategoryModel.value=null;
-      }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-
-
-    } catch (e) {
-      print("Error getAllLeadsApi: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoadingProductCategory(false);
-    } finally {
-
-      isLoadingProductCategory(false);
-    }
-  }
 
   void  addProductListApi({
     required String KSDPLProductId,
@@ -1100,62 +928,62 @@ class AddProductController extends GetxController{
     String? Product_Validate_To_date,
     String? Profit_Percentage,
     String? docDescr,
-}) async {
+  }) async {
     try {
       isLoading(true);
 
 
       var data = await ProductService.addProductListApi(
-        KSDPLProductId: KSDPLProductId,
-        Id: Id,
-        BankId: BankId,
-        bankers_Name: bankers_Name,
-        Bankers_Mobile_Number: Bankers_Mobile_Number,
-        Bankers_WhatsApp_Number: Bankers_WhatsApp_Number,
-        BankersEmailId: BankersEmailId,
-        Min_CIBIL: Min_CIBIL,
-        Segment_Vertical: Segment_Vertical,
-        Product: Product,
-        ProductDescription: ProductDescription,
-        Customer_Category: Customer_Category,
-        Collateral_Security_Category: Collateral_Security_Category,
-        Collateral_Security_Excluded: Collateral_Security_Excluded,
-        Income_Types: Income_Types,
-        Profile_Excluded: Profile_Excluded,
-        Age_limit_Earning_Applicants: Age_limit_Earning_Applicants,
-        Age_limit_Non_Earning_Co_Applicant: Age_limit_Non_Earning_Co_Applicant,
-        Minimum_age_earning_applicants: Minimum_age_earning_applicants,
-        Minimum_age_non_earning_applicants: Minimum_age_non_earning_applicants,
-        Minimum_Income_Criteria: Minimum_Income_Criteria,
-        Minimum_Loan_Amount: Minimum_Loan_Amount,
-        Min_Tenor: Min_Tenor,
-        Maximum_Tenor: Maximum_Tenor,
-        Minimum_ROI: Minimum_ROI,
-        Maximum_ROI: Maximum_ROI,
-        Maximum_Tenor_Eligibility_Criteria: Maximum_Tenor_Eligibility_Criteria,
-        Geo_Limit: Geo_Limit,
-        Negative_Profiles: Negative_Profiles,
-        Negative_Areas: Negative_Areas,
-        Maximum_TAT: Maximum_TAT,
-        Minimum_Property_Value: Minimum_Property_Value,
-        Maximum_IIR: Maximum_IIR,
-        Maximum_FOIR: Maximum_FOIR,
-        Maximum_LTV: Maximum_LTV,
-        Processing_Fee: Processing_Fee,
-        Legal_Fee: Legal_Fee,
-        Technical_Fee: Technical_Fee,
-        Admin_Fee: Admin_Fee,
-        Foreclosure_Charges: Foreclosure_Charges,
-        Other_Charges: Other_Charges,
-        Stamp_Duty: Stamp_Duty,
-        TSR_Years: TSR_Years,
-        TSR_Charges: TSR_Charges,
-        Valuation_Charges: Valuation_Charges,
-        NoOfDocument: NoOfDocument,
-        Product_Validate_From_date: Product_Validate_From_date,
-        Product_Validate_To_date: Product_Validate_To_date,
-        Profit_Percentage: Profit_Percentage,
-        docDescr: docDescr
+          KSDPLProductId: KSDPLProductId,
+          Id: Id,
+          BankId: BankId,
+          bankers_Name: bankers_Name,
+          Bankers_Mobile_Number: Bankers_Mobile_Number,
+          Bankers_WhatsApp_Number: Bankers_WhatsApp_Number,
+          BankersEmailId: BankersEmailId,
+          Min_CIBIL: Min_CIBIL,
+          Segment_Vertical: Segment_Vertical,
+          Product: Product,
+          ProductDescription: ProductDescription,
+          Customer_Category: Customer_Category,
+          Collateral_Security_Category: Collateral_Security_Category,
+          Collateral_Security_Excluded: Collateral_Security_Excluded,
+          Income_Types: Income_Types,
+          Profile_Excluded: Profile_Excluded,
+          Age_limit_Earning_Applicants: Age_limit_Earning_Applicants,
+          Age_limit_Non_Earning_Co_Applicant: Age_limit_Non_Earning_Co_Applicant,
+          Minimum_age_earning_applicants: Minimum_age_earning_applicants,
+          Minimum_age_non_earning_applicants: Minimum_age_non_earning_applicants,
+          Minimum_Income_Criteria: Minimum_Income_Criteria,
+          Minimum_Loan_Amount: Minimum_Loan_Amount,
+          Min_Tenor: Min_Tenor,
+          Maximum_Tenor: Maximum_Tenor,
+          Minimum_ROI: Minimum_ROI,
+          Maximum_ROI: Maximum_ROI,
+          Maximum_Tenor_Eligibility_Criteria: Maximum_Tenor_Eligibility_Criteria,
+          Geo_Limit: Geo_Limit,
+          Negative_Profiles: Negative_Profiles,
+          Negative_Areas: Negative_Areas,
+          Maximum_TAT: Maximum_TAT,
+          Minimum_Property_Value: Minimum_Property_Value,
+          Maximum_IIR: Maximum_IIR,
+          Maximum_FOIR: Maximum_FOIR,
+          Maximum_LTV: Maximum_LTV,
+          Processing_Fee: Processing_Fee,
+          Legal_Fee: Legal_Fee,
+          Technical_Fee: Technical_Fee,
+          Admin_Fee: Admin_Fee,
+          Foreclosure_Charges: Foreclosure_Charges,
+          Other_Charges: Other_Charges,
+          Stamp_Duty: Stamp_Duty,
+          TSR_Years: TSR_Years,
+          TSR_Charges: TSR_Charges,
+          Valuation_Charges: Valuation_Charges,
+          NoOfDocument: NoOfDocument,
+          Product_Validate_From_date: Product_Validate_From_date,
+          Product_Validate_To_date: Product_Validate_To_date,
+          Profit_Percentage: Profit_Percentage,
+          docDescr: docDescr
       );
 
       print("Income_Types in API controller===>${Income_Types}");
@@ -1268,57 +1096,57 @@ class AddProductController extends GetxController{
       isLoading(true);
       print("Income_Types in API controlle updateProductListApir===>${Income_Types}");
       var data = await ProductService.updateProductListApi(
-        KSDPLProductId: KSDPLProductId,
-        Id: Id,
-        BankId: BankId,
-        bankers_Name: bankers_Name,
-        Bankers_Mobile_Number: Bankers_Mobile_Number,
-        Bankers_WhatsApp_Number: Bankers_WhatsApp_Number,
-        BankersEmailId: BankersEmailId,
-        Min_CIBIL: Min_CIBIL,
-        Segment_Vertical: Segment_Vertical,
-        Product: Product,
-        ProductDescription: ProductDescription,
-        Customer_Category: Customer_Category,
-        Collateral_Security_Category: Collateral_Security_Category,
-        Collateral_Security_Excluded: Collateral_Security_Excluded,
-        Income_Types: Income_Types,
-        Profile_Excluded: Profile_Excluded,
-        Age_limit_Earning_Applicants: Age_limit_Earning_Applicants,
-        Age_limit_Non_Earning_Co_Applicant: Age_limit_Non_Earning_Co_Applicant,
-        Minimum_age_earning_applicants: Minimum_age_earning_applicants,
-        Minimum_age_non_earning_applicants: Minimum_age_non_earning_applicants,
-        Minimum_Income_Criteria: Minimum_Income_Criteria,
-        Minimum_Loan_Amount: Minimum_Loan_Amount,
-        Maximum_Loan_Amount: Maximum_Loan_Amount,
-        Min_Tenor: Min_Tenor,
-        Maximum_Tenor: Maximum_Tenor,
-        Minimum_ROI: Minimum_ROI,
-        Maximum_ROI: Maximum_ROI,
-        Maximum_Tenor_Eligibility_Criteria: Maximum_Tenor_Eligibility_Criteria,
-        Geo_Limit: Geo_Limit,
-        Negative_Profiles: Negative_Profiles,
-        Negative_Areas: Negative_Areas,
-        Maximum_TAT: Maximum_TAT,
-        Minimum_Property_Value: Minimum_Property_Value,
-        Maximum_IIR: Maximum_IIR,
-        Maximum_FOIR: Maximum_FOIR,
-        Maximum_LTV: Maximum_LTV,
-        Processing_Fee: Processing_Fee,
-        Legal_Fee: Legal_Fee,
-        Technical_Fee: Technical_Fee,
-        Admin_Fee: Admin_Fee,
-        Foreclosure_Charges: Foreclosure_Charges,
-        Other_Charges: Other_Charges,
-        Stamp_Duty: Stamp_Duty,
-        TSR_Years: TSR_Years,
-        TSR_Charges: TSR_Charges,
-        Valuation_Charges: Valuation_Charges,
-        NoOfDocument: NoOfDocument,
-        Product_Validate_From_date: Product_Validate_From_date,
-        Product_Validate_To_date: Product_Validate_To_date,
-        Profit_Percentage: Profit_Percentage,
-        docDescr: docDescr
+          KSDPLProductId: KSDPLProductId,
+          Id: Id,
+          BankId: BankId,
+          bankers_Name: bankers_Name,
+          Bankers_Mobile_Number: Bankers_Mobile_Number,
+          Bankers_WhatsApp_Number: Bankers_WhatsApp_Number,
+          BankersEmailId: BankersEmailId,
+          Min_CIBIL: Min_CIBIL,
+          Segment_Vertical: Segment_Vertical,
+          Product: Product,
+          ProductDescription: ProductDescription,
+          Customer_Category: Customer_Category,
+          Collateral_Security_Category: Collateral_Security_Category,
+          Collateral_Security_Excluded: Collateral_Security_Excluded,
+          Income_Types: Income_Types,
+          Profile_Excluded: Profile_Excluded,
+          Age_limit_Earning_Applicants: Age_limit_Earning_Applicants,
+          Age_limit_Non_Earning_Co_Applicant: Age_limit_Non_Earning_Co_Applicant,
+          Minimum_age_earning_applicants: Minimum_age_earning_applicants,
+          Minimum_age_non_earning_applicants: Minimum_age_non_earning_applicants,
+          Minimum_Income_Criteria: Minimum_Income_Criteria,
+          Minimum_Loan_Amount: Minimum_Loan_Amount,
+          Maximum_Loan_Amount: Maximum_Loan_Amount,
+          Min_Tenor: Min_Tenor,
+          Maximum_Tenor: Maximum_Tenor,
+          Minimum_ROI: Minimum_ROI,
+          Maximum_ROI: Maximum_ROI,
+          Maximum_Tenor_Eligibility_Criteria: Maximum_Tenor_Eligibility_Criteria,
+          Geo_Limit: Geo_Limit,
+          Negative_Profiles: Negative_Profiles,
+          Negative_Areas: Negative_Areas,
+          Maximum_TAT: Maximum_TAT,
+          Minimum_Property_Value: Minimum_Property_Value,
+          Maximum_IIR: Maximum_IIR,
+          Maximum_FOIR: Maximum_FOIR,
+          Maximum_LTV: Maximum_LTV,
+          Processing_Fee: Processing_Fee,
+          Legal_Fee: Legal_Fee,
+          Technical_Fee: Technical_Fee,
+          Admin_Fee: Admin_Fee,
+          Foreclosure_Charges: Foreclosure_Charges,
+          Other_Charges: Other_Charges,
+          Stamp_Duty: Stamp_Duty,
+          TSR_Years: TSR_Years,
+          TSR_Charges: TSR_Charges,
+          Valuation_Charges: Valuation_Charges,
+          NoOfDocument: NoOfDocument,
+          Product_Validate_From_date: Product_Validate_From_date,
+          Product_Validate_To_date: Product_Validate_To_date,
+          Profit_Percentage: Profit_Percentage,
+          docDescr: docDescr
       );
 
 
@@ -1388,7 +1216,7 @@ class AddProductController extends GetxController{
 
         getProductListById.value= GetProductListById.fromJson(data);
 
-       await populateStep1Info();
+        await populateStep1Info();
         await populateStep2Info();
         await populateStep3Info();
         await populateStep4Info();
@@ -1422,7 +1250,7 @@ class AddProductController extends GetxController{
     prodBankersEmailController.text=getProductListById.value!.data!.bankersEmailID??"";
 
     prodMinCibilController.text=(getProductListById.value!.data!.minCIBIL ?? 0).toStringAsFixed(0);
-    await getAllProductCategoryApi();
+
     selectedProductCategory.value=int.parse(getProductListById.value!.data!.segmentVertical.toString());
     prodProductNameController.text=getProductListById.value!.data!.product??"";
     selectedCustomerCategories.assignAll(
@@ -1520,52 +1348,6 @@ class AddProductController extends GetxController{
   }
 
 
-  Future<void>addProductDocumentApi({
-    required List<Map<String, dynamic>> coApPayload,
-
-  }) async {
-    try {
-      isLoading(true);
-      var uln = Get.arguments['uln'];
-      print("addLoanApplicationApi");
-
-      print("here propid===>${cleanText(propPropIdController.text)}");
-      var data = await ProductService.addProductDocumentApi(
-          body:[
-            {
-              "id":loanApplId,
-              "coApplicant": coApPayload,
-              "bankerName": cleanText(bankerNameController.text),
-            }
-          ]
-      );
-
-
-
-      if(data['success'] == true){
-
-        addProductDocumentModel.value= AddProductDocumentModel.fromJson(data);
-        print("sucess addprodoc==>${addProductDocumentModel.value!.message!.toString()}");
-
-        isLoading(false);
-
-      }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-
-
-    } catch (e) {
-      print("Error getLeadDetailByIdApi: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
-    } finally {
-
-      isLoading(false);
-    }
-
-
-  }
 
   void  getDocumentListByProductIdApi({
     required String productId

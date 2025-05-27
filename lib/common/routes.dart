@@ -13,6 +13,7 @@ import '../enforcement_panel/upload_common_task.dart';
 import '../exp.dart';
 import '../home/EditProfile2.dart';
 import '../home/LeadListScreen.dart';
+import '../home/camnote/camnote_group_screen.dart';
 import '../home/change_password.dart';
 import '../home/dashboard_screen.dart';
 import '../home/edit_profile.dart';
@@ -69,4 +70,5 @@ final routes = [
   GetPage(name: '/viewProductScreen', page: () => ViewProductScreen()),
   GetPage(name: '/productDetailScreen', page: () => ProductDetailScreen()),
   GetPage(name: '/editProductScreen', page: () => EditProductScreen()),
+  GetPage(name: '/camNoteGroupScreen', page: () => CamNoteGroupScreen()),
 ];

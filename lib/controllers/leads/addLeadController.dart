@@ -85,7 +85,7 @@ class Addleadcontroller extends GetxController{
         print("here 3");
         fullNameController.text=getLeadDetailModel.value!.data!.name!.toString();
         print("here 4");
-        dobController.text=Helper.birthdayFormat(getLeadDetailModel.value!.data!.dateOfBirth!.toString());
+        dobController.text=getLeadDetailModel.value!.data!.dateOfBirth==null?"":Helper.birthdayFormat(getLeadDetailModel.value!.data!.dateOfBirth!.toString());
         print("here 5");
         phoneController.text=getLeadDetailModel.value?.data?.mobileNumber??"";
         print("here 6");

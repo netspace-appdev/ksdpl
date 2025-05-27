@@ -104,7 +104,9 @@ class ViewProductScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                         children: [
                           const SizedBox(height: 20),
-                          productSection(context)
+                          productSection(context),
+
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
