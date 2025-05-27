@@ -237,22 +237,7 @@ class ViewProductScreen extends StatelessWidget {
 
       return  Column(
         children: [
-/*
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search Products...',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              onChanged: (value) {
-                viewProductController.searchQuery.value = value;
-              },
-            ),
-          ),
 
-          SizedBox(height: 20,),*/
 
           ListView.builder(
             itemCount:viewProductController.filteredProducts.length,//viewProductController.getAllProductListModel.value!.data!.length,
@@ -261,69 +246,6 @@ class ViewProductScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               // final product = viewProductController.getAllProductListModel.value!.data![index];
               final product =  viewProductController.filteredProducts[index];
-
-
-
-             /* return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                decoration:  BoxDecoration(
-                  border: Border.all(color: AppColor.grey200),
-                  color: AppColor.appWhite,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-                    /// Header with profile and menu icon
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        Helper.capitalizeEachWord( product.product.toString()),
-
-                        // lead.name.toString(),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                          color: AppColor.primaryColor
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-
-                    /// Lead details
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        children: [
-                          _buildDetailRow("Bank Name", product.bankName.toString()),
-                          _buildDetailRow("Min. CIBIL", product.minCIBIL.toString()),
-                          _buildDetailRow("Product Categorry", product.productCategoryName.toString()),
-                          // _buildDetailRow("Uploaded by", lead.uploadedBy.toString()),
-                          // _buildDetailRow("City", "Sagwada"),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 10),
-
-                    /// Bottom Row Buttons (Assigned, Follow Up, Call Back, Employment)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildTextButton("Edit", context, Colors.purple, Icons.edit, product.id.toString()),
-
-
-                        _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file,product.id.toString()),
-                      ],
-                    ),
-                  ],
-                ),
-              );*/
 
               return buildCard(
                 Helper.capitalizeEachWord(product.product.toString()), // title

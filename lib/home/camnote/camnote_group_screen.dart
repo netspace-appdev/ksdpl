@@ -14,6 +14,7 @@ import '../product/Step3FormProduct.dart';
 
 import 'Step1CamNote.dart';
 import 'Step2CamNote.dart';
+import 'Step3CamNote.dart';
 
 
 
@@ -28,7 +29,7 @@ class CamNoteGroupScreen extends StatelessWidget {
   final List<Widget> stepForms = [
     Step1CamNote(),
     Step2CamNote(),
-    Step3FormProduct(),
+    Step3CamNote(),
 
 
   ];

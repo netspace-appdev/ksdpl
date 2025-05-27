@@ -637,8 +637,10 @@ class AppText{
   static const String autoCalculatedFoir = "Auto-calculated FOIR";
 
   static const String ltv = "LTV";
+  static const String autoCalculatedLtv = "Auto-calculated LTV";
   static const String sectionA = "Section A";
   static const String sectionB = "Section B";
+  static const String sectionC = "Section C";
 }
 
 class AppColor{

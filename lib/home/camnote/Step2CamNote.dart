@@ -4,15 +4,12 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/custom_widgets/custom_photo_picker_widget.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
-import '../../common/validation_helper.dart';
 import '../../controllers/camnote/camnote_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
-import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
-import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../models/product/GetAllProductListModel.dart' as prod;
@@ -27,9 +24,10 @@ class Step2CamNote extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Container(
+
       child: Obx((){
         if( camNoteController.isLoadingMainScreen.value)
-          return Center(
+           return Center(
             child: CustomSkelton.productShimmerList(context),
           );
         return Form(
@@ -46,9 +44,9 @@ class Step2CamNote extends StatelessWidget {
                 initiallyExpanded: true,
 
 
-                childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
                 title:const Text( AppText.sectionA, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                leading: Icon(Icons.list_alt, size: 20,),
+                leading: const Icon(Icons.list_alt, size: 20,),
                 children: [
 
                  Column(
@@ -127,16 +125,16 @@ class Step2CamNote extends StatelessWidget {
                 initiallyExpanded: true,
 
 
-                childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
                 title:const Text(AppText.sectionB, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                leading: Icon(Icons.list_alt, size: 20,),
+                leading: const Icon(Icons.list_alt, size: 20,),
                 children: [
 
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      CustomTextLabel(
+                      const CustomTextLabel(
                         label: AppText.loanSegment,
                         isRequired: true,
 
@@ -149,7 +147,7 @@ class Step2CamNote extends StatelessWidget {
                         if (addProductController.isLoadingProductCategory.value) {
                           return  Center(child:CustomSkelton.leadShimmerList(context));
                         }
-                        print("prod cat list in obx=-=====>${ addProductController.productCategoryList.toString()}");
+
 
 
                         return CustomDropdown<productCat.Data>(
@@ -173,7 +171,7 @@ class Step2CamNote extends StatelessWidget {
                       const SizedBox(height: 20),
 
 
-                      CustomTextLabel(
+                      const CustomTextLabel(
                         label: AppText.loanProduct,
                         isRequired: true,
 
@@ -186,7 +184,7 @@ class Step2CamNote extends StatelessWidget {
                         if (viewProductController.isMainListMoreLoading.value) {
                           return  Center(child:CustomSkelton.leadShimmerList(context));
                         }
-                        print("prod cat list in obx=-=====>${ viewProductController.loanProductList.toString()}");
+
 
 
                         return CustomDropdown<prod.Data>(
@@ -233,15 +231,148 @@ class Step2CamNote extends StatelessWidget {
                       CustomPhotoPickerWidget(
                         controller: camNoteController,
                         imageKey: 'property_photo',
-                        label: 'Upload Property Photo',
+                        label: 'Upload Property Photos',
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20,),
 
                       CustomPhotoPickerWidget(
                         controller: camNoteController,
                         imageKey: 'residence_photo',
-                        label: 'Upload Residence Photo',
+                        label: 'Upload Residence Photos',
+                      ),
+
+                      const SizedBox(height: 20,),
+
+                      CustomPhotoPickerWidget(
+                        controller: camNoteController,
+                        imageKey: 'office_photo',
+                        label: 'Upload Office Photos',
+                      ),
+                      const SizedBox(height: 20,),
+                    ],
+                  )
+
+
+                ],
+              ),
+
+              ExpansionTile(
+                initiallyExpanded: true,
+
+
+                childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
+                title:const Text(AppText.sectionC, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                leading: const Icon(Icons.list_alt, size: 20,),
+                children: [
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      const CustomTextLabel(
+                        label: AppText.incomeType,
+                        isRequired: false,
+                      ),
+
+                      const SizedBox(height: 10),
+
+
+                      Obx((){
+                        if (camNoteController.isLoading.value) {
+                          return  Center(child:CustomSkelton.productShimmerList(context));
+                        }
+
+
+                        return CustomDropdown<String>(
+                          items: addProductController.incomeTypeList,
+                          getId: (item) => item,  // Adjust based on your model structure
+                          getName: (item) => item,
+                          selectedValue: camNoteController.selectedCamIncomeTypeList.value,
+                          onChanged: (value) {
+                            camNoteController.selectedCamIncomeTypeList.value =  value;
+                          },
+                        );
+                      }),
+
+                      const SizedBox(height: 20),
+
+                      CustomLabeledTextField(
+                        label: AppText.earningCustomerAge,
+                        controller: camNoteController.camEarningCustomerAgeController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterEarningCustomerAge,
+                      ),
+
+
+                      CustomLabeledTextField(
+                        label: AppText.nonEarningCustomerAge,
+                        controller: camNoteController.camEarningCustomerAgeController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.nonEarningCustomerAge,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.totalFamilyIncome,
+                        controller: camNoteController.camTotalFamilyIncomeController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterTotalFamilyIncome,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.incomeCanBeConsidered,
+                        controller: camNoteController.camIncomeCanBeConsideredController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterConsideredIncome,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.loanAmountRequested,
+                        controller: camNoteController.camLoanAmountRequestedController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterConsideredIncome,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.loanTenorRequested,
+                        controller: camNoteController.camLoanTenorRequestedController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterLoanTenorRequested,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.rateOfInterest,
+                        controller: camNoteController.camRateOfInterestController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterRateOfInterest,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.proposedEmi,
+                        controller: camNoteController.camProposedEmiController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.autoCalculatedProposedEmi,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.propertyValue,
+                        controller: camNoteController.camPropertyValueController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterPropertyValue,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.foir,
+                        controller: camNoteController.camFoirController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.autoCalculatedFoir,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.ltv,
+                        controller: camNoteController.camLtvController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.autoCalculatedLtv,
                       ),
                     ],
                   )
@@ -249,24 +380,12 @@ class Step2CamNote extends StatelessWidget {
 
                 ],
               ),
+
             ],
           ),
         );
       }),
     );
   }
-  Widget _buildRadioOption(String gender) {
-    return Row(
-      children: [
-        Radio<String>(
-          value: gender,
-          groupValue: camNoteController.selectedGender.value,
-          onChanged: (value) {
-            camNoteController.selectedGender.value=value;
-          },
-        ),
-        Text(gender),
-      ],
-    );
-  }
+
 }

@@ -1,14 +1,10 @@
-// widgets/photo_picker_widget.dart
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'ImagePickerMixin.dart';
-
-
-
-
 
 class CustomPhotoPickerWidget extends StatelessWidget {
   final ImagePickerMixin controller;
@@ -34,7 +30,7 @@ class CustomPhotoPickerWidget extends StatelessWidget {
               title: const Text('Take Photo'),
               onTap: () {
                 Navigator.pop(context);
-                controller.pickImage(imageKey, ImageSource.camera);
+                controller.pickImages(imageKey, ImageSource.camera);
               },
             ),
             ListTile(
@@ -42,7 +38,7 @@ class CustomPhotoPickerWidget extends StatelessWidget {
               title: const Text('Choose from Gallery'),
               onTap: () {
                 Navigator.pop(context);
-                controller.pickImage(imageKey, ImageSource.gallery);
+                controller.pickImages(imageKey, ImageSource.gallery);
               },
             ),
           ],
@@ -51,10 +47,15 @@ class CustomPhotoPickerWidget extends StatelessWidget {
     );
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final File? imageFile = controller.getImage(imageKey).value;
+
+      final images = controller.getImages(imageKey);
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -76,16 +77,46 @@ class CustomPhotoPickerWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              if (imageFile != null)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(
-                    imageFile,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
+              Expanded(
+                child: SizedBox(
+                  height: 100,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: images.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    itemBuilder: (_, index) {
+                      return Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.file(
+                              images[index],
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                            top: 4,
+                            right: 4,
+                            child: GestureDetector(
+                              onTap: () => images.removeAt(index),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.red,
+                                ),
+                                padding: const EdgeInsets.all(2),
+                                child: const Icon(Icons.close, color: Colors.white, size: 16),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
+              ),
             ],
           ),
         ],
@@ -93,5 +124,7 @@ class CustomPhotoPickerWidget extends StatelessWidget {
     });
   }
 }
+
+
 
 
