@@ -69,6 +69,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   google_fonts: ^6.2.1
   #flutter_quill: ^11.0.0
+  flutter_launcher_icons: ^0.14.3
 
 
 
@@ -126,3 +127,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.jfif"

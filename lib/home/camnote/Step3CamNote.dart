@@ -9,11 +9,9 @@ import '../../controllers/camnote/camnote_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
+import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
+
 import '../../custom_widgets/CustomDropdown.dart';
-import '../../custom_widgets/CustomLabeledTextField.dart';
-import '../../custom_widgets/CustomTextLabel.dart';
-import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
-import '../../models/product/GetAllProductListModel.dart' as prod;
 
 class Step3CamNote extends StatelessWidget {
 
@@ -137,7 +135,7 @@ class Step3CamNote extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildTextButton("Add", context, Colors.purple, Icons.edit, banker.id.toString()),
+                      _buildTextButton("Add", context, Colors.purple, Icons.edit, banker.bankId.toString()),
                     ],
                   ),
                 ],
@@ -146,7 +144,7 @@ class Step3CamNote extends StatelessWidget {
             },
           ),
 
-          if (viewProductController.hasMore.value && viewProductController.filteredProducts.length > 1)
+         /* if (viewProductController.hasMore.value && viewProductController.filteredProducts.length > 1)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
@@ -163,7 +161,7 @@ class Step3CamNote extends StatelessWidget {
                     child: Center(child: CircularProgressIndicator(color: AppColor.primaryColor, strokeWidth: 2,)))
                     : Text("Load More"),
               ),
-            ),
+            ),*/
         ],
       );
     });
@@ -252,10 +250,11 @@ class Step3CamNote extends StatelessWidget {
 
 
 
-  Widget _buildTextButton(String label, BuildContext context, Color color, IconData icon, String id) {
+  Widget _buildTextButton(String label, BuildContext context, Color color, IconData icon, String bankId) {
     return GestureDetector(
       onTap: () {
-
+        leadDDController.getAllBranchByBankIdApi(bankId: bankId );
+        showCustomBottomSheet(context);
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -286,5 +285,62 @@ class Step3CamNote extends StatelessWidget {
       ),
     );
   }
+
+
+  void showCustomBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 24,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+
+
+                Obx((){
+                  if (leadDDController.isBranchLoading.value) {
+                    return  Center(child:CustomSkelton.leadShimmerList(context));
+                  }
+
+
+                  return CustomDropdown<bankBrach.Data>(
+                    items: leadDDController.getAllBranchBIModel.value?.data ?? [],
+                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                    getName: (item) => item.branchName.toString(),
+                    selectedValue: leadDDController.getAllBranchBIModel.value?.data?.firstWhereOrNull(
+                          (item) => item.id== camNoteController.selectedBankBranch.value,
+                    ),
+                    onChanged: (value) {
+                      camNoteController.selectedBankBranch.value =  value?.id;
+                    },
+                    onClear: (){
+                      camNoteController.selectedBankBranch.value = 0;
+                      leadDDController.getAllBranchBIModel.value?.data?.clear(); // reset dependent dropdown
+                    },
+                  );
+                }),
+
+                const SizedBox(
+                  height: 100,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
 }

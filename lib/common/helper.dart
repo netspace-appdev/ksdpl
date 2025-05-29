@@ -641,6 +641,12 @@ class AppText{
   static const String sectionA = "Section A";
   static const String sectionB = "Section B";
   static const String sectionC = "Section C";
+
+  static const String todaycall = "Today's Calls";
+  static const String convertedToInterested = "Converted to Interested";
+  static const String connectedCalls = "Connected Calls";
+  static const String todaycallDuration = "Today's Call Duration";
+  static const String leadCallYear = "Leads Called in The Year";
 }
 
 class AppColor{

@@ -581,6 +581,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
         isBankerLoading(false);
+
+
        /* if(docDescr!.isNotEmpty){
           String productDocument = docDescr.toString();
 
