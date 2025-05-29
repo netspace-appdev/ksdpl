@@ -161,7 +161,7 @@ class Step1FormProduct extends StatelessWidget {
 
                 controller: addProductController.prodMinCibilController,
                 inputType: TextInputType.number,
-                hintText: AppText.enterBankerWhatsapp,
+                hintText: AppText.enterMinCibil,
 
               ),
 
@@ -221,19 +221,22 @@ class Step1FormProduct extends StatelessWidget {
               const SizedBox(height: 10),
 
 
-              MultiSelectDropdown<String>(
-                items: addProductController.customerCategoryList,
+            Obx(() {
+              final values = addProductController.selectedCustomerCategories.toList();
+              return MultiSelectDropdown<String>(
+                key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
+                items: addProductController.customerCategoryList.toList(),
                 getId: (e) => e,
                 getName: (e) => e,
-                selectedValues: addProductController.selectedCustomerCategories.toList(), // or preselected values
+                selectedValues: values,
                 onChanged: (selectedList) {
-
                   addProductController.selectedCustomerCategories.assignAll(selectedList);
                 },
-              ),
+              );
+            }),
 
 
-              const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
               CustomTextLabel(
                 label: AppText.selectCollateralSecurityCategory,

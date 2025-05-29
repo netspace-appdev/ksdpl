@@ -633,7 +633,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                     int globalIndex = chunkIndex * 4 + ind;
 
-                    print("globalIndex===>${globalIndex.toString()}");
+
 
                     var stageId=0;
                    // LeadListController leadListController=Get.find();
@@ -2057,7 +2057,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                               onChanged: (value) {
                                 leadDDController.selectedStage.value =  value?.id?.toString();
-                                print("here check--->${leadDDController.selectedStage.value}");
+
                                 if( leadDDController.selectedStage.value!=null){
                                   if (int.parse(leadDDController.selectedStage.value!) == 3) {
                                     leadDDController.selectedStageActive.value = 1;
@@ -2065,7 +2065,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
                                     leadDDController.selectedStageActive.value = 1;
                                     leadListController.isFBDetailsShow.value=true;
-                                    print("this one===>${leadListController.isFBDetailsShow.value}");
+
                                   } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
                                     leadDDController.selectedStageActive.value = 0;
                                     leadListController.isFBDetailsShow.value=false;
@@ -2081,7 +2081,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                   }
 
-                                  print("changed LeadStage==>${leadDDController.selectedStage.value}");
+
                                 }
 
 
@@ -2191,8 +2191,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
 
             }
-            print("currentLeadStage at leadlist===>${currentLeadStage}");
-            print("selectedStage at selectedStage===>${leadDDController.selectedStage.value}");
+
 
             leadListController.callFeedbackSubmit(
                 leadId: leadId,

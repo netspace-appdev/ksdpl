@@ -532,10 +532,10 @@ class LeadSearchScreen extends StatelessWidget {
   void onPressed(){
     var dt=leadDDController.selectedStage.value??"0";
     leadListController.selectedPrevStage.value=dt;
-    print("on press==>leadListController.selectedPrevStage.value==>${leadListController.selectedPrevStage.value}");
+
     var temp=leadDDController.selectedStage.value??"0";
     leadListController.leadCode.value=temp;
-    print("on press==>leadcode==>${leadListController.leadCode.value}");
+
     leadListController.getFilteredLeadsApi(
       employeeId: leadListController.eId.value.toString(),
       leadStage:temp,
@@ -881,8 +881,7 @@ class LeadSearchScreen extends StatelessWidget {
           addLeadController.fromWhere.value="interested";
           addLeadController.getLeadId.value=leadId;
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
-          print("leadId===>${leadId}");
-          print("leadId===>${ addLeadController.getLeadId.value}");
+
           Get.toNamed("/addLeadScreen",);
 
         }else if (label_code == "add_feedback") {
@@ -1234,7 +1233,7 @@ class LeadSearchScreen extends StatelessWidget {
                             if (leadDDController.isLeadStageLoading.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
                             }
-                            print("lead coe==>${leadListController.leadCode.value}");
+
                             int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
 
                             // Allowed stage IDs based on leadCode
@@ -1274,7 +1273,7 @@ class LeadSearchScreen extends StatelessWidget {
                               ),
                               onChanged: (value) {
                                 leadDDController.selectedStage.value =  value?.id?.toString();
-                                print("here check--->${leadDDController.selectedStage.value}");
+
                                 if( leadDDController.selectedStage.value!=null){
                                   if (int.parse(leadDDController.selectedStage.value!) == 3) {
                                     leadDDController.selectedStageActive.value = 1;
@@ -1282,7 +1281,7 @@ class LeadSearchScreen extends StatelessWidget {
                                   } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
                                     leadDDController.selectedStageActive.value = 1;
                                     leadListController.isFBDetailsShow.value=true;
-                                    print("this one===>${leadListController.isFBDetailsShow.value}");
+
                                   } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
                                     leadDDController.selectedStageActive.value = 0;
                                     leadListController.isFBDetailsShow.value=false;
@@ -1298,7 +1297,7 @@ class LeadSearchScreen extends StatelessWidget {
 
                                   }
 
-                                  print("changed LeadStage==>${leadDDController.selectedStage.value}");
+
                                 }
 
 
@@ -1408,8 +1407,7 @@ class LeadSearchScreen extends StatelessWidget {
               callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
 
             }
-            print("currentLeadStage at leadlist===>${currentLeadStage}");
-            print("selectedStage at selectedStage===>${leadDDController.selectedStage.value}");
+
 
             leadListController.callFeedbackSubmit(
                 leadId: leadId,
@@ -1784,7 +1782,7 @@ class LeadSearchScreen extends StatelessWidget {
 
                         }
 
-                        print("changed LeadStage==>${leadDDController.selectedStage.value}");
+
                       }
 
                     },

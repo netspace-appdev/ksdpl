@@ -29,9 +29,6 @@ class LoanApplService {
       );
       const JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
-      printInChunks("Req body 1===> ${jsonEncode(body)}");
-      print("Response Status: ${response.statusCode}");
-      print("Response Body: ${response.body}");
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -63,10 +60,8 @@ class LoanApplService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("===>  getLoanApplicationDetailsByUniqueLeadNumber==>url+++?${Uri.parse(getLoanApplicationDetailsByUniqueLeadNumber)}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getLoanApplicationDetailsByUniqueLeadNumber==>${response.body.toString()}");
+
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

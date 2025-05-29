@@ -179,9 +179,7 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>changePasswordApi==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -210,21 +208,19 @@ class DrawerApiService {
         'POST',
         Uri.parse(getCompanyProfile),
       );
-      print("uri===>getCompanyProfileApi==>${getCompanyProfile.toString()}");
+
       // Headers
       request.headers.addAll({
         'accept': 'text/plain',
       });
       var header=await MyHeader.getHeaders2();
-      print("uri===>getCompanyProfileApi==>${header}");
+
       request.headers.addAll(header);
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request===>getCompanyProfileApi==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -348,7 +344,7 @@ class DrawerApiService {
     required leadMobileNumber,
   }) async {
     try {
-      print("API called");
+
       var request = http.MultipartRequest(
         'POST',
         Uri.parse("$getAllLeads?pageNumber=$pageNumber&pageSize=$pageSize"),
@@ -371,10 +367,7 @@ class DrawerApiService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("link===>  getDetailsListOfLeadsForDashboardApi==>$getAllLeads?pageNumber=$pageNumber&pageSize=$pageSize");
-      print("request===> getAllLeadsApi==>${request.fields}");
-      print("response===>getAllLeadsApi ==>${response.statusCode}");
-      print("response===>getAllLeadsApi ==>${response.body}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         return jsonResponse;
@@ -394,7 +387,7 @@ class DrawerApiService {
     required int pageSize,
   }) async {
     try {
-      print("API called");
+
       var request = http.MultipartRequest(
         'POST',
         Uri.parse("$getDetailsListOfLeadsForDashboard?pageNumber=$pageNumber&pageSize=$pageSize"),
@@ -409,10 +402,7 @@ class DrawerApiService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("link===>  getDetailsListOfLeadsForDashboardApi==>$getDetailsListOfLeadsForDashboard?pageNumber=$pageNumber&pageSize=$pageSize");
-      print("request===>  getDetailsListOfLeadsForDashboardApi==>${request.fields}");
-      print("response===> getDetailsListOfLeadsForDashboardApi ==>${response.statusCode}");
-      print("response===>getAllLeadsApi ==>${response.body}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         return jsonResponse;
@@ -434,7 +424,7 @@ class DrawerApiService {
         'POST',
         Uri.parse( updateLeadStage),
       );
-      print("uri===> updateLeadStage==>");
+
       // Headers
       request.headers.addAll({
         'accept': 'text/plain',
@@ -448,9 +438,7 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===> updateLeadStage==>${request.fields}");
-      print("response===> updateLeadStage==>${response.statusCode}");
-      print("response===> updateLeadStage==>${response.body}");
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -474,7 +462,7 @@ class DrawerApiService {
   static Future<Map<String, dynamic>> getLeadDetailByIdApi({
     required leadId,
   }) async {
-    print("request===> getLeadDetailById==>");
+
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -492,10 +480,7 @@ class DrawerApiService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request===>  getLeadDetailById==>${getLeadDetailById.toString()}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getLeadDetailById==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -524,13 +509,13 @@ class DrawerApiService {
         'POST',
         Uri.parse(leadMoveToCommonTask),
       );
-      print("uri===> leadMoveToCommonTask==>${leadMoveToCommonTask.toString()}");
+
       // Headers
       request.headers.addAll({
         'accept': 'text/plain',
       });
       var header=await MyHeader.getHeaders2();
-      print("uri===> leadMoveToCommonTask==>${header}");
+
       request.headers.addAll(header);
       request.fields['LeadId'] = leadId;
       request.fields['Percentage'] = percentage;
@@ -614,8 +599,7 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("Req--->getDistrictByStateIdApi==>${request.fields}");
-      print("Res--->${response.body}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -656,8 +640,7 @@ class DrawerApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("getCityByDistrictIdApi req===>${request.fields}");
-      print("getCityByDistrictIdApi res===>${response.body}");
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -716,7 +699,7 @@ class DrawerApiService {
 
 
   static Future<Map<String, dynamic>> getAllKsdplProductApi() async {
-    print("====>getAllKsdplProductApi==>");
+
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -733,8 +716,6 @@ class DrawerApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-
-      print("res====>getAllKsdplProductApi==>${response.body.toString()}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -759,27 +740,26 @@ class DrawerApiService {
   static Future<Map<String, dynamic>> getProductListByBankIdApi({
     required bankId
   }) async {
-print("getProductListByBankIdApi===>${bankId}");
+
     try {
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(getProductListByBankId),
       );
-      print("getProductListByBankIdApi===>2");
+
       // Headers
 
       var header=await MyHeader.getHeaders2();
-      print("getProductListByBankIdApi===>3");
+
       request.headers.addAll(header);
-      print("getProductListByBankIdApi===>4");
+
       request.fields['BankId'] = bankId.toString();
-      print("getProductListByBankIdApi===>5");
+
       // Sending request
       var streamedResponse = await request.send();
-      print("getProductListByBankIdApi===>6");
+
       var response = await http.Response.fromStream(streamedResponse);
-      print("req==>getProductListByBankIdApi==>${request.fields}");
-      print("resp==>getProductListByBankIdApi==>${response.body}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -821,10 +801,7 @@ print("getProductListByBankIdApi===>${bankId}");
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>  getUpcomingDateOfBirth==>${pickupLeadFromCommonTasks.toString()}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -873,7 +850,7 @@ print("getProductListByBankIdApi===>${bankId}");
         Uri.parse(workOnLead),
       );
 
-      print("URI ===> workOnLead ===> ${workOnLead.toString()}");
+
 
       // Headers
       request.headers.addAll({
@@ -919,9 +896,6 @@ print("getProductListByBankIdApi===>${bankId}");
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("Request Fields: ${request.fields}");
-      print("Response Status: ${response.statusCode}");
-      print("Response Body work onlead: ${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -960,10 +934,7 @@ print("getProductListByBankIdApi===>${bankId}");
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>  getLeadWorkByLeadId==>${getLeadWorkByLeadId.toString()}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -983,7 +954,7 @@ print("getProductListByBankIdApi===>${bankId}");
   }
 
   static Future<Map<String, dynamic>> getCampaignNameApi() async {
-    print("request===>  getCampaignNameApi ==>${getCampaignName.toString()}");
+
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -999,10 +970,7 @@ print("getProductListByBankIdApi===>${bankId}");
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>  getCampaignNameApi==>");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getCampaignNameApi==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -1029,7 +997,7 @@ print("getProductListByBankIdApi===>${bankId}");
     String KsdplBranchId="0",
 
   }) async {
-    print("request===>  getCommonLeadListByFilter in open poll==>${getCommonLeadListByFilter.toString()}");
+
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -1050,10 +1018,7 @@ print("getProductListByBankIdApi===>${bankId}");
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>  getCommonLeadListByFilterApi==>${getAllLeads.toString()}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -1089,10 +1054,7 @@ print("getProductListByBankIdApi===>${bankId}");
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>  getAllKsdplBranch==>${getAllKsdplProductList.toString()}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -1167,8 +1129,7 @@ print("getProductListByBankIdApi===>${bankId}");
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request---->${request.fields}");
-      print("response.bdy---->${response.body}");
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

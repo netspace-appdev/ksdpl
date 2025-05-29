@@ -115,7 +115,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
     return InkWell(
       onTap: (){
         if (index == 2) {  // AddLeadScreen index
-          print("here==>");
+
           Get.arguments?["leadId"]=0;
           Addleadcontroller addleadcontroller=Get.put(Addleadcontroller());
           addleadcontroller.clearControllers();

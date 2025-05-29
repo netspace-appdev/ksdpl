@@ -81,8 +81,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     "Basic Details", "CAM Note", "Bank Details"
   ];
 
-  var selectedBank = Rxn<int>();
-  var selectedBankBranch = Rxn<int>();
   var selectedChannel = Rxn<int>();
 
 
@@ -246,10 +244,21 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camFoirController = TextEditingController();
   final TextEditingController camLtvController = TextEditingController();
 
+  final TextEditingController camBankerMobileNoController = TextEditingController();
+  final TextEditingController camBankerNameController = TextEditingController();
+  final TextEditingController camBankerWhatsappController = TextEditingController();
+  final TextEditingController camBankerEmailController = TextEditingController();
+  final TextEditingController camBankerSuperiorNameController = TextEditingController();
+  final TextEditingController camBankerSuperiorMobController = TextEditingController();
+  final TextEditingController camBankerSuperiorWhatsappController = TextEditingController();
+  final TextEditingController camBankerSuperiorEmailController = TextEditingController();
+
   final Map<String, RxList<File>> imageMap = {};
 
 
-
+  var selectedBank = Rxn<int>();
+  var selectedBankBranch = Rxn<int>();
+  var selectedBankerBranch = Rxn<int>();
 
   void clearImages(String key) {
     imageMap[key]?.clear();

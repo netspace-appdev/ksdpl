@@ -147,7 +147,7 @@ class Addleadcontroller extends GetxController{
 
 
     } catch (e) {
-      print("Error getLeadDetailByIdApi: $e");
+
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -235,8 +235,7 @@ class Addleadcontroller extends GetxController{
       }
 
 
-    } catch (e) {
-      print("Error getLeadDetailByIdApi: $e");
+    } catch (e) {  print("Error getLeadDetailByIdApi: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -374,7 +373,7 @@ class Addleadcontroller extends GetxController{
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    print("all close");
+
   }
 
 }

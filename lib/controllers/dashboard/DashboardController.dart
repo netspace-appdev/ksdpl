@@ -62,13 +62,13 @@ class DashboardController extends GetxController {
   }) async {
     try {
       isLoading(true);
-      print("getEmployeeByPhoneNumberApi==>");
+
 
 
       var data = await DashboardApiService.getEmployeeByPhoneNumberApi(phone: phone,);
 
 
-      print("getEmployeeByPhoneNumberApi==>data===>${data.toString()}");
+
 
       if(data['success'] == true){
 
@@ -101,13 +101,13 @@ class DashboardController extends GetxController {
         Get.offAllNamed("/login");
         return;
       }else{
-        print("data here===>${data.toString()}");
+
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 
 
     } catch (e) {
-      print("Error getEmployeeByPhoneNumberApi: $e");
+
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -154,7 +154,7 @@ class DashboardController extends GetxController {
 
 
     } catch (e) {
-      print("Error getAllLeadsApi: $e");
+
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -199,7 +199,7 @@ class DashboardController extends GetxController {
 
 
     } catch (e) {
-      print("Error getAllLeadsApi: $e");
+
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -235,7 +235,7 @@ class DashboardController extends GetxController {
 
 
     } catch (e) {
-      print("Error getBreakingNews: $e");
+
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -270,7 +270,7 @@ class DashboardController extends GetxController {
 
 
     } catch (e) {
-      print("Error getUpcomingDateOfBirthModel: $e");
+
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -307,7 +307,7 @@ class DashboardController extends GetxController {
 
 
     } catch (e) {
-      print("Error todayWorkStatusOfRoBmApi: $e");
+
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -348,7 +348,7 @@ class DashboardController extends GetxController {
             final dateTime = DateTime.parse(rawDate!);
 
             if (dateTime.isAfter(DateTime.now())) {
-              print("⏰ Scheduling alarm for $rawDate");
+
 
               await NotificationHelper.scheduleReminder(
                 id: i + 1, // make sure ID is unique
@@ -357,10 +357,10 @@ class DashboardController extends GetxController {
                 scheduledDateTime: dateTime,
               );
             } else {
-              print("⏭️ Skipped past reminder: $rawDate");
+
             }
           } catch (e) {
-            print("❌ Error parsing/scheduling reminder: $e");
+
           }
         }
 
@@ -377,7 +377,7 @@ class DashboardController extends GetxController {
 
 
     } catch (e) {
-      print("Error getRemindersModel: $e");
+
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -415,7 +415,7 @@ class DashboardController extends GetxController {
           generalToken: generalToken
 
       );
-      print("data in controller==>${data.toString()}");
+
 
       if(data['success'] == true){
         updateFCMTokenModel= UpdateFCMTokenModel.fromJson(data);
@@ -428,7 +428,7 @@ class DashboardController extends GetxController {
 
 
     } catch (e) {
-      print("Error here: $e");
+
       // Get.snackbar('Error', 'Failed to fetch data');
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -441,10 +441,10 @@ class DashboardController extends GetxController {
   Future<String> getFCMToken() async {
     try {
       String? token = await FirebaseMessaging.instance.getToken();
-      print('🔑 FCM Token: $token');
+
       return token ?? "";
     } catch (e) {
-      print("❌ Error fetching FCM token: $e");
+
       return "";
     }
   }
@@ -454,17 +454,17 @@ class DashboardController extends GetxController {
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
       if (Platform.isAndroid) {
         AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        print('📱 Android Device ID: ${androidInfo.id}');
+
         return androidInfo.id ?? "no-id";
       } else if (Platform.isIOS) {
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        print('📱 iOS Device ID: ${iosInfo.identifierForVendor}');
+
         return iosInfo.identifierForVendor ?? "no-id";
       } else {
         return "unsupported-platform";
       }
     } catch (e) {
-      print("❌ Error fetching device ID: $e");
+
       return "unknown";
     }
   }

@@ -119,11 +119,6 @@ class ApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-     // print("Response Status Code: ${response.statusCode}");
-     // print("Response Body: ${response.body}");
-      print("request===> loginApi==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -156,7 +151,7 @@ class ApiService {
         'accept': 'text/plain',
       });
 
-      print("request--->${request.fields}");
+
 
 
       // Sending request
@@ -196,7 +191,7 @@ class ApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("response in getAllBranchByBankIdApi==<${response.body}");
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -269,7 +264,6 @@ class ApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("reponse==>${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -310,8 +304,7 @@ class ApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("req===functionalSupervisorApi--->${request.fields}");
-      print("response===>${response.body}");
+
 
 
       if (response.statusCode == 200) {
@@ -645,9 +638,7 @@ class ApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>SendMailToBankerAfterRegistrationApi==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -698,11 +689,7 @@ class ApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      // print("Response Status Code: ${response.statusCode}");
-      // print("Response Body: ${response.body}");
-      print("request===> updateFCMTokenApi==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

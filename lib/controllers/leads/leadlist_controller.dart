@@ -232,13 +232,12 @@ class LeadListController extends GetxController {
 
     String selectedDate = followDateController.text; // MM/DD/YYYY
     String selectedTime = followTimeController.text; // HH:MM AM/PM
-print("selectd data==>${selectedDate}");
-print("selectedTime ==>${selectedTime}");
+
 
     String formattedDateTime="";
 
     if(isCallReminder.value){
-      print("call reminder");
+
       if (selectedDate.isEmpty || selectedTime.isEmpty) {
         ToastMessage.msg("Date or Time is empty!");
         return;
@@ -253,13 +252,12 @@ print("selectedTime ==>${selectedTime}");
 // Format to desired output
       String formatted = DateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(parsedDateTime);
       formattedDateTime=formatted.toString();
-      print("selectedTime fianl ==>${formatted}");
-      print("selectedTime fianl ==>${formattedDateTime.toString()}");
+
     }else{
 
 
       DateTime now = DateTime.now();
-      print("fnow in real box==>${now.toString()}");
+
       var td=DateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(now);
       formattedDateTime=td.toString();
 
@@ -271,12 +269,6 @@ print("selectedTime ==>${selectedTime}");
 
 
 
-    print("call status  in real box==>${callStatus}");
-    print("id in real box==>${id}");
-    print("formattedDateTime in real box==>${formattedDateTime.toString()}");
-    print("currentLeadStage in real box==>${currentLeadStage.toString()}");
-    print("selectedStage in real box==>${selectedStage.toString()}");
-    print("whats change in real box==>${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
    // callStatus=="0" && currentLeadStage=="13"
 
 
@@ -303,7 +295,7 @@ print("selectedTime ==>${selectedTime}");
       ).then((_){
 
         SearchLeadController searchLeadController=Get.find();
-        print("selectedPrevStage on second-->${selectedPrevStage.value}");
+
         getFilteredLeadsApi(
           employeeId: eId.value.toString(),
           leadStage: selectedPrevStage.value??"0",
@@ -319,7 +311,7 @@ print("selectedTime ==>${selectedTime}");
         );
         DashboardController dashboardController=Get.find();
         dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
-        print("only followup");
+
 
 
       });
@@ -455,7 +447,7 @@ print("selectedTime ==>${selectedTime}");
         } else {
           filteredGetAllLeadsModel.value = newLeads;
         }
-        print("len==>${filteredGetAllLeadsModel.value!.data!.length}");
+
         filteredLeadListLength.value=filteredGetAllLeadsModel.value!.data!.length;
 
         if (newLeads.data!.length < pageSize) {
@@ -641,7 +633,7 @@ print("selectedTime ==>${selectedTime}");
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-      print("run hua");
+
 
 
 
@@ -698,7 +690,7 @@ print("selectedTime ==>${selectedTime}");
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-      print("run hua");
+
 
 
 
@@ -841,7 +833,7 @@ print("selectedTime ==>${selectedTime}");
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-      print("run hua");
+
 
 
 
@@ -882,7 +874,7 @@ print("selectedTime ==>${selectedTime}");
     String id = "0",
   }) async {
     try {
-        print("workOnLeadAndStageUpdateApi");
+
       isLoading(true);
 
       var eId=StorageService.get(StorageService.EMPLOYEE_ID);
@@ -945,7 +937,7 @@ print("selectedTime ==>${selectedTime}");
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-      print("run hua");
+
 
 
 
@@ -1001,7 +993,7 @@ print("selectedTime ==>${selectedTime}");
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-      print("run hua");
+
 
 
 
@@ -1042,7 +1034,7 @@ print("selectedTime ==>${selectedTime}");
         isLoading(false);
         eId.value=StorageService.get(StorageService.EMPLOYEE_ID).toString();
 
-        print("fromWhere==>${fromWhere.value}");
+
 
         getAllLeadsApi(
           leadStage: leadCode.value,

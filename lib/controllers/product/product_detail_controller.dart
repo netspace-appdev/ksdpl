@@ -28,7 +28,7 @@ class ProductDetailsController extends GetxController{
 
       if(data['success'] == true){
 
-        print("here 1");
+
 
         getProductListById.value= GetProductListById.fromJson(data);
 

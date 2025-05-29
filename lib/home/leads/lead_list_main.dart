@@ -616,7 +616,7 @@ class LeadListMain extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
                 onPressed: () {
-                  print("leadListController.fromWhereLeads.value===>${leadListController.fromWhereLeads.value}");
+
 
 
                   leadListController.fromWhereLeads.value=="dashboard"?
@@ -785,8 +785,7 @@ overflow: TextOverflow.ellipsis,
           addLeadController.fromWhere.value="interested";
           addLeadController.getLeadId.value=leadId;
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
-          print("leadId===>${leadId}");
-          print("leadId===>${ addLeadController.getLeadId.value}");
+
           AddProductController addProductController = Get.put(AddProductController());
           addProductController.getAllProductCategoryApi();
 
@@ -1046,7 +1045,7 @@ overflow: TextOverflow.ellipsis,
                               String selectedValueDoable = (selectedOption == "Doable") ? "6" : "7";
                               String activeValueDoable = (selectedOption == "Doable") ? "1" : "0";
                               if(leadListController.leadCode.value=="2"){
-                                print("for intrested");
+
 
                                 leadListController.workOnLeadApi(
                                   leadId: leadId.toString(),
@@ -1054,7 +1053,7 @@ overflow: TextOverflow.ellipsis,
                                 );
 
                               }else  if(leadListController.leadCode.value=="4"){
-                                print("for doable");
+
                                 leadListController.workOnLeadApi(
                                   leadId: leadId.toString(),
                                   leadStageStatus:selectedValue,
@@ -1315,7 +1314,7 @@ overflow: TextOverflow.ellipsis,
                               ),
                               onChanged: (value) {
                                 leadDDController.selectedStage.value =  value?.id?.toString();
-                                print("here check--->${leadDDController.selectedStage.value}");
+
                                 if( leadDDController.selectedStage.value!=null){
                                   if (int.parse(leadDDController.selectedStage.value!) == 3) {
                                     leadDDController.selectedStageActive.value = 1;
@@ -1323,7 +1322,7 @@ overflow: TextOverflow.ellipsis,
                                   } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
                                     leadDDController.selectedStageActive.value = 1;
                                     leadListController.isFBDetailsShow.value=true;
-                                    print("this one===>${leadListController.isFBDetailsShow.value}");
+
                                   } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
                                     leadDDController.selectedStageActive.value = 0;
                                     leadListController.isFBDetailsShow.value=false;
@@ -1339,7 +1338,7 @@ overflow: TextOverflow.ellipsis,
 
                                   }
 
-                                  print("changed LeadStage==>${leadDDController.selectedStage.value}");
+
                                 }
 
 
@@ -1449,8 +1448,7 @@ overflow: TextOverflow.ellipsis,
               callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
 
             }
-            print("currentLeadStage at leadlist===>${currentLeadStage}");
-            print("selectedStage at selectedStage===>${leadDDController.selectedStage.value}");
+
 
             leadListController.callFeedbackSubmit(
                 leadId: leadId,
@@ -1490,8 +1488,7 @@ overflow: TextOverflow.ellipsis,
 
 
 
-        print("currentLeadStage==>${currentLeadStage}");
-        print("currentLeadStage==>${leadDDController.selectedStage.value}");
+
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: AppText.addFollowUp,

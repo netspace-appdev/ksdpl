@@ -74,6 +74,7 @@ class Step1Form extends StatelessWidget {
                     CustomTextLabel(
                       label: AppText.bankNostar,
 
+
                     ),
 
                     const SizedBox(height: 10),

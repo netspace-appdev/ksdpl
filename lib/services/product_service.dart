@@ -34,10 +34,7 @@ class ProductService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("===>  getAllProductCategoryApi==>url+++?${Uri.parse(getAllProductCategory)}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getAllProductCategoryApi==>${response.body.toString()}");
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -111,9 +108,6 @@ class ProductService {
         Uri.parse(addProductList),
       );
 
-      // Headers
-      print("Collateral_Security_Category---->${Customer_Category}");
-      print("Collateral_Security_Category---->${Collateral_Security_Category}");
 
       var header=await MyHeader.getHeaders2();
 
@@ -170,10 +164,7 @@ class ProductService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      print("===>  addProductList==>url+++?${Uri.parse(getAllProductCategory)}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>addProductList==>${response.body.toString()}");
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -249,9 +240,7 @@ class ProductService {
         Uri.parse(updateProductList),
       );
 
-      // Headers
-      print("Collateral_Security_Category---->${Customer_Category}");
-      print("Collateral_Security_Category---->${Collateral_Security_Category}");
+
       var header=await MyHeader.getHeaders2();
 
       request.headers.addAll(header);
@@ -311,9 +300,7 @@ class ProductService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>updateProductList==>${response.body.toString()}");
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -346,10 +333,7 @@ class ProductService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("===>  getAllProductList==>url+++?${Uri.parse(getAllProductCategory)}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getAllProductList==>${response.body.toString()}");
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -381,11 +365,10 @@ class ProductService {
       request.fields['Id'] = id.toString();
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("===>  getProductListById==>url+++?${Uri.parse(getProductListById)}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getProductListById==>${response.body.toString()}");
 
+      print("request===>==>getProductListByIdApi===>${request.fields.toString()}");
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>getProductListByIdApi==>${response.body.toString()}");
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
@@ -412,9 +395,6 @@ class ProductService {
       );
       const JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
-      printInChunks("Req body AddProductDocumentApi===> ${jsonEncode(body)}");
-      print("Response Status: ${response.statusCode}");
-      print("Response Body AddProductDocumentApi: ${response.body}");
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -445,10 +425,7 @@ class ProductService {
       request.fields['productId'] = productId.toString();
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("===>  getDocumentListByProductIdApi==>url+++?${Uri.parse(getProductListById)}");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getDocumentListByProductIdApi==>${response.body.toString()}");
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

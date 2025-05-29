@@ -78,7 +78,7 @@ class DashboardApiService{
       var response = await http.Response.fromStream(streamedResponse);
 
       final jsonResponse = jsonDecode(response.body);
-      print("jsonResponse===>${jsonResponse}");
+
 
       if (response.statusCode == 200) {
         if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
@@ -119,8 +119,7 @@ class DashboardApiService{
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("Request lead count api===>${request.fields}");
-      print("Response lead count api===>${response.body}");
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -163,8 +162,6 @@ class DashboardApiService{
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("Request getDetailsCountOfLeadsForDashboardApi===>${request.fields}");
-      print("Response getDetailsCountOfLeadsForDashboardApi===>${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -262,7 +259,7 @@ class DashboardApiService{
   static Future<Map<String, dynamic>> todayWorkStatusOfRoBmApi({
     required employeeId
 }) async {
-print("todayWorkStatusOfRoBmApi");
+
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -278,7 +275,7 @@ print("todayWorkStatusOfRoBmApi");
 
     // Step 3: Call your method
     //String formatted = Helper.formatDate(dateString);
-    print("dateString===>${dateString}");
+
     /*print("formatted===>${formatted}");
 
     print("Formatted: $formatted");
@@ -295,8 +292,7 @@ print("todayWorkStatusOfRoBmApi");
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>todayWorkStatusOfRoBmApi==>${request.fields.toString()}");
-      print("resp===>todayWorkStatusOfRoBmApi======>${response.body.toString()}");
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -337,10 +333,7 @@ print("todayWorkStatusOfRoBmApi");
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>  getRemindersApi==>");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getRemindersApi==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -380,10 +373,7 @@ print("todayWorkStatusOfRoBmApi");
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      print("request===>  getBreakingNewsByIdApi==>");
-      print("request===>==>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getBreakingNewsByIdApi==>${response.body.toString()}");
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

@@ -16,7 +16,7 @@ class LeadDetailController extends GetxController{
     // TODO: implement onInit
     super.onInit();
     dynamic arg= Get.arguments;
-    print("arg===>${arg["leadId"]}");
+
     getLeadDetailByIdApi(leadId:arg["leadId"] );
 
   }

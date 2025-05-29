@@ -191,7 +191,7 @@ class LoanApplicationController extends GetxController{
   }
 
   void saveForm() {
-    print("Form Saved!");
+
   }
   @override
   void onInit() {
@@ -552,7 +552,7 @@ class LoanApplicationController extends GetxController{
       );
 
 
-      print("coap gender--->${coAp.selectedGenderCoAP.value}");
+
 
       final coApModel = CoApplicantModel(
         name: cleanText(coAp.coApFullNameController.text),
@@ -619,10 +619,7 @@ class LoanApplicationController extends GetxController{
     List<Map<String, dynamic>>  ccPayload = creditCardModel.map((e) => e.toMap()).toList();
     List<Map<String, dynamic>>  refPayload = referenceModel.map((e) => e.toMap()).toList();
 
-    print("payload==>${coApPayload.toString()}");
-    print("famPayload==>${famPayload.toString()}");
-    print("ccPayload==>${ccPayload.toString()}");
-    print("refPayload==>${refPayload.toString()}");
+
     addLoanApplicationApi(
       coApPayload:coApPayload,
       famPayload: famPayload,
@@ -640,9 +637,9 @@ class LoanApplicationController extends GetxController{
     try {
       isLoading(true);
       var uln = Get.arguments['uln'];
-print("addLoanApplicationApi");
 
-      print("here propid===>${cleanText(propPropIdController.text)}");
+
+
       var data = await LoanApplService.addLoanApplicationApi(
         body:[
           {
@@ -839,10 +836,9 @@ print("addLoanApplicationApi");
         getLoanApplIdModel.value= GetLoanApplIdModel.fromJson(req);
         Map<String, dynamic>? detailMap;
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
-          print("det==>${getLoanApplIdModel.value!.data!.detailForLoanApplication!}");
+
           detailMap = jsonDecode(getLoanApplIdModel.value!.data!.detailForLoanApplication!);
-          print("detailMap===>${detailMap}");
-          print("dsastaff===>${detailMap?['dsaStaffName']}");
+
 
           dsaStaffNController.text = detailMap?['DsaStaffName'] ?? '';
           proFeeController.text = detailMap?['ProcessingFee']?.toString() ?? '';
@@ -860,8 +856,7 @@ print("addLoanApplicationApi");
           applFullNameController.text = applicant?['Name'] ?? '';
           fatherNameController.text = applicant?['FatherName'] ?? '';
           selectedGender.value = applicant?['Gender']?? '-1';
-          print("dob-->${applicant?['DateOfBirth']}");
-          print("dob-->${Helper.convertFromIso8601(applicant?['DateOfBirth']) ?? 'null'}");
+
           dobController.text = Helper.convertFromIso8601(applicant?['DateOfBirth']) ?? 'null';
           qualiController.text = applicant?['Qualification'] ?? '';
           maritalController.text = applicant?['MaritalStatus'] ?? '';
@@ -878,8 +873,7 @@ print("addLoanApplicationApi");
           selectedOwnershipList.value = employer?['OwnershipType']?? 'null';
           natureOfBizController.text = employer?['NatureOfBusiness'] ?? '';
           staffStrengthController.text = employer?['StaffStrength']?.toString() ?? '0';
-          print("here===>${applicant?['DateOfSalary']}");
-          print("here===>${ Helper.convertFromIso8601(applicant?['DateOfSalary'])}");
+
           salaryDateController.text =  Helper.convertFromIso8601(applicant?['DateOfSalary']) ?? 'null';
  // Present Add
           final presentAdd = applicant?['PresentAddress'];
@@ -889,13 +883,13 @@ print("addLoanApplicationApi");
           localityController.text = presentAdd?['Locality'] ?? '';
           streetNameController.text = presentAdd?['StreetName'] ?? '';
           leadDDController.selectedStateCurr.value = presentAdd?['State']==""?"0":presentAdd?['State'] ?? '0';
-          print("yaha state-->${leadDDController.selectedStateCurr.value}");
+
           await leadDDController.getDistrictByStateIdCurrApi(stateId: leadDDController.selectedStateCurr.value);
           leadDDController.selectedDistrictCurr.value =presentAdd?['District']==""?"0": presentAdd?['District'] ?? '0';
-          print("yaha district-->${leadDDController.selectedDistrictCurr.value}");
+
           await leadDDController.getCityByDistrictIdCurrApi(districtId: leadDDController.selectedDistrictCurr.value);
           leadDDController.selectedCityCurr.value = presentAdd?['City']==""?"0":presentAdd?['City'] ?? '0';
-          print("yaha city-->${leadDDController.selectedCityCurr.value}");
+
           talukaController.text = presentAdd?['Taluka'] ?? '';
           selectedCountry.value= presentAdd?['Country'] ?? '0';
           pinCodeController.text = presentAdd?['PinCode'] ?? '';
@@ -908,15 +902,15 @@ print("addLoanApplicationApi");
           localityPermController.text = permanentAdd?['Locality'] ?? '';
           streetNamePermController.text = permanentAdd?['StreetName'] ?? '';
           leadDDController.selectedStatePerm.value = permanentAdd?['State']==""?"0":permanentAdd?['State'] ?? '0';
-          print("yaha state-->Perm${leadDDController.selectedStatePerm.value}");
+
           await leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value);
           leadDDController.selectedDistrictPerm.value =permanentAdd?['District']==""?"0": permanentAdd?['District'] ?? '0';
-          print("yaha district-->Perm${leadDDController.selectedDistrictPerm.value}");
+
           await leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value);
-          print("what===>${permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0'}");
+
 
           leadDDController.selectedCityPerm.value = permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0';
-          print("yaha city--Perm>${leadDDController.selectedCityPerm.value}");
+
           talukaPermController.text = permanentAdd?['Taluka'] ?? '';
           selectedCountryPerm.value= permanentAdd?['Country'] ?? '0';
           pinCodePermController.text = permanentAdd?['PinCode'] ?? '';
@@ -928,13 +922,13 @@ print("addLoanApplicationApi");
 
         dsaCodeController.text = data?.dsaCode ?? '';
         lanController.text = data?.loanApplicationNo ?? '';
-        print("bank Id==>${data?.bankId}");
+
         selectedBank.value =  data?.bankId ?? 0;
 
         await leadDDController.getAllBranchByBankIdApi(bankId: data?.bankId.toString() ?? "0");
-        print("ab chalega");
+
         selectedBankBranch.value = data?.branchId ?? 0;
-        print(" selectedBankBranch.value===>${ selectedBankBranch.value}");
+
         if(data?.bankId!=0){
           await leadDDController.getProductListByBankIdApi(bankId: data?.branchId ?? 0);
         }
@@ -1014,7 +1008,7 @@ print("addLoanApplicationApi");
           await coApController.getCityByDistrictIdCurrApi(districtId: coApController.selectedDistrictCurr.value);
           coApController.selectedCityCurr.value =presentAdd?['City']==""?"0":presentAdd?['City'] ?? '0';
           coApController.coApCurrTalukaController.text = presentAdd?["Taluka"] ?? '';
-          print("country___curr-->${presentAdd?['Country']}");
+
           coApController.selectedCountrCurr.value =presentAdd?['Country']==""?"":presentAdd?['Country'];
 
 
@@ -1031,7 +1025,7 @@ print("addLoanApplicationApi");
           await coApController.getCityByDistrictIdPermApi(districtId: coApController.selectedDistrictPerm.value);
           coApController.selectedCityPerm.value =permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0';
           coApController.coApPermTalukaController.text = permanentAdd?["Taluka"] ?? '';
-          print("country___curr-->${permanentAdd?['Country']}");
+
           coApController.selectedCountryPerm.value =permanentAdd?['Country']==""?"":permanentAdd?['Country'];
 
           coApplicantList.add(coApController);
@@ -1045,10 +1039,10 @@ print("addLoanApplicationApi");
   void populatePropertyDetails() async{
     Map<String, dynamic>? propDetails;
     if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
-      print("det==>${getLoanApplIdModel.value!.data!.loanDetails!}");
+
       propDetails = jsonDecode(getLoanApplIdModel.value!.data!.loanDetails!);
-      print("detailMap===>${propDetails}");
-      print("dsastaff===>${propDetails?['PropertyId']}");
+
+
 
       propPropIdController.text = propDetails?['PropertyId'] ?? '';
       propSurveyNoController.text = propDetails?['SurveyNo'] ?? '';
@@ -1072,10 +1066,10 @@ print("addLoanApplicationApi");
   void populateFinancialDetails() async{
     Map<String, dynamic>? finDetails;
     if (getLoanApplIdModel.value!.data!.financialDetails != null) {
-      print("det==>${getLoanApplIdModel.value!.data!.financialDetails!}");
+
       finDetails = jsonDecode(getLoanApplIdModel.value!.data!.financialDetails!);
 
-      print("GrossMonthlySalary===>${finDetails?['GrossMonthlySalary']}");
+
 
       fdGrossMonthlySalaryController.text = finDetails?['GrossMonthlySalary'].toString() ?? '';
       fdnNtMonthlySalaryController.text = finDetails?['NetMonthlySalary'].toString() ?? '';
@@ -1099,7 +1093,7 @@ print("addLoanApplicationApi");
       if (decoded is List) {
         for (var item in decoded) {
           final famController = FamilyMemberController();
-          print("dob===>${item["BirthDate"]}");
+
 
           // famController.coApFullNameController.text = item["Name"] ?? '';
           famController.famNameController.text= item["Name"] ?? '';
@@ -1129,7 +1123,7 @@ print("addLoanApplicationApi");
       if (decoded is List) {
         for (var item in decoded) {
           final ccController = CreditCardsController();
-          print("dob===>${item["BirthDate"]}");
+
 
 
            ccController.ccCompBankController.text= item["CompanyBank"] ?? '';
@@ -1158,7 +1152,7 @@ print("addLoanApplicationApi");
       if (decoded is List) {
         for (var item in decoded) {
           final refController = ReferenceController();
-          print("dob===>${item["BirthDate"]}");
+
 
 
           refController.refNameController.text= item["Name"] ?? '';

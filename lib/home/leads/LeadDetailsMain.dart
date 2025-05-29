@@ -432,7 +432,7 @@ class LeadDetailsMain extends StatelessWidget {
                               ),
                               onChanged: (value) {
                                 leadDDController.selectedStage.value =  value?.id?.toString();
-                                print("here check--->${leadDDController.selectedStage.value}");
+
                                 if( leadDDController.selectedStage.value!=null){
                                   if (int.parse(leadDDController.selectedStage.value!) == 3) {
                                     leadDDController.selectedStageActive.value = 1;
@@ -440,7 +440,7 @@ class LeadDetailsMain extends StatelessWidget {
                                   } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
                                     leadDDController.selectedStageActive.value = 1;
                                     leadListController.isFBDetailsShow.value=true;
-                                    print("this one===>${leadListController.isFBDetailsShow.value}");
+
                                   } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
                                     leadDDController.selectedStageActive.value = 0;
                                     leadListController.isFBDetailsShow.value=false;
@@ -456,7 +456,7 @@ class LeadDetailsMain extends StatelessWidget {
 
                                   }
 
-                                  print("changed LeadStage==>${leadDDController.selectedStage.value}");
+
                                 }
 
 
@@ -566,8 +566,7 @@ class LeadDetailsMain extends StatelessWidget {
               callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
 
             }
-            print("currentLeadStage at leadlist===>${currentLeadStage}");
-            print("selectedStage at selectedStage===>${leadDDController.selectedStage.value}");
+
 
             leadListController.callFeedbackSubmit(
                 leadId: leadId,

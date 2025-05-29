@@ -647,6 +647,29 @@ class AppText{
   static const String connectedCalls = "Connected Calls";
   static const String todaycallDuration = "Today's Call Duration";
   static const String leadCallYear = "Leads Called in The Year";
+  static const String employee = "Employee";
+
+  static const String bankerMobileNo = "Banker Mobile No";
+  static const String enterBankerMobileNo = "Enter Banker Mobile No";
+
+  static const String enterWhatsappNo = "Enter WhatsApp No";
+
+
+  static const String enterEmail = "Enter Email";
+
+  static const String superiorName = "Superior Name";
+  static const String enterSuperiorName = "Enter Superior Name";
+
+  static const String superiorMobile = "Superior Mobile";
+  static const String enterSuperiorMobile = "Enter Superior Mobile";
+
+  static const String superiorWhatsapp = "Superior WhatsApp";
+  static const String enterSuperiorWhatsapp = "Enter Superior WhatsApp";
+
+  static const String superiorEmail = "Superior Email";
+  static const String enterSuperiorEmail = "Enter Superior Email";
+
+
 }
 
 class AppColor{

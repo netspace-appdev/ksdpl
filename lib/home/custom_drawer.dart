@@ -238,7 +238,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   loadData(){
-    print("role===>${StorageService.get(StorageService.ROLE).toString()}");
+
     firstName=StorageService.get(StorageService.FIRST_NAME).toString();
     email=StorageService.get(StorageService.EMAIL).toString();
     var rawRole = StorageService.get(StorageService.ROLE).toString();

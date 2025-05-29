@@ -229,8 +229,17 @@ class AddProductController extends GetxController{
   final TextEditingController prodNoOfDocController = TextEditingController();
   var prodSegmentList=["Insurance", "Secured","Unsecured", ];
   var selectedprodSegment = Rxn<String>();
-  var customerCategoryList=["Salaried", "Salaried NRI","Self Employed Professional", "Self Employed Non Professional", "Non-Individual","Others"];
-  var selectedCustomerCategories = <String>[].obs;
+  RxList<String> customerCategoryList = [
+    "Salaried",
+    "Salaried NRI",
+    "Self Employed Professional",
+    "Self Employed Non Professional",
+    "Non-Individual",
+    "Others"
+  ].obs;
+  /*var selectedCustomerCategories = <String>[].obs;*/
+  RxList<String> selectedCustomerCategories = <String>[].obs;
+
   var getAllProductCategoryModel = Rxn<productCat.GetAllProductCategoryModel>(); //
   var addProductListModel = Rxn<AddProductListModel>(); //
   var addProductDocumentModel = Rxn<AddProductDocumentModel>(); //
@@ -340,7 +349,7 @@ class AddProductController extends GetxController{
   }
 
   void saveForm() {
-    print("Form Saved!");
+
   }
   List<GlobalKey<FormState>> stepFormKeys = List.generate(4, (_) => GlobalKey<FormState>());
   @override
@@ -365,7 +374,7 @@ class AddProductController extends GetxController{
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please name the product");
     }else{
-      print("pdocDescr===>${ Helper.convertListToCsvSafe(selectedProdDescr.value)}");
+
 
       addProductListApi(
         Id: "0",
@@ -421,7 +430,6 @@ class AddProductController extends GetxController{
          docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
       );
 
-      print("All steps valid! Submitting form...");
     }
 
 
@@ -437,7 +445,7 @@ class AddProductController extends GetxController{
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select KSDPL Product");
     }else{
-      print("FD---->${prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):""}");
+
       updateProductListApi(
           Id: getProductListById.value!.data!.id.toString(),
           BankId:selectedBank.value?.toString(),
@@ -492,7 +500,6 @@ class AddProductController extends GetxController{
         docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
       );
 
-      print("All steps valid! Submitting form...");
     }
 
 
@@ -1158,7 +1165,7 @@ class AddProductController extends GetxController{
         docDescr: docDescr
       );
 
-      print("Income_Types in API controller===>${Income_Types}");
+
 
 
       if(data['success'] == true){
@@ -1183,7 +1190,7 @@ class AddProductController extends GetxController{
             "documentType": documentType,
           })
               .toList();
-          print("productDocument===>${documentPayload}");
+
           await ProductService.addProductDocumentApi(body: documentPayload);
         }
 
@@ -1266,7 +1273,7 @@ class AddProductController extends GetxController{
   }) async {
     try {
       isLoading(true);
-      print("Income_Types in API controlle updateProductListApir===>${Income_Types}");
+
       var data = await ProductService.updateProductListApi(
         KSDPLProductId: KSDPLProductId,
         Id: Id,
@@ -1345,7 +1352,7 @@ class AddProductController extends GetxController{
             "documentType": documentType,
           })
               .toList();
-          print("productDocument===>${documentPayload}");
+
           await ProductService.addProductDocumentApi(body: documentPayload);
         }
 
@@ -1384,7 +1391,7 @@ class AddProductController extends GetxController{
 
       if(data['success'] == true){
 
-        print("here 1");
+
 
         getProductListById.value= GetProductListById.fromJson(data);
 
@@ -1430,6 +1437,14 @@ class AddProductController extends GetxController{
             .split(',')
             .map((e) => e.trim())
             .toList());
+
+
+    print("selectedCustomerCategories in get===>${selectedCustomerCategories}");
+    print("Dropdown items: ${customerCategoryList}");
+
+
+
+
     selectedCollSecCat.assignAll(
         (getProductListById.value!.data!.collateralSecurityCategory ?? "")
             .split(',')
@@ -1442,16 +1457,6 @@ class AddProductController extends GetxController{
             .split(',')
             .map((e) => e.trim())
             .toList());
-
-    print("customerCategory res===>${getProductListById.value!.data!.customerCategory}");
-    print("selectedCustomerCategories res===>${ selectedCustomerCategories.value}");
-
-    print("collateralSecurityCategory res===>${getProductListById.value!.data!.collateralSecurityCategory}");
-    print("selectedCollSecCat res===>${ selectedCollSecCat.value}");
-
-
-    print("incomeTypes res===>${getProductListById.value!.data!.incomeTypes}");
-    print("selectedIncomeType res===>${ selectedIncomeType.value}");
   }
 
   Future <void> populateStep2Info() async{
@@ -1527,9 +1532,8 @@ class AddProductController extends GetxController{
     try {
       isLoading(true);
       var uln = Get.arguments['uln'];
-      print("addLoanApplicationApi");
 
-      print("here propid===>${cleanText(propPropIdController.text)}");
+
       var data = await ProductService.addProductDocumentApi(
           body:[
             {
@@ -1545,7 +1549,7 @@ class AddProductController extends GetxController{
       if(data['success'] == true){
 
         addProductDocumentModel.value= AddProductDocumentModel.fromJson(data);
-        print("sucess addprodoc==>${addProductDocumentModel.value!.message!.toString()}");
+
 
         isLoading(false);
 
@@ -1577,7 +1581,7 @@ class AddProductController extends GetxController{
 
       if(data['success'] == true){
 
-        print("here 1");
+
 
         getDocumentProductIdModel.value= GetDocumentProductIdModel.fromJson(data);
         selectedProdDescr.assignAll(

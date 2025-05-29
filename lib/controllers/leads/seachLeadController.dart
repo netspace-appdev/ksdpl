@@ -44,14 +44,6 @@ class SearchLeadController extends GetxController{
 
   pollFilterSubmit(){
 
-    print("st==>${leadDDController.selectedState.value}");
-    print("st==>${leadDDController.selectedDistrict.value}");
-    print("st==>${leadDDController.selectedCity.value}");
-    print("st==>${leadListController.eId}");
-    print("st==>${leadListController.leadCode.value}");
-
-
-
     getCommonLeadListByFilterApi(
       stateId: leadDDController.selectedState.value??"0",
       distId: leadDDController.selectedDistrict.value??"0",
