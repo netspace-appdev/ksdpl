@@ -247,7 +247,22 @@ class Step1FormProduct extends StatelessWidget {
               const SizedBox(height: 10),
 
 
-              MultiSelectDropdown<String>(
+              Obx(() {
+                final values = addProductController.selectedCollSecCat.toList();
+                return MultiSelectDropdown<String>(
+                  key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
+                  items: addProductController.collSecCatList.toList(),
+                  getId: (e) => e,
+                  getName: (e) => e,
+                  selectedValues: values,
+                  onChanged: (selectedList) {
+                    addProductController.selectedCollSecCat.assignAll(selectedList);
+                  },
+                );
+              }),
+
+
+           /*   MultiSelectDropdown<String>(
                 items: addProductController.collSecCatList,
                 getId: (e) => e,
                 getName: (e) => e,
@@ -257,7 +272,7 @@ class Step1FormProduct extends StatelessWidget {
                   addProductController.selectedCollSecCat.assignAll(selectedList);
                 },
               ),
-
+*/
 
               const SizedBox(height: 20),
 
@@ -284,28 +299,24 @@ class Step1FormProduct extends StatelessWidget {
               const SizedBox(height: 10),
 
 
-              MultiSelectDropdown<String>(
-                items: addProductController.incomeTypeList,
-                getId: (e) => e,
-                getName: (e) => e,
-                selectedValues: addProductController.selectedIncomeType.toList(),
-                onChanged: (selectedList) {
-
-                  addProductController.selectedIncomeType.assignAll(selectedList);
-                },
-              ),
+              Obx(() {
+                final values = addProductController.selectedIncomeType.toList();
+                return MultiSelectDropdown<String>(
+                  key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
+                  items: addProductController.incomeTypeList.toList(),
+                  getId: (e) => e,
+                  getName: (e) => e,
+                  selectedValues: values,
+                  onChanged: (selectedList) {
+                    addProductController.selectedIncomeType.assignAll(selectedList);
+                  },
+                );
+              }),
 
 
               const SizedBox(height: 20),
 
-             /* CustomLabeledTextField(
-                label: AppText.profileExcluded, ///Previously it was named Profile Excluded
 
-                controller: addProductController.prodProfileExcludedController,
-                inputType: TextInputType.name,
-                hintText: AppText.enterProfileExcluded,
-
-              ),*/
 
 
             ],

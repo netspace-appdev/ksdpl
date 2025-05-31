@@ -312,7 +312,7 @@ class AppText{
   static const String selectChannel = "Select your Channel";
   static const String channelCode = "Channel Code";
   static const String enterChannelCode = "Enter Channel Code";
-  static const String processingFee = "Processing Fee";
+  static const String processingFee = "Processing Fee (%)";
   static const String enterProcessingFee = "Enter Processing Fee";
   static const String chqDdSlipNo = "CHQ/DD Slip No";
   static const String enterChqDdSlipNo = "Enter CHQ/DD Slip No";
@@ -493,26 +493,26 @@ class AppText{
   static const String maxLtv = "Maximum LTV";
   static const String enterMaxLtv = "Enter Maximum LTV";
 
-  static const String legalFee = "Legal Fee";
+  static const String legalFee = "Legal Fee (₹)";
   static const String enterLegalFee = "EnterLegal Fee";
-  static const String technicalFee = "Technical Fee";
+  static const String technicalFee = "Technical Fee (₹)";
   static const String enterTechnicalFee = "EnterTechnical Fee";
-  static const String adminFee = "Admin Fee";
+  static const String adminFee = "Admin Fee (₹)";
   static const String enterAdminFee = "Enter Admin Fee";
-  static const String foreclosureCharges = "Foreclosure Charges";
+  static const String foreclosureCharges = "Foreclosure Charges (%)";
   static const String enterForeclosureCharges = "Enter Foreclosure Charges";
-  static const String otherCharges = "Other Charges";
+  static const String otherCharges = "Other Charges (₹)";
   static const String enterOtherCharges = "Enter Other Charges";
-  static const String stampDuty = "Stamp Duty";
+  static const String stampDuty = "Stamp Duty (%)";
   static const String tampDuty = "Stamp Duty";
   static const String enterStampDuty = "Enter Stamp Duty";
 
   static const String tsrYears = "TSR Years";
   static const String enterTsrYears = "Enter TSR Charges";
 
-  static const String tsrCharges = "TSR Charges";
+  static const String tsrCharges = "TSR Charges (₹)";
   static const String enterTsrCharges = "Enter TSR Charges";
-  static const String valuationCharges = "Valuation Charges";
+  static const String valuationCharges = "Valuation Charges (₹)";
   static const String enterValuationCharges = "Enter Valuation Charges";
 
   static const String ksdplProduct = "KSDPL Product";
@@ -538,7 +538,7 @@ class AppText{
   static const String selectCollateralSecurityCategory = "Select Collateral Security Category";
   static const String selectIncomeType = "Select Income Type";
   static const String productName = "Product Name";
-  static const String enterProductName = "enter product name";
+  static const String enterProductName = "Enter product name";
 
   static const String noOfDocuments = "No. of Documents";
   static const String enterNoOfDocuments = "Enter No. of Documents";
@@ -549,7 +549,7 @@ class AppText{
   static const String editProduct = "Edit Product";
   static const String leadform_camnote = "Lead Form & Cam Note";
 
-  static const String processingCharges = "Processing Charges";
+  static const String processingCharges = "Processing Charges (₹)";
   static const String enterProcessingCharges = "Enter Processing Charges";
 
 
@@ -669,7 +669,20 @@ class AppText{
   static const String superiorEmail = "Superior Email";
   static const String enterSuperiorEmail = "Enter Superior Email";
 
+  static const String fromAmtRange = "From Amount Range";
+  static const String enterFromAmtRange = "Enter From Amount Range";
 
+  static const String toAmtRange = "To Amount Range";
+  static const String enterToAmtRange = "Enter To Amount Range";
+
+  static const String totalOverdueCases2 = "Total Overdue Cases";
+  static const String enterTotalOverdueCases = "Enter Total Overdue Cases";
+
+  static const String totalOverdueAmount = "Total Overdue Amount";
+  static const String enterTotalOverdueAmount = "Enter Total Overdue Amount";
+
+  static const String totalEnquiries2 = "Total Enquiries";
+  static const String enterTotalEnquiries2 = "Enter Total Enquiries";
 }
 
 class AppColor{

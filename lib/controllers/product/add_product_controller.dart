@@ -17,7 +17,9 @@ import '../../models/loan_application/special_model/CreditCardModel.dart';
 import '../../models/loan_application/special_model/FamilyMemberModel.dart';
 import '../../models/loan_application/special_model/ReferenceModel.dart';
 import '../../models/product/AddProductListModel.dart';
+import '../../models/product/GetAllNegativeProfileModel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
+import '../../models/product/GetAllNegativeProfileModel.dart' as negProfile;
 import '../../models/product/GetAllProductCategoryModel.dart';
 import '../../models/product/GetDocumentProductIdModel.dart';
 import '../../models/product/GetProductListById.dart';
@@ -223,6 +225,12 @@ class AddProductController extends GetxController{
   final TextEditingController prodProductValidateToController = TextEditingController();
   final TextEditingController prodMaxTatController = TextEditingController();
 
+  final TextEditingController prodFromAmtController = TextEditingController();
+  final TextEditingController prodToAmtController = TextEditingController();
+  final TextEditingController prodTotalOverdueCasesController = TextEditingController();
+  final TextEditingController prodTotalOverdueAmtController = TextEditingController();
+  final TextEditingController prodTotalEnquiriesController = TextEditingController();
+
 // Descriptions
   final TextEditingController prodDocumentDescriptionsController = TextEditingController();
   final TextEditingController prodProductDescriptionsController = TextEditingController();
@@ -244,6 +252,7 @@ class AddProductController extends GetxController{
   var addProductListModel = Rxn<AddProductListModel>(); //
   var addProductDocumentModel = Rxn<AddProductDocumentModel>(); //
   RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
+  RxList<negProfile.Data> negProfileApiList = <negProfile.Data>[].obs;
   var isLoadingProductCategory = false.obs;
   var isProductLoading = false.obs;
   var selectedKsdplProduct = Rxn<int>();
@@ -282,7 +291,7 @@ class AddProductController extends GetxController{
   ];
   var selectedCollSecCat = <String>[].obs;
   var selectedIncomeType = <String>[].obs;
-  var selectedNegProfile = <String>[].obs;
+  RxList<negProfile.Data> selectedNegProfile = <negProfile.Data>[].obs;
   var selectedProdDescr = <String>[].obs;
   var selectedNegArea = <String>[].obs;
 
@@ -293,6 +302,7 @@ class AddProductController extends GetxController{
 
   var getProductListById = Rxn<GetProductListById>(); //
   var getDocumentProductIdModel = Rxn<GetDocumentProductIdModel>(); //
+  var getAllNegativeProfileModel = Rxn<GetAllNegativeProfileModel>(); //
 
   void addChip(String value) {
     if (value.trim().isNotEmpty && !chips.contains(value.trim())) {
@@ -351,6 +361,10 @@ class AddProductController extends GetxController{
   void saveForm() {
 
   }
+
+  final processingFeeFieldKey = GlobalKey<FormFieldState>();
+  final processingFeeFocusNode = FocusNode();
+
   List<GlobalKey<FormState>> stepFormKeys = List.generate(4, (_) => GlobalKey<FormState>());
   @override
   void onInit() {
@@ -358,9 +372,54 @@ class AddProductController extends GetxController{
     super.onInit();
   }
 
-  void validateAndSubmit() {
+  bool validateAllSteps(List<GlobalKey<FormState>> stepFormKeys) {
+    bool allValid = true;
 
+    for (var formKey in stepFormKeys) {
+      final isStepValid = formKey.currentState?.validate() ?? false;
+      if (!isStepValid) {
+        allValid = false;
+      }
+    }
 
+    return allValid;
+  }
+
+  void validateAndSubmit() async {
+
+  /*  for (int i = 0; i < stepFormKeys.length; i++) {
+      print("✅ i==>${i}");
+      final formKey = stepFormKeys[i];
+
+      final formState = formKey.currentState;
+      if (formState != null) {
+        if (!formState.validate()) {
+          // Jump to the step with the first error
+          jumpToStep(i);
+
+          await Future.delayed(Duration(milliseconds: 300)); // Let the UI update
+
+          // Handle known field errors (like processing fee)
+          if (i == 3) {
+            final context = processingFeeFieldKey.currentContext;
+            if (context != null) {
+              Scrollable.ensureVisible(
+                context,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                alignment: 0.3,
+              );
+              processingFeeFocusNode.requestFocus();
+            }
+          }
+
+          return;
+        }
+      }
+    }*/
+
+    // All forms are valid!
+    print("✅ All forms passed validation. Submit to API now.");
     if(selectedKsdplProduct.value==null){
       jumpToStep(0);
 
@@ -374,6 +433,10 @@ class AddProductController extends GetxController{
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please name the product");
     }else{
+
+      print("neg pro==>${Helper.convertListToCsvSafe(
+          selectedNegProfile.map((e) => e.negativeProfile.toString()).toList()
+      )}");
 
 
       addProductListApi(
@@ -405,7 +468,9 @@ class AddProductController extends GetxController{
          Maximum_ROI:prodMaxRoiController.text,
          Maximum_Tenor_Eligibility_Criteria:prodMaxTenorEligibilityCriteriaController.text,
          Geo_Limit:prodGeoLimitController.text,
-         Negative_Profiles:Helper.convertListToCsvSafe(selectedNegProfile.value),
+         Negative_Profiles:Helper.convertListToCsvSafe(
+             selectedNegProfile.map((e) => e.negativeProfile.toString()).toList()
+         ),
          Negative_Areas:Helper.convertListToCsvSafe(selectedNegArea.value),
          Maximum_TAT:prodMaxTatController.text,
          Minimum_Property_Value:prodMinPropertyValueController.text,
@@ -417,6 +482,7 @@ class AddProductController extends GetxController{
          Technical_Fee:prodTechnicalFeeController.text,
          Admin_Fee:prodAdminFeeController.text,
          Foreclosure_Charges:prodForeclosureChargesController.text,
+         Processing_Charges:prodProcessingChargesController.text,
          Other_Charges:prodOtherChargesController.text,
          Stamp_Duty:prodStampDutyController.text,
          TSR_Years:prodTsrYearsController.text,
@@ -428,6 +494,11 @@ class AddProductController extends GetxController{
          Profit_Percentage:prodProfitPercentageController.text,
          KSDPLProductId:selectedKsdplProduct.value.toString(),
          docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
+        FromAmountRange:prodFromAmtController.text,
+        ToAmountRange: prodToAmtController.text,
+        TotalOverdueCases: prodTotalOverdueCasesController.text,
+        TotalOverdueAmount: prodTotalOverdueAmtController.text,
+        TotalEnquiries: prodTotalEnquiriesController.text,
       );
 
     }
@@ -475,11 +546,13 @@ class AddProductController extends GetxController{
           Maximum_ROI:prodMaxRoiController.text,
           Maximum_Tenor_Eligibility_Criteria:prodMaxTenorEligibilityCriteriaController.text,
           Geo_Limit:prodGeoLimitController.text,
-          Negative_Profiles:Helper.convertListToCsvSafe(selectedNegProfile.value),
+          Negative_Profiles:Helper.convertListToCsvSafe(
+            selectedNegProfile.map((e) => e.negativeProfile.toString()).toList()
+           ),
           Negative_Areas:Helper.convertListToCsvSafe(selectedNegArea.value),
           Maximum_TAT:prodMaxTatController.text,
           Minimum_Property_Value:prodMinPropertyValueController.text,
-          Maximum_IIR:prodMaxIirController.text,
+          Maximum_IIR:prodMaxIirController.text.isEmpty?prodMaxFoirController.text:prodMaxIirController.text,
           Maximum_FOIR:prodMaxFoirController.text,
           Maximum_LTV:prodMaxLtvController.text,
           Processing_Fee:prodProcessingFeeController.text,
@@ -498,213 +571,14 @@ class AddProductController extends GetxController{
           Profit_Percentage:prodProfitPercentageController.text,
           KSDPLProductId:selectedKsdplProduct.value.toString(),
         docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
+        Processing_Charges:prodProcessingChargesController.text,
       );
 
     }
 
 
   }
-  void copyPresentToPermanentAddress() {
-    // Text field values
-    houseFlatPermController.text = houseFlatController.text;
-    buildingNoPermController.text = buildingNoController.text;
-    societyNamePermController.text = societyNameController.text;
-    localityPermController.text = localityController.text;
-    streetNamePermController.text = streetNameController.text;
-    pinCodePermController.text = pinCodeController.text;
-    talukaPermController.text = talukaController.text;
-    selectedCountryPerm.value = selectedCountry.value;
 
-    // Copy state
-    leadDDController.selectedStatePerm.value = leadDDController.selectedStateCurr.value;
-
-    // Now fetch districts and wait for the lists to update
-    leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value).then((_) {
-      leadDDController.districtListPerm.value = List.from(leadDDController.districtListCurr);
-      leadDDController.selectedDistrictPerm.value = leadDDController.selectedDistrictCurr.value;
-
-      // Now fetch cities and wait for the city list to update
-      leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value).then((_) {
-        leadDDController.cityListPerm.value = List.from(leadDDController.cityListCurr);
-        leadDDController.selectedCityPerm.value = leadDDController.selectedCityCurr.value;
-      });
-    });
-  }
-
-  void addCoApplicant() {
-    coApplicantList.add(CoApplicantDetailController());
-  }
-  void addFamilyMember() {
-    familyMemberApplList.add(FamilyMemberController());
-  }
-  void addCreditCard() {
-    creditCardsList.add(CreditCardsController());
-  }
-  void addReference() {
-    referencesList.add(ReferenceController());
-  }
-
-  void removeCoApplicant(int index) {
-    if (coApplicantList.length <= 1) {
-      ToastMessage.msg("You can not delete this");
-      return;
-    }
-    if (index >= 0 && index < coApplicantList.length) {
-      // Hold reference to the item to be disposed
-      final removed = coApplicantList[index];
-
-      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
-      coApplicantList.removeAt(index);
-      coApplicantList.refresh(); // If you're using an RxList
-
-      // Dispose AFTER rebuild
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        removed.coApFullNameController.dispose();
-        removed.coApFatherNameController.dispose();
-        removed.coApDobController.dispose();
-        removed.coApQqualiController.dispose();
-        removed.coApMaritalController.dispose();
-        removed.coApEmplStatusController.dispose();
-        removed.coApNationalityController.dispose();
-        removed.coApOccupationController.dispose();
-        removed.coApOccSectorController.dispose();
-        removed.coApEmailController.dispose();
-        removed.coApMobController.dispose();
-        removed.coApQualiController.dispose();
-
-        removed.coApCurrHouseFlatController.dispose();
-        removed.coApCurrBuildingNoController.dispose();
-        removed.coApCurrSocietyNameController.dispose();
-        removed.coApCurrLocalityController.dispose();
-        removed.coApCurrStreetNameController.dispose();
-        removed.coApCurrPinCodeController.dispose();
-        removed.coApCurrTalukaController.dispose();
-
-        removed.coApPermHouseFlatController.dispose();
-        removed.coApPermBuildingNoController.dispose();
-        removed.coApPermSocietyNameController.dispose();
-        removed.coApPermLocalityController.dispose();
-        removed.coApPermStreetNameController.dispose();
-        removed.coApPermPinCodeController.dispose();
-        removed.coApPermTalukaController.dispose();
-
-
-        removed.selectedStateCurr.value = null;
-        removed.selectedDistrictCurr.value = null;
-        removed.selectedCityCurr.value = null;
-
-        removed.selectedStatePerm.value = null;
-        removed.selectedDistrictPerm.value = null;
-        removed.selectedCityPerm.value = null;
-
-        // Clear RxLists
-        removed.stateListPerm.clear();
-        removed.stateListCurr.clear();
-
-        removed.districtListPerm.clear();
-        removed.districtListCurr.clear();
-
-        removed.cityListPerm.clear();
-        removed.cityListCurr.clear();
-
-      });
-    } else {
-      print("🧯 Invalid index passed to removeCoApplicant: $index");
-    }
-  }
-
-
-  void removeFamilyMember(int index) {
-    if (familyMemberApplList.length <= 1) {
-      ToastMessage.msg("You can not delete this");
-      return;
-    }
-    if (index >= 0 && index < familyMemberApplList.length) {
-      // Hold reference to the item to be disposed
-      final removed = familyMemberApplList[index];
-
-      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
-      familyMemberApplList.removeAt(index);
-      familyMemberApplList.refresh(); // If you're using an RxList
-
-      // Dispose AFTER rebuild
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        removed.famNameController.dispose();
-        removed.famDobController.dispose();
-        removed.famRelWithApplController.dispose();
-        removed.famMonthlyIncomeController.dispose();
-        removed.famEmployedWithController.dispose();
-
-        removed.selectedGenderFam.value = null;
-        removed.selectedFamDependent.value = null;
-
-      });
-    } else {
-      print("🧯 Invalid index passed to removeCoApplicant: $index");
-    }
-  }
-
-
-  void removeCreditCard(int index) {
-    if (creditCardsList.length <= 1) {
-      ToastMessage.msg("You can not delete this");
-      return;
-    }
-    if (index >= 0 && index < creditCardsList.length) {
-      // Hold reference to the item to be disposed
-      final removed = creditCardsList[index];
-
-      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
-      creditCardsList.removeAt(index);
-      creditCardsList.refresh(); // If you're using an RxList
-
-      // Dispose AFTER rebuild
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        removed.ccCompBankController.dispose();
-        removed.ccCardNumberController.dispose();
-        removed.ccHavingSinceController.dispose();
-        removed.ccAvgMonSpendingController.dispose();
-      });
-    } else {
-      print("🧯 Invalid index passed to removeCoApplicant: $index");
-    }
-  }
-
-  void removeReference(int index) {
-    if (referencesList.length <= 1) {
-      ToastMessage.msg("You can not delete this");
-      return;
-    }
-    if (index >= 0 && index < referencesList.length) {
-      // Hold reference to the item to be disposed
-      final removed = referencesList[index];
-
-      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
-      referencesList.removeAt(index);
-      referencesList.refresh(); // If you're using an RxList
-
-      // Dispose AFTER rebuild
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        removed.refNameController.dispose();
-        removed.refAddController.dispose();
-        removed.refPhoneController.dispose();
-        removed.refRelWithApplController.dispose();
-        removed.refPincodeController.dispose();
-
-        removed.stateListPerm.clear();
-        removed.districtListPerm.clear();
-        removed.cityListPerm.clear();
-
-        removed.selectedStatePerm.value = null;
-        removed.selectedDistrictPerm.value = null;
-        removed.selectedCityPerm.value = null;
-        removed.selectedCountry.value = null;
-
-      });
-    } else {
-      print("🧯 Invalid index passed to removeCoApplicant: $index");
-    }
-  }
   @override
   void onClose() {
     // TODO: implement onClose
@@ -883,13 +757,6 @@ class AddProductController extends GetxController{
   }
 
 
-
-
-
-
-
-
-
   String cleanText(String text) {
     return text.trim().isEmpty ? "" : text.trim();
   }
@@ -900,6 +767,7 @@ class AddProductController extends GetxController{
     }
     return 0;
   }
+
   String cleanDateText(String? controller) {
     if (controller == null) return "null";
     final text = controller.trim();
@@ -917,21 +785,6 @@ class AddProductController extends GetxController{
   void debugPrintKeyVal(String key, dynamic value) {
     print("$key: ${value ?? 'null'}");
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   ///product
@@ -1097,6 +950,7 @@ class AddProductController extends GetxController{
     String? Technical_Fee,
     String? Admin_Fee,
     String? Foreclosure_Charges,
+    String? Processing_Charges,
     String? Other_Charges,
     String? Stamp_Duty,
     String? TSR_Years,
@@ -1107,6 +961,11 @@ class AddProductController extends GetxController{
     String? Product_Validate_To_date,
     String? Profit_Percentage,
     String? docDescr,
+    String? FromAmountRange,
+    String? ToAmountRange,
+    String? TotalOverdueCases,
+    String? TotalOverdueAmount,
+    String? TotalEnquiries,
 }) async {
     try {
       isLoading(true);
@@ -1153,6 +1012,7 @@ class AddProductController extends GetxController{
         Technical_Fee: Technical_Fee,
         Admin_Fee: Admin_Fee,
         Foreclosure_Charges: Foreclosure_Charges,
+          Processing_Charges: Processing_Charges,
         Other_Charges: Other_Charges,
         Stamp_Duty: Stamp_Duty,
         TSR_Years: TSR_Years,
@@ -1162,7 +1022,13 @@ class AddProductController extends GetxController{
         Product_Validate_From_date: Product_Validate_From_date,
         Product_Validate_To_date: Product_Validate_To_date,
         Profit_Percentage: Profit_Percentage,
-        docDescr: docDescr
+        docDescr: docDescr,
+          FromAmountRange:FromAmountRange,
+        ToAmountRange: ToAmountRange,
+        TotalOverdueAmount: TotalOverdueAmount,
+        TotalOverdueCases: TotalOverdueCases,
+        TotalEnquiries: TotalEnquiries,
+
       );
 
 
@@ -1256,6 +1122,7 @@ class AddProductController extends GetxController{
     String? Maximum_FOIR,
     String? Maximum_LTV,
     String? Processing_Fee,
+    String? Processing_Charges,
     String? Legal_Fee,
     String? Technical_Fee,
     String? Admin_Fee,
@@ -1270,6 +1137,11 @@ class AddProductController extends GetxController{
     String? Product_Validate_To_date,
     String? Profit_Percentage,
     String? docDescr,
+    String? FromAmountRange,
+    String? ToAmountRange,
+    String? TotalOverdueCases,
+    String? TotalOverdueAmount,
+    String? TotalEnquiries,
   }) async {
     try {
       isLoading(true);
@@ -1325,7 +1197,13 @@ class AddProductController extends GetxController{
         Product_Validate_From_date: Product_Validate_From_date,
         Product_Validate_To_date: Product_Validate_To_date,
         Profit_Percentage: Profit_Percentage,
-        docDescr: docDescr
+        docDescr: docDescr,
+          Processing_Charges: Processing_Charges,
+        FromAmountRange:FromAmountRange,
+        ToAmountRange: ToAmountRange,
+        TotalOverdueAmount: TotalOverdueAmount,
+        TotalOverdueCases: TotalOverdueCases,
+        TotalEnquiries: TotalEnquiries,
       );
 
 
@@ -1417,6 +1295,9 @@ class AddProductController extends GetxController{
       isLoadingMainScreen(false);
     }
   }
+
+
+
   Future <void> populateStep1Info() async{
     await leadDDController.getAllKsdplProductApi();
     selectedKsdplProduct.value=int.parse(getProductListById.value!.data!.ksdplProductId.toString());
@@ -1432,24 +1313,19 @@ class AddProductController extends GetxController{
     await getAllProductCategoryApi();
     selectedProductCategory.value=int.parse(getProductListById.value!.data!.segmentVertical.toString());
     prodProductNameController.text=getProductListById.value!.data!.product??"";
+
     selectedCustomerCategories.assignAll(
         (getProductListById.value!.data!.customerCategory ?? "")
             .split(',')
             .map((e) => e.trim())
             .toList());
 
-
-    print("selectedCustomerCategories in get===>${selectedCustomerCategories}");
-    print("Dropdown items: ${customerCategoryList}");
-
-
-
-
     selectedCollSecCat.assignAll(
         (getProductListById.value!.data!.collateralSecurityCategory ?? "")
             .split(',')
             .map((e) => e.trim())
             .toList());
+
     prodCollateralSecurityExcludedController.text=getProductListById.value!.data!.collateralSecurityExcluded??"";
     prodProfileExcludedController.text=getProductListById.value!.data!.profileExcluded??"";
     selectedIncomeType.assignAll(
@@ -1487,6 +1363,7 @@ class AddProductController extends GetxController{
     prodMaxFoirController.text=(getProductListById.value!.data!.maximumFOIR ?? 0).toStringAsFixed(2);
     prodMaxLtvController.text=(getProductListById.value!.data!.maximumLTV ?? 0).toStringAsFixed(2);
     prodProcessingFeeController.text=(getProductListById.value!.data!.processingFee ?? 0).toStringAsFixed(2);
+    prodProcessingChargesController.text=(getProductListById.value!.data!.processingCharges ?? 0).toStringAsFixed(2);
     prodLegalFeeController.text=(getProductListById.value!.data!.legalFee ?? 0).toStringAsFixed(2);
     prodTechnicalFeeController.text=(getProductListById.value!.data!.technicalFee ?? 0).toStringAsFixed(2);
     prodAdminFeeController.text=(getProductListById.value!.data!.adminFee ?? 0).toStringAsFixed(2);
@@ -1500,11 +1377,30 @@ class AddProductController extends GetxController{
     prodProductValidateToController.text=Helper.convertFromIso8601(getProductListById.value!.data!.productValidateToDate);
     prodMaxTatController.text=(getProductListById.value!.data!.maximumTAT ?? 0).toStringAsFixed(2);
 
-    selectedNegProfile.assignAll(
+    prodFromAmtController.text=(getProductListById.value!.data!.fromAmountRange ?? 0).toStringAsFixed(2);
+    prodToAmtController.text=(getProductListById.value!.data!.toAmountRange ?? 0).toStringAsFixed(2);
+    prodTotalOverdueCasesController.text=(getProductListById.value!.data!.totalOverdueCases ?? 0).toStringAsFixed(0);
+    prodTotalOverdueAmtController.text=(getProductListById.value!.data!.totalOverdueAmount ?? 0).toStringAsFixed(2);
+    prodTotalEnquiriesController.text=(getProductListById.value!.data!.totalEnquiries ?? 0).toStringAsFixed(0);
+
+    var tempSelectedProfileNames = (getProductListById.value!.data!.negativeProfiles ?? "")
+        .split(',')
+        .map((e) => e.trim())
+        .toList();
+
+// Now match them with the actual objects
+    final matchedProfiles = negProfileApiList
+        .where((profile) => tempSelectedProfileNames.contains(profile.negativeProfile))
+        .toList();
+
+// Assign
+    selectedNegProfile.assignAll(matchedProfiles);
+
+/*    selectedNegProfile.assignAll(
         (getProductListById.value!.data!.negativeProfiles ?? "")
             .split(',')
             .map((e) => e.trim())
-            .toList());
+            .toList());*/
 
     selectedNegArea.assignAll(
         (getProductListById.value!.data!.negativeAreas ?? "")
@@ -1591,6 +1487,44 @@ class AddProductController extends GetxController{
               .cast<String>()
               .toList(),
         );
+
+        isLoadingMainScreen(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllProductListModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoadingMainScreen(false);
+    } finally {
+
+      isLoadingMainScreen(false);
+    }
+  }
+
+
+  void  getAllNegativeProfileApi() async {
+    try {
+      isLoadingMainScreen(true);
+
+      var data = await ProductService.getAllNegativeProfileApi();
+
+      if(data['success'] == true){
+
+
+        getAllNegativeProfileModel.value= GetAllNegativeProfileModel.fromJson(data);
+
+        final List<negProfile.Data> allNegProfiles = getAllNegativeProfileModel.value?.data ?? [];
+
+        final List<negProfile.Data> activeNegProfile = allNegProfiles.where((cat) => cat.active == true).toList();
+
+        negProfileApiList.value = activeNegProfile;
+
+
 
         isLoadingMainScreen(false);
 

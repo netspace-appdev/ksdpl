@@ -12,8 +12,9 @@ import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
+import '../../custom_widgets/CustomMultiSelectDropdown.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
-
+import '../../models/product/GetAllNegativeProfileModel.dart' as negProfile;
 
 
 class Step3FormProduct extends StatelessWidget {
@@ -46,7 +47,7 @@ class Step3FormProduct extends StatelessWidget {
               ),
 
               const SizedBox(height: 10),
-              CustomChipTextField(
+             /* CustomChipTextField(
                 textController: addProductController.chipTextController,
                 initialTags: addProductController.selectedNegProfile.toList(),
                 hintText:  AppText.negativeProfilesHint,
@@ -55,6 +56,20 @@ class Step3FormProduct extends StatelessWidget {
                   addProductController.selectedNegProfile.assignAll(tags);
                 },
               ),
+*/
+          Obx(() {
+            final values = addProductController.selectedNegProfile.toList(); // This should be List<negProfile.Data>
+            return MultiSelectDropdown<negProfile.Data>(
+              key: ValueKey(values.map((e) => e.id).join(',')), // Give it something stable to hash
+              items: addProductController.negProfileApiList.toList(),
+              getId: (e) => e.id.toString(), // assuming `id` is a property of `Data`
+              getName: (e) => e.negativeProfile ?? 'Unknown', // assuming `name` is a property of `Data`
+              selectedValues: values,
+              onChanged: (selectedList) {
+                addProductController.selectedNegProfile.assignAll(selectedList);
+              },
+            );
+          }),
 
 
               const SizedBox(
@@ -117,8 +132,28 @@ class Step3FormProduct extends StatelessWidget {
                 controller: addProductController.prodProcessingFeeController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterProcessingFee,
-                validator:  ValidationHelper.validateName,
+                validator:  ValidationHelper.validatePercentage,
               ),
+
+          /*    TextFormField(
+                key: addProductController.processingFeeFieldKey,
+                focusNode: addProductController.processingFeeFocusNode,
+                controller: addProductController.prodProcessingFeeController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: "Enter Processing Fee",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  final numValue = num.tryParse(value ?? '') ?? 0;
+                  if (numValue > 100) {
+                    return "Percentage can't be more than 100!";
+                  }
+                  return null;
+                },
+              ),*/
+
+
 
               CustomLabeledTextField(
                 label: AppText.legalFee,
@@ -232,6 +267,45 @@ class Step3FormProduct extends StatelessWidget {
                 validator:  ValidationHelper.validateName,
               ),
 
+              CustomLabeledTextField(
+                label: AppText.fromAmtRange,
+                controller: addProductController.prodFromAmtController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterFromAmtRange,
+                validator:  ValidationHelper.validateName,
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.toAmtRange,
+                controller: addProductController.prodToAmtController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterToAmtRange,
+                validator:  ValidationHelper.validateName,
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.totalOverdueCases2,
+                controller: addProductController.prodTotalOverdueCasesController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterTotalOverdueCases,
+                validator:  ValidationHelper.validateName,
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.totalOverdueAmount,
+                controller: addProductController.prodTotalOverdueAmtController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterTotalOverdueAmount,
+                validator:  ValidationHelper.validateName,
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.totalEnquiries2,
+                controller: addProductController.prodTotalEnquiriesController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterTotalEnquiries2,
+                validator:  ValidationHelper.validateName,
+              ),
             ],
           ),
         );

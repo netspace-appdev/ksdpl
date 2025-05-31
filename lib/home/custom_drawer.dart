@@ -191,6 +191,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                        leadDDController.getAllKsdplProductApi();
                        AddProductController addProductController =Get.put(AddProductController());
                        addProductController.getAllProductCategoryApi();
+                       addProductController.getAllNegativeProfileApi();
                        addProductController.clearForm();
                        addProductController.currentStep.value=0;
                        Get.toNamed("/addProductScreen");

@@ -174,8 +174,8 @@ class LeadListController extends GetxController {
 
     }else if( selectedIndex.value==2){
       leadCode.value="3";
-      leadStageName.value="Working Leads";
-
+      leadStageName.value="Ongoing Call";
+      //working leads is now ongoing call
     }else if(selectedIndex.value==3){
       leadCode.value="13";
       leadStageName.value="Couldn't Connect";

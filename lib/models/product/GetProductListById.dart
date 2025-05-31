@@ -63,6 +63,7 @@ class Data {
   num? maximumFOIR;
   num? maximumLTV;
   num? processingFee;
+  num? processingCharges;
   num? legalFee;
   num? technicalFee;
   num? adminFee;
@@ -86,6 +87,11 @@ class Data {
   String? deletedDate;
   String? deletedBy;
   String? productCategoryName;
+  num? fromAmountRange;
+  num? toAmountRange;
+  num? totalOverdueCases;
+  num? totalOverdueAmount;
+  num? totalEnquiries;
 
   Data(
       {this.id,
@@ -125,6 +131,7 @@ class Data {
         this.maximumFOIR,
         this.maximumLTV,
         this.processingFee,
+        this.processingCharges,
         this.legalFee,
         this.technicalFee,
         this.adminFee,
@@ -147,7 +154,13 @@ class Data {
         this.updatedBy,
         this.deletedDate,
         this.deletedBy,
-        this.productCategoryName});
+        this.productCategoryName,
+        this.fromAmountRange,
+        this.toAmountRange,
+        this.totalOverdueCases,
+        this.totalOverdueAmount,
+        this.totalEnquiries
+      });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -211,6 +224,12 @@ class Data {
     deletedDate = json['deletedDate'];
     deletedBy = json['deletedBy'];
     productCategoryName = json['productCategoryName'];
+    processingCharges = json['processingCharges'];
+    fromAmountRange = json['fromAmountRange'];
+    toAmountRange = json['toAmountRange'];
+    totalOverdueCases = json['totalOverdueCases'];
+    totalOverdueAmount = json['totalOverdueAmount'];
+    totalEnquiries = json['totalEnquiries'];
   }
 
   Map<String, dynamic> toJson() {
@@ -278,6 +297,12 @@ class Data {
     data['deletedDate'] = this.deletedDate;
     data['deletedBy'] = this.deletedBy;
     data['productCategoryName'] = this.productCategoryName;
+    data['processingCharges'] = this.processingCharges;
+    data['fromAmountRange'] = this.fromAmountRange;
+    data['toAmountRange'] = this.toAmountRange;
+    data['totalOverdueCases'] = this.totalOverdueCases;
+    data['totalOverdueAmount'] = this.totalOverdueAmount;
+    data['totalEnquiries'] = this.totalEnquiries;
     return data;
   }
 }

@@ -194,4 +194,21 @@ class ValidationHelper {
 
     return null;
   }
+
+  static String? validatePercentage(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return null;
+    }
+
+    final numValue = num.tryParse(value);
+    if (numValue == null) {
+      return 'Please enter a valid number';
+    }
+
+    if (numValue < 0 || numValue > 100) {
+      return 'Percentage must be between 0 and 100';
+    }
+
+    return null; // ✅ All good
+  }
 }

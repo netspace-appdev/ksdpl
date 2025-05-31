@@ -189,7 +189,6 @@ class ProductDetailScreen extends StatelessWidget {
           buildCard("Basic Product Info", [
             DetailRow(label: "Product", value: data.product.toString()),
             DetailRow(label: "Product Category Name", value: data.productCategoryName.toString()),
-            DetailRow(label: "Segment Vertical", value: data.segmentVertical.toString()),
             DetailRow(label: "Customer Category", value: data.customerCategory.toString()),
           ],
             Icons.info_outline
@@ -246,6 +245,7 @@ class ProductDetailScreen extends StatelessWidget {
 
           buildCard("Charges & Fees", [
             DetailRow(label: "Processing Fee", value: data.processingFee.toString()),
+            DetailRow(label: "Processing Charges", value: data.processingCharges.toString()),
             DetailRow(label: "Legal Fee", value: data.legalFee.toString()),
             DetailRow(label: "Technical Fee", value: data.technicalFee.toString()),
             DetailRow(label: "Admin Fee", value: data.adminFee.toString()),
@@ -255,6 +255,11 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: "TSR Years", value: data.tsRYears.toString()),
             DetailRow(label: "TSR Charges", value: data.tsRCharges.toString()),
             DetailRow(label: "Valuation Charges", value: data.valuationCharges.toString()),
+            DetailRow(label: "From Amount Range", value: data.fromAmountRange.toString()),
+            DetailRow(label: "To Amount Range", value: data.toAmountRange.toString()),
+            DetailRow(label: "Total Overdue Cases", value: data.totalOverdueCases.toString()),
+            DetailRow(label: "Total Overdue Amount", value: data.totalOverdueAmount.toString()),
+            DetailRow(label: "Total Enquiries", value: data.totalEnquiries.toString()),
           ],
               Icons.attach_money
           ),

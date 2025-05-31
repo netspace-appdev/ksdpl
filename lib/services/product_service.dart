@@ -17,6 +17,7 @@ class ProductService {
   static const String updateProductList = BaseUrl.baseUrl + 'ProductList/UpdateProductList';
   static const String addProductDocument = BaseUrl.baseUrl + 'ProductList/AddProductDocument';
   static const String getDocumentListByProductId = BaseUrl.baseUrl + 'ProductList/GetDocumentListByProductId';
+  static const String getAllNegativeProfileMaster = BaseUrl.baseUrl + 'ProductList/GetAllNegativeProfileMaster';
 
 
   static Future<Map<String, dynamic>> getAllProductCategoryApi() async {
@@ -91,6 +92,7 @@ class ProductService {
     String? Technical_Fee,
     String? Admin_Fee,
     String? Foreclosure_Charges,
+    String? Processing_Charges,
     String? Other_Charges,
     String? Stamp_Duty,
     String? TSR_Years,
@@ -101,8 +103,14 @@ class ProductService {
     String? Product_Validate_To_date,
     String? Profit_Percentage,
     String? docDescr,
+    String? FromAmountRange,
+    String? ToAmountRange,
+    String? TotalOverdueCases,
+    String? TotalOverdueAmount,
+    String? TotalEnquiries,
 }) async {
     try {
+      print("Negative_Profiles===.${Negative_Profiles}");
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(addProductList),
@@ -149,6 +157,7 @@ class ProductService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Technical_Fee', Technical_Fee,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Admin_Fee', Admin_Fee,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Foreclosure_Charges', Foreclosure_Charges,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Processing_Charges', Processing_Charges,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Other_Charges', Other_Charges,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Stamp_Duty', Stamp_Duty,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'TSR_Years', TSR_Years,fallback: "0");
@@ -160,10 +169,20 @@ class ProductService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'KSDPLProductId', KSDPLProductId,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Profit_Percentage', Profit_Percentage,fallback: "0");
 
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'FromAmountRange', FromAmountRange,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ToAmountRange', ToAmountRange,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueCases', TotalOverdueCases,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueAmount', TotalOverdueAmount,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalEnquiries', TotalEnquiries,fallback: "0");
+
 
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
+
+      print("request===>addProductListApi====>${request.fields}");
+      print("request===>addProductListApi====>here==${request.fields["Negative_Profiles"]}");
+      print("response===>addProductListApi===>${response.body}");
 
 
       if (response.statusCode == 200) {
@@ -232,6 +251,12 @@ class ProductService {
     String? Product_Validate_To_date,
     String? Profit_Percentage,
     String? docDescr,
+    String? Processing_Charges,
+    String? FromAmountRange,
+    String? ToAmountRange,
+    String? TotalOverdueCases,
+    String? TotalOverdueAmount,
+    String? TotalEnquiries,
   }) async {
 
     try {
@@ -294,6 +319,13 @@ class ProductService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Profit_Percentage', Profit_Percentage,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Minimum_ROI', Minimum_ROI,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Maximum_ROI', Maximum_ROI,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Processing_Charges', Processing_Charges,fallback: "0");
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'FromAmountRange', FromAmountRange,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ToAmountRange', ToAmountRange,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueCases', TotalOverdueCases,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueAmount', TotalOverdueAmount,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalEnquiries', TotalEnquiries,fallback: "0");
 
 
       var streamedResponse = await request.send();
@@ -427,6 +459,37 @@ class ProductService {
       var response = await http.Response.fromStream(streamedResponse);
 
 
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>>getAllNegativeProfileApi() async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllNegativeProfileMaster),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      print("response.statusCode===>${response.statusCode}");
+      print("response==>getProductListByIdApi==>${response.body.toString()}");
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

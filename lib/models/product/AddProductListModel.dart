@@ -63,6 +63,7 @@ class Data {
   num? maximumFOIR;
   num? maximumLTV;
   num? processingFee;
+  num? processingCharges;
   num? legalFee;
   num? technicalFee;
   num? adminFee;
@@ -125,6 +126,7 @@ class Data {
         this.maximumFOIR,
         this.maximumLTV,
         this.processingFee,
+        this.processingCharges,
         this.legalFee,
         this.technicalFee,
         this.adminFee,
@@ -188,6 +190,7 @@ class Data {
     maximumFOIR = json['maximum_FOIR'];
     maximumLTV = json['maximum_LTV'];
     processingFee = json['processing_Fee'];
+    processingCharges = json['processingCharges'];
     legalFee = json['legal_Fee'];
     technicalFee = json['technical_Fee'];
     adminFee = json['admin_Fee'];
@@ -255,6 +258,7 @@ class Data {
     data['maximum_FOIR'] = this.maximumFOIR;
     data['maximum_LTV'] = this.maximumLTV;
     data['processing_Fee'] = this.processingFee;
+    data['processingCharges'] = this.processingCharges;
     data['legal_Fee'] = this.legalFee;
     data['technical_Fee'] = this.technicalFee;
     data['admin_Fee'] = this.adminFee;
