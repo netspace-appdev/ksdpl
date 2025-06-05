@@ -94,6 +94,7 @@ class LeadDDController extends GetxController{
   var isStateLoadingPerm = false.obs;
   var isDistrictLoadingPerm = false.obs;
   var isCityLoadingPerm = false.obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -107,6 +108,78 @@ class LeadDDController extends GetxController{
     getAllKsdplBranchApi();
     getAllLeadStageApi();
     getAllChannelListApi();
+  }
+  @override
+  void onClose() {
+    super.onClose();
+
+    isLoading.value = false;
+    banks.clear();
+
+    getAllStateModel.value = null;
+    getDistrictByStateModel.value = null;
+    getCityByDistrictIdModel.value = null;
+    getAllBankModel.value = null;
+    getAllKsdplProductModel.value = null;
+    getProductListByBankModel.value = null;
+    getAllKsdplBranchModel.value = null;
+    getAllLeadStageModel.value = null;
+    getAllBranchBIModel.value = null;
+    getAllChannelModel.value = null;
+    getCampaignNameModel.value = null;
+
+    selectedState.value = null;
+    selectedDistrict.value = null;
+    selectedCity.value = null;
+    selectedBank.value = null;
+    selectedProdType.value = null;
+    currEmpStatus.value = null;
+    selectedCampaign.value = null;
+    selectedKsdplBr.value = null;
+    selectedStage.value = null;
+    selectedBankBranch.value = null;
+    selectedChannel.value = null;
+    selectedStageActive.value = 0;
+
+    isStateLoading.value = false;
+    isDistrictLoading.value = false;
+    isCityLoading.value = false;
+    isCampaignLoading.value = false;
+    isKSDPLBrLoading.value = false;
+    isBankLoading.value = false;
+    isProductLoading.value = false;
+    isLeadStageLoading.value = false;
+    isBranchLoading.value = false;
+    isChannelLoading.value = false;
+    activeStatus.value = "";
+
+    selectedStateCurr.value = null;
+    selectedDistrictCurr.value = null;
+    selectedCityCurr.value = null;
+
+    selectedStatePerm.value = null;
+    selectedDistrictPerm.value = null;
+    selectedCityPerm.value = null;
+
+    districtListPerm.clear();
+    districtListCurr.clear();
+
+    cityListPerm.clear();
+    cityListCurr.clear();
+
+    getDistrictByStateModelCurr.value = null;
+    getDistrictByStateModelPerm.value = null;
+    getCityByDistrictIdModelCurr.value = null;
+    getCityByDistrictIdModelPerm.value = null;
+
+    isStateLoadingCurr.value = false;
+    isDistrictLoadingCurr.value = false;
+    isCityLoadingCurr.value = false;
+    isStateLoadingPerm.value = false;
+    isDistrictLoadingPerm.value = false;
+    isCityLoadingPerm.value = false;
+
+
   }
 
   changeActiveStatus(String stage){

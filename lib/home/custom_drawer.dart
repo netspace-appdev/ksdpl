@@ -154,7 +154,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                      leading:  Icon(Icons.add_task,color: AppColor.blackColor),
                      title:  Text("Add", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                      onTap: () {
-
+                       LeadDDController leadDDController=Get.find();
+                       leadDDController.getAllKsdplProductApi();
+                       AddProductController addProductController =Get.put(AddProductController());
+                       addProductController.getAllProductCategoryApi();
                        addLeadController.fromWhere.value="drawer";
                         Get.toNamed("/addLeadScreen");
                      },

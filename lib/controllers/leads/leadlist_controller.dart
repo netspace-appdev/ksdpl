@@ -184,7 +184,7 @@ class LeadListController extends GetxController {
       leadStageName.value="Interested Leads";
     }else if(selectedIndex.value==5){
       leadCode.value="5";
-      leadStageName.value="Not Interested Leads";
+      leadStageName.value="Not Interested";
     }
     else if(selectedIndex.value==6){
       leadCode.value="6";
@@ -192,7 +192,7 @@ class LeadListController extends GetxController {
     }
     else if(selectedIndex.value==7){
       leadCode.value="7";
-      leadStageName.value="Not Doable Leads";
+      leadStageName.value="Not Doable";
     }
   }
 

@@ -336,7 +336,7 @@ class Step1CamNote extends StatelessWidget {
                   label: AppText.addIncome,
                   isRequired: false,
                   controller: addleadcontroller.addSourceIncomeController ,
-                  inputType: TextInputType.name,
+                  inputType: TextInputType.number,
                   hintText: AppText.enterAddIncome,
                   validator: ValidationHelper.validateAddSrcInc,
                 ),

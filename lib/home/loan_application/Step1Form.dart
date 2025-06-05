@@ -200,6 +200,9 @@ class Step1Form extends StatelessWidget {
                       inputType: TextInputType.number,
                       hintText: AppText.enterAadharCardNo,
                       validator:  ValidationHelper.validateName,
+                      isSecret: true,
+                      secretDigit: 4,
+                      maxLength: 12,
                     ),
 
                     CustomLabeledTextField(
@@ -278,7 +281,7 @@ class Step1Form extends StatelessWidget {
                       label: AppText.processingFee,
                       isRequired: false,
                       controller: loanApplicationController.proFeeController,
-                      inputType: TextInputType.name,
+                      inputType: TextInputType.number,
                       hintText: AppText.enterProcessingFee,
                       validator:  ValidationHelper.validateName,
 

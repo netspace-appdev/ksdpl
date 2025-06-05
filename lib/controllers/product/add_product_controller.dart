@@ -245,7 +245,7 @@ class AddProductController extends GetxController{
     "Non-Individual",
     "Others"
   ].obs;
-  /*var selectedCustomerCategories = <String>[].obs;*/
+
   RxList<String> selectedCustomerCategories = <String>[].obs;
 
   var getAllProductCategoryModel = Rxn<productCat.GetAllProductCategoryModel>(); //

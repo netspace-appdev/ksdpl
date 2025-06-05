@@ -146,7 +146,10 @@ class LeadListMain extends StatelessWidget {
                               )),
                               InkWell(
                                 onTap: (){
-
+                                  LeadDDController leadDDController=Get.find();
+                                  leadDDController.getAllKsdplProductApi();
+                                  AddProductController addProductController =Get.put(AddProductController());
+                                  addProductController.getAllProductCategoryApi();
                                   addLeadController.fromWhere.value="leadList";
                                   Get.toNamed("/addLeadScreen");
                                 },

@@ -206,8 +206,8 @@ class ProductDetailScreen extends StatelessWidget {
           ),
 
           buildCard("Collateral & Profile Restrictions", [
-            DetailRow(label: "Collateral Security Category", value: data.collateralSecurityCategory.toString()),
-            DetailRow(label: "Collateral Security Excluded", value: data.collateralSecurityExcluded.toString()),
+            DetailRow(label: "Prime Security Category", value: data.collateralSecurityCategory.toString()), //Collateral is Prime now
+            DetailRow(label: "Prime Security Excluded", value: data.collateralSecurityExcluded.toString()),
             DetailRow(label: "Profile Excluded", value: data.profileExcluded.toString()),
             DetailRow(label: "Negative Profiles", value: data.negativeProfiles.toString()),
             DetailRow(label: "Negative Areas", value: data.negativeAreas.toString()),

@@ -14,6 +14,8 @@ class CustomLabeledTextField extends StatelessWidget {
   final bool isTextArea;
   final int? maxLength;
   final bool isInputEnabled;
+  final bool isSecret;         // New
+  final int secretDigit;
 
   const CustomLabeledTextField({
     Key? key,
@@ -27,7 +29,9 @@ class CustomLabeledTextField extends StatelessWidget {
     this.obscureText = false,
     this.isTextArea = false,
     this.maxLength,
-    this.isInputEnabled=true
+    this.isInputEnabled=true,
+    this.isSecret = false,      // Default false
+    this.secretDigit = 4,       // Default 4 digits visible
 
   }) : super(key: key);
 
@@ -38,27 +42,35 @@ class CustomLabeledTextField extends StatelessWidget {
       children: [
 
         /// Label Row (with * if required)
+
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColor.grey2,
-              ),
-            ),
-            if (isRequired)
-              Text(
-                " *",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.redColor,
+            Expanded( // This allows the label text to wrap
+              child: Text.rich(
+                TextSpan(
+                  text: label,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey2,
+                  ),
+                  children: isRequired
+                      ? [
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: AppColor.redColor,
+                      ),
+                    ),
+                  ]
+                      : [],
                 ),
               ),
+            ),
           ],
         ),
+
 
         SizedBox(height: 10),
 
@@ -73,6 +85,8 @@ class CustomLabeledTextField extends StatelessWidget {
           isTextArea: isTextArea,
           maxLength: maxLength,
           isInputEnabled: isInputEnabled,
+          isSecret: isSecret,
+          secretDigit: secretDigit,
         ),
 
         SizedBox(height: 20),

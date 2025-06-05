@@ -8,6 +8,9 @@ import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
+import '../../controllers/product/add_product_controller.dart';
+import '../../custom_widgets/CustomTextLabel.dart';
+import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
@@ -34,7 +37,7 @@ class AddLeadScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   Addleadcontroller addleadcontroller=Get.put(Addleadcontroller(),permanent: false);
-
+  final addProductController = Get.find<AddProductController>();
 
 
   @override
@@ -196,7 +199,8 @@ class AddLeadScreen extends StatelessWidget {
                                 inputType: TextInputType.phone,
                                 hintText: AppText.enterAadhar,
                                 maxLength: 12,
-
+                                isSecret: true,
+                                secretDigit: 4,
                               ),
 
                               CustomLabeledTextField(
@@ -392,7 +396,7 @@ class AddLeadScreen extends StatelessWidget {
                                 label: AppText.addIncome,
                                 isRequired: false,
                                 controller: addleadcontroller.addSourceIncomeController ,
-                                inputType: TextInputType.name,
+                                inputType: TextInputType.number,
                                 hintText: AppText.enterAddIncome,
                                 validator: ValidationHelper.validateAddSrcInc,
                               ),
@@ -497,9 +501,43 @@ class AddLeadScreen extends StatelessWidget {
                                       validator: ValidationHelper.validateNoExLoan,
                                     ),
 
-                                    const SizedBox(height: 20),
+                                    const SizedBox(height: 10),
                                   ],
                                 ),
+
+                              CustomTextLabel(
+                                label: AppText.productSegment,
+                              ),
+
+                              const SizedBox(height: 10),
+
+
+                              Obx((){
+                                if (addProductController.isLoadingProductCategory.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+
+
+                                return CustomDropdown<productCat.Data>(
+                                  items: addProductController.productCategoryList  ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.productCategoryName.toString(),
+                                  selectedValue: addProductController.productCategoryList.firstWhereOrNull(
+                                        (item) => item.id == addleadcontroller.selectedProductCategory.value,
+                                  ),
+                                  onChanged: (value) {
+                                    addleadcontroller.selectedProductCategory.value =  value?.id;
+                                  },
+                                  onClear: (){
+                                    addleadcontroller.selectedProductCategory.value = 0;
+                                    addProductController.productCategoryList.clear(); // reset dependent dropdown
+
+                                  },
+                                );
+                              }),
+
+                              const SizedBox(height: 30),
+
                               const Text(
                                 AppText.productTypeInt,
                                 style: TextStyle(

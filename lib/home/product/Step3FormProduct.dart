@@ -47,17 +47,8 @@ class Step3FormProduct extends StatelessWidget {
               ),
 
               const SizedBox(height: 10),
-             /* CustomChipTextField(
-                textController: addProductController.chipTextController,
-                initialTags: addProductController.selectedNegProfile.toList(),
-                hintText:  AppText.negativeProfilesHint,
-                onChanged: (tags) {
-                  print("Updated tags: $tags");
-                  addProductController.selectedNegProfile.assignAll(tags);
-                },
-              ),
-*/
-          Obx(() {
+
+         /* Obx(() {
             final values = addProductController.selectedNegProfile.toList(); // This should be List<negProfile.Data>
             return MultiSelectDropdown<negProfile.Data>(
               key: ValueKey(values.map((e) => e.id).join(',')), // Give it something stable to hash
@@ -70,6 +61,36 @@ class Step3FormProduct extends StatelessWidget {
               },
             );
           }),
+*/
+
+              Obx(() {
+                final values = addProductController.selectedNegProfile.toList(); // List<negProfile.Data>
+                final negProfileList = addProductController.negProfileApiList.toList();
+
+                final isAllSelected = Set.from(values.map((e) => e.id)).containsAll(negProfileList.map((e) => e.id));
+                final controlOption = negProfile.Data(id: -1, negativeProfile: isAllSelected ? "Deselect All" : "Select All");
+
+                final allItems = [controlOption, ...negProfileList];
+
+                return MultiSelectDropdown<negProfile.Data>(
+                  key: ValueKey(values.map((e) => e.id).join(',')), // Stable key
+                  items: allItems,
+                  getId: (e) => e.id.toString(),
+                  getName: (e) => e.negativeProfile ?? 'Unknown',
+                  selectedValues: values.where((e) => e.id != -1).toList(), // exclude control option from selection
+                  onChanged: (selectedList) {
+                    if (selectedList.any((e) => e.id == -1 && e.negativeProfile == "Select All")) {
+                      addProductController.selectedNegProfile.assignAll(negProfileList);
+                    } else if (selectedList.any((e) => e.id == -1 && e.negativeProfile == "Deselect All")) {
+                      addProductController.selectedNegProfile.clear();
+                    } else {
+                      addProductController.selectedNegProfile.assignAll(
+                        selectedList.where((e) => e.id != -1),
+                      );
+                    }
+                  },
+                );
+              }),
 
 
               const SizedBox(

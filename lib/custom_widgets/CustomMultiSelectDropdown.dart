@@ -104,6 +104,9 @@ class _MultiSelectDropdownState<T> extends State<MultiSelectDropdown<T>> {
     overlay?.insert(overlayEntry!);
   }
 
+
+
+
   void _removeOverlay() {
     overlayEntry?.remove();
     overlayEntry = null;

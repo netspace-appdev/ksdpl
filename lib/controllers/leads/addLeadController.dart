@@ -49,7 +49,7 @@ class Addleadcontroller extends GetxController{
   var getLeadId = Rxn<String>();
   var createdByWhichEmployee = Rxn<String>();
 
-
+  var selectedProductCategory = Rxn<int>();
 
   void toggleConnectorCheckbox(bool? value) {
     isConnectorChecked.value = value ?? false;
@@ -369,11 +369,74 @@ class Addleadcontroller extends GetxController{
   }
 
 
+
   @override
   void onClose() {
-    // TODO: implement onClose
     super.onClose();
 
+    // RxBools and Strings
+    isLoading.value = false;
+    isConnectorChecked.value = false;
+    selectedGender.value = null;
+    selectedIndexRelBank.value = -1;
+    fromWhere.value = "";
+    getLeadId.value = null;
+    createdByWhichEmployee.value = null;
+    selectedProductCategory.value = null;
+
+    // Rx Models
+    getLeadDetailModel.value = null;
+    individualLeadUploadModel.value = null;
+    selectedProductCategory.value = null;
+    // TextEditingControllers
+    fullNameController.clear();
+    dobController.clear();
+    phoneController.clear();
+    genderController.clear();
+    loanAmtReqController.clear();
+    emailController.clear();
+    aadharController.clear();
+    panController.clear();
+    streetAddController.clear();
+    zipController.clear();
+    nationalityController.clear();
+    currEmpStController.clear();
+    employerNameController.clear();
+    monthlyIncomeController.clear();
+    addSourceIncomeController.clear();
+    branchLocController.clear();
+    productTypeController.clear();
+    connNameController.clear();
+    connMobController.clear();
+    connShareController.clear();
+    existingLoansController.clear();
+    noOfExistingLoansController.clear();
+
+    // Dispose controllers to prevent memory leaks
+    fullNameController.dispose();
+    dobController.dispose();
+    phoneController.dispose();
+    genderController.dispose();
+    loanAmtReqController.dispose();
+    emailController.dispose();
+    aadharController.dispose();
+    panController.dispose();
+    streetAddController.dispose();
+    zipController.dispose();
+    nationalityController.dispose();
+    currEmpStController.dispose();
+    employerNameController.dispose();
+    monthlyIncomeController.dispose();
+    addSourceIncomeController.dispose();
+    branchLocController.dispose();
+    productTypeController.dispose();
+    connNameController.dispose();
+    connMobController.dispose();
+    connShareController.dispose();
+    existingLoansController.dispose();
+    noOfExistingLoansController.dispose();
+
   }
+
 
 }

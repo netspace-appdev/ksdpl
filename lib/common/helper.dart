@@ -193,8 +193,8 @@ class AppText{
   static const String enterEmployerName="Enter Employer Name";
   static const String monIncome="Monthly Income(Gross Income)";
   static const String enterMonIncome="Enter Monthly Income";
-  static const String addIncome="Additional Source of Income";
-  static const String enterAddIncome="Enter Additional Income";
+  static const String addIncome="Additional source of income (Monthly)"; // "Additional source of income" needs to be changed.,The label should say "Additional source of income (Monthly)"
+  static const String enterAddIncome="Enter Additional source of income";
   static const String brLoc="Branch Location";
   static const String productTypeInt="Product Type Interested";
   static const String enterBrLoc="Enter Branch Location";
@@ -433,14 +433,14 @@ class AppText{
 
   ///product
   static const String addProduct = "Add Product";
-  static const String collateralSecurityExcluded = "Collateral Security Excluded";
-  static const String enterCollateralSecurityExcluded = "Enter Collateral Security Excluded";
+  static const String collateralSecurityExcluded = "Prime Security Excluded"; //Collateral is Prime now
+  static const String enterCollateralSecurityExcluded = "Enter Prime Security Excluded";
 
   static const String profileExcluded = "Profile Excluded";
   static const String enterProfileExcluded = "Enter Profile Excluded";
 
-  static const String ageLimitEarningApplicants = "Age Limit Earning Applicants";
-  static const String enterAgeLimitEarningApplicants = "Enter Age Limit Earning Applicants";
+  static const String ageLimitEarningApplicants = "Age at the time of loan maturity (earning applicant)"; //"Age limit earning applicant" should be changed to "Age at the time of loan maturity (earning applicant)".
+  static const String enterAgeLimitEarningApplicants = "Enter Age ge at the time of loan maturity";
   static const String ageLimitNonEarningCoApplicant = "Age Limit Non-Earning Co-Applicant";
   static const String enterAgeLimitNonEarningCoApplicant = "Enter Age Limit Non-Earning Co-Applicant";
   static const String minAgeEarningApplicants = "Minimum Age Earning Applicants";
@@ -488,16 +488,16 @@ class AppText{
   static const String enterMinPropertyValue = "Enter Minimum Property Value";
   static const String maxIir = "Maximum IIR";
   static const String enterMaxIir = "Enter Maximum IIR";
-  static const String maxFoir = "Maximum FOIR";
+  static const String maxFoir = "Maximum FOIR (%)";
   static const String enterMaxFoir = "Enter Maximum FOIR";
-  static const String maxLtv = "Maximum LTV";
+  static const String maxLtv = "Maximum LTV (%)";
   static const String enterMaxLtv = "Enter Maximum LTV";
 
-  static const String legalFee = "Legal Fee (₹)";
-  static const String enterLegalFee = "EnterLegal Fee";
-  static const String technicalFee = "Technical Fee (₹)";
-  static const String enterTechnicalFee = "EnterTechnical Fee";
-  static const String adminFee = "Admin Fee (₹)";
+  static const String legalFee = "Legal Vetting Charges (in ₹)";
+  static const String enterLegalFee = "EnterLegal Vetting Charges";
+  static const String technicalFee = "Technical Inspection Charges (in ₹)";
+  static const String enterTechnicalFee = "EnterTechnical Inspection Charges";
+  static const String adminFee = "Admin Fee (%)";
   static const String enterAdminFee = "Enter Admin Fee";
   static const String foreclosureCharges = "Foreclosure Charges (%)";
   static const String enterForeclosureCharges = "Enter Foreclosure Charges";
@@ -510,8 +510,8 @@ class AppText{
   static const String tsrYears = "TSR Years";
   static const String enterTsrYears = "Enter TSR Charges";
 
-  static const String tsrCharges = "TSR Charges (₹)";
-  static const String enterTsrCharges = "Enter TSR Charges";
+  static const String tsrCharges = "TSR Legal Charges (in ₹)";
+  static const String enterTsrCharges = "Enter TSR Legal Charges";
   static const String valuationCharges = "Valuation Charges (₹)";
   static const String enterValuationCharges = "Enter Valuation Charges";
 
@@ -535,7 +535,7 @@ class AppText{
 
   static const String prodName = "Product Name";
   static const String selectCustomerCategory = "Select Customer Category";
-  static const String selectCollateralSecurityCategory = "Select Collateral Security Category";
+  static const String selectCollateralSecurityCategory = "Select Prime Security Category";
   static const String selectIncomeType = "Select Income Type";
   static const String productName = "Product Name";
   static const String enterProductName = "Enter product name";

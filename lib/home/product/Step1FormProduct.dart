@@ -221,19 +221,38 @@ class Step1FormProduct extends StatelessWidget {
               const SizedBox(height: 10),
 
 
+
             Obx(() {
               final values = addProductController.selectedCustomerCategories.toList();
+              final customerList = addProductController.customerCategoryList;
+
+              final isAllSelected = Set.from(values).containsAll(customerList);
+
+              final controlOption = isAllSelected ? "Deselect All" : "Select All";
+
+              final allItems = [controlOption, ...customerList];
+
               return MultiSelectDropdown<String>(
-                key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
-                items: addProductController.customerCategoryList.toList(),
+                key: ValueKey(values.join(',')),
+                items: allItems,
                 getId: (e) => e,
                 getName: (e) => e,
-                selectedValues: values,
+                selectedValues: values, // ← DO NOT include controlOption here!
                 onChanged: (selectedList) {
-                  addProductController.selectedCustomerCategories.assignAll(selectedList);
+                  if (selectedList.contains("Select All")) {
+                    addProductController.selectedCustomerCategories
+                        .assignAll(customerList);
+                  } else if (selectedList.contains("Deselect All")) {
+                    addProductController.selectedCustomerCategories.clear();
+                  } else {
+                    addProductController.selectedCustomerCategories
+                        .assignAll(selectedList.where((e) => e != "Select All" && e != "Deselect All"));
+                  }
                 },
               );
             }),
+
+
 
 
             const SizedBox(height: 20),
@@ -247,7 +266,7 @@ class Step1FormProduct extends StatelessWidget {
               const SizedBox(height: 10),
 
 
-              Obx(() {
+            /*  Obx(() {
                 final values = addProductController.selectedCollSecCat.toList();
                 return MultiSelectDropdown<String>(
                   key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
@@ -260,21 +279,39 @@ class Step1FormProduct extends StatelessWidget {
                   },
                 );
               }),
-
-
-           /*   MultiSelectDropdown<String>(
-                items: addProductController.collSecCatList,
-                getId: (e) => e,
-                getName: (e) => e,
-                selectedValues: addProductController.selectedCollSecCat.toList(), // or preselected values
-                onChanged: (selectedList) {
-
-                  addProductController.selectedCollSecCat.assignAll(selectedList);
-                },
-              ),
 */
 
-              const SizedBox(height: 20),
+
+            Obx(() {
+              final values = addProductController.selectedCollSecCat.toList();
+              final catList = addProductController.collSecCatList;
+
+              final isAllSelected = Set.from(values).containsAll(catList);
+              final controlOption = isAllSelected ? "Deselect All" : "Select All";
+              final allItems = [controlOption, ...catList];
+
+              return MultiSelectDropdown<String>(
+                key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
+                items: allItems,
+                getId: (e) => e,
+                getName: (e) => e,
+                selectedValues: values, // Don’t include Select/Deselect All in selected list!
+                onChanged: (selectedList) {
+                  if (selectedList.contains("Select All")) {
+                    addProductController.selectedCollSecCat.assignAll(catList);
+                  } else if (selectedList.contains("Deselect All")) {
+                    addProductController.selectedCollSecCat.clear();
+                  } else {
+                    addProductController.selectedCollSecCat.assignAll(
+                      selectedList.where((e) => e != "Select All" && e != "Deselect All"),
+                    );
+                  }
+                },
+              );
+            }),
+
+
+            const SizedBox(height: 20),
 
               CustomLabeledTextField(
                 label: AppText.collateralSecurityExcluded,
@@ -299,7 +336,7 @@ class Step1FormProduct extends StatelessWidget {
               const SizedBox(height: 10),
 
 
-              Obx(() {
+             /* Obx(() {
                 final values = addProductController.selectedIncomeType.toList();
                 return MultiSelectDropdown<String>(
                   key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
@@ -309,6 +346,35 @@ class Step1FormProduct extends StatelessWidget {
                   selectedValues: values,
                   onChanged: (selectedList) {
                     addProductController.selectedIncomeType.assignAll(selectedList);
+                  },
+                );
+              }),
+*/
+
+              Obx(() {
+                final values = addProductController.selectedIncomeType.toList();
+                final incomeTypeList = addProductController.incomeTypeList;
+
+                final isAllSelected = Set.from(values).containsAll(incomeTypeList);
+                final controlOption = isAllSelected ? "Deselect All" : "Select All";
+                final allItems = [controlOption, ...incomeTypeList];
+
+                return MultiSelectDropdown<String>(
+                  key: ValueKey(values.join(',')), // Force rebuild to reflect changes
+                  items: allItems,
+                  getId: (e) => e,
+                  getName: (e) => e,
+                  selectedValues: values, // Don't include "Select All"/"Deselect All" in selected values
+                  onChanged: (selectedList) {
+                    if (selectedList.contains("Select All")) {
+                      addProductController.selectedIncomeType.assignAll(incomeTypeList);
+                    } else if (selectedList.contains("Deselect All")) {
+                      addProductController.selectedIncomeType.clear();
+                    } else {
+                      addProductController.selectedIncomeType.assignAll(
+                        selectedList.where((e) => e != "Select All" && e != "Deselect All"),
+                      );
+                    }
                   },
                 );
               }),

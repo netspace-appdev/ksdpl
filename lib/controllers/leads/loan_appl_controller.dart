@@ -766,7 +766,7 @@ class LoanApplicationController extends GetxController{
         ToastMessage.msg( addLoanApplicationModel.value!.message!.toString());
 
 
-
+        clearForm();
 
         isLoading(false);
 
@@ -786,6 +786,108 @@ class LoanApplicationController extends GetxController{
     }
 
 
+  }
+
+  void clearForm() {
+    // Clear text fields
+    leadDController.selectedStateCurr.value=null;
+    leadDController.selectedDistrictCurr.value=null;
+    leadDController.selectedCityCurr.value=null;
+    leadDController. selectedStatePerm.value=null;
+    leadDController.selectedDistrictPerm.value=null;
+    leadDController.selectedCityPerm.value=null;
+
+    dsaCodeController.dispose();
+    lanController.dispose();
+    panController.dispose();
+    aadharController.dispose();
+    laAppliedController.dispose();
+    dsaStaffNController.dispose();
+    ulnController.dispose();
+    chCodeController.dispose();
+    proFeeController.dispose();
+    chqDDSNController.dispose();
+    proFeeDateController.dispose();
+    loPurposeController.dispose();
+    schemeController.dispose();
+    repayTpeController.dispose();
+    loanTenureYController.dispose();
+    monthInstaController.dispose();
+    prevLoanApplController.dispose();
+
+    applFullNameController.dispose();
+    fatherNameController.dispose();
+    dobController.dispose();
+    qualiController.dispose();
+    maritalController.dispose();
+    emplStatusController.dispose();
+    nationalityController.dispose();
+    occupationController.dispose();
+    occSectorController.dispose();
+    applEmailController.dispose();
+    applMobController.dispose();
+
+    orgNameController.dispose();
+    natureOfBizController.dispose();
+    staffStrengthController.dispose();
+    salaryDateController.dispose();
+
+    houseFlatController.dispose();
+    buildingNoController.dispose();
+    societyNameController.dispose();
+    localityController.dispose();
+    streetNameController.dispose();
+    pinCodeController.dispose();
+    talukaController.dispose();
+
+    houseFlatPermController.dispose();
+    buildingNoPermController.dispose();
+    societyNamePermController.dispose();
+    localityPermController.dispose();
+    streetNamePermController.dispose();
+    pinCodePermController.dispose();
+    talukaPermController.dispose();
+
+    propPropIdController.dispose();
+    propSurveyNoController.dispose();
+    propFinalPlotNoNoController.dispose();
+    propBlockNoController.dispose();
+
+    propHouseFlatController.dispose();
+    propBuildingNameController.dispose();
+    propSocietyNameController.dispose();
+    propLocalityController.dispose();
+    propStreetNameController.dispose();
+    propPinCodeController.dispose();
+    propTalukaController.dispose();
+
+    fdGrossMonthlySalaryController.dispose();
+    fdnNtMonthlySalaryController.dispose();
+    fdAnnualBonusController.dispose();
+    fdAvgMonOvertimeController.dispose();
+    fdAvgMonCommissionController.dispose();
+    fdAMonthlyPfDeductionController.dispose();
+    fdOtherMonthlyIncomeController.dispose();
+
+
+    // Clear Rx variables
+    selectedGender.value = null;
+    selectedGenderCoAP.value = null;
+    selectedGenderDependent.value = null;
+    selectedPrevLoanAppl.value = -1;
+    selectedOwnershipList.value = null;
+    selectedCountry.value = null;
+    selectedCountryPerm.value = null;
+    selectedStateProp.value = null;
+    selectedDistrictProp.value = null;
+    selectedCityProp.value = null;
+
+// Clear Lists (and dispose their controllers if needed)
+    coApplicantList.clear();
+    familyMemberApplList.clear();
+    creditCardsList.clear();
+    referencesList.clear();
+    referencesList.clear();
   }
 
 
