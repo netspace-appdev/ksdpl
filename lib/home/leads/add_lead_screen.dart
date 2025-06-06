@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ksdpl/controllers/leads/income_step_controller.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
@@ -39,6 +40,7 @@ class AddLeadScreen extends StatelessWidget {
   Addleadcontroller addleadcontroller=Get.put(Addleadcontroller(),permanent: false);
   final addProductController = Get.find<AddProductController>();
 
+  IncomeStepController incomeStepController = Get.put(IncomeStepController());
 
   @override
   Widget build(BuildContext context) {
@@ -392,14 +394,147 @@ class AddLeadScreen extends StatelessWidget {
 
                               ),
 
-                              CustomLabeledTextField(
+                              /*CustomLabeledTextField(
                                 label: AppText.addIncome,
                                 isRequired: false,
                                 controller: addleadcontroller.addSourceIncomeController ,
                                 inputType: TextInputType.number,
                                 hintText: AppText.enterAddIncome,
                                 validator: ValidationHelper.validateAddSrcInc,
+                              ),*/
+
+                              Helper.customDivider(color: Colors.grey),
+                              SizedBox(height: 10,),
+                              CustomTextLabel(
+                                label: AppText.addIncome,
                               ),
+
+                              Obx(() => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: List.generate(addleadcontroller.addIncomeList.length, (index) {
+                                  final ai = addleadcontroller.addIncomeList[index];
+
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+
+
+                                      SizedBox(height: 20,),
+
+
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CustomLabeledTextField(
+                                            label: AppText.source,
+                                            isRequired: false,
+                                            controller: ai.aiSourceController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.enterSource,
+                                            validator:  ValidationHelper.validateName,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.income,
+                                            isRequired: false,
+                                            controller: ai.aiIncomeController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.enterIncome,
+                                            validator:  ValidationHelper.validateName,
+                                          ),
+
+                                        ],
+                                      ),
+
+
+
+                                     Row(
+                                       mainAxisAlignment: MainAxisAlignment.end,
+
+                                       children: [
+                                         index== addleadcontroller.addIncomeList.length-1?
+                                         Obx((){
+                                           if(addleadcontroller.isLoading.value){
+                                             return const Align(
+                                               alignment: Alignment.centerRight,
+                                               child: SizedBox(
+                                                 height: 30,
+                                                 width: 30,
+                                                 child: CircularProgressIndicator(
+                                                   color: AppColor.primaryColor,
+                                                 ),
+                                               ),
+                                             );
+                                           }
+                                           return Align(
+                                             alignment: Alignment.centerRight,
+                                             child: IconButton(
+                                                 onPressed: (){
+                                                   addleadcontroller.addAdditionalSrcIncome();
+                                                 },
+                                                 icon: Container(
+
+                                                     decoration: BoxDecoration(
+                                                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                                       color: AppColor.primaryColor,
+
+                                                     ),
+                                                     padding: EdgeInsets.all(10),
+
+                                                     child: Icon(Icons.add, color: AppColor.appWhite,)
+                                                 )
+                                             ),
+                                           );
+                                         }):
+                                         Container(),
+
+                                         SizedBox(height: 20),
+
+                                         Obx((){
+                                           if(addleadcontroller.isLoading.value){
+                                             return const Align(
+                                               alignment: Alignment.center,
+                                               child: SizedBox(
+                                                 height: 30,
+                                                 width: 30,
+                                                 child: CircularProgressIndicator(
+                                                   color: AppColor.primaryColor,
+                                                 ),
+                                               ),
+                                             );
+                                           }
+
+
+                                           return Align(
+                                             alignment: Alignment.centerRight,
+                                             child: IconButton(
+                                                 onPressed: addleadcontroller.addIncomeList.length <= 1?(){}: (){
+                                                   addleadcontroller.removeAdditionalSrcIncome(index);
+                                                 },
+                                                 icon: Container(
+
+                                                     decoration: BoxDecoration(
+                                                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                                       color: addleadcontroller.addIncomeList.length <= 1?AppColor.lightRed: AppColor.redColor,
+
+                                                     ),
+                                                     padding: EdgeInsets.all(10),
+
+                                                     child: Icon(Icons.remove, color: AppColor.appWhite,)
+                                                 )
+                                             ),
+                                           );
+                                         })
+                                       ],
+                                     )
+                                    ],
+                                  );
+                                }),
+                              )),
+
+                              SizedBox(height: 10,),
+                              Helper.customDivider(color: Colors.grey),
+
+                              SizedBox(height: 20,),
 
                               const Text(
                                 AppText.preferredBank,

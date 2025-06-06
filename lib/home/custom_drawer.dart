@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
+import '../controllers/leads/income_step_controller.dart';
 import '../controllers/leads/leadlist_controller.dart';
 import '../controllers/product/add_product_controller.dart';
 import '../controllers/product/view_product_controller.dart';
@@ -159,6 +160,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                        AddProductController addProductController =Get.put(AddProductController());
                        addProductController.getAllProductCategoryApi();
                        addLeadController.fromWhere.value="drawer";
+
+                       addLeadController.clearControllers();
+
                         Get.toNamed("/addLeadScreen");
                      },
                    ),
@@ -195,6 +199,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                        AddProductController addProductController =Get.put(AddProductController());
                        addProductController.getAllProductCategoryApi();
                        addProductController.getAllNegativeProfileApi();
+                       addProductController.getAllCommonDocumentNameListApi();
                        addProductController.clearForm();
                        addProductController.currentStep.value=0;
                        Get.toNamed("/addProductScreen");

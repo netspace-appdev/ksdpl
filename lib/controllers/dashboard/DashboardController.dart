@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../common/helper.dart';
 import '../../common/notification_helper.dart';
 import '../../common/storage_service.dart';
@@ -34,6 +35,10 @@ class DashboardController extends GetxController {
   ScrollController scrollReminderController = ScrollController();
   UpdateFCMTokenModel? updateFCMTokenModel;
   List<int> fixedLeadIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+  var isLeadCountYearly = 'false'.obs;
+
+  var selectedIndex = (1).obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -44,6 +49,26 @@ class DashboardController extends GetxController {
     getBreakingNewsApi();
     getUpcomingDateOfBirthApi();
 
+  }
+
+  void selectCheckbox(int index) {
+
+    selectedIndex.value = index;
+    if( selectedIndex.value==0){
+     isLeadCountYearly.value="true";
+
+    } else if( selectedIndex.value==1){
+      isLeadCountYearly.value="false";
+
+
+    }else{
+
+    }
+  }
+
+
+  void filterSubmit(){
+    getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
   }
   void scrollToLatestItem() {
     Future.delayed(Duration(milliseconds: 100), () {
@@ -88,8 +113,8 @@ class DashboardController extends GetxController {
             generalToken: genToekn.toString()
         );
 
-        getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
-        getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
+        //getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
+        getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
         getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
         todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
       }else if (data['StatusCode'] == "You are not authorized" || data['Message'] == "401") {

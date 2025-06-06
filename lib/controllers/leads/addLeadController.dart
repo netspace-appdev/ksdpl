@@ -9,6 +9,7 @@ import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../services/drawer_api_service.dart';
 import '../../services/lead_api_service.dart';
 import '../registration_dd_controller.dart';
+import 'add_income_model_controller.dart';
 
 class Addleadcontroller extends GetxController{
 
@@ -50,6 +51,35 @@ class Addleadcontroller extends GetxController{
   var createdByWhichEmployee = Rxn<String>();
 
   var selectedProductCategory = Rxn<int>();
+
+  var addIncomeList = <AddIncomeModelController>[].obs;
+
+  void addAdditionalSrcIncome() {
+    addIncomeList.add(AddIncomeModelController());
+  }
+
+  void removeAdditionalSrcIncome(int index) {
+    if (addIncomeList.length <= 1) {
+      ToastMessage.msg("You can not delete this");
+      return;
+    }
+    if (index >= 0 && index < addIncomeList.length) {
+      // Hold reference to the item to be disposed
+      final removed = addIncomeList[index];
+
+      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
+      addIncomeList.removeAt(index);
+      addIncomeList.refresh(); // If you're using an RxList
+
+      // Dispose AFTER rebuild
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        removed.aiSourceController .dispose();
+        removed.aiIncomeController .dispose();
+      });
+    } else {
+      print("🧯 Invalid index passed to removeCoApplicant: $index");
+    }
+  }
 
   void toggleConnectorCheckbox(bool? value) {
     isConnectorChecked.value = value ?? false;
@@ -269,6 +299,46 @@ class Addleadcontroller extends GetxController{
     existingLoansController.clear();
     noOfExistingLoansController.clear();
     selectedGender.value="";
+
+    ///=====
+    isLoading.value = false;
+    isConnectorChecked.value = false;
+    selectedGender.value = null;
+    selectedIndexRelBank.value = -1;
+    fromWhere.value = "";
+    getLeadId.value = null;
+    createdByWhichEmployee.value = null;
+    selectedProductCategory.value = null;
+
+    // Rx Models
+    getLeadDetailModel.value = null;
+    individualLeadUploadModel.value = null;
+    selectedProductCategory.value = null;
+    // TextEditingControllers
+    fullNameController.clear();
+    dobController.clear();
+    phoneController.clear();
+    genderController.clear();
+    loanAmtReqController.clear();
+    emailController.clear();
+    aadharController.clear();
+    panController.clear();
+    streetAddController.clear();
+    zipController.clear();
+    nationalityController.clear();
+    currEmpStController.clear();
+    employerNameController.clear();
+    monthlyIncomeController.clear();
+    addSourceIncomeController.clear();
+    branchLocController.clear();
+    productTypeController.clear();
+    connNameController.clear();
+    connMobController.clear();
+    connShareController.clear();
+    existingLoansController.clear();
+    noOfExistingLoansController.clear();
+    addIncomeList.clear();
+
   }
 
 
@@ -435,6 +505,7 @@ class Addleadcontroller extends GetxController{
     connShareController.dispose();
     existingLoansController.dispose();
     noOfExistingLoansController.dispose();
+    addIncomeList.clear();
 
   }
 

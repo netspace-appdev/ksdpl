@@ -48,20 +48,7 @@ class Step3FormProduct extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-         /* Obx(() {
-            final values = addProductController.selectedNegProfile.toList(); // This should be List<negProfile.Data>
-            return MultiSelectDropdown<negProfile.Data>(
-              key: ValueKey(values.map((e) => e.id).join(',')), // Give it something stable to hash
-              items: addProductController.negProfileApiList.toList(),
-              getId: (e) => e.id.toString(), // assuming `id` is a property of `Data`
-              getName: (e) => e.negativeProfile ?? 'Unknown', // assuming `name` is a property of `Data`
-              selectedValues: values,
-              onChanged: (selectedList) {
-                addProductController.selectedNegProfile.assignAll(selectedList);
-              },
-            );
-          }),
-*/
+
 
               Obx(() {
                 final values = addProductController.selectedNegProfile.toList(); // List<negProfile.Data>
@@ -104,6 +91,7 @@ class Step3FormProduct extends StatelessWidget {
               ),
 
               const SizedBox(height: 10),
+
               CustomChipTextField(
                 textController: addProductController.chipText2Controller,
                 initialTags: addProductController.selectedNegArea.toList(),

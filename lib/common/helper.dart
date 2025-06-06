@@ -212,6 +212,7 @@ class AppText{
   static const String existingRelationship="Existing Relationship with Bank?";
   static const String currEmpSt="Current Employement Status";
   static const String employed="Employed";
+  static const String salaried="Salaried";
   static const String selfEmployed="Self-Employed";
   static const String unemployed="Unemployed";
   static const String retired="Retired";
@@ -524,7 +525,7 @@ class AppText{
   static const String maxTat = "Maximum TAT";
   static const String enterMaxTat = "Enter Maximum TAT";
 
-  static const String documentDescriptions = "Document Descriptions";
+  static const String additionalDocuments = "Additional Documents";
   static const String documentDescriptionsHint = "Type and press Enter to add";
 
   static const String productDescriptions = "Product Descriptions";
@@ -683,6 +684,12 @@ class AppText{
 
   static const String totalEnquiries2 = "Total Enquiries";
   static const String enterTotalEnquiries2 = "Enter Total Enquiries";
+
+  static const String source = "Source";
+  static const String enterSource = "Enter Source of Additional Income";
+  static const String income = "Income";
+  static const String enterIncome = "Enter the Income";
+  static const String documents = "Documents";
 }
 
 class AppColor{

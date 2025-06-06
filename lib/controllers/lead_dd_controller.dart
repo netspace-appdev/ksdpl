@@ -42,7 +42,7 @@ class LeadDDController extends GetxController{
   var selectedBank = Rxn<String>();
   var selectedProdType = Rxn<String>();
   var currEmpStatus = Rxn<String>();
-  var currEmpStList=[AppText.employed, AppText.selfEmployed, AppText.unemployed, AppText.retired, AppText.student];
+  var currEmpStList=[AppText.salaried, AppText.selfEmployed, AppText.unemployed, AppText.retired, AppText.student];
   var getCampaignNameModel = Rxn<GetCampaignNameModel>();
   var selectedCampaign = Rxn<String>();
   var selectedKsdplBr = Rxn<String>();

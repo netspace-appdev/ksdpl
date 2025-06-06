@@ -201,21 +201,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
 
 
-          Row(
+         /* Row(
             mainAxisSize: MainAxisSize.min,
 
             children: [
 
-
-              /*  InkWell(
-                onTap:(){
-                  Get.toNamed("/notificationScreen");
-                },
-                child: Image.asset(
-                  AppImage.bellIcon, // Replace with your image path
-                  height: 22,
-                ),
-              ),*/
               InkWell(
                 onTap: (){
 
@@ -235,6 +225,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               )
             ],
+          )*/
+
+          InkWell(
+            onTap: (){
+              showFilterDialogForLeadCount(context: context);
+            },
+            child: Container(
+
+              width: 40,
+              height:40,
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              decoration:  BoxDecoration(
+                color: AppColor.appWhite.withOpacity(0.15),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
+            ),
           )
         ],
       ),
@@ -765,6 +774,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
           );
         },
       ),
+    );
+  }
+
+
+  void showFilterDialogForLeadCount({
+    required BuildContext context,
+  }) {
+
+    //working leads is now ongoing call
+    List<String> options = ["Yearly Lead Counts","Monthly Lead Counts"];
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title: "Lead Count Filter",
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
+                child:  Obx(()=>Column(
+                  children: options.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    String option = entry.value;
+
+                    return CheckboxListTile(
+                      activeColor: AppColor.secondaryColor,
+
+                      title: Text(option),
+                      value: dashboardController.selectedIndex.value == index,
+                      onChanged: (value) => dashboardController.selectCheckbox(index),
+                    );
+                  }).toList(),
+                )),
+              ),
+
+            ],
+          ),
+          onSubmit: () {
+            dashboardController.filterSubmit();
+            Navigator.pop(context); // Close dialog after submission
+            // Handle submission logic
+          },
+        );
+      },
     );
   }
 
@@ -1864,14 +1921,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   _statusMiniCard(
                     icon: Icons.watch_later_outlined,
                     label: AppText.todaycallDuration,
-                    value: data.todayConnectedCall.toString(),
+                    value: data.todayCallDuration.toString(),
                     color: Colors.redAccent,
                   ),
                   const SizedBox(height: 12),
                   _statusMiniCard(
                     icon: Icons.show_chart,
                     label: AppText.leadCallYear,
-                    value: data.todayConnectedCall.toString(),
+                    value: data.leadsCalledInYear.toString(),
                     color: Colors.deepPurpleAccent,
                   ),
                 ],
@@ -1914,7 +1971,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Text(
             value,// value,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
           ),

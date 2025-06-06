@@ -9,6 +9,7 @@ import 'package:ksdpl/services/product_service.dart';
 
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
+import '../../custom_widgets/CustomOptionalChipTextField.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
 import '../../models/loan_application/GetLoanApplIdModel.dart';
@@ -17,6 +18,7 @@ import '../../models/loan_application/special_model/CreditCardModel.dart';
 import '../../models/loan_application/special_model/FamilyMemberModel.dart';
 import '../../models/loan_application/special_model/ReferenceModel.dart';
 import '../../models/product/AddProductListModel.dart';
+import '../../models/product/GetAllCommonDocumentModel.dart' as commanDoc;
 import '../../models/product/GetAllNegativeProfileModel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../models/product/GetAllNegativeProfileModel.dart' as negProfile;
@@ -253,6 +255,7 @@ class AddProductController extends GetxController{
   var addProductDocumentModel = Rxn<AddProductDocumentModel>(); //
   RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
   RxList<negProfile.Data> negProfileApiList = <negProfile.Data>[].obs;
+  RxList<commanDoc.Data> commonDocList = <commanDoc.Data>[].obs;
   var isLoadingProductCategory = false.obs;
   var isProductLoading = false.obs;
   var selectedKsdplProduct = Rxn<int>();
@@ -292,7 +295,11 @@ class AddProductController extends GetxController{
   var selectedCollSecCat = <String>[].obs;
   var selectedIncomeType = <String>[].obs;
   RxList<negProfile.Data> selectedNegProfile = <negProfile.Data>[].obs;
-  var selectedProdDescr = <String>[].obs;
+  RxList<commanDoc.Data> selectedCommonDoc = <commanDoc.Data>[].obs;
+ // var selectedProdDescr = <String>[].obs;
+ // var selectedProdDescr = <String, bool>{}.obs;
+  List<ChipData> selectedProdDescr = [];
+
   var selectedNegArea = <String>[].obs;
 
   RxList<String> chips = <String>[].obs;
@@ -303,6 +310,7 @@ class AddProductController extends GetxController{
   var getProductListById = Rxn<GetProductListById>(); //
   var getDocumentProductIdModel = Rxn<GetDocumentProductIdModel>(); //
   var getAllNegativeProfileModel = Rxn<GetAllNegativeProfileModel>(); //
+  var getAllCommonDocumentModel = Rxn<commanDoc.GetAllCommonDocumentModel>(); //
 
   void addChip(String value) {
     if (value.trim().isNotEmpty && !chips.contains(value.trim())) {
@@ -387,36 +395,7 @@ class AddProductController extends GetxController{
 
   void validateAndSubmit() async {
 
-  /*  for (int i = 0; i < stepFormKeys.length; i++) {
-      print("✅ i==>${i}");
-      final formKey = stepFormKeys[i];
 
-      final formState = formKey.currentState;
-      if (formState != null) {
-        if (!formState.validate()) {
-          // Jump to the step with the first error
-          jumpToStep(i);
-
-          await Future.delayed(Duration(milliseconds: 300)); // Let the UI update
-
-          // Handle known field errors (like processing fee)
-          if (i == 3) {
-            final context = processingFeeFieldKey.currentContext;
-            if (context != null) {
-              Scrollable.ensureVisible(
-                context,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                alignment: 0.3,
-              );
-              processingFeeFocusNode.requestFocus();
-            }
-          }
-
-          return;
-        }
-      }
-    }*/
 
     // All forms are valid!
     print("✅ All forms passed validation. Submit to API now.");
@@ -434,9 +413,7 @@ class AddProductController extends GetxController{
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please name the product");
     }else{
 
-      print("neg pro==>${Helper.convertListToCsvSafe(
-          selectedNegProfile.map((e) => e.negativeProfile.toString()).toList()
-      )}");
+      print("no of doc==>${selectedCommonDoc.length+ selectedProdDescr.length ?? 0}");
 
 
       addProductListApi(
@@ -488,19 +465,25 @@ class AddProductController extends GetxController{
          TSR_Years:prodTsrYearsController.text,
          TSR_Charges:prodTsrChargesController.text,
          Valuation_Charges:prodValuationChargesController.text,
-         NoOfDocument:"${selectedProdDescr.value?.length ?? 0}",
+         NoOfDocument:"${selectedCommonDoc.length+ selectedProdDescr.length ?? 0}",
          Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
          Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
          Profit_Percentage:prodProfitPercentageController.text,
          KSDPLProductId:selectedKsdplProduct.value.toString(),
-         docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
+        // docDescr:Helper.convertListToCsvSafe(selectedProdDescr),
         FromAmountRange:prodFromAmtController.text,
         ToAmountRange: prodToAmtController.text,
         TotalOverdueCases: prodTotalOverdueCasesController.text,
         TotalOverdueAmount: prodTotalOverdueAmtController.text,
         TotalEnquiries: prodTotalEnquiriesController.text,
+        commonDocument: selectedCommonDoc
       );
-
+      selectedCommonDoc.map((e){
+        print("here---<${e.id}");
+        print("here---<${e.active}");
+        print("here---<${e.commonDocument1}");
+        print("here---<${e.documentType}");
+      });
     }
 
 
@@ -570,7 +553,7 @@ class AddProductController extends GetxController{
           Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
           Profit_Percentage:prodProfitPercentageController.text,
           KSDPLProductId:selectedKsdplProduct.value.toString(),
-        docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
+        //docDescr:Helper.convertListToCsvSafe(selectedProdDescr.value),
         Processing_Charges:prodProcessingChargesController.text,
       );
 
@@ -966,6 +949,7 @@ class AddProductController extends GetxController{
     String? TotalOverdueCases,
     String? TotalOverdueAmount,
     String? TotalEnquiries,
+    List? commonDocument
 }) async {
     try {
       isLoading(true);
@@ -1042,7 +1026,7 @@ class AddProductController extends GetxController{
 
 
         isLoading(false);
-        if(docDescr!.isNotEmpty){
+        /*if(docDescr!.isNotEmpty){
           String productDocument = docDescr.toString();
 
           int productId = int.parse(addProductListModel.value!.data!.id.toString()); // replace with your actual productId
@@ -1054,11 +1038,37 @@ class AddProductController extends GetxController{
             "productId": productId,
             "documentName": doc.trim(),
             "documentType": documentType,
+            "documentType": documentType,
           })
               .toList();
 
           await ProductService.addProductDocumentApi(body: documentPayload);
-        }
+        }*/
+
+       // print("commodoc===>${convertSelectedCommonDocToJson(commonDocument.toList())}");
+       /* commonDocument.map((e){
+         print(" e.id===>${ e.id}");
+         print(" e.id===>${ e.is}");
+        });*/
+
+        /*if(commonDocument!.isNotEmpty){
+          String productDocument = docDescr.toString();
+
+          int productId = int.parse(addProductListModel.value!.data!.id.toString()); // replace with your actual productId
+          String documentType = "O";
+
+          List<Map<String, dynamic>> documentPayload = productDocument
+              .split(',')
+              .map((doc) => {
+            "productId": productId,
+            "documentName": doc.trim(),
+            "documentType": documentType,
+            "documentType": documentType,
+          })
+              .toList();
+
+          await ProductService.addProductDocumentApi(body: documentPayload);
+        }*/
 
 
         clearForm();
@@ -1082,6 +1092,17 @@ class AddProductController extends GetxController{
       clearForm();
       isLoading(false);
     }
+  }
+
+  List<Map<String, dynamic>> convertSelectedCommonDocToJson(List<commanDoc.Data> selectedDocs) {
+    return selectedDocs.map((doc) {
+      return {
+        "productId": 0, // you can replace 0 with actual productId if you have it in doc
+        "documentName": doc.commonDocument1 ?? "",
+        "documentType": "Mandatory", // or "Optional", use logic if needed
+        "documentCategory": 0, // change if needed
+      };
+    }).toList();
   }
 
   void  updateProductListApi({
@@ -1480,13 +1501,13 @@ class AddProductController extends GetxController{
 
 
         getDocumentProductIdModel.value= GetDocumentProductIdModel.fromJson(data);
-        selectedProdDescr.assignAll(
+        /*selectedProdDescr.assignAll(
           getDocumentProductIdModel.value!.data!
               .map((e) => e.documentName?.toString().trim())
               .where((name) => name != null && name.isNotEmpty)
               .cast<String>()
               .toList(),
-        );
+        );*/
 
         isLoadingMainScreen(false);
 
@@ -1523,6 +1544,46 @@ class AddProductController extends GetxController{
         final List<negProfile.Data> activeNegProfile = allNegProfiles.where((cat) => cat.active == true).toList();
 
         negProfileApiList.value = activeNegProfile;
+
+
+
+        isLoadingMainScreen(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllProductListModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoadingMainScreen(false);
+    } finally {
+
+      isLoadingMainScreen(false);
+    }
+  }
+
+
+
+
+  void  getAllCommonDocumentNameListApi() async {
+    try {
+      isLoadingMainScreen(true);
+
+      var data = await ProductService.getAllCommonDocumentNameListApi();
+
+      if(data['success'] == true){
+
+
+        getAllCommonDocumentModel.value= commanDoc.GetAllCommonDocumentModel.fromJson(data);
+
+        final List<commanDoc.Data> allComDoc = getAllCommonDocumentModel.value?.data ?? [];
+
+        final List<commanDoc.Data> activeAllComDoc = allComDoc.where((cat) => cat.active == 1).toList();
+
+        commonDocList.value = activeAllComDoc;
 
 
 

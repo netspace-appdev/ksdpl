@@ -18,6 +18,7 @@ class ProductService {
   static const String addProductDocument = BaseUrl.baseUrl + 'ProductList/AddProductDocument';
   static const String getDocumentListByProductId = BaseUrl.baseUrl + 'ProductList/GetDocumentListByProductId';
   static const String getAllNegativeProfileMaster = BaseUrl.baseUrl + 'ProductList/GetAllNegativeProfileMaster';
+  static const String getAllCommonDocumentNameList = BaseUrl.baseUrl + 'KsdplProductList/GetAllCommonDocumentNameList';
 
 
   static Future<Map<String, dynamic>> getAllProductCategoryApi() async {
@@ -501,6 +502,36 @@ class ProductService {
     }
   }
 
+
+  static Future<Map<String, dynamic>>getAllCommonDocumentNameListApi() async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllCommonDocumentNameList),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      print("response.statusCode===>getAllCommonDocumentNameListApi==>${response.statusCode}");
+      print("response==>getAllCommonDocumentNameListApi==>${response.body.toString()}");
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
 
   static void printInChunks(String text, {int chunkSize = 2048}) {
     final pattern = RegExp('.{1,$chunkSize}', dotAll: true);
