@@ -95,25 +95,14 @@ class Step4FormProduct extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-            /*  CustomChipTextField(
-                textController: addProductController.chipText3Controller,
-                initialTags: addProductController.selectedProdDescr.toList(),
-                hintText:  AppText.negativeProfilesHint,
-                onChanged: (tags) {
-
-                  addProductController.selectedProdDescr.assignAll(tags);
-                },
-              ),
-*/
-
 
               CustomOptionalChipTextField(
                 textController: addProductController.chipText3Controller,
-                initialTags: addProductController.selectedProdDescr,
+                initialTags: addProductController.selectedAdditionalDocs,
                 hintText: AppText.negativeProfilesHint,
                 onChanged: (tags) {
                   print("Updated tags: $tags");
-                  addProductController.selectedProdDescr = tags;
+                  addProductController.selectedAdditionalDocs = tags;
                 },
               ),
 

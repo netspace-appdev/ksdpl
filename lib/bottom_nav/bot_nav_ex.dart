@@ -100,6 +100,8 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
             onPressed: () {
               LeadDDController leadDDController = Get.find();
               leadDDController.selectedStage.value = "0";
+              LeadListController leadListController = Get.find();
+              leadListController.filteredGetAllLeadsModel.value=null;
               Get.toNamed("/leadSearchScreen");
             },
             shape: const CircleBorder(),

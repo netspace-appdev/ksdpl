@@ -38,7 +38,7 @@ class DashboardController extends GetxController {
 
   var isLeadCountYearly = 'false'.obs;
 
-  var selectedIndex = (1).obs;
+  var selectedIndex = (0).obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -55,10 +55,10 @@ class DashboardController extends GetxController {
 
     selectedIndex.value = index;
     if( selectedIndex.value==0){
-     isLeadCountYearly.value="true";
+     isLeadCountYearly.value="false";
 
     } else if( selectedIndex.value==1){
-      isLeadCountYearly.value="false";
+      isLeadCountYearly.value="true";
 
 
     }else{

@@ -208,7 +208,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                 child: const Text('Prev'),
               ),
               ElevatedButton(
-                onPressed: camNoteController.validateAndSubmit,
+                onPressed: (){},
                 child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,

@@ -49,6 +49,7 @@ class LeadListController extends GetxController {
   var interestLeadsCheck = false.obs; // Observable variable
   var assignedLeadsCheck = true.obs; // Observable variable
   var leadCode="2".obs;
+  var filteredleadCode="2".obs;
   var leadStageName="Fresh Leads".obs;
   var leadStageName2="Fresh Leads".obs;
   var fromWhere="".obs;
@@ -62,6 +63,7 @@ class LeadListController extends GetxController {
   var branchMain="0".obs;
   var uniqueLeadNumberMain="".obs;
   var leadMobileNumberMain="".obs;
+  var leadNameMain="".obs;
 
   var selectedIndex = (1).obs;
   var leadId = RxnString();
@@ -212,12 +214,108 @@ class LeadListController extends GetxController {
         toDate: toDateMain.value,
         branch: branchMain.value,
         uniqueLeadNumber: uniqueLeadNumberMain.value,
-        leadMobileNumber:leadMobileNumberMain.value
+        leadMobileNumber:leadMobileNumberMain.value,
+        leadName:leadNameMain.value,
 
     );
   }
 
   void callFeedbackSubmit({
+    required leadId,
+    required currentLeadStage,
+    required callStatus,
+    required callDuration,
+    required callStartTime,
+    required callEndTime,
+    String? id,
+    required fromWhere,
+    required selectedStage,
+  }){
+
+
+    String selectedDate = followDateController.text; // MM/DD/YYYY
+    String selectedTime = followTimeController.text; // HH:MM AM/PM
+
+
+    String formattedDateTime="";
+
+    if(isCallReminder.value){
+
+      if (selectedDate.isEmpty || selectedTime.isEmpty) {
+        ToastMessage.msg("Date or Time is empty!");
+        return;
+      }
+
+
+      String combined = "$selectedDate $selectedTime";
+
+// Parse using the right pattern
+      DateTime parsedDateTime = DateFormat("yyyy-MM-dd h:mm a").parse(combined);
+
+// Format to desired output
+      String formatted = DateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(parsedDateTime);
+      formattedDateTime=formatted.toString();
+
+    }else{
+
+
+      DateTime now = DateTime.now();
+
+      var td=DateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(now);
+      formattedDateTime=td.toString();
+
+    }
+    
+    updateLeadStageApiForCall(
+      id:leadId.toString(),
+      active: leadDDController.selectedStageActive.value.toString(),
+      // stage:selectedStage==""?currentLeadStage: selectedStage
+      stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage
+    ).then((_){
+    /*  workOnLeadApi(
+        // id:callStatus=="1"?id.toString():"0",
+        id:id.toString(),
+        leadId: leadId.toString(),
+        leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
+        feedbackRelatedToCall: callFeedbackController.text.trim(),
+        feedbackRelatedToLead: leadFeedbackController.text.trim(),
+        callStatus: callStatus,
+        callDuration: callDuration,
+        callStartTime: callStartTime,
+        callEndTime: callEndTime,
+        callReminder: formattedDateTime,
+        reminderStatus:  isCallReminder.value?"1":"0",
+      ).then((_){*/
+
+        SearchLeadController searchLeadController=Get.put(SearchLeadController());
+
+        getFilteredLeadsApi(
+          employeeId: eId.value.toString(),
+          leadStage: selectedPrevStage.value??"0",
+          stateId: leadDDController.selectedState.value??"0",
+          distId: leadDDController.selectedDistrict.value??"0",
+          cityId:leadDDController.selectedCity.value??"0",
+          campaign: leadDDController.selectedCampaign.value??"",
+          fromDate:fromDateController.value.text.isEmpty?"":Helper.convertToIso8601(fromDateController.value.text),
+          toDate: toDateController.value.text.isEmpty?"":Helper.convertToIso8601(toDateController.value.text),
+          branch: leadDDController.selectedKsdplBr.value??"0",
+          uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
+          leadMobileNumber: searchLeadController.leadMobileNumberController.text,
+          leadName: searchLeadController.leadNameController.text,
+        );
+        DashboardController dashboardController=Get.find();
+        dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
+
+
+
+      /*});*/
+    });
+
+
+  }
+
+
+  void onlyFollowupSubmit({
     required leadId,
     required currentLeadStage,
     required callStatus,
@@ -269,16 +367,16 @@ class LeadListController extends GetxController {
 
 
 
-   // callStatus=="0" && currentLeadStage=="13"
+    // callStatus=="0" && currentLeadStage=="13"
 
 
-
+/*
     updateLeadStageApiForCall(
-      id:leadId.toString(),
-      active: leadDDController.selectedStageActive.value.toString(),
-      // stage:selectedStage==""?currentLeadStage: selectedStage
-      stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage
-    ).then((_){
+        id:leadId.toString(),
+        active: leadDDController.selectedStageActive.value.toString(),
+        // stage:selectedStage==""?currentLeadStage: selectedStage
+        stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage
+    ).then((_){*/
       workOnLeadApi(
         // id:callStatus=="1"?id.toString():"0",
         id:id.toString(),
@@ -308,6 +406,7 @@ class LeadListController extends GetxController {
           branch: leadDDController.selectedKsdplBr.value??"0",
           uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
           leadMobileNumber: searchLeadController.leadMobileNumberController.text,
+          leadName: searchLeadController.leadNameController.text,
         );
         DashboardController dashboardController=Get.find();
         dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
@@ -315,11 +414,10 @@ class LeadListController extends GetxController {
 
 
       });
-    });
+ /*   });*/
 
 
   }
-
 
 
   void getAllLeadsApi({
@@ -334,6 +432,7 @@ class LeadListController extends GetxController {
     required branch,
     required leadMobileNumber,
     required uniqueLeadNumber,
+    required leadName,
     bool isLoadMore = false,
   }) async {
 
@@ -361,7 +460,8 @@ class LeadListController extends GetxController {
         toDate: toDate,
         branch: branch,
         leadMobileNumber: leadMobileNumber,
-        uniqueLeadNumber: uniqueLeadNumber
+        uniqueLeadNumber: uniqueLeadNumber,
+        leadName: leadName
       );
 
       if (data['success'] == true) {
@@ -411,6 +511,7 @@ class LeadListController extends GetxController {
     required branch,
     required leadMobileNumber,
     required uniqueLeadNumber,
+    required leadName,
     bool isLoadMore = false,
   }) async {
     try {
@@ -437,6 +538,8 @@ class LeadListController extends GetxController {
         branch: branch,
         leadMobileNumber: leadMobileNumber,
         uniqueLeadNumber: uniqueLeadNumber,
+        leadName:leadName,
+
       );
 
       if (data['success'] == true) {
@@ -457,7 +560,7 @@ class LeadListController extends GetxController {
         }
 
       }else if (data['success'] == false && (data['data'] as List).isEmpty) {
-
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
         filteredGetAllLeadsModel.value = null;
         filteredHasMore.value = false;
       } else {
@@ -648,7 +751,8 @@ class LeadListController extends GetxController {
           toDate: toDateMain.value,
           branch: branchMain.value,
           uniqueLeadNumber: uniqueLeadNumberMain.value,
-          leadMobileNumber:leadMobileNumberMain.value
+          leadMobileNumber:leadMobileNumberMain.value,
+        leadName:leadNameMain.value,
       );
 
       isLoading(false);
@@ -705,7 +809,8 @@ class LeadListController extends GetxController {
           toDate: toDateMain.value,
           branch: branchMain.value,
           uniqueLeadNumber: uniqueLeadNumberMain.value,
-          leadMobileNumber:leadMobileNumberMain.value
+          leadMobileNumber:leadMobileNumberMain.value,
+        leadName:leadNameMain.value,
       );
 
       isLoading(false);
@@ -765,7 +870,8 @@ class LeadListController extends GetxController {
           toDate: toDateMain.value,
           branch: branchMain.value,
           uniqueLeadNumber: uniqueLeadNumberMain.value,
-          leadMobileNumber:leadMobileNumberMain.value
+          leadMobileNumber:leadMobileNumberMain.value,
+        leadName:leadNameMain.value,
       );
 
       isLoading(false);
@@ -848,7 +954,8 @@ class LeadListController extends GetxController {
           toDate: toDateMain.value,
           branch: branchMain.value,
           uniqueLeadNumber: uniqueLeadNumberMain.value,
-          leadMobileNumber:leadMobileNumberMain.value
+          leadMobileNumber:leadMobileNumberMain.value,
+        leadName:leadNameMain.value,
       );
 
       isLoading(false);
@@ -952,7 +1059,8 @@ class LeadListController extends GetxController {
           toDate: toDateMain.value,
           branch: branchMain.value,
           uniqueLeadNumber: uniqueLeadNumberMain.value,
-          leadMobileNumber:leadMobileNumberMain.value
+          leadMobileNumber:leadMobileNumberMain.value,
+        leadName:leadNameMain.value,
       );
 
       isLoading(false);
@@ -1008,7 +1116,8 @@ class LeadListController extends GetxController {
           toDate: toDateMain.value,
           branch: branchMain.value,
           uniqueLeadNumber: uniqueLeadNumberMain.value,
-          leadMobileNumber:leadMobileNumberMain.value
+          leadMobileNumber:leadMobileNumberMain.value,
+        leadName:leadNameMain.value,
       );
 
       isLoading(false);
@@ -1047,7 +1156,8 @@ class LeadListController extends GetxController {
           toDate: toDateMain.value,
           branch: branchMain.value,
            uniqueLeadNumber: uniqueLeadNumberMain.value,
-         leadMobileNumber:leadMobileNumberMain.value
+         leadMobileNumber:leadMobileNumberMain.value,
+          leadName:leadNameMain.value,
         );
 
 
@@ -1085,7 +1195,8 @@ class LeadListController extends GetxController {
         toDate: toDateMain.value,
         branch: branchMain.value,
         uniqueLeadNumber: uniqueLeadNumberMain.value,
-        leadMobileNumber:leadMobileNumberMain.value
+        leadMobileNumber:leadMobileNumberMain.value,
+      leadName:leadNameMain.value,
     );
   }
 

@@ -639,6 +639,7 @@ class AddLeadScreen extends StatelessWidget {
                                     const SizedBox(height: 10),
                                   ],
                                 ),
+/*
 
                               CustomTextLabel(
                                 label: AppText.productSegment,
@@ -670,8 +671,9 @@ class AddLeadScreen extends StatelessWidget {
                                   },
                                 );
                               }),
+*/
 
-                              const SizedBox(height: 30),
+                              const SizedBox(height: 10),
 
                               const Text(
                                 AppText.productTypeInt,

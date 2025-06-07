@@ -473,6 +473,8 @@ class LeadListMain extends StatelessWidget {
                       children: [
 
                         if(leadListController.leadCode.value=="4")...[
+
+
                           _buildTextButton(
                             label:AppText.doable,
                             context: context,
@@ -641,6 +643,7 @@ class LeadListMain extends StatelessWidget {
                     branch: leadListController.branchMain.value.toString(),
                     uniqueLeadNumber:leadListController.uniqueLeadNumberMain.value.toString(),
                     leadMobileNumber:leadListController.leadMobileNumberMain.value.toString(),
+                    leadName:leadListController.leadNameMain.value.toString(),
                     isLoadMore: true,
                   );
 
@@ -727,7 +730,7 @@ overflow: TextOverflow.ellipsis,
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:"+919399779813",//"+919201963012",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
+            phoneNumber:phoneNumber,//"+919238513910",//"+919201963012",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -764,6 +767,53 @@ overflow: TextOverflow.ellipsis,
     );
   }
 
+  Widget _disableTextButton({
+    required String label,
+    required BuildContext context,
+    required Color color,
+    required IconData icon,
+    required String leadId,
+    required String label_code,
+    required String uln,
+    String? currentLeadStage
+  }) {
+
+    return InkWell(
+      onTap: null,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            width:
+            label_code=="loan_appl_form"?MediaQuery.of(context).size.width*0.82:
+            (label_code=="add_feedback" ) ?
+            MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
+            MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
+
+            decoration: BoxDecoration(
+              //color: color,
+                color: label_code=="add_feedback"?AppColor.primaryColor:Colors.transparent,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: AppColor.grey700)
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:Colors.red, size: 16),
+                SizedBox(width: 6),
+                Text(
+                  label,
+                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
 
 
@@ -810,8 +860,8 @@ overflow: TextOverflow.ellipsis,
               leadId: leadId,
               currentLeadStage: currentLeadStage.toString(),
               callDuration: "00:00",
-              callStartTime:  "00:00",
-              callEndTime: "00:00",
+              callStartTime:  "null",
+              callEndTime: "null",
               callStatus: "0"
           );
 
@@ -1579,7 +1629,7 @@ overflow: TextOverflow.ellipsis,
             } else {
               var id=0;
 
-              leadListController.callFeedbackSubmit(
+              leadListController.onlyFollowupSubmit(
                   leadId: leadId,
                   currentLeadStage: currentLeadStage,
                   callStatus: callStatus,

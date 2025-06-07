@@ -308,7 +308,9 @@ class AppText{
   static const String dsaStaffName = "DSA Staff Name";
   static const String enterDsaStaffName = "Enter DSA Staff Name";
   static const String uniqueLeadNumber = "Unique Lead Number";
+  static const String leadName = "Lead Name";
   static const String enterUniqueLeadNumber = "Enter Unique Lead Number";
+  static const String enterLeadName = "Enter Lead Name";
   static const String channel = "Channel";
   static const String selectChannel = "Select your Channel";
   static const String channelCode = "Channel Code";
@@ -648,6 +650,7 @@ class AppText{
   static const String connectedCalls = "Connected Calls";
   static const String todaycallDuration = "Today's Call Duration";
   static const String leadCallYear = "Leads Called in The Year";
+  static const String ongoingCallYTD= "Ongoing Call (YTD)";
   static const String employee = "Employee";
 
   static const String bankerMobileNo = "Banker Mobile No";

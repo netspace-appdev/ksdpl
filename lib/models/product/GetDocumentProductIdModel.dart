@@ -42,6 +42,8 @@ class Data {
   String? documentType;
   int? ksdplProductId;
   bool? active;
+  int? documentCategoryId;
+  String? documentCategory;
 
   Data(
       {this.productId,
@@ -53,7 +55,9 @@ class Data {
         this.documentName,
         this.documentType,
         this.ksdplProductId,
-        this.active});
+        this.active,
+        this.documentCategoryId,
+        this.documentCategory});
 
   Data.fromJson(Map<String, dynamic> json) {
     productId = json['productId'];
@@ -66,6 +70,8 @@ class Data {
     documentType = json['documentType'];
     ksdplProductId = json['ksdplProductId'];
     active = json['active'];
+    documentCategoryId = json['documentCategoryId'];
+    documentCategory = json['documentCategory'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +86,8 @@ class Data {
     data['documentType'] = this.documentType;
     data['ksdplProductId'] = this.ksdplProductId;
     data['active'] = this.active;
+    data['documentCategoryId'] = this.documentCategoryId;
+    data['documentCategory'] = this.documentCategory;
     return data;
   }
 }

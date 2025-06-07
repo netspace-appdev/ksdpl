@@ -382,6 +382,9 @@ class ViewProductScreen extends StatelessWidget {
         if (label == "Details") {
           ProductDetailsController productDetailsController = Get.put(ProductDetailsController());
           productDetailsController.getProductListByIdApi(id: id);
+
+          AddProductController addProductController = Get.put(AddProductController());
+          addProductController.getDocumentListByProductIdApi(productId:id );
           Get.toNamed("/productDetailScreen");
 
         }else  if (label == "Edit") {

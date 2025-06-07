@@ -23,6 +23,7 @@ class SearchLeadController extends GetxController{
   var getCommonLeadListFModel = Rxn<GetCommonLeadListFModel>(); //
   final TextEditingController uniqueLeadNumberController = TextEditingController();
   final TextEditingController leadMobileNumberController = TextEditingController();
+  final TextEditingController leadNameController = TextEditingController();
 /*  @override
   void onInit() {
     // TODO: implement onInit

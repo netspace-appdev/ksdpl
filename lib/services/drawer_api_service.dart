@@ -342,6 +342,7 @@ class DrawerApiService {
     required branch,
     required uniqueLeadNumber,
     required leadMobileNumber,
+    required leadName,
   }) async {
     try {
 
@@ -364,9 +365,12 @@ class DrawerApiService {
       request.fields['Branch'] = branch;
       request.fields['UniqueLeadNumber'] = uniqueLeadNumber;
       request.fields['LeadMobileNumber'] = leadMobileNumber;
+      request.fields['LeadName'] = leadName;
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      print("request===>${getAllLeads}===>${response.body}");
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -479,6 +483,8 @@ class DrawerApiService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
+
+      print("response===>${getLeadDetailById}===>${response.body}");
 
 
       if (response.statusCode == 200) {

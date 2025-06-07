@@ -25,6 +25,7 @@ import '../../../custom_widgets/CustomLabeledTextField.dart';
 import '../../common/storage_service.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 import '../../controllers/open_poll_filter_controller.dart';
+import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/product_detail_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
@@ -42,6 +43,7 @@ class ProductDetailScreen extends StatelessWidget {
 
 
   ProductDetailsController productDetailsController = Get.put(ProductDetailsController());
+  AddProductController addProductController = Get.find();
 
 
   @override
@@ -165,7 +167,7 @@ class ProductDetailScreen extends StatelessWidget {
 
   Widget productSection(BuildContext context) {
     return Obx(() {
-      if (productDetailsController.isLoading.value) {
+      if (productDetailsController.isLoading.value || addProductController.isLoadingMainScreen.value) {
         return Center(child: CustomSkelton.productShimmerList(context));
       }
 
@@ -273,11 +275,33 @@ class ProductDetailScreen extends StatelessWidget {
               Icons.admin_panel_settings_sharp
           ),
 
-        
+          buildCard("Documents", [
+            addProductController.getDocumentProductIdModel.value!.data!.isEmpty?
+            DetailRow(label: "No Docs Found", value: "")
+           : ListView.builder(
+              itemCount:addProductController.getDocumentProductIdModel.value!.data!.length,//viewProductController.getAllProductListModel.value!.data!.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                // final product = viewProductController.getAllProductListModel.value!.data![index];
+                final data =  addProductController.getDocumentProductIdModel.value!.data![index];
+
+
+                return DetailRow(label: data.documentName.toString(), value: (data.documentType!.trim().toString()=="m" || data.documentType!.trim().toString()=="M") ?"Mandatory":"Optional" );
+
+              },
+            ),
+
+          /*  getDocumentProductIdModel.value!.data![0]
+            DetailRow(label: "No of Documents", value: data.noOfDocument.toString()),*/
+          ],
+              Icons.list_alt_rounded
+          ),
 
           SizedBox(height: 20),
         ],
       );
+
     });
   }
 

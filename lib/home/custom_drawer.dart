@@ -225,6 +225,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
                ),
 
+               CustomListTile(
+                 title:  "Bank Credentials",
+                 imagePath:AppImage.webImg,
+                 onTap: () => _launchURL("https://docs.google.com/spreadsheets/d/1__iYzKKiDthxhfTqh8WEsdVolIcl2ymi0fqnShwNqto/edit?gid=0#gid=0"),
+
+               ),
+
 
 
                // Logout Button

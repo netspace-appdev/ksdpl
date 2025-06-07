@@ -1927,7 +1927,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SizedBox(height: 12),
                   _statusMiniCard(
                     icon: Icons.show_chart,
-                    label: AppText.leadCallYear,
+                    label: AppText.ongoingCallYTD,
                     value: data.leadsCalledInYear.toString(),
                     color: Colors.deepPurpleAccent,
                   ),
