@@ -53,7 +53,8 @@ class Addleadcontroller extends GetxController{
   var selectedProductCategory = Rxn<int>();
 
   var addIncomeList = <AddIncomeModelController>[].obs;
-
+  var isLoadingProductSegment = false.obs;
+  var selectedProdSegment = Rxn<int>();
   void addAdditionalSrcIncome() {
     addIncomeList.add(AddIncomeModelController());
   }

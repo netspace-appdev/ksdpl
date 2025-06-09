@@ -128,6 +128,7 @@ class AddLeadScreen extends StatelessWidget {
                                 hintText: AppText.mmddyyyy,
                                 validator: ValidationHelper.validateDob,
                                 isDateField: true,
+                                isFutureDisabled: true,
                               ),
 
                               CustomLabeledTextField(
@@ -431,7 +432,7 @@ class AddLeadScreen extends StatelessWidget {
                                             controller: ai.aiSourceController,
                                             inputType: TextInputType.name,
                                             hintText: AppText.enterSource,
-                                            validator:  ValidationHelper.validateName,
+
                                           ),
                                           CustomLabeledTextField(
                                             label: AppText.income,
@@ -439,7 +440,7 @@ class AddLeadScreen extends StatelessWidget {
                                             controller: ai.aiIncomeController,
                                             inputType: TextInputType.name,
                                             hintText: AppText.enterIncome,
-                                            validator:  ValidationHelper.validateName,
+
                                           ),
 
                                         ],
@@ -814,17 +815,28 @@ class AddLeadScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
 
-          addleadcontroller.fromWhere.value=="drawer" ||addleadcontroller.fromWhere.value=="leadList" ||  addleadcontroller.fromWhere.value=="interested"?
-          InkWell(
-              onTap: (){
-                Get.back();
-              },
-              child: Image.asset(AppImage.arrowLeft,height: 24,)):
-          InkWell(
+         // addleadcontroller.fromWhere.value=="drawer" ||addleadcontroller.fromWhere.value=="leadList" ||  addleadcontroller.fromWhere.value=="interested"?
+      InkWell(
+      borderRadius: BorderRadius.circular(8), // for ripple effect
+      onTap: () {
+        Get.back();
+      },
+      child: Container(
+        width: 48,
+        height: 48,
+        padding: const EdgeInsets.all(12), // optional internal padding
+        alignment: Alignment.center,
+        child: Image.asset(
+          AppImage.arrowLeft,
+          height: 24,
+        ),
+      ),
+    ),
+     /*     InkWell(
               onTap: (){
                 _scaffoldKey.currentState?.openDrawer();
               },
-              child: SvgPicture.asset(AppImage.drawerIcon)),
+              child: SvgPicture.asset(AppImage.drawerIcon)),*/
 
           const Text(
             AppText.addLead,

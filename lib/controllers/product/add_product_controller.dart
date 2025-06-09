@@ -238,7 +238,7 @@ class AddProductController extends GetxController{
   final TextEditingController prodDocumentDescriptionsController = TextEditingController();
   final TextEditingController prodProductDescriptionsController = TextEditingController();
   final TextEditingController prodNoOfDocController = TextEditingController();
-  var prodSegmentList=["Insurance", "Secured","Unsecured", ];
+
   var selectedprodSegment = Rxn<String>();
   RxList<String> customerCategoryList = [
     "Salaried",
@@ -481,8 +481,8 @@ class AddProductController extends GetxController{
     }
 
 
-  }
-  void validateAndUpdate() {
+  } void validateAndUpdate() {
+
 
 
 

@@ -5,13 +5,13 @@ import '../common/helper.dart';
 import '../models/AdminSupervisorModel.dart';
 import '../models/FunctionalSupervisorModel.dart';
 import '../models/GetCampaignNameModel.dart';
-import '../models/dashboard/GetAllBankModel.dart';
+import '../models/dashboard/GetAllBankModel.dart' as allBank;
 import '../models/GetAllBranchByBankIdModel.dart';
 import '../models/GetBankerRoleByLevelAndBankIdModel.dart';
 import '../models/GetLevelOfBankerRoleModel.dart';
 import '../models/dashboard/GetAllBranchBIModel.dart';
 import '../models/dashboard/GetAllChannelModel.dart';
-import '../models/dashboard/GetAllKsdplProductModel.dart';
+import '../models/dashboard/GetAllKsdplProductModel.dart' as ksdplProduct;
 import '../models/dashboard/GetAllStateModel.dart';
 import '../models/dashboard/GetCityByDistrictIdModel.dart';
 import '../models/dashboard/GetDistrictByStateModel.dart';
@@ -29,8 +29,8 @@ class LeadDDController extends GetxController{
   var getAllStateModel = Rxn<GetAllStateModel>(); //
   var getDistrictByStateModel = Rxn<GetDistrictByStateModel>(); //
   var getCityByDistrictIdModel = Rxn<GetCityByDistrictIdModel>(); //
-  var getAllBankModel = Rxn<GetAllBankModel>(); //
-  var getAllKsdplProductModel = Rxn<GetAllKsdplProductModel>(); //
+  var getAllBankModel = Rxn<allBank.GetAllBankModel>(); //
+  var getAllKsdplProductModel = Rxn<ksdplProduct.GetAllKsdplProductModel>(); //
   var getProductListByBankModel = Rxn<GetProductListByBankModel>(); //
   var getAllKsdplBranchModel = Rxn<GetAllKsdplBranchModel>(); //
   var getAllLeadStageModel = Rxn<GetAllLeadStageModel>(); //
@@ -86,7 +86,9 @@ class LeadDDController extends GetxController{
   var getCityByDistrictIdModelCurr = Rxn<GetCityByDistrictIdModel>(); //
   var getCityByDistrictIdModelPerm = Rxn<GetCityByDistrictIdModel>(); //
 
+  RxList<allBank.Data> bankList = <allBank.Data>[].obs;
 
+  RxList<ksdplProduct.Data> ksdplProductList = <ksdplProduct.Data>[].obs;
   var isStateLoadingCurr = false.obs;
   var isDistrictLoadingCurr = false.obs;
   var isCityLoadingCurr = false.obs;
@@ -354,8 +356,10 @@ class LeadDDController extends GetxController{
 
       if(data['success'] == true){
 
-        getAllBankModel.value= GetAllBankModel.fromJson(data);
+        getAllBankModel.value= allBank.GetAllBankModel.fromJson(data);
 
+        final List<allBank.Data> tempAllBank = getAllBankModel.value?.data ?? [];
+        bankList.value = List<allBank.Data>.from(tempAllBank);
 
         isLoading(false);
         isBankLoading(false);
@@ -391,10 +395,11 @@ class LeadDDController extends GetxController{
 
       if(data['success'] == true){
 
-        getAllKsdplProductModel.value= GetAllKsdplProductModel.fromJson(data);
+        getAllKsdplProductModel.value= ksdplProduct.GetAllKsdplProductModel.fromJson(data);
 
 
-
+        final List<ksdplProduct.Data> tempAllPro = getAllKsdplProductModel.value?.data ?? [];
+        ksdplProductList.value = List<ksdplProduct.Data>.from(tempAllPro);
 
         isLoading(false);
         isProductLoading(false);
@@ -434,7 +439,7 @@ class LeadDDController extends GetxController{
 
       if(data['success'] == true){
 
-        getAllKsdplProductModel.value= GetAllKsdplProductModel.fromJson(data);
+        getAllKsdplProductModel.value= ksdplProduct.GetAllKsdplProductModel.fromJson(data);
 
 
 

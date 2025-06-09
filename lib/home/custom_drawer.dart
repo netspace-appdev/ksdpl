@@ -159,6 +159,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                        leadDDController.getAllKsdplProductApi();
                        AddProductController addProductController =Get.put(AddProductController());
                        addProductController.getAllProductCategoryApi();
+
                        addLeadController.fromWhere.value="drawer";
 
                        addLeadController.clearControllers();
@@ -208,10 +209,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                    ),
                    ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
                      leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
-                     title:  Text("Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                     title:  Text("View Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
                      onTap: () {
                        ViewProductController viewProductController=Get.put(ViewProductController());
                        viewProductController.getAllProductListApi();
+                       AddProductController addProductController =Get.put(AddProductController());
+                       addProductController.getAllProductCategoryApi();
                        Get.toNamed("/viewProductScreen");
                      },
                    ),

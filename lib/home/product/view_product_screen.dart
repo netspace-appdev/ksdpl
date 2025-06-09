@@ -32,9 +32,10 @@ import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
+import '../../custom_widgets/CustomTextLabel.dart';
 import '../custom_drawer.dart';
 
-
+import '../../models/product/GetAllProductCategoryModel.dart' as productSegment;
 
 class ViewProductScreen extends StatelessWidget {
 
@@ -43,7 +44,8 @@ class ViewProductScreen extends StatelessWidget {
 
 
   ViewProductController viewProductController = Get.put(ViewProductController());
-
+  final LeadDDController leadDDController =Get.find();
+  final  AddProductController addProductController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +105,33 @@ class ViewProductScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                         children: [
+
+                          const SizedBox(height: 20),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppText.products,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              InkWell(
+                                onTap: (){
+
+                                  viewProductController.clearFilter();
+
+                                },
+                                child: Text(
+                                  "Clear Filter",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
+                                ),
+                              ),
+                            ],
+                          ),
+
                           const SizedBox(height: 20),
                           productSection(context),
 
@@ -129,13 +158,24 @@ class ViewProductScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-              onTap: (){
-                Get.back();
-              },
-              child: Image.asset(AppImage.arrowLeft,height: 24,)),
+            borderRadius: BorderRadius.circular(8), // for ripple effect
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              width: 48,
+              height: 48,
+              padding: const EdgeInsets.all(12), // optional internal padding
+              alignment: Alignment.center,
+              child: Image.asset(
+                AppImage.arrowLeft,
+                height: 24,
+              ),
+            ),
+          ),
 
           const Text(
-            AppText.showProducts,
+            AppText.viewProducts,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
@@ -145,7 +185,8 @@ class ViewProductScreen extends StatelessWidget {
 
           InkWell(
             onTap: (){
-
+              viewProductController.clearForm();
+              showFilterDialogForProduct(context: context);
             },
             child: Container(
 
@@ -153,19 +194,197 @@ class ViewProductScreen extends StatelessWidget {
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration:  BoxDecoration(
-                color: Colors.transparent,
+                color: AppColor.appWhite.withOpacity(0.15),
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
-
+              child: Center(child: Icon(Icons.filter_alt_outlined, color: AppColor.appWhite,),),
             ),
           )
 
-
-
         ],
       ),
+    );
+  }
+
+
+  void showFilterDialogForProduct({
+    required BuildContext context,
+
+  }) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Product Filter",
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(Get.context!).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
+                      child:  Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+
+                          CustomLabeledTextField(
+                            label: AppText.productName,
+                            isRequired: false,
+                            controller: viewProductController.vpProductNameController ,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterProductName,
+
+                          ),
+
+                          CustomLabeledTextField(
+                            label: AppText.minCibil,
+                            isRequired: false,
+                            controller: viewProductController.vpMinCibilController ,
+                            inputType: TextInputType.number,
+                            hintText: AppText.enterMinCibil,
+
+                          ),
+
+
+                          const SizedBox(height: 20),
+
+                          CustomTextLabel(
+                            label: AppText.bankNostar,
+
+
+                          ),
+
+                          const SizedBox(height: 10),
+
+
+                          Obx((){
+                            if (leadDDController.isBankLoading.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<bank.Data>(
+                              items: leadDDController.bankList ?? [],
+                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.bankName.toString(),
+                              selectedValue:leadDDController.bankList.firstWhereOrNull(
+                                    (item) => item.id == viewProductController.selectedBank.value,
+                              ),
+                              onChanged: (value) {
+
+                                viewProductController.selectedBank.value =  value?.id;
+
+
+                              },
+                              onClear: (){
+                                viewProductController.selectedBank.value=  0;
+                                leadDDController.bankList.clear(); // reset dependent dropdown
+
+                              },
+                            );
+                          }),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          CustomTextLabel(
+                            label: AppText.productSegment,
+                            isRequired: true,
+
+                          ),
+
+                          const SizedBox(height: 10),
+
+
+                          Obx((){
+                            if (viewProductController.isLoadingProductSegment.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<productSegment.Data>(
+                              items: addProductController.productCategoryList  ?? [],
+                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.productCategoryName.toString(),
+                              selectedValue: addProductController.productCategoryList.firstWhereOrNull(
+                                    (item) => item.id == viewProductController.selectedProdSegment.value,
+                              ),
+                              onChanged: (value) {
+                                viewProductController.selectedProdSegment.value =  value?.id;
+                              },
+                              onClear: (){
+                                viewProductController.selectedProdSegment.value = 0;
+                                addProductController.productCategoryList.clear(); // reset dependent dropdown
+
+                              },
+                            );
+                          }),
+
+                          const SizedBox(
+                            height: 20,
+                          ),
+
+                          CustomTextLabel(
+                            label: AppText.ksdplProduct,
+                            isRequired: true,
+
+
+                          ),
+
+                          const SizedBox(height: 10),
+
+
+                          Obx((){
+                            if (leadDDController.isProductLoading.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<product.Data>(
+                              items: leadDDController.ksdplProductList ?? [],
+                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.productName.toString(),
+                              selectedValue: leadDDController.ksdplProductList.firstWhereOrNull(
+                                    (item) => item.id == viewProductController.selectedKsdplProduct.value,
+                              ),
+                              onChanged: (value) {
+                                viewProductController.selectedKsdplProduct.value =  value?.id;
+                              },
+                              onClear: (){
+                                viewProductController.selectedKsdplProduct.value =  null;
+                              },
+                            );
+                          }),
+
+                          const SizedBox(height: 100),
+
+                        ],
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onSubmit: () {
+            viewProductController.submitFilter();
+            Get.back();
+
+          },
+        );
+      },
     );
   }
 
@@ -207,7 +426,7 @@ class ViewProductScreen extends StatelessWidget {
 
   Widget productSection(BuildContext context){
     return Obx((){
-      if (viewProductController.isLoading.value) {
+      if (viewProductController.isMainListMoreLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
       if (viewProductController.getAllProductListModel.value == null ||
@@ -430,310 +649,6 @@ class ViewProductScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
-
-
-/*  void showFilterDialog({
-    required BuildContext context,
-    required leadId,
-  }) {
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-
-          title: "Filter",
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              const SizedBox(
-                height: 10,
-              ),
-
-              const Text(
-                AppText.state,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.grey2,
-                ),
-              ),
-
-              SizedBox(height: 10),
-
-
-              Obx((){
-                if (leadDDController.isStateLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
-
-                return CustomDropdown<Data>(
-                  items: leadDDController.getAllStateModel.value?.data ?? [],
-                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.stateName.toString(),
-                  selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedState.value,
-                  ),
-                  onChanged: (value) {
-                    leadDDController.selectedState.value =  value?.id?.toString();
-                    leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
-                  },
-                );
-              }),
-
-              const SizedBox(height: 20),
-
-              const Text(
-                AppText.district,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.grey2,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-
-              Obx((){
-                if (leadDDController.isDistrictLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
-
-
-                return CustomDropdown<dist.Data>(
-                  items: leadDDController.getDistrictByStateModel.value?.data ?? [],
-                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.districtName.toString(),
-                  selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedDistrict.value,
-                  ),
-                  onChanged: (value) {
-                    leadDDController.selectedDistrict.value =  value?.id?.toString();
-                    leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
-                  },
-                );
-              }),
-
-              const SizedBox(height: 20),
-
-
-              const Text(
-                AppText.city,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.grey2,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-
-              Obx((){
-                if (leadDDController.isCityLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
-
-
-                return CustomDropdown<city.Data>(
-                  items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
-                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.cityName.toString(),
-                  selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedCity.value,
-                  ),
-                  onChanged: (value) {
-                    leadDDController.selectedCity.value =  value?.id?.toString();
-                  },
-                );
-              }),
-
-
-              const SizedBox(height: 20),
-
-
-              const Text(
-                AppText.ksdplBr,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.grey2,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-              Obx((){
-                if (leadDDController.isKSDPLBrLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
-
-
-                return CustomDropdown<ksdplBranch.Data>(
-                  items: leadDDController.getAllKsdplBranchModel.value?.data ?? [],
-                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.branchName.toString(),
-                  selectedValue: leadDDController.getAllKsdplBranchModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedKsdplBr.value,
-                  ),
-                  onChanged: (value) {
-                    leadDDController.selectedKsdplBr.value =  value?.id?.toString();
-                  },
-                );
-              }),
-
-              const SizedBox(height: 20),
-
-
-            ],
-          ),
-
-          onSubmit: onPressed,
-        );
-      },
-    );
-  }
-
-  void showOpenPollDialog({
-    required BuildContext context,
-    required String leadId,
-  }) {
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Container(
-                width: double.infinity, // Makes it full width
-                padding: EdgeInsets.zero,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // 🔵 Title in Blue Strip
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: const BoxDecoration(
-                          color:AppColor.primaryColor, // Title background color
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                          gradient: LinearGradient(
-                            colors: [AppColor.primaryLight, AppColor.primaryDark],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                        child: const Text(
-                          "Open Poll",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white, // Title text color
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-
-                      // 📝 Content (Radio Buttons)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        child:  Column(
-                          children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Enter percent for leads",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColor.grey1, // Title text color
-                                ),
-
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            CustomTextFieldPrefix(
-                              inputType:  TextInputType.number,
-                              controller: leadListController.openPollPercentController,
-                              hintText: "like 2.0 %",
-                              validator: validatePercentage,
-                              isPassword: false,
-                              obscureText: false,
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // 🟠 Buttons (Close & Submit)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OutlinedButton(
-                              onPressed: () {
-                                Navigator.pop(context); // Close dialog
-                              },
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColor.grey1,
-                                side: BorderSide(color: AppColor.grey2),
-                              ),
-                              child: Text("Close", style: TextStyle(color: AppColor.grey2)),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  leadListController.leadMoveToCommonTaskApi(
-                                      leadId: leadId,
-                                      percentage: leadListController.openPollPercentController.text.trim().toString()
-                                  );
-                                  Navigator.pop(context);
-                                }
-
-                                // Close dialog after submission
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.orangeColor,
-                              ),
-                              child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  String? validatePercentage(String? value) {
-    if (value == null || value.isEmpty) {
-      return AppText.percentageRequired;
-    }
-    return null;
-  }*/
-
 
 }
 

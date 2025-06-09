@@ -12,8 +12,9 @@ class CustomLabeledPickerTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool isPassword;
   final bool obscureText;
-  final bool isDateField; // ✅ New parameter to check if it's a date field
+  final bool isDateField;
   final bool enabled;
+  final bool isFutureDisabled;
 
   const CustomLabeledPickerTextField({
     Key? key,
@@ -26,7 +27,9 @@ class CustomLabeledPickerTextField extends StatelessWidget {
     this.isPassword = false,
     this.obscureText = false,
     this.isDateField = false, // Default: Not a date field
-    this.enabled = true, // ✅ Default enabled
+    this.enabled = true,
+    this.isFutureDisabled = false,
+
   }) : super(key: key);
 
   @override
@@ -95,11 +98,12 @@ class CustomLabeledPickerTextField extends StatelessWidget {
 
   /// Date Picker Function
   Future<void> _selectDate(BuildContext context) async {
+    DateTime now = DateTime.now();
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: now,
       firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+      lastDate: isFutureDisabled ? now : DateTime(2100), // ✅ Conditional max date
     );
 
     if (pickedDate != null) {

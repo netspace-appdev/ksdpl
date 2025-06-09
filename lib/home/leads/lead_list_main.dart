@@ -200,11 +200,22 @@ class LeadListMain extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           leadListController.fromWhere.value=="drawer"?
-          InkWell(
-              onTap: (){
-                Get.back();
-              },
-              child: Image.asset(AppImage.arrowLeft,height: 24,)):
+      InkWell(
+      borderRadius: BorderRadius.circular(8), // for ripple effect
+      onTap: () {
+        Get.back();
+      },
+      child: Container(
+        width: 48,
+        height: 48,
+        padding: const EdgeInsets.all(12), // optional internal padding
+        alignment: Alignment.center,
+        child: Image.asset(
+          AppImage.arrowLeft,
+          height: 24,
+        ),
+      ),
+    ):
           InkWell(
               onTap: (){
                 _scaffoldKey.currentState?.openDrawer();

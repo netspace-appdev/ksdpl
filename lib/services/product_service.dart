@@ -350,6 +350,11 @@ class ProductService {
   static Future<Map<String, dynamic>> getAllProductListApi({
     required int pageNumber,
     required int pageSize,
+    String? bankId,
+    String? minCibil,
+    String? segment,
+    String? product,
+    String? KsdplProductId,
 }) async {
     try {
       var request = http.MultipartRequest(
@@ -364,10 +369,17 @@ class ProductService {
 
       request.headers.addAll(header);
 
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'BankId', bankId,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'MinCIBIL', minCibil,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Segment', segment,fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Product', product);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'KSDPLProductId', KsdplProductId,fallback: "0");
+
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-
+      Helper.ApiReq(getAllProductList, request.fields);
+      Helper.ApiRes(getAllProductList, response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

@@ -112,11 +112,10 @@ class DashboardController extends GetxController {
             deviceID: deviceId,
             generalToken: genToekn.toString()
         );
+        await todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
+        await getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
+        await getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
 
-        //getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
-        getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
-        getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
-        todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
       }else if (data['StatusCode'] == "You are not authorized" || data['Message'] == "401") {
         // Clear user datd
         StorageService.clear();
@@ -189,7 +188,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  void  getDetailsCountOfLeadsForDashboardApi({
+  Future<void>  getDetailsCountOfLeadsForDashboardApi({
     required employeeId,
     required applyDateFilter,
 
@@ -305,7 +304,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  void  todayWorkStatusOfRoBmApi({
+  Future<void>  todayWorkStatusOfRoBmApi({
     required employeeId
 }) async {
     try {
@@ -342,7 +341,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  void  getRemindersApi({
+  Future<void>  getRemindersApi({
     required String employeeId,
   }) async {
     try {

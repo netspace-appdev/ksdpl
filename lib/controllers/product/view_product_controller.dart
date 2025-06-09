@@ -22,6 +22,12 @@ class ViewProductController extends GetxController{
   final int pageSize = 20;
   RxString searchQuery = "".obs;
   RxList<prod.Data> loanProductList = <prod.Data>[].obs;
+  final TextEditingController vpProductNameController = TextEditingController();
+  final TextEditingController vpMinCibilController = TextEditingController();
+  var selectedBank = Rxn<int>();
+  var selectedProdSegment = Rxn<int>();
+  var selectedKsdplProduct = Rxn<int>();
+  var isLoadingProductSegment = false.obs;
 
   List<prod.Data> get filteredProducts {
     final query = searchQuery.value.toLowerCase();
@@ -35,8 +41,51 @@ class ViewProductController extends GetxController{
           (product.productCategoryName?.toLowerCase().contains(query) ?? false);
     }).toList();
   }
+
+  void submitFilter() {
+    print("vpProductNameController.text===>${vpProductNameController.text}");
+    getAllProductListApi(
+        bankId: selectedBank.value.toString(),
+        minCibil:  vpMinCibilController.text,
+        product: vpProductNameController.text,
+        KsdplProductId: selectedProdSegment.value.toString(),
+        segment: selectedProdSegment.value.toString()
+    );
+  }
+  void clearForm() {
+    // Clear text fields
+    vpMinCibilController.clear();
+    vpProductNameController.clear();
+    selectedBank.value=null;
+    selectedProdSegment.value=null;
+    selectedKsdplProduct.value=null;
+  }
+
+
+  clearFilter(){
+
+    selectedBank.value=0;
+    selectedProdSegment.value=0;
+    selectedProdSegment.value=0;
+    vpMinCibilController.text="";
+    vpProductNameController.text="";
+
+
+    getAllProductListApi(
+        bankId: selectedBank.value.toString(),
+        minCibil:  vpMinCibilController.text,
+        product: vpProductNameController.text,
+        KsdplProductId: selectedProdSegment.value.toString(),
+        segment: selectedProdSegment.value.toString()
+    );
+  }
   void  getAllProductListApi({
     bool isLoadMore = false,
+    String? bankId,
+    String? minCibil,
+    String? segment,
+    String? product,
+    String? KsdplProductId,
 }) async {
     try {
 
@@ -51,6 +100,11 @@ class ViewProductController extends GetxController{
       var data = await ProductService.getAllProductListApi(
         pageNumber: currentPage.value,
         pageSize: pageSize,
+        product: product,
+        segment: segment,
+        KsdplProductId: KsdplProductId,
+        minCibil: minCibil,
+        bankId: bankId
       );
 
       if (data['success'] == true) {
@@ -76,9 +130,11 @@ class ViewProductController extends GetxController{
         } else {
           currentPage.value++; // Ready for next page
         }
+
+        clearForm();
        // leadListLength.value=getAllLeadsModel.value!.data!.length;
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
-
+        clearForm();
         getAllProductListModel.value = null;
         hasMore.value = false;
       } else{

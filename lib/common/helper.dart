@@ -693,6 +693,7 @@ class AppText{
   static const String income = "Income";
   static const String enterIncome = "Enter the Income";
   static const String documents = "Documents";
+  static const String viewProducts = "View Products";
 }
 
 class AppColor{
@@ -1082,7 +1083,14 @@ class Helper{
 
 
 
+  static void ApiReq(String url, dynamic data) {
+    print("🛰️ [API Request] ➡️ $url\n📝 Payload: $data\n-----------------------------");
+  }
 
+  /// 📥 Logs API Response
+  static void ApiRes(String url, dynamic response) {
+    print("🎁 [API Response] ⬅️ $url\n📄 Response: $response\n=============================");
+  }
 
 }
 
@@ -1122,6 +1130,14 @@ class MultipartFieldHelper {
     }
   }
 
+  static void addFieldWithoutNull(Map<String, String> fields, String key, String? value) {
+    if (value != null && value != "string") {
+      fields[key] = value;
+    } else {
+      fields[key] = "";
+    }
+  }
+
   /// Overloaded version with default fallback (optional)
   static void addFieldWithDefault(
       Map<String, String> fields,
@@ -1129,7 +1145,8 @@ class MultipartFieldHelper {
       String? value, {
         String fallback = "0",
       }) {
-    if (value != null && value != "") {
+    print("value in field===>${value}");
+    if (value != null && value != "" && value != "null") {
       fields[key] = value;
     } else {
       fields[key] = fallback;

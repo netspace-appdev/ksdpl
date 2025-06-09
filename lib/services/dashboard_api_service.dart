@@ -276,14 +276,7 @@ class DashboardApiService{
     // Step 2: Format it to match your expected input
     String dateString = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SS").format(now);
 
-    // Step 3: Call your method
-    //String formatted = Helper.formatDate(dateString);
 
-    /*print("formatted===>${formatted}");
-
-    print("Formatted: $formatted");
-*/
-      // Headers
 
       var header=await MyHeader.getHeaders2();
 
@@ -295,6 +288,7 @@ class DashboardApiService{
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
 
 
       if (response.statusCode == 200) {

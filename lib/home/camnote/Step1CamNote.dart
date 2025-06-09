@@ -20,13 +20,14 @@ import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart' as state;
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
+import '../../models/product/GetAllProductCategoryModel.dart' as productSegment;
 
 class Step1CamNote extends StatelessWidget {
 
   LeadDDController leadDDController = Get.put(LeadDDController());
   final CamNoteController camNoteController =Get.find();
   Addleadcontroller addleadcontroller = Get.find();
-
+  AddProductController addProductController = Get.find();
   @override
   Widget build(BuildContext context) {
 
@@ -441,7 +442,7 @@ class Step1CamNote extends StatelessWidget {
                         validator: ValidationHelper.validateNoExLoan,
                       ),
 
-                      const SizedBox(height: 20),
+                      //const SizedBox(height: 20),
                     ],
                   ),
                 const Text(
@@ -472,6 +473,44 @@ class Step1CamNote extends StatelessWidget {
                   );
                 }),
 
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomTextLabel(
+                  label: AppText.productSegment,
+                  isRequired: true,
+
+                ),
+
+                const SizedBox(height: 10),
+
+
+                Obx((){
+                  if (addleadcontroller.isLoadingProductSegment.value) {
+                    return  Center(child:CustomSkelton.leadShimmerList(context));
+                  }
+
+                  return CustomDropdown<productSegment.Data>(
+                    items: addProductController.productCategoryList  ?? [],
+                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                    getName: (item) => item.productCategoryName.toString(),
+                    selectedValue: addProductController.productCategoryList.firstWhereOrNull(
+                          (item) => item.id == addleadcontroller.selectedProdSegment.value,
+                    ),
+                    onChanged: (value) {
+                      addleadcontroller.selectedProdSegment.value =  value?.id;
+                    },
+                    onClear: (){
+                      addleadcontroller.selectedProdSegment.value = 0;
+                      addProductController.productCategoryList.clear(); // reset dependent dropdown
+
+                    },
+                  );
+                }),
+
+                const SizedBox(
+                  height: 20,
+                ),
 
                 const SizedBox(height: 20),
 
