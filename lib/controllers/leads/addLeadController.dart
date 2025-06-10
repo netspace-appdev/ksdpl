@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 
 import '../../common/helper.dart';
 import '../../models/IndividualLeadUploadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
+import '../../models/leads/special_model/AddIncModel.dart';
 import '../../services/drawer_api_service.dart';
 import '../../services/lead_api_service.dart';
 import '../registration_dd_controller.dart';
@@ -376,9 +378,13 @@ class Addleadcontroller extends GetxController{
     String? connShare,
     String? existingLoans,
     String? noOfExistingLoans,
+    String? uniqueLeadNumber,
+    String leadSegment = "0",
+    List<AddIncomeModelController>? addIncomeListTemp
   }) async {
     try {
       isLoading(true);
+
 
 
       var data = await LeadApiService.individualLeadUploadApi(
@@ -410,14 +416,47 @@ class Addleadcontroller extends GetxController{
           connShare: connShare,
           existingLoans: existingLoans,
           noOfExistingLoans: noOfExistingLoans,
+        uniqueLeadNumber: uniqueLeadNumber,
+        leadSegment: leadSegment
 
       );
 
 
       if(data['success'] == true){
 
+
+
         individualLeadUploadModel.value= IndividualLeadUploadModel.fromJson(data);
+
         ToastMessage.msg( individualLeadUploadModel.value!.message!.toString());
+
+        var uln=individualLeadUploadModel.value!.data!.uniqueLeadNumber.toString();
+
+
+        if ((addIncomeListTemp?.any((e) =>
+        e.aiIncomeController.text.trim().isNotEmpty ||
+            e.aiSourceController.text.trim().isNotEmpty) ?? false)) {
+
+
+          final List<AddIncModel> addIncModel = [];
+
+          for (var ai in addIncomeListTemp!) {
+            if (ai.aiIncomeController.text.trim().isEmpty &&
+                ai.aiSourceController.text.trim().isEmpty) {
+              continue; // skip blank entries
+            }
+
+
+            final acModel = AddIncModel(
+              amount: int.parse(ai.aiIncomeController.text),
+              description: Helper.cleanText(ai.aiSourceController.text),
+              uniqueLeadNumber: uln,
+            );
+            addIncModel.add(acModel);
+          }
+        }
+
+
 
 
         clearControllers();
@@ -444,7 +483,9 @@ class Addleadcontroller extends GetxController{
   @override
   void onClose() {
     super.onClose();
-
+    if (Get.isRegistered<CamNoteController>()) {
+      Get.delete<CamNoteController>(); // This triggers onClose() in CamNoteController
+    }
     // RxBools and Strings
     isLoading.value = false;
     isConnectorChecked.value = false;

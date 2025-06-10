@@ -90,8 +90,6 @@ class LeadApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(fillLeadForm, request.fields);
-      Helper.ApiRes(fillLeadForm, response.body);
 
 
       if (response.statusCode == 200) {
@@ -145,8 +143,10 @@ class LeadApiService {
     String? connShare,
     String? existingLoans,
     String? noOfExistingLoans,
+    String? uniqueLeadNumber,
+    String leadSegment = "0",
   }) async {
-
+  print("leadSegment in service==>${leadSegment}");
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -179,12 +179,14 @@ class LeadApiService {
       if (monthlyIncome != "string") request.fields['MonthlyIncome'] = monthlyIncome ?? "null";
       if (addSrcIncome != "string") request.fields['AdditionalSourceOfIncome'] = addSrcIncome ?? "null";
       if (branchLoc != "string") request.fields['Branch'] = branchLoc ?? "null";
-      request.fields['ProductType'] = prodTypeInt;
+      request.fields['ProductType'] =  (prodTypeInt==null || prodTypeInt=="null")?"0":prodTypeInt;
       if (connName != "string") request.fields['ConnectorName'] = connName ?? "null";
       if (connMob != "string") request.fields['ConnectorMobileNo'] = connMob ?? "null";
       if (connShare != "string") request.fields['ConnectorPercentage'] = connShare ?? "null";
       if (existingLoans != "string") request.fields['ExistingLoans'] = existingLoans ?? "null";
       if (noOfExistingLoans != "string") request.fields['NoOfExistingLoans'] = noOfExistingLoans ?? "null";
+      if (uniqueLeadNumber != "string") request.fields['UniqueLeadNumber'] = uniqueLeadNumber ?? "null";
+      request.fields['Leadsegment'] = (leadSegment==null || leadSegment=="null")?"0":leadSegment;
 
      // ===============================
 
@@ -214,4 +216,6 @@ class LeadApiService {
       throw Exception('Error: $e');
     }
   }
+
+
 }

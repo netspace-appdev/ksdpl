@@ -13,6 +13,8 @@ import 'package:ksdpl/services/product_service.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../custom_widgets/ImagePickerMixin.dart';
+import '../../models/camnote/AddAdSrcIncomModel.dart';
+import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
 import '../../models/camnote/GetProductDetailsByFilterModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
@@ -45,6 +47,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var isBankerLoading = false.obs;
   var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
+  var addAdSrcIncomModel = Rxn<AddAdSrcIncomModel>(); //
+  var getAllPackageMasterModel = Rxn<pkg.GetAllPackageMasterModel>(); //
   var selectedGender = Rxn<String>();
   String get selectedGenderValue => selectedGender.value ?? "";
   var selectedGenderCoAP = Rxn<String>();
@@ -60,8 +64,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var loanApplId = 0;
   var isSameAddressApl = false.obs;
   LeadDDController leadDDController = Get.find();
-
-
 
 
   var selectedStateProp = Rxn<String>();
@@ -87,71 +89,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final scrollController = ScrollController();
 
 
-  ///product
-  // Email and Basic Info
-  final TextEditingController prodBankersNameController = TextEditingController();
-  final TextEditingController prodBankersMobController = TextEditingController();
-  final TextEditingController prodBankersWhatsappController = TextEditingController();
-  final TextEditingController prodBankersEmailController = TextEditingController();
-  final TextEditingController prodMinCibilController = TextEditingController();
-  final TextEditingController prodProductNameController = TextEditingController();
-
-// Exclusions
-  final TextEditingController prodCollateralSecurityExcludedController = TextEditingController();
-  final TextEditingController prodProfileExcludedController = TextEditingController();
-
-// Age Limits
-  final TextEditingController prodAgeLimitEarningApplicantsController = TextEditingController();
-  final TextEditingController prodAgeLimitNonEarningCoApplicantController = TextEditingController();
-  final TextEditingController prodMinAgeEarningApplicantsController = TextEditingController();
-  final TextEditingController prodMinAgeNonEarningApplicantsController = TextEditingController();
-
-// Income & Loan Details
-  final TextEditingController prodMinIncomeCriteriaController = TextEditingController();
-  final TextEditingController prodMinLoanAmountController = TextEditingController();
-  final TextEditingController prodMaxLoanAmountController = TextEditingController();
-  final TextEditingController prodProfitPercentageController = TextEditingController();
-  final TextEditingController prodMinTenorController = TextEditingController();
-  final TextEditingController prodMaxTenorController = TextEditingController();
-  final TextEditingController prodMinRoiController = TextEditingController();
-  final TextEditingController prodMaxRoiController = TextEditingController();
-  final TextEditingController prodMaxTenorEligibilityCriteriaController = TextEditingController();
-
-// Geographical & Profile Restrictions
-  final TextEditingController prodGeoLimitController = TextEditingController();
-  final TextEditingController prodNegativeProfilesController = TextEditingController();
-  final TextEditingController prodNegativeAreasController = TextEditingController();
-
-// Property & Financial Ratios
-  final TextEditingController prodMinPropertyValueController = TextEditingController();
-  final TextEditingController prodMaxIirController = TextEditingController();
-  final TextEditingController prodMaxFoirController = TextEditingController();
-  final TextEditingController prodMaxLtvController = TextEditingController();
-
-// Fees
-  final TextEditingController prodProcessingFeeController = TextEditingController();
-  final TextEditingController prodLegalFeeController = TextEditingController();
-  final TextEditingController prodTechnicalFeeController = TextEditingController();
-  final TextEditingController prodAdminFeeController = TextEditingController();
-  final TextEditingController prodForeclosureChargesController = TextEditingController();
-  final TextEditingController prodOtherChargesController = TextEditingController();
-  final TextEditingController prodStampDutyController = TextEditingController();
-
-  final TextEditingController prodProcessingChargesController = TextEditingController();
-
-// TSR and Misc
-  final TextEditingController prodTsrYearsController = TextEditingController();
-  final TextEditingController prodTsrChargesController = TextEditingController();
-  final TextEditingController prodValuationChargesController = TextEditingController();
-
-  final TextEditingController prodProductValidateFromController = TextEditingController();
-  final TextEditingController prodProductValidateToController = TextEditingController();
-  final TextEditingController prodMaxTatController = TextEditingController();
-
-// Descriptions
-  final TextEditingController prodDocumentDescriptionsController = TextEditingController();
-  final TextEditingController prodProductDescriptionsController = TextEditingController();
-  final TextEditingController prodNoOfDocController = TextEditingController();
   var prodSegmentList=["Insurance", "Secured","Unsecured", ];
   var selectedprodSegment = Rxn<String>();
   var customerCategoryList=["Salaried", "Salaried NRI","Self Employed Professional", "Self Employed Non Professional", "Non-Individual","Others"];
@@ -253,9 +190,16 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camBankerSuperiorWhatsappController = TextEditingController();
   final TextEditingController camBankerSuperiorEmailController = TextEditingController();
 
+  final TextEditingController camPackageNameController = TextEditingController();
+  final TextEditingController camPackageAmtController = TextEditingController();
+  final TextEditingController camReceivableAmtController = TextEditingController();
+  final TextEditingController camReceivableDateController = TextEditingController();
+  final TextEditingController camTransactionDetailsController = TextEditingController();
+  final TextEditingController camRemarkController = TextEditingController();
+
   final Map<String, RxList<File>> imageMap = {};
-
-
+  var isPackageLoading = false.obs;
+  var selectedPackage = Rxn<int>();
   var selectedBank = Rxn<int>();
   var selectedBankBranch = Rxn<int>();
   var selectedBankerBranch = Rxn<int>();
@@ -264,7 +208,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     imageMap[key]?.clear();
   }
 
-
+  RxList<pkg.Data> packageList = <pkg.Data>[].obs;
+  var isLoadingPackage = false.obs;
 
   void nextStep() {
     if (currentStep.value < 2) {
@@ -332,7 +277,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   void validateAndSubmit() {
 
-
+/*
     if(selectedKsdplProduct.value==null){
       jumpToStep(0);
 
@@ -351,7 +296,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
       print("All steps valid! Submitting form...");
-    }
+    }*/
 
 
   }
@@ -359,7 +304,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   @override
   void onClose() {
     // TODO: implement onClose
-    super.onClose();
+
     leadDController.selectedStateCurr.value=null;
     leadDController.selectedDistrictCurr.value=null;
     leadDController.selectedCityCurr.value=null;
@@ -406,61 +351,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     chipText2Controller.dispose();
     chipText3Controller.dispose();
 
-    // Dispose all TextEditingControllers
-    prodBankersNameController.dispose();
-    prodBankersMobController.dispose();
-    prodBankersWhatsappController.dispose();
-    prodBankersEmailController.dispose();
-    prodMinCibilController.dispose();
-    prodProductNameController.dispose();
+    addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
+    addAdSrcIncomModel = Rxn<AddAdSrcIncomModel>(); //
 
-    prodCollateralSecurityExcludedController.dispose();
-    prodProfileExcludedController.dispose();
-
-    prodAgeLimitEarningApplicantsController.dispose();
-    prodAgeLimitNonEarningCoApplicantController.dispose();
-    prodMinAgeEarningApplicantsController.dispose();
-    prodMinAgeNonEarningApplicantsController.dispose();
-
-    prodMinIncomeCriteriaController.dispose();
-    prodMinLoanAmountController.dispose();
-    prodMaxLoanAmountController.dispose();
-    prodProfitPercentageController.dispose();
-    prodMinTenorController.dispose();
-    prodMaxTenorController.dispose();
-    prodMinRoiController.dispose();
-    prodMaxRoiController.dispose();
-    prodMaxTenorEligibilityCriteriaController.dispose();
-
-    prodGeoLimitController.dispose();
-    prodNegativeProfilesController.dispose();
-    prodNegativeAreasController.dispose();
-
-    prodMinPropertyValueController.dispose();
-    prodMaxIirController.dispose();
-    prodMaxFoirController.dispose();
-    prodMaxLtvController.dispose();
-
-    prodProcessingFeeController.dispose();
-    prodLegalFeeController.dispose();
-    prodTechnicalFeeController.dispose();
-    prodAdminFeeController.dispose();
-    prodForeclosureChargesController.dispose();
-    prodOtherChargesController.dispose();
-    prodStampDutyController.dispose();
-
-    prodTsrYearsController.dispose();
-    prodTsrChargesController.dispose();
-    prodValuationChargesController.dispose();
-
-    prodProductValidateFromController.dispose();
-    prodProductValidateToController.dispose();
-    prodMaxTatController.dispose();
-
-    prodDocumentDescriptionsController.dispose();
-    prodProductDescriptionsController.dispose();
-    prodNoOfDocController.dispose();
-
+    addLoanApplicationModel.value = null;
+    addAdSrcIncomModel.value = null;
+    super.onClose();
   }
 
 
@@ -495,60 +391,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   ///product
   void clearForm() {
-    // Clear text fields
-    prodBankersNameController.clear();
-    prodBankersMobController.clear();
-    prodBankersWhatsappController.clear();
-    prodBankersEmailController.clear();
-    prodMinCibilController.clear();
-    prodProductNameController.clear();
-
-    prodCollateralSecurityExcludedController.clear();
-    prodProfileExcludedController.clear();
-
-    prodAgeLimitEarningApplicantsController.clear();
-    prodAgeLimitNonEarningCoApplicantController.clear();
-    prodMinAgeEarningApplicantsController.clear();
-    prodMinAgeNonEarningApplicantsController.clear();
-
-    prodMinIncomeCriteriaController.clear();
-    prodMinLoanAmountController.clear();
-    prodMaxLoanAmountController.clear();
-    prodProfitPercentageController.clear();
-    prodMinTenorController.clear();
-    prodMaxTenorController.clear();
-    prodMinRoiController.clear();
-    prodMaxRoiController.clear();
-    prodMaxTenorEligibilityCriteriaController.clear();
-
-    prodGeoLimitController.clear();
-    prodNegativeProfilesController.clear();
-    prodNegativeAreasController.clear();
-
-    prodMinPropertyValueController.clear();
-    prodMaxIirController.clear();
-    prodMaxFoirController.clear();
-    prodMaxLtvController.clear();
-
-    prodProcessingFeeController.clear();
-    prodLegalFeeController.clear();
-    prodTechnicalFeeController.clear();
-    prodAdminFeeController.clear();
-    prodForeclosureChargesController.clear();
-    prodOtherChargesController.clear();
-    prodStampDutyController.clear();
-
-    prodTsrYearsController.clear();
-    prodTsrChargesController.clear();
-    prodValuationChargesController.clear();
-
-    prodProductValidateFromController.clear();
-    prodProductValidateToController.clear();
-    prodMaxTatController.clear();
-
-    prodDocumentDescriptionsController.clear();
-    prodProductDescriptionsController.clear();
-    prodNoOfDocController.clear();
 
     // Reset reactive values
     selectedprodSegment.value = null;
@@ -592,26 +434,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         isBankerLoading(false);
 
 
-       /* if(docDescr!.isNotEmpty){
-          String productDocument = docDescr.toString();
-
-          int productId = int.parse(addProductListModel.value!.data!.id.toString()); // replace with your actual productId
-          String documentType = "O";
-
-          List<Map<String, dynamic>> documentPayload = productDocument
-              .split(',')
-              .map((doc) => {
-            "productId": productId,
-            "documentName": doc.trim(),
-            "documentType": documentType,
-          })
-              .toList();
-          print("productDocument===>${documentPayload}");
-          await ProductService.addProductDocumentApi(body: documentPayload);
-        }
-
-
-       */
 
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -635,7 +457,88 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
 
+  Future<void>addAdditionalSourceIncomeApi({
+    required List<Map<String, dynamic>> aiPayload,
+  }) async {
+    try {
+      isLoading(true);
 
+      var data = await CamNoteService.addAdditionalSourceIncomeApi(
+          body:aiPayload
+      );
+
+
+
+      if(data['success'] == true){
+
+        addAdSrcIncomModel.value= AddAdSrcIncomModel.fromJson(data);
+        ToastMessage.msg( addAdSrcIncomModel.value!.message!.toString());
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getLeadDetailByIdApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+
+
+  }
+
+  void  getAllPackageMasterApi() async {
+    try {
+      isPackageLoading(true);
+
+
+      var data = await CamNoteService.getAllPackageMasterApi();
+
+
+      if(data['success'] == true){
+
+
+        getAllPackageMasterModel.value= pkg.GetAllPackageMasterModel.fromJson(data);
+
+
+
+        final List<pkg.Data> packages = getAllPackageMasterModel.value?.data ?? [];
+
+        final List<pkg.Data> activeNegProfile = packages.where((pk) => pk.active == true).toList();
+
+        packageList.value = activeNegProfile;
+
+        isPackageLoading(false);
+
+
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAllPackageMasterModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getProductDetailsByFilterModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isBankerLoading(false);
+    } finally {
+
+      isBankerLoading(false);
+    }
+  }
 }
 
 extension ParseStringExtension on String? {
@@ -646,6 +549,10 @@ extension ParseStringExtension on String? {
     return 0;
   }
 }
+
+
+
+
 extension TextEditingControllerExtension on TextEditingController {
   int toIntOrZero() {
     if (text.isNotEmpty) {

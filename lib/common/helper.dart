@@ -196,7 +196,7 @@ class AppText{
   static const String addIncome="Additional source of income (Monthly)"; // "Additional source of income" needs to be changed.,The label should say "Additional source of income (Monthly)"
   static const String enterAddIncome="Enter Additional source of income";
   static const String brLoc="Branch Location";
-  static const String productTypeInt="Product Type Interested";
+  static const String productTypeInt="Product Type Interested (KSDPL Product)";
   static const String enterBrLoc="Enter Branch Location";
   static const String conName="Connector Name";
   static const String conMob="Connector Mobile";
@@ -532,7 +532,7 @@ class AppText{
 
   static const String productDescriptions = "Product Descriptions";
   static const String enterProductDescriptions = "Enter Product Descriptions";
-  static const String productSegment = "Product Segment";
+  static const String productSegment = "Product Segment (Loan Segment)";
   static const String enterProductSegment = "Enter Product Segment";
   static const String writeYourContent = "Write your content";
 
@@ -563,7 +563,7 @@ class AppText{
   static const String totalLiveLoan = "Total Live Loan";
   static const String enterTotalLiveLoan = "Enter Total Live Loan";
 
-  static const String cibil = "CIBIL    Need to generate ?";
+  static const String cibil = "CIBIL";
   static const String enterCibilScore = "Enter CIBIL Score";
 
   static const String totalEmi = "Total EMI";
@@ -694,6 +694,18 @@ class AppText{
   static const String enterIncome = "Enter the Income";
   static const String documents = "Documents";
   static const String viewProducts = "View Products";
+  static const String packageName = "Package Name";
+  static const String enterPackageName = "Enter Package Name";
+  static const String packageAmount = "Package Amount";
+  static const String enterPackageAmount = "Enter Package Amount";
+  static const String receivableAmount = "Receivable Amount";
+  static const String enterReceivableAmount = "Enter Receivable Amount";
+  static const String receivableDate = "Receivable Date";
+  static const String enterReceivableDate  = "Enter Receivable Date";
+  static const String transactionDetails  = "Transaction Details";
+  static const String enterTransactionDetails  = "Enter Transaction Details";
+  static const String remark  = "Remark";
+  static const String enterRemark  = "Enter Remark";
 }
 
 class AppColor{
@@ -1091,6 +1103,11 @@ class Helper{
   static void ApiRes(String url, dynamic response) {
     print("🎁 [API Response] ⬅️ $url\n📄 Response: $response\n=============================");
   }
+
+  static String cleanText(String text) {
+    return text.trim().isEmpty ? "" : text.trim();
+  }
+
 
 }
 

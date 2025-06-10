@@ -25,7 +25,7 @@ class CamNoteGroupScreen extends StatelessWidget {
   InfoController infoController = Get.put(InfoController());
 
   final AddProductController addProductController =Get.put(AddProductController());
-  final CamNoteController camNoteController =Get.put(CamNoteController());
+  final CamNoteController camNoteController =Get.find();
   final List<Widget> stepForms = [
     Step1CamNote(),
     Step2CamNote(),

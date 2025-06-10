@@ -9,8 +9,10 @@ import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
+import '../../controllers/leads/add_income_model_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
+import '../../models/leads/special_model/AddIncModel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
@@ -37,7 +39,8 @@ class AddLeadScreen extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  Addleadcontroller addleadcontroller=Get.put(Addleadcontroller(),permanent: false);
+  // Addleadcontroller addleadcontroller=Get.put(Addleadcontroller(),permanent: false);
+  final Addleadcontroller addleadcontroller=Get.find();
   final addProductController = Get.find<AddProductController>();
 
   IncomeStepController incomeStepController = Get.put(IncomeStepController());
@@ -395,17 +398,10 @@ class AddLeadScreen extends StatelessWidget {
 
                               ),
 
-                              /*CustomLabeledTextField(
-                                label: AppText.addIncome,
-                                isRequired: false,
-                                controller: addleadcontroller.addSourceIncomeController ,
-                                inputType: TextInputType.number,
-                                hintText: AppText.enterAddIncome,
-                                validator: ValidationHelper.validateAddSrcInc,
-                              ),*/
 
                               Helper.customDivider(color: Colors.grey),
                               SizedBox(height: 10,),
+
                               CustomTextLabel(
                                 label: AppText.addIncome,
                               ),
@@ -438,7 +434,7 @@ class AddLeadScreen extends StatelessWidget {
                                             label: AppText.income,
                                             isRequired: false,
                                             controller: ai.aiIncomeController,
-                                            inputType: TextInputType.name,
+                                            inputType: TextInputType.number,
                                             hintText: AppText.enterIncome,
 
                                           ),
@@ -640,41 +636,9 @@ class AddLeadScreen extends StatelessWidget {
                                     const SizedBox(height: 10),
                                   ],
                                 ),
-/*
-
-                              CustomTextLabel(
-                                label: AppText.productSegment,
-                              ),
-
-                              const SizedBox(height: 10),
 
 
-                              Obx((){
-                                if (addProductController.isLoadingProductCategory.value) {
-                                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                                }
 
-
-                                return CustomDropdown<productCat.Data>(
-                                  items: addProductController.productCategoryList  ?? [],
-                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                  getName: (item) => item.productCategoryName.toString(),
-                                  selectedValue: addProductController.productCategoryList.firstWhereOrNull(
-                                        (item) => item.id == addleadcontroller.selectedProductCategory.value,
-                                  ),
-                                  onChanged: (value) {
-                                    addleadcontroller.selectedProductCategory.value =  value?.id;
-                                  },
-                                  onClear: (){
-                                    addleadcontroller.selectedProductCategory.value = 0;
-                                    addProductController.productCategoryList.clear(); // reset dependent dropdown
-
-                                  },
-                                );
-                              }),
-*/
-
-                              const SizedBox(height: 10),
 
                               const Text(
                                 AppText.productTypeInt,
@@ -704,6 +668,44 @@ class AddLeadScreen extends StatelessWidget {
                                 );
                               }),
 
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              CustomTextLabel(
+                                label: AppText.productSegment,
+
+
+                              ),
+
+                              const SizedBox(height: 10),
+
+
+                              Obx((){
+                                if (addleadcontroller.isLoadingProductSegment.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+
+                                return CustomDropdown<productCat.Data>(
+                                  items: addProductController.productCategoryList  ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.productCategoryName.toString(),
+                                  selectedValue: addProductController.productCategoryList.firstWhereOrNull(
+                                        (item) => item.id == addleadcontroller.selectedProdSegment.value,
+                                  ),
+                                  onChanged: (value) {
+                                    addleadcontroller.selectedProdSegment.value =  value?.id;
+                                  },
+                                  onClear: (){
+                                    addleadcontroller.selectedProdSegment.value = 0;
+                                    addProductController.productCategoryList.clear(); // reset dependent dropdown
+
+                                  },
+                                );
+                              }),
+
+                              const SizedBox(
+                                height: 20,
+                              ),
 
                               const SizedBox(height: 20),
 
@@ -892,7 +894,6 @@ class AddLeadScreen extends StatelessWidget {
 
   void onPressed(){
 
-
     if (_formKey.currentState!.validate()) {
 
       if (addleadcontroller.selectedGender.value==null) {
@@ -918,6 +919,7 @@ class AddLeadScreen extends StatelessWidget {
             nationality: addleadcontroller.nationalityController.text.toString(),
             currEmpSt: leadDDController.currEmpStatus.value??"",
             employerName: addleadcontroller.employerNameController.text.toString(),
+            ///Now this is not working, Have different API for Additional source of income
             monthlyIncome: addleadcontroller.monthlyIncomeController.text.toString(),
             addSrcIncome: addleadcontroller.addSourceIncomeController.text.toString(),
             prefBank: leadDDController.selectedBank.toString(),
@@ -953,6 +955,7 @@ class AddLeadScreen extends StatelessWidget {
             currEmpSt:  leadDDController.currEmpStatus.value??"",
             employerName: addleadcontroller.employerNameController.text.toString(),
             monthlyIncome: addleadcontroller.monthlyIncomeController.text.toString(),
+            ///Now this is not working, Have different API for Additional source of income
             addSrcIncome: addleadcontroller.addSourceIncomeController.text.toString(),
             prefBank: leadDDController.selectedBank.toString(),
             exRelBank: addleadcontroller.selectedIndexRelBank.value==-1?"":addleadcontroller.selectedIndexRelBank.value.toString(),
@@ -963,12 +966,22 @@ class AddLeadScreen extends StatelessWidget {
             connShare: addleadcontroller.connShareController.text.toString(),
             existingLoans: addleadcontroller.existingLoansController.text.toString(),
             noOfExistingLoans: addleadcontroller.noOfExistingLoansController.text.toString(),
+            addIncomeListTemp: addleadcontroller.addIncomeList,
+            leadSegment: addleadcontroller.selectedProdSegment.value.toString(),
+            uniqueLeadNumber: "",
+
           ).then((_){
+            print("hello====1");
+            print("addleadcontroller.fromWhere.value===>${addleadcontroller.fromWhere.value}");
             if(addleadcontroller.fromWhere.value=="drawer"){
-             // Get.back();
+
+              print("hello====2");
               BotNavController botNavController=Get.put(BotNavController());
+              print("hello====3");
               botNavController.selectedIndex.value = 1;
+              print("hello====4");
               Get.offAllNamed("/bottomNavbar");
+
             }
           });
         }

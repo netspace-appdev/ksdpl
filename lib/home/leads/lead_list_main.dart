@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/leads/loan_appl_controller.dart';
 import 'package:lottie/lottie.dart';
@@ -855,6 +856,10 @@ overflow: TextOverflow.ellipsis,
 
           ViewProductController viewProductController=Get.put(ViewProductController());
           viewProductController.getAllProductListApi();
+          addLeadController.clearControllers();
+
+          CamNoteController camNoteController=Get.put(CamNoteController());
+          camNoteController.getAllPackageMasterApi();
 
           Get.toNamed("/camNoteGroupScreen",);
 

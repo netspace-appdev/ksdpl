@@ -7,6 +7,7 @@ import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
+import '../../controllers/leads/income_step_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
@@ -21,6 +22,7 @@ import 'package:ksdpl/models/dashboard/GetAllStateModel.dart' as state;
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import '../../models/product/GetAllProductCategoryModel.dart' as productSegment;
+import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
 
 class Step1CamNote extends StatelessWidget {
 
@@ -28,6 +30,7 @@ class Step1CamNote extends StatelessWidget {
   final CamNoteController camNoteController =Get.find();
   Addleadcontroller addleadcontroller = Get.find();
   AddProductController addProductController = Get.find();
+  IncomeStepController incomeStepController = Get.put(IncomeStepController());
   @override
   Widget build(BuildContext context) {
 
@@ -68,6 +71,7 @@ class Step1CamNote extends StatelessWidget {
                   hintText: AppText.mmddyyyy,
                   validator: ValidationHelper.validateDob,
                   isDateField: true,
+                  isFutureDisabled: true,
                 ),
 
                 CustomLabeledTextField(
@@ -78,8 +82,9 @@ class Step1CamNote extends StatelessWidget {
                   hintText: AppText.enterPhNumber,
                   validator: ValidationHelper.validatePhoneNumber,
                   maxLength: 10,
+
                 ),
-                const SizedBox(height: 10),
+
                 const Row(
                   children: [
                     Text(
@@ -141,6 +146,8 @@ class Step1CamNote extends StatelessWidget {
                   inputType: TextInputType.phone,
                   hintText: AppText.enterAadhar,
                   maxLength: 12,
+                  isSecret: true,
+                  secretDigit: 4,
 
                 ),
 
@@ -334,13 +341,14 @@ class Step1CamNote extends StatelessWidget {
                 ),
 
                 CustomLabeledTextField(
-                  label: AppText.addIncome,
+                  label: AppText.brLoc,
                   isRequired: false,
-                  controller: addleadcontroller.addSourceIncomeController ,
-                  inputType: TextInputType.number,
-                  hintText: AppText.enterAddIncome,
-                  validator: ValidationHelper.validateAddSrcInc,
+                  controller: addleadcontroller.branchLocController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterBrLoc,
+                  validator: ValidationHelper.validateBrLoc,
                 ),
+
 
                 const Text(
                   AppText.preferredBank,
@@ -374,108 +382,9 @@ class Step1CamNote extends StatelessWidget {
                     },
                   );
                 }),
-
-                const SizedBox(height: 20),
-
-                const Text(
-                  AppText.existingRelationship,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.grey2,
-                  ),
-                ),
-
-                const SizedBox(height: 10),
+                SizedBox(height: 30,),
 
 
-                Obx(()=>Column(
-                  children: addleadcontroller.optionsRelBank.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    String option = entry.value;
-
-                    return CheckboxListTile(
-                      activeColor: AppColor.secondaryColor,
-
-                      title: Text(option),
-                      value: addleadcontroller.selectedIndexRelBank.value == index,
-                      onChanged: (value) => addleadcontroller.selectCheckboxRelBank(index),
-                    );
-                  }).toList(),
-                )),
-
-                const SizedBox(height: 20),
-
-                CustomLabeledTextField(
-                  label: AppText.brLoc,
-                  isRequired: false,
-                  controller: addleadcontroller.branchLocController,
-                  inputType: TextInputType.name,
-                  hintText: AppText.enterBrLoc,
-                  validator: ValidationHelper.validateBrLoc,
-                ),
-
-
-
-                const SizedBox(height: 20),
-
-                if(addleadcontroller.fromWhere.value!="interested")
-                  Column(
-                    children: [
-                      CustomLabeledTextField(
-                        label: AppText.existingLoans,
-                        isRequired: false,
-                        controller: addleadcontroller.existingLoansController ,
-                        inputType: TextInputType.name,
-                        hintText: AppText.enterExistingLoans,
-                        validator: ValidationHelper.validateExLoan,
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      CustomLabeledTextField(
-                        label: AppText.noOfExistingLoans,
-                        isRequired: false,
-                        controller: addleadcontroller.noOfExistingLoansController ,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterNoOfExistingLoans,
-                        validator: ValidationHelper.validateNoExLoan,
-                      ),
-
-                      //const SizedBox(height: 20),
-                    ],
-                  ),
-                const Text(
-                  AppText.productTypeInt,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.grey2,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Obx((){
-                  if (leadDDController.isProductLoading.value) {
-                    return  Center(child:CustomSkelton.leadShimmerList(context));
-                  }
-
-
-                  return CustomDropdown<product.Data>(
-                    items: leadDDController.getAllKsdplProductModel.value?.data ?? [],
-                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                    getName: (item) => item.productName.toString(),
-                    selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
-                          (item) => item.id.toString() == leadDDController.selectedProdType.value,
-                    ),
-                    onChanged: (value) {
-                      leadDDController.selectedProdType.value =  value?.id?.toString();
-                    },
-                  );
-                }),
-
-                const SizedBox(
-                  height: 20,
-                ),
                 CustomTextLabel(
                   label: AppText.productSegment,
                   isRequired: true,
@@ -507,59 +416,311 @@ class Step1CamNote extends StatelessWidget {
                     },
                   );
                 }),
+                SizedBox(height: 30,),
 
-                const SizedBox(
-                  height: 20,
+                const Text(
+                  AppText.productTypeInt,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey2,
+                  ),
                 ),
+                const SizedBox(height: 10),
+                Obx((){
+                  if (leadDDController.isProductLoading.value) {
+                    return  Center(child:CustomSkelton.leadShimmerList(context));
+                  }
+
+
+                  return CustomDropdown<product.Data>(
+                    items: leadDDController.getAllKsdplProductModel.value?.data ?? [],
+                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                    getName: (item) => item.productName.toString(),
+                    selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
+                          (item) => item.id.toString() == leadDDController.selectedProdType.value,
+                    ),
+                    onChanged: (value) {
+                      leadDDController.selectedProdType.value =  value?.id?.toString();
+                    },
+                  );
+                }),
 
                 const SizedBox(height: 20),
 
-                Obx(() => Column(
+                const Text(
+                  AppText.existingRelationship,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey2,
+                  ),
+                ),
 
-                  children: [
-                    CheckboxListTile(
+                const SizedBox(height: 10),
+
+
+                Obx(()=>Column(
+                  children: addleadcontroller.optionsRelBank.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    String option = entry.value;
+
+                    return CheckboxListTile(
                       activeColor: AppColor.secondaryColor,
-                      title: Text(AppText.connector),
-                      value: addleadcontroller.isConnectorChecked.value,
-                      onChanged: addleadcontroller.toggleConnectorCheckbox,
-                      controlAffinity: ListTileControlAffinity.leading, // Puts checkbox on the left
-                    ),
-                    if(addleadcontroller.isConnectorChecked.value)
-                      Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          CustomLabeledTextField(
-                            label: AppText.conName,
-                            isRequired: false,
-                            controller: addleadcontroller.connNameController ,
-                            inputType: TextInputType.name,
-                            hintText: AppText.enterConName,
-                            validator: ValidationHelper.validateConnName,
-                          ),
 
-                          CustomLabeledTextField(
-                            label: AppText.conMob,
-                            isRequired: false,
-                            controller: addleadcontroller.connMobController ,
-                            inputType: TextInputType.number,
-                            hintText: AppText.enterConMob,
-                            validator: ValidationHelper.validatePhoneNumber,
-                            maxLength: 10,
-                          ),
-
-                          CustomLabeledTextField(
-                            label: AppText.conShare,
-                            isRequired: false,
-                            controller: addleadcontroller.connShareController ,
-                            inputType: TextInputType.number,
-                            hintText: AppText.enterConShare,
-
-                          )
-
-                        ],
-                      )
-                  ],
+                      title: Text(option),
+                      value: addleadcontroller.selectedIndexRelBank.value == index,
+                      onChanged: (value) => addleadcontroller.selectCheckboxRelBank(index),
+                    );
+                  }).toList(),
                 )),
+
+
+
+                const SizedBox(height: 20),
+
+
+
+
+                CustomTextLabel(
+                  label: AppText.packageName,
+                  isRequired: true,
+
+                ),
+
+                const SizedBox(height: 10),
+
+
+                Obx((){
+                  if (camNoteController.isLoadingPackage.value) {
+                    return  Center(child:CustomSkelton.leadShimmerList(context));
+                  }
+
+                  return CustomDropdown<pkg.Data>(
+                    items: camNoteController.packageList  ?? [],
+                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                    getName: (item) => item.packageName.toString(),
+                    selectedValue: camNoteController.packageList.firstWhereOrNull(
+                          (item) => item.id == camNoteController.selectedPackage.value,
+                    ),
+                    onChanged: (value) {
+                      camNoteController.selectedPackage.value =  value?.id;
+                    },
+                    onClear: (){
+                      camNoteController.selectedPackage.value = 0;
+
+                    },
+                  );
+                }),
+                SizedBox(height: 20,),
+
+                CustomLabeledTextField(
+                  label: AppText.packageName,
+                  controller: camNoteController.camPackageNameController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterPackageName,
+
+                ),
+
+                CustomLabeledTextField(
+                  label: AppText.packageAmount,
+                  controller: camNoteController.camPackageAmtController,
+                  inputType: TextInputType.number,
+                  hintText: AppText.enterPackageAmount,
+                  isInputEnabled: false,
+                ),
+
+                CustomLabeledTextField(
+                  label: AppText.receivableAmount,
+                  controller: camNoteController.camReceivableAmtController,
+                  inputType: TextInputType.number,
+                  hintText: AppText.enterReceivableAmount,
+
+                ),
+
+                CustomLabeledPickerTextField(
+                  label: AppText.receivableDate,
+
+                  controller: camNoteController.camReceivableDateController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.mmddyyyy,
+                  isDateField: true,
+
+                ),
+
+                CustomLabeledTextField(
+                  label: AppText.transactionDetails,
+                  controller: camNoteController.camTransactionDetailsController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterTransactionDetails,
+
+                ),
+                CustomLabeledTextField(
+                  label: AppText.remark,
+                  controller: camNoteController.camRemarkController,
+                  inputType: TextInputType.name,
+                  hintText: AppText.enterRemark,
+
+                ),
+                /*if(addleadcontroller.fromWhere.value!="interested")
+                  Column(
+                    children: [
+                      CustomLabeledTextField(
+                        label: AppText.existingLoans,
+                        isRequired: false,
+                        controller: addleadcontroller.existingLoansController ,
+                        inputType: TextInputType.name,
+                        hintText: AppText.enterExistingLoans,
+                        validator: ValidationHelper.validateExLoan,
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      CustomLabeledTextField(
+                        label: AppText.noOfExistingLoans,
+                        isRequired: false,
+                        controller: addleadcontroller.noOfExistingLoansController ,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterNoOfExistingLoans,
+                        validator: ValidationHelper.validateNoExLoan,
+                      ),
+
+                      //const SizedBox(height: 20),
+                    ],
+                  ),
+*/
+                Helper.customDivider(color: Colors.grey),
+                SizedBox(height: 10,),
+
+                CustomTextLabel(
+                  label: AppText.addIncome,
+                ),
+
+                Obx(() => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(addleadcontroller.addIncomeList.length, (index) {
+                    final ai = addleadcontroller.addIncomeList[index];
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+
+                        SizedBox(height: 20,),
+
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomLabeledTextField(
+                              label: AppText.source,
+                              isRequired: false,
+                              controller: ai.aiSourceController,
+                              inputType: TextInputType.name,
+                              hintText: AppText.enterSource,
+
+                            ),
+                            CustomLabeledTextField(
+                              label: AppText.income,
+                              isRequired: false,
+                              controller: ai.aiIncomeController,
+                              inputType: TextInputType.number,
+                              hintText: AppText.enterIncome,
+
+                            ),
+
+                          ],
+                        ),
+
+
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+
+                          children: [
+                            index== addleadcontroller.addIncomeList.length-1?
+                            Obx((){
+                              if(addleadcontroller.isLoading.value){
+                                return const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      color: AppColor.primaryColor,
+                                    ),
+                                  ),
+                                );
+                              }
+                              return Align(
+                                alignment: Alignment.centerRight,
+                                child: IconButton(
+                                    onPressed: (){
+                                      addleadcontroller.addAdditionalSrcIncome();
+                                    },
+                                    icon: Container(
+
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                          color: AppColor.primaryColor,
+
+                                        ),
+                                        padding: EdgeInsets.all(10),
+
+                                        child: Icon(Icons.add, color: AppColor.appWhite,)
+                                    )
+                                ),
+                              );
+                            }):
+                            Container(),
+
+                            SizedBox(height: 20),
+
+                            Obx((){
+                              if(addleadcontroller.isLoading.value){
+                                return const Align(
+                                  alignment: Alignment.center,
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      color: AppColor.primaryColor,
+                                    ),
+                                  ),
+                                );
+                              }
+
+
+                              return Align(
+                                alignment: Alignment.centerRight,
+                                child: IconButton(
+                                    onPressed: addleadcontroller.addIncomeList.length <= 1?(){}: (){
+                                      addleadcontroller.removeAdditionalSrcIncome(index);
+                                    },
+                                    icon: Container(
+
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                          color: addleadcontroller.addIncomeList.length <= 1?AppColor.lightRed: AppColor.redColor,
+
+                                        ),
+                                        padding: EdgeInsets.all(10),
+
+                                        child: Icon(Icons.remove, color: AppColor.appWhite,)
+                                    )
+                                ),
+                              );
+                            })
+                          ],
+                        )
+                      ],
+                    );
+                  }),
+                )),
+
+                SizedBox(height: 10,),
+                Helper.customDivider(color: Colors.grey),
+
 
 
               ],

@@ -12,6 +12,8 @@ class CamNoteService {
 
 
   static const String getProductDetailsByFilter = BaseUrl.baseUrl + 'LeadDetail/GetProductDetailsByFilter';
+  static const String addAdditionalSourceIncome = BaseUrl.baseUrl + 'CamNoteDetail/AddAdditionalSourceIncome';
+  static const String getAllPackageMaster = BaseUrl.baseUrl + 'CamNoteDetail/GetAllPackageMaster';
 
 
 
@@ -53,9 +55,63 @@ class CamNoteService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request===>==>getProductDetailsByFilterApi===>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getProductDetailsByFilterApi==>${response.body.toString()}");
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> addAdditionalSourceIncomeApi({
+    required List<Map<String, dynamic>> body,
+  }) async {
+    try {
+      var headers = await MyHeader.getHeaders3(); // should return 'Authorization' and 'Content-Type: application/json'
+
+      var response = await http.post(
+        Uri.parse(addAdditionalSourceIncome),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+     // const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> getAllPackageMasterApi() async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllPackageMaster),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      Helper.ApiRes(getAllPackageMaster, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
