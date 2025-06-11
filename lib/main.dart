@@ -97,30 +97,46 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     final ThemeController themeController = Get.find();
-    return MediaQuery(
+    /*return MediaQuery(
       data: MediaQuery.of(context).copyWith(
         padding: EdgeInsets.zero,
         viewInsets: EdgeInsets.zero,
         viewPadding: EdgeInsets.zero,
       ),
       child: Obx(()=>GetMaterialApp(
-        //initialBinding: RootBinding(),
+
         debugShowCheckedModeBanner: false,
         title: 'KSDPL',
         theme: ThemeData.light(
           //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
-      
+
         ),
-      
+
         darkTheme: ThemeData.dark(),
         themeMode: themeController.themeMode.value,
         getPages: routes,
         initialRoute:"/",
       )),
-    );
+    );*/
+
+    return Obx(()=>GetMaterialApp(
+
+      debugShowCheckedModeBanner: false,
+      title: 'KSDPL',
+      theme: ThemeData.light(
+        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+
+      ),
+
+      darkTheme: ThemeData.dark(),
+      themeMode: themeController.themeMode.value,
+      getPages: routes,
+      initialRoute:"/",
+    ));
   }
 }
 

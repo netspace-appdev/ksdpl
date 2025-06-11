@@ -126,6 +126,7 @@ class ProductService {
       MultipartFieldHelper.addField(request.fields, 'Bankers_Name', bankers_Name);
       MultipartFieldHelper.addField(request.fields, 'Bankers_Mobile_Number', Bankers_Mobile_Number);
       MultipartFieldHelper.addField(request.fields, 'Bankers_WhatsApp_Number', Bankers_WhatsApp_Number);
+      MultipartFieldHelper.addField(request.fields, 'Bankers_email_ID', BankersEmailId);
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Min_CIBIL', Min_CIBIL,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Segment_Vertical', Segment_Vertical,fallback: "0");
       MultipartFieldHelper.addField(request.fields, 'Product', Product);
@@ -181,11 +182,8 @@ class ProductService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request===>addProductListApi====>${request.fields}");
-      print("request===>addProductListApi====>here==${request.fields["Negative_Profiles"]}");
-      print("response===>addProductListApi===>${response.body}");
-
-
+      Helper.ApiReq(addProductList, request.fields);
+      Helper.ApiRes(addProductList, response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

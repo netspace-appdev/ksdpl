@@ -162,9 +162,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camLoanSegmentController = TextEditingController();
   final TextEditingController camLoanProductController = TextEditingController();
   final TextEditingController camOfferedSecurityTypeController = TextEditingController();
-  final TextEditingController camGeoLocationPropertyController = TextEditingController();
-  final TextEditingController camGeoLocationResidenceController = TextEditingController();
-  final TextEditingController camGeoLocationOfficeController = TextEditingController();
+  final TextEditingController camGeoLocationPropertyLatController = TextEditingController();
+  final TextEditingController camGeoLocationPropertyLongController = TextEditingController();
+  final TextEditingController camGeoLocationResidenceLatController = TextEditingController();
+  final TextEditingController camGeoLocationResidenceLongController = TextEditingController();
+  final TextEditingController camGeoLocationOfficeLatController = TextEditingController();
+  final TextEditingController camGeoLocationOfficeLongController = TextEditingController();
   final TextEditingController camPhotosOfPropertyController = TextEditingController();
   final TextEditingController camPhotosOfResidenceController = TextEditingController();
   final TextEditingController camPhotosOfOfficeController = TextEditingController();

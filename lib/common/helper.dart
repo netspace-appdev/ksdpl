@@ -464,9 +464,9 @@ class AppText{
   static const String enterProfitPercentage = "Enter Profit Percentage";
   static const String minCibil = "Minimum CIBIL";
   static const String enterMinCibil = "Enter Minimum CIBIL";
-  static const String minTenor = "Minimum Tenor";
+  static const String minTenor = "Minimum Tenor (Years)";
   static const String enterMinTenor = "Enter Minimum Tenor";
-  static const String maxTenor = "Maximum Tenor";
+  static const String maxTenor = "Maximum Tenor (Years)";
   static const String enterMaxTenor = "Enter Maximum Tenor";
 
   static const String minRoi = "Minimum ROI";
@@ -537,8 +537,8 @@ class AppText{
   static const String writeYourContent = "Write your content";
 
   static const String prodName = "Product Name";
-  static const String selectCustomerCategory = "Select Customer Category";
-  static const String selectCollateralSecurityCategory = "Select Prime Security Category";
+  static const String selectCustomerCategory = "Customer Category";
+  static const String selectCollateralSecurityCategory = "Prime Security Category";
   static const String selectIncomeType = "Select Income Type";
   static const String productName = "Product Name";
   static const String enterProductName = "Enter product name";
@@ -595,6 +595,9 @@ class AppText{
 
   static const String geoLocationProperty = "Geo Location Of Property";
   static const String enterGeoLocationProperty = "Enter Geo Location Of Property";
+
+  static const String enterLatitude = "Enter Latitude";
+  static const String enterLongitude = "Enter Longitude";
 
   static const String geoLocationResidence = "Geo Location Of Residence";
   static const String enterGeoLocationResidence = "Enter Geo Location Of Residence";

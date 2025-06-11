@@ -14,7 +14,7 @@ class ApiService {
   static const String listProduct = baseUrl + 'list-product';
 
 
-  static const String authenticate = baseUrl + 'Auth/Authenticate';
+  static const String authenticate = baseUrl + 'Auth/AuthenticateForApp';
   static const String getAllBank = baseUrl + 'BankMaster/GetAllBank';
   static const String getAllBranchByBankId = baseUrl + 'Branch/GetAllBranchByBankId';
   static const String getLevelOfBankerRole = baseUrl + 'BankerRole/GetLevelOfBankerRole';

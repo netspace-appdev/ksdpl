@@ -277,22 +277,6 @@ class Step3FormProduct extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.fromAmtRange,
-                controller: addProductController.prodFromAmtController,
-                inputType: TextInputType.number,
-                hintText: AppText.enterFromAmtRange,
-                validator:  ValidationHelper.validateName,
-              ),
-
-              CustomLabeledTextField(
-                label: AppText.toAmtRange,
-                controller: addProductController.prodToAmtController,
-                inputType: TextInputType.number,
-                hintText: AppText.enterToAmtRange,
-                validator:  ValidationHelper.validateName,
-              ),
-
-              CustomLabeledTextField(
                 label: AppText.totalOverdueCases2,
                 controller: addProductController.prodTotalOverdueCasesController,
                 inputType: TextInputType.number,

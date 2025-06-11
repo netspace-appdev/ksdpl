@@ -82,6 +82,40 @@ class AddProductScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
+
+                          Obx(() => Container(
+
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: addProductController.currentStep.value > 0
+                                      ? addProductController.previousStep
+                                      : null,
+                                  child: const Text('Prev'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: addProductController.validateAndSubmit,
+                                  child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: addProductController.currentStep.value < 6
+                                      ? addProductController.nextStep
+                                      : null,
+                                  child: const Text('Next',style: TextStyle(color: AppColor.appWhite),),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.primaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+
+
                           SizedBox(
                             height: 100,
                             child: ListView.builder(
@@ -193,7 +227,7 @@ class AddProductScreen extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: Obx(() => Container(
+       /* bottomNavigationBar: Obx(() => Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Row(
@@ -223,7 +257,7 @@ class AddProductScreen extends StatelessWidget {
               ),
             ],
           ),
-        )),
+        )),*/
 
 
       ),

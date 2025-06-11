@@ -53,6 +53,13 @@ class Step2CamNote extends StatelessWidget {
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
                      CustomLabeledTextField(
+                       label: AppText.cibil,
+                       controller: camNoteController.camCibilController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterCibilScore,
+                     ),
+
+                     CustomLabeledTextField(
                        label: AppText.totalLoanAvaileCibil,
                        controller: camNoteController.camTotalLoanAvailedController,
                        inputType: TextInputType.number,
@@ -64,13 +71,6 @@ class Step2CamNote extends StatelessWidget {
                        controller: camNoteController.camTotalLiveLoanController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterTotalLiveLoan,
-                     ),
-
-                     CustomLabeledTextField(
-                       label: AppText.cibil,
-                       controller: camNoteController.camCibilController,
-                       inputType: TextInputType.number,
-                       hintText: AppText.enterCibilScore,
                      ),
 
                      CustomLabeledTextField(
@@ -134,7 +134,47 @@ class Step2CamNote extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const CustomTextLabel(
+                      CustomLabeledTextField(
+                        label: AppText.geoLocationProperty,
+                        controller: camNoteController.camGeoLocationPropertyLatController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterLatitude,
+                      ),
+                      CustomLabeledTextField(
+                        label: "",
+                        controller: camNoteController.camGeoLocationPropertyLongController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterLongitude,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.geoLocationResidence,
+                        controller: camNoteController.camGeoLocationResidenceLatController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterLatitude,
+                      ),
+                      CustomLabeledTextField(
+                        label: "",
+                        controller: camNoteController.camGeoLocationResidenceLongController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterLongitude,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.geoLocationOffice,
+                        controller: camNoteController.camGeoLocationOfficeLatController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterLatitude,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: "",
+                        controller: camNoteController.camGeoLocationOfficeLongController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterLongitude,
+                      ),
+
+ /*                     const CustomTextLabel(
                         label: AppText.loanSegment,
                         isRequired: true,
 
@@ -168,10 +208,32 @@ class Step2CamNote extends StatelessWidget {
                         );
                       }),
 
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 20),*/
 
 
-                      const CustomTextLabel(
+                      CustomPhotoPickerWidget(
+                        controller: camNoteController,
+                        imageKey: 'property_photo',
+                        label: 'Upload Property Photos',
+                      ),
+
+                      const SizedBox(height: 20,),
+
+                      CustomPhotoPickerWidget(
+                        controller: camNoteController,
+                        imageKey: 'residence_photo',
+                        label: 'Upload Residence Photos',
+                      ),
+
+                      const SizedBox(height: 20,),
+
+                      CustomPhotoPickerWidget(
+                        controller: camNoteController,
+                        imageKey: 'office_photo',
+                        label: 'Upload Office Photos',
+                      ),
+
+        /*              const CustomTextLabel(
                         label: AppText.loanProduct,
                         isRequired: true,
 
@@ -207,48 +269,9 @@ class Step2CamNote extends StatelessWidget {
 
                       const SizedBox(height: 20),
 
-                      CustomLabeledTextField(
-                        label: AppText.offeredSecurityType,
-                        controller: camNoteController.camOfferedSecurityTypeController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterSecurityType,
-                      ),
 
-                      CustomLabeledTextField(
-                        label: AppText.geoLocationProperty,
-                        controller: camNoteController.camGeoLocationPropertyController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterGeoLocationProperty,
-                      ),
+*/
 
-                      CustomLabeledTextField(
-                        label: AppText.geoLocationOffice,
-                        controller: camNoteController.camGeoLocationOfficeController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterGeoLocationOffice,
-                      ),
-
-                      CustomPhotoPickerWidget(
-                        controller: camNoteController,
-                        imageKey: 'property_photo',
-                        label: 'Upload Property Photos',
-                      ),
-
-                      const SizedBox(height: 20,),
-
-                      CustomPhotoPickerWidget(
-                        controller: camNoteController,
-                        imageKey: 'residence_photo',
-                        label: 'Upload Residence Photos',
-                      ),
-
-                      const SizedBox(height: 20,),
-
-                      CustomPhotoPickerWidget(
-                        controller: camNoteController,
-                        imageKey: 'office_photo',
-                        label: 'Upload Office Photos',
-                      ),
                       const SizedBox(height: 20,),
                     ],
                   )
@@ -373,6 +396,13 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camLtvController,
                         inputType: TextInputType.number,
                         hintText: AppText.autoCalculatedLtv,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.offeredSecurityType,
+                        controller: camNoteController.camOfferedSecurityTypeController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterSecurityType,
                       ),
                     ],
                   )

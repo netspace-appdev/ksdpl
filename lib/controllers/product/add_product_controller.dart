@@ -413,7 +413,9 @@ class AddProductController extends GetxController{
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please name the product");
     }else{
 
-      print("no of doc==>${selectedCommonDoc.length+ selectedAdditionalDocs.length ?? 0}");
+      print("Banker email==>${prodBankersEmailController.text}");
+      print("prodTechnicalFeeController.text==>${prodTechnicalFeeController.text}");
+      print("selectedKsdplProduct.value.toString()=>${selectedKsdplProduct.value.toString()}");
 
 
       addProductListApi(
@@ -481,12 +483,10 @@ class AddProductController extends GetxController{
     }
 
 
-  } void validateAndUpdate() {
+  }
 
 
-
-
-
+  void validateAndUpdate() {
 
     if(selectedKsdplProduct.value==null){
       jumpToStep(0);
@@ -734,6 +734,12 @@ class AddProductController extends GetxController{
     prodDocumentDescriptionsController.dispose();
     prodProductDescriptionsController.dispose();
     prodNoOfDocController.dispose();
+    prodFromAmtController.dispose();
+    prodToAmtController.dispose();
+    prodTotalOverdueCasesController.dispose();
+    prodTotalOverdueAmtController.dispose();
+    prodTotalEnquiriesController.dispose();
+
 
   }
 
@@ -843,6 +849,12 @@ class AddProductController extends GetxController{
     chipText3Controller.clear();
     selectedCommonDoc.clear();
     selectedAdditionalDocs.clear();
+
+    prodFromAmtController.clear();
+    prodToAmtController.clear();
+    prodTotalOverdueCasesController.clear();
+    prodTotalOverdueAmtController.clear();
+    prodTotalEnquiriesController.clear();
   }
 
   Future<void>  getAllProductCategoryApi() async {
@@ -1387,7 +1399,7 @@ class AddProductController extends GetxController{
     prodProcessingFeeController.text=(getProductListById.value!.data!.processingFee ?? 0).toStringAsFixed(2);
     prodProcessingChargesController.text=(getProductListById.value!.data!.processingCharges ?? 0).toStringAsFixed(2);
     prodLegalFeeController.text=(getProductListById.value!.data!.legalFee ?? 0).toStringAsFixed(2);
-    prodTechnicalFeeController.text=(getProductListById.value!.data!.technicalFee ?? 0).toStringAsFixed(2);
+    prodTechnicalFeeController.text=(getProductListById.value!.data!.technicalInspectionFee ?? 0).toStringAsFixed(2);
     prodAdminFeeController.text=(getProductListById.value!.data!.adminFee ?? 0).toStringAsFixed(2);
     prodForeclosureChargesController.text=(getProductListById.value!.data!.foreclosureCharges ?? 0).toStringAsFixed(2);
     prodOtherChargesController.text=(getProductListById.value!.data!.otherCharges ?? 0).toStringAsFixed(2);

@@ -70,12 +70,30 @@ class Step1FormProduct extends StatelessWidget {
                 );
               }),
 
-
               const SizedBox(height: 20),
+              CustomLabeledTextField(
+                label: AppText.fromAmtRange,
+                isRequired: true,
+                controller: addProductController.prodFromAmtController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterFromAmtRange,
+                validator:  ValidationHelper.validateName,
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.toAmtRange,
+                isRequired: true,
+
+                controller: addProductController.prodToAmtController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterToAmtRange,
+                validator:  ValidationHelper.validateName,
+              ),
+
 
               CustomTextLabel(
                 label: AppText.bankNostar,
-
+                isRequired: true,
 
               ),
 
@@ -116,6 +134,7 @@ class Step1FormProduct extends StatelessWidget {
                   },
                 );
               }),
+
               const SizedBox(
                 height: 20,
               ),
@@ -154,6 +173,8 @@ class Step1FormProduct extends StatelessWidget {
                 hintText: AppText.enterBankerEmail,
 
               ),
+
+
 
 
               CustomLabeledTextField(

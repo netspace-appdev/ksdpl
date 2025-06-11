@@ -42,37 +42,41 @@ class CustomLabeledTextField extends StatelessWidget {
       children: [
 
         /// Label Row (with * if required)
-
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        label.isEmpty?Container():
+        Column(
           children: [
-            Expanded( // This allows the label text to wrap
-              child: Text.rich(
-                TextSpan(
-                  text: label,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.grey2,
-                  ),
-                  children: isRequired
-                      ? [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded( // This allows the label text to wrap
+                  child: Text.rich(
                     TextSpan(
-                      text: ' *',
+                      text: label,
                       style: TextStyle(
-                        color: AppColor.redColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.grey2,
                       ),
+                      children: isRequired
+                          ? [
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: AppColor.redColor,
+                          ),
+                        ),
+                      ]
+                          : [],
                     ),
-                  ]
-                      : [],
+                  ),
                 ),
-              ),
+              ],
             ),
+
+
+            SizedBox(height: 10),
           ],
         ),
-
-
-        SizedBox(height: 10),
 
         /// Custom TextField
         CustomTextFieldPrefix(
