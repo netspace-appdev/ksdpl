@@ -29,7 +29,6 @@ class AddProductScreen extends StatelessWidget {
     Step2FormProduct(),
     Step3FormProduct(),
     Step4FormProduct(),
-
   ];
   @override
   Widget build(BuildContext context) {
@@ -83,7 +82,7 @@ class AddProductScreen extends StatelessWidget {
                       child: Column(
                         children: [
 
-                          Obx(() => Container(
+                         /* Obx(() => Container(
 
                             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                             child: Row(
@@ -113,11 +112,16 @@ class AddProductScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          )),
+                          )),*/
 
 
-                          SizedBox(
-                            height: 100,
+
+
+
+
+                          Container(
+
+                            height: 70,
                             child: ListView.builder(
                               controller: addProductController.scrollController,
                               scrollDirection: Axis.horizontal,
@@ -209,7 +213,46 @@ class AddProductScreen extends StatelessWidget {
                               },
                             ),
                           ),
-                          const SizedBox(height: 20),
+
+
+                          Obx(() => Container(
+
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+
+                                  onPressed: addProductController.currentStep.value > 0
+                                      ? addProductController.previousStep
+                                      : null,
+                                  child:  Text('Prev', style: TextStyle(color:addProductController.currentStep.value > 0? AppColor.appWhite: AppColor.black87) ),
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(130, 40),
+
+                                    backgroundColor: AppColor.primaryColor,
+                                  ),
+                                ),
+                                /* ElevatedButton(
+                                  onPressed: addProductController.validateAndSubmit,
+                                  child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                  ),
+                                ),*/
+                                ElevatedButton(
+                                  onPressed: addProductController.currentStep.value < 4
+                                      ? ()=>addProductController.nextStep(addProductController.currentStep.value)
+                                      : null,
+                                  child:  Text(addProductController.currentStep.value==3?"Save":'Save & Next',style: TextStyle(color: AppColor.appWhite),),
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(130, 40),
+                                    backgroundColor: AppColor.greenColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
 
                           // Scrollable form
                           SingleChildScrollView(
@@ -227,39 +270,6 @@ class AddProductScreen extends StatelessWidget {
             ],
           ),
         ),
-       /* bottomNavigationBar: Obx(() => Container(
-          color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: addProductController.currentStep.value > 0
-                    ? addProductController.previousStep
-                    : null,
-                child: const Text('Prev'),
-              ),
-              ElevatedButton(
-                onPressed: addProductController.validateAndSubmit,
-                child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: addProductController.currentStep.value < 6
-                    ? addProductController.nextStep
-                    : null,
-                child: const Text('Next',style: TextStyle(color: AppColor.appWhite),),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColor.primaryColor,
-                ),
-              ),
-            ],
-          ),
-        )),*/
-
-
       ),
     );
   }
@@ -325,30 +335,11 @@ class AddProductScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRadioOption(String gender) {
-    return Row(
-      children: [
-        Radio<String>(
-          value: gender,
-          groupValue: addProductController.selectedGender.value,
-          onChanged: (value) {
-            addProductController.selectedGender.value=value;
-          },
-        ),
-        Text(gender),
-      ],
-    );
-  }
 
 
 
-  String _breakTwoWords(String title) {
-    final words = title.trim().split(' ');
-    if (words.length == 2) {
-      return '${words[0]}\n${words[1]}';
-    }
-    return title;
-  }
+
+
 
 }
 

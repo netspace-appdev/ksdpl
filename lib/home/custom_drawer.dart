@@ -203,6 +203,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                        addProductController.getAllCommonDocumentNameListApi();
                        addProductController.clearForm();
                        addProductController.currentStep.value=0;
+                       addProductController.isFirstSave.value=0;
+
                        Get.toNamed("/addProductScreen");
 
                      },

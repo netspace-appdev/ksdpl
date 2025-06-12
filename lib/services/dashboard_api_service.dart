@@ -222,6 +222,38 @@ class DashboardApiService{
     }
   }
 
+  static Future<bool> validateToken() async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getBreakingNews),
+      );
+
+      var header = await MyHeader.getHeaders2(); // Includes token
+      request.headers.addAll(header);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['status'] == "200" && data['success'] == true) {
+          return true; // ✅ Valid token
+        } else if (data['status'] == "401" || (data['message']?.toLowerCase().contains("token") ?? false)) {
+          return false; // ⛔ Expired or invalid token
+        }
+      } else if (response.statusCode == 401) {
+        return false;
+      }
+
+      return false;
+    } catch (e) {
+      print("validateToken error: $e");
+      return false; // Fail-safe
+    }
+  }
+
   static Future<Map<String, dynamic>> getUpcomingDateOfBirthApi() async {
 
     try {

@@ -19,6 +19,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  SplashController splashController=Get.put(SplashController());
   @override
   void initState() {
     super.initState();
@@ -65,8 +66,8 @@ class _SplashScreenState extends State<SplashScreen> {
   onLoad(){
     var userId=StorageService.get(StorageService.USER_ID);
     if(userId!=null){
-
-      Get.offAllNamed("/bottomNavbar");
+      splashController.checkTokenAndNavigate();
+      //Get.offAllNamed("/bottomNavbar");
     }else{
       Get.offAllNamed("/login");
     }

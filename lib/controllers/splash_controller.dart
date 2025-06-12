@@ -12,53 +12,33 @@ import '../../services/dashboard_api_service.dart';
 
 class SplashController extends GetxController {
 
-  var isLoading = false.obs;
+ // var isLoading = false.obs;
   GetEmployeeModel? getEmployeeModel;
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    var phone=StorageService.get(StorageService.PHONE);
-    getEmployeeByPhoneNumberApi(phone: phone.toString());
-
 
   }
 
-  void  getEmployeeByPhoneNumberApi({
-    required String phone,
-
-  }) async {
-    try {
-      isLoading(true);
 
 
-      var data = await DashboardApiService.getEmployeeByPhoneNumberApi(phone: phone,);
+  void checkTokenAndNavigate() async {
+    bool isValid = await DashboardApiService.validateToken();
 
+    if (isValid) {
+      Get.offAllNamed("/bottomNavbar");// or Product List screen // User is logged in
+    } else {
+      // Clear token or user data
+      StorageService.delete(StorageService.TOKEN); // Clear invalid token
 
-      if(data['success'] == true){
+      // Optional toast
+      ToastMessage.msg("Session expired. Please login again.");
 
-        getEmployeeModel= GetEmployeeModel.fromJson(data);
-
-        ToastMessage.msg(getEmployeeModel!.message!);
-        StorageService.put(StorageService.EMPLOYEE_ID, getEmployeeModel!.data!.id.toString());
-        isLoading(false);
-        //getCountOfLeadsApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: "false");
-
-      }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-
-
-    } catch (e) {
-      print("Error getEmployeeByPhoneNumberApi: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
-    } finally {
-
-      isLoading(false);
+      Get.offAllNamed("/login");
     }
   }
+
 
 }

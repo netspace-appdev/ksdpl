@@ -331,7 +331,8 @@ class ProductService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
-
+      Helper.ApiReq(updateProductList, request.fields);
+      Helper.ApiRes(updateProductList, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -435,11 +436,6 @@ class ProductService {
         headers: headers,
         body: jsonEncode(body),
       );
-      const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-
-
-      print("response===>${addProductDocument}====>${response.body}");
-      print("rwq===>${addProductDocument}====>${body}");
 
 
       if (response.statusCode == 200) {

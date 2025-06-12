@@ -36,6 +36,7 @@ import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
 
 class AddProductController extends GetxController{
+  var isFirstSave = 0.obs;
 
   var getLoanApplIdModel = Rxn<GetLoanApplIdModel>();
   var leadId="".obs;
@@ -326,11 +327,24 @@ class AddProductController extends GetxController{
     chips.clear();
     chipTextController.clear();
   }
-  void nextStep() {
-    if (currentStep.value < 6) {
+  void nextStep(int tappedIndex) {
+    if (currentStep.value < 3) {
       currentStep.value++;
       scrollToStep(currentStep.value);
     }
+
+    if(isFirstSave.value==0 && tappedIndex==0 ){
+      validateAndSubmit();
+    }else if(isFirstSave.value==1 && (tappedIndex==0 || tappedIndex==1 || tappedIndex==2 || tappedIndex==3 )){
+      validateAndUpdate();
+    }{
+      print("Third case inn add product");
+    }
+
+
+    print("isFirstSave.value===>${isFirstSave.value}");
+    print("currentStep.value===>${currentStep.value}");
+    print("tappedIndex.value===>${tappedIndex}");
   }
 
   void previousStep() {
@@ -398,7 +412,7 @@ class AddProductController extends GetxController{
 
 
     // All forms are valid!
-    print("✅ All forms passed validation. Submit to API now.");
+    print("✅  validateAndSubmit--->All forms passed validation. Submit to API now.");
     if(selectedKsdplProduct.value==null){
       jumpToStep(0);
 
@@ -487,12 +501,19 @@ class AddProductController extends GetxController{
 
 
   void validateAndUpdate() {
-
+    print("✅  validateAndUpdate--->");
     if(selectedKsdplProduct.value==null){
       jumpToStep(0);
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select KSDPL Product");
     }else{
+      var productId=0;
+
+      if (addProductListModel.value?.data?.id == null ) {
+        // id is null or empty, do your thing
+       // productId=addProductListModel.value!.data!.id;
+      }
+
 
       updateProductListApi(
           Id: getProductListById.value!.data!.id.toString(),
@@ -1070,10 +1091,10 @@ class AddProductController extends GetxController{
         }
 
 
-
-        clearForm();
+        isFirstSave.value=1;
+      //  clearForm();
         isLoading(false);
-        Get.back();
+      //  Get.back();
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -1090,7 +1111,7 @@ class AddProductController extends GetxController{
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-      clearForm();
+      //clearForm();
       isLoading(false);
     }
   }

@@ -216,7 +216,7 @@ class EditProductScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: addProductController.currentStep.value < 6
-                    ? addProductController.nextStep
+                    ?()=> addProductController.nextStep(addProductController.currentStep.value)
                     : null,
                 child: const Text('Next',style: TextStyle(color: AppColor.appWhite),),
                 style: ElevatedButton.styleFrom(
