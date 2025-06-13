@@ -389,7 +389,7 @@ class Data {
   String? productValidateFromDate;
   String? productValidateToDate;
   num? ksdplProductId;
-  Null? ksdplProductName;
+  String? ksdplProductName;
   num? profitPercentage;
   bool? active;
   String? createdDate;

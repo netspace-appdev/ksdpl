@@ -40,6 +40,7 @@ class LoginController extends GetxController {
         StorageService.put(StorageService.TOKEN, loginModel!.data!.token.toString());
         StorageService.put(StorageService.PHONE, loginModel!.data!.phoneNumber.toString());
         StorageService.put(StorageService.ROLE, loginModel!.data!.roles.toString());
+        StorageService.put(StorageService.FULL_NAME, loginModel!.data!.firstName.toString() +" "+ loginModel!.data!.lastName.toString());
         print("data in controller==>${ loginModel!.data!.roles.toString()}");
 
         isLoading(false);

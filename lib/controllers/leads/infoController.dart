@@ -14,7 +14,7 @@ class InfoController extends GetxController{
 
   }
   loadData(){
-    firstName.value=StorageService.get(StorageService.FIRST_NAME).toString();
+    firstName.value=StorageService.get(StorageService.FULL_NAME).toString();
     email.value=StorageService.get(StorageService.EMAIL).toString();
   }
 }

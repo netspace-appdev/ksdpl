@@ -93,7 +93,6 @@ class Step1FormProduct extends StatelessWidget {
 
               CustomTextLabel(
                 label: AppText.bankNostar,
-                isRequired: true,
 
               ),
 

@@ -100,7 +100,7 @@ class LoginScreen extends StatelessWidget {
 
 
                      )),
-                      const SizedBox(height: 10),
+                      /*const SizedBox(height: 10),
 
                       // Forgot Password
                       Align(
@@ -112,7 +112,7 @@ class LoginScreen extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                      ),
+                      ),*/
                       const SizedBox(height: 25),
 
                       // Sign In Button
@@ -146,8 +146,8 @@ class LoginScreen extends StatelessWidget {
                                     controller.passwordController.text);*/
 
                                 Helper.checkInternet(() => controller.loginApi(
-                                    controller.mobileController.text,
-                                    controller.passwordController.text));
+                                    controller.mobileController.text.trim(),
+                                    controller.passwordController.text.trim()));
                               }
 
 
@@ -165,24 +165,7 @@ class LoginScreen extends StatelessWidget {
                       }),
                       const SizedBox(height: 20),
 
-                      // Signup Link
-                      Center(
-                        child: RichText(
-                          text: TextSpan(
-                            text: "Don't have an account? ",
-                            style: const TextStyle(color: Colors.black),
-                            children: [
-                              TextSpan(
-                                text: "Signup here",
-                                style: TextStyle(
-                                  color: AppColor.secondaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+
                     ],
                   ),
                 ),

@@ -15,6 +15,7 @@ class StorageService {
   static const String BANK_ID = "BANK_ID";
   static const String EMPLOYEE_ID = "EMPLOYEE_ID";
   static const String ROLE = "ROLE";
+  static const String FULL_NAME = "FULL_NAME";
 
 
   static void put(String key, String value) {

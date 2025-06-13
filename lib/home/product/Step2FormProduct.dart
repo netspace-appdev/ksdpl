@@ -72,7 +72,6 @@ class Step2FormProduct extends StatelessWidget {
 
               CustomLabeledTextField(
                 label: AppText.minIncomeCriteria,
-
                 controller: addProductController.prodMinIncomeCriteriaController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterMinIncomeCriteria,

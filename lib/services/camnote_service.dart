@@ -23,6 +23,19 @@ class CamNoteService {
   static Future<Map<String, dynamic>> getProductDetailsByFilterApi({
 
     String? cibil,
+   /* String? SegmentVertical,
+    String? CustomerCategory,
+    String? CollateralSecurityCategory,
+    String? CollateralSecurityExcluded,
+    String? IncomeTypes,
+    String? AgeEarningApplicants,
+    String? AgeNonEarningCoApplicant,
+    String? ApplicantMonthlySalary,
+    String? LoanAmount,
+    String? Tenor,
+    String? Roi,
+    String? MaximumTenorEligibilityCriteria,
+    String? CustomerAddress,*/
 
   }) async {
     try {
@@ -40,14 +53,12 @@ class CamNoteService {
       MultipartFieldHelper.addField(request.fields, 'CollateralSecurityCategory', "");
       MultipartFieldHelper.addField(request.fields, 'CollateralSecurityExcluded', "");
       MultipartFieldHelper.addField(request.fields, 'IncomeTypes', "");
-      MultipartFieldHelper.addField(request.fields, 'IncomeTypes', "");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'AgeEarningApplicants', "",fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'AgeNonEarningCoApplicant',  "",fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'ApplicantMonthlySalary',  "",fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanAmount',  "",fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Tenor',  "",fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Roi',  "",fallback: "0");
-      MultipartFieldHelper.addFieldWithDefault(request.fields, 'MaximumTenorEligibilityCriteria',  "",fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'MaximumTenorEligibilityCriteria',  "",fallback: "0");
       MultipartFieldHelper.addField(request.fields, 'CustomerAddress', "");
 

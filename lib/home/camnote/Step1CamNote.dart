@@ -124,7 +124,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.lar,
                   isRequired: true,
-                  controller: addleadcontroller.loanAmtReqController,
+                  controller: camNoteController.camLoanAmountRequestedController,
                   inputType: TextInputType.phone,
                   hintText: AppText.enterLar,
                   validator: ValidationHelper.validateLoanAmt,

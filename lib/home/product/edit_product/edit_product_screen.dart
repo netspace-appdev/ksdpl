@@ -84,8 +84,8 @@ class EditProductScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          SizedBox(
-                            height: 100,
+                          Container(
+                            height: 70,
                             child: ListView.builder(
                               controller: addProductController.scrollController,
                               scrollDirection: Axis.horizontal,
@@ -177,7 +177,44 @@ class EditProductScreen extends StatelessWidget {
                               },
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          Obx(() => Container(
+
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+
+                                  onPressed: addProductController.currentStep.value > 0
+                                      ? addProductController.previousStep
+                                      : null,
+                                  child:  Text('Prev', style: TextStyle(color:addProductController.currentStep.value > 0? AppColor.appWhite: AppColor.black87) ),
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(130, 40),
+
+                                    backgroundColor: AppColor.primaryColor,
+                                  ),
+                                ),
+                                /* ElevatedButton(
+                                  onPressed: addProductController.validateAndSubmit,
+                                  child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                  ),
+                                ),*/
+                                ElevatedButton(
+                                  onPressed: addProductController.currentStep.value < 4
+                                      ? ()=>addProductController.nextStep(addProductController.currentStep.value)
+                                      : null,
+                                  child:  Text(addProductController.currentStep.value==3?"Save":'Save & Next',style: TextStyle(color: AppColor.appWhite),),
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(130, 40),
+                                    backgroundColor: AppColor.greenColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
 
                           // Scrollable form
                           SingleChildScrollView(
@@ -195,7 +232,7 @@ class EditProductScreen extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: Obx(() => Container(
+       /* bottomNavigationBar: Obx(() => Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Row(
@@ -208,7 +245,7 @@ class EditProductScreen extends StatelessWidget {
                 child: const Text('Prev'),
               ),
               ElevatedButton(
-                onPressed: addProductController.validateAndUpdate,
+                onPressed: ()=>addProductController.validateAndUpdate(-1),
                 child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -225,7 +262,7 @@ class EditProductScreen extends StatelessWidget {
               ),
             ],
           ),
-        )),
+        )),*/
 
 
       ),

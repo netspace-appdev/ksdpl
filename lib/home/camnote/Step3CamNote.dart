@@ -130,13 +130,13 @@ class Step3CamNote extends StatelessWidget {
               return buildCard(
                 Helper.capitalizeEachWord(banker.bankName.toString()), // title
                 [
-                  _buildDetailRow("Bankers Name", banker.bankersName.toString()),
-                  _buildDetailRow("Bankers Mobile", banker.bankersMobileNumber.toString()),
-                  _buildDetailRow("Bankers Whatsapp", banker.bankersWhatsAppNumber.toString()),
-                  _buildDetailRow("Bankers Email", banker.bankersEmailID.toString()),
-                  _buildDetailRow("Customer Category", banker.customerCategory.toString()),
-                  _buildDetailRow("KSDPL Product", banker.ksdplProduct.toString()),
-                  _buildDetailRow("Income Type", banker.incomeTypes.toString()),
+                  _buildDetailRow(AppText.bankerName, banker.bankersName.toString()),
+                  _buildDetailRow(AppText.bankerMobile, banker.bankersMobileNumber.toString()),
+                  _buildDetailRow(AppText.bankerWhatsapp, banker.bankersWhatsAppNumber.toString()),
+                  _buildDetailRow(AppText.bankerEmail, banker.bankersEmailID.toString()),
+                  _buildDetailRow(AppText.selectCustomerCategory, banker.customerCategory.toString()),
+                  _buildDetailRow(AppText.ksdplProduct, banker.ksdplProduct.toString()),
+                  _buildDetailRow(AppText.incomeType, banker.incomeTypes.toString()),
 
                   const SizedBox(height: 10),
 

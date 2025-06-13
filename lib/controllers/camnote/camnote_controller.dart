@@ -219,9 +219,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       currentStep.value++;
       print("currentStep.value in next===>${currentStep.value.toString()}");
       if(currentStep.value==2){
-        getProductDetailsByFilterApi(
-          cibil: camCibilController.text.trim().toString()
-        );
+
+        forBankDetailSubmit();
       }
       scrollToStep(currentStep.value);
     }
@@ -276,6 +275,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+  }
+
+  void forBankDetailSubmit(){
+    getProductDetailsByFilterApi(
+        cibil: camCibilController.text.trim().toString(),
+    );
   }
 
   void validateAndSubmit() {

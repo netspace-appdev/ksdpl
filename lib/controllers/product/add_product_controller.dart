@@ -336,7 +336,7 @@ class AddProductController extends GetxController{
     if(isFirstSave.value==0 && tappedIndex==0 ){
       validateAndSubmit();
     }else if(isFirstSave.value==1 && (tappedIndex==0 || tappedIndex==1 || tappedIndex==2 || tappedIndex==3 )){
-      validateAndUpdate();
+      validateAndUpdate(tappedIndex);
     }{
       print("Third case inn add product");
     }
@@ -417,6 +417,14 @@ class AddProductController extends GetxController{
       jumpToStep(0);
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select KSDPL Product");
+    }else if(prodFromAmtController.text.isEmpty){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter from amount range");
+    }else if(prodToAmtController.text.isEmpty){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter to amount range");
     }else if(selectedProductCategory.value==null){
       jumpToStep(0);
 
@@ -426,11 +434,6 @@ class AddProductController extends GetxController{
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please name the product");
     }else{
-
-      print("Banker email==>${prodBankersEmailController.text}");
-      print("prodTechnicalFeeController.text==>${prodTechnicalFeeController.text}");
-      print("selectedKsdplProduct.value.toString()=>${selectedKsdplProduct.value.toString()}");
-
 
       addProductListApi(
         Id: "0",
@@ -500,8 +503,8 @@ class AddProductController extends GetxController{
   }
 
 
-  void validateAndUpdate() {
-    print("✅  validateAndUpdate--->");
+  void validateAndUpdate(int tappedIndex) {
+
     if(selectedKsdplProduct.value==null){
       jumpToStep(0);
 
@@ -509,14 +512,15 @@ class AddProductController extends GetxController{
     }else{
       var productId=0;
 
-      if (addProductListModel.value?.data?.id == null ) {
+      if (addProductListModel.value?.data?.id != null ) {
         // id is null or empty, do your thing
-       // productId=addProductListModel.value!.data!.id;
+        productId=addProductListModel.value!.data!.id!;
       }
 
-
+      print("✅  validateAndUpdate--->${productId.toString()}");
+      print("✅  validateAndUpdateaddProductListModel.value?.data?.id--->${addProductListModel.value?.data?.id}");
       updateProductListApi(
-          Id: getProductListById.value!.data!.id.toString(),
+          Id: productId==0?  getProductListById.value!.data!.id.toString() : productId.toString(),
           BankId:selectedBank.value?.toString(),
           bankers_Name:prodBankersNameController.text,
           Bankers_Mobile_Number:prodBankersMobController.text,
@@ -563,7 +567,7 @@ class AddProductController extends GetxController{
           TSR_Years:prodTsrYearsController.text,
           TSR_Charges:prodTsrChargesController.text,
           Valuation_Charges:prodValuationChargesController.text,
-          NoOfDocument:prodNoOfDocController.text,
+          NoOfDocument:"${selectedCommonDoc.length+ selectedAdditionalDocs.length ?? 0}",
           Product_Validate_From_date:prodProductValidateFromController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateFromController.text):"",
           Product_Validate_To_date:prodProductValidateToController.text.isNotEmpty?Helper.convertToIso8601(prodProductValidateToController.text):"",
           Profit_Percentage:prodProfitPercentageController.text,
@@ -571,6 +575,13 @@ class AddProductController extends GetxController{
            Processing_Charges:prodProcessingChargesController.text,
         commonDocument: selectedCommonDoc,
         additionalDocs: selectedAdditionalDocs,
+        tappedIndex: tappedIndex,
+
+        FromAmountRange:prodFromAmtController.text,
+        ToAmountRange: prodToAmtController.text,
+        TotalOverdueCases: prodTotalOverdueCasesController.text,
+        TotalOverdueAmount: prodTotalOverdueAmtController.text,
+        TotalEnquiries: prodTotalEnquiriesController.text,
       );
 
     }
@@ -876,6 +887,7 @@ class AddProductController extends GetxController{
     prodTotalOverdueCasesController.clear();
     prodTotalOverdueAmtController.clear();
     prodTotalEnquiriesController.clear();
+    prodProcessingChargesController.clear();
   }
 
   Future<void>  getAllProductCategoryApi() async {
@@ -988,8 +1000,6 @@ class AddProductController extends GetxController{
 }) async {
     try {
       isLoading(true);
-      print("commonDocument in api===>${commonDocument}");
-
 
       var data = await ProductService.addProductListApi(
         KSDPLProductId: KSDPLProductId,
@@ -1129,6 +1139,7 @@ class AddProductController extends GetxController{
 
   void  updateProductListApi({
     required String KSDPLProductId,
+    required tappedIndex,
     String? Id,
     String? BankId,
     String? bankers_Name,
@@ -1186,7 +1197,8 @@ class AddProductController extends GetxController{
     String? TotalOverdueAmount,
     String? TotalEnquiries,
     List<commanDoc.Data>? commonDocument,
-    List<ChipData>? additionalDocs
+    List<ChipData>? additionalDocs,
+
   }) async {
     try {
       isLoading(true);
@@ -1258,7 +1270,7 @@ class AddProductController extends GetxController{
         addProductListModel.value= AddProductListModel.fromJson(data);
 
         ToastMessage.msg(addProductListModel.value!.message!);
-        ViewProductController viewProductController=Get.find();
+        ViewProductController viewProductController=Get.put(ViewProductController());
         viewProductController.getAllProductListApi();
 
 
@@ -1289,9 +1301,12 @@ class AddProductController extends GetxController{
         }
 
 
-        clearForm();
+       // clearForm();
         isLoading(false);
-        Get.back();
+       // Get.back();
+        if(tappedIndex==3){
+          Get.back();
+        }
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -1356,6 +1371,8 @@ class AddProductController extends GetxController{
   Future <void> populateStep1Info() async{
     await leadDDController.getAllKsdplProductApi();
     selectedKsdplProduct.value=int.parse(getProductListById.value!.data!.ksdplProductId.toString());
+    prodFromAmtController.text=getProductListById.value!.data!.fromAmountRange.toString()??"";
+    prodToAmtController.text=getProductListById.value!.data!.toAmountRange.toString()??"";
 
     await leadDDController.getAllBankApi();
     selectedBank.value=int.parse(getProductListById.value!.data!.bankId.toString());
@@ -1462,6 +1479,10 @@ class AddProductController extends GetxController{
             .split(',')
             .map((e) => e.trim())
             .toList());
+
+    prodTotalOverdueCasesController.text=(getProductListById.value!.data!.totalOverdueCases ?? 0).toStringAsFixed(0);
+    prodTotalOverdueAmtController.text=(getProductListById.value!.data!.totalOverdueAmount ?? 0).toStringAsFixed(2);
+    prodTotalEnquiriesController.text=(getProductListById.value!.data!.totalEnquiries ?? 0).toStringAsFixed(0);
 
   }
 

@@ -125,11 +125,11 @@ class AddLeadScreen extends StatelessWidget {
 
                               CustomLabeledPickerTextField(
                                 label: AppText.dateOfBirth,
-                                isRequired: true,
+
                                 controller: addleadcontroller.dobController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.mmddyyyy,
-                                validator: ValidationHelper.validateDob,
+
                                 isDateField: true,
                                 isFutureDisabled: true,
                               ),

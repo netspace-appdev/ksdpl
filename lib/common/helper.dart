@@ -176,7 +176,7 @@ class AppText{
   static const String addLead="Add Lead";
   static const String fullName="Full Name";
   static const String enterFullName="Enter Full Name";
-  static const String dateOfBirth="Date of Birth*";
+  static const String dateOfBirth="Date of Birth";
   static const String enterPhNumber="Enter Phone Number";
   static const String lar="Loan Amount Requested";
   static const String enterLar="Enter Loan Amount Requested";
@@ -450,7 +450,7 @@ class AppText{
   static const String enterMinAgeEarningApplicants = "Enter Minimum Age Earning Applicants";
   static const String minAgeNonEarningApplicants = "Minimum Age Non-Earning Applicants";
   static const String enterMinAgeNonEarningApplicants = "Enter Minimum Age Non-Earning Applicants";
-  static const String minIncomeCriteria = "Minimum Income Criteria";
+  static const String minIncomeCriteria = "Minimum Income Criteria (Monthly)";
   static const String enterMinIncomeCriteria = "Enter Minimum Income Criteria";
 
   static const String minLoanAmount = "Minimum Loan Amount";
@@ -479,7 +479,7 @@ class AppText{
   static const String  enterMaxTenorEligibilityCriteria = "EnterMaximum Tenor Eligibility Criteria";
   static const String enterAgeAtMaturity = "EnterMaximum Age at Maturity";
 
-  static const String geoLimit = "Geo Limit";
+  static const String geoLimit = "Geo Limit (KM)";
   static const String enterGeoLimit = "Enter Geo Limit";
 
   static const String negativeProfiles = "Negative Profiles";

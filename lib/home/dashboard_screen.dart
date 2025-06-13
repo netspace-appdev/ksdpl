@@ -186,13 +186,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         color: AppColor.grey3
                     ),
                   )),
-                  Text(
-                    infoController.firstName.value.toString(),
-                    style:  GoogleFonts.roboto(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.50,
+                    child: Text(
+                      infoController.firstName.value.toString(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style:  GoogleFonts.roboto(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
 
-                        color: AppColor.grey3
+                          color: AppColor.grey3
+                      ),
                     ),
                   )
                 ],

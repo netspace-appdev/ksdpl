@@ -615,6 +615,7 @@ class ViewProductScreen extends StatelessWidget {
          addProductController.getAllProductCategoryApi();
          addProductController.clearForm();
          addProductController.currentStep.value=0;
+         addProductController.isFirstSave.value=1;
           Get.toNamed("/editProductScreen");
 
         }else{

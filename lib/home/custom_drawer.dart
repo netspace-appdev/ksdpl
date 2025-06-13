@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ksdpl/common/base_url.dart';
 import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
@@ -72,19 +73,30 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          firstName,
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.50,
+                          child: Text(
+                            firstName,//firstName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                        Text(
-                          role,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.white70,
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.50,
+
+                          child: Text(
+                            role,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: Colors.white70,
+                            ),
                           ),
                         )
                       ],
@@ -109,43 +121,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
                ),
 
-
-               /*ExpansionTile(
-                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                 title: Text(AppText.myProfile),
-                 leading: Image.asset(AppImage.manInBlack, height: 20,),
-                 children: [
-                   ListTile(
-
-                     leading:  Icon(Icons.home,color: Theme.of(context).brightness == Brightness.dark?Colors.white54:AppColor.black54),
-                     title:  Text("Edit profile", style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
-                     onTap: () {
-                       //  Get.toNamed("/editProfile");
-                     },
-                   ),
-                   ListTile(
-                     leading:  Icon(Icons.lock,color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),
-                     title:  Text(AppText.changePassword,style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
-                     onTap: () {
-                       //  Get.toNamed("/changePassword");
-                     },
-                   ),
-                 ],
-               ),*/
-
-             /*  CustomListTile(
-                 title:  AppText.myProfile,
-                 imagePath:AppImage.manInBlack,
-                 onTap: () {
-                   Navigator.pop(context);
-                   // Add your navigation logic here
-                 },
-
-               ),*/
-
                ExpansionTile(
-
-
                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                  title:const Text(AppText.leads, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                  leading: Image.asset(AppImage.manInBlack, height: 20,),
@@ -184,8 +160,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
 
                ExpansionTile(
-
-
                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                  title:const Text(AppText.manageProducts, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                  leading: Image.asset(AppImage.product, height: 20,),
@@ -227,14 +201,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  title:  "Web Panel",
                  imagePath:AppImage.webImg,
                  onTap: () => _launchURL("https://kanchaneshver.in/"),
-
                ),
 
                CustomListTile(
                  title:  "Bank Credentials",
                  imagePath:AppImage.webImg,
                  onTap: () => _launchURL("https://docs.google.com/spreadsheets/d/1__iYzKKiDthxhfTqh8WEsdVolIcl2ymi0fqnShwNqto/edit?gid=0#gid=0"),
-
                ),
 
 
@@ -247,9 +219,33 @@ class _CustomDrawerState extends State<CustomDrawer> {
                    StorageService.clear();
                    Get.offNamed("/login");
                  },
-
                ),
-              
+               SizedBox(
+                 height: MediaQuery.of(context).size.height*0.06,
+               ),
+
+
+               Text(
+                 BaseUrl.devVersion,
+                 style: TextStyle(
+                   fontSize: 14,
+                   color: Colors.grey[600],
+                   fontStyle: FontStyle.italic,
+                 ),
+               ),
+
+               Padding(
+                 padding: const EdgeInsets.only(bottom: 10.0),
+                 child: Text(
+                   BaseUrl.buildDate,
+                   style: TextStyle(
+                     fontSize: 10,
+                     color: Colors.grey[600],
+                     fontStyle: FontStyle.italic,
+                   ),
+                 ),
+               ),
+
              ],
            ),
          )
@@ -260,7 +256,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   loadData(){
 
-    firstName=StorageService.get(StorageService.FIRST_NAME).toString();
+    firstName=StorageService.get(StorageService.FULL_NAME).toString();
     email=StorageService.get(StorageService.EMAIL).toString();
     var rawRole = StorageService.get(StorageService.ROLE).toString();
     role = rawRole.replaceAll('[', '').replaceAll(']', '');
