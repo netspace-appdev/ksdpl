@@ -15,6 +15,21 @@ class ValidationHelper {
     return null; // Name is valid
   }
 
+  static String? validateWhatsapp(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Whatsapp number is required";
+    }
+
+    String pattern = r'^[0-9]{10,}$';
+    RegExp regex = RegExp(pattern);
+
+    if (!regex.hasMatch(value)) {
+      return "Enter a valid Whatsapp number";
+    }
+
+    return null; // Phone is valid
+  }
+
   static String? validateDob(String? value) {
     if (value == null || value.isEmpty) {
       return "DOB is required";
@@ -37,6 +52,22 @@ class ValidationHelper {
     }
 
     return null; // Name is valid
+  }
+
+  static String? validateEmailNotNull(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Email is required";
+    }
+
+    // Regular expression for a valid email format
+    String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    RegExp regex = RegExp(emailPattern);
+
+    if (!regex.hasMatch(value!)) {
+      return "Enter a valid email address";
+    }
+
+    return null; // Email is valid
   }
   /// Validate Email
   static String? validateEmail(String? value) {

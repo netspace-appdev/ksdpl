@@ -107,71 +107,88 @@ class Addleadcontroller extends GetxController{
 
       if(data['success'] == true){
 
-        print("here 1");
-
-
         getLeadDetailModel.value= GetLeadDetailModel.fromJson(data);
-        print("here 1");
+
         LeadDDController leadDDController=Get.put(LeadDDController());
-        print("here 2");
+        CamNoteController camNoteController=Get.put(CamNoteController());
+
         getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
-        print("here 3");
+
         fullNameController.text=getLeadDetailModel.value!.data!.name!.toString();
-        print("here 4");
+        camNoteController.camFullNameController.text = getLeadDetailModel.value!.data!.name!.toString();
+
         dobController.text=getLeadDetailModel.value!.data!.dateOfBirth==null?"":Helper.birthdayFormat(getLeadDetailModel.value!.data!.dateOfBirth!.toString());
-        print("here 5");
+        camNoteController.camDobController.text = getLeadDetailModel.value!.data!.dateOfBirth == null
+            ? ""
+            : Helper.birthdayFormat(getLeadDetailModel.value!.data!.dateOfBirth!.toString());
+
         phoneController.text=getLeadDetailModel.value?.data?.mobileNumber??"";
-        print("here 6");
+        camNoteController.camPhoneController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
+
         selectedGender.value=getLeadDetailModel.value?.data?.gender??"";
-        print("here 7");
+        camNoteController.selectedGender.value = getLeadDetailModel.value?.data?.gender ?? "";
+
         loanAmtReqController.text=getLeadDetailModel.value?.data?.loanAmountRequested??"";
-        print("here 8");
+        camNoteController.camLoanAmtReqController.text = getLeadDetailModel.value?.data?.loanAmountRequested ?? "";
 
-        print("here 9");
+
         emailController.text=getLeadDetailModel.value?.data?.email??"";
-
-        print("email==>${ emailController.text.toString()}");
+        camNoteController.camEmailController.text = getLeadDetailModel.value?.data?.email ?? "";
 
         aadharController.text=getLeadDetailModel.value?.data?.adharCard??"";
-        print("here 10");
+        camNoteController.camAadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
+
         panController.text=getLeadDetailModel.value?.data?.panCard??"";
-        print("here 11");
+        camNoteController.camPanController.text = getLeadDetailModel.value?.data?.panCard ?? "";
 
         streetAddController.text=getLeadDetailModel.value?.data?.streetAddress??"";
-        print("here 12");
+        camNoteController.camStreetAddController.text = getLeadDetailModel.value?.data?.streetAddress ?? "";
+
         leadDDController.selectedState.value=getLeadDetailModel.value!.data!.state!.toString();
-        print("here 13");
+        camNoteController.camSelectedState.value = getLeadDetailModel.value!.data!.state!.toString();
+
         leadDDController.selectedDistrict.value=getLeadDetailModel.value!.data!.district!.toString();
-        print("here 14");
+        camNoteController.camSelectedDistrict.value = getLeadDetailModel.value!.data!.district!.toString();
+
         leadDDController.selectedCity.value=getLeadDetailModel.value!.data!.city!.toString();
-        print("here 15");
+        camNoteController.camSelectedCity.value = getLeadDetailModel.value!.data!.city!.toString();
+
         zipController.text=getLeadDetailModel.value?.data?.pincode??"";
-        print("here 16");
+        camNoteController.camZipController.text = getLeadDetailModel.value?.data?.pincode ?? "";
+
         nationalityController.text=getLeadDetailModel.value?.data?.nationality??"";
-        print("here 17");
+        camNoteController.camNationalityController.text = getLeadDetailModel.value?.data?.nationality ?? "";
+
         leadDDController.currEmpStatus.value=getLeadDetailModel.value?.data?.currentEmploymentStatus??"";
-        print("here 18");
+        camNoteController.camCurrEmpStatus.value = getLeadDetailModel.value?.data?.currentEmploymentStatus ?? "";
+
         employerNameController.text=getLeadDetailModel.value?.data?.employerName??"";
-        print("here 19");
+        camNoteController.camEmployerNameController.text = getLeadDetailModel.value?.data?.employerName ?? "";
+
         monthlyIncomeController.text=getLeadDetailModel.value?.data?.monthlyIncome??"";
-        print("here 20");
+        camNoteController.camMonthlyIncomeController.text = getLeadDetailModel.value?.data?.monthlyIncome ?? "";
+
         addSourceIncomeController.text=getLeadDetailModel.value?.data?.additionalSourceOfIncome??"";
-        print("here 21");
+
+
         leadDDController.selectedBank.value=getLeadDetailModel.value?.data?.prefferedBank??"";
-        print("here 22");
+        camNoteController.camSelectedBank.value = getLeadDetailModel.value?.data?.prefferedBank ?? "";
+
         branchLocController.text=getLeadDetailModel.value?.data?.branch??"";
-        print("here 23");
+        camNoteController.camBranchLocController.text = getLeadDetailModel.value?.data?.branch ?? "";
+
         leadDDController.selectedProdType.value=getLeadDetailModel.value?.data?.productType??"";
-        print("here 24");
+        camNoteController.camSelectedProdType.value=getLeadDetailModel.value?.data?.productType??"";
+
+
         connNameController.text=getLeadDetailModel.value?.data?.connectorName??"";
-        print("here 25");
+
         connMobController.text=getLeadDetailModel.value?.data?.connectorMobileNo??"";
-        print("here 26");
+
         connShareController.text=getLeadDetailModel.value?.data?.connectorPercentage.toString()??"";
-        print("here 27");
 
         createdByWhichEmployee.value=getLeadDetailModel.value?.data?.assignedEmployeeId.toString()??"";
-        print("here 28");
+
         isLoading(false);
 
       }else{

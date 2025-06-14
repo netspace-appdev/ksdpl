@@ -281,30 +281,6 @@ class CamNoteGroupScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRadioOption(String gender) {
-    return Row(
-      children: [
-        Radio<String>(
-          value: gender,
-          groupValue: camNoteController.selectedGender.value,
-          onChanged: (value) {
-            camNoteController.selectedGender.value=value;
-          },
-        ),
-        Text(gender),
-      ],
-    );
-  }
-
-
-
-  String _breakTwoWords(String title) {
-    final words = title.trim().split(' ');
-    if (words.length == 2) {
-      return '${words[0]}\n${words[1]}';
-    }
-    return title;
-  }
 
 }
 

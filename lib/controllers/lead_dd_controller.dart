@@ -320,6 +320,8 @@ class LeadDDController extends GetxController{
       if(data['success'] == true){
 
         getCityByDistrictIdModel.value= GetCityByDistrictIdModel.fromJson(data);
+        final List<city.Data> cities = getCityByDistrictIdModel.value?.data ?? [];
+        cityListCurr.value = List<city.Data>.from(cities);
 
 
         isLoading(false);

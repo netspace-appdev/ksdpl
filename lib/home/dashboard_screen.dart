@@ -189,7 +189,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Container(
                     width: MediaQuery.of(context).size.width*0.50,
                     child: Text(
-                      infoController.firstName.value.toString(),
+                      infoController.firstName.value=="null"?"User":infoController.firstName.value.toString(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style:  GoogleFonts.roboto(
@@ -204,33 +204,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           ),
-
-
-         /* Row(
-            mainAxisSize: MainAxisSize.min,
-
-            children: [
-
-              InkWell(
-                onTap: (){
-
-                },
-                child: Container(
-
-                  width: 40,
-                  height:40,
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  decoration:  const BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-
-                ),
-              )
-            ],
-          )*/
 
           InkWell(
             onTap: (){
@@ -487,7 +460,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 ///new code and experiment for lead count
   Widget offerContainer() {
     return Obx(() {
-      if (dashboardController.isLoading.value) {
+      if (dashboardController.isOfferLoading.value) {
         return Center(child: CustomSkelton.dashboardShimmerList(context));
       }
 

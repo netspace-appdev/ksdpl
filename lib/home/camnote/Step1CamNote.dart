@@ -57,7 +57,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.fullName,
                   isRequired: true,
-                  controller: addleadcontroller.fullNameController,
+                  // controller: addleadcontroller.fullNameController,
+                  controller: camNoteController.camFullNameController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterFullName,
                   validator:  ValidationHelper.validateName,
@@ -66,7 +67,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledPickerTextField(
                   label: AppText.dateOfBirth,
                   isRequired: true,
-                  controller: addleadcontroller.dobController,
+                  // controller: addleadcontroller.dobController,
+                  controller: camNoteController.camDobController,
                   inputType: TextInputType.name,
                   hintText: AppText.mmddyyyy,
                   validator: ValidationHelper.validateDob,
@@ -77,7 +79,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.phoneNumberNoStar,
                   isRequired: true,
-                  controller: addleadcontroller.phoneController,
+                  // controller: addleadcontroller.phoneController,
+                  controller: camNoteController.camPhoneController,
                   inputType: TextInputType.phone,
                   hintText: AppText.enterPhNumber,
                   validator: ValidationHelper.validatePhoneNumber,
@@ -124,7 +127,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.lar,
                   isRequired: true,
-                  controller: camNoteController.camLoanAmountRequestedController,
+                  controller: camNoteController.camLoanAmtReqController,
                   inputType: TextInputType.phone,
                   hintText: AppText.enterLar,
                   validator: ValidationHelper.validateLoanAmt,
@@ -133,7 +136,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.eml,
                   isRequired: false,
-                  controller: addleadcontroller.emailController,
+                  // controller: addleadcontroller.emailController,
+                  controller: camNoteController.camEmailController,
                   inputType: TextInputType.emailAddress,
                   hintText: AppText.enterEA,
                   validator: ValidationHelper.validateEmail,
@@ -142,7 +146,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.aadhar,
                   isRequired: false,
-                  controller: addleadcontroller.aadharController ,
+                  // controller: addleadcontroller.aadharController ,
+                  controller:camNoteController.camAadharController,
                   inputType: TextInputType.phone,
                   hintText: AppText.enterAadhar,
                   maxLength: 12,
@@ -154,7 +159,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.panNumber,
                   isRequired: false,
-                  controller: addleadcontroller.panController ,
+                  // controller: addleadcontroller.panController ,
+                  controller: camNoteController.camPanController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterPan,
                   validator: ValidationHelper.validatePanCard,
@@ -165,7 +171,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.streetAdd,
                   isRequired: false,
-                  controller: addleadcontroller.streetAddController ,
+                  // controller: addleadcontroller.streetAddController ,
+                  controller: camNoteController.camStreetAddController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterStreetAdd,
 
@@ -183,7 +190,7 @@ class Step1CamNote extends StatelessWidget {
                 SizedBox(height: 10),
 
 
-                Obx((){
+               /* Obx((){
                   if (leadDDController.isStateLoading.value) {
                     return  Center(child:CustomSkelton.leadShimmerList(context));
                   }
@@ -200,7 +207,33 @@ class Step1CamNote extends StatelessWidget {
                       leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
                     },
                   );
+                }),*/
+                Obx((){
+                  if (leadDDController.isStateLoading.value) {
+                    return  Center(child:CustomSkelton.leadShimmerList(context));
+                  }
+
+                  return CustomDropdown<state.Data>(
+                    items: leadDDController.getAllStateModel.value?.data ?? [],
+                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                    getName: (item) => item.stateName.toString(),
+                    selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                          (item) => item.id.toString() == camNoteController.camSelectedState.value,
+                    ),
+                    onChanged: (value) {
+                      camNoteController.camSelectedState.value =  value?.id?.toString();
+                      leadDDController.getDistrictByStateIdApi(stateId: camNoteController.camSelectedState.value);
+                    },
+                    onClear: (){
+                      camNoteController.camSelectedDistrict.value = null;
+                      leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
+
+                      camNoteController.camSelectedCity.value = null;
+                      leadDDController. cityListCurr.value.clear(); // reset dependent dropdown
+                    },
+                  );
                 }),
+
 
                 const SizedBox(height: 20),
 
@@ -216,7 +249,7 @@ class Step1CamNote extends StatelessWidget {
                 const SizedBox(height: 10),
 
 
-                Obx((){
+               /* Obx((){
                   if (leadDDController.isDistrictLoading.value) {
                     return  Center(child:CustomSkelton.leadShimmerList(context));
                   }
@@ -234,7 +267,33 @@ class Step1CamNote extends StatelessWidget {
                       leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
                     },
                   );
+                }),*/
+
+                Obx((){
+                  if (leadDDController.isDistrictLoading.value) {
+                    return  Center(child:CustomSkelton.leadShimmerList(context));
+                  }
+
+
+                  return CustomDropdown<dist.Data>(
+                    items: leadDDController.districtListCurr.value ?? [],
+                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                    getName: (item) => item.districtName.toString(),
+                    selectedValue: leadDDController.districtListCurr.value.firstWhereOrNull(
+                          (item) => item.id.toString() == camNoteController.camSelectedDistrict.value,
+                    ),
+                    onChanged: (value) {
+                      camNoteController.camSelectedDistrict.value =  value?.id?.toString();
+                      leadDDController.getCityByDistrictIdApi(districtId: camNoteController.camSelectedDistrict.value);
+                    },
+                    onClear: (){
+                      camNoteController.camSelectedDistrict.value = null;
+                      leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
+
+                    },
+                  );
                 }),
+
 
                 const SizedBox(height: 20),
 
@@ -251,7 +310,7 @@ class Step1CamNote extends StatelessWidget {
                 const SizedBox(height: 10),
 
 
-                Obx((){
+             /*   Obx((){
                   if (leadDDController.isCityLoading.value) {
                     return  Center(child:CustomSkelton.leadShimmerList(context));
                   }
@@ -268,6 +327,30 @@ class Step1CamNote extends StatelessWidget {
                       leadDDController.selectedCity.value =  value?.id?.toString();
                     },
                   );
+                }),*/
+
+                Obx((){
+                  if (leadDDController.isCityLoading.value) {
+                    return  Center(child:CustomSkelton.leadShimmerList(context));
+                  }
+
+
+                  return CustomDropdown<city.Data>(
+                    items: leadDDController.cityListCurr.value  ?? [],
+                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                    getName: (item) => item.cityName.toString(),
+                    selectedValue: leadDDController.cityListCurr.value.firstWhereOrNull(
+                          (item) => item.id.toString() == camNoteController.camSelectedCity.value,
+                    ),
+                    onChanged: (value) {
+                      camNoteController.camSelectedCity.value=  value?.id?.toString();
+                    },
+                    onClear: (){
+                      camNoteController.camSelectedCity.value = null;
+                      leadDDController.cityListCurr.value.clear(); // reset dependent dropdown
+
+                    },
+                  );
                 }),
 
                 const SizedBox(height: 20),
@@ -275,7 +358,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.zipCode,
                   isRequired: false,
-                  controller: addleadcontroller.zipController ,
+                  // controller: addleadcontroller.zipController ,
+                  controller: camNoteController.camZipController ,
                   inputType: TextInputType.number,
                   hintText: AppText.enterZipCode,
                   maxLength: 6,
@@ -284,7 +368,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.nationality,
                   isRequired: false,
-                  controller: addleadcontroller.nationalityController ,
+                  // controller: addleadcontroller.nationalityController ,
+                  controller: camNoteController.camNationalityController,
                   inputType: TextInputType.name,
                   hintText: AppText.nationality,
                   validator: ValidationHelper.validateNationality,
@@ -313,9 +398,10 @@ class Step1CamNote extends StatelessWidget {
                     items: leadDDController.currEmpStList,
                     getId: (item) => item,  // Adjust based on your model structure
                     getName: (item) => item,
-                    selectedValue: leadDDController.currEmpStatus.value,
+                     // selectedValue: leadDDController.currEmpStatus.value,
+                    selectedValue: camNoteController.camCurrEmpStatus.value,
                     onChanged: (value) {
-                      leadDDController.currEmpStatus.value =  value;
+                      camNoteController.camCurrEmpStatus.value =  value;
                     },
                   );
                 }),
@@ -325,7 +411,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.employerName,
                   isRequired: false,
-                  controller: addleadcontroller.employerNameController ,
+                  // controller: addleadcontroller.employerNameController ,
+                  controller: camNoteController.camEmployerNameController ,
                   inputType: TextInputType.name,
                   hintText: AppText.enterEmployerName,
                   validator: ValidationHelper.validateEmpName,
@@ -334,7 +421,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.monIncome,
                   isRequired: false,
-                  controller: addleadcontroller.monthlyIncomeController ,
+                  // controller: addleadcontroller.monthlyIncomeController ,
+                  controller: camNoteController.camMonthlyIncomeController ,
                   inputType: TextInputType.number,
                   hintText: AppText.enterMonIncome,
 
@@ -343,7 +431,8 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.brLoc,
                   isRequired: false,
-                  controller: addleadcontroller.branchLocController,
+                  // controller: addleadcontroller.branchLocController,
+                  controller: camNoteController.camBranchLocController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterBrLoc,
                   validator: ValidationHelper.validateBrLoc,
@@ -373,12 +462,12 @@ class Step1CamNote extends StatelessWidget {
                     getId: (item) => item.id.toString(),  // Adjust based on your model structure
                     getName: (item) => item.bankName.toString(),
                     selectedValue: leadDDController.getAllBankModel.value?.data?.firstWhereOrNull(
-                          (item) => item.id.toString() == leadDDController.selectedBank.value,
+                          (item) => item.id.toString() == camNoteController.camSelectedBank.value,
                     ),
                     onChanged: (value) {
 
-                      leadDDController.selectedBank.value =  value?.id?.toString();
-                      leadDDController.getProductListByBankIdApi(bankId: leadDDController.selectedBank.value);
+                      camNoteController.camSelectedBank.value =  value?.id?.toString();
+                      leadDDController.getProductListByBankIdApi(bankId: camNoteController.camSelectedBank.value);
                     },
                   );
                 }),
@@ -404,13 +493,13 @@ class Step1CamNote extends StatelessWidget {
                     getId: (item) => item.id.toString(),  // Adjust based on your model structure
                     getName: (item) => item.productCategoryName.toString(),
                     selectedValue: addProductController.productCategoryList.firstWhereOrNull(
-                          (item) => item.id == addleadcontroller.selectedProdSegment.value,
+                          (item) => item.id == camNoteController.camSelectedProdSegment.value,
                     ),
                     onChanged: (value) {
-                      addleadcontroller.selectedProdSegment.value =  value?.id;
+                      camNoteController.camSelectedProdSegment.value =  value?.id;
                     },
                     onClear: (){
-                      addleadcontroller.selectedProdSegment.value = 0;
+                      camNoteController.camSelectedProdSegment.value = 0;
                       addProductController.productCategoryList.clear(); // reset dependent dropdown
 
                     },
@@ -438,10 +527,10 @@ class Step1CamNote extends StatelessWidget {
                     getId: (item) => item.id.toString(),  // Adjust based on your model structure
                     getName: (item) => item.productName.toString(),
                     selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
-                          (item) => item.id.toString() == leadDDController.selectedProdType.value,
+                          (item) => item.id.toString() == camNoteController.camSelectedProdType.value,
                     ),
                     onChanged: (value) {
-                      leadDDController.selectedProdType.value =  value?.id?.toString();
+                      camNoteController.camSelectedProdType.value =  value?.id?.toString();
                     },
                   );
                 }),
@@ -460,7 +549,7 @@ class Step1CamNote extends StatelessWidget {
                 const SizedBox(height: 10),
 
 
-                Obx(()=>Column(
+               /* Obx(()=>Column(
                   children: addleadcontroller.optionsRelBank.asMap().entries.map((entry) {
                     int index = entry.key;
                     String option = entry.value;
@@ -471,6 +560,22 @@ class Step1CamNote extends StatelessWidget {
                       title: Text(option),
                       value: addleadcontroller.selectedIndexRelBank.value == index,
                       onChanged: (value) => addleadcontroller.selectCheckboxRelBank(index),
+                    );
+                  }).toList(),
+                )),
+*/
+
+                Obx(()=>Column(
+                  children: addleadcontroller.optionsRelBank.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    String option = entry.value;
+
+                    return CheckboxListTile(
+                      activeColor: AppColor.secondaryColor,
+
+                      title: Text(option),
+                      value: camNoteController.camSelectedIndexRelBank.value == index,
+                      onChanged: (value) => camNoteController.selectCheckboxRelBank(index),
                     );
                   }).toList(),
                 )),

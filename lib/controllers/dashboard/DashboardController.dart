@@ -23,7 +23,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/home_service.dart';
 class DashboardController extends GetxController {
-
+  var isOfferLoading = false.obs;
   var isLoading = false.obs;
   GetEmployeeModel? getEmployeeModel;
   var getCountOfLeadsModel = Rxn<GetCountOfLeadsModel>(); //
@@ -87,7 +87,7 @@ class DashboardController extends GetxController {
   }) async {
     try {
       isLoading(true);
-
+      isOfferLoading(true);
 
 
       var data = await DashboardApiService.getEmployeeByPhoneNumberApi(phone: phone,);
@@ -112,9 +112,10 @@ class DashboardController extends GetxController {
             deviceID: deviceId,
             generalToken: genToekn.toString()
         );
-        await todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
-        await getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
-        await getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
+         todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
+         getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
+         await getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
+
 
       }else if (data['StatusCode'] == "You are not authorized" || data['Message'] == "401") {
         // Clear user datd
@@ -135,9 +136,11 @@ class DashboardController extends GetxController {
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      isOfferLoading(false);
     } finally {
 
       isLoading(false);
+      isOfferLoading(false);
     }
   }
 
@@ -194,7 +197,7 @@ class DashboardController extends GetxController {
 
   }) async {
     try {
-      isLoading(true);
+      isOfferLoading(true);
 
 
       var data = await DashboardApiService.getDetailsCountOfLeadsForDashboardApi(
@@ -211,7 +214,7 @@ class DashboardController extends GetxController {
 
 
 
-        isLoading(false);
+        isOfferLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -226,10 +229,10 @@ class DashboardController extends GetxController {
 
 
       ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
+      isOfferLoading(false);
     } finally {
 
-      isLoading(false);
+      //isOfferLoading(false);
     }
   }
 

@@ -14,8 +14,12 @@ import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../custom_widgets/ImagePickerMixin.dart';
 import '../../models/camnote/AddAdSrcIncomModel.dart';
+import '../../models/camnote/AddBankerDetail.dart';
 import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
+import '../../models/camnote/GetBankerDetailModelForCheck.dart';
+import '../../models/camnote/GetBankerDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailsByFilterModel.dart';
+import '../../models/camnote/UpdateBankerDetailModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
 import '../../models/loan_application/GetLoanApplIdModel.dart';
@@ -30,12 +34,14 @@ import '../../models/product/GetDocumentProductIdModel.dart';
 import '../../models/product/GetProductListById.dart';
 import '../../models/product/AddProductDocumentModel.dart';
 import '../../services/loan_appl_service.dart';
+import '../../services/new_dd_service.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
 
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
+var getBankerDetailsByIdModel = Rxn<GetBankerDetailsByIdModel>(); //
 
 class CamNoteController extends GetxController with ImagePickerMixin{
 
@@ -45,12 +51,16 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var email="".obs;
   var isLoading = false.obs;
   var isBankerLoading = false.obs;
+  var isBankerSuperiorLoading = false.obs;
   var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
   var addAdSrcIncomModel = Rxn<AddAdSrcIncomModel>(); //
   var getAllPackageMasterModel = Rxn<pkg.GetAllPackageMasterModel>(); //
-  var selectedGender = Rxn<String>();
-  String get selectedGenderValue => selectedGender.value ?? "";
+  var updateBankerDetailModel = Rxn<UpdateBankerDetailModel>(); //
+  var addBankerDetail = Rxn<AddBankerDetail>(); //
+  var getBankerDetailModelForCheck = Rxn<GetBankerDetailModelForCheck>(); //
+
+
   var selectedGenderCoAP = Rxn<String>();
   var selectedGenderDependent = Rxn<String>();
   List<String> optionsPrevLoanAppl = ["Yes", "No"];
@@ -176,7 +186,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camNonEarningCustomerAgeController = TextEditingController();
   final TextEditingController camTotalFamilyIncomeController = TextEditingController();
   final TextEditingController camIncomeCanBeConsideredController = TextEditingController();
-  final TextEditingController camLoanAmountRequestedController = TextEditingController();
   final TextEditingController camLoanTenorRequestedController = TextEditingController();
   final TextEditingController camRateOfInterestController = TextEditingController();
   final TextEditingController camProposedEmiController = TextEditingController();
@@ -199,18 +208,63 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camReceivableDateController = TextEditingController();
   final TextEditingController camTransactionDetailsController = TextEditingController();
   final TextEditingController camRemarkController = TextEditingController();
+  final TextEditingController camLoanAmtReqController = TextEditingController();
+
+  var selectedGender = Rxn<String>();
+  ///cam 1 form
+  final TextEditingController camFullNameController = TextEditingController();
+  final TextEditingController camDobController = TextEditingController();
+  final TextEditingController camPhoneController = TextEditingController();
+  final TextEditingController camGenderController = TextEditingController();
+  final TextEditingController camEmailController = TextEditingController();
+  final TextEditingController camAadharController = TextEditingController();
+  final TextEditingController camPanController = TextEditingController();
+  final TextEditingController camStreetAddController = TextEditingController();
+  final TextEditingController camZipController = TextEditingController();
+  final TextEditingController camNationalityController = TextEditingController();
+  final TextEditingController camCurrEmpStController = TextEditingController();
+  final TextEditingController camEmployerNameController = TextEditingController();
+  final TextEditingController camMonthlyIncomeController = TextEditingController();
+  final TextEditingController camAddSourceIncomeController = TextEditingController();
+  final TextEditingController camBranchLocController = TextEditingController();
+  var camSelectedState = Rxn<String>();
+  var camSelectedDistrict = Rxn<String>();
+  var camSelectedCity = Rxn<String>();
+  var camCurrEmpStatus = Rxn<String>();
+  var camSelectedBank = Rxn<String>();
+  var camSelectedProdSegment = Rxn<int>();
+  var camSelectedProdType = Rxn<String>();
+  var camSelectedIndexRelBank = (-1).obs;
+  ///end
+
 
   final Map<String, RxList<File>> imageMap = {};
   var isPackageLoading = false.obs;
   var selectedPackage = Rxn<int>();
-  var selectedBank = Rxn<int>();
   var selectedBankBranch = Rxn<int>();
   var selectedBankerBranch = Rxn<int>();
+
+
+  void clearBankerDetails(){
+    selectedBankBranch.value= null;
+    selectedBankerBranch.value= null;
+    camBankerMobileNoController.clear();
+    camBankerNameController.clear();
+    camBankerWhatsappController.clear();
+    camBankerEmailController.clear();
+    camBankerSuperiorNameController.clear();
+    camBankerSuperiorMobController.clear();
+    camBankerSuperiorWhatsappController.clear();
+    camBankerSuperiorEmailController.clear();
+  }
 
   void clearImages(String key) {
     imageMap[key]?.clear();
   }
+  void selectCheckboxRelBank(int index) {
 
+    camSelectedIndexRelBank.value = index;
+  }
   RxList<pkg.Data> packageList = <pkg.Data>[].obs;
   var isLoadingPackage = false.obs;
 
@@ -234,16 +288,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   void jumpToStep(int step) {
-    // We only mark previous step completed if jumping forward
-    /*  if (step > currentStep.value) {
-      stepCompleted[currentStep.value] = true;
-    }*/
+
     currentStep.value = step;
     print("currentStep.value===>${currentStep.value.toString()}");
     if(currentStep.value==2){
-      getProductDetailsByFilterApi(
-          cibil: camCibilController.text.trim().toString()
-      );
+      forBankDetailSubmit();
     }
     scrollToStep(step);
   }
@@ -280,6 +329,20 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   void forBankDetailSubmit(){
     getProductDetailsByFilterApi(
         cibil: camCibilController.text.trim().toString(),
+        segmentVertical: camSelectedProdSegment.value.toString(),
+        customerCategory: "",
+        collateralSecurityCategory: "",
+        collateralSecurityExcluded: "",
+        incomeTypes:selectedCamIncomeTypeList.value,
+        ageEarningApplicants: camEarningCustomerAgeController.text,
+        ageNonEarningCoApplicant:camEarningCustomerAgeController.text,
+        applicantMonthlySalary:camTotalFamilyIncomeController.text,
+        loanAmount:camLoanAmtReqController.text.trim().toString(),
+        tenor: camLoanTenorRequestedController.text.trim().toString(),
+        roi:camRateOfInterestController.text.trim().toString(),
+        maximumTenorEligibilityCriteria:"",
+        customerAddress:camStreetAddController.text.trim().toString(),
+
     );
   }
 
@@ -324,7 +387,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
     // Clear Rx variables
-    selectedGender.value = null;
+
     selectedGenderCoAP.value = null;
     selectedGenderDependent.value = null;
     selectedPrevLoanAppl.value = -1;
@@ -405,7 +468,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     selectedCustomerCategories.clear();
     selectedKsdplProduct.value = null;
     selectedProductCategory.value = null;
-    selectedBank.value=null;
+
     selectedCollSecCat.clear();
     selectedIncomeType.clear();
     selectedNegProfile.clear();
@@ -422,6 +485,19 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   void  getProductDetailsByFilterApi({
     String? cibil,
+    String? segmentVertical,
+    String? customerCategory,
+    String? collateralSecurityCategory,
+    String? collateralSecurityExcluded,
+    String? incomeTypes,
+    String? ageEarningApplicants,
+    String? ageNonEarningCoApplicant,
+    String? applicantMonthlySalary,
+    String? loanAmount,
+    String? tenor,
+    String? roi,
+    String? maximumTenorEligibilityCriteria,
+    String? customerAddress,
   }) async {
     try {
       isBankerLoading(true);
@@ -429,6 +505,19 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       var data = await CamNoteService.getProductDetailsByFilterApi(
         cibil: cibil,
+        segmentVertical:segmentVertical,
+        customerCategory: customerCategory,
+        collateralSecurityCategory:collateralSecurityCategory,
+        collateralSecurityExcluded:collateralSecurityExcluded,
+        incomeTypes:incomeTypes,
+        ageEarningApplicants:ageEarningApplicants,
+        ageNonEarningCoApplicant:ageNonEarningCoApplicant,
+        applicantMonthlySalary:applicantMonthlySalary,
+        loanAmount:loanAmount,
+        tenor:tenor,
+        roi:roi,
+        maximumTenorEligibilityCriteria:maximumTenorEligibilityCriteria,
+        customerAddress:customerAddress,
       );
 
 
@@ -545,6 +634,251 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     } finally {
 
       isBankerLoading(false);
+    }
+  }
+
+
+  Future<void>  getBankerDetailsByIdApi({
+    String? bankerId,
+  }) async {
+    try {
+
+      isBankerSuperiorLoading(true);
+
+
+      var data = await NewDDService.getBankerDetailsByIdApi(
+          bankerId: bankerId
+      );
+
+
+      if(data['success'] == true){
+
+        getBankerDetailsByIdModel.value= GetBankerDetailsByIdModel.fromJson(data);
+
+        camBankerMobileNoController.text=getBankerDetailsByIdModel.value!.data!.bankersMobileNumber.toString();
+        camBankerNameController.text=getBankerDetailsByIdModel.value!.data!.bankersName.toString();
+        camBankerWhatsappController.text=getBankerDetailsByIdModel.value!.data!.bankersWhatsAppNumber.toString();
+        camBankerEmailController.text=getBankerDetailsByIdModel.value!.data!.bankersEmailId.toString();
+        camBankerSuperiorNameController.text=getBankerDetailsByIdModel.value!.data!.superiorName.toString();
+        camBankerSuperiorMobController.text=getBankerDetailsByIdModel.value!.data!.superiorMobile.toString();
+        camBankerSuperiorWhatsappController.text=getBankerDetailsByIdModel.value!.data!.superiorWhatsApp.toString();
+        camBankerSuperiorEmailController.text=getBankerDetailsByIdModel.value!.data!.superiorEmail.toString();
+
+        isBankerSuperiorLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getBankerDetailsByIdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getBankerDetailsByIdModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isBankerSuperiorLoading(false);
+    } finally {
+
+
+      isBankerSuperiorLoading(false);
+    }
+  }
+
+
+  Future<void>  updateBankerDetailApi({
+    String? bankId,
+    String? branchId,
+    String? bankersName,
+    String? bankersMobileNumber,
+    String? bankersWhatsAppNumber,
+    String? bankersEmailId,
+    String? city,
+    String? superiorName,
+    String? superiorMobile,
+    String? superiorWhatsApp,
+    String? superiorEmail,
+    String? createdBy,
+  }) async {
+    try {
+
+      isLoading(true);
+
+
+      var data = await CamNoteService.updateBankerDetailApi(
+        bankId:bankId,
+        branchId:branchId,
+        bankersName:bankersName,
+        bankersMobileNumber:bankersMobileNumber,
+        bankersWhatsAppNumber:bankersWhatsAppNumber,
+        bankersEmailId:bankersEmailId,
+        city:city,
+        superiorName:superiorName,
+        superiorMobile:superiorMobile,
+        superiorWhatsApp:superiorWhatsApp,
+        superiorEmail:superiorEmail,
+        createdBy:createdBy,
+      );
+
+
+      if(data['success'] == true){
+
+        updateBankerDetailModel.value= UpdateBankerDetailModel.fromJson(data);
+
+        /*camBankerMobileNoController.text=getBankerDetailsByIdModel.value!.data!.bankersMobileNumber.toString();
+        camBankerNameController.text=getBankerDetailsByIdModel.value!.data!.bankersName.toString();
+        camBankerWhatsappController.text=getBankerDetailsByIdModel.value!.data!.bankersWhatsAppNumber.toString();
+        camBankerEmailController.text=getBankerDetailsByIdModel.value!.data!.bankersEmailId.toString();
+        camBankerSuperiorNameController.text=getBankerDetailsByIdModel.value!.data!.superiorName.toString();
+        camBankerSuperiorMobController.text=getBankerDetailsByIdModel.value!.data!.superiorMobile.toString();
+        camBankerSuperiorWhatsappController.text=getBankerDetailsByIdModel.value!.data!.superiorWhatsApp.toString();
+        camBankerSuperiorEmailController.text=getBankerDetailsByIdModel.value!.data!.superiorEmail.toString();
+*/
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getBankerDetailsByIdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getBankerDetailsByIdModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+    } finally {
+
+
+      isLoading(false);
+    }
+  }
+
+
+  Future<void>  addBankerDetailApi({
+    String? bankId,
+    String? branchId,
+    String? bankersName,
+    String? bankersMobileNumber,
+    String? bankersWhatsAppNumber,
+    String? bankersEmailId,
+    String? city,
+    String? superiorName,
+    String? superiorMobile,
+    String? superiorWhatsApp,
+    String? superiorEmail,
+    String? createdBy,
+  }) async {
+    try {
+
+      isLoading(true);
+
+
+      var data = await CamNoteService.addBankerDetailApi(
+        bankId:bankId,
+        branchId:branchId,
+        bankersName:bankersName,
+        bankersMobileNumber:bankersMobileNumber,
+        bankersWhatsAppNumber:bankersWhatsAppNumber,
+        bankersEmailId:bankersEmailId,
+        city:city,
+        superiorName:superiorName,
+        superiorMobile:superiorMobile,
+        superiorWhatsApp:superiorWhatsApp,
+        superiorEmail:superiorEmail,
+        createdBy:createdBy,
+      );
+
+
+      if(data['success'] == true){
+
+        addBankerDetail.value= AddBankerDetail.fromJson(data);
+
+        /*camBankerMobileNoController.text=getBankerDetailsByIdModel.value!.data!.bankersMobileNumber.toString();
+        camBankerNameController.text=getBankerDetailsByIdModel.value!.data!.bankersName.toString();
+        camBankerWhatsappController.text=getBankerDetailsByIdModel.value!.data!.bankersWhatsAppNumber.toString();
+        camBankerEmailController.text=getBankerDetailsByIdModel.value!.data!.bankersEmailId.toString();
+        camBankerSuperiorNameController.text=getBankerDetailsByIdModel.value!.data!.superiorName.toString();
+        camBankerSuperiorMobController.text=getBankerDetailsByIdModel.value!.data!.superiorMobile.toString();
+        camBankerSuperiorWhatsappController.text=getBankerDetailsByIdModel.value!.data!.superiorWhatsApp.toString();
+        camBankerSuperiorEmailController.text=getBankerDetailsByIdModel.value!.data!.superiorEmail.toString();
+*/
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        addBankerDetail.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getBankerDetailsByIdModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+    } finally {
+
+
+      isLoading(false);
+    }
+  }
+
+
+  Future<void>  getBankerDetaillApi({
+    required String phoneNo,
+  }) async {
+    try {
+
+      isLoading(true);
+
+
+      var data = await CamNoteService.getBankerDetaillApi(
+        phoneNo:phoneNo,
+      );
+
+
+      if(data['success'] == true){
+
+        getBankerDetailModelForCheck.value= GetBankerDetailModelForCheck.fromJson(data);
+
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        updateBankerDetailApi(
+
+        );
+
+       // getBankerDetailModelForCheck.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getBankerDetailModelForCheck: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+    } finally {
+
+
+      isLoading(false);
     }
   }
 }

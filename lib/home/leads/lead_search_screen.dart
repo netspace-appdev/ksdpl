@@ -27,11 +27,14 @@ import '../../../custom_widgets/CustomDropdown.dart';
 import '../../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../../custom_widgets/CustomLabeledTextField.dart';
 import '../../common/storage_service.dart';
+import '../../controllers/camnote/camnote_controller.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/open_poll_filter_controller.dart';
+import '../../controllers/product/add_product_controller.dart';
+import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
@@ -824,7 +827,7 @@ class LeadSearchScreen extends StatelessWidget {
                             uln: lead.uniqueLeadNumber.toString(),
                           ),
 
-                          _buildTextButton(
+                          /*_buildTextButton(
                             label:AppText.addFollowUp,
                             context: context,
                             color: Colors.purple,
@@ -833,7 +836,7 @@ class LeadSearchScreen extends StatelessWidget {
                             label_code: "add_feedback",
                             currentLeadStage: lead.leadStage.toString(),
                             uln: lead.uniqueLeadNumber.toString(),
-                          ),
+                          ),*/
 
 
                       ],
@@ -842,7 +845,38 @@ class LeadSearchScreen extends StatelessWidget {
 
                     SizedBox(height: 10),
 
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
 
+                        if(lead.leadStage.toString()=="4" )
+                          _buildTextButton(
+                              label:AppText.fillLeadForm,
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.person_outline_outlined,
+                              leadId: lead.id.toString(),
+                              label_code: "add_lead_form",
+                              currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
+                          ),
+                        if(lead.leadStage.toString()=="4" || lead.leadStage.toString()=="6" ||lead.leadStage.toString()=="0" ||
+                            lead.leadStage.toString()=="5" || lead.leadStage.toString()=="7"
+                        )...[
+                          _buildTextButton(
+                              label:AppText.addFollowUp,
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.call,
+                              leadId: lead.id.toString(),
+                              label_code: "add_feedback",
+                              currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
+                          ),
+
+                        ],
+                      ],
+                    ),
 
                   ],
                 ),
@@ -907,7 +941,18 @@ class LeadSearchScreen extends StatelessWidget {
           addLeadController.getLeadId.value=leadId;
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
 
-          Get.toNamed("/addLeadScreen",);
+          AddProductController addProductController = Get.put(AddProductController());
+          addProductController.getAllProductCategoryApi();
+
+          ViewProductController viewProductController=Get.put(ViewProductController());
+          viewProductController.getAllProductListApi();
+          addLeadController.clearControllers();
+
+          CamNoteController camNoteController=Get.put(CamNoteController());
+          camNoteController.getAllPackageMasterApi();
+          camNoteController.currentStep.value=0;
+
+          Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {
 

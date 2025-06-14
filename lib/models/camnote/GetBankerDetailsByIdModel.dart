@@ -1,21 +1,17 @@
-class GetBankerDetailsByBranchIdModel {
+
+class GetBankerDetailsByIdModel {
   String? status;
   bool? success;
-  List<Data>? data;
+  Data? data;
   String? message;
 
-  GetBankerDetailsByBranchIdModel(
+  GetBankerDetailsByIdModel(
       {this.status, this.success, this.data, this.message});
 
-  GetBankerDetailsByBranchIdModel.fromJson(Map<String, dynamic> json) {
+  GetBankerDetailsByIdModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     success = json['success'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     message = json['message'];
   }
 
@@ -24,7 +20,7 @@ class GetBankerDetailsByBranchIdModel {
     data['status'] = this.status;
     data['success'] = this.success;
     if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.toJson();
     }
     data['message'] = this.message;
     return data;
@@ -34,76 +30,72 @@ class GetBankerDetailsByBranchIdModel {
 class Data {
   int? id;
   int? bankId;
+  String? bankName;
   int? branchId;
+  String? branchName;
   String? bankersName;
   String? bankersMobileNumber;
   String? bankersWhatsAppNumber;
   String? bankersEmailId;
   int? city;
+  Null? cityName;
   String? superiorName;
   String? superiorMobile;
   String? superiorWhatsApp;
   String? superiorEmail;
-  String? createdBy;
-  String? createdDate;
-  String? updatedBy;
-  String? updatedDate;
 
   Data(
       {this.id,
         this.bankId,
+        this.bankName,
         this.branchId,
+        this.branchName,
         this.bankersName,
         this.bankersMobileNumber,
         this.bankersWhatsAppNumber,
         this.bankersEmailId,
         this.city,
+        this.cityName,
         this.superiorName,
         this.superiorMobile,
         this.superiorWhatsApp,
-        this.superiorEmail,
-        this.createdBy,
-        this.createdDate,
-        this.updatedBy,
-        this.updatedDate});
+        this.superiorEmail});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     bankId = json['bankId'];
+    bankName = json['bankName'];
     branchId = json['branchId'];
+    branchName = json['branchName'];
     bankersName = json['bankersName'];
     bankersMobileNumber = json['bankersMobileNumber'];
     bankersWhatsAppNumber = json['bankersWhatsAppNumber'];
     bankersEmailId = json['bankersEmailId'];
     city = json['city'];
+    cityName = json['cityName'];
     superiorName = json['superiorName'];
     superiorMobile = json['superiorMobile'];
     superiorWhatsApp = json['superiorWhatsApp'];
     superiorEmail = json['superiorEmail'];
-    createdBy = json['createdBy'];
-    createdDate = json['createdDate'];
-    updatedBy = json['updatedBy'];
-    updatedDate = json['updatedDate'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['bankId'] = this.bankId;
+    data['bankName'] = this.bankName;
     data['branchId'] = this.branchId;
+    data['branchName'] = this.branchName;
     data['bankersName'] = this.bankersName;
     data['bankersMobileNumber'] = this.bankersMobileNumber;
     data['bankersWhatsAppNumber'] = this.bankersWhatsAppNumber;
     data['bankersEmailId'] = this.bankersEmailId;
     data['city'] = this.city;
+    data['cityName'] = this.cityName;
     data['superiorName'] = this.superiorName;
     data['superiorMobile'] = this.superiorMobile;
     data['superiorWhatsApp'] = this.superiorWhatsApp;
     data['superiorEmail'] = this.superiorEmail;
-    data['createdBy'] = this.createdBy;
-    data['createdDate'] = this.createdDate;
-    data['updatedBy'] = this.updatedBy;
-    data['updatedDate'] = this.updatedDate;
     return data;
   }
 }

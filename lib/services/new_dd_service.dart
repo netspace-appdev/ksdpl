@@ -13,6 +13,7 @@ class NewDDService {
 
   static const String getBranchListOfDistrictByZipAndBank = BaseUrl.baseUrl + 'Branch/GetBranchListOfDistrictByZipAndBank';
   static const String getBankerDetailsByBranchId = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetailsByBranchId';
+  static const String getBankerDetailsById = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetailsById';
 
 
 
@@ -71,10 +72,8 @@ class NewDDService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-
-      print("request===>==>getBankerDetailsByBranchIdApi===>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getBankerDetailsByBranchIdApi==>${response.body.toString()}");
+      Helper.ApiReq(getBankerDetailsByBranchId, request.fields);
+      Helper.ApiRes(getBankerDetailsByBranchId, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -86,6 +85,42 @@ class NewDDService {
       throw Exception('Error while submitting: $e');
     }
   }
+
+
+
+  static Future<Map<String, dynamic>> getBankerDetailsByIdApi({
+    String? bankerId,
+
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getBankerDetailsById),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', bankerId,fallback: "0");
+
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(getBankerDetailsById, request.fields);
+      Helper.ApiRes(getBankerDetailsById, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
 
   static void printInChunks(String text, {int chunkSize = 2048}) {
     final pattern = RegExp('.{1,$chunkSize}', dotAll: true);

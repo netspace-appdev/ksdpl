@@ -100,6 +100,10 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
             onPressed: () {
               LeadDDController leadDDController = Get.find();
               leadDDController.selectedStage.value = "0";
+              leadDDController.selectedState.value = "0";
+              leadDDController.selectedState.value = null;
+              leadDDController.selectedDistrict.value = null;
+              leadDDController.selectedCity.value = null;
               LeadListController leadListController = Get.find();
               leadListController.filteredGetAllLeadsModel.value=null;
               Get.toNamed("/leadSearchScreen");

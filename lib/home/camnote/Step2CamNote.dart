@@ -351,7 +351,7 @@ class Step2CamNote extends StatelessWidget {
 
                       CustomLabeledTextField(
                         label: AppText.loanAmountRequested,
-                        controller: camNoteController.camLoanAmountRequestedController,
+                        controller: camNoteController.camLoanAmtReqController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterConsideredIncome,
                         isInputEnabled: false,

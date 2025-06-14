@@ -1,17 +1,19 @@
 import 'package:get/get.dart';
 import 'package:ksdpl/services/new_dd_service.dart';
 import '../../common/helper.dart';
-import '../models/GetBranchDistrictByZipBankModel.dart';
+import '../models/GetBranchDistrictByZipBankModel.dart' as branchList;
 import '../models/camnote/GetBankerDetailsByBranchIdModel.dart' as banker;
+import '../models/camnote/GetBankerDetailsByIdModel.dart';
 
 class NewDDController extends GetxController{
 
   var isLoading = false.obs;
-  var getBranchDistrictByZipBankModel = Rxn<GetBranchDistrictByZipBankModel>(); //
+  var getBranchDistrictByZipBankModel = Rxn<branchList.GetBranchDistrictByZipBankModel>(); //
   var getBankerDetailsByBranchIdModel = Rxn<banker.GetBankerDetailsByBranchIdModel>(); //
+
   var isBranchLoading = false.obs;
   var isBankerLoading = false.obs;
-  RxList<Data> branchByZipList = <Data>[].obs;
+  RxList<branchList.Data> branchByZipList = <branchList.Data>[].obs;
   RxList<banker.Data> bankerByBranchList = <banker.Data>[].obs;
 
   Future<void>  getBranchListOfDistrictByZipAndBankApi({
@@ -31,11 +33,11 @@ class NewDDController extends GetxController{
 
       if(data['success'] == true){
 
-        getBranchDistrictByZipBankModel.value= GetBranchDistrictByZipBankModel.fromJson(data);
+        getBranchDistrictByZipBankModel.value= branchList.GetBranchDistrictByZipBankModel.fromJson(data);
 
-        final List<Data> allBr = getBranchDistrictByZipBankModel.value?.data ?? [];
+        final List<branchList.Data> allBr = getBranchDistrictByZipBankModel.value?.data ?? [];
 
-        final List<Data> branches = allBr.where((cat) => cat.active == true).toList();
+        final List<branchList.Data> branches = allBr.where((cat) => cat.active == true).toList();
 
         branchByZipList.value = branches;
 
@@ -111,5 +113,8 @@ class NewDDController extends GetxController{
       isBankerLoading(false);
     }
   }
+
+
+
 
 }

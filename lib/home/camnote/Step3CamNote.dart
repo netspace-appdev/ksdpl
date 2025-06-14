@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ksdpl/common/validation_helper.dart';
 import 'package:ksdpl/custom_widgets/custom_photo_picker_widget.dart';
 import 'package:lottie/lottie.dart';
 import '../../common/helper.dart';
@@ -18,6 +19,7 @@ import 'package:ksdpl/models/camnote/GetBankerDetailsByBranchIdModel.dart' as ba
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
 
 class Step3CamNote extends StatelessWidget {
 
@@ -26,7 +28,7 @@ class Step3CamNote extends StatelessWidget {
   final AddProductController addProductController =Get.find();
   final ViewProductController viewProductController = Get.put(ViewProductController());
   NewDDController newDDController=Get.put(NewDDController());
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
 
@@ -262,11 +264,18 @@ class Step3CamNote extends StatelessWidget {
     return GestureDetector(
       onTap: () {
 
-        Addleadcontroller adLeaController = Get.find();
+       // Addleadcontroller adLeaController = Get.find();
 
+        camNoteController.clearBankerDetails();
 
-        newDDController.getBranchListOfDistrictByZipAndBankApi(bankId: bankId, zipcode:  adLeaController.zipController.text);
-        showCustomBottomSheet(context);
+        if(camNoteController.camZipController.text.isEmpty){
+          SnackbarHelper.showSnackbar(title: "Incomplete Detail", message: AppText.enterZipcode);
+        }else{
+          newDDController.getBranchListOfDistrictByZipAndBankApi(bankId: bankId, zipcode:  camNoteController.camZipController.text);
+
+          showCustomBottomSheet(context);
+        }
+
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -306,185 +315,6 @@ class Step3CamNote extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-     /* builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 24,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-
-                CustomTextLabel(
-                  label: AppText.branch,
-                  isRequired: true,
-                ),
-
-                const SizedBox(height: 10),
-
-
-                Obx((){
-                  if (newDDController.isBranchLoading.value) {
-                    return  Center(child:CustomSkelton.leadShimmerList(context));
-                  }
-
-
-                  return CustomDropdown<branchByZip.Data>(
-                    items: newDDController.branchByZipList ?? [],
-                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                    getName: (item) => item.branchName.toString(),
-                    selectedValue:  newDDController.branchByZipList.firstWhereOrNull(
-                          (item) => item.id== camNoteController.selectedBankBranch.value,
-                    ),
-                    onChanged: (value) {
-                      camNoteController.selectedBankBranch.value =  value?.id;
-                      newDDController.getBankerDetailsByBranchIdApi(branchId: camNoteController.selectedBankBranch.value.toString());
-                    },
-                    onClear: (){
-                      camNoteController.selectedBankBranch.value = 0;
-                      newDDController.branchByZipList.clear(); // reset dependent dropdown
-                    },
-                  );
-                }),
-                const SizedBox(height: 20),
-
-                CustomTextLabel(
-                  label: AppText.employee,
-                  isRequired: true,
-                ),
-
-                const SizedBox(height: 10),
-
-
-                Obx((){
-                  if (newDDController.isBankerLoading.value) {
-                    return  Center(child:CustomSkelton.leadShimmerList(context));
-                  }
-
-
-                  return CustomDropdown<banker.Data>(
-                    items: newDDController.bankerByBranchList ?? [],
-                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                    getName: (item) => item.bankersName.toString(),
-                    selectedValue:  newDDController.bankerByBranchList.firstWhereOrNull(
-                          (item) => item.id== camNoteController.selectedBankerBranch.value,
-                    ),
-                    onChanged: (value) {
-                      camNoteController.selectedBankerBranch.value =  value?.id;
-                    },
-                    onClear: (){
-                      camNoteController.selectedBankerBranch.value = 0;
-                      newDDController.bankerByBranchList.clear(); // reset dependent dropdown
-                    },
-                  );
-                }),
-
-                const SizedBox(
-                  height: 20,
-                ),
-
-                CustomLabeledTextField(
-                  label: AppText.bankerMobile,
-
-                  controller: camNoteController.camBankerMobileNoController,
-                  inputType: TextInputType.number,
-                  hintText: AppText.enterBankerMobile,
-                  isRequired: true,
-                ),
-
-                CustomLabeledTextField(
-                  label: AppText.bankerName,
-
-                  controller: camNoteController.camBankerNameController,
-                  inputType: TextInputType.name,
-                  hintText: AppText.enterBankerName,
-                  isRequired: true,
-                ),
-
-                CustomLabeledTextField(
-                  label: AppText.bankerWhatsapp,
-
-                  controller: camNoteController.camBankerWhatsappController,
-                  inputType: TextInputType.number,
-                  hintText: AppText.enterBankerWhatsapp,
-                  isRequired: true,
-                ),
-
-                CustomLabeledTextField(
-                  label: AppText.bankerEmail,
-
-                  controller: camNoteController.camBankerEmailController,
-                  inputType: TextInputType.emailAddress,
-                  hintText: AppText.enterBankerEmail,
-                  isRequired: true,
-                ),
-                CustomLabeledTextField(
-                  label: AppText.superiorName,
-
-                  controller: camNoteController.camBankerSuperiorNameController,
-                  inputType: TextInputType.name,
-                  hintText: AppText.enterSuperiorName,
-                  isRequired: true,
-                ),
-                CustomLabeledTextField(
-                  label: AppText.superiorMobile,
-
-                  controller: camNoteController.camBankerSuperiorEmailController,
-                  inputType: TextInputType.name,
-                  hintText: AppText.enterSuperiorName,
-                  isRequired: true,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Obx((){
-                  if(camNoteController.isLoading.value){
-                    return const Align(
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: CircularProgressIndicator(
-                          color: AppColor.primaryColor,
-                        ),
-                      ),
-                    );
-                  }
-                  return SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.secondaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: (){},
-                      child: const Text(
-                        AppText.submit,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
-        );
-      },*/
-
         builder: (context) {
           return Padding(
             padding: EdgeInsets.only(
@@ -500,111 +330,149 @@ class Step3CamNote extends StatelessWidget {
                   // Scrollable Form Fields
                   Expanded(
                     child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
 
-                          const SizedBox(height: 10),
-                          CustomTextLabel(
-                            label: AppText.branch,
-                            isRequired: true,
-                          ),
-                          const SizedBox(height: 10),
+                            const SizedBox(height: 10),
+                            CustomTextLabel(
+                              label: AppText.branch,
+                              isRequired: true,
+                            ),
+                            const SizedBox(height: 10),
 
-                          Obx(() {
-                            if (newDDController.isBranchLoading.value) {
-                              return Center(child: CustomSkelton.leadShimmerList(context));
-                            }
+                            Obx(() {
+                              if (newDDController.isBranchLoading.value) {
+                                return Center(child: CustomSkelton.leadShimmerList(context));
+                              }
 
-                            return CustomDropdown<branchByZip.Data>(
-                              items: newDDController.branchByZipList ?? [],
-                              getId: (item) => item.id.toString(),
-                              getName: (item) => item.branchName.toString(),
-                              selectedValue: newDDController.branchByZipList.firstWhereOrNull(
-                                      (item) => item.id == camNoteController.selectedBankBranch.value),
-                              onChanged: (value) {
-                                camNoteController.selectedBankBranch.value = value?.id;
-                                newDDController.getBankerDetailsByBranchIdApi(
-                                    branchId: camNoteController.selectedBankBranch.value.toString());
-                              },
-                              onClear: () {
-                                camNoteController.selectedBankBranch.value = 0;
-                                newDDController.branchByZipList.clear();
-                              },
-                            );
-                          }),
+                              return CustomDropdown<branchByZip.Data>(
+                                items: newDDController.branchByZipList ?? [],
+                                getId: (item) => item.id.toString(),
+                                getName: (item) => item.branchName.toString(),
+                                selectedValue: newDDController.branchByZipList.firstWhereOrNull(
+                                        (item) => item.id == camNoteController.selectedBankBranch.value),
+                                onChanged: (value) {
+                                  camNoteController.selectedBankBranch.value = value?.id;
+                                  newDDController.getBankerDetailsByBranchIdApi(
+                                      branchId: camNoteController.selectedBankBranch.value.toString());
+                                },
+                                onClear: () {
+                                  camNoteController.selectedBankBranch.value = 0;
+                                  newDDController.bankerByBranchList.clear();
+                                  camNoteController.clearBankerDetails();
+                                },
+                              );
+                            }),
 
-                          const SizedBox(height: 20),
-                          CustomTextLabel(label: AppText.employee, isRequired: true),
-                          const SizedBox(height: 10),
+                            const SizedBox(height: 20),
 
-                          Obx(() {
-                            if (newDDController.isBankerLoading.value) {
-                              return Center(child: CustomSkelton.leadShimmerList(context));
-                            }
+                            CustomTextLabel(
+                              label: AppText.employee,
+                            ),
 
-                            return CustomDropdown<banker.Data>(
-                              items: newDDController.bankerByBranchList ?? [],
-                              getId: (item) => item.id.toString(),
-                              getName: (item) => item.bankersName.toString(),
-                              selectedValue: newDDController.bankerByBranchList.firstWhereOrNull(
-                                      (item) => item.id == camNoteController.selectedBankerBranch.value),
-                              onChanged: (value) {
-                                camNoteController.selectedBankerBranch.value = value?.id;
-                              },
-                              onClear: () {
-                                camNoteController.selectedBankerBranch.value = 0;
-                                newDDController.bankerByBranchList.clear();
-                              },
-                            );
-                          }),
+                            const SizedBox(height: 10),
 
-                          const SizedBox(height: 20),
-                          CustomLabeledTextField(
-                            label: AppText.bankerMobile,
-                            controller: camNoteController.camBankerMobileNoController,
-                            inputType: TextInputType.number,
-                            hintText: AppText.enterBankerMobile,
-                            isRequired: true,
-                          ),
-                          CustomLabeledTextField(
-                            label: AppText.bankerName,
-                            controller: camNoteController.camBankerNameController,
-                            inputType: TextInputType.name,
-                            hintText: AppText.enterBankerName,
-                            isRequired: true,
-                          ),
-                          CustomLabeledTextField(
-                            label: AppText.bankerWhatsapp,
-                            controller: camNoteController.camBankerWhatsappController,
-                            inputType: TextInputType.number,
-                            hintText: AppText.enterBankerWhatsapp,
-                            isRequired: true,
-                          ),
-                          CustomLabeledTextField(
-                            label: AppText.bankerEmail,
-                            controller: camNoteController.camBankerEmailController,
-                            inputType: TextInputType.emailAddress,
-                            hintText: AppText.enterBankerEmail,
-                            isRequired: true,
-                          ),
-                          CustomLabeledTextField(
-                            label: AppText.superiorName,
-                            controller: camNoteController.camBankerSuperiorNameController,
-                            inputType: TextInputType.name,
-                            hintText: AppText.enterSuperiorName,
-                            isRequired: true,
-                          ),
-                          CustomLabeledTextField(
-                            label: AppText.superiorMobile,
-                            controller: camNoteController.camBankerSuperiorEmailController,
-                            inputType: TextInputType.name,
-                            hintText: AppText.enterSuperiorName,
-                            isRequired: true,
-                          ),
+                            Obx(() {
+                              if (newDDController.isBankerLoading.value) {
+                                return Center(child: CustomSkelton.leadShimmerList(context));
+                              }
 
-                          const SizedBox(height: 30), // Give some space above the fixed button
-                        ],
+                              return CustomDropdown<banker.Data>(
+                                items: newDDController.bankerByBranchList ?? [],
+                                getId: (item) => item.id.toString(),
+                                getName: (item) => item.bankersName.toString(),
+                                selectedValue: newDDController.bankerByBranchList.firstWhereOrNull(
+                                        (item) => item.id == camNoteController.selectedBankerBranch.value),
+                                onChanged: (value) {
+                                  camNoteController.selectedBankerBranch.value = value?.id;
+                                  camNoteController.getBankerDetailsByIdApi(bankerId: camNoteController.selectedBankerBranch.value.toString());
+                                },
+                                onClear: () {
+                                  camNoteController.selectedBankerBranch.value = 0;
+                                  camNoteController.clearBankerDetails();
+                                },
+                              );
+                            }),
+
+                            const SizedBox(height: 20),
+
+                           Obx((){
+                             if( camNoteController.isBankerSuperiorLoading.value)
+                               return Center(
+                                 child: CustomSkelton.productShimmerList(context),
+                               );
+                              return  Column(
+                               children: [
+                                 CustomLabeledTextField(
+                                   label: AppText.bankerMobile,
+                                   controller: camNoteController.camBankerMobileNoController,
+                                   inputType: TextInputType.number,
+                                   hintText: AppText.enterBankerMobile,
+                                   isRequired: true,
+                                   validator: ValidationHelper.validatePhoneNumber,
+                                 ),
+                                 CustomLabeledTextField(
+                                   label: AppText.bankerName,
+                                   controller: camNoteController.camBankerNameController,
+                                   inputType: TextInputType.name,
+                                   hintText: AppText.enterBankerName,
+                                   validator: ValidationHelper.validateName,
+                                   isRequired: true,
+                                 ),
+                                 CustomLabeledTextField(
+                                   label: AppText.bankerWhatsapp,
+                                   controller: camNoteController.camBankerWhatsappController,
+                                   inputType: TextInputType.number,
+                                   hintText: AppText.enterBankerWhatsapp,
+                                   isRequired: true,
+                                   validator: ValidationHelper.validateWhatsapp
+                                 ),
+                                 CustomLabeledTextField(
+                                   label: AppText.bankerEmail,
+                                   controller: camNoteController.camBankerEmailController,
+                                   inputType: TextInputType.emailAddress,
+                                   hintText: AppText.enterBankerEmail,
+                                   isRequired: true,
+                                     validator: ValidationHelper.validateEmailNotNull
+                                 ),
+                                 CustomLabeledTextField(
+                                   label: AppText.superiorMobile,
+                                   controller: camNoteController.camBankerSuperiorMobController,
+                                   inputType: TextInputType.number,
+                                   hintText: AppText.enterSuperiorMobile,
+
+                                 ),
+                                 CustomLabeledTextField(
+                                   label: AppText.superiorName,
+                                   controller: camNoteController.camBankerSuperiorNameController,
+                                   inputType: TextInputType.name,
+                                   hintText: AppText.enterSuperiorName,
+
+                                 ),
+                                 CustomLabeledTextField(
+                                   label: AppText.superiorWhatsapp,
+                                   controller: camNoteController.camBankerSuperiorWhatsappController,
+                                   inputType: TextInputType.number,
+                                   hintText: AppText.enterSuperiorWhatsapp,
+
+                                 ),
+                                 CustomLabeledTextField(
+                                   label: AppText.superiorEmail,
+                                   controller: camNoteController.camBankerSuperiorEmailController,
+                                   inputType: TextInputType.emailAddress,
+                                   hintText: AppText.enterSuperiorEmail,
+
+                                 ),
+                               ],
+                             );
+                           }),
+
+                            const SizedBox(height: 30), // Give some space above the fixed button
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -633,7 +501,25 @@ class Step3CamNote extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            // your action here
+
+
+                            if(camNoteController.selectedBankBranch.value==null){
+                              SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select a branch");
+                            }else{
+                              if (_formKey.currentState!.validate()) {
+
+
+                                if(camNoteController.camBankerMobileNoController.value==camNoteController.camBankerSuperiorMobController.value){
+                                  SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please use different mobile number for superior");
+                                }{
+                                  /* camNoteController.getBankerDetaillApi(
+                                         phoneNo: camNoteController.camBankerMobileNoController.text.trim().toString(),
+                                         bankId: camNoteController.camBankerMobileNoController.text.trim().toString(),
+                                   );*/
+                                  print("validate ho gaya===>");
+                                }
+                              }
+                            }
                           },
                           child: const Text(
                             AppText.submit,

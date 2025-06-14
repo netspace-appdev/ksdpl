@@ -1,21 +1,16 @@
-class GetBankerDetailsByBranchIdModel {
+class GetBankerDetailModelForCheck {
   String? status;
   bool? success;
-  List<Data>? data;
+  Data? data;
   String? message;
 
-  GetBankerDetailsByBranchIdModel(
+  GetBankerDetailModelForCheck(
       {this.status, this.success, this.data, this.message});
 
-  GetBankerDetailsByBranchIdModel.fromJson(Map<String, dynamic> json) {
+  GetBankerDetailModelForCheck.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     success = json['success'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     message = json['message'];
   }
 
@@ -24,7 +19,7 @@ class GetBankerDetailsByBranchIdModel {
     data['status'] = this.status;
     data['success'] = this.success;
     if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.toJson();
     }
     data['message'] = this.message;
     return data;
