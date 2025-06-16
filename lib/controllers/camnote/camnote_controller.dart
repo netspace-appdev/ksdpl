@@ -244,8 +244,46 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var selectedBankBranch = Rxn<int>();
   var selectedBankerBranch = Rxn<int>();
 
+  final List<Map<String, dynamic>> bankerThemes = [
+    {
+      "containerColor": Colors.transparent,
+      "textColor": AppColor.blackColor,
+      "iconColor": AppColor.grey700,
+    },
+    {
+      "containerColor": Colors.green,
+      "textColor": AppColor.appWhite,
+      "iconColor": AppColor.appWhite,
+    },
 
+  ];
+
+  final List<Map<String, dynamic>> bankerContainerThemes = [
+    {
+      "containerColor": AppColor.primaryColor,
+      "borderColor":  AppColor.grey4,
+      "textColor": AppColor.grey700,
+    },
+    {
+      "containerColor": Colors.green,
+      "borderColor": AppColor.appWhite,
+      "textColor": AppColor.appWhite,
+    },
+
+  ];
   void clearBankerDetails(){
+
+    selectedBankerBranch.value= null;
+    camBankerMobileNoController.clear();
+    camBankerNameController.clear();
+    camBankerWhatsappController.clear();
+    camBankerEmailController.clear();
+    camBankerSuperiorNameController.clear();
+    camBankerSuperiorMobController.clear();
+    camBankerSuperiorWhatsappController.clear();
+    camBankerSuperiorEmailController.clear();
+  }
+  void clearBankDetails(){
     selectedBankBranch.value= null;
     selectedBankerBranch.value= null;
     camBankerMobileNoController.clear();
@@ -257,6 +295,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camBankerSuperiorWhatsappController.clear();
     camBankerSuperiorEmailController.clear();
   }
+
 
   void clearImages(String key) {
     imageMap[key]?.clear();
@@ -706,6 +745,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     try {
 
       isLoading(true);
+      String? empId = StorageService.get(StorageService.EMPLOYEE_ID);
 
 
       var data = await CamNoteService.updateBankerDetailApi(
@@ -720,7 +760,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         superiorMobile:superiorMobile,
         superiorWhatsApp:superiorWhatsApp,
         superiorEmail:superiorEmail,
-        createdBy:createdBy,
+        createdBy:empId.toString(),
       );
 
 
@@ -728,15 +768,16 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         updateBankerDetailModel.value= UpdateBankerDetailModel.fromJson(data);
 
-        /*camBankerMobileNoController.text=getBankerDetailsByIdModel.value!.data!.bankersMobileNumber.toString();
-        camBankerNameController.text=getBankerDetailsByIdModel.value!.data!.bankersName.toString();
-        camBankerWhatsappController.text=getBankerDetailsByIdModel.value!.data!.bankersWhatsAppNumber.toString();
-        camBankerEmailController.text=getBankerDetailsByIdModel.value!.data!.bankersEmailId.toString();
-        camBankerSuperiorNameController.text=getBankerDetailsByIdModel.value!.data!.superiorName.toString();
-        camBankerSuperiorMobController.text=getBankerDetailsByIdModel.value!.data!.superiorMobile.toString();
-        camBankerSuperiorWhatsappController.text=getBankerDetailsByIdModel.value!.data!.superiorWhatsApp.toString();
-        camBankerSuperiorEmailController.text=getBankerDetailsByIdModel.value!.data!.superiorEmail.toString();
-*/
+      /*  camBankerMobileNoController.text=updateBankerDetailModel.value!.data!.bankersMobileNumber.toString();
+        camBankerNameController.text=updateBankerDetailModel.value!.data!.bankersName.toString();
+        camBankerWhatsappController.text=updateBankerDetailModel.value!.data!.bankersWhatsAppNumber.toString();
+        camBankerEmailController.text=updateBankerDetailModel.value!.data!.bankersEmailId.toString();
+        camBankerSuperiorNameController.text=updateBankerDetailModel.value!.data!.superiorName.toString();
+        camBankerSuperiorMobController.text=updateBankerDetailModel.value!.data!.superiorMobile.toString();
+        camBankerSuperiorWhatsappController.text=updateBankerDetailModel.value!.data!.superiorWhatsApp.toString();
+        camBankerSuperiorEmailController.text=getBankerDetailsByIdModel.value!.data!.superiorEmail.toString();*/
+
+        Get.back();
         isLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -779,7 +820,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     try {
 
       isLoading(true);
-
+      String? empId = StorageService.get(StorageService.EMPLOYEE_ID);
 
       var data = await CamNoteService.addBankerDetailApi(
         bankId:bankId,
@@ -793,7 +834,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         superiorMobile:superiorMobile,
         superiorWhatsApp:superiorWhatsApp,
         superiorEmail:superiorEmail,
-        createdBy:createdBy,
+        createdBy:empId.toString(),
       );
 
 
@@ -801,16 +842,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         addBankerDetail.value= AddBankerDetail.fromJson(data);
 
-        /*camBankerMobileNoController.text=getBankerDetailsByIdModel.value!.data!.bankersMobileNumber.toString();
-        camBankerNameController.text=getBankerDetailsByIdModel.value!.data!.bankersName.toString();
-        camBankerWhatsappController.text=getBankerDetailsByIdModel.value!.data!.bankersWhatsAppNumber.toString();
-        camBankerEmailController.text=getBankerDetailsByIdModel.value!.data!.bankersEmailId.toString();
-        camBankerSuperiorNameController.text=getBankerDetailsByIdModel.value!.data!.superiorName.toString();
-        camBankerSuperiorMobController.text=getBankerDetailsByIdModel.value!.data!.superiorMobile.toString();
-        camBankerSuperiorWhatsappController.text=getBankerDetailsByIdModel.value!.data!.superiorWhatsApp.toString();
-        camBankerSuperiorEmailController.text=getBankerDetailsByIdModel.value!.data!.superiorEmail.toString();
-*/
+
         isLoading(false);
+
+        Get.back();
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -836,7 +871,18 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
   Future<void>  getBankerDetaillApi({
-    required String phoneNo,
+    String? bankId,
+    String? branchId,
+    String? bankersName,
+    required String bankersMobileNumber,
+    String? bankersWhatsAppNumber,
+    String? bankersEmailId,
+    String? city,
+    String? superiorName,
+    String? superiorMobile,
+    String? superiorWhatsApp,
+    String? superiorEmail,
+    String? createdBy,
   }) async {
     try {
 
@@ -844,24 +890,48 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
       var data = await CamNoteService.getBankerDetaillApi(
-        phoneNo:phoneNo,
+        phoneNo:bankersMobileNumber,
       );
 
 
       if(data['success'] == true){
 
         getBankerDetailModelForCheck.value= GetBankerDetailModelForCheck.fromJson(data);
+        updateBankerDetailApi(
+          bankId:bankId,
+          branchId:branchId,
+          bankersName:bankersName,
+          bankersMobileNumber:bankersMobileNumber,
+          bankersWhatsAppNumber:bankersWhatsAppNumber,
+          bankersEmailId:bankersEmailId,
+          city:city,
+          superiorName:superiorName,
+          superiorMobile:superiorMobile,
+          superiorWhatsApp:superiorWhatsApp,
+          superiorEmail:superiorEmail,
 
+        );
 
 
         isLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
-
-        updateBankerDetailApi(
+        addBankerDetailApi(
+          bankId:bankId,
+          branchId:branchId,
+          bankersName:bankersName,
+          bankersMobileNumber:bankersMobileNumber,
+          bankersWhatsAppNumber:bankersWhatsAppNumber,
+          bankersEmailId:bankersEmailId,
+          city:city,
+          superiorName:superiorName,
+          superiorMobile:superiorMobile,
+          superiorWhatsApp:superiorWhatsApp,
+          superiorEmail:superiorEmail,
 
         );
+
 
        // getBankerDetailModelForCheck.value=null;
       }else{

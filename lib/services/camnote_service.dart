@@ -236,8 +236,8 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(updateBankerDetail, request.fields);
-      Helper.ApiRes(updateBankerDetail, response.body);
+      Helper.ApiReq(addBankerDetail, request.fields);
+      Helper.ApiRes(addBankerDetail, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -257,7 +257,7 @@ class CamNoteService {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(addBankerDetail),
+        Uri.parse(getBankerDetail),
       );
 
       var header=await MyHeader.getHeaders2();
@@ -269,8 +269,8 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(addBankerDetail, request.fields);
-      Helper.ApiRes(addBankerDetail, response.body);
+      Helper.ApiReq(getBankerDetail, request.fields);
+      Helper.ApiRes(getBankerDetail, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

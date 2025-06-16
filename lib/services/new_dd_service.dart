@@ -26,6 +26,7 @@ class NewDDService {
     String? bankId,
 
   }) async {
+    print("inside--->getBranchListOfDistrictByZipAndBank");
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -41,6 +42,9 @@ class NewDDService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getBranchListOfDistrictByZipAndBank, request.fields);
+      Helper.ApiRes(getBranchListOfDistrictByZipAndBank, response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

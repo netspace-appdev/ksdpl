@@ -710,6 +710,7 @@ class AppText{
   static const String remark  = "Remark";
   static const String enterRemark  = "Enter Remark";
   static const String enterZipcode  = "Please Add Zipcode in Step 1";
+  static const String forgotMsg  = "We’ve sent a password reset link to your email address. Please check your inbox";
 }
 
 class AppColor{

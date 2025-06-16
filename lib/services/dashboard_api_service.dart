@@ -306,7 +306,7 @@ class DashboardApiService{
     DateTime now = DateTime.now();
 
     // Step 2: Format it to match your expected input
-    String dateString = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SS").format(now);
+    String dateString = DateFormat("yyyy-MM-dd").format(now); //yyyy-MM-dd'T'HH:mm:ss.SS
 
 
 

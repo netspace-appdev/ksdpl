@@ -3,13 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:lottie/lottie.dart';
 
 import '../common/helper.dart';
 import '../controllers/login_controller.dart';
+import '../custom_widgets/CustomBigDialogBox.dart';
 import '../custom_widgets/CustomTextFieldPrefix.dart';
 
-class LoginScreen extends StatelessWidget {
-  final LoginController controller = Get.put(LoginController());
+class ForgotPasswordScreen extends StatelessWidget {
+  final LoginController controller = Get.find();
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       // Login Title
                       const Text(
-                        "Login",
+                        "Forgot Password",
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -71,7 +73,7 @@ class LoginScreen extends StatelessWidget {
 
                       // Welcome Text
                       const Text(
-                        "Welcome back!\nPlease login to continue",
+                        "Enter your account details below",
                         style: TextStyle(fontSize: 16, color: AppColor.blackColor),
                       ),
                       const SizedBox(height: 25),
@@ -90,58 +92,23 @@ class LoginScreen extends StatelessWidget {
 
 
                       ),
-                      const SizedBox(height: 15),
 
-                      // Password Field
-                     Obx(()=> CustomTextFieldPrefix(
-                       inputType:  TextInputType.text,
-                       controller: controller.passwordController,
-                       hintText: "Password",
-                       validator: validatePassword,
-                       isPassword: true,
-                       obscureText: controller.obscurePassword.value,
-                       onSuffixIconPressed: () {
-                         controller.obscurePassword.value = !controller.obscurePassword.value;
-                       },
-                       prefixImage: AppImage.passwordIcon,
-
-
-                     )),
-
-                      const SizedBox(height: 10),
-
-                      // Forgot Password
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: InkWell(
-                          onTap: (){
-                            Get.toNamed("/forgotPasswordScreen");
-                          },
-                          child: Text(
-                            "Forgot Password?",
-                            style: TextStyle(
-                              color: Colors.orange[600],
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
                       const SizedBox(height: 25),
 
                       // Sign In Button
                       Obx((){
-                           if(controller.isLoading.value){
-                               return Align(
-                                 alignment: Alignment.center,
-                                 child: SizedBox(
-                                       height: 30,
-                                       width: 30,
-                                   child: CircularProgressIndicator(
-                                     color: AppColor.primaryColor,
-                                   ),
-                                 ),
-                                   );
-                            }
+                        if(controller.isLoading.value){
+                          return Align(
+                            alignment: Alignment.center,
+                            child: SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                color: AppColor.primaryColor,
+                              ),
+                            ),
+                          );
+                        }
                         return SizedBox(
                           width: double.infinity,
                           height: 50,
@@ -155,18 +122,13 @@ class LoginScreen extends StatelessWidget {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
 
-                              /*  controller.loginApi(controller.mobileController.text,
-                                    controller.passwordController.text);*/
-
-                                Helper.checkInternet(() => controller.loginApi(
-                                    controller.mobileController.text.trim(),
-                                    controller.passwordController.text.trim()));
+                                Helper.checkInternet(() => controller.forgotPasswordApi(
+                                    controller.mobileController.text.trim(),context));
                               }
-
 
                             },
                             child: const Text(
-                              "SIGN IN",
+                              AppText.submit,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -208,6 +170,76 @@ class LoginScreen extends StatelessWidget {
     }
     return null;
   }
+
+  Widget header(context){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Row(
+
+        children: [
+
+          InkWell(
+            borderRadius: BorderRadius.circular(8), // for ripple effect
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              width: 48,
+              height: 48,
+              padding: const EdgeInsets.all(12), // optional internal padding
+              alignment: Alignment.center,
+              child: Image.asset(
+                AppImage.arrowLeft,
+                height: 24,
+              ),
+            ),
+          ),
+
+
+          Expanded(
+            child: Center(
+              child: Text(
+                AppText.allReminders,
+                style: TextStyle(
+                    fontSize: 20,
+                    color: AppColor.grey3,
+                    fontWeight: FontWeight.w700
+
+
+                ),
+              ),
+            ),
+          ),
+
+          InkWell(
+            onTap: (){
+
+            },
+            child: Container(
+
+              width: 40,
+              height:40,
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              decoration:  const BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+
+            ),
+          )
+
+
+
+        ],
+      ),
+    );
+  }
+
+
+
+
 }
 
 

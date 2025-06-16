@@ -36,6 +36,7 @@ import '../home/product/edit_product/edit_product_screen.dart';
 import '../home/product/product_detail_screen.dart';
 import '../home/product/view_product_screen.dart';
 import '../home/splash.dart';
+import '../registration/forgot_password_screen.dart';
 import '../registration/login.dart';
 import '../registration/registration.dart';
 
@@ -71,4 +72,5 @@ final routes = [
   GetPage(name: '/productDetailScreen', page: () => ProductDetailScreen()),
   GetPage(name: '/editProductScreen', page: () => EditProductScreen()),
   GetPage(name: '/camNoteGroupScreen', page: () => CamNoteGroupScreen()),
+  GetPage(name: '/forgotPasswordScreen', page: () => ForgotPasswordScreen()),
 ];
