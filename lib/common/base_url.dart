@@ -4,8 +4,8 @@ class BaseUrl{
 
   static const String imageBaseUrl = 'https://ksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
-  static const String devVersion = 'Dev App Version 1.0.3';
-  static const String buildDate = 'Build Date : 16 June 2025';
+  static const String devVersion = 'Dev App Version 1.0.4';
+  static const String buildDate = 'Build Date : 17 June 2025';
 }
 
 

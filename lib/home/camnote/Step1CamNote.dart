@@ -703,8 +703,8 @@ class Step1CamNote extends StatelessWidget {
 
                 Obx(() => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(addleadcontroller.addIncomeList.length, (index) {
-                    final ai = addleadcontroller.addIncomeList[index];
+                  children: List.generate(camNoteController.addIncomeList.length, (index) {
+                    final ai = camNoteController.addIncomeList[index];
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -743,9 +743,9 @@ class Step1CamNote extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
 
                           children: [
-                            index== addleadcontroller.addIncomeList.length-1?
+                            index== camNoteController.addIncomeList.length-1?
                             Obx((){
-                              if(addleadcontroller.isLoading.value){
+                              if(camNoteController.isLoading.value){
                                 return const Align(
                                   alignment: Alignment.centerRight,
                                   child: SizedBox(
@@ -761,7 +761,7 @@ class Step1CamNote extends StatelessWidget {
                                 alignment: Alignment.centerRight,
                                 child: IconButton(
                                     onPressed: (){
-                                      addleadcontroller.addAdditionalSrcIncome();
+                                      camNoteController.addAdditionalSrcIncome();
                                     },
                                     icon: Container(
 
@@ -782,7 +782,7 @@ class Step1CamNote extends StatelessWidget {
                             SizedBox(height: 20),
 
                             Obx((){
-                              if(addleadcontroller.isLoading.value){
+                              if(camNoteController.isLoading.value){
                                 return const Align(
                                   alignment: Alignment.center,
                                   child: SizedBox(
@@ -799,14 +799,14 @@ class Step1CamNote extends StatelessWidget {
                               return Align(
                                 alignment: Alignment.centerRight,
                                 child: IconButton(
-                                    onPressed: addleadcontroller.addIncomeList.length <= 1?(){}: (){
-                                      addleadcontroller.removeAdditionalSrcIncome(index);
+                                    onPressed: camNoteController.addIncomeList.length <= 1?(){}: (){
+                                      camNoteController.removeAdditionalSrcIncome(index);
                                     },
                                     icon: Container(
 
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                          color: addleadcontroller.addIncomeList.length <= 1?AppColor.lightRed: AppColor.redColor,
+                                          color: camNoteController.addIncomeList.length <= 1?AppColor.lightRed: AppColor.redColor,
 
                                         ),
                                         padding: EdgeInsets.all(10),

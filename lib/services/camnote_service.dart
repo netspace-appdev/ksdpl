@@ -98,7 +98,8 @@ class CamNoteService {
       );
      // const JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
-
+     Helper.ApiReq(addAdditionalSourceIncome, jsonEncode(body));
+     Helper.ApiRes(addAdditionalSourceIncome, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

@@ -84,8 +84,8 @@ class CamNoteGroupScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          SizedBox(
-                            height: 100,
+                          Container(
+                            height: 70,
                             child: ListView.builder(
                               controller: camNoteController.scrollController,
                               scrollDirection: Axis.horizontal,
@@ -177,7 +177,39 @@ class CamNoteGroupScreen extends StatelessWidget {
                               },
                             ),
                           ),
-                          const SizedBox(height: 20),
+
+                          Obx(() => Container(
+
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+
+                                  onPressed: camNoteController.currentStep.value > 0
+                                      ? camNoteController.previousStep
+                                      : null,
+                                  child:  Text('Prev', style: TextStyle(color:camNoteController.currentStep.value > 0? AppColor.appWhite: AppColor.black87) ),
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(130, 40),
+
+                                    backgroundColor: AppColor.primaryColor,
+                                  ),
+                                ),
+
+                                ElevatedButton(
+                                  onPressed: camNoteController.currentStep.value < 3
+                                      ? ()=>camNoteController.nextStep(camNoteController.currentStep.value)
+                                      : null,
+                                  child:  Text(camNoteController.currentStep.value==2?"Save":'Save & Next',style: TextStyle(color: AppColor.appWhite),),
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(130, 40),
+                                    backgroundColor: AppColor.greenColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
 
                           // Scrollable form
                           SingleChildScrollView(
@@ -195,7 +227,7 @@ class CamNoteGroupScreen extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: Obx(() => Container(
+/*        bottomNavigationBar: Obx(() => Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Row(
@@ -225,7 +257,7 @@ class CamNoteGroupScreen extends StatelessWidget {
               ),
             ],
           ),
-        )),
+        )),*/
 
 
       ),

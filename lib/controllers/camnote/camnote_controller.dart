@@ -20,6 +20,7 @@ import '../../models/camnote/GetBankerDetailModelForCheck.dart';
 import '../../models/camnote/GetBankerDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailsByFilterModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
+import '../../models/camnote/special_model/IncomeModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
 import '../../models/loan_application/GetLoanApplIdModel.dart';
@@ -35,6 +36,7 @@ import '../../models/product/GetProductListById.dart';
 import '../../models/product/AddProductDocumentModel.dart';
 import '../../services/loan_appl_service.dart';
 import '../../services/new_dd_service.dart';
+import '../leads/add_income_model_controller.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
@@ -260,9 +262,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   final List<Map<String, dynamic>> bankerContainerThemes = [
     {
-      "containerColor": AppColor.primaryColor,
-      "borderColor":  AppColor.grey4,
-      "textColor": AppColor.grey700,
+      "containerColor": AppColor.grey200,
+      "borderColor":  AppColor.grey200,
+      "textColor": AppColor.blackColor,
     },
     {
       "containerColor": Colors.green,
@@ -271,6 +273,28 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     },
 
   ];
+  var infoFilledBankers = <String>{}.obs;
+  var selectedBankers = <String>{}.obs;
+  void markBankerAsSubmitted(String boxId) {
+    infoFilledBankers.add(boxId);
+  }
+
+  bool isBankerSubmitted(String bankId) {
+    return infoFilledBankers.contains(bankId);
+  }
+
+  void toggleBankerSelection(String bankId) {
+    if (selectedBankers.contains(bankId)) {
+      selectedBankers.remove(bankId);
+    } else {
+      selectedBankers.add(bankId);
+    }
+
+    print("selectedBankers===>${selectedBankers.toString()}");
+  }
+
+  bool isBankerSelected(String bankId) => selectedBankers.contains(bankId);
+
   void clearBankerDetails(){
 
     selectedBankerBranch.value= null;
@@ -296,7 +320,33 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camBankerSuperiorEmailController.clear();
   }
 
+  var addIncomeList = <AddIncomeModelController>[].obs;
+  void addAdditionalSrcIncome() {
+    addIncomeList.add(AddIncomeModelController());
+  }
 
+  void removeAdditionalSrcIncome(int index) {
+    if (addIncomeList.length <= 1) {
+      ToastMessage.msg("You can not delete this");
+      return;
+    }
+    if (index >= 0 && index < addIncomeList.length) {
+      // Hold reference to the item to be disposed
+      final removed = addIncomeList[index];
+
+      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
+      addIncomeList.removeAt(index);
+      addIncomeList.refresh(); // If you're using an RxList
+
+      // Dispose AFTER rebuild
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        removed.aiSourceController .dispose();
+        removed.aiIncomeController .dispose();
+      });
+    } else {
+      print("🧯 Invalid index passed to removeCoApplicant: $index");
+    }
+  }
   void clearImages(String key) {
     imageMap[key]?.clear();
   }
@@ -307,7 +357,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   RxList<pkg.Data> packageList = <pkg.Data>[].obs;
   var isLoadingPackage = false.obs;
 
-  void nextStep() {
+  void nextStep(int tappedIndex) {
     if (currentStep.value < 2) {
       currentStep.value++;
       print("currentStep.value in next===>${currentStep.value.toString()}");
@@ -316,6 +366,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         forBankDetailSubmit();
       }
       scrollToStep(currentStep.value);
+    }
+
+    if(tappedIndex==2){
+      saveForm();
     }
   }
 
@@ -355,7 +409,25 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   void saveForm() {
     print("Form Saved!");
+
+    final List<IncomeModel> addIncomeSrcModels = [];
+
+    for (var ai in addIncomeList) {
+      final aiModel = IncomeModel(
+        uniqueLeadNumber: "",
+        description: cleanText(ai.aiSourceController.text),
+        amount: ai.aiIncomeController.text as double,
+      );
+
+      addIncomeSrcModels.add(aiModel);
+    }
+
+    List<Map<String, dynamic>> aiPayload = addIncomeSrcModels.map((e) => e.toMap()).toList();
+
+    if(aiPayload.isNotEmpty){}
+    addAdditionalSourceIncomeApi(aiPayload:aiPayload);
   }
+
   List<GlobalKey<FormState>> stepFormKeys = List.generate(3, (_) => GlobalKey<FormState>());
   var selectedCamIncomeTypeList = Rxn<String>();
 
@@ -466,6 +538,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     addLoanApplicationModel.value = null;
     addAdSrcIncomModel.value = null;
+
+    infoFilledBankers.clear();
+    selectedBankers.clear();
     super.onClose();
   }
 
@@ -768,14 +843,15 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         updateBankerDetailModel.value= UpdateBankerDetailModel.fromJson(data);
 
-      /*  camBankerMobileNoController.text=updateBankerDetailModel.value!.data!.bankersMobileNumber.toString();
-        camBankerNameController.text=updateBankerDetailModel.value!.data!.bankersName.toString();
-        camBankerWhatsappController.text=updateBankerDetailModel.value!.data!.bankersWhatsAppNumber.toString();
-        camBankerEmailController.text=updateBankerDetailModel.value!.data!.bankersEmailId.toString();
-        camBankerSuperiorNameController.text=updateBankerDetailModel.value!.data!.superiorName.toString();
-        camBankerSuperiorMobController.text=updateBankerDetailModel.value!.data!.superiorMobile.toString();
-        camBankerSuperiorWhatsappController.text=updateBankerDetailModel.value!.data!.superiorWhatsApp.toString();
-        camBankerSuperiorEmailController.text=getBankerDetailsByIdModel.value!.data!.superiorEmail.toString();*/
+
+        onFormSubmit(
+            updateBankerDetailModel.value!.data!.bankId.toString(), {
+          'bankersName': updateBankerDetailModel.value!.data!.bankersName.toString(),
+          'bankersMobileNumber': updateBankerDetailModel.value!.data!.bankersMobileNumber.toString(),
+          'bankersWhatsAppNumber': updateBankerDetailModel.value!.data!.bankersWhatsAppNumber.toString(),
+          'bankersEmailID': updateBankerDetailModel.value!.data!.bankersEmailId.toString(),
+        });
+
 
         Get.back();
         isLoading(false);
@@ -951,6 +1027,34 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       isLoading(false);
     }
   }
+
+
+  void onFormSubmit(String bankId, Map<String, dynamic> updatedFields) {
+
+
+    final index = getProductDetailsByFilterModel.value!.data!
+        .indexWhere((element) => element.bankId.toString() == bankId);
+
+    print("index===>${index.toString()}");
+
+    if (index != -1) {
+      final old = getProductDetailsByFilterModel.value!.data![index];
+
+      // Update relevant fields
+      final updatedBanker =  getProductDetailsByFilterModel.value!.data![index] = old.copyWith(
+        bankersName: updatedFields['bankersName'],
+        bankersMobileNumber: updatedFields['bankersMobileNumber'],
+        bankersWhatsAppNumber: updatedFields['bankersWhatsAppNumber'],
+        bankersEmailID: updatedFields['bankersEmailID'],
+      );
+     getProductDetailsByFilterModel.value!.data![index] = updatedBanker;
+      // Refresh the list
+      getProductDetailsByFilterModel.refresh();
+
+
+    }
+  }
+
 }
 
 extension ParseStringExtension on String? {
@@ -979,3 +1083,7 @@ extension ddToStringExt on String? {
     return this ?? "";
   }
 }
+String cleanText(String text) {
+  return text.trim().isEmpty ? "" : text.trim();
+}
+

@@ -861,6 +861,8 @@ overflow: TextOverflow.ellipsis,
           CamNoteController camNoteController=Get.put(CamNoteController());
           camNoteController.getAllPackageMasterApi();
           camNoteController.currentStep.value=0;
+          camNoteController.infoFilledBankers.clear();
+          camNoteController.selectedBankers.clear();
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

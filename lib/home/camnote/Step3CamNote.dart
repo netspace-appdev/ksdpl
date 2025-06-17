@@ -130,29 +130,59 @@ class Step3CamNote extends StatelessWidget {
               final banker =  camNoteController.getProductDetailsByFilterModel.value!.data![index];
 
 
-              return buildCard(
-                Helper.capitalizeEachWord(banker.bankName.toString()), // title
-                [
-                  _buildDetailRow(AppText.bankerName, banker.bankersName.toString()),
-                  _buildDetailRow(AppText.bankerMobile, banker.bankersMobileNumber.toString()),
-                  _buildDetailRow(AppText.bankerWhatsapp, banker.bankersWhatsAppNumber.toString()),
-                  _buildDetailRow(AppText.bankerEmail, banker.bankersEmailID.toString()),
-                  _buildDetailRow(AppText.selectCustomerCategory, banker.customerCategory.toString()),
-                  _buildDetailRow(AppText.ksdplProduct, banker.ksdplProduct.toString()),
-                  _buildDetailRow(AppText.incomeType, banker.incomeTypes.toString()),
 
-                  const SizedBox(height: 10),
+              return Obx((){
 
-                  Column(
-                    children: [
-                      _buildTextButton("Add","add" ,context, camNoteController.bankerThemes[0]["containerColor"], Icons.edit, banker.bankId.toString(), camNoteController.bankerThemes[0]["textColor"], camNoteController.bankerThemes[0]["iconColor"]),
-                      SizedBox(height: 10,),
-                      _buildTextButton("Select", "select",context,camNoteController.bankerThemes[1]["containerColor"], Icons.check_circle, banker.bankId.toString(), camNoteController.bankerThemes[1]["textColor"], camNoteController.bankerThemes[1]["iconColor"]),
+                 final isSubmitted = camNoteController.isBankerSubmitted(banker.bankId.toString());
+              final isSelected = camNoteController.isBankerSelected(banker.bankId.toString());
+                return buildCard(
+                  Helper.capitalizeEachWord(banker.bankName.toString()), // title
+                  [
+                    _buildDetailRow(AppText.bankerName, banker.bankersName.toString()),
+                    _buildDetailRow(AppText.bankerMobile, banker.bankersMobileNumber.toString()),
+                    _buildDetailRow(AppText.bankerWhatsapp, banker.bankersWhatsAppNumber.toString()),
+                    _buildDetailRow(AppText.bankerEmail, banker.bankersEmailID.toString()),
+                    _buildDetailRow(AppText.selectCustomerCategory, banker.customerCategory.toString()),
+                    _buildDetailRow(AppText.ksdplProduct, banker.ksdplProduct.toString()),
+                    _buildDetailRow(AppText.incomeType, banker.incomeTypes.toString()),
 
-                    ],
-                  ),
-                ],
-              );
+                    const SizedBox(height: 10),
+
+                    Column(
+                      children: [
+                        _buildTextButton(
+                          label:"Add",
+                          code:"add" ,
+                          context:context,
+                          containerColor: camNoteController.bankerThemes[0]["containerColor"],
+                          icon: Icons.add_box_outlined,
+                          bankId:banker.bankId.toString(),
+                          textColor: camNoteController.bankerThemes[0]["textColor"],
+                          iconColor:camNoteController.bankerThemes[0]["iconColor"],
+                          boxId: banker.id.toString(),
+                        ),
+                        SizedBox(height: 10,),
+
+                        if (isSubmitted)
+                          _buildTextButton(
+                            label: isSelected ? "Selected" :  "Select",
+                            code: "select",
+                            context:context,
+                            containerColor: isSelected ? camNoteController.bankerThemes[1]["containerColor"] :   camNoteController.bankerThemes[0]["containerColor"],
+                            icon: isSelected ? Icons.check_box : Icons.check_box_outline_blank,
+                            bankId:banker.bankId.toString(),
+                            textColor:isSelected ? camNoteController.bankerThemes[1]["textColor"] :   camNoteController.bankerThemes[0]["textColor"],
+                            iconColor:isSelected ? camNoteController.bankerThemes[1]["iconColor"] :   camNoteController.bankerThemes[0]["iconColor"],
+                            boxId: banker.id.toString(),
+                          ),
+
+                      ],
+                    ),
+
+                  ],
+                    isSelected
+                );
+              });
 
             },
           ),
@@ -212,16 +242,16 @@ class Step3CamNote extends StatelessWidget {
   }
 
 
-  Widget buildCard(String title, List<Widget> children) {
+  Widget buildCard(String title, List<Widget> children, bool isSelected) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(14),
           topRight: Radius.circular(14),
         ),
-        border: Border.all(color:
+        border: Border.all(color:  isSelected ? camNoteController.bankerContainerThemes[1]["containerColor"] :   camNoteController.bankerContainerThemes[0]["containerColor"],
         //AppColor.greenColor,
-        AppColor.grey4,
+        //AppColor.grey4,
             width: 2),
 
 
@@ -236,7 +266,7 @@ class Step3CamNote extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
             decoration: BoxDecoration(
                //color: AppColor.primaryColor, // Blue background
-                color: Colors.grey,
+                color:  isSelected ? camNoteController.bankerContainerThemes[1]["containerColor"] :   camNoteController.bankerContainerThemes[0]["containerColor"],
               //color: AppColor.greenColor, // Blue background
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
@@ -246,9 +276,9 @@ class Step3CamNote extends StatelessWidget {
             ),
             child: Text(
               title,
-              style: const TextStyle(
+              style:  TextStyle(
                 fontSize: 16,
-                color: Colors.white,
+                color: isSelected ? camNoteController.bankerContainerThemes[1]["textColor"] :   camNoteController.bankerContainerThemes[0]["textColor"],
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -268,21 +298,37 @@ class Step3CamNote extends StatelessWidget {
 
 
 
-  Widget _buildTextButton(String label,String code ,BuildContext context, Color containerColor, IconData icon, String bankId,  Color textColor, Color iconColor) {
+  Widget _buildTextButton({
+    required String label,
+    required String code ,
+    required BuildContext context,
+    required Color containerColor,
+    required IconData icon,
+    required String bankId,
+    required Color textColor,
+    required Color iconColor,
+    required String boxId,
+}) {
     return GestureDetector(
       onTap: () {
 
-       // Addleadcontroller adLeaController = Get.find();
+        if(code=="select"){
+          camNoteController.toggleBankerSelection(bankId);
+        }else if(code=="add"){
 
-        camNoteController.clearBankDetails();
+          camNoteController.clearBankDetails();
 
-        if(camNoteController.camZipController.text.isEmpty){
-          SnackbarHelper.showSnackbar(title: "Incomplete Detail", message: AppText.enterZipcode);
-        }else{
-          newDDController.getBranchListOfDistrictByZipAndBankApi(bankId: bankId, zipcode:  camNoteController.camZipController.text);
+          if(camNoteController.camZipController.text.isEmpty){
 
-          showCustomBottomSheet(context, bankId);
+            SnackbarHelper.showSnackbar(title: "Incomplete Detail", message: AppText.enterZipcode);
+
+          }else{
+
+            newDDController.getBranchListOfDistrictByZipAndBankApi(bankId: bankId, zipcode:  camNoteController.camZipController.text);
+            showCustomBottomSheet(context, bankId, boxId);
+          }
         }
+
 
       },
       child: Column(
@@ -302,7 +348,7 @@ class Step3CamNote extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.add_circle_rounded, color: iconColor, size: 20),
+                Icon(icon, color: iconColor, size: 20),
                 SizedBox(width: 6),
                 Text(
                   label,
@@ -317,7 +363,7 @@ class Step3CamNote extends StatelessWidget {
   }
 
 
-  void showCustomBottomSheet(BuildContext context, String bankId) {
+  void showCustomBottomSheet(BuildContext context, String bankId, String boxId) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -534,17 +580,6 @@ class Step3CamNote extends StatelessWidget {
                                   SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please use different mobile number for superior");
                                 }{
 
-                                  print("🔍 Debugging getBankerDetaillApi call:");
-                                  print("bankId: $bankId");
-                                  print("branchId: ${camNoteController.selectedBankBranch.value.toString()}");
-                                  print("bankersName: ${camNoteController.camBankerNameController.text.trim()}");
-                                  print("bankersMobileNumber: ${camNoteController.camBankerMobileNoController.text.trim()}");
-                                  print("bankersWhatsAppNumber: ${camNoteController.camBankerWhatsappController.text.trim()}");
-                                  print("bankersEmailId: ${camNoteController.camBankerWhatsappController.text.trim()}");
-                                  print("superiorName: ${camNoteController.camBankerSuperiorNameController.text.trim()}");
-                                  print("superiorMobile: ${camNoteController.camBankerSuperiorMobController.text.trim()}");
-                                  print("superiorWhatsApp: ${camNoteController.camBankerSuperiorWhatsappController.text.trim()}");
-                                  print("superiorEmail: ${camNoteController.camBankerSuperiorEmailController.text.trim()}");
 
                                    camNoteController.getBankerDetaillApi(
                                      bankId: bankId,
@@ -558,7 +593,9 @@ class Step3CamNote extends StatelessWidget {
                                      superiorWhatsApp:camNoteController.camBankerSuperiorWhatsappController.text.trim().toString(),
                                      superiorEmail:camNoteController.camBankerSuperiorEmailController.text.trim().toString(),
 
-                                   );
+                                   ).then((_){
+                                     camNoteController.markBankerAsSubmitted(bankId);
+                                   });
                                   print("validate ho gaya===>");
                                 }
                               }

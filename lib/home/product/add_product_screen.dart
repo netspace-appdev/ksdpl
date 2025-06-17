@@ -82,43 +82,6 @@ class AddProductScreen extends StatelessWidget {
                       child: Column(
                         children: [
 
-                         /* Obx(() => Container(
-
-                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: addProductController.currentStep.value > 0
-                                      ? addProductController.previousStep
-                                      : null,
-                                  child: const Text('Prev'),
-                                ),
-                                ElevatedButton(
-                                  onPressed: addProductController.validateAndSubmit,
-                                  child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green,
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  onPressed: addProductController.currentStep.value < 6
-                                      ? addProductController.nextStep
-                                      : null,
-                                  child: const Text('Next',style: TextStyle(color: AppColor.appWhite),),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColor.primaryColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),*/
-
-
-
-
-
-
                           Container(
 
                             height: 70,

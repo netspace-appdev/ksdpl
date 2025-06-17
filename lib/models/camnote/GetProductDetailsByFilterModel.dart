@@ -259,4 +259,73 @@ class Data {
     data['ksdplProduct'] = this.ksdplProduct;
     return data;
   }
+
+  Data copyWith({
+    String? bankersName,
+    String? bankersMobileNumber,
+    String? bankersWhatsAppNumber,
+    String? bankersEmailID,
+    String? customerCategory,
+    String? ksdplProduct,
+    String? incomeTypes,
+  }) {
+    return Data(
+      id: id,
+      bankId: bankId,
+      bankersName: bankersName ?? this.bankersName,
+      bankersMobileNumber: bankersMobileNumber ?? this.bankersMobileNumber,
+      bankersWhatsAppNumber: bankersWhatsAppNumber ?? this.bankersWhatsAppNumber,
+      bankersEmailID: bankersEmailID ?? this.bankersEmailID,
+      customerCategory: customerCategory ?? this.customerCategory,
+      ksdplProduct: ksdplProduct ?? this.ksdplProduct,
+      incomeTypes: incomeTypes ?? this.incomeTypes,
+      // keep the rest same
+      minCIBIL: minCIBIL,
+      segmentVertical: segmentVertical,
+      product: product,
+      productDescription: productDescription,
+      collateralSecurityCategory: collateralSecurityCategory,
+      collateralSecurityExcluded: collateralSecurityExcluded,
+      profileExcluded: profileExcluded,
+      ageLimitEarningApplicants: ageLimitEarningApplicants,
+      ageLimitNonEarningCoApplicant: ageLimitNonEarningCoApplicant,
+      minimumAgeEarningApplicants: minimumAgeEarningApplicants,
+      minimumAgeNonEarningApplicants: minimumAgeNonEarningApplicants,
+      minimumIncomeCriteria: minimumIncomeCriteria,
+      minimumLoanAmount: minimumLoanAmount,
+      maximumLoanAmount: maximumLoanAmount,
+      minTenor: minTenor,
+      maximumTenor: maximumTenor,
+      minimumROI: minimumROI,
+      maximumROI: maximumROI,
+      maximumTenorEligibilityCriteria: maximumTenorEligibilityCriteria,
+      geoLimit: geoLimit,
+      negativeProfiles: negativeProfiles,
+      negativeAreas: negativeAreas,
+      maximumTAT: maximumTAT,
+      minimumPropertyValue: minimumPropertyValue,
+      maximumIIR: maximumIIR,
+      maximumFOIR: maximumFOIR,
+      maximumLTV: maximumLTV,
+      processingFee: processingFee,
+      legalFee: legalFee,
+      technicalFee: technicalFee,
+      adminFee: adminFee,
+      foreclosureCharges: foreclosureCharges,
+      otherCharges: otherCharges,
+      stampDuty: stampDuty,
+      tsRYears: tsRYears,
+      tsRCharges: tsRCharges,
+      valuationCharges: valuationCharges,
+      noOfDocument: noOfDocument,
+      productValidateFromDate: productValidateFromDate,
+      productValidateToDate: productValidateToDate,
+      ksdplProductId: ksdplProductId,
+      profitPercentage: profitPercentage,
+      bankName: bankName,
+      productSegment: productSegment,
+    );
+  }
+
 }
+

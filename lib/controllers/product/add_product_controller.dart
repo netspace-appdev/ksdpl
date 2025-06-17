@@ -341,10 +341,6 @@ class AddProductController extends GetxController{
       print("Third case inn add product");
     }
 
-
-    print("isFirstSave.value===>${isFirstSave.value}");
-    print("currentStep.value===>${currentStep.value}");
-    print("tappedIndex.value===>${tappedIndex}");
   }
 
   void previousStep() {
@@ -355,10 +351,7 @@ class AddProductController extends GetxController{
   }
 
   void jumpToStep(int step) {
-    // We only mark previous step completed if jumping forward
-    /*  if (step > currentStep.value) {
-      stepCompleted[currentStep.value] = true;
-    }*/
+
     currentStep.value = step;
     scrollToStep(step);
   }

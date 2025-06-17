@@ -162,10 +162,6 @@ class DashboardApiService{
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(GetDetailsCountOfLeadsForDashboard, request.fields);
-      Helper.ApiRes(GetDetailsCountOfLeadsForDashboard, response.body);
-
-
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -321,10 +317,6 @@ class DashboardApiService{
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(todayWorkStatusOfRoBm, request.fields);
-      Helper.ApiRes(todayWorkStatusOfRoBm, response.body);
-
-
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -365,8 +357,7 @@ class DashboardApiService{
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(getReminderCallListTodayAndTomorrow, request.fields);
-      Helper.ApiRes(getReminderCallListTodayAndTomorrow, response.body);
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

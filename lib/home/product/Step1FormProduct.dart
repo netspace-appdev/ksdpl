@@ -355,22 +355,6 @@ class Step1FormProduct extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-
-             /* Obx(() {
-                final values = addProductController.selectedIncomeType.toList();
-                return MultiSelectDropdown<String>(
-                  key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
-                  items: addProductController.incomeTypeList.toList(),
-                  getId: (e) => e,
-                  getName: (e) => e,
-                  selectedValues: values,
-                  onChanged: (selectedList) {
-                    addProductController.selectedIncomeType.assignAll(selectedList);
-                  },
-                );
-              }),
-*/
-
               Obx(() {
                 final values = addProductController.selectedIncomeType.toList();
                 final incomeTypeList = addProductController.incomeTypeList;
