@@ -113,6 +113,8 @@ class Addleadcontroller extends GetxController{
         CamNoteController camNoteController=Get.put(CamNoteController());
 
         getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
+        camNoteController.getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
+        camNoteController.loanApplicationNumber=getLeadDetailModel.value!.data!.loanApplicationNo?.toString()??"";
 
         fullNameController.text=getLeadDetailModel.value!.data!.name!.toString();
         camNoteController.camFullNameController.text = getLeadDetailModel.value!.data!.name!.toString();
@@ -208,33 +210,41 @@ class Addleadcontroller extends GetxController{
   }
 
  Future<void>fillLeadFormApi({
-    required String id,
+   required String id,
+   required String dob,
+   required String gender,
+   required String loanAmtReq,
+   String? email,
+   String? aadhar,
+   String? pan,
+   String? streetAdd,
+   String? state,
+   String? district,
+   String? city,
+   String? zip,
+   String? nationality,
+   String? currEmpSt,
+   String? employerName,
+   String? monthlyIncome,
+   String? addSrcIncome,
+   String? prefBank,
+   String? exRelBank,
+   String? branchLoc,
+   String? prodTypeInt,
+   String? connName,
+   String? connMob,
+   String? connShare,
+   String? loanApplNo,
 
-    required String dob,
-
-    required String gender,
-    required String loanAmtReq,
-    String? email,
-    String? aadhar,
-    String? pan,
-    String? streetAdd,
-    String state = "0",
-    String district = "0",
-    String city = "0",
-    String? zip,
-    String? nationality,
-    String currEmpSt = "0",
-    String? employerName,
-    String? monthlyIncome,
-    String? addSrcIncome,
-    String prefBank = "0",
-    String? exRelBank,
-    String? branchLoc,
-    String prodTypeInt = "0",
-    String? connName,
-    String? connMob,
-    String? connShare,
-    String? loanApplNo,
+   String? name,
+   String? mobileNumber,
+   String? packageId,
+   String? packageAmount,
+   String? receivableAmount,
+   String? receivableDate,
+   String? transactionDetails,
+   String? remark,
+   String? leadSegment,
   }) async {
     try {
       isLoading(true);
@@ -242,9 +252,7 @@ class Addleadcontroller extends GetxController{
 
       var data = await LeadApiService.fillLeadFormApi(
         id: id,
-
         dob: dob,
-
         gender: gender,
         loanAmtReq: loanAmtReq,
         email: email,
@@ -268,6 +276,16 @@ class Addleadcontroller extends GetxController{
         connMob: connMob,
         connShare: connShare,
         loanApplNo: loanApplNo,
+
+        name:name,
+        mobileNumber:mobileNumber,
+        packageId:packageId,
+        packageAmount:packageAmount,
+        receivableAmount:receivableAmount,
+        receivableDate:receivableDate,
+        transactionDetails:transactionDetails,
+        remark:remark,
+        leadSegment:leadSegment,
       );
 
 
@@ -294,6 +312,10 @@ class Addleadcontroller extends GetxController{
       isLoading(false);
     }
   }
+
+
+
+
 
   void clearControllers(){
     fullNameController.clear();

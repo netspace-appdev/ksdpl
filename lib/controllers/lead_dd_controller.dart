@@ -429,7 +429,7 @@ class LeadDDController extends GetxController{
 
   Future<void>  getProductListByBankIdApi({required bankId}) async {
     try {
-      isLoading(true);
+
       isProductLoading(true);
 
       var data = await DrawerApiService.getProductListByBankIdApi(
@@ -446,7 +446,7 @@ class LeadDDController extends GetxController{
 
 
 
-        isLoading(false);
+
         isProductLoading(false);
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -461,11 +461,11 @@ class LeadDDController extends GetxController{
       print("Error getProductListByBankModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
+
       isProductLoading(false);
     } finally {
 
-      isLoading(false);
+
       isProductLoading(false);
     }
   }

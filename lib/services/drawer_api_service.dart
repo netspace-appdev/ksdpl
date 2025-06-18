@@ -483,8 +483,8 @@ class DrawerApiService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("response===>${getLeadDetailById}===>${response.body}");
-
+      Helper.ApiReq(getLeadDetailById, request.fields);
+      Helper.ApiRes(getLeadDetailById, response.body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

@@ -15,7 +15,7 @@ class LeadApiService {
   static const String individualLeadUpload = baseUrl + 'LeadDetail/IndividualLeadUpload';
 
 
-  static Future<Map<String, dynamic>> fillLeadFormApi({
+/*  static Future<Map<String, dynamic>> fillLeadFormApi({
     required String id,
 
     required String dob,
@@ -56,7 +56,7 @@ class LeadApiService {
       var header=await MyHeader.getHeaders2();
 
       request.headers.addAll(header);
-      request.fields['Id'] = id.toString();
+      request.fields['Id'] = id.toString(); //done
 
       request.fields['DateOfBirth'] = dob;
 
@@ -107,6 +107,113 @@ class LeadApiService {
       }
     } catch (e) {
       throw Exception('Error: $e');
+    }
+  }*/
+
+
+
+
+  static Future<Map<String, dynamic>> fillLeadFormApi({
+
+    required String id,
+    required String dob,
+    required String gender,
+    required String loanAmtReq,
+    String? email,
+    String? aadhar,
+    String? pan,
+    String? streetAdd,
+    String? state,
+    String? district,
+    String? city,
+    String? zip,
+    String? nationality,
+    String? currEmpSt,
+    String? employerName,
+    String? monthlyIncome,
+    String? addSrcIncome,
+    String? prefBank,
+    String? exRelBank,
+    String? branchLoc,
+    String? prodTypeInt,
+    String? connName,
+    String? connMob,
+    String? connShare,
+    String? loanApplNo,
+
+    String? name,
+    String? mobileNumber,
+    String? packageId,
+    String? packageAmount,
+    String? receivableAmount,
+    String? receivableDate,
+    String? transactionDetails,
+    String? remark,
+    String? leadSegment,
+  }) async {
+    try {
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(fillLeadForm),
+      );
+
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', id,fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Name', name);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'MobileNumber', mobileNumber);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Email', email);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Pincode', pan);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'DateOfBirth', dob);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Gender', gender);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'LoanAmountRequested', loanAmtReq);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'AdharCard', aadhar);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PanCard', pan);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'StreetAddress', streetAdd);
+
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'State', state,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'District', district,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'City', city,fallback: "0");
+
+
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Nationality', nationality);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CurrentEmploymentStatus', currEmpSt);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'EmployerName', employerName);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'MonthlyIncome', monthlyIncome);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'AdditionalSourceOfIncome', addSrcIncome);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PrefferedBank', prefBank);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'ExistinRelaationshipWithBank', exRelBank);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Branch', branchLoc);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'ProductType', prodTypeInt);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'LoanApplicationNo', loanApplNo);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'ConnectorName', connName);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'ConnectorMobileNo', connMob);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ConnectorPercentage', connShare,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'PackageId', packageId,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'PackageAmount', packageAmount,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ReceiveableAmount', receivableAmount,fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'ReceiveableDate', receivableDate);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'TransactionDetails', transactionDetails);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Remark', remark);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LeadSegment', leadSegment,fallback: "0");
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(fillLeadForm, request.fields);
+      Helper.ApiRes(fillLeadForm, response.body);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
     }
   }
 

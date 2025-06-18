@@ -953,6 +953,7 @@ class LeadSearchScreen extends StatelessWidget {
           camNoteController.currentStep.value=0;
           camNoteController.infoFilledBankers.clear();
           camNoteController.selectedBankers.clear();
+          leadDDController.getAllKsdplProductApi();
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
+import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
 import 'package:ksdpl/controllers/product/view_product_controller.dart';
 import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
@@ -100,7 +101,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   final scrollController = ScrollController();
 
-
+  var getLeadId = Rxn<String>();
   var prodSegmentList=["Insurance", "Secured","Unsecured", ];
   var selectedprodSegment = Rxn<String>();
   var customerCategoryList=["Salaried", "Salaried NRI","Self Employed Professional", "Self Employed Non Professional", "Non-Individual","Others"];
@@ -238,7 +239,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var camSelectedProdType = Rxn<String>();
   var camSelectedIndexRelBank = (-1).obs;
   ///end
-
+  var uniqueLeadNUmber="";
+  var loanApplicationNumber="";
 
   final Map<String, RxList<File>> imageMap = {};
   var isPackageLoading = false.obs;
@@ -407,16 +409,16 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     stepCompleted[currentStep.value] = true;
   }
 
-  void saveForm() {
+  void saveForm() async {
     print("Form Saved!");
 
     final List<IncomeModel> addIncomeSrcModels = [];
 
     for (var ai in addIncomeList) {
       final aiModel = IncomeModel(
-        uniqueLeadNumber: "",
+        uniqueLeadNumber: uniqueLeadNUmber,
         description: cleanText(ai.aiSourceController.text),
-        amount: ai.aiIncomeController.text as double,
+        amount: ai.aiIncomeController.text.toDoubleOrZero(),
       );
 
       addIncomeSrcModels.add(aiModel);
@@ -424,8 +426,59 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     List<Map<String, dynamic>> aiPayload = addIncomeSrcModels.map((e) => e.toMap()).toList();
 
-    if(aiPayload.isNotEmpty){}
-    addAdditionalSourceIncomeApi(aiPayload:aiPayload);
+    if(aiPayload.isNotEmpty){
+      await addAdditionalSourceIncomeApi(aiPayload:aiPayload);
+    }
+
+
+    if (selectedGender.value==null) {
+      ToastMessage.msg("Please select gender");
+    }else {
+        Addleadcontroller addLeadController =Get.find();
+
+        print("camSelectedBank.value.toString()===>${camSelectedBank.value.toString()}");
+        print("camSelectedDistrict===>${camSelectedDistrict.value.toString()}");
+        print("camSelectedCity===>${camSelectedCity.value.toString()}");
+
+        addLeadController.fillLeadFormApi(
+          id: getLeadId.value.toString(),
+          dob: camDobController.text.toString(),
+          gender: selectedGender.toString(),
+          loanAmtReq:camLoanAmtReqController.text.toString(),
+          email: camEmailController.text.toString(),
+          aadhar: camAadharController.text.toString(),
+          pan: camPanController.text.toString(),
+          streetAdd: camStreetAddController.text.toString(),
+          state:  camSelectedState.value.toString(),
+          district: camSelectedDistrict.value.toString(),
+          city: camSelectedCity.value.toString(),
+          zip: camZipController.text.toString(),
+          nationality: camNationalityController.text.toString(),
+          currEmpSt: camCurrEmpStatus.value,
+          employerName: camEmployerNameController.text.toString(),
+          monthlyIncome:camMonthlyIncomeController.text.toString(),
+          ///Now this is not working, Have different API for Additional source of income
+          addSrcIncome: "",
+          prefBank: camSelectedBank.value.toString(),
+          exRelBank:camSelectedIndexRelBank.value==-1?"":camSelectedIndexRelBank.value.toString(),
+          branchLoc:camBranchLocController.text.toString(),
+          prodTypeInt: camSelectedProdType.value.toString(),
+          /// connection name mob and percent are not sent
+          loanApplNo: loanApplicationNumber.toString(),
+
+          name: camFullNameController.text.toString(),
+          mobileNumber: camPhoneController.text.toString(),
+          packageId: selectedPackage.value.toString(),
+          packageAmount: camPackageAmtController.text.toString(),
+          receivableAmount:camReceivableAmtController.text.toString(),
+          receivableDate:camReceivableDateController.text.toString(),
+          transactionDetails:camTransactionDetailsController.text.toString(),
+          remark:camRemarkController.text.toString(),
+          leadSegment:camSelectedProdSegment.value.toString(),
+
+        );
+
+    }
   }
 
   List<GlobalKey<FormState>> stepFormKeys = List.generate(3, (_) => GlobalKey<FormState>());
@@ -541,6 +594,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     infoFilledBankers.clear();
     selectedBankers.clear();
+    uniqueLeadNUmber="";
+    loanApplicationNumber="";
     super.onClose();
   }
 
@@ -693,7 +748,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
     } catch (e) {
-      print("Error getLeadDetailByIdApi: $e");
+      print("Error addAdditionalSourceIncomeApi: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -1067,7 +1122,14 @@ extension ParseStringExtension on String? {
 }
 
 
-
+extension ParseStringToDoubleExtension on String? {
+  double toDoubleOrZero() {
+    if (this != null && this!.isNotEmpty) {
+      return double.tryParse(this!.trim()) ?? 0.0;
+    }
+    return 0.0;
+  }
+}
 
 extension TextEditingControllerExtension on TextEditingController {
   int toIntOrZero() {

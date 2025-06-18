@@ -174,6 +174,39 @@ class Step1FormProduct extends StatelessWidget {
               ),
 
 
+              CustomLabeledTextField(
+                label: AppText.superiorName,
+                controller: addProductController.prodBankerSuperiorNameController,
+                inputType: TextInputType.name,
+                hintText: AppText.enterSuperiorName,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.superiorMobile,
+                controller: addProductController.prodBankerSuperiorMobController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterSuperiorMobile,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.superiorWhatsapp,
+                controller: addProductController.prodBankerSuperiorWhatsappController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterSuperiorWhatsapp,
+
+              ),
+
+              CustomLabeledTextField(
+                label: AppText.superiorEmail,
+                controller: addProductController.prodBankerSuperiorEmailController,
+                inputType: TextInputType.emailAddress,
+                hintText: AppText.enterSuperiorEmail,
+
+              ),
+
+
 
 
               CustomLabeledTextField(

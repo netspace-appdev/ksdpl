@@ -109,6 +109,11 @@ class ProductService {
     String? TotalOverdueCases,
     String? TotalOverdueAmount,
     String? TotalEnquiries,
+
+    String? SuperiorName,
+    String? SuperiorMobileNo,
+    String? SuperiorWhatsappNo,
+    String? SuperiorEmail,
 }) async {
     try {
       print("Negative_Profiles===.${Negative_Profiles}");
@@ -176,6 +181,11 @@ class ProductService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueCases', TotalOverdueCases,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueAmount', TotalOverdueAmount,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalEnquiries', TotalEnquiries,fallback: "0");
+
+      MultipartFieldHelper.addField(request.fields, 'SuperiorName', SuperiorName);
+      MultipartFieldHelper.addField(request.fields, 'SuperiorMobileNo', SuperiorMobileNo);
+      MultipartFieldHelper.addField(request.fields, 'SuperiorWhatsappNo', SuperiorWhatsappNo);
+      MultipartFieldHelper.addField(request.fields, 'SuperiorEmail', SuperiorEmail);
 
 
       var streamedResponse = await request.send();
@@ -256,6 +266,11 @@ class ProductService {
     String? TotalOverdueCases,
     String? TotalOverdueAmount,
     String? TotalEnquiries,
+
+    String? SuperiorName,
+    String? SuperiorMobileNo,
+    String? SuperiorWhatsappNo,
+    String? SuperiorEmail,
   }) async {
 
     try {
@@ -325,6 +340,12 @@ class ProductService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueCases', TotalOverdueCases,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueAmount', TotalOverdueAmount,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalEnquiries', TotalEnquiries,fallback: "0");
+
+      MultipartFieldHelper.addField(request.fields, 'SuperiorName', SuperiorName);
+      MultipartFieldHelper.addField(request.fields, 'SuperiorMobileNo', SuperiorMobileNo);
+      MultipartFieldHelper.addField(request.fields, 'SuperiorWhatsappNo', SuperiorWhatsappNo);
+      MultipartFieldHelper.addField(request.fields, 'SuperiorEmail', SuperiorEmail);
+
 
 
       var streamedResponse = await request.send();

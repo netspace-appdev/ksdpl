@@ -240,6 +240,11 @@ class AddProductController extends GetxController{
   final TextEditingController prodProductDescriptionsController = TextEditingController();
   final TextEditingController prodNoOfDocController = TextEditingController();
 
+  final TextEditingController prodBankerSuperiorNameController = TextEditingController();
+  final TextEditingController prodBankerSuperiorMobController = TextEditingController();
+  final TextEditingController prodBankerSuperiorWhatsappController = TextEditingController();
+  final TextEditingController prodBankerSuperiorEmailController = TextEditingController();
+
   var selectedprodSegment = Rxn<String>();
   RxList<String> customerCategoryList = [
     "Salaried",
@@ -489,6 +494,10 @@ class AddProductController extends GetxController{
         TotalEnquiries: prodTotalEnquiriesController.text,
         commonDocument: selectedCommonDoc,
         additionalDocs: selectedAdditionalDocs,
+        SuperiorName: prodBankerSuperiorNameController.text,
+        SuperiorMobileNo: prodBankerSuperiorMobController.text,
+        SuperiorEmail: prodBankerSuperiorEmailController.text,
+        SuperiorWhatsappNo: prodBankerSuperiorWhatsappController.text,
       );
     }
 
@@ -575,6 +584,11 @@ class AddProductController extends GetxController{
         TotalOverdueCases: prodTotalOverdueCasesController.text,
         TotalOverdueAmount: prodTotalOverdueAmtController.text,
         TotalEnquiries: prodTotalEnquiriesController.text,
+
+        SuperiorName: prodBankerSuperiorNameController.text,
+        SuperiorMobileNo: prodBankerSuperiorMobController.text,
+        SuperiorEmail: prodBankerSuperiorEmailController.text,
+        SuperiorWhatsappNo: prodBankerSuperiorWhatsappController.text,
       );
 
     }
@@ -765,7 +779,10 @@ class AddProductController extends GetxController{
     prodTotalOverdueAmtController.dispose();
     prodTotalEnquiriesController.dispose();
 
-
+    prodBankerSuperiorNameController.dispose();
+    prodBankerSuperiorMobController.dispose();
+    prodBankerSuperiorWhatsappController.dispose();
+    prodBankerSuperiorEmailController.dispose();
   }
 
 
@@ -881,6 +898,11 @@ class AddProductController extends GetxController{
     prodTotalOverdueAmtController.clear();
     prodTotalEnquiriesController.clear();
     prodProcessingChargesController.clear();
+
+    prodBankerSuperiorNameController.clear();
+    prodBankerSuperiorMobController.clear();
+    prodBankerSuperiorWhatsappController.clear();
+    prodBankerSuperiorEmailController.clear();
   }
 
   Future<void>  getAllProductCategoryApi() async {
@@ -988,7 +1010,12 @@ class AddProductController extends GetxController{
     String? TotalOverdueAmount,
     String? TotalEnquiries,
     List<commanDoc.Data>? commonDocument,
-    List<ChipData>? additionalDocs
+    List<ChipData>? additionalDocs,
+
+    String? SuperiorName,
+    String? SuperiorMobileNo,
+    String? SuperiorWhatsappNo,
+    String? SuperiorEmail,
 
 }) async {
     try {
@@ -1051,6 +1078,11 @@ class AddProductController extends GetxController{
         TotalOverdueAmount: TotalOverdueAmount,
         TotalOverdueCases: TotalOverdueCases,
         TotalEnquiries: TotalEnquiries,
+
+        SuperiorName: SuperiorName,
+        SuperiorMobileNo: SuperiorMobileNo,
+        SuperiorWhatsappNo: SuperiorWhatsappNo,
+        SuperiorEmail: SuperiorEmail,
 
       );
 
@@ -1192,6 +1224,11 @@ class AddProductController extends GetxController{
     List<commanDoc.Data>? commonDocument,
     List<ChipData>? additionalDocs,
 
+    String? SuperiorName,
+    String? SuperiorMobileNo,
+    String? SuperiorWhatsappNo,
+    String? SuperiorEmail,
+
   }) async {
     try {
       isLoading(true);
@@ -1254,6 +1291,11 @@ class AddProductController extends GetxController{
         TotalOverdueAmount: TotalOverdueAmount,
         TotalOverdueCases: TotalOverdueCases,
         TotalEnquiries: TotalEnquiries,
+
+        SuperiorName: SuperiorName,
+        SuperiorMobileNo: SuperiorMobileNo,
+        SuperiorWhatsappNo: SuperiorWhatsappNo,
+        SuperiorEmail: SuperiorEmail,
       );
 
 
@@ -1398,6 +1440,13 @@ class AddProductController extends GetxController{
             .split(',')
             .map((e) => e.trim())
             .toList());
+
+
+    prodBankerSuperiorNameController.text=getProductListById.value!.data!.superiorName??"";
+    prodBankerSuperiorMobController.text=getProductListById.value!.data!.superiorMobileNo??"";
+    prodBankerSuperiorWhatsappController.text=getProductListById.value!.data!.superiorWhatsappNo??"";
+    prodBankerSuperiorEmailController.text=getProductListById.value!.data!.superiorEmail??"";
+
   }
 
   Future <void> populateStep2Info() async{

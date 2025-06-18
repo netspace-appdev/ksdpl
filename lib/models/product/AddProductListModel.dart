@@ -87,7 +87,15 @@ class Data {
   String? deletedDate;
   String? deletedBy;
   String? productCategoryName;
-
+  num? fromAmountRange;
+  num? toAmountRange;
+  num? totalOverdueCases;
+  num? totalOverdueAmount;
+  num? totalEnquiries;
+  String? superiorName;
+  String? superiorMobileNo;
+  String? superiorWhatsappNo;
+  String? superiorEmail;
   Data(
       {this.id,
         this.bankId,
@@ -149,7 +157,17 @@ class Data {
         this.updatedBy,
         this.deletedDate,
         this.deletedBy,
-        this.productCategoryName});
+        this.productCategoryName,
+        this.fromAmountRange,
+        this.toAmountRange,
+        this.totalOverdueCases,
+        this.totalOverdueAmount,
+        this.totalEnquiries,
+        this.superiorName,
+        this.superiorMobileNo,
+        this.superiorWhatsappNo,
+        this.superiorEmail
+      });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -214,6 +232,16 @@ class Data {
     deletedDate = json['deletedDate'];
     deletedBy = json['deletedBy'];
     productCategoryName = json['productCategoryName'];
+    fromAmountRange = json['fromAmountRange'];
+    toAmountRange = json['toAmountRange'];
+    totalOverdueCases = json['totalOverdueCases'];
+    totalOverdueAmount = json['totalOverdueAmount'];
+    totalEnquiries = json['totalEnquiries'];
+    superiorName = json['superiorName'];
+    superiorMobileNo = json['superiorMobileNo'];
+    superiorWhatsappNo = json['superiorWhatsappNo'];
+    superiorEmail = json['superiorEmail'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -282,6 +310,15 @@ class Data {
     data['deletedDate'] = this.deletedDate;
     data['deletedBy'] = this.deletedBy;
     data['productCategoryName'] = this.productCategoryName;
+    data['fromAmountRange'] = this.fromAmountRange;
+    data['toAmountRange'] = this.toAmountRange;
+    data['totalOverdueCases'] = this.totalOverdueCases;
+    data['totalOverdueAmount'] = this.totalOverdueAmount;
+    data['totalEnquiries'] = this.totalEnquiries;
+    data['superiorName'] = this.superiorName;
+    data['superiorMobileNo'] = this.superiorMobileNo;
+    data['superiorWhatsappNo'] = this.superiorWhatsappNo;
+    data['superiorEmail'] = this.superiorEmail;
     return data;
   }
 }

@@ -204,6 +204,10 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: AppText.bankerMobile, value: data.bankersMobileNumber.toString()),
             DetailRow(label: AppText.bankerWhatsapp, value: data.bankersWhatsAppNumber.toString()),
             DetailRow(label: AppText.bankerEmail, value: data.bankersEmailID.toString()),
+            DetailRow(label: AppText.superiorName, value: data.superiorName.toString()),
+            DetailRow(label: AppText.superiorMobile, value: data.superiorMobileNo.toString()),
+            DetailRow(label: AppText.superiorEmail, value: data.superiorEmail.toString()),
+            DetailRow(label: AppText.superiorWhatsapp, value: data.superiorWhatsappNo.toString()),
           ],
               Icons.phone
           ),

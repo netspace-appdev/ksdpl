@@ -189,25 +189,6 @@ class Step1CamNote extends StatelessWidget {
 
                 SizedBox(height: 10),
 
-
-               /* Obx((){
-                  if (leadDDController.isStateLoading.value) {
-                    return  Center(child:CustomSkelton.leadShimmerList(context));
-                  }
-
-                  return CustomDropdown<state.Data>(
-                    items: leadDDController.getAllStateModel.value?.data ?? [],
-                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                    getName: (item) => item.stateName.toString(),
-                    selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                          (item) => item.id.toString() == leadDDController.selectedState.value,
-                    ),
-                    onChanged: (value) {
-                      leadDDController.selectedState.value =  value?.id?.toString();
-                      leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
-                    },
-                  );
-                }),*/
                 Obx((){
                   if (leadDDController.isStateLoading.value) {
                     return  Center(child:CustomSkelton.leadShimmerList(context));
@@ -548,22 +529,6 @@ class Step1CamNote extends StatelessWidget {
 
                 const SizedBox(height: 10),
 
-
-               /* Obx(()=>Column(
-                  children: addleadcontroller.optionsRelBank.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    String option = entry.value;
-
-                    return CheckboxListTile(
-                      activeColor: AppColor.secondaryColor,
-
-                      title: Text(option),
-                      value: addleadcontroller.selectedIndexRelBank.value == index,
-                      onChanged: (value) => addleadcontroller.selectCheckboxRelBank(index),
-                    );
-                  }).toList(),
-                )),
-*/
 
                 Obx(()=>Column(
                   children: addleadcontroller.optionsRelBank.asMap().entries.map((entry) {
