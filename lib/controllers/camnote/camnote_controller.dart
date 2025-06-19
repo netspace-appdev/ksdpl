@@ -16,6 +16,8 @@ import '../../common/storage_service.dart';
 import '../../custom_widgets/ImagePickerMixin.dart';
 import '../../models/camnote/AddAdSrcIncomModel.dart';
 import '../../models/camnote/AddBankerDetail.dart';
+import '../../models/camnote/AddCamNoteDetail.dart';
+import '../../models/camnote/GetAddIncUniqueLeadModel.dart';
 import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
 import '../../models/camnote/GetBankerDetailModelForCheck.dart';
 import '../../models/camnote/GetBankerDetailsByIdModel.dart';
@@ -62,6 +64,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var updateBankerDetailModel = Rxn<UpdateBankerDetailModel>(); //
   var addBankerDetail = Rxn<AddBankerDetail>(); //
   var getBankerDetailModelForCheck = Rxn<GetBankerDetailModelForCheck>(); //
+  var getAddIncUniqueLeadModel = Rxn<GetAddIncUniqueLeadModel>(); //
+  var addCamNoteDetail = Rxn<AddCamNoteDetail>(); //
 
 
   var selectedGenderCoAP = Rxn<String>();
@@ -436,9 +440,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else {
         Addleadcontroller addLeadController =Get.find();
 
-        print("camSelectedBank.value.toString()===>${camSelectedBank.value.toString()}");
-        print("camSelectedDistrict===>${camSelectedDistrict.value.toString()}");
-        print("camSelectedCity===>${camSelectedCity.value.toString()}");
+
+        print("camSelectedIndexRelBank===>${camSelectedIndexRelBank.value}");
 
         addLeadController.fillLeadFormApi(
           id: getLeadId.value.toString(),
@@ -460,7 +463,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           ///Now this is not working, Have different API for Additional source of income
           addSrcIncome: "",
           prefBank: camSelectedBank.value.toString(),
-          exRelBank:camSelectedIndexRelBank.value==-1?"":camSelectedIndexRelBank.value.toString(),
+          exRelBank:camSelectedIndexRelBank.value==-1?"":camSelectedIndexRelBank.value==0?"Yes":"No",
           branchLoc:camBranchLocController.text.toString(),
           prodTypeInt: camSelectedProdType.value.toString(),
           /// connection name mob and percent are not sent
@@ -760,7 +763,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   }
 
-  void  getAllPackageMasterApi() async {
+  Future<void>  getAllPackageMasterApi() async {
     try {
       isPackageLoading(true);
 
@@ -1109,6 +1112,194 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     }
   }
+
+  Future<void>  getAddIncUniqueLeadApi({
+    required String uniqueLeadNumber,
+
+  }) async {
+    try {
+
+      isLoading(true);
+
+      var data = await CamNoteService.getAddIncUniqueLeadApi(uniqueLeadNumber:uniqueLeadNumber);
+
+
+      if(data['success'] == true){
+
+        getAddIncUniqueLeadModel.value= GetAddIncUniqueLeadModel.fromJson(data);
+
+
+        isLoading(false);
+
+        ///code for populatinf add inc
+        if(getAddIncUniqueLeadModel.value!.data!=null || getAddIncUniqueLeadModel.value!.data!.isNotEmpty){
+          addIncomeList.clear();
+          final jsonStr =  getAddIncUniqueLeadModel.value!.data;
+
+          if (jsonStr != null) {
+            // final decoded = jsonDecode(jsonStr);
+            final decoded = jsonStr;
+
+            // Check if it's actually a List of Maps
+            if (decoded is List) {
+              for (var item in decoded) {
+                final aiController = AddIncomeModelController();
+
+                aiController.aiSourceController.text= item.description ?? '';
+                aiController.aiIncomeController.text= item.amount.toString() ?? '';
+                addIncomeList.add(aiController);
+              }
+            } else {
+              print("Expected a List but got: ${decoded.runtimeType}");
+            }
+          }
+        }
+
+        ///end
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAddIncUniqueLeadModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAddIncUniqueLeadModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+    } finally {
+
+
+      isLoading(false);
+    }
+  }
+
+  Future<void>  addCamNoteDetailApi({
+    String? Id,
+    String? LeadID,
+    String? BankId,
+    String? BankersName,
+    String? BankersMobileNumber,
+    String? BankersWhatsAppNumber,
+    String? BankersEmailID,
+    String? Cibil,
+    String? TotalLoanAvailedOnCibil,
+    String? TotalLiveLoan,
+    String? TotalEMI,
+    String? EMIStoppedOnBeforeThisLoan,
+    String? EMIWillContinue,
+    String? TotalOverdueCasesAsPerCibil,
+    String? TotalOverdueAmountAsPerCibil,
+    String? TotalEnquiriesMadeAsPerCibil,
+    String? LoanSegment,
+    String? LoanProduct,
+    String? OfferedSecurityType,
+    String? GeoLocationOfProperty,
+    String? IncomeType,
+    String? EarningCustomerAge,
+    String? NonEarningCustomerAge,
+    String? TotalFamilyIncome,
+    String? IncomeCanBeConsidered,
+    String? LoanAmountRequested,
+    String? LoanTenorRequested,
+    String? ROI,
+    String? ProposedEMI,
+    String? PropertyValueAsPerCustomer,
+    String? FOIR,
+    String? LTV,
+    String? BranchOfBank,
+    String? GeoLocationOfResidence,
+    String? GeoLocationOfOffice,
+    String? PhotosOfProperty,
+    String? PhotosOfResidence,
+    String? PhotosOfOffice,
+    String? SanctionProcessingCharges,
+
+
+  }) async {
+    try {
+
+      isLoading(true);
+
+      var data = await CamNoteService.addCamNoteDetailApi(
+        Id: Id,
+        LeadID: LeadID,
+        BankId: BankId,
+        BankersName: BankersName,
+        BankersMobileNumber: BankersMobileNumber,
+        BankersWhatsAppNumber: BankersWhatsAppNumber,
+        BankersEmailID: BankersEmailID,
+        Cibil: Cibil,
+        TotalLoanAvailedOnCibil: TotalLoanAvailedOnCibil,
+        TotalLiveLoan: TotalLiveLoan,
+        TotalEMI: TotalEMI,
+        EMIStoppedOnBeforeThisLoan: EMIStoppedOnBeforeThisLoan,
+        EMIWillContinue: EMIWillContinue,
+        TotalOverdueCasesAsPerCibil: TotalOverdueCasesAsPerCibil,
+        TotalOverdueAmountAsPerCibil: TotalOverdueAmountAsPerCibil,
+        TotalEnquiriesMadeAsPerCibil: TotalEnquiriesMadeAsPerCibil,
+        LoanSegment: LoanSegment,
+        LoanProduct: LoanProduct,
+        OfferedSecurityType: OfferedSecurityType,
+        GeoLocationOfProperty: GeoLocationOfProperty,
+        IncomeType: IncomeType,
+        EarningCustomerAge: EarningCustomerAge,
+        NonEarningCustomerAge: NonEarningCustomerAge,
+        TotalFamilyIncome: TotalFamilyIncome,
+        IncomeCanBeConsidered: IncomeCanBeConsidered,
+        LoanAmountRequested: LoanAmountRequested,
+        LoanTenorRequested: LoanTenorRequested,
+        ROI: ROI,
+        ProposedEMI: ProposedEMI,
+        PropertyValueAsPerCustomer: PropertyValueAsPerCustomer,
+        FOIR: FOIR,
+        LTV: LTV,
+        BranchOfBank: BranchOfBank,
+        GeoLocationOfResidence: GeoLocationOfResidence,
+        GeoLocationOfOffice: GeoLocationOfOffice,
+        PhotosOfProperty: PhotosOfProperty,
+        PhotosOfResidence: PhotosOfResidence,
+        PhotosOfOffice: PhotosOfOffice,
+        SanctionProcessingCharges: SanctionProcessingCharges,
+      );
+
+
+      if(data['success'] == true){
+
+        addCamNoteDetail.value= AddCamNoteDetail.fromJson(data);
+
+
+        isLoading(false);
+
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        addCamNoteDetail.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error addCamNoteDetail: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+    } finally {
+
+
+      isLoading(false);
+    }
+  }
+
 
 }
 

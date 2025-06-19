@@ -229,27 +229,6 @@ class Step1CamNote extends StatelessWidget {
 
                 const SizedBox(height: 10),
 
-
-               /* Obx((){
-                  if (leadDDController.isDistrictLoading.value) {
-                    return  Center(child:CustomSkelton.leadShimmerList(context));
-                  }
-
-
-                  return CustomDropdown<dist.Data>(
-                    items: leadDDController.getDistrictByStateModel.value?.data ?? [],
-                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                    getName: (item) => item.districtName.toString(),
-                    selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
-                          (item) => item.id.toString() == leadDDController.selectedDistrict.value,
-                    ),
-                    onChanged: (value) {
-                      leadDDController.selectedDistrict.value =  value?.id?.toString();
-                      leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
-                    },
-                  );
-                }),*/
-
                 Obx((){
                   if (leadDDController.isDistrictLoading.value) {
                     return  Center(child:CustomSkelton.leadShimmerList(context));
@@ -291,24 +270,6 @@ class Step1CamNote extends StatelessWidget {
                 const SizedBox(height: 10),
 
 
-             /*   Obx((){
-                  if (leadDDController.isCityLoading.value) {
-                    return  Center(child:CustomSkelton.leadShimmerList(context));
-                  }
-
-
-                  return CustomDropdown<city.Data>(
-                    items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
-                    getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                    getName: (item) => item.cityName.toString(),
-                    selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
-                          (item) => item.id.toString() == leadDDController.selectedCity.value,
-                    ),
-                    onChanged: (value) {
-                      leadDDController.selectedCity.value =  value?.id?.toString();
-                    },
-                  );
-                }),*/
 
                 Obx((){
                   if (leadDDController.isCityLoading.value) {

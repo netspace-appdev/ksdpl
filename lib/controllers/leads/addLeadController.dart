@@ -115,14 +115,13 @@ class Addleadcontroller extends GetxController{
         getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
         camNoteController.getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
         camNoteController.loanApplicationNumber=getLeadDetailModel.value!.data!.loanApplicationNo?.toString()??"";
+        camNoteController.uniqueLeadNUmber=getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"";
 
         fullNameController.text=getLeadDetailModel.value!.data!.name!.toString();
         camNoteController.camFullNameController.text = getLeadDetailModel.value!.data!.name!.toString();
 
-        dobController.text=getLeadDetailModel.value!.data!.dateOfBirth==null?"":Helper.birthdayFormat(getLeadDetailModel.value!.data!.dateOfBirth!.toString());
-        camNoteController.camDobController.text = getLeadDetailModel.value!.data!.dateOfBirth == null
-            ? ""
-            : Helper.birthdayFormat(getLeadDetailModel.value!.data!.dateOfBirth!.toString());
+        dobController.text=getLeadDetailModel.value!.data!.dateOfBirth==""?"": Helper.convertFromIso8601(getLeadDetailModel.value!.data!.dateOfBirth) ?? '';
+        camNoteController.camDobController.text =getLeadDetailModel.value!.data!.dateOfBirth==""?"": Helper.convertFromIso8601(getLeadDetailModel.value!.data!.dateOfBirth) ?? '';
 
         phoneController.text=getLeadDetailModel.value?.data?.mobileNumber??"";
         camNoteController.camPhoneController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
@@ -149,8 +148,14 @@ class Addleadcontroller extends GetxController{
         leadDDController.selectedState.value=getLeadDetailModel.value!.data!.state!.toString();
         camNoteController.camSelectedState.value = getLeadDetailModel.value!.data!.state!.toString();
 
+        leadDDController.getDistrictByStateIdApi(stateId: camNoteController.camSelectedState.value);
+        leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+
         leadDDController.selectedDistrict.value=getLeadDetailModel.value!.data!.district!.toString();
         camNoteController.camSelectedDistrict.value = getLeadDetailModel.value!.data!.district!.toString();
+
+        leadDDController.getCityByDistrictIdApi(districtId: camNoteController.camSelectedDistrict.value);
+        leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
 
         leadDDController.selectedCity.value=getLeadDetailModel.value!.data!.city!.toString();
         camNoteController.camSelectedCity.value = getLeadDetailModel.value!.data!.city!.toString();
@@ -170,9 +175,9 @@ class Addleadcontroller extends GetxController{
         monthlyIncomeController.text=getLeadDetailModel.value?.data?.monthlyIncome??"";
         camNoteController.camMonthlyIncomeController.text = getLeadDetailModel.value?.data?.monthlyIncome ?? "";
 
-        addSourceIncomeController.text=getLeadDetailModel.value?.data?.additionalSourceOfIncome??"";
+        addSourceIncomeController.text="";
 
-
+        await leadDDController.getAllBankApi();
         leadDDController.selectedBank.value=getLeadDetailModel.value?.data?.prefferedBank??"";
         camNoteController.camSelectedBank.value = getLeadDetailModel.value?.data?.prefferedBank ?? "";
 
@@ -183,6 +188,11 @@ class Addleadcontroller extends GetxController{
         camNoteController.camSelectedProdType.value=getLeadDetailModel.value?.data?.productType??"";
 
 
+        camNoteController.camSelectedProdSegment.value=int.parse(getLeadDetailModel.value?.data?.leadsegment.toString()??"0")??0;
+
+        print("relb--->${getLeadDetailModel.value?.data?.existinRelaationshipWithBank}");
+
+        camNoteController.camSelectedIndexRelBank.value=getLeadDetailModel.value?.data?.existinRelaationshipWithBank==""?-1:getLeadDetailModel.value?.data?.existinRelaationshipWithBank=="Yes"?0:1;
         connNameController.text=getLeadDetailModel.value?.data?.connectorName??"";
 
         connMobController.text=getLeadDetailModel.value?.data?.connectorMobileNo??"";
@@ -190,6 +200,10 @@ class Addleadcontroller extends GetxController{
         connShareController.text=getLeadDetailModel.value?.data?.connectorPercentage.toString()??"";
 
         createdByWhichEmployee.value=getLeadDetailModel.value?.data?.assignedEmployeeId.toString()??"";
+
+
+        camNoteController.getAddIncUniqueLeadApi(uniqueLeadNumber:getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"0");
+        //camNoteController.selectedPackage.value=getLeadDetailModel.value?.data?.assignedEmployeeId.toString()??"";
 
         isLoading(false);
 

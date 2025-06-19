@@ -166,7 +166,7 @@ class LeadApiService {
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Name', name);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'MobileNumber', mobileNumber);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Email', email);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Pincode', pan);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Pincode', zip);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'DateOfBirth', dob);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Gender', gender);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'LoanAmountRequested', loanAmtReq);

@@ -17,6 +17,8 @@ class CamNoteService {
   static const String updateBankerDetail = BaseUrl.baseUrl + 'CamNoteDetail/UpdateBankerDetail';
   static const String addBankerDetail = BaseUrl.baseUrl + 'CamNoteDetail/AddBankerDetail';
   static const String getBankerDetail = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetail';
+  static const String getAdditionalIncomeByUniqueLeadNumber = BaseUrl.baseUrl + 'CamNoteDetail/GetAdditionalIncomeByUniqueLeadNumber';
+  static const String addCamNoteDetail = BaseUrl.baseUrl + 'CamNoteDetail/AddCamNoteDetail';
 
 
 
@@ -283,6 +285,154 @@ class CamNoteService {
       throw Exception('Error while submitting: $e');
     }
   }
+
+  static Future<Map<String, dynamic>> getAddIncUniqueLeadApi({
+    required String uniqueLeadNumber,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAdditionalIncomeByUniqueLeadNumber),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'UniqueLeadNumber', uniqueLeadNumber);
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(getAdditionalIncomeByUniqueLeadNumber, request.fields);
+      Helper.ApiRes(getAdditionalIncomeByUniqueLeadNumber, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> addCamNoteDetailApi({
+     String? Id,
+     String? LeadID,
+     String? BankId,
+     String? BankersName,
+     String? BankersMobileNumber,
+     String? BankersWhatsAppNumber,
+     String? BankersEmailID,
+     String? Cibil,
+     String? TotalLoanAvailedOnCibil,
+     String? TotalLiveLoan,
+     String? TotalEMI,
+     String? EMIStoppedOnBeforeThisLoan,
+     String? EMIWillContinue,
+     String? TotalOverdueCasesAsPerCibil,
+    String? TotalOverdueAmountAsPerCibil,
+    String? TotalEnquiriesMadeAsPerCibil,
+    String? LoanSegment,
+    String? LoanProduct,
+    String? OfferedSecurityType,
+    String? GeoLocationOfProperty,
+    String? IncomeType,
+    String? EarningCustomerAge,
+    String? NonEarningCustomerAge,
+    String? TotalFamilyIncome,
+    String? IncomeCanBeConsidered,
+    String? LoanAmountRequested,
+    String? LoanTenorRequested,
+    String? ROI,
+    String? ProposedEMI,
+    String? PropertyValueAsPerCustomer,
+    String? FOIR,
+    String? LTV,
+    String? BranchOfBank,
+    String? GeoLocationOfResidence,
+    String? GeoLocationOfOffice,
+    String? PhotosOfProperty,
+    String? PhotosOfResidence,
+    String? PhotosOfOffice,
+    String? SanctionProcessingCharges,
+
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(addCamNoteDetail),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', Id,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LeadID', LeadID,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'BankId', BankId,fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'BankersName', BankersName);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'BankersMobileNumber', BankersMobileNumber);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'BankersWhatsAppNumber', BankersWhatsAppNumber);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'BankersEmailID', BankersEmailID);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Cibil', Cibil,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalLoanAvailedOnCibil', TotalLoanAvailedOnCibil,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalLiveLoan', TotalLiveLoan,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalEMI', TotalEMI,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'EMIStoppedOnBeforeThisLoan', EMIStoppedOnBeforeThisLoan,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'EMIWillContinue', EMIWillContinue,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueCasesAsPerCibil', TotalOverdueCasesAsPerCibil,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueAmountAsPerCibil', TotalOverdueAmountAsPerCibil,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalEnquiriesMadeAsPerCibil', TotalEnquiriesMadeAsPerCibil,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanSegment', LoanSegment,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanProduct', LoanProduct,fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'OfferedSecurityType', OfferedSecurityType);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfProperty', GeoLocationOfProperty);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'IncomeType', IncomeType);
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'EarningCustomerAge', EarningCustomerAge,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'NonEarningCustomerAge', NonEarningCustomerAge,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalFamilyIncome', TotalFamilyIncome,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'IncomeCanBeConsidered', IncomeCanBeConsidered,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanAmountRequested', LoanAmountRequested,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanTenorRequested', LoanTenorRequested,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ROI', ROI,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ProposedEMI', ProposedEMI,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'PropertyValueAsPerCustomer', PropertyValueAsPerCustomer,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'FOIR', FOIR,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LTV', LTV,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'BranchOfBank', BranchOfBank,fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfResidence', GeoLocationOfResidence);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
+
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfProperty', PhotosOfProperty); //it needs some brainstorming
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfResidence', PhotosOfResidence);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfOffice', PhotosOfOffice);
+
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'SanctionProcessingCharges', SanctionProcessingCharges,fallback: "0");
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(getAdditionalIncomeByUniqueLeadNumber, request.fields);
+      Helper.ApiRes(getAdditionalIncomeByUniqueLeadNumber, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
 
   static void printInChunks(String text, {int chunkSize = 2048}) {
     final pattern = RegExp('.{1,$chunkSize}', dotAll: true);
