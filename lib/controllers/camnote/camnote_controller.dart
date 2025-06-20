@@ -281,6 +281,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   ];
   var infoFilledBankers = <String>{}.obs;
   var selectedBankers = <String>{}.obs;
+
+  Map<String, String> bankerBranchMap = {};
   void markBankerAsSubmitted(String boxId) {
     infoFilledBankers.add(boxId);
   }
@@ -353,7 +355,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       print("🧯 Invalid index passed to removeCoApplicant: $index");
     }
   }
-  void clearImages(String key) {
+  void s(String key) {
     imageMap[key]?.clear();
   }
   void selectCheckboxRelBank(int index) {
@@ -416,34 +418,37 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   void saveForm() async {
     print("Form Saved!");
 
-    final List<IncomeModel> addIncomeSrcModels = [];
+    if(selectedBankers.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select a bank first");
+    }else{
+      final List<IncomeModel> addIncomeSrcModels = [];
 
-    for (var ai in addIncomeList) {
-      final aiModel = IncomeModel(
-        uniqueLeadNumber: uniqueLeadNUmber,
-        description: cleanText(ai.aiSourceController.text),
-        amount: ai.aiIncomeController.text.toDoubleOrZero(),
-      );
+      for (var ai in addIncomeList) {
+        final aiModel = IncomeModel(
+          uniqueLeadNumber: uniqueLeadNUmber,
+          description: cleanText(ai.aiSourceController.text),
+          amount: ai.aiIncomeController.text.toDoubleOrZero(),
+        );
 
-      addIncomeSrcModels.add(aiModel);
-    }
+        addIncomeSrcModels.add(aiModel);
+      }
 
-    List<Map<String, dynamic>> aiPayload = addIncomeSrcModels.map((e) => e.toMap()).toList();
+      List<Map<String, dynamic>> aiPayload = addIncomeSrcModels.map((e) => e.toMap()).toList();
 
-    if(aiPayload.isNotEmpty){
-      await addAdditionalSourceIncomeApi(aiPayload:aiPayload);
-    }
+      if(aiPayload.isNotEmpty){
+        await addAdditionalSourceIncomeApi(aiPayload:aiPayload);
+      }
 
 
-    if (selectedGender.value==null) {
-      ToastMessage.msg("Please select gender");
-    }else {
+      if (selectedGender.value==null) {
+        ToastMessage.msg("Please select gender");
+      }else {
         Addleadcontroller addLeadController =Get.find();
 
 
         print("camSelectedIndexRelBank===>${camSelectedIndexRelBank.value}");
 
-        addLeadController.fillLeadFormApi(
+        await addLeadController.fillLeadFormApi(
           id: getLeadId.value.toString(),
           dob: camDobController.text.toString(),
           gender: selectedGender.toString(),
@@ -480,9 +485,100 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           leadSegment:camSelectedProdSegment.value.toString(),
 
         );
+      }
 
+      final productList = getProductDetailsByFilterModel.value?.data ?? [];
+
+      if(productList.isNotEmpty){
+        for (var bankerId in selectedBankers) {
+
+
+          final matchingProducts = productList.where((product) => product.bankId.toString() == bankerId);
+          for (var product in matchingProducts) {
+
+            final bankId = product.bankId;
+            final bankersName = product.bankersName;
+            final bankersMobileNumber = product.bankersMobileNumber;
+            final bankersWhatsAppNumber = product.bankersWhatsAppNumber;
+            final bankersEmailID = product.bankersEmailID;
+            final specialBranchId = product.specialBranchId;
+
+
+            final branchId = bankerBranchMap[bankId.toString()];
+
+            if (branchId != null) {
+              print("Found stored branchId: $branchId for bankId: $bankId");
+              // Use this in your next API call
+            } else {
+              print("No branchId stored yet for bankId: $bankId");
+            }
+// Now call API with extracted values
+
+            List<File> propertyPhotos = getImages("property_photo");
+
+            print("propertyPhotos===>${propertyPhotos.toString()}");
+
+            addCamNoteDetailApi(
+              Id:"0",
+              LeadID:getLeadId.value.toString(),
+              Cibil: camCibilController.text.trim().toString(),
+              TotalLoanAvailedOnCibil: camTotalLoanAvailedController.text.trim().toString(),
+              TotalLiveLoan: camTotalLiveLoanController.text.trim().toString(),
+              TotalEMI:camTotalEmiController.text.trim().toString(),
+              EMIStoppedOnBeforeThisLoan:camEmiStoppedBeforeController.text.trim().toString(),
+              EMIWillContinue:camEmiWillContinueController.text.trim().toString(),
+              TotalOverdueCasesAsPerCibil:camTotalOverdueCasesController.text.trim().toString(),
+              TotalOverdueAmountAsPerCibil:camTotalOverdueAmountController.text.trim().toString(),
+              TotalEnquiriesMadeAsPerCibil:camTotalEnquiriesController.text.trim().toString(),
+              GeoLocationOfProperty:camGeoLocationPropertyLatController.text.trim().toString()+"-"+camGeoLocationPropertyLongController.text.trim().toString(),
+              GeoLocationOfResidence:camGeoLocationResidenceLatController.text.trim().toString()+"-"+camGeoLocationResidenceLongController.text.trim().toString(),
+              GeoLocationOfOffice:camGeoLocationOfficeLatController.text.trim().toString()+"-"+camGeoLocationOfficeLongController.text.trim().toString(),
+              PhotosOfProperty: propertyPhotos??[],
+              PhotosOfResidence: "",
+              PhotosOfOffice: "",
+              IncomeType: selectedCamIncomeTypeList.value.toString(),
+              EarningCustomerAge: "",
+              NonEarningCustomerAge: camNonEarningCustomerAgeController.text.trim().toString(),
+              TotalFamilyIncome: camTotalFamilyIncomeController.text.trim().toString(),
+              IncomeCanBeConsidered: camIncomeCanBeConsideredController.text.trim().toString(),
+              LoanAmountRequested: camLoanAmtReqController.text.trim().toString(),
+              LoanTenorRequested: camLoanTenorRequestedController.text.trim().toString(),
+              ROI: camRateOfInterestController.text.trim().toString(),
+              ProposedEMI: camProposedEmiController.text.trim().toString(),
+              PropertyValueAsPerCustomer: camPropertyValueController.text.trim().toString(),
+              FOIR: camFoirController.text.trim().toString(),
+              LTV: camLtvController.text.trim().toString(),
+              OfferedSecurityType: camOfferedSecurityTypeController.text.trim().toString(),
+              LoanProduct:camSelectedProdType.value.toString(),
+              LoanSegment:camSelectedProdSegment.value.toString(),
+              BankersName: bankersName,
+              BankersMobileNumber: bankersMobileNumber,
+              BankersEmailID: bankersEmailID,
+              BankersWhatsAppNumber: bankersWhatsAppNumber,
+              BankId: bankId.toString(),
+              BranchOfBank: branchId.toString(),
+              SanctionProcessingCharges:"",
+
+            );
+
+          }
+        }
+      }else{
+        SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select a bank first");
+      }
     }
   }
+
+/*
+  void saveForm(){
+
+    List<File> propertyPhotos = getImages("property_photo");
+
+    print("propertyPhotos===>${propertyPhotos.toString()}");
+  }
+*/
+
+
 
   List<GlobalKey<FormState>> stepFormKeys = List.generate(3, (_) => GlobalKey<FormState>());
   var selectedCamIncomeTypeList = Rxn<String>();
@@ -1215,7 +1311,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? BranchOfBank,
     String? GeoLocationOfResidence,
     String? GeoLocationOfOffice,
-    String? PhotosOfProperty,
+    List<File>? PhotosOfProperty,
     String? PhotosOfResidence,
     String? PhotosOfOffice,
     String? SanctionProcessingCharges,
@@ -1273,7 +1369,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         addCamNoteDetail.value= AddCamNoteDetail.fromJson(data);
 
-
+        bankerBranchMap.clear();
         isLoading(false);
 
 

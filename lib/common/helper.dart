@@ -196,7 +196,7 @@ class AppText{
   static const String addIncome="Additional source of income (Monthly)"; // "Additional source of income" needs to be changed.,The label should say "Additional source of income (Monthly)"
   static const String enterAddIncome="Enter Additional source of income";
   static const String brLoc="Branch Location";
-  static const String productTypeInt="Product Type Interested (KSDPL Product)";
+  static const String productTypeInt="KSDPL Product";//\n(Product Type Interested)
   static const String enterBrLoc="Enter Branch Location";
   static const String conName="Connector Name";
   static const String conMob="Connector Mobile";
@@ -532,7 +532,7 @@ class AppText{
 
   static const String productDescriptions = "Product Descriptions";
   static const String enterProductDescriptions = "Enter Product Descriptions";
-  static const String productSegment = "Product Segment (Loan Segment)";
+  static const String productSegment = "Loan Segment";
   static const String enterProductSegment = "Enter Product Segment";
   static const String writeYourContent = "Write your content";
 

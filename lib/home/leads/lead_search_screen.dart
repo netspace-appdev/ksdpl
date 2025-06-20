@@ -954,6 +954,9 @@ class LeadSearchScreen extends StatelessWidget {
           camNoteController.infoFilledBankers.clear();
           camNoteController.selectedBankers.clear();
           leadDDController.getAllKsdplProductApi();
+          camNoteController.clearImages("property_photo");
+          camNoteController.clearImages("residence_photo");
+          camNoteController.clearImages("office_photo");
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

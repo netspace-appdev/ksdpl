@@ -57,7 +57,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.fullName,
                   isRequired: true,
-                  // controller: addleadcontroller.fullNameController,
+
                   controller: camNoteController.camFullNameController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterFullName,
@@ -67,7 +67,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledPickerTextField(
                   label: AppText.dateOfBirth,
                   isRequired: true,
-                  // controller: addleadcontroller.dobController,
+
                   controller: camNoteController.camDobController,
                   inputType: TextInputType.name,
                   hintText: AppText.mmddyyyy,
@@ -79,7 +79,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.phoneNumberNoStar,
                   isRequired: true,
-                  // controller: addleadcontroller.phoneController,
+
                   controller: camNoteController.camPhoneController,
                   inputType: TextInputType.phone,
                   hintText: AppText.enterPhNumber,
@@ -136,7 +136,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.eml,
                   isRequired: false,
-                  // controller: addleadcontroller.emailController,
+
                   controller: camNoteController.camEmailController,
                   inputType: TextInputType.emailAddress,
                   hintText: AppText.enterEA,
@@ -146,7 +146,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.aadhar,
                   isRequired: false,
-                  // controller: addleadcontroller.aadharController ,
+
                   controller:camNoteController.camAadharController,
                   inputType: TextInputType.phone,
                   hintText: AppText.enterAadhar,
@@ -159,19 +159,19 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.panNumber,
                   isRequired: false,
-                  // controller: addleadcontroller.panController ,
+
                   controller: camNoteController.camPanController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterPan,
                   validator: ValidationHelper.validatePanCard,
                   maxLength: 10,
-
+                  isCapital: true,
                 ),
 
                 CustomLabeledTextField(
                   label: AppText.streetAdd,
                   isRequired: false,
-                  // controller: addleadcontroller.streetAddController ,
+
                   controller: camNoteController.camStreetAddController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterStreetAdd,
@@ -300,7 +300,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.zipCode,
                   isRequired: false,
-                  // controller: addleadcontroller.zipController ,
+
                   controller: camNoteController.camZipController ,
                   inputType: TextInputType.number,
                   hintText: AppText.enterZipCode,
@@ -310,7 +310,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.nationality,
                   isRequired: false,
-                  // controller: addleadcontroller.nationalityController ,
+
                   controller: camNoteController.camNationalityController,
                   inputType: TextInputType.name,
                   hintText: AppText.nationality,
@@ -353,7 +353,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.employerName,
                   isRequired: false,
-                  // controller: addleadcontroller.employerNameController ,
+
                   controller: camNoteController.camEmployerNameController ,
                   inputType: TextInputType.name,
                   hintText: AppText.enterEmployerName,
@@ -363,7 +363,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.monIncome,
                   isRequired: false,
-                  // controller: addleadcontroller.monthlyIncomeController ,
+
                   controller: camNoteController.camMonthlyIncomeController ,
                   inputType: TextInputType.number,
                   hintText: AppText.enterMonIncome,
@@ -373,7 +373,7 @@ class Step1CamNote extends StatelessWidget {
                 CustomLabeledTextField(
                   label: AppText.brLoc,
                   isRequired: false,
-                  // controller: addleadcontroller.branchLocController,
+
                   controller: camNoteController.camBranchLocController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterBrLoc,
@@ -593,33 +593,7 @@ class Step1CamNote extends StatelessWidget {
                   hintText: AppText.enterRemark,
 
                 ),
-                /*if(addleadcontroller.fromWhere.value!="interested")
-                  Column(
-                    children: [
-                      CustomLabeledTextField(
-                        label: AppText.existingLoans,
-                        isRequired: false,
-                        controller: addleadcontroller.existingLoansController ,
-                        inputType: TextInputType.name,
-                        hintText: AppText.enterExistingLoans,
-                        validator: ValidationHelper.validateExLoan,
-                      ),
 
-                      const SizedBox(height: 20),
-
-                      CustomLabeledTextField(
-                        label: AppText.noOfExistingLoans,
-                        isRequired: false,
-                        controller: addleadcontroller.noOfExistingLoansController ,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterNoOfExistingLoans,
-                        validator: ValidationHelper.validateNoExLoan,
-                      ),
-
-                      //const SizedBox(height: 20),
-                    ],
-                  ),
-*/
                 Helper.customDivider(color: Colors.grey),
                 SizedBox(height: 10,),
 
@@ -643,6 +617,7 @@ class Step1CamNote extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+
                             CustomLabeledTextField(
                               label: AppText.source,
                               isRequired: false,
@@ -651,6 +626,8 @@ class Step1CamNote extends StatelessWidget {
                               hintText: AppText.enterSource,
 
                             ),
+
+
                             CustomLabeledTextField(
                               label: AppText.income,
                               isRequired: false,

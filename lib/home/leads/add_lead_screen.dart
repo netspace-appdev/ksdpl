@@ -217,6 +217,7 @@ class AddLeadScreen extends StatelessWidget {
                                 hintText: AppText.enterPan,
                                 validator: ValidationHelper.validatePanCard,
                                 maxLength: 10,
+                                isCapital: true,
 
                               ),
 
@@ -399,137 +400,37 @@ class AddLeadScreen extends StatelessWidget {
                               ),
 
 
-                              Helper.customDivider(color: Colors.grey),
-                              SizedBox(height: 10,),
-
                               CustomTextLabel(
-                                label: AppText.addIncome,
+                                label: AppText.productSegment,
+
+
                               ),
 
-                              Obx(() => Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: List.generate(addleadcontroller.addIncomeList.length, (index) {
-                                  final ai = addleadcontroller.addIncomeList[index];
-
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
+                              const SizedBox(height: 10),
 
 
-                                      SizedBox(height: 20,),
+                              Obx((){
+                                if (addleadcontroller.isLoadingProductSegment.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
 
+                                return CustomDropdown<productCat.Data>(
+                                  items: addProductController.productCategoryList  ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.productCategoryName.toString(),
+                                  selectedValue: addProductController.productCategoryList.firstWhereOrNull(
+                                        (item) => item.id == addleadcontroller.selectedProdSegment.value,
+                                  ),
+                                  onChanged: (value) {
+                                    addleadcontroller.selectedProdSegment.value =  value?.id;
+                                  },
+                                  onClear: (){
+                                    addleadcontroller.selectedProdSegment.value = 0;
+                                    addProductController.productCategoryList.clear(); // reset dependent dropdown
 
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          CustomLabeledTextField(
-                                            label: AppText.source,
-                                            isRequired: false,
-                                            controller: ai.aiSourceController,
-                                            inputType: TextInputType.name,
-                                            hintText: AppText.enterSource,
-
-                                          ),
-                                          CustomLabeledTextField(
-                                            label: AppText.income,
-                                            isRequired: false,
-                                            controller: ai.aiIncomeController,
-                                            inputType: TextInputType.number,
-                                            hintText: AppText.enterIncome,
-
-                                          ),
-
-                                        ],
-                                      ),
-
-
-
-                                     Row(
-                                       mainAxisAlignment: MainAxisAlignment.end,
-
-                                       children: [
-                                         index== addleadcontroller.addIncomeList.length-1?
-                                         Obx((){
-                                           if(addleadcontroller.isLoading.value){
-                                             return const Align(
-                                               alignment: Alignment.centerRight,
-                                               child: SizedBox(
-                                                 height: 30,
-                                                 width: 30,
-                                                 child: CircularProgressIndicator(
-                                                   color: AppColor.primaryColor,
-                                                 ),
-                                               ),
-                                             );
-                                           }
-                                           return Align(
-                                             alignment: Alignment.centerRight,
-                                             child: IconButton(
-                                                 onPressed: (){
-                                                   addleadcontroller.addAdditionalSrcIncome();
-                                                 },
-                                                 icon: Container(
-
-                                                     decoration: BoxDecoration(
-                                                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                                       color: AppColor.primaryColor,
-
-                                                     ),
-                                                     padding: EdgeInsets.all(10),
-
-                                                     child: Icon(Icons.add, color: AppColor.appWhite,)
-                                                 )
-                                             ),
-                                           );
-                                         }):
-                                         Container(),
-
-                                         SizedBox(height: 20),
-
-                                         Obx((){
-                                           if(addleadcontroller.isLoading.value){
-                                             return const Align(
-                                               alignment: Alignment.center,
-                                               child: SizedBox(
-                                                 height: 30,
-                                                 width: 30,
-                                                 child: CircularProgressIndicator(
-                                                   color: AppColor.primaryColor,
-                                                 ),
-                                               ),
-                                             );
-                                           }
-
-
-                                           return Align(
-                                             alignment: Alignment.centerRight,
-                                             child: IconButton(
-                                                 onPressed: addleadcontroller.addIncomeList.length <= 1?(){}: (){
-                                                   addleadcontroller.removeAdditionalSrcIncome(index);
-                                                 },
-                                                 icon: Container(
-
-                                                     decoration: BoxDecoration(
-                                                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                                       color: addleadcontroller.addIncomeList.length <= 1?AppColor.lightRed: AppColor.redColor,
-
-                                                     ),
-                                                     padding: EdgeInsets.all(10),
-
-                                                     child: Icon(Icons.remove, color: AppColor.appWhite,)
-                                                 )
-                                             ),
-                                           );
-                                         })
-                                       ],
-                                     )
-                                    ],
-                                  );
-                                }),
-                              )),
-
-                              SizedBox(height: 10,),
-                              Helper.customDivider(color: Colors.grey),
+                                  },
+                                );
+                              }),
 
                               SizedBox(height: 20,),
 
@@ -561,11 +462,40 @@ class AddLeadScreen extends StatelessWidget {
                                   onChanged: (value) {
 
                                     leadDDController.selectedBank.value =  value?.id?.toString();
-                                    leadDDController.getProductListByBankIdApi(bankId: leadDDController.selectedBank.value);
+                                   // leadDDController.getProductListByBankIdApi(bankId: leadDDController.selectedBank.value);
                                   },
                                 );
                               }),
 
+                              const SizedBox(height: 20),
+
+                              const Text(
+                                AppText.productTypeInt,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.grey2,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Obx((){
+                                if (leadDDController.isProductLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+
+
+                                return CustomDropdown<product.Data>(
+                                  items: leadDDController.getAllKsdplProductModel.value?.data ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.productName.toString(),
+                                  selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
+                                        (item) => item.id.toString() == leadDDController.selectedProdType.value,
+                                  ),
+                                  onChanged: (value) {
+                                    leadDDController.selectedProdType.value =  value?.id?.toString();
+                                  },
+                                );
+                              }),
                               const SizedBox(height: 20),
 
                               const Text(
@@ -612,15 +542,37 @@ class AddLeadScreen extends StatelessWidget {
 
                               if(addleadcontroller.fromWhere.value!="interested")
                                 Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CustomLabeledTextField(
-                                      label: AppText.existingLoans,
-                                      isRequired: false,
-                                      controller: addleadcontroller.existingLoansController ,
-                                      inputType: TextInputType.name,
-                                      hintText: AppText.enterExistingLoans,
-                                      validator: ValidationHelper.validateExLoan,
+
+                                    const Text(
+                                      AppText.existingLoans,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.grey2,
+                                      ),
                                     ),
+
+                                    const SizedBox(height: 10),
+
+
+                                    Obx(()=>Column(
+                                      children: addleadcontroller.optionsRelBank.asMap().entries.map((entry) {
+                                        int index = entry.key;
+                                        String option = entry.value;
+
+                                        return CheckboxListTile(
+                                          activeColor: AppColor.secondaryColor,
+
+                                          title: Text(option),
+                                          value: addleadcontroller.selectedIndexExistingLoan.value == index,
+                                          onChanged: (value) => addleadcontroller.selectCheckboxExistingLoan(index),
+                                        );
+                                      }).toList(),
+                                    )),
+
+                                    const SizedBox(height: 20),
 
                                     const SizedBox(height: 20),
 
@@ -639,75 +591,141 @@ class AddLeadScreen extends StatelessWidget {
 
 
 
-
-                              const Text(
-                                AppText.productTypeInt,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.grey2,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Obx((){
-                                if (leadDDController.isProductLoading.value) {
-                                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                                }
-
-
-                                return CustomDropdown<product.Data>(
-                                  items: leadDDController.getAllKsdplProductModel.value?.data ?? [],
-                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                  getName: (item) => item.productName.toString(),
-                                  selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
-                                        (item) => item.id.toString() == leadDDController.selectedProdType.value,
-                                  ),
-                                  onChanged: (value) {
-                                    leadDDController.selectedProdType.value =  value?.id?.toString();
-                                  },
-                                );
-                              }),
-
                               const SizedBox(
                                 height: 20,
                               ),
+
+                              Helper.customDivider(color: Colors.grey),
+                              SizedBox(height: 10,),
+
                               CustomTextLabel(
-                                label: AppText.productSegment,
-
-
+                                label: AppText.addIncome,
                               ),
 
-                              const SizedBox(height: 10),
+                              Obx(() => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: List.generate(addleadcontroller.addIncomeList.length, (index) {
+                                  final ai = addleadcontroller.addIncomeList[index];
+
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
 
 
-                              Obx((){
-                                if (addleadcontroller.isLoadingProductSegment.value) {
-                                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                                }
+                                      SizedBox(height: 20,),
 
-                                return CustomDropdown<productCat.Data>(
-                                  items: addProductController.productCategoryList  ?? [],
-                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                  getName: (item) => item.productCategoryName.toString(),
-                                  selectedValue: addProductController.productCategoryList.firstWhereOrNull(
-                                        (item) => item.id == addleadcontroller.selectedProdSegment.value,
-                                  ),
-                                  onChanged: (value) {
-                                    addleadcontroller.selectedProdSegment.value =  value?.id;
-                                  },
-                                  onClear: (){
-                                    addleadcontroller.selectedProdSegment.value = 0;
-                                    addProductController.productCategoryList.clear(); // reset dependent dropdown
 
-                                  },
-                                );
-                              }),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CustomLabeledTextField(
+                                            label: AppText.source,
+                                            isRequired: false,
+                                            controller: ai.aiSourceController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.enterSource,
 
-                              const SizedBox(
-                                height: 20,
-                              ),
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.income,
+                                            isRequired: false,
+                                            controller: ai.aiIncomeController,
+                                            inputType: TextInputType.number,
+                                            hintText: AppText.enterIncome,
 
-                              const SizedBox(height: 20),
+                                          ),
+
+                                        ],
+                                      ),
+
+
+
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+
+                                        children: [
+                                          index== addleadcontroller.addIncomeList.length-1?
+                                          Obx((){
+                                            if(addleadcontroller.isLoading.value){
+                                              return const Align(
+                                                alignment: Alignment.centerRight,
+                                                child: SizedBox(
+                                                  height: 30,
+                                                  width: 30,
+                                                  child: CircularProgressIndicator(
+                                                    color: AppColor.primaryColor,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            return Align(
+                                              alignment: Alignment.centerRight,
+                                              child: IconButton(
+                                                  onPressed: (){
+                                                    addleadcontroller.addAdditionalSrcIncome();
+                                                  },
+                                                  icon: Container(
+
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                                        color: AppColor.primaryColor,
+
+                                                      ),
+                                                      padding: EdgeInsets.all(10),
+
+                                                      child: Icon(Icons.add, color: AppColor.appWhite,)
+                                                  )
+                                              ),
+                                            );
+                                          }):
+                                          Container(),
+
+                                          SizedBox(height: 20),
+
+                                          Obx((){
+                                            if(addleadcontroller.isLoading.value){
+                                              return const Align(
+                                                alignment: Alignment.center,
+                                                child: SizedBox(
+                                                  height: 30,
+                                                  width: 30,
+                                                  child: CircularProgressIndicator(
+                                                    color: AppColor.primaryColor,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+
+
+                                            return Align(
+                                              alignment: Alignment.centerRight,
+                                              child: IconButton(
+                                                  onPressed: addleadcontroller.addIncomeList.length <= 1?(){}: (){
+                                                    addleadcontroller.removeAdditionalSrcIncome(index);
+                                                  },
+                                                  icon: Container(
+
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                                        color: addleadcontroller.addIncomeList.length <= 1?AppColor.lightRed: AppColor.redColor,
+
+                                                      ),
+                                                      padding: EdgeInsets.all(10),
+
+                                                      child: Icon(Icons.remove, color: AppColor.appWhite,)
+                                                  )
+                                              ),
+                                            );
+                                          })
+                                        ],
+                                      )
+                                    ],
+                                  );
+                                }),
+                              )),
+
+                              SizedBox(height: 10,),
+                              Helper.customDivider(color: Colors.grey),
 
                               Obx(() => Column(
 
@@ -893,9 +911,10 @@ class AddLeadScreen extends StatelessWidget {
   }
 
   void onPressed(){
+    print("onpressed===>");
 
     if (_formKey.currentState!.validate()) {
-
+      print("onpressed===>2");
       if (addleadcontroller.selectedGender.value==null) {
         ToastMessage.msg("Please select gender");
       }else {
@@ -922,8 +941,8 @@ class AddLeadScreen extends StatelessWidget {
             ///Now this is not working, Have different API for Additional source of income
             monthlyIncome: addleadcontroller.monthlyIncomeController.text.toString(),
             addSrcIncome: addleadcontroller.addSourceIncomeController.text.toString(),
-            prefBank: leadDDController.selectedBank.toString(),
-            exRelBank: addleadcontroller.selectedIndexRelBank.value==-1?"":addleadcontroller.selectedIndexRelBank.value.toString(),
+            prefBank: leadDDController.selectedBank.value.toString(),
+            exRelBank:addleadcontroller.selectedIndexRelBank.value==-1?"":addleadcontroller.selectedIndexRelBank.value==0?"Yes":"No",
             branchLoc:addleadcontroller.branchLocController.text.toString(),
             prodTypeInt: leadDDController.selectedProdType.value.toString(),
             connName: addleadcontroller.connNameController.text.toString(),
@@ -934,6 +953,7 @@ class AddLeadScreen extends StatelessWidget {
             Get.back();
           });
         }else{
+          print("inside else==.");
           var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
           addleadcontroller.individualLeadUploadApi(
 
@@ -958,13 +978,13 @@ class AddLeadScreen extends StatelessWidget {
             ///Now this is not working, Have different API for Additional source of income
             addSrcIncome: addleadcontroller.addSourceIncomeController.text.toString(),
             prefBank: leadDDController.selectedBank.toString(),
-            exRelBank: addleadcontroller.selectedIndexRelBank.value==-1?"":addleadcontroller.selectedIndexRelBank.value.toString(),
+            exRelBank:addleadcontroller.selectedIndexRelBank.value==-1?"":addleadcontroller.selectedIndexRelBank.value==0?"Yes":"No",
             branchLoc:addleadcontroller.branchLocController.text.toString(),
             prodTypeInt:leadDDController.selectedProdType.value.toString(),
             connName: addleadcontroller.connNameController.text.toString(),
             connMob: addleadcontroller.connMobController.text.toString(),
             connShare: addleadcontroller.connShareController.text.toString(),
-            existingLoans: addleadcontroller.existingLoansController.text.toString(),
+            existingLoans:addleadcontroller.selectedIndexExistingLoan.value==-1?"":addleadcontroller.selectedIndexExistingLoan.value==0?"Yes":"No",
             noOfExistingLoans: addleadcontroller.noOfExistingLoansController.text.toString(),
             addIncomeListTemp: addleadcontroller.addIncomeList,
             leadSegment: addleadcontroller.selectedProdSegment.value.toString(),
@@ -972,7 +992,7 @@ class AddLeadScreen extends StatelessWidget {
 
           ).then((_){
             print("hello====1");
-            print("addleadcontroller.fromWhere.value===>${addleadcontroller.fromWhere.value}");
+            /*print("addleadcontroller.fromWhere.value===>${addleadcontroller.fromWhere.value}");
             if(addleadcontroller.fromWhere.value=="drawer"){
 
               print("hello====2");
@@ -982,7 +1002,13 @@ class AddLeadScreen extends StatelessWidget {
               print("hello====4");
               Get.offAllNamed("/bottomNavbar");
 
-            }
+            }*/
+            print("hello====2");
+            BotNavController botNavController=Get.put(BotNavController());
+            print("hello====3");
+            botNavController.selectedIndex.value = 1;
+            print("hello====4");
+            Get.offAllNamed("/bottomNavbar");
           });
         }
 

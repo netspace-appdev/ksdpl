@@ -174,41 +174,6 @@ class Step2CamNote extends StatelessWidget {
                         hintText: AppText.enterLongitude,
                       ),
 
- /*                     const CustomTextLabel(
-                        label: AppText.loanSegment,
-                        isRequired: true,
-
-                      ),
-
-                      const SizedBox(height: 10),
-
-
-                      Obx((){
-                        if (addProductController.isLoadingProductCategory.value) {
-                          return  Center(child:CustomSkelton.leadShimmerList(context));
-                        }
-
-
-
-                        return CustomDropdown<productCat.Data>(
-                          items: addProductController.productCategoryList  ?? [],
-                          getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                          getName: (item) => item.productCategoryName.toString(),
-                          selectedValue: addProductController.productCategoryList.firstWhereOrNull(
-                                (item) => item.id == camNoteController.selectedProductCategory.value,
-                          ),
-                          onChanged: (value) {
-                            camNoteController.selectedProductCategory.value =  value?.id;
-                          },
-                          onClear: (){
-                            camNoteController.selectedProductCategory.value = 0;
-                            addProductController.productCategoryList.clear(); // reset dependent dropdown
-
-                          },
-                        );
-                      }),
-
-                      const SizedBox(height: 20),*/
 
 
                       CustomPhotoPickerWidget(
@@ -232,45 +197,6 @@ class Step2CamNote extends StatelessWidget {
                         imageKey: 'office_photo',
                         label: 'Upload Office Photos',
                       ),
-
-        /*              const CustomTextLabel(
-                        label: AppText.loanProduct,
-                        isRequired: true,
-
-                      ),
-
-                      const SizedBox(height: 10),
-
-
-                      Obx((){
-                        if (viewProductController.isMainListMoreLoading.value) {
-                          return  Center(child:CustomSkelton.leadShimmerList(context));
-                        }
-
-
-
-                        return CustomDropdown<prod.Data>(
-                          items: viewProductController.loanProductList?? [],
-                          getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                          getName: (item) => item.product.toString(),
-                          selectedValue: viewProductController.loanProductList.firstWhereOrNull(
-                                (item) => item.id == camNoteController.selectedLoanProduct.value,
-                          ),
-                          onChanged: (value) {
-                            camNoteController.selectedLoanProduct.value =  value?.id;
-                          },
-                          onClear: (){
-                            camNoteController.selectedLoanProduct.value = 0;
-                            viewProductController.loanProductList.clear(); // reset dependent dropdown
-
-                          },
-                        );
-                      }),
-
-                      const SizedBox(height: 20),
-
-
-*/
 
                       const SizedBox(height: 20,),
                     ],
@@ -325,12 +251,13 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camEarningCustomerAgeController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterEarningCustomerAge,
+                        isInputEnabled: false,
                       ),
 
 
                       CustomLabeledTextField(
                         label: AppText.nonEarningCustomerAge,
-                        controller: camNoteController.camEarningCustomerAgeController,
+                        controller: camNoteController.camNonEarningCustomerAgeController,
                         inputType: TextInputType.number,
                         hintText: AppText.nonEarningCustomerAge,
                       ),
@@ -390,6 +317,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camFoirController,
                         inputType: TextInputType.number,
                         hintText: AppText.autoCalculatedFoir,
+                        isInputEnabled: false,
                       ),
 
                       CustomLabeledTextField(

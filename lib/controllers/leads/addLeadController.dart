@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -6,6 +8,7 @@ import 'package:ksdpl/controllers/lead_dd_controller.dart';
 
 import '../../common/helper.dart';
 import '../../models/IndividualLeadUploadModel.dart';
+import '../../models/camnote/special_model/IncomeModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/leads/special_model/AddIncModel.dart';
 import '../../services/drawer_api_service.dart';
@@ -21,6 +24,7 @@ class Addleadcontroller extends GetxController{
   //final RegistrationDDController regDDController= Get.put(RegistrationDDController());
   List<String> optionsRelBank = ["Yes", "No"];
   var selectedIndexRelBank = (-1).obs;
+  var selectedIndexExistingLoan = (-1).obs;
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -91,6 +95,10 @@ class Addleadcontroller extends GetxController{
   void selectCheckboxRelBank(int index) {
 
     selectedIndexRelBank.value = index;
+  }
+  void selectCheckboxExistingLoan(int index) {
+
+    selectedIndexExistingLoan.value = index;
   }
 
   void  getLeadDetailByIdApi({
@@ -332,6 +340,7 @@ class Addleadcontroller extends GetxController{
 
 
   void clearControllers(){
+    LeadDDController leadDDController=Get.find();
     fullNameController.clear();
     dobController.clear();
     phoneController.clear();
@@ -394,7 +403,15 @@ class Addleadcontroller extends GetxController{
     existingLoansController.clear();
     noOfExistingLoansController.clear();
     addIncomeList.clear();
-
+    leadDDController.selectedState.value=null;
+    leadDDController.selectedDistrict.value=null;
+    leadDDController.selectedCity.value=null;
+    leadDDController.currEmpStatus.value=null;
+    leadDDController.selectedBank.value=null;
+    leadDDController.selectedProdType.value=null;
+    selectedIndexRelBank.value=-1;
+    selectedIndexExistingLoan.value=-1;
+    selectedProdSegment.value=null;
   }
 
 
@@ -485,6 +502,7 @@ class Addleadcontroller extends GetxController{
 
         var uln=individualLeadUploadModel.value!.data!.uniqueLeadNumber.toString();
 
+/*
 
         if ((addIncomeListTemp?.any((e) =>
         e.aiIncomeController.text.trim().isNotEmpty ||
@@ -508,7 +526,27 @@ class Addleadcontroller extends GetxController{
             addIncModel.add(acModel);
           }
         }
+*/
 
+
+        final List<IncomeModel> addIncomeSrcModels = [];
+
+        for (var ai in addIncomeList) {
+          final aiModel = IncomeModel(
+            uniqueLeadNumber: uln,
+            description: cleanText(ai.aiSourceController.text),
+            amount: ai.aiIncomeController.text.toDoubleOrZero(),
+          );
+
+          addIncomeSrcModels.add(aiModel);
+        }
+
+        List<Map<String, dynamic>> aiPayload = addIncomeSrcModels.map((e) => e.toMap()).toList();
+        CamNoteController camNoteController=Get.find();
+
+        if(aiPayload.isNotEmpty){
+          await camNoteController.addAdditionalSourceIncomeApi(aiPayload:aiPayload);
+        }
 
 
 

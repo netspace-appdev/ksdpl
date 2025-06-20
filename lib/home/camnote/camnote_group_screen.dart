@@ -201,7 +201,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                                   onPressed: camNoteController.currentStep.value < 3
                                       ? ()=>camNoteController.nextStep(camNoteController.currentStep.value)
                                       : null,
-                                  child:  Text(camNoteController.currentStep.value==2?"Save":'Save & Next',style: TextStyle(color: AppColor.appWhite),),
+                                  child:  Text(camNoteController.currentStep.value==2?"Save":'Next',style: TextStyle(color: AppColor.appWhite),),
                                   style: ElevatedButton.styleFrom(
                                     minimumSize: Size(130, 40),
                                     backgroundColor: AppColor.greenColor,

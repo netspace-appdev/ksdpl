@@ -16,6 +16,7 @@ class CustomLabeledTextField extends StatelessWidget {
   final bool isInputEnabled;
   final bool isSecret;         // New
   final int secretDigit;
+  final bool isCapital;
 
   const CustomLabeledTextField({
     Key? key,
@@ -32,7 +33,7 @@ class CustomLabeledTextField extends StatelessWidget {
     this.isInputEnabled=true,
     this.isSecret = false,      // Default false
     this.secretDigit = 4,       // Default 4 digits visible
-
+    this.isCapital = false,
   }) : super(key: key);
 
   @override
@@ -91,6 +92,7 @@ class CustomLabeledTextField extends StatelessWidget {
           isInputEnabled: isInputEnabled,
           isSecret: isSecret,
           secretDigit: secretDigit,
+          isCapital: isCapital,
         ),
 
         SizedBox(height: 20),

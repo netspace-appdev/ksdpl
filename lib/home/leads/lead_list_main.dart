@@ -863,6 +863,10 @@ overflow: TextOverflow.ellipsis,
           camNoteController.currentStep.value=0;
           camNoteController.infoFilledBankers.clear();
           camNoteController.selectedBankers.clear();
+          camNoteController.bankerBranchMap.clear();
+          camNoteController.clearImages("property_photo");
+          camNoteController.clearImages("residence_photo");
+          camNoteController.clearImages("office_photo");
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

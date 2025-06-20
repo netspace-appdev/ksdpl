@@ -1,93 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ksdpl/common/helper.dart';
 
-/*class CustomTextFieldPrefix extends StatelessWidget {
-  final String? hintText;
-  final TextEditingController controller;
-  final bool isPassword;
-  final bool obscureText;
-  final VoidCallback? onSuffixIconPressed;
-  final String? Function(String?)? validator;
-  final TextInputType inputType;
-  final Function(String)? onChanged;
-  final String? prefixImage; // Nullable image path
-  final String? label;
-  final bool isTextArea;
-  final int? maxLength;
-  final bool isInputEnabled;
-  final bool isSecret;
-  final int secretDigit;
-
-  const CustomTextFieldPrefix({
-    Key? key,
-    this.hintText,
-    required this.controller,
-    this.isPassword = false,
-    this.obscureText = false,
-    this.onSuffixIconPressed,
-    this.validator,
-    required this.inputType,
-    this.onChanged,
-    this.prefixImage, // Optional parameter
-    this.label,
-    this.isTextArea = false,
-    this.maxLength,
-    this.isInputEnabled=true,
-    this.isSecret = false,
-    this.secretDigit = 4,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: inputType,
-      obscureText: obscureText,
-      validator: validator,
-      onChanged: onChanged,
-      maxLines: isTextArea ? null : 1, // Allow multiple lines if isTextArea is true
-      minLines: isTextArea ? 3 : 1, // Minimum 5 lines for text area
-      maxLength: maxLength,
-      enabled: isInputEnabled,
-      style: TextStyle(color: isInputEnabled ? Colors.black : Colors.grey),
-      decoration: InputDecoration(
-        hintText: hintText!=null?hintText:null,
-        hintStyle: TextStyle(color: AppColor.grey2),
-        filled: true,
-        fillColor: isInputEnabled ? AppColor.grey3 : Colors.grey[300],
-        label: label != null?
-        Text(label!):null,
-
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide:  const BorderSide(color: Colors.red, width: 1.5),
-        ),
-        enabledBorder:OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide:  const BorderSide(color: AppColor.borderColor, width: 1.5),
-        ),
-
-        // Conditionally add prefix icon
-        prefixIcon: prefixImage != null
-            ? Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Image.asset(prefixImage!, width: 24, height: 24),
-        )
-            : null,
-        suffixIcon: isPassword
-            ? IconButton(
-          icon: Icon(
-            obscureText ? Icons.visibility_off : Icons.visibility,
-            color: AppColor.grey1,
-          ),
-          onPressed: onSuffixIconPressed,
-        )
-            : null,
-      ),
-    );
-  }
-}*/
-
 class CustomTextFieldPrefix extends StatefulWidget {
   final String? hintText;
   final TextEditingController controller;
@@ -104,7 +17,7 @@ class CustomTextFieldPrefix extends StatefulWidget {
   final bool isInputEnabled;
   final bool isSecret;
   final int secretDigit;
-
+  final bool isCapital;
   const CustomTextFieldPrefix({
     Key? key,
     this.hintText,
@@ -122,6 +35,7 @@ class CustomTextFieldPrefix extends StatefulWidget {
     this.isInputEnabled = true,
     this.isSecret = false,
     this.secretDigit = 4,
+    this.isCapital = false,
   }) : super(key: key);
 
   @override
@@ -177,9 +91,11 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
     }
   }
 
+
+
   void _onTextChanged(String value) {
     _isEditing = true;
-
+    String processedValue = widget.isCapital ? value.toUpperCase() : value;
     if (widget.isSecret) {
       // Handle secret text input
       String newActualValue = _calculateActualValue(value);
@@ -192,8 +108,8 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
         _isEditing = false;
       });
     } else {
-      _actualValue = value;
-      widget.controller.text = value;
+      _actualValue = processedValue;
+      widget.controller.text = processedValue;
       _isEditing = false;
     }
 

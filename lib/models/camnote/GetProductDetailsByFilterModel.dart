@@ -86,7 +86,7 @@ class Data {
   String? bankName;
   String? productSegment;
   String? ksdplProduct;
-
+  num? specialBranchId;
   Data(
       {this.id,
         this.bankId,
@@ -140,7 +140,9 @@ class Data {
         this.profitPercentage,
         this.bankName,
         this.productSegment,
-        this.ksdplProduct});
+        this.ksdplProduct,
+        this.specialBranchId, // 👈 include in constructor
+      });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];

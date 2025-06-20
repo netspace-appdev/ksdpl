@@ -12,6 +12,7 @@ class IncomeStepController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    addleadcontroller.addIncomeList.add(AddIncomeModelController());
     camNoteController.addIncomeList.add(AddIncomeModelController());
 
   }

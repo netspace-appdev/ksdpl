@@ -20,7 +20,7 @@ import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
-
+import '../../models/camnote/GetProductDetailsByFilterModel.dart' as proFilter;
 class Step3CamNote extends StatelessWidget {
 
   LeadDDController leadDDController = Get.put(LeadDDController());
@@ -45,7 +45,7 @@ class Step3CamNote extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              productSection(context)
+              bankerSection(context)
             ],
           ),
         );
@@ -75,7 +75,7 @@ class Step3CamNote extends StatelessWidget {
                       repeat: false
                   )),
               Text(
-                  "No Products Found",
+                  "No Data Found",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -88,7 +88,7 @@ class Step3CamNote extends StatelessWidget {
     );
   }
 
-  Widget productSection(BuildContext context){
+  Widget bankerSection(BuildContext context){
     return Obx((){
       if (camNoteController.isBankerLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
@@ -132,6 +132,7 @@ class Step3CamNote extends StatelessWidget {
 
 
               return Obx((){
+
 
                  final isSubmitted = camNoteController.isBankerSubmitted(banker.bankId.toString());
               final isSelected = camNoteController.isBankerSelected(banker.bankId.toString());
@@ -580,6 +581,8 @@ class Step3CamNote extends StatelessWidget {
                                   SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please use different mobile number for superior");
                                 }{
 
+                                  var branchId=camNoteController.selectedBankBranch.value.toString();
+
 
                                    camNoteController.getBankerDetaillApi(
                                      bankId: bankId,
@@ -595,6 +598,23 @@ class Step3CamNote extends StatelessWidget {
 
                                    ).then((_){
                                      camNoteController.markBankerAsSubmitted(bankId);
+                                     camNoteController.bankerBranchMap[bankId] = branchId;
+                                     /*final productList = camNoteController.getProductDetailsByFilterModel.value?.data ?? [];
+
+                                     proFilter.Data? product;
+
+                                     try {
+                                       product = productList.firstWhere((element) => element.bankId.toString() == bankId);
+                                     } catch (e) {
+                                       product = null;
+                                     }
+                                     if (product != null) {
+                                       product.specialBranchId = int.parse(branchId); // 🎯 Assigned locally
+                                       print("Stored branchId: $branchId for banker ${product.bankersName}");
+                                     } else {
+                                       print("Banker with bankId $bankId not found!");
+                                     }*/
+
                                    });
                                   print("validate ho gaya===>");
                                 }

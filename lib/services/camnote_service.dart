@@ -355,7 +355,7 @@ class CamNoteService {
     String? BranchOfBank,
     String? GeoLocationOfResidence,
     String? GeoLocationOfOffice,
-    String? PhotosOfProperty,
+    List<File>? PhotosOfProperty,
     String? PhotosOfResidence,
     String? PhotosOfOffice,
     String? SanctionProcessingCharges,
@@ -409,18 +409,32 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
 
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfProperty', PhotosOfProperty); //it needs some brainstorming
+      //MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfProperty', PhotosOfProperty); //it needs some brainstorming
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfResidence', PhotosOfResidence);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfOffice', PhotosOfOffice);
 
 
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'SanctionProcessingCharges', SanctionProcessingCharges,fallback: "0");
 
+
+    if(PhotosOfProperty!=null ||PhotosOfProperty!.isNotEmpty ){
+      // 📸 Add multiple images for "PhotosOfProperty"
+      for (int i = 0; i < PhotosOfProperty.length; i++) {
+        var file = await http.MultipartFile.fromPath(
+          'PhotosOfProperty',
+          PhotosOfProperty[i].path,
+         /* contentType: MediaType('image', 'jpeg'), // adjust if needed*/
+        );
+        request.files.add(file);
+      }
+    }
+
+
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(getAdditionalIncomeByUniqueLeadNumber, request.fields);
-      Helper.ApiRes(getAdditionalIncomeByUniqueLeadNumber, response.body);
+      Helper.ApiReq(addCamNoteDetail, request.fields);
+      Helper.ApiRes(addCamNoteDetail, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

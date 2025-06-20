@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
+import '../controllers/camnote/camnote_controller.dart';
 import '../controllers/leads/income_step_controller.dart';
 import '../controllers/leads/leadlist_controller.dart';
 import '../controllers/product/add_product_controller.dart';
@@ -139,7 +140,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                        addLeadController.fromWhere.value="drawer";
 
                        addLeadController.clearControllers();
-
+                       CamNoteController camNoteController=Get.put(CamNoteController());
                         Get.toNamed("/addLeadScreen");
                      },
                    ),
