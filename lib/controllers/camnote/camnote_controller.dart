@@ -22,6 +22,7 @@ import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
 import '../../models/camnote/GetBankerDetailModelForCheck.dart';
 import '../../models/camnote/GetBankerDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailsByFilterModel.dart';
+import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
 import '../../models/camnote/special_model/IncomeModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
@@ -66,6 +67,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var getBankerDetailModelForCheck = Rxn<GetBankerDetailModelForCheck>(); //
   var getAddIncUniqueLeadModel = Rxn<GetAddIncUniqueLeadModel>(); //
   var addCamNoteDetail = Rxn<AddCamNoteDetail>(); //
+  SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
 
 
   var selectedGenderCoAP = Rxn<String>();
@@ -515,6 +517,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 // Now call API with extracted values
 
             List<File> propertyPhotos = getImages("property_photo");
+            List<File> residencePhotos = getImages("residence_photo");
+            List<File> officePhotos = getImages("office_photo");
 
             print("propertyPhotos===>${propertyPhotos.toString()}");
 
@@ -534,8 +538,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               GeoLocationOfResidence:camGeoLocationResidenceLatController.text.trim().toString()+"-"+camGeoLocationResidenceLongController.text.trim().toString(),
               GeoLocationOfOffice:camGeoLocationOfficeLatController.text.trim().toString()+"-"+camGeoLocationOfficeLongController.text.trim().toString(),
               PhotosOfProperty: propertyPhotos??[],
-              PhotosOfResidence: "",
-              PhotosOfOffice: "",
+              PhotosOfResidence: residencePhotos??[],
+              PhotosOfOffice: officePhotos??[],
               IncomeType: selectedCamIncomeTypeList.value.toString(),
               EarningCustomerAge: "",
               NonEarningCustomerAge: camNonEarningCustomerAgeController.text.trim().toString(),
@@ -1311,11 +1315,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? BranchOfBank,
     String? GeoLocationOfResidence,
     String? GeoLocationOfOffice,
-    List<File>? PhotosOfProperty,
-    String? PhotosOfResidence,
-    String? PhotosOfOffice,
     String? SanctionProcessingCharges,
-
+    List<File>? PhotosOfProperty,
+    List<File>? PhotosOfResidence,
+    List<File>? PhotosOfOffice,
 
   }) async {
     try {
@@ -1370,6 +1373,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         addCamNoteDetail.value= AddCamNoteDetail.fromJson(data);
 
         bankerBranchMap.clear();
+        ToastMessage.msg(addCamNoteDetail.value!.message!);
+
+        sendMailToBankerAfterGenerateCamNoteApi(id: addCamNoteDetail.value!.data!.id.toString());
+        Get.back();
         isLoading(false);
 
 
@@ -1396,6 +1403,44 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
+
+  Future<void>  sendMailToBankerAfterGenerateCamNoteApi({
+   required String id,
+  }) async {
+    try {
+
+      isLoading(true);
+
+
+      var data = await CamNoteService.sendMailToBankerAfterGenerateCamNoteApi(
+          id: id
+      );
+
+
+      if(data['success'] == true){
+
+        // ✅ No need to parse the whole model if only 'message' matters
+        String message = data['message'] ?? AppText.somethingWentWrong;
+        ToastMessage.msg(message);
+        sendMailToBankerCamNoteModel = SendMailToBankerCamNoteModel(message: message);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error sendMailToBankerAfterGenerateCamNoteApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+    } finally {
+
+
+      isLoading(false);
+    }
+  }
 
 }
 

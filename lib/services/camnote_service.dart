@@ -19,6 +19,7 @@ class CamNoteService {
   static const String getBankerDetail = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetail';
   static const String getAdditionalIncomeByUniqueLeadNumber = BaseUrl.baseUrl + 'CamNoteDetail/GetAdditionalIncomeByUniqueLeadNumber';
   static const String addCamNoteDetail = BaseUrl.baseUrl + 'CamNoteDetail/AddCamNoteDetail';
+  static const String sendMailToBankerAfterGenerateCamNote = BaseUrl.baseUrl + 'CamNoteDetail/SendMailToBankerAfterGenerateCamNote';
 
 
 
@@ -356,8 +357,8 @@ class CamNoteService {
     String? GeoLocationOfResidence,
     String? GeoLocationOfOffice,
     List<File>? PhotosOfProperty,
-    String? PhotosOfResidence,
-    String? PhotosOfOffice,
+    List<File>? PhotosOfResidence,
+    List<File>? PhotosOfOffice,
     String? SanctionProcessingCharges,
 
   }) async {
@@ -409,10 +410,6 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
 
-      //MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfProperty', PhotosOfProperty); //it needs some brainstorming
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfResidence', PhotosOfResidence);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhotosOfOffice', PhotosOfOffice);
-
 
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'SanctionProcessingCharges', SanctionProcessingCharges,fallback: "0");
 
@@ -428,7 +425,29 @@ class CamNoteService {
         request.files.add(file);
       }
     }
+      if(PhotosOfResidence!=null ||PhotosOfResidence!.isNotEmpty ){
+        // 📸 Add multiple images for "PhotosOfProperty"
+        for (int i = 0; i < PhotosOfResidence.length; i++) {
+          var file = await http.MultipartFile.fromPath(
+            'PhotosOfResidence',
+            PhotosOfResidence[i].path,
+            /* contentType: MediaType('image', 'jpeg'), // adjust if needed*/
+          );
+          request.files.add(file);
+        }
+      }
 
+      if(PhotosOfOffice!=null ||PhotosOfOffice!.isNotEmpty ){
+        // 📸 Add multiple images for "PhotosOfProperty"
+        for (int i = 0; i < PhotosOfOffice.length; i++) {
+          var file = await http.MultipartFile.fromPath(
+            'PhotosOfOffice',
+            PhotosOfOffice[i].path,
+            /* contentType: MediaType('image', 'jpeg'), // adjust if needed*/
+          );
+          request.files.add(file);
+        }
+      }
 
       var streamedResponse = await request.send();
 
@@ -446,6 +465,43 @@ class CamNoteService {
       throw Exception('Error while submitting: $e');
     }
   }
+
+
+
+  static Future<Map<String, dynamic>> sendMailToBankerAfterGenerateCamNoteApi({
+    required String id,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(sendMailToBankerAfterGenerateCamNote),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Id', id);
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(sendMailToBankerAfterGenerateCamNote, request.fields);
+      Helper.ApiRes(sendMailToBankerAfterGenerateCamNote, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+
 
 
   static void printInChunks(String text, {int chunkSize = 2048}) {
