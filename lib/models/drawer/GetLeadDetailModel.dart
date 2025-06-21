@@ -345,7 +345,7 @@ class Data {
   String? currentEmploymentStatus;
   String? employerName;
   String? monthlyIncome;
-  num? additionalSourceOfIncome;
+  String? additionalSourceOfIncome;
   String? prefferedBank;
   String? existinRelaationshipWithBank;
   String? branch;
@@ -357,7 +357,7 @@ class Data {
   num? connectorPercentage;
   String? existingLoans;
   num? noOfExistingLoans;
-  num? moveToCommon;
+  String? moveToCommon;
   String? pickedUpEmployeeName;
   String? assignedEmployeeName;
   String? bankName;

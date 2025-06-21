@@ -433,6 +433,9 @@ class LeadListMain extends StatelessWidget {
                           _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
                           _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  "),
                           _buildDetailRow("Status", lead.stageName.toString()??""),
+                          if(lead.leadStage==4)
+                            _buildDetailRow("Cam Note Count", lead.camNoteCount.toString()??"0"),
+
                         ],
                       ),
                     ),

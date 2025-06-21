@@ -600,22 +600,10 @@ class Step3CamNote extends StatelessWidget {
 
                                    ).then((_){
                                      camNoteController.markBankerAsSubmitted(bankId);
-                                     camNoteController.bankerBranchMap[bankId] = branchId;
-                                     /*final productList = camNoteController.getProductDetailsByFilterModel.value?.data ?? [];
+                                     // camNoteController.bankerBranchMap[bankId] = branchId;
+                                     camNoteController.bankerBranchMap[boxId] = branchId;
 
-                                     proFilter.Data? product;
-
-                                     try {
-                                       product = productList.firstWhere((element) => element.bankId.toString() == bankId);
-                                     } catch (e) {
-                                       product = null;
-                                     }
-                                     if (product != null) {
-                                       product.specialBranchId = int.parse(branchId); // 🎯 Assigned locally
-                                       print("Stored branchId: $branchId for banker ${product.bankersName}");
-                                     } else {
-                                       print("Banker with bankId $bankId not found!");
-                                     }*/
+                                     print("camNoteController.bankerBranchMap on tap==>${camNoteController.bankerBranchMap}");
 
                                    });
                                   print("validate ho gaya===>");

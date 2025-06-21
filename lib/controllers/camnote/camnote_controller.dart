@@ -526,7 +526,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         for (var bankerId in selectedBankers) {
 
 
-          final matchingProducts = productList.where((product) => product.bankId.toString() == bankerId);
+          final matchingProducts = productList.where((product) => product.id.toString() == bankerId);
           for (var product in matchingProducts) {
 
             final bankId = product.bankId;
@@ -534,7 +534,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
             final bankersMobileNumber = product.bankersMobileNumber;
             final bankersWhatsAppNumber = product.bankersWhatsAppNumber;
             final bankersEmailID = product.bankersEmailID;
-            final specialBranchId = product.specialBranchId;
+
 
 
             final branchId = bankerBranchMap[bankId.toString()];
@@ -604,14 +604,49 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
-/*
-  void saveForm(){
+ /* void saveForm(){
+    final productList = getProductDetailsByFilterModel.value?.data ?? [];
+     if(productList.isNotEmpty){
+       print("selectedBankers: $selectedBankers");
+        for (var bankerId in selectedBankers) {
 
-    List<File> propertyPhotos = getImages("property_photo");
 
-    print("propertyPhotos===>${propertyPhotos.toString()}");
-  }
-*/
+          final matchingProducts = productList.where((product) => product.id.toString() == bankerId);
+
+          print("matchingProducts: $matchingProducts");
+          for (var product in matchingProducts) {
+            print("product: =---inside");
+            final bankId = product.bankId;
+            final bankersName = product.bankersName;
+            final bankersMobileNumber = product.bankersMobileNumber;
+            final bankersWhatsAppNumber = product.bankersWhatsAppNumber;
+            final bankersEmailID = product.bankersEmailID;
+            final specialBranchId = product.specialBranchId;
+
+
+            final branchId = bankerBranchMap[bankId.toString()];
+
+            if (branchId != null) {
+              print("Found stored branchId: $branchId for bankId: $bankId");
+              // Use this in your next API call
+            } else {
+              print("No branchId stored yet for bankId: $bankId");
+            }
+// Now call API with extracted values
+
+            List<File> propertyPhotos = getImages("property_photo");
+            List<File> residencePhotos = getImages("residence_photo");
+            List<File> officePhotos = getImages("office_photo");
+
+            print("propertyPhotos===>Camnote API will run");
+
+
+          }
+        }
+      }else{
+        SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select a bank first");
+      }
+  }*/
 
 
 
