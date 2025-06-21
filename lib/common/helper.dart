@@ -711,6 +711,8 @@ class AppText{
   static const String enterRemark  = "Enter Remark";
   static const String enterZipcode  = "Please Add Zipcode in Step 1";
   static const String forgotMsg  = "We’ve sent a password reset link to your email address. Please check your inbox";
+  static const String genAadhar  = "Generate by Aadhar";
+  static const String genPan  = "Generate by PAN";
 }
 
 class AppColor{
@@ -1167,7 +1169,7 @@ class MultipartFieldHelper {
       String? value, {
         String fallback = "0",
       }) {
-    print("value in field===>${value}");
+
     if (value != null && value != "" && value != "null") {
       fields[key] = value;
     } else {

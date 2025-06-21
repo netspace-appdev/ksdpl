@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +18,8 @@ import '../../custom_widgets/ImagePickerMixin.dart';
 import '../../models/camnote/AddAdSrcIncomModel.dart';
 import '../../models/camnote/AddBankerDetail.dart';
 import '../../models/camnote/AddCamNoteDetail.dart';
+import '../../models/camnote/AddCibilDetailsModel.dart';
+import '../../models/camnote/GenerateCibilAadharModel.dart';
 import '../../models/camnote/GetAddIncUniqueLeadModel.dart';
 import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
 import '../../models/camnote/GetBankerDetailModelForCheck.dart';
@@ -47,6 +50,7 @@ import 'package:flutter/material.dart';
 
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
+import 'calculateCibilData.dart';
 var getBankerDetailsByIdModel = Rxn<GetBankerDetailsByIdModel>(); //
 
 class CamNoteController extends GetxController with ImagePickerMixin{
@@ -56,6 +60,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var firstName="".obs;
   var email="".obs;
   var isLoading = false.obs;
+  var isLoadingCibil = false.obs;
+
+  var isAllCamnoteSubmit = false.obs;
+
   var isBankerLoading = false.obs;
   var isBankerSuperiorLoading = false.obs;
   var isLoadingMainScreen = false.obs;
@@ -67,6 +75,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var getBankerDetailModelForCheck = Rxn<GetBankerDetailModelForCheck>(); //
   var getAddIncUniqueLeadModel = Rxn<GetAddIncUniqueLeadModel>(); //
   var addCamNoteDetail = Rxn<AddCamNoteDetail>(); //
+  var generateCibilAadharModel = Rxn<GenerateCibilAadharModel>(); //
+  var addCibilDetailsModel = Rxn<AddCibilDetailsModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
 
 
@@ -220,6 +230,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camLoanAmtReqController = TextEditingController();
 
   var selectedGender = Rxn<String>();
+  var selectedGenderGenCibil = Rxn<String>();
   ///cam 1 form
   final TextEditingController camFullNameController = TextEditingController();
   final TextEditingController camDobController = TextEditingController();
@@ -236,6 +247,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camMonthlyIncomeController = TextEditingController();
   final TextEditingController camAddSourceIncomeController = TextEditingController();
   final TextEditingController camBranchLocController = TextEditingController();
+
+  final TextEditingController camCibilMobController = TextEditingController();
   var camSelectedState = Rxn<String>();
   var camSelectedDistrict = Rxn<String>();
   var camSelectedCity = Rxn<String>();
@@ -253,7 +266,24 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var selectedPackage = Rxn<int>();
   var selectedBankBranch = Rxn<int>();
   var selectedBankerBranch = Rxn<int>();
+  var selectedIndexGenCibil = (-1).obs;
+  var enableAllCibilFields = true.obs;
 
+  void selectCheckboxCibil(int index) {
+    selectedIndexGenCibil.value = index;
+
+    print("selectedIndexGenCibil===>${selectedIndexGenCibil}");
+   /* if( selectedIndex.value==0){
+      isLeadCountYearly.value="false";
+
+    } else if( selectedIndex.value==1){
+      isLeadCountYearly.value="true";
+
+
+    }else{
+
+    }*/
+  }
   final List<Map<String, dynamic>> bankerThemes = [
     {
       "containerColor": Colors.transparent,
@@ -423,6 +453,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     if(selectedBankers.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select a bank first");
     }else{
+      isAllCamnoteSubmit(true);
       final List<IncomeModel> addIncomeSrcModels = [];
 
       for (var ai in addIncomeList) {
@@ -699,6 +730,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     selectedBankers.clear();
     uniqueLeadNUmber="";
     loanApplicationNumber="";
+    clearStep1();
+    clearStep2();
+    clearBankDetails();
     super.onClose();
   }
 
@@ -1226,22 +1260,26 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       if(data['success'] == true){
 
+
         getAddIncUniqueLeadModel.value= GetAddIncUniqueLeadModel.fromJson(data);
 
 
-        isLoading(false);
+
 
         ///code for populatinf add inc
-        if(getAddIncUniqueLeadModel.value!.data!=null || getAddIncUniqueLeadModel.value!.data!.isNotEmpty){
+        if(getAddIncUniqueLeadModel.value!.data!=null && getAddIncUniqueLeadModel.value!.data!.isNotEmpty){
+
           addIncomeList.clear();
           final jsonStr =  getAddIncUniqueLeadModel.value!.data;
 
           if (jsonStr != null) {
+
             // final decoded = jsonDecode(jsonStr);
             final decoded = jsonStr;
 
             // Check if it's actually a List of Maps
             if (decoded is List) {
+
               for (var item in decoded) {
                 final aiController = AddIncomeModelController();
 
@@ -1256,7 +1294,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         }
 
         ///end
-
+        isLoading(false);
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
@@ -1376,7 +1414,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         ToastMessage.msg(addCamNoteDetail.value!.message!);
 
         sendMailToBankerAfterGenerateCamNoteApi(id: addCamNoteDetail.value!.data!.id.toString());
+        clearStep1();
+        clearStep2();
+        clearBankDetails();
         Get.back();
+        isAllCamnoteSubmit(false);
         isLoading(false);
 
 
@@ -1401,6 +1443,79 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       isLoading(false);
     }
+  }
+  void clearStep1(){
+    camFullNameController.clear();
+    camDobController.clear();
+    camPhoneController.clear();
+    camLoanAmtReqController.clear();
+    camEmailController.clear();
+    camAadharController.clear();
+    camPanController.clear();
+    camStreetAddController.clear();
+    camZipController.clear();
+    camNationalityController.clear();
+    camEmployerNameController.clear();
+    camMonthlyIncomeController.clear();
+    camBranchLocController.clear();
+    camPackageNameController.clear();
+    camPackageAmtController.clear();
+    camReceivableAmtController.clear();
+    camReceivableDateController.clear();
+    camTransactionDetailsController.clear();
+    camRemarkController.clear();
+
+
+
+    selectedGender.value=null;
+    camSelectedState.value=null;
+    camSelectedDistrict.value=null;
+    camSelectedCity.value=null;
+    camCurrEmpStatus.value=null;
+    camSelectedBank.value=null;
+    camSelectedProdSegment.value=null;
+    camSelectedProdType.value=null;
+    selectedPackage.value=null;
+    camSelectedIndexRelBank.value=-1;
+    camSelectedIndexRelBank.value=-1;
+    addIncomeList.clear();
+    Addleadcontroller addLeadController =Get.find();
+    addLeadController.addIncomeList.clear();
+  }
+
+  void clearStep2(){
+
+    camCibilController.clear();
+    camTotalLoanAvailedController.clear();
+    camTotalLiveLoanController.clear();
+    camTotalEmiController.clear();
+    camEmiStoppedBeforeController.clear();
+    camEmiWillContinueController.clear();
+    camTotalOverdueCasesController.clear();
+    camTotalOverdueAmountController.clear();
+    camTotalEnquiriesController.clear();
+    camGeoLocationPropertyLatController.clear();
+    camGeoLocationPropertyLongController.clear();
+    camGeoLocationResidenceLatController.clear();
+    camGeoLocationResidenceLongController.clear();
+    camGeoLocationOfficeLongController.clear();
+    camGeoLocationOfficeLongController.clear();
+    camEarningCustomerAgeController.clear();
+    camNonEarningCustomerAgeController.clear();
+    camTotalFamilyIncomeController.clear();
+    camIncomeCanBeConsideredController.clear();
+    camLoanAmtReqController.clear();
+    camLoanTenorRequestedController.clear();
+    camRateOfInterestController.clear();
+    camProposedEmiController.clear();
+    camPropertyValueController.clear();
+    camFoirController.clear();
+    camLtvController.clear();
+    camLtvController.clear();
+    camOfferedSecurityTypeController.clear();
+    camCibilMobController.clear();
+
+    selectedCamIncomeTypeList.value=null;
   }
 
 
@@ -1442,6 +1557,224 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
+
+
+  Future<void>  generateCibilScoreByAadharApi({
+    required String fullName,
+    required String idNumber,
+    required String mobile,
+    required String gender,
+  }) async {
+    try {
+
+      isLoadingCibil(true);
+
+      var data = await CamNoteService.generateCibilScoreByAadharApi(
+        fullName: fullName,
+        idNumber: idNumber,
+        mobile: mobile,
+        gender: gender,
+
+      );
+
+
+      if(data['success'] == true){
+
+        generateCibilAadharModel.value= GenerateCibilAadharModel.fromMap(data);
+        final cibilValues = calculateCibilData(generateCibilAadharModel.value!.data.data);
+        print("TotalLoanAvailedOnCibil: ₹${cibilValues.totalLoanAvailedOnCibil}");
+        print("TotalLiveLoan: ${cibilValues.totalLiveLoan}");
+        print("TotalEMI: ₹${cibilValues.totalEMI.toStringAsFixed(2)}");
+        print("EMIWillContinue: ${cibilValues.emiWillContinue}");
+        print("TotalOverdueCasesAsPerCibil: ${cibilValues.totalOverdueCasesAsPerCibil}");
+        print("TotalOverdueAmountAsPerCibil: ₹${cibilValues.totalOverdueAmountAsPerCibil}");
+        print("TotalEnquiriesMadeAsPerCibil: ${cibilValues.totalEnquiriesMadeAsPerCibil}");
+
+        var date = DateTime.now().toIso8601String();
+
+
+        addCibilDetailsApi(
+          phoneNo: mobile,
+          aadhar: idNumber,
+          pan: "",
+          uniqueLeadNo: uniqueLeadNUmber.toString(),
+          paymentTransactionId: "",
+          cibilTransactionId: generateCibilAadharModel.value!.data!.transactionId.toString()??"0",
+          pdf: generateCibilAadharModel.value!.data!.data.pdfUrl.toString()??"",
+          date:date
+        );
+
+        camTotalLoanAvailedController.text=cibilValues.totalLoanAvailedOnCibil.toString();
+        camTotalLiveLoanController.text=cibilValues.totalLiveLoan.toString();
+        camTotalEmiController.text=cibilValues.totalEMI.toStringAsFixed(2);
+        camEmiWillContinueController.text=cibilValues.emiWillContinue.toString();
+        camTotalOverdueCasesController.text=cibilValues.totalOverdueCasesAsPerCibil.toString();
+        camTotalOverdueAmountController.text=cibilValues.totalOverdueAmountAsPerCibil.toString();
+        camTotalEnquiriesController.text=cibilValues.totalEnquiriesMadeAsPerCibil.toString();
+        enableAllCibilFields.value=false;
+
+        isLoadingCibil(false);
+
+        Get.back();
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        generateCibilAadharModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error generateCibilScoreByAadharApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoadingCibil(false);
+    } finally {
+
+
+      isLoadingCibil(false);
+    }
+  }
+
+
+  Future<void>  generateCibilScoreByPANApi({
+    required String fullName,
+    required String pan,
+    required String mobile,
+  }) async {
+    try {
+
+      isLoadingCibil(true);
+
+      var data = await CamNoteService.generateCibilScoreByPANApi(
+        fullName: fullName,
+        pan: pan,
+        mobile: mobile,
+      );
+
+
+      if(data['success'] == true){
+
+        generateCibilAadharModel.value= GenerateCibilAadharModel.fromMap(data);
+        final cibilValues = calculateCibilData(generateCibilAadharModel.value!.data.data);
+        print("TotalLoanAvailedOnCibil: ₹${cibilValues.totalLoanAvailedOnCibil}");
+        print("TotalLiveLoan: ${cibilValues.totalLiveLoan}");
+        print("TotalEMI: ₹${cibilValues.totalEMI.toStringAsFixed(2)}");
+        print("EMIWillContinue: ${cibilValues.emiWillContinue}");
+        print("TotalOverdueCasesAsPerCibil: ${cibilValues.totalOverdueCasesAsPerCibil}");
+        print("TotalOverdueAmountAsPerCibil: ₹${cibilValues.totalOverdueAmountAsPerCibil}");
+        print("TotalEnquiriesMadeAsPerCibil: ${cibilValues.totalEnquiriesMadeAsPerCibil}");
+
+        var date = DateTime.now().toIso8601String();
+        addCibilDetailsApi(
+            phoneNo: mobile,
+            aadhar: "",
+            pan: pan,
+            uniqueLeadNo: uniqueLeadNUmber.toString(),
+            paymentTransactionId: "",
+            cibilTransactionId: generateCibilAadharModel.value!.data!.transactionId.toString()??"0",
+            pdf: generateCibilAadharModel.value!.data!.data.pdfUrl.toString()??"",
+            date:date
+        );
+
+        camTotalLoanAvailedController.text=cibilValues.totalLoanAvailedOnCibil.toString();
+        camTotalLiveLoanController.text=cibilValues.totalLiveLoan.toString();
+        camTotalEmiController.text=cibilValues.totalEMI.toStringAsFixed(2);
+        camEmiWillContinueController.text=cibilValues.emiWillContinue.toString();
+        camTotalOverdueCasesController.text=cibilValues.totalOverdueCasesAsPerCibil.toString();
+        camTotalOverdueAmountController.text=cibilValues.totalOverdueAmountAsPerCibil.toString();
+        camTotalEnquiriesController.text=cibilValues.totalEnquiriesMadeAsPerCibil.toString();
+        enableAllCibilFields.value=false;
+
+        isLoadingCibil(false);
+
+        Get.back();
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+        ToastMessage.msg(AppText.somethingWentWrong);
+
+
+        generateCibilAadharModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error generateCibilScoreByAadharApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoadingCibil(false);
+    } finally {
+
+
+      isLoadingCibil(false);
+    }
+  }
+
+
+  //ye wali
+  Future<void>  addCibilDetailsApi({
+    required String phoneNo,
+    required String aadhar,
+    required String pan,
+    required String uniqueLeadNo,
+    required String paymentTransactionId,
+    required String cibilTransactionId,
+    required String pdf,
+    required String date,
+  }) async {
+    try {
+
+      isLoadingCibil(true);
+
+      var data = await CamNoteService.addCibilDetailsApi(
+        phoneNo: phoneNo,
+        aadhar: aadhar,
+        pan: pan,
+        uniqueLeadNo: uniqueLeadNo,
+        paymentTransactionId: paymentTransactionId,
+        cibilTransactionId: cibilTransactionId,
+        pdf: pdf,
+        date: date,
+      );
+
+
+      if(data['success'] == true){
+
+        addCibilDetailsModel.value= AddCibilDetailsModel.fromJson(data);
+
+        isLoadingCibil(false);
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+        ToastMessage.msg(AppText.somethingWentWrong);
+
+
+        addCibilDetailsModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error addCibilDetailsModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoadingCibil(false);
+    } finally {
+
+
+      isLoadingCibil(false);
+    }
+  }
+
+
 }
 
 extension ParseStringExtension on String? {
@@ -1480,4 +1813,5 @@ extension ddToStringExt on String? {
 String cleanText(String text) {
   return text.trim().isEmpty ? "" : text.trim();
 }
+
 

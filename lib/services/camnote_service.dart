@@ -20,6 +20,9 @@ class CamNoteService {
   static const String getAdditionalIncomeByUniqueLeadNumber = BaseUrl.baseUrl + 'CamNoteDetail/GetAdditionalIncomeByUniqueLeadNumber';
   static const String addCamNoteDetail = BaseUrl.baseUrl + 'CamNoteDetail/AddCamNoteDetail';
   static const String sendMailToBankerAfterGenerateCamNote = BaseUrl.baseUrl + 'CamNoteDetail/SendMailToBankerAfterGenerateCamNote';
+  static const String generateCibilScoreByAadhar = BaseUrl.baseUrl + 'FileUpload/GenerateCibilScoreByAadhar';
+  static const String generateCibilScoreByPAN = BaseUrl.baseUrl + 'FileUpload/GenerateCibilScoreByPAN';
+  static const String addCibilDetails = BaseUrl.baseUrl + 'CamNoteDetail/AddCibilDetails';
 
 
 
@@ -502,6 +505,125 @@ class CamNoteService {
 
 
 
+  static Future<Map<String, dynamic>> generateCibilScoreByAadharApi({
+    required String fullName,
+    required String idNumber,
+    required String mobile,
+    required String gender,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(generateCibilScoreByAadhar),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'fullName', fullName);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'IdNumber', idNumber);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'mobile', mobile);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'gender', gender);
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(generateCibilScoreByAadhar, request.fields);
+      Helper.ApiRes(generateCibilScoreByAadhar, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> generateCibilScoreByPANApi({
+    required String fullName,
+    required String pan,
+    required String mobile,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(generateCibilScoreByPAN),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'fullName', fullName);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'pan', pan);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'mobile', mobile);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(generateCibilScoreByPAN, request.fields);
+      Helper.ApiRes(generateCibilScoreByPAN, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+
+  static Future<Map<String, dynamic>> addCibilDetailsApi({
+    required String phoneNo,
+    required String aadhar,
+    required String pan,
+    required String uniqueLeadNo,
+    required String paymentTransactionId,
+    required String cibilTransactionId,
+    required String pdf,
+    required String date,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(addCibilDetails),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PhoneNo', phoneNo);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Aadhar', aadhar);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Pan', pan);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'UniqueLeadNo', uniqueLeadNo);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PaymentTransactionId', paymentTransactionId);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CibilTransactionId', cibilTransactionId);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PDF', pdf);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Date', date);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(addCibilDetails, request.fields);
+      Helper.ApiRes(addCibilDetails, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error: $e');
+    }
+  }
 
 
   static void printInChunks(String text, {int chunkSize = 2048}) {

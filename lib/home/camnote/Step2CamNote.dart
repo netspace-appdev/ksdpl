@@ -1,15 +1,22 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
 import 'package:ksdpl/custom_widgets/custom_photo_picker_widget.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
+import '../../common/validation_helper.dart';
 import '../../controllers/camnote/camnote_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
+import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomLoadingOverlay.dart';
+import '../../custom_widgets/CustomTextFieldPrefix.dart' as customTF;
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../models/product/GetAllProductListModel.dart' as prod;
@@ -52,11 +59,62 @@ class Step2CamNote extends StatelessWidget {
                  Column(
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
-                     CustomLabeledTextField(
-                       label: AppText.cibil,
+
+                      Column(
+                       children: [
+                         Row(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             Expanded( // This allows the label text to wrap
+                               child: Row(
+                                 children: [
+                                   const Text.rich(
+                                     TextSpan(
+                                       text: AppText.cibil,
+                                       style: TextStyle(
+                                         fontSize: 16,
+                                         fontWeight: FontWeight.bold,
+                                         color: AppColor.grey2,
+                                       ),
+                                     ),
+                                   ),
+                                   SizedBox(width: 10,),
+                                   InkWell(
+                                     onTap: (){
+                                       camNoteController.selectedIndexGenCibil.value=-1;
+                                       camNoteController.camCibilMobController.text=camNoteController.camPhoneController.text;
+                                       camNoteController.selectedGenderGenCibil.value=camNoteController.selectedGender.value;
+
+                                       print("gender-->${camNoteController.selectedGender.value}");
+                                       showDialogGenCibil(context:context);
+                                     },
+                                     child: const Text(
+                                      "Need to generate ?",
+                                       style: TextStyle(
+                                         fontSize: 16,
+                                         fontWeight: FontWeight.bold,
+                                         color: AppColor.redColor,
+                                       ),
+                                     ),
+                                   )
+                                 ],
+                               ),
+                             ),
+                           ],
+                         ),
+
+
+                         SizedBox(height: 10),
+                       ],
+                     ),
+
+
+
+                     customTF.CustomTextFieldPrefix(
                        controller: camNoteController.camCibilController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterCibilScore,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
                      ),
 
                      CustomLabeledTextField(
@@ -64,6 +122,7 @@ class Step2CamNote extends StatelessWidget {
                        controller: camNoteController.camTotalLoanAvailedController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterTotalLoanAvaileCibil,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
                      ),
 
                      CustomLabeledTextField(
@@ -71,11 +130,13 @@ class Step2CamNote extends StatelessWidget {
                        controller: camNoteController.camTotalLiveLoanController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterTotalLiveLoan,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
                      ),
 
                      CustomLabeledTextField(
                        label: AppText.totalEmi,
                        controller: camNoteController.camTotalEmiController,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
                        inputType: TextInputType.number,
                        hintText: AppText.enterTotalEmi,
                      ),
@@ -92,6 +153,7 @@ class Step2CamNote extends StatelessWidget {
                        controller: camNoteController.camEmiWillContinueController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterEmiWillContinue,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
                      ),
 
                      CustomLabeledTextField(
@@ -99,6 +161,7 @@ class Step2CamNote extends StatelessWidget {
                        controller: camNoteController.camTotalOverdueCasesController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterOverdueCases,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
                      ),
 
                      CustomLabeledTextField(
@@ -106,6 +169,7 @@ class Step2CamNote extends StatelessWidget {
                        controller: camNoteController.camTotalOverdueAmountController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterOverdueAmountCibil,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
                      ),
 
                      CustomLabeledTextField(
@@ -113,6 +177,7 @@ class Step2CamNote extends StatelessWidget {
                        controller: camNoteController.camTotalEnquiriesController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterTotalEnquiries,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
                      ),
                    ],
                  )
@@ -347,4 +412,200 @@ class Step2CamNote extends StatelessWidget {
     );
   }
 
+
+  void showDialogGenCibil({
+    required BuildContext context,
+  }) {
+
+    //working leads is now ongoing call
+    List<String> options = [AppText.genAadhar,AppText.genPan];
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx((){
+
+          return camNoteController.isLoadingCibil.value?
+          CustomLoadingOverlay():
+
+          CustomBigDialogBox(
+            titleBackgroundColor: AppColor.secondaryColor,
+
+            title: "Genrate CIBIL",
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
+                  child:  Obx(()=>Column(
+                    children: options.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      String option = entry.value;
+
+                      return CheckboxListTile(
+                        activeColor: AppColor.secondaryColor,
+
+                        title: Text(option),
+                        value: camNoteController.selectedIndexGenCibil.value == index,
+                        onChanged: (value) => camNoteController.selectCheckboxCibil(index),
+                      );
+                    }).toList(),
+                  )),
+                ),
+                SizedBox(height: 10,),
+
+
+                Obx(()=>Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if(camNoteController.selectedIndexGenCibil.value==0)...[
+                      CustomLabeledTextField(
+                        label: AppText.fullName,
+                        controller: camNoteController.camFullNameController,
+                        inputType: TextInputType.name,
+                        hintText: AppText.enterFullName,
+                        isRequired: true,
+                        validator: ValidationHelper.validateName,
+                      ),
+                      CustomLabeledTextField(
+                        label: AppText.aadhar,
+                        isRequired: true,
+
+                        controller:camNoteController.camAadharController,
+                        inputType: TextInputType.phone,
+                        hintText: AppText.enterAadhar,
+                        maxLength: 12,
+                        isSecret: true,
+                        secretDigit: 4,
+
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.phoneNumberNoStar,
+                        isRequired: true,
+
+                        controller: camNoteController.camCibilMobController,
+                        inputType: TextInputType.phone,
+                        hintText: AppText.enterPhNumber,
+                        validator: ValidationHelper.validatePhoneNumber,
+                        maxLength: 10,
+
+                      ),
+                      const Row(
+                        children: [
+                          Text(
+                            AppText.gender,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.grey2,
+                            ),
+                          ),
+                          Text(
+                            " *",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.redColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      /// Label Row (with * if required)
+                      Obx(()=>  Row(
+                        children: [
+                          _buildRadioOption("Male"),
+                          _buildRadioOption("Female"),
+                          _buildRadioOption("Other"),
+                        ],
+                      )
+                      ),
+                    ],
+
+                    if(camNoteController.selectedIndexGenCibil.value==1)...[
+                      CustomLabeledTextField(
+                        label: AppText.fullName,
+                        controller: camNoteController.camFullNameController,
+                        inputType: TextInputType.name,
+                        hintText: AppText.enterFullName,
+                        isRequired: true,
+                        validator: ValidationHelper.validateName,
+                      ),
+                      CustomLabeledTextField(
+                        label: AppText.panNumber,
+                        isRequired: true,
+
+                        controller: camNoteController.camPanController,
+                        inputType: TextInputType.name,
+                        hintText: AppText.enterPan,
+                        validator: ValidationHelper.validatePanCard,
+                        maxLength: 10,
+                        isCapital: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.phoneNumberNoStar,
+                        isRequired: true,
+
+                        controller: camNoteController.camCibilMobController,
+                        inputType: TextInputType.phone,
+                        hintText: AppText.enterPhNumber,
+                        validator: ValidationHelper.validatePhoneNumber,
+                        maxLength: 10,
+
+                      ),
+                    ]
+                  ],
+                ))
+
+
+              ],
+            ),
+            onSubmit: () {
+              if(camNoteController.selectedGenderGenCibil.value==null && camNoteController.selectedIndexGenCibil.value==0){
+                SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select gender");
+              }else if(camNoteController.selectedIndexGenCibil.value==0){
+                camNoteController.generateCibilScoreByAadharApi(
+                    fullName: camNoteController.camFullNameController.text.trim().toString(),
+                    idNumber: camNoteController.camAadharController.text.trim().toString(),
+                    mobile: camNoteController.camCibilMobController.text.trim().toString(),
+                    gender: camNoteController.selectedGenderGenCibil.value.toString(),
+                ); //
+                // Close dialog after submission
+              }else if(camNoteController.selectedIndexGenCibil.value==1){
+                camNoteController.generateCibilScoreByPANApi(
+                  fullName: camNoteController.camFullNameController.text.trim().toString(),
+                  pan: camNoteController.camPanController.text.trim().toString(),
+                  mobile: camNoteController.camCibilMobController.text.trim().toString(),
+                ); //generateCibilScoreByPANApi
+              // Close dialog after submission
+              }else{
+
+              }
+
+              // Handle submission logic
+            },
+          );
+        });
+
+      },
+    );
+  }
+
+
+  Widget _buildRadioOption(String gender) {
+    return Row(
+      children: [
+        Radio<String>(
+          value: gender,
+          groupValue: camNoteController.selectedGenderGenCibil.value,
+          onChanged: (value) {
+            camNoteController.selectedGenderGenCibil.value=value;
+          },
+        ),
+        Text(gender),
+      ],
+    );
+  }
 }

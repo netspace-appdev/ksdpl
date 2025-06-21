@@ -211,7 +211,7 @@ class Addleadcontroller extends GetxController{
 
 
         camNoteController.getAddIncUniqueLeadApi(uniqueLeadNumber:getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"0");
-        //camNoteController.selectedPackage.value=getLeadDetailModel.value?.data?.assignedEmployeeId.toString()??"";
+
 
         isLoading(false);
 

@@ -859,6 +859,8 @@ overflow: TextOverflow.ellipsis,
           addLeadController.clearControllers();
 
           CamNoteController camNoteController=Get.put(CamNoteController());
+          camNoteController.clearStep1();
+          camNoteController.clearStep2();
           camNoteController.getAllPackageMasterApi();
           camNoteController.currentStep.value=0;
           camNoteController.infoFilledBankers.clear();
@@ -867,6 +869,8 @@ overflow: TextOverflow.ellipsis,
           camNoteController.clearImages("property_photo");
           camNoteController.clearImages("residence_photo");
           camNoteController.clearImages("office_photo");
+          camNoteController.enableAllCibilFields.value=true;
+          leadDDController.getAllKsdplProductApi();
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

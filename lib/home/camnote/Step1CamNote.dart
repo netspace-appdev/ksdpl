@@ -46,6 +46,8 @@ class Step1CamNote extends StatelessWidget {
             if (addleadcontroller.isLoading.value) {
               return  Center(child: CustomSkelton.productShimmerList(context));
             }
+
+            print("addIncomeList obx==>${camNoteController.addIncomeList.length}");
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min, // Prevents extra spacing
@@ -409,7 +411,7 @@ class Step1CamNote extends StatelessWidget {
                     onChanged: (value) {
 
                       camNoteController.camSelectedBank.value =  value?.id?.toString();
-                      leadDDController.getProductListByBankIdApi(bankId: camNoteController.camSelectedBank.value);
+                     // leadDDController.getProductListByBankIdApi(bankId: camNoteController.camSelectedBank.value);
                     },
                   );
                 }),
