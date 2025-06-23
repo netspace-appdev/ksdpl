@@ -13,6 +13,8 @@ import '../enforcement_panel/upload_common_task.dart';
 import '../exp.dart';
 import '../home/EditProfile2.dart';
 import '../home/LeadListScreen.dart';
+import '../home/camnote/cam_note_details.dart';
+import '../home/camnote/cam_note_single.dart';
 import '../home/camnote/camnote_group_screen.dart';
 import '../home/change_password.dart';
 import '../home/dashboard_screen.dart';
@@ -60,7 +62,6 @@ final routes = [
   GetPage(name: '/addLeadScreen', page: () =>AddLeadScreen()),
   GetPage(name: '/loanApplication', page: () =>LoanApplicationScreen()),
   GetPage(name: '/openPollFilter', page: () =>OpenPollFilter()),
-  //GetPage(name: '/leadFollowup', page: () =>LeadFollowupScreen()),
   GetPage(name: '/leadDetailsTab', page: () =>LeadDetailsTab()),
   GetPage(name: '/leadHistory', page: () => LeadHistory()),
   GetPage(name: '/dashboardScreen', page: () => DashboardScreen()),
@@ -73,4 +74,6 @@ final routes = [
   GetPage(name: '/editProductScreen', page: () => EditProductScreen()),
   GetPage(name: '/camNoteGroupScreen', page: () => CamNoteGroupScreen()),
   GetPage(name: '/forgotPasswordScreen', page: () => ForgotPasswordScreen()),
+  GetPage(name: '/camNoteDetailsScreen', page: () => CamNoteDetailsScreen()),
+  GetPage(name: '/camNoteSingle', page: () => CamNoteSingle()),
 ];

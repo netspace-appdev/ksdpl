@@ -23,6 +23,8 @@ class CamNoteService {
   static const String generateCibilScoreByAadhar = BaseUrl.baseUrl + 'FileUpload/GenerateCibilScoreByAadhar';
   static const String generateCibilScoreByPAN = BaseUrl.baseUrl + 'FileUpload/GenerateCibilScoreByPAN';
   static const String addCibilDetails = BaseUrl.baseUrl + 'CamNoteDetail/AddCibilDetails';
+  static const String getCamNoteDetailByLeadId = BaseUrl.baseUrl + 'CamNoteDetail/GetCamNoteDetailByLeadId';
+  static const String getCamNoteDetailById = BaseUrl.baseUrl + 'CamNoteDetail/GetCamNoteDetailById';
 
 
 
@@ -625,6 +627,73 @@ class CamNoteService {
     }
   }
 
+
+
+  static Future<Map<String, dynamic>> getCamNoteDetailByLeadIdApi({
+    required String leadId,
+
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getCamNoteDetailByLeadId),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'LeadId', leadId);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(getCamNoteDetailByLeadId, request.fields);
+      Helper.ApiRes(getCamNoteDetailByLeadId, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error: $e');
+    }
+  }
+
+
+ // getCamNoteDetailById
+
+  static Future<Map<String, dynamic>> getCamNoteDetailByIdApi({
+    required String id,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getCamNoteDetailById),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', id, fallback: "0");
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(getCamNoteDetailById, request.fields);
+      Helper.ApiRes(getCamNoteDetailById, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error: $e');
+    }
+  }
 
   static void printInChunks(String text, {int chunkSize = 2048}) {
     final pattern = RegExp('.{1,$chunkSize}', dotAll: true);

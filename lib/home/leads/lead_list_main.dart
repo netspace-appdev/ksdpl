@@ -625,6 +625,17 @@ class LeadListMain extends StatelessWidget {
 
                     SizedBox(height: 10),
 
+                    if(lead.leadStage==4 )
+                      _buildTextButton(
+                          label:"Cam Note Details",
+                          context: context,
+                          color: Colors.purple,
+                          icon:  Icons.person_outline_outlined,
+                          leadId: lead.id.toString(),
+                          label_code: "cam_note_details",
+                          currentLeadStage: lead.leadStage.toString(),
+                          uln: lead.uniqueLeadNumber.toString()
+                      ),
                   ],
                 ),
               );
@@ -949,6 +960,13 @@ overflow: TextOverflow.ellipsis,
           'uln': uln.toString(),
           });
 
+        }else if (label_code == "cam_note_details") {
+
+          CamNoteController camNoteController=Get.put(CamNoteController());
+
+          camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
+          Get.toNamed("/camNoteDetailsScreen");
+
         }else{
 
         }
@@ -960,7 +978,7 @@ overflow: TextOverflow.ellipsis,
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
-            label_code=="loan_appl_form"?MediaQuery.of(context).size.width*0.82:
+            label_code=="loan_appl_form" || label_code=="cam_note_details" ?MediaQuery.of(context).size.width*0.82:
             (label_code=="add_feedback" ) ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,

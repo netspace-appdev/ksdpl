@@ -24,6 +24,8 @@ import '../../models/camnote/GetAddIncUniqueLeadModel.dart';
 import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
 import '../../models/camnote/GetBankerDetailModelForCheck.dart';
 import '../../models/camnote/GetBankerDetailsByIdModel.dart';
+import '../../models/camnote/GetCamNoteDetailByIdModeli.dart';
+import '../../models/camnote/GetCamNoteLeadIdModel.dart';
 import '../../models/camnote/GetProductDetailsByFilterModel.dart';
 import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
@@ -126,6 +128,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var addProductListModel = Rxn<AddProductListModel>(); //
   var addProductDocumentModel = Rxn<AddProductDocumentModel>(); //
   var getProductDetailsByFilterModel = Rxn<GetProductDetailsByFilterModel>(); //
+  var getCamNoteLeadIdModel = Rxn<GetCamNoteLeadIdModel>(); //
+  var getCamNoteDetailByIdModel = Rxn<GetCamNoteDetailByIdModel>(); //
   RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
   var isLoadingProductCategory = false.obs;
   var isProductLoading = false.obs;
@@ -1752,7 +1756,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
 
-  //ye wali
+
   Future<void>  addCibilDetailsApi({
     required String phoneNo,
     required String aadhar,
@@ -1809,6 +1813,97 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
+
+
+  Future<void>  getCamNoteDetailByLeadIdApi({
+    required String leadId,
+
+  }) async {
+    try {
+
+      isLoadingMainScreen(true);
+
+      var data = await CamNoteService.getCamNoteDetailByLeadIdApi(
+        leadId: leadId,
+
+      );
+
+
+      if(data['success'] == true){
+
+        getCamNoteLeadIdModel.value= GetCamNoteLeadIdModel.fromJson(data);
+
+        isLoadingMainScreen(false);
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+        ToastMessage.msg(AppText.somethingWentWrong);
+
+
+        getCamNoteLeadIdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getCamNoteLeadIdModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoadingMainScreen(false);
+    } finally {
+
+
+      isLoadingMainScreen(false);
+    }
+  }
+
+
+
+  Future<void> getCamNoteDetailByIdApi({
+    required String id,
+
+  }) async {
+    try {
+
+      isLoadingMainScreen(true);
+
+      var data = await CamNoteService.getCamNoteDetailByIdApi(
+        id: id,
+
+      );
+
+
+      if(data['success'] == true){
+
+        getCamNoteDetailByIdModel.value= GetCamNoteDetailByIdModel.fromJson(data);
+
+        isLoadingMainScreen(false);
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+        ToastMessage.msg(AppText.somethingWentWrong);
+
+
+        getCamNoteDetailByIdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getCamNoteDetailByIdModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoadingMainScreen(false);
+    } finally {
+
+
+      isLoadingMainScreen(false);
+    }
+  }
 
 }
 
