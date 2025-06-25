@@ -5,12 +5,12 @@ class ValidationHelper {
       return "Name is required";
     }
 
-    String pattern = r'^[a-zA-Z\s]+$';
+   /* String pattern = r'^[a-zA-Z\s]+$';
     RegExp regex = RegExp(pattern);
 
     if (!regex.hasMatch(value)) {
       return "Enter a valid name";
-    }
+    }*/
 
     return null; // Name is valid
   }

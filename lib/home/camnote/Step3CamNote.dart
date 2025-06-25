@@ -597,6 +597,7 @@ class Step3CamNote extends StatelessWidget {
                                      superiorMobile:camNoteController.camBankerSuperiorMobController.text.trim().toString(),
                                      superiorWhatsApp:camNoteController.camBankerSuperiorWhatsappController.text.trim().toString(),
                                      superiorEmail:camNoteController.camBankerSuperiorEmailController.text.trim().toString(),
+                                     whichScreen: "fresh_camnote"
 
                                    ).then((_){
                                      camNoteController.markBankerAsSubmitted(bankId);

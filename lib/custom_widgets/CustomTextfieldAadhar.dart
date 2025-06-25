@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ksdpl/common/helper.dart';
 
-class CustomTextFieldPrefix extends StatefulWidget {
+class CustomTextFieldAadhar extends StatefulWidget {
   final String? hintText;
   final TextEditingController controller;
   final bool isPassword;
@@ -18,7 +18,7 @@ class CustomTextFieldPrefix extends StatefulWidget {
   final bool isSecret;
   final int secretDigit;
   final bool isCapital;
-  const CustomTextFieldPrefix({
+  const CustomTextFieldAadhar({
     Key? key,
     this.hintText,
     required this.controller,
@@ -39,10 +39,10 @@ class CustomTextFieldPrefix extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CustomTextFieldPrefix> createState() => _CustomTextFieldPrefixState();
+  State<CustomTextFieldAadhar> createState() => _CustomTextFieldPrefixState();
 }
 
-class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
+class _CustomTextFieldPrefixState extends State<CustomTextFieldAadhar> {
   late TextEditingController _displayController;
   String _actualValue = '';
   bool _isEditing = false;
@@ -93,7 +93,7 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
 
 
 
-  /*void _onTextChanged(String value) {
+  void _onTextChanged(String value) {
     _isEditing = true;
     String processedValue = widget.isCapital ? value.toUpperCase() : value;
     if (widget.isSecret) {
@@ -116,38 +116,7 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
     if (widget.onChanged != null) {
       widget.onChanged!(_actualValue);
     }
-  }*/
-
-  void _onTextChanged(String value) {
-    _isEditing = true;
-    final processedValue = widget.isCapital ? value.toUpperCase() : value;
-
-    if (widget.isSecret) {
-      String newActualValue = _calculateActualValue(value);
-      _actualValue = newActualValue;
-      widget.controller.text = newActualValue;
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _updateDisplayText();
-        _isEditing = false;
-      });
-    } else {
-      if (widget.controller.text != processedValue) {
-        final oldSelection = widget.controller.selection;
-        widget.controller.value = TextEditingValue(
-          text: processedValue,
-          selection: oldSelection,
-        );
-      }
-      _actualValue = processedValue;
-      _isEditing = false;
-    }
-
-    if (widget.onChanged != null) {
-      widget.onChanged!(_actualValue);
-    }
   }
-
 
   String _calculateActualValue(String displayValue) {
     if (!widget.isSecret) {
@@ -244,6 +213,3 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
     );
   }
 }
-
-
-

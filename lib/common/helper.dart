@@ -716,6 +716,15 @@ class AppText{
   static const String camNoteDetails = "Cam Note Details";
   static const String bankName = "Bank Name";
   static const String softSanctionStatus = "Soft Sanction Status";
+  static const String sanctionAmount = "Sanction Amount";
+  static const String sanctionTenor = "Sanction Tenor";
+  static const String sanctionROI = "Sanction ROI";
+  static const String sanctionCondition = "Sanction Condition";
+  static const String sanctionProcessingFees = "Sanction Processing Fees";
+  static const String sanctionStampDuty = "Sanction Stamp Duty";
+  static const String softSanctionDate = "Soft Sanction Date";
+  static const String rejectReason = "Reject Reason";
+
 }
 
 class AppColor{

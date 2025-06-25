@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
@@ -79,6 +80,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var addCamNoteDetail = Rxn<AddCamNoteDetail>(); //
   var generateCibilAadharModel = Rxn<GenerateCibilAadharModel>(); //
   var addCibilDetailsModel = Rxn<AddCibilDetailsModel>(); //
+  var editCamNoteDetail = Rxn<AddCamNoteDetail>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
 
 
@@ -402,6 +404,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var isLoadingPackage = false.obs;
 
   void nextStep(int tappedIndex) {
+    print("tappedIndex===>${tappedIndex.toString()}");
     if (currentStep.value < 2) {
       currentStep.value++;
       print("currentStep.value in next===>${currentStep.value.toString()}");
@@ -410,6 +413,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         forBankDetailSubmit();
       }
       scrollToStep(currentStep.value);
+    }
+
+    if(currentStep.value==1 || currentStep.value==2){
+      setAgeFromDob(camDobController, camEarningCustomerAgeController);
     }
 
     if(tappedIndex==2){
@@ -425,6 +432,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   void jumpToStep(int step) {
+    print("step--->${step}");
+    if(step==1 || step==2){
+      setAgeFromDob(camDobController, camEarningCustomerAgeController);
+    }
 
     currentStep.value = step;
     print("currentStep.value===>${currentStep.value.toString()}");
@@ -576,7 +587,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               PhotosOfResidence: residencePhotos??[],
               PhotosOfOffice: officePhotos??[],
               IncomeType: selectedCamIncomeTypeList.value.toString(),
-              EarningCustomerAge: "",
+              EarningCustomerAge: camEarningCustomerAgeController.text.trim().toString(),
               NonEarningCustomerAge: camNonEarningCustomerAgeController.text.trim().toString(),
               TotalFamilyIncome: camTotalFamilyIncomeController.text.trim().toString(),
               IncomeCanBeConsidered: camIncomeCanBeConsideredController.text.trim().toString(),
@@ -1047,6 +1058,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? superiorWhatsApp,
     String? superiorEmail,
     String? createdBy,
+    required String whichScreen,
   }) async {
     try {
 
@@ -1081,7 +1093,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           'bankersMobileNumber': updateBankerDetailModel.value!.data!.bankersMobileNumber.toString(),
           'bankersWhatsAppNumber': updateBankerDetailModel.value!.data!.bankersWhatsAppNumber.toString(),
           'bankersEmailID': updateBankerDetailModel.value!.data!.bankersEmailId.toString(),
-        });
+        },whichScreen
+        );
 
 
         Get.back();
@@ -1123,6 +1136,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? superiorWhatsApp,
     String? superiorEmail,
     String? createdBy,
+    required String whichScreen,
   }) async {
     try {
 
@@ -1152,6 +1166,15 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         isLoading(false);
 
+
+        onFormSubmit(
+            addBankerDetail.value!.data!.bankId.toString(), {
+          'bankersName': addBankerDetail.value!.data!.bankersName.toString(),
+          'bankersMobileNumber': addBankerDetail.value!.data!.bankersMobileNumber.toString(),
+          'bankersWhatsAppNumber': addBankerDetail.value!.data!.bankersWhatsAppNumber.toString(),
+          'bankersEmailID': addBankerDetail.value!.data!.bankersEmailId.toString(),
+        },whichScreen
+        );
         Get.back();
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -1190,6 +1213,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? superiorWhatsApp,
     String? superiorEmail,
     String? createdBy,
+    required String whichScreen,
   }) async {
     try {
 
@@ -1216,6 +1240,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           superiorMobile:superiorMobile,
           superiorWhatsApp:superiorWhatsApp,
           superiorEmail:superiorEmail,
+          whichScreen: whichScreen
 
         );
 
@@ -1236,6 +1261,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           superiorMobile:superiorMobile,
           superiorWhatsApp:superiorWhatsApp,
           superiorEmail:superiorEmail,
+          whichScreen: whichScreen
 
         );
 
@@ -1260,30 +1286,99 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
 
-  void onFormSubmit(String bankId, Map<String, dynamic> updatedFields) {
+  void onFormSubmit(String bankId, Map<String, dynamic> updatedFields,  String whichScreen,) {
+    print("onFormSubmit===>");
+    var index=-1;
+    if(whichScreen=="fresh_camnote"){
+       index = getProductDetailsByFilterModel.value!.data!
+          .indexWhere((element) => element.bankId.toString() == bankId);
+       print("index===>${index.toString()}");
+
+       if (index != -1) {
+         final old = getProductDetailsByFilterModel.value!.data![index];
+
+         // Update relevant fields
+         final updatedBanker =  getProductDetailsByFilterModel.value!.data![index] = old.copyWith(
+           bankersName: updatedFields['bankersName'],
+           bankersMobileNumber: updatedFields['bankersMobileNumber'],
+           bankersWhatsAppNumber: updatedFields['bankersWhatsAppNumber'],
+           bankersEmailID: updatedFields['bankersEmailID'],
+         );
+         getProductDetailsByFilterModel.value!.data![index] = updatedBanker;
+         // Refresh the list
+         getProductDetailsByFilterModel.refresh();
 
 
-    final index = getProductDetailsByFilterModel.value!.data!
-        .indexWhere((element) => element.bankId.toString() == bankId);
+       }
+    }else if(whichScreen=="update_camnote"){
+      index = getCamNoteLeadIdModel.value!.data!
+          .indexWhere((element) => element.bankId.toString() == bankId);
 
-    print("index===>${index.toString()}");
+      print("index===>${index.toString()}");
 
-    if (index != -1) {
-      final old = getProductDetailsByFilterModel.value!.data![index];
+      if (index != -1) {
+        final old = getCamNoteLeadIdModel.value!.data![index];
 
-      // Update relevant fields
-      final updatedBanker =  getProductDetailsByFilterModel.value!.data![index] = old.copyWith(
-        bankersName: updatedFields['bankersName'],
-        bankersMobileNumber: updatedFields['bankersMobileNumber'],
-        bankersWhatsAppNumber: updatedFields['bankersWhatsAppNumber'],
-        bankersEmailID: updatedFields['bankersEmailID'],
-      );
-     getProductDetailsByFilterModel.value!.data![index] = updatedBanker;
-      // Refresh the list
-      getProductDetailsByFilterModel.refresh();
+        // Update relevant fields
+        final updatedBanker =  getCamNoteLeadIdModel.value!.data![index] = old.copyWith(
+          bankersName: updatedFields['bankersName'],
+          bankersMobileNumber: updatedFields['bankersMobileNumber'],
+          bankersWhatsAppNumber: updatedFields['bankersWhatsAppNumber'],
+          bankersEmailID: updatedFields['bankersEmailID'],
+        );
+        getCamNoteLeadIdModel.value!.data![index] = updatedBanker;
+        // Refresh the list
+        getCamNoteLeadIdModel.refresh();
+        var dataNew=getCamNoteLeadIdModel.value!.data![index];
+        print("leadid on tap edit--->${dataNew.leadID}");
+        editCamNoteDetailApi(
+          Id:dataNew.id.toString(),
+          LeadID:dataNew.leadID.toString(),
+          Cibil: dataNew.cibil.toString(),
+          TotalLoanAvailedOnCibil: dataNew.totalLoanAvailedOnCibil.toString(),
+          TotalLiveLoan: dataNew.totalLiveLoan.toString(),
+          TotalEMI:dataNew.totalEMI.toString(),
+          EMIStoppedOnBeforeThisLoan:dataNew.emiStoppedOnBeforeThisLoan.toString(),
+          EMIWillContinue:dataNew.emiWillContinue.toString(),
+          TotalOverdueCasesAsPerCibil:dataNew.totalOverdueCasesAsPerCibil.toString(),
+          TotalOverdueAmountAsPerCibil:dataNew.totalOverdueAmountAsPerCibil.toString(),
+          TotalEnquiriesMadeAsPerCibil:dataNew.totalEnquiriesMadeAsPerCibil.toString(),
+          GeoLocationOfProperty:dataNew.geoLocationOfProperty,
+          GeoLocationOfResidence:dataNew.geoLocationOfResidence,
+          GeoLocationOfOffice:dataNew.geoLocationOfOffice.toString(),
+          PhotosOfProperty: dataNew.photosOfProperty.toString(),
+          PhotosOfResidence: dataNew.photosOfResidence.toString(),
+          PhotosOfOffice: dataNew.photosOfOffice.toString(),
+          IncomeType: dataNew.incomeType.toString(),
+          EarningCustomerAge: dataNew.earningCustomerAge.toString(),
+          NonEarningCustomerAge: dataNew.nonEarningCustomerAge.toString(),
+          TotalFamilyIncome: dataNew.totalFamilyIncome.toString(),
+          IncomeCanBeConsidered: dataNew.incomeCanBeConsidered.toString(),
+          LoanAmountRequested: dataNew.loanAmountRequested.toString(),
+          LoanTenorRequested: dataNew.loanTenorRequested.toString(),
+          ROI: dataNew.roi.toString(),
+          ProposedEMI: dataNew.proposedEMI.toString(),
+          PropertyValueAsPerCustomer: dataNew.propertyValueAsPerCustomer.toString(),
+          FOIR: dataNew.foir.toString(),
+          LTV:dataNew.ltv.toString(),
+          OfferedSecurityType: dataNew.offeredSecurityType.toString(),
+          LoanProduct:dataNew.loanProduct.toString(),
+          LoanSegment:dataNew.loanSegment.toString(),
+          BankersName: dataNew.bankersName.toString(),
+          BankersMobileNumber: dataNew.bankersMobileNumber.toString(),
+          BankersEmailID: dataNew.bankersEmailID.toString(),
+          BankersWhatsAppNumber: dataNew.bankersWhatsAppNumber.toString(),
+          BankId: dataNew.bankId.toString(),
+          BranchOfBank: dataNew.branchId.toString(),
+          SanctionProcessingCharges:dataNew.sanctionProcessingFees.toString(),
 
+        );
 
+      }
+    }else{
+      print("error in model===>");
     }
+
   }
 
   Future<void>  getAddIncUniqueLeadApi({
@@ -1483,6 +1578,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       isLoading(false);
     }
   }
+
+
   void clearStep1(){
     camFullNameController.clear();
     camDobController.clear();
@@ -1905,6 +2002,154 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
+
+
+  Future<void>  editCamNoteDetailApi({
+    String? Id,
+    String? LeadID,
+    String? BankId,
+    String? BankersName,
+    String? BankersMobileNumber,
+    String? BankersWhatsAppNumber,
+    String? BankersEmailID,
+    String? Cibil,
+    String? TotalLoanAvailedOnCibil,
+    String? TotalLiveLoan,
+    String? TotalEMI,
+    String? EMIStoppedOnBeforeThisLoan,
+    String? EMIWillContinue,
+    String? TotalOverdueCasesAsPerCibil,
+    String? TotalOverdueAmountAsPerCibil,
+    String? TotalEnquiriesMadeAsPerCibil,
+    String? LoanSegment,
+    String? LoanProduct,
+    String? OfferedSecurityType,
+    String? GeoLocationOfProperty,
+    String? IncomeType,
+    String? EarningCustomerAge,
+    String? NonEarningCustomerAge,
+    String? TotalFamilyIncome,
+    String? IncomeCanBeConsidered,
+    String? LoanAmountRequested,
+    String? LoanTenorRequested,
+    String? ROI,
+    String? ProposedEMI,
+    String? PropertyValueAsPerCustomer,
+    String? FOIR,
+    String? LTV,
+    String? BranchOfBank,
+    String? GeoLocationOfResidence,
+    String? GeoLocationOfOffice,
+    String? SanctionProcessingCharges,
+    String? PhotosOfProperty,
+    String? PhotosOfResidence,
+    String? PhotosOfOffice,
+
+  }) async {
+    try {
+
+      isLoading(true);
+
+      var data = await CamNoteService.editCamNoteDetailApi(
+        Id: Id,
+        LeadID: LeadID,
+        BankId: BankId,
+        BankersName: BankersName,
+        BankersMobileNumber: BankersMobileNumber,
+        BankersWhatsAppNumber: BankersWhatsAppNumber,
+        BankersEmailID: BankersEmailID,
+        Cibil: Cibil,
+        TotalLoanAvailedOnCibil: TotalLoanAvailedOnCibil,
+        TotalLiveLoan: TotalLiveLoan,
+        TotalEMI: TotalEMI,
+        EMIStoppedOnBeforeThisLoan: EMIStoppedOnBeforeThisLoan,
+        EMIWillContinue: EMIWillContinue,
+        TotalOverdueCasesAsPerCibil: TotalOverdueCasesAsPerCibil,
+        TotalOverdueAmountAsPerCibil: TotalOverdueAmountAsPerCibil,
+        TotalEnquiriesMadeAsPerCibil: TotalEnquiriesMadeAsPerCibil,
+        LoanSegment: LoanSegment,
+        LoanProduct: LoanProduct,
+        OfferedSecurityType: OfferedSecurityType,
+        GeoLocationOfProperty: GeoLocationOfProperty,
+        IncomeType: IncomeType,
+        EarningCustomerAge: EarningCustomerAge,
+        NonEarningCustomerAge: NonEarningCustomerAge,
+        TotalFamilyIncome: TotalFamilyIncome,
+        IncomeCanBeConsidered: IncomeCanBeConsidered,
+        LoanAmountRequested: LoanAmountRequested,
+        LoanTenorRequested: LoanTenorRequested,
+        ROI: ROI,
+        ProposedEMI: ProposedEMI,
+        PropertyValueAsPerCustomer: PropertyValueAsPerCustomer,
+        FOIR: FOIR,
+        LTV: LTV,
+        BranchOfBank: BranchOfBank,
+        GeoLocationOfResidence: GeoLocationOfResidence,
+        GeoLocationOfOffice: GeoLocationOfOffice,
+        PhotosOfProperty: PhotosOfProperty,
+        PhotosOfResidence: PhotosOfResidence,
+        PhotosOfOffice: PhotosOfOffice,
+        SanctionProcessingCharges: SanctionProcessingCharges,
+      );
+
+
+      if(data['success'] == true){
+
+        editCamNoteDetail.value= AddCamNoteDetail.fromJson(data);
+
+        bankerBranchMap.clear();
+        ToastMessage.msg(editCamNoteDetail.value!.message!);
+
+        sendMailToBankerAfterGenerateCamNoteApi(id: editCamNoteDetail.value!.data!.id.toString());
+
+        clearBankDetails();
+        Get.back();
+        isLoading(false);
+
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        addCamNoteDetail.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error addCamNoteDetail: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+    } finally {
+
+
+      isLoading(false);
+    }
+  }
+  int calculateAge(DateTime birthDate) {
+    DateTime today = DateTime.now();
+    int age = today.year - birthDate.year;
+    if (today.month < birthDate.month ||
+        (today.month == birthDate.month && today.day < birthDate.day)) {
+      age--;
+    }
+    return age;
+  }
+  void setAgeFromDob(TextEditingController dobController, TextEditingController ageController) {
+
+    if (dobController.text.isNotEmpty) {
+      try {
+        DateTime dob = DateFormat("yyyy-MM-dd").parse(dobController.text);
+        int age = calculateAge(dob);
+        ageController.text = "$age";
+      } catch (e) {
+        print("Invalid DOB format: ${dobController.text}");
+      }
+    }
+  }
 }
 
 extension ParseStringExtension on String? {

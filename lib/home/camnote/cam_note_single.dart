@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
@@ -37,14 +38,7 @@ import '../custom_drawer.dart';
 
 
 class CamNoteSingle extends StatelessWidget {
-
-
-
-
-
-  ProductDetailsController productDetailsController = Get.put(ProductDetailsController());
-  AddProductController addProductController = Get.find();
-
+  final CamNoteController camNoteController=Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +99,7 @@ class CamNoteSingle extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                         children: [
                           const SizedBox(height: 20),
-                          productSection(context)
+                          camNoteDetailSingleSection(context)
                         ],
                       ),
                     ),
@@ -131,7 +125,7 @@ class CamNoteSingle extends StatelessWidget {
               child: Image.asset(AppImage.arrowLeft,height: 24,)),
 
           const Text(
-            AppText.productDetails,
+            AppText.camNoteDetails,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
@@ -165,13 +159,13 @@ class CamNoteSingle extends StatelessWidget {
     );
   }
 
-  Widget productSection(BuildContext context) {
+  Widget camNoteDetailSingleSection(BuildContext context) {
     return Obx(() {
-      if (productDetailsController.isLoading.value || addProductController.isLoadingMainScreen.value) {
+      if (camNoteController.isLoading.value || camNoteController.isLoadingMainScreen.value) {
         return Center(child: CustomSkelton.productShimmerList(context));
       }
 
-      final data = productDetailsController.getProductListById.value?.data;
+      final data = camNoteController.getCamNoteDetailByIdModel.value?.data;
       if (data == null || data == "") {
         return /// Header with profile and menu icon
           Align(
@@ -188,120 +182,90 @@ class CamNoteSingle extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildCard("Basic Product Info", [
-            DetailRow(label: AppText.productName, value: data.product.toString()),
-            DetailRow(label: AppText.productSegment, value: data.productCategoryName.toString()),
-            DetailRow(label: AppText.selectCustomerCategory, value: data.customerCategory.toString()),
-            DetailRow(label: AppText.minCibil, value: data.minCIBIL.toString()),
+          buildCard("Basic Info", [
+            DetailRow(label: AppText.bankerName, value: data.bankersName.toString()),
+            DetailRow(label: AppText.bankerMobile, value: data.bankersMobileNumber.toString()),
+            DetailRow(label: AppText.bankerWhatsapp, value: data. bankersWhatsAppNumber.toString()),
+            DetailRow(label: AppText.bankerEmail, value: data.bankersEmailID.toString()),
           ],
               Icons.info_outline
 
           ),
 
-          buildCard("Bank & Contact Info", [
-            DetailRow(label: AppText.bankNostar, value: data.bankName.toString()),
-            DetailRow(label: AppText.bankerName, value: data.bankersName.toString()),
-            DetailRow(label: AppText.bankerMobile, value: data.bankersMobileNumber.toString()),
-            DetailRow(label: AppText.bankerWhatsapp, value: data.bankersWhatsAppNumber.toString()),
-            DetailRow(label: AppText.bankerEmail, value: data.bankersEmailID.toString()),
-            DetailRow(label: AppText.superiorName, value: data.superiorName.toString()),
-            DetailRow(label: AppText.superiorMobile, value: data.superiorMobileNo.toString()),
-            DetailRow(label: AppText.superiorEmail, value: data.superiorEmail.toString()),
-            DetailRow(label: AppText.superiorWhatsapp, value: data.superiorWhatsappNo.toString()),
+          buildCard("CIBIL Info", [
+            DetailRow(label: AppText.cibil, value: data.cibil.toString()),
+            DetailRow(label: AppText.totalLoanAvaileCibil, value: data.totalLoanAvailedOnCibil.toString()),
+            DetailRow(label: AppText.totalLiveLoan, value: data. totalLiveLoan.toString()),
+            DetailRow(label: AppText.totalEmi, value: data.totalEMI.toString()),
+            DetailRow(label: AppText.emiStoppedBefore, value: data.emiStoppedOnBeforeThisLoan.toString()),
+            DetailRow(label: AppText.emiWillContinue, value: data.emiWillContinue.toString()),
+            DetailRow(label: AppText.totalOverdueCases, value: data.totalOverdueCasesAsPerCibil.toString()),
+            DetailRow(label: AppText.totalOverdueAmountCibil, value: data.totalOverdueAmountAsPerCibil.toString()),
+            DetailRow(label: AppText.totalEnquiries, value: data.totalEnquiriesMadeAsPerCibil.toString()),
+
           ],
-              Icons.phone
+              Icons.money_rounded
+
           ),
 
-          buildCard("Collateral & Profile Restrictions", [
-            DetailRow(label: AppText.selectCollateralSecurityCategory, value: data.collateralSecurityCategory.toString()), //Collateral is Prime now
-            DetailRow(label: AppText.collateralSecurityExcluded, value: data.collateralSecurityExcluded.toString()),
-            // DetailRow(label: AppText.profileExcluded, value: data.profileExcluded.toString()),
-            DetailRow(label: AppText.negativeProfiles, value: data.negativeProfiles.toString()),
-            DetailRow(label: AppText.negativeAreas, value: data.negativeAreas.toString()),
-            DetailRow(label: AppText.geoLimit, value: data.geoLimit.toString()),
+          buildCard("Loan Info", [
+            DetailRow(label: AppText.loanSegment, value: data.loanSegment.toString()),
+            DetailRow(label: AppText.loanProduct, value: data.loanProduct.toString()),
+            DetailRow(label: AppText.offeredSecurityType, value: data.offeredSecurityType.toString()),
+            DetailRow(label: AppText.offeredSecurityType, value: data.offeredSecurityType.toString()),
+            DetailRow(label: AppText.geoLocationProperty, value: data.geoLocationOfProperty.toString()),
+            DetailRow(label: AppText.geoLocationResidence, value: data.geoLocationOfResidence.toString()),
+            DetailRow(label: AppText.geoLocationOffice, value: data.geoLocationOfOffice.toString()),
+
+
           ],
-              Icons.security
+              Icons.info_outline
+
           ),
 
           buildCard("Eligibility Criteria", [
-            DetailRow(label: AppText.selectIncomeType, value: data.incomeTypes.toString()),
-            DetailRow(label:  AppText.ageLimitEarningApplicants, value: data.ageLimitEarningApplicants.toString()),
-            DetailRow(label: AppText.ageLimitNonEarningCoApplicant, value: data.ageLimitNonEarningCoApplicant.toString()),
-            DetailRow(label: AppText.minAgeEarningApplicants, value: data.ageLimitNonEarningCoApplicant.toString()),
-            DetailRow(label: AppText.minAgeNonEarningApplicants, value: data.minimumAgeNonEarningApplicants.toString()),
-            DetailRow(label: AppText.minIncomeCriteria, value: data.minimumIncomeCriteria.toString()),
-            DetailRow(label: AppText.minLoanAmount, value: data.minimumLoanAmount.toString()),
-            DetailRow(label: AppText.maxLoanAmount, value: data.maximumLoanAmount.toString()),
-            DetailRow(label: AppText.minRoi, value: data.minimumROI.toString()),
-            DetailRow(label:  AppText.maxRoi, value: data.maximumROI.toString()),
-            DetailRow(label: AppText.minTenor, value: data.minTenor.toString()),
-            DetailRow(label:  AppText.maxTenor, value: data.maximumTenor.toString()),
-            DetailRow(label: AppText.ageAtMaturity, value: data.maximumTenorEligibilityCriteria.toString()),
+            DetailRow(label: AppText.incomeType, value: data.incomeType.toString()),
+            DetailRow(label: AppText.earningCustomerAge, value: data.earningCustomerAge.toString()),
+            DetailRow(label: AppText.nonEarningCustomerAge, value: data.nonEarningCustomerAge.toString()),
+            DetailRow(label: AppText.totalFamilyIncome, value: data.totalFamilyIncome.toString()),
+            DetailRow(label: AppText.incomeCanBeConsidered, value: data.incomeCanBeConsidered.toString()),
+            DetailRow(label: AppText.loanAmountRequested, value: data.loanAmountRequested.toString()),
+            DetailRow(label: AppText.loanTenorRequested, value: data.loanTenorRequested.toString()),
+            DetailRow(label: AppText.rateOfInterest, value: data.roi.toString()),
+            DetailRow(label: AppText.proposedEmi, value: data.proposedEMI.toString()),
+            DetailRow(label: AppText.propertyValue, value: data.propertyValueAsPerCustomer.toString()),
+            DetailRow(label: AppText.foir, value: data.foir.toString()),
+            DetailRow(label: AppText.ltv, value: data.ltv.toString()),
+
           ],
               Icons.rule
+
           ),
 
-          buildCard("Financial Limits", [
-            DetailRow(label: AppText.minPropertyValue, value: data.minimumPropertyValue.toString()),
-            DetailRow(label:  AppText.maxIir, value: data.maximumIIR.toString()),
-            DetailRow(label: AppText.maxFoir, value: data.maximumFOIR.toString()),
-            DetailRow(label: AppText.maxLtv, value: data.maximumLTV.toString()),
+          buildCard("Sanction Details", [
+            DetailRow(label: AppText.softSanctionStatus, value: data.softsanction.toString()),
+            DetailRow(label: AppText.sanctionAmount, value: data.sanctionAmount.toString()),
+            DetailRow(label: AppText.sanctionTenor, value: data.sanctionTenor.toString()),
+            DetailRow(label: AppText.sanctionROI, value: data.sanctionROI.toString()),
+            DetailRow(label: AppText.sanctionCondition, value: data.sanctionCondition.toString()),
+            DetailRow(label: AppText.sanctionProcessingFees, value: data.sanctionProcessingFees.toString()),
+            DetailRow(label: AppText.sanctionStampDuty, value: data.sanctionStampDuty.toString()),
+            DetailRow(label: AppText.softSanctionDate, value: data.softsanctionDate.toString()),
+            DetailRow(label: AppText.rejectReason, value: data.rejectReason.toString()),
+
           ],
-              Icons.radar
+              Icons.security
+
           ),
 
-          buildCard("Charges & Fees", [
-            DetailRow(label: AppText.processingFee, value: data.processingFee.toString()),
-            DetailRow(label: AppText.processingCharges, value: data.processingCharges.toString()),
-            DetailRow(label:  AppText.legalFee, value: data.legalFee.toString()),
-            DetailRow(label: AppText.technicalFee, value: data.technicalInspectionFee.toString()),
-            DetailRow(label:  AppText.adminFee, value: data.adminFee.toString()),
-            DetailRow(label: AppText.foreclosureCharges, value: data.foreclosureCharges.toString()),
-            DetailRow(label: AppText.otherCharges, value: data.otherCharges.toString()),
-            DetailRow(label: AppText.stampDuty, value: data.stampDuty.toString()),
-            DetailRow(label: AppText.tsrYears, value: data.tsRYears.toString()),
-            DetailRow(label: AppText.tsrCharges, value: data.tsRCharges.toString()),
-            DetailRow(label: AppText.valuationCharges, value: data.valuationCharges.toString()),
-            DetailRow(label: AppText.fromAmtRange, value: data.fromAmountRange.toString()),
-            DetailRow(label: AppText.toAmtRange, value: data.toAmountRange.toString()),
-            DetailRow(label: AppText.totalOverdueCases2, value: data.totalOverdueCases.toString()),
-            DetailRow(label: AppText.totalOverdueAmount, value: data.totalOverdueAmount.toString()),
-            DetailRow(label: AppText.totalEnquiries2, value: data.totalEnquiries.toString()),
+          buildCard("Document Details", [
+            DetailRow(label: AppText.documents, value: data.documents.toString()),
+
           ],
-              Icons.attach_money
+              Icons.document_scanner
+
           ),
 
-          buildCard("Administrative Info", [
-            DetailRow(label: AppText.noOfDocuments, value: data.noOfDocument.toString()),
-            DetailRow(label: AppText.ksdplProduct, value: data.ksdplProductName.toString()),
-            DetailRow(label: AppText.eligibleProfitPercent, value: data.profitPercentage.toString()),
-            DetailRow(label: AppText.maxTat, value: data.maximumTAT.toString()),
-          ],
-              Icons.admin_panel_settings_sharp
-          ),
-
-          buildCard("Documents", [
-            addProductController.getDocumentProductIdModel.value!.data!.isEmpty?
-            DetailRow(label: "No Docs Found", value: "")
-                : ListView.builder(
-              itemCount:addProductController.getDocumentProductIdModel.value!.data!.length,//viewProductController.getAllProductListModel.value!.data!.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                // final product = viewProductController.getAllProductListModel.value!.data![index];
-                final data =  addProductController.getDocumentProductIdModel.value!.data![index];
-
-
-                return DetailRow(label: data.documentName.toString(), value: (data.documentType!.trim().toString()=="m" || data.documentType!.trim().toString()=="M") ?"Mandatory":"Optional" );
-
-              },
-            ),
-
-            /*  getDocumentProductIdModel.value!.data![0]
-            DetailRow(label: "No of Documents", value: data.noOfDocument.toString()),*/
-          ],
-              Icons.list_alt_rounded
-          ),
 
           SizedBox(height: 20),
         ],
@@ -373,65 +337,6 @@ class CamNoteSingle extends StatelessWidget {
 
 
 //details
-
-// Helper Widget for Status Chips
-class StatusChip extends StatelessWidget {
-  final String label;
-  final Color color;
-
-  StatusChip({required this.label, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: AppColor.primaryColor,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Text(label, style: TextStyle(color: AppColor.appWhite, fontSize: 12)),
-    );
-  }
-}
-
-// Helper Widget for Detail Rows
-/*class DetailRow extends StatelessWidget {
-  final String label;
-  final String value;
-
-  DetailRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-
-        children: [
-          Container(
-
-            width: 120,
-            child: Text("$label",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor)),
-          ),
-          Text(":", style: TextStyle(fontSize: 14),),
-          Expanded(
-              child: value=="null" || value==AppText.customdash?
-              Row(
-
-
-                children: [
-                  Icon(Icons.horizontal_rule, size: 15,),
-                ],):
-              Text(" "+value, style: TextStyle(fontSize: 14), maxLines: 2)),
-        ],
-      ),
-    );
-  }
-}*/
 
 class DetailRow extends StatelessWidget {
   final String label;

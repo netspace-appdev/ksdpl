@@ -1018,7 +1018,7 @@ class LeadSearchScreen extends StatelessWidget {
             leadStageId: currentLeadStage
           );
         } else if (label_code == "cam_note_details") {
-
+          addLeadController.getLeadDetailByIdApi(leadId: leadId);
           CamNoteController camNoteController=Get.put(CamNoteController());
 
           camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);

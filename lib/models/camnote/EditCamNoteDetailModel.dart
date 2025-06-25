@@ -1,22 +1,15 @@
-import '../../common/safe_json_helper.dart';
-
-class GetCamNoteLeadIdModel {
+class EditCamNoteDetailModel {
   String? status;
   bool? success;
-  List<Data>? data;
+  Data? data;
   String? message;
 
-  GetCamNoteLeadIdModel({this.status, this.success, this.data, this.message});
+  EditCamNoteDetailModel({this.status, this.success, this.data, this.message});
 
-  GetCamNoteLeadIdModel.fromJson(Map<String, dynamic> json) {
+  EditCamNoteDetailModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     success = json['success'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     message = json['message'];
   }
 
@@ -25,7 +18,7 @@ class GetCamNoteLeadIdModel {
     data['status'] = this.status;
     data['success'] = this.success;
     if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.toJson();
     }
     data['message'] = this.message;
     return data;
@@ -40,48 +33,48 @@ class Data {
   String? bankersMobileNumber;
   String? bankersWhatsAppNumber;
   String? bankersEmailID;
-  num? cibil;
-  num? totalLoanAvailedOnCibil;
-  num? totalLiveLoan;
-  num? totalEMI;
-  num? emiStoppedOnBeforeThisLoan;
-  num? emiWillContinue;
-  num? totalOverdueCasesAsPerCibil;
-  num? totalOverdueAmountAsPerCibil;
-  num? totalEnquiriesMadeAsPerCibil;
-  num? loanSegment;
-  num? loanProduct;
-  String? offeredSecurityType;
-  String? geoLocationOfProperty;
-  String? incomeType;
-  num? earningCustomerAge;
-  num? nonEarningCustomerAge;
-  num? totalFamilyIncome;
-  num? incomeCanBeConsidered;
-  num? loanAmountRequested;
-  num? loanTenorRequested;
-  num? roi;
-  num? proposedEMI;
-  num? propertyValueAsPerCustomer;
-  num? foir;
-  num? ltv;
-  String? documents;
-  num? softsanction;
-  num? sanctionStampDuty;
-  num? sanctionProcessingFees;
-  String? sanctionCondition;
-  num? sanctionROI;
-  num? sanctionTenor;
-  num? sanctionAmount;
-  String? softsanctionDate;
-  String? rejectReason;
+  int? cibil;
+  int? totalLoanAvailedOnCibil;
+  int? totalLiveLoan;
+  int? totalEMI;
+  int? emiStoppedOnBeforeThisLoan;
+  int? emiWillContinue;
+  int? totalOverdueCasesAsPerCibil;
+  int? totalOverdueAmountAsPerCibil;
+  int? totalEnquiriesMadeAsPerCibil;
+  int? loanSegment;
+  int? loanProduct;
+  Null? offeredSecurityType;
+  Null? geoLocationOfProperty;
+  Null? incomeType;
+  int? earningCustomerAge;
+  int? nonEarningCustomerAge;
+  int? totalFamilyIncome;
+  int? incomeCanBeConsidered;
+  int? loanAmountRequested;
+  int? loanTenorRequested;
+  int? roi;
+  int? proposedEMI;
+  int? propertyValueAsPerCustomer;
+  int? foir;
+  int? ltv;
+  Null? documents;
+  int? softsanction;
+  Null? sanctionStampDuty;
+  Null? sanctionProcessingFees;
+  Null? sanctionCondition;
+  Null? sanctionROI;
+  Null? sanctionTenor;
+  Null? sanctionAmount;
+  Null? softsanctionDate;
+  Null? rejectReason;
   String? bankName;
   String? productCategoryName;
   String? product;
-  num? branchId;
-  String? branchName;
-  String? geoLocationOfResidence;
-  String? geoLocationOfOffice;
+  Null? branchId;
+  Null? branchName;
+  Null? geoLocationOfResidence;
+  Null? geoLocationOfOffice;
   String? photosOfProperty;
   String? photosOfResidence;
   String? photosOfOffice;
@@ -141,8 +134,6 @@ class Data {
         this.photosOfOffice});
 
   Data.fromJson(Map<String, dynamic> json) {
-
-
     id = json['id'];
     leadID = json['leadID'];
     bankId = json['bankId'];
@@ -195,7 +186,6 @@ class Data {
     photosOfProperty = json['photosOfProperty'];
     photosOfResidence = json['photosOfResidence'];
     photosOfOffice = json['photosOfOffice'];
-
   }
 
   Map<String, dynamic> toJson() {
@@ -254,115 +244,4 @@ class Data {
     data['photosOfOffice'] = this.photosOfOffice;
     return data;
   }
-
-  Data copyWith({
-    int? id,
-    int? leadID,
-    int? bankId,
-    String? bankersName,
-    String? bankersMobileNumber,
-    String? bankersWhatsAppNumber,
-    String? bankersEmailID,
-    num? cibil,
-    num? totalLoanAvailedOnCibil,
-    num? totalLiveLoan,
-    num? totalEMI,
-    num? emiStoppedOnBeforeThisLoan,
-    num? emiWillContinue,
-    num? totalOverdueCasesAsPerCibil,
-    num? totalOverdueAmountAsPerCibil,
-    num? totalEnquiriesMadeAsPerCibil,
-    num? loanSegment,
-    num? loanProduct,
-    String? offeredSecurityType,
-    String? geoLocationOfProperty,
-    String? incomeType,
-    num? earningCustomerAge,
-    num? nonEarningCustomerAge,
-    num? totalFamilyIncome,
-    num? incomeCanBeConsidered,
-    num? loanAmountRequested,
-    num? loanTenorRequested,
-    num? roi,
-    num? proposedEMI,
-    num? propertyValueAsPerCustomer,
-    num? foir,
-    num? ltv,
-    String? documents,
-    num? softsanction,
-    num? sanctionStampDuty,
-    num? sanctionProcessingFees,
-    String? sanctionCondition,
-    num? sanctionROI,
-    num? sanctionTenor,
-    num? sanctionAmount,
-    String? softsanctionDate,
-    String? rejectReason,
-    String? bankName,
-    String? productCategoryName,
-    String? product,
-    num? branchId,
-    String? branchName,
-    String? geoLocationOfResidence,
-    String? geoLocationOfOffice,
-    String? photosOfProperty,
-    String? photosOfResidence,
-    String? photosOfOffice,
-  }) {
-    return Data(
-      id: id ?? this.id,
-      leadID: leadID ?? this.leadID,
-      bankId: bankId ?? this.bankId,
-      bankersName: bankersName ?? this.bankersName,
-      bankersMobileNumber: bankersMobileNumber ?? this.bankersMobileNumber,
-      bankersWhatsAppNumber: bankersWhatsAppNumber ?? this.bankersWhatsAppNumber,
-      bankersEmailID: bankersEmailID ?? this.bankersEmailID,
-      cibil: cibil ?? this.cibil,
-      totalLoanAvailedOnCibil: totalLoanAvailedOnCibil ?? this.totalLoanAvailedOnCibil,
-      totalLiveLoan: totalLiveLoan ?? this.totalLiveLoan,
-      totalEMI: totalEMI ?? this.totalEMI,
-      emiStoppedOnBeforeThisLoan: emiStoppedOnBeforeThisLoan ?? this.emiStoppedOnBeforeThisLoan,
-      emiWillContinue: emiWillContinue ?? this.emiWillContinue,
-      totalOverdueCasesAsPerCibil: totalOverdueCasesAsPerCibil ?? this.totalOverdueCasesAsPerCibil,
-      totalOverdueAmountAsPerCibil: totalOverdueAmountAsPerCibil ?? this.totalOverdueAmountAsPerCibil,
-      totalEnquiriesMadeAsPerCibil: totalEnquiriesMadeAsPerCibil ?? this.totalEnquiriesMadeAsPerCibil,
-      loanSegment: loanSegment ?? this.loanSegment,
-      loanProduct: loanProduct ?? this.loanProduct,
-      offeredSecurityType: offeredSecurityType ?? this.offeredSecurityType,
-      geoLocationOfProperty: geoLocationOfProperty ?? this.geoLocationOfProperty,
-      incomeType: incomeType ?? this.incomeType,
-      earningCustomerAge: earningCustomerAge ?? this.earningCustomerAge,
-      nonEarningCustomerAge: nonEarningCustomerAge ?? this.nonEarningCustomerAge,
-      totalFamilyIncome: totalFamilyIncome ?? this.totalFamilyIncome,
-      incomeCanBeConsidered: incomeCanBeConsidered ?? this.incomeCanBeConsidered,
-      loanAmountRequested: loanAmountRequested ?? this.loanAmountRequested,
-      loanTenorRequested: loanTenorRequested ?? this.loanTenorRequested,
-      roi: roi ?? this.roi,
-      proposedEMI: proposedEMI ?? this.proposedEMI,
-      propertyValueAsPerCustomer: propertyValueAsPerCustomer ?? this.propertyValueAsPerCustomer,
-      foir: foir ?? this.foir,
-      ltv: ltv ?? this.ltv,
-      documents: documents ?? this.documents,
-      softsanction: softsanction ?? this.softsanction,
-      sanctionStampDuty: sanctionStampDuty ?? this.sanctionStampDuty,
-      sanctionProcessingFees: sanctionProcessingFees ?? this.sanctionProcessingFees,
-      sanctionCondition: sanctionCondition ?? this.sanctionCondition,
-      sanctionROI: sanctionROI ?? this.sanctionROI,
-      sanctionTenor: sanctionTenor ?? this.sanctionTenor,
-      sanctionAmount: sanctionAmount ?? this.sanctionAmount,
-      softsanctionDate: softsanctionDate ?? this.softsanctionDate,
-      rejectReason: rejectReason ?? this.rejectReason,
-      bankName: bankName ?? this.bankName,
-      productCategoryName: productCategoryName ?? this.productCategoryName,
-      product: product ?? this.product,
-      branchId: branchId ?? this.branchId,
-      branchName: branchName ?? this.branchName,
-      geoLocationOfResidence: geoLocationOfResidence ?? this.geoLocationOfResidence,
-      geoLocationOfOffice: geoLocationOfOffice ?? this.geoLocationOfOffice,
-      photosOfProperty: photosOfProperty ?? this.photosOfProperty,
-      photosOfResidence: photosOfResidence ?? this.photosOfResidence,
-      photosOfOffice: photosOfOffice ?? this.photosOfOffice,
-    );
-  }
-
 }

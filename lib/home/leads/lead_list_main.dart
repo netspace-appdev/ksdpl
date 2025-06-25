@@ -961,6 +961,10 @@ overflow: TextOverflow.ellipsis,
           });
 
         }else if (label_code == "cam_note_details") {
+          print("leadId on tap-->${leadId}");
+
+
+          addLeadController.getLeadDetailByIdApi(leadId: leadId);
 
           CamNoteController camNoteController=Get.put(CamNoteController());
 

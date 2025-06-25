@@ -101,7 +101,7 @@ class Addleadcontroller extends GetxController{
     selectedIndexExistingLoan.value = index;
   }
 
-  void  getLeadDetailByIdApi({
+  Future<void>  getLeadDetailByIdApi({
     required String leadId,
   }) async {
     try {
