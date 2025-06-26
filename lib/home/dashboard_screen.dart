@@ -629,83 +629,99 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       leadListController.selectCheckbox(-1);
                       leadListController.leadStageName2.value ="Total Assigned";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="1";
                     } else if(globalIndex==1){
                       stageId=2;
                       leadListController.selectCheckbox(-1);
                       leadListController.leadCode.value="4";
                       leadListController.leadStageName2.value ="Self Sourced Leads";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="2";
                     } else if(globalIndex==2){
                       stageId=3;
                       leadListController.selectCheckbox(-1);
                       leadListController.leadStageName2.value ="Total Leads";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="3";
                     }else if(globalIndex==3){
                       stageId=4;
                       leadListController.selectCheckbox(1);
                       leadListController.leadStageName2.value ="Fresh Leads";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="4";
                     }else if(globalIndex==4){
                       stageId=5;
                       leadListController.selectCheckbox(-1);
                       leadListController.leadStageName2.value ="Total Working Leads";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="5";
                     }else if(globalIndex==5){
                       stageId=6;
                       leadListController.selectCheckbox(2);
                       leadListController.leadStageName2.value ="Ongoing Calls";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="6";
                     }else if(globalIndex==6){
                       stageId=7;
                       leadListController.selectCheckbox(5);
                       leadListController.leadStageName2.value ="Not Interested";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="7";
                     }else if(globalIndex==7){
                       stageId=8;
                       leadListController.selectCheckbox(3);
                       leadListController.leadStageName2.value ="Could Not Connect";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="8";
                     }else if(globalIndex==8){
                       stageId=9;
                       leadListController.selectCheckbox(4);
                       leadListController.leadStageName2.value ="Interested";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="9";
 
                     }else if(globalIndex==9){
                       stageId=10;
                       leadListController.selectCheckbox(7);
                       leadListController.leadStageName2.value ="Not Doable";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="10";
                     }else if(globalIndex==10){
                       stageId=11;
                       leadListController.selectCheckbox(-1);
                       leadListController.leadStageName2.value ="Hold";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="11";
                     }else if(globalIndex==11){
                       stageId=12;
                       leadListController.selectCheckbox(6);
                       leadListController.leadStageName2.value ="Doable";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="12";
                     }else if(globalIndex==12){
                       stageId=13;
                       leadListController.selectCheckbox(-1);
                       leadListController.leadStageName2.value ="Logged In";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="13";
                     }else if(globalIndex==13){
                       stageId=14;
                       leadListController.selectCheckbox(-1);
                       leadListController.leadStageName2.value ="Sanction";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="14";
                     }else if(globalIndex==14){
                       stageId=15;
                       leadListController.selectCheckbox(-1);
                       leadListController.leadStageName2.value ="Partial Disbursed";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="15";
                     }else if(globalIndex==15){
                       stageId=16;
                       leadListController.selectCheckbox(-1);
                       leadListController.leadStageName2.value ="Fully Disbursed";
                       botNavController.selectedIndex.value = 1;
+                      leadListController.leadCode.value="16";
                     }else{
 
                     }

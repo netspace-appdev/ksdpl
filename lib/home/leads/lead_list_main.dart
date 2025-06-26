@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/leads/loan_appl_controller.dart';
@@ -38,6 +39,7 @@ class LeadListMain extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());
   LeadDDController leadDDController=Get.find();
+  BotNavController botNavController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -647,13 +649,12 @@ class LeadListMain extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
                 onPressed: () {
-
-
+                  print("load more===>00${leadListController.fromWhereLeads.value}");
 
                   leadListController.fromWhereLeads.value=="dashboard"?
                   leadListController.getDetailsListOfLeadsForDashboardApi(
                     applyDateFilter: "false",
-                    stageId: "1",
+                    stageId: leadListController.leadCode.value,
                     isLoadMore: true
                   ):
 

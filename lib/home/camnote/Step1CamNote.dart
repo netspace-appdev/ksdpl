@@ -535,9 +535,14 @@ class Step1CamNote extends StatelessWidget {
                     getName: (item) => item.packageName.toString(),
                     selectedValue: camNoteController.packageList.firstWhereOrNull(
                           (item) => item.id == camNoteController.selectedPackage.value,
+
                     ),
                     onChanged: (value) {
                       camNoteController.selectedPackage.value =  value?.id;
+                      if(camNoteController.selectedPackage.value!=null){
+                        camNoteController.getPackageDetailsByIdApi(packageId: camNoteController.selectedPackage.toString());
+                      }
+
                     },
                     onClear: (){
                       camNoteController.selectedPackage.value = 0;
@@ -547,14 +552,14 @@ class Step1CamNote extends StatelessWidget {
                 }),
                 SizedBox(height: 20,),
 
-                CustomLabeledTextField(
+              /*  CustomLabeledTextField(
                   label: AppText.packageName,
                   controller: camNoteController.camPackageNameController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterPackageName,
 
                 ),
-
+*/
                 CustomLabeledTextField(
                   label: AppText.packageAmount,
                   controller: camNoteController.camPackageAmtController,

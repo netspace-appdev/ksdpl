@@ -348,7 +348,8 @@ class DrawerApiService {
 
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse("$getAllLeads?pageNumber=$pageNumber&pageSize=$pageSize"),
+        // Uri.parse("$getAllLeads?pageNumber=$pageNumber&pageSize=$pageSize"),
+        Uri.parse("$getAllLeads?pageNumber=${1}&pageSize=${pageNumber*20}"),
       );
 
       var header = await MyHeader.getHeaders2();
@@ -369,6 +370,9 @@ class DrawerApiService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq("$getAllLeads?pageNumber=${1}&pageSize=${pageNumber*20}", request.fields);
+      Helper.ApiRes("$getAllLeads?pageNumber=${1}&pageSize=${pageNumber*20}", response.body);
 
 
       if (response.statusCode == 200) {
@@ -393,7 +397,8 @@ class DrawerApiService {
 
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse("$getDetailsListOfLeadsForDashboard?pageNumber=$pageNumber&pageSize=$pageSize"),
+        // Uri.parse("$getDetailsListOfLeadsForDashboard?pageNumber=$pageNumber&pageSize=$pageSize"),
+        Uri.parse("$getDetailsListOfLeadsForDashboard?pageNumber=${1}&pageSize=${pageNumber*20}"),
       );
       var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
       var header = await MyHeader.getHeaders2();
@@ -402,9 +407,20 @@ class DrawerApiService {
       request.fields['StageId'] =stageId;
       request.fields['EmployeeId'] =empId;
       request.fields['ApplyDateFilter'] =applyDateFilter;
+      request.fields['StateId'] ="0";
+      request.fields['District'] ="0";
+      request.fields['CityId'] ="0";
+      request.fields['FromDate'] ="";
+      request.fields['ToDate'] ="";
+      request.fields['LeadName'] ="";
+      request.fields['CampaignName'] ="";
+
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq("$getDetailsListOfLeadsForDashboard?pageNumber=${1}&pageSize=${pageNumber*20}", request.fields);
+      Helper.ApiRes("$getDetailsListOfLeadsForDashboard?pageNumber=${1}&pageSize=${pageNumber*20}", response.body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

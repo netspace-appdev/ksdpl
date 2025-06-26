@@ -27,6 +27,7 @@ import '../../models/camnote/GetBankerDetailModelForCheck.dart';
 import '../../models/camnote/GetBankerDetailsByIdModel.dart';
 import '../../models/camnote/GetCamNoteDetailByIdModeli.dart';
 import '../../models/camnote/GetCamNoteLeadIdModel.dart';
+import '../../models/camnote/GetPackageDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailsByFilterModel.dart';
 import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
@@ -55,6 +56,7 @@ import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
 import 'calculateCibilData.dart';
 var getBankerDetailsByIdModel = Rxn<GetBankerDetailsByIdModel>(); //
+var getPackageDetailsByIdModel = Rxn<GetPackageDetailsByIdModel>(); //
 
 class CamNoteController extends GetxController with ImagePickerMixin{
 
@@ -436,6 +438,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     if(step==1 || step==2){
       setAgeFromDob(camDobController, camEarningCustomerAgeController);
     }
+
+
 
     currentStep.value = step;
     print("currentStep.value===>${currentStep.value.toString()}");
@@ -2129,6 +2133,57 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       isLoading(false);
     }
   }
+
+  Future<void>  getPackageDetailsByIdApi({
+    required String packageId,
+  }) async {
+    try {
+
+      isBankerSuperiorLoading(true);
+
+
+      var data = await CamNoteService.getPackageDetailsByIdApi(
+          packageId: packageId
+      );
+
+
+      if(data['success'] == true){
+
+        getPackageDetailsByIdModel.value= GetPackageDetailsByIdModel.fromJson(data);
+        final cibilPackages = getPackageDetailsByIdModel.value!.data?.where((d) => d.isCibilService).toList();
+        if(cibilPackages!.length<0){
+          print("cibil exist--.");
+        }else{
+          print("cibil not exist--.");
+        }
+
+
+
+        isBankerSuperiorLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getPackageDetailsByIdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getPackageDetailsByIdApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isBankerSuperiorLoading(false);
+    } finally {
+
+
+      isBankerSuperiorLoading(false);
+    }
+  }
+
+
   int calculateAge(DateTime birthDate) {
     DateTime today = DateTime.now();
     int age = today.year - birthDate.year;

@@ -26,6 +26,7 @@ class CamNoteService {
   static const String getCamNoteDetailByLeadId = BaseUrl.baseUrl + 'CamNoteDetail/GetCamNoteDetailByLeadId';
   static const String getCamNoteDetailById = BaseUrl.baseUrl + 'CamNoteDetail/GetCamNoteDetailById';
   static const String editCamNoteDetail = BaseUrl.baseUrl + 'CamNoteDetail/EditCamNoteDetail';
+  static const String getPackageDetailsById = BaseUrl.baseUrl + 'CamNoteDetail/GetPackageDetailsById';
 
 
 
@@ -807,6 +808,36 @@ class CamNoteService {
   }
 
 
+  static Future<Map<String, dynamic>> getPackageDetailsByIdApi({
+    required String packageId,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getPackageDetailsById),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'PackageId', packageId, fallback: "0");
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(getPackageDetailsById, request.fields);
+      Helper.ApiRes(getPackageDetailsById, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error: $e');
+    }
+  }
   static void printInChunks(String text, {int chunkSize = 2048}) {
     final pattern = RegExp('.{1,$chunkSize}', dotAll: true);
     for (final match in pattern.allMatches(text)) {
