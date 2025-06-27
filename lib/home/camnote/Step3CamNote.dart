@@ -8,6 +8,7 @@ import 'package:lottie/lottie.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../controllers/camnote/camnote_controller.dart';
+import '../../controllers/check_valid_email_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/new_dd_controller.dart';
@@ -31,6 +32,7 @@ class Step3CamNote extends StatelessWidget {
   final ViewProductController viewProductController = Get.put(ViewProductController());
   NewDDController newDDController=Get.put(NewDDController());
   final _formKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -506,7 +508,7 @@ class Step3CamNote extends StatelessWidget {
                                    inputType: TextInputType.emailAddress,
                                    hintText: AppText.enterBankerEmail,
                                    isRequired: true,
-                                     validator: ValidationHelper.validateEmailNotNull
+                                     validator: ValidationHelper.validateEmailOfficial
                                  ),
                                  CustomLabeledTextField(
                                    label: AppText.superiorMobile,

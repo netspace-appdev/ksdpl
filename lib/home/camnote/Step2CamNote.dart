@@ -79,21 +79,22 @@ class Step2CamNote extends StatelessWidget {
                                      ),
                                    ),
                                    SizedBox(width: 10,),
-                                   InkWell(
-                                     onTap: (){
-                                       camNoteController.selectedIndexGenCibil.value=-1;
-                                       camNoteController.camCibilMobController.text=camNoteController.camPhoneController.text;
-                                       camNoteController.selectedGenderGenCibil.value=camNoteController.selectedGender.value;
-
-                                       print("gender-->${camNoteController.selectedGender.value}");
-                                       showDialogGenCibil(context:context);
-                                     },
-                                     child: const Text(
-                                      "Need to generate ?",
-                                       style: TextStyle(
-                                         fontSize: 16,
-                                         fontWeight: FontWeight.bold,
-                                         color: AppColor.redColor,
+                                   Visibility(
+                                     visible: camNoteController.isGenerateCibilVisible.value,
+                                     child: InkWell(
+                                       onTap: (){
+                                         camNoteController.selectedIndexGenCibil.value=-1;
+                                         camNoteController.camCibilMobController.text=camNoteController.camPhoneController.text;
+                                         camNoteController.selectedGenderGenCibil.value=camNoteController.selectedGender.value;
+                                         showDialogGenCibil(context:context);
+                                       },
+                                       child: const Text(
+                                        "Need to generate ?",
+                                         style: TextStyle(
+                                           fontSize: 16,
+                                           fontWeight: FontWeight.bold,
+                                           color: AppColor.redColor,
+                                         ),
                                        ),
                                      ),
                                    )

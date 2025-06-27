@@ -15,7 +15,7 @@ class CheckValidEmailController extends GetxController {
 
 
   var isValidEmail = false.obs;
-  CheckPhoneExistsModel? checkPhoneExistsModel;
+  /*CheckPhoneExistsModel? checkPhoneExistsModel;*/
 
   void checkValidEmail(String email) {
     // Regular expression to extract domain from email

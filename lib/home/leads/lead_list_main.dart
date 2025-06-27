@@ -154,6 +154,8 @@ class LeadListMain extends StatelessWidget {
                                   AddProductController addProductController =Get.put(AddProductController());
                                   addProductController.getAllProductCategoryApi();
                                   addLeadController.fromWhere.value="leadList";
+                                 addLeadController.clearControllers();
+                                  CamNoteController camNoteController=Get.put(CamNoteController());
                                   Get.toNamed("/addLeadScreen");
                                 },
                                 child: const Row(

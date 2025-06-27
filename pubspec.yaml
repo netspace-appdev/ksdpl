@@ -70,6 +70,7 @@ dependencies:
   google_fonts: ^6.2.1
   #flutter_quill: ^11.0.0
   flutter_launcher_icons: ^0.14.3
+  #geolocator: ^13.0.2 #9.0.1
 
 
 

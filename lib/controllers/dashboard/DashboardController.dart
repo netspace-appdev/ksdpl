@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
@@ -14,7 +15,9 @@ import '../../models/dashboard/GetCountOfLeadsModel.dart';
 import '../../models/dashboard/GetDetailsCountOfLeadsForDashboardModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
 import '../../models/dashboard/GetRemindersModel.dart';
+import '../../models/dashboard/GetToAttendanceDeEmId.dart';
 import '../../models/dashboard/GetUpcomingDateOfBirthModel.dart';
+import '../../models/dashboard/StartDayEndEmpModel.dart';
 import '../../models/dashboard/TodayWorkStatusRBModel.dart';
 import '../../models/dashboard/getBreakingNewsModel.dart';
 import '../../services/dashboard_api_service.dart';
@@ -32,6 +35,8 @@ class DashboardController extends GetxController {
   var getUpcomingDateOfBirthModel = Rxn<GetUpcomingDateOfBirthModel>(); //
   var todayWorkStatusRBModel = Rxn<TodayWorkStatusRBModel>(); //
   var getRemindersModel = Rxn<GetRemindersModel>(); //
+  var getToAttendanceDeEmId = Rxn<GetToAttendanceDeEmId>(); //
+  var startDayEndEmpModel = Rxn<StartDayEndEmpModel>(); //
   ScrollController scrollReminderController = ScrollController();
   UpdateFCMTokenModel? updateFCMTokenModel;
   List<int> fixedLeadIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -496,5 +501,126 @@ class DashboardController extends GetxController {
     }
   }
 
+  Future<void>  getTodayAttendanceDetailOfEmployeeIdApi({
+    required employeeId
+  }) async {
+    try {
+      isLoading(true);
 
+
+      var data = await DashboardApiService.getTodayAttendanceDetailOfEmployeeIdApi(employeeId: employeeId);
+
+
+      if(data['success'] == true){
+
+        getToAttendanceDeEmId.value= GetToAttendanceDeEmId.fromJson(data); //change it
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getToAttendanceDeEmId.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+  Future<void>  startDayOrEndDayOfEmployeeApi({
+    required id,
+    required employeeId,
+    required employeeType,
+    required longitudeLatitude,
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await DashboardApiService.startDayOrEndDayOfEmployeeApi(
+          id: id,
+        employeeId: employeeId,
+        employeeType: employeeType,
+        longitudeLatitude: longitudeLatitude,
+
+      );
+
+
+      if(data['success'] == true){
+
+        startDayEndEmpModel.value= StartDayEndEmpModel.fromJson(data); //change it
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        startDayEndEmpModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+
+/*
+  Future<Position?> getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Check if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled
+      print("Location services are disabled.");
+      return null;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied
+        print("Location permission denied.");
+        return null;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are permanently denied
+      print("Location permissions are permanently denied.");
+      return null;
+    }
+
+    // Get the current position
+    return await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+  }
+  final LocationSettings locationSettings = LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 100,
+  );*/
 }

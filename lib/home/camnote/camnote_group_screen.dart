@@ -106,8 +106,14 @@ class CamNoteGroupScreen extends StatelessWidget {
                                           circleColor = Colors.grey;
                                         }
 
-                                        return GestureDetector(
-                                          onTap: () => camNoteController.jumpToStep(index),
+                                        return InkWell(
+                                          onTap:
+
+                                          (camNoteController.currentStep.value==0 && camNoteController.selectedPackage.value!=null && camNoteController.camTransactionDetailsController.text.isEmpty )?(){
+                                            ToastMessage.msg("Please enter package's transaction details first");
+                                          }:
+
+                                              () => camNoteController.jumpToStep(index),
                                           child: Row(
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
@@ -202,7 +208,11 @@ class CamNoteGroupScreen extends StatelessWidget {
                                       ),
 
                                       ElevatedButton(
-                                        onPressed: camNoteController.currentStep.value < 3
+                                        onPressed:
+                                        (camNoteController.currentStep.value==0 && camNoteController.selectedPackage.value!=null && camNoteController.camTransactionDetailsController.text.isEmpty )?(){
+                                          ToastMessage.msg("Please enter package's transaction details first");
+                                        }:
+                                        camNoteController.currentStep.value < 3
                                             ? ()=>camNoteController.nextStep(camNoteController.currentStep.value)
                                             : null,
                                         child:  Text(camNoteController.currentStep.value==2?"Save":'Next',style: TextStyle(color: AppColor.appWhite),),

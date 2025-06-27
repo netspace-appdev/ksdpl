@@ -18,8 +18,10 @@ class DashboardApiService{
   static const String getCampaignName = baseUrl + 'LeadDetail/GetCampaignName';
   static const String getBreakingNewsById = baseUrl + 'UpdatedNews/GetBreakingNewsById';
   static const String todayWorkStatusOfRoBm = baseUrl + 'EmployeeDashboard/TodayWorkStatusOfRoBm';
-
   static const String GetDetailsCountOfLeadsForDashboard = baseUrl + 'LeadDetail/GetDetailsCountOfLeadsForDashboard';
+  static const String getTodayAttendanceDetailOfEmployeeId = baseUrl + 'Employee/GetTodayAttendanceDetailOfEmployeeId';
+  static const String startDayOrEndDayOfEmployee = baseUrl + 'Employee/StartDayOrEndDayOfEmployee';
+
 
 /*
   static Future<Map<String, dynamic>> getEmployeeByPhoneNumberApi({
@@ -289,7 +291,7 @@ class DashboardApiService{
 
   static Future<Map<String, dynamic>> todayWorkStatusOfRoBmApi({
     required employeeId
-}) async {
+  }) async {
 
     try {
       var request = http.MultipartRequest(
@@ -415,4 +417,97 @@ class DashboardApiService{
       throw Exception('Error: $e');
     }
   }
+
+//attandance
+  static Future<Map<String, dynamic>> getTodayAttendanceDetailOfEmployeeIdApi({
+    required employeeId
+  }) async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getTodayAttendanceDetailOfEmployeeId),
+      );
+
+
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['EmployeeId'] = employeeId;
+
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+
+
+
+  static Future<Map<String, dynamic>> startDayOrEndDayOfEmployeeApi({
+    required id,
+    required employeeId,
+    required employeeType,
+    required longitudeLatitude,
+  }) async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(startDayOrEndDayOfEmployee),
+      );
+
+
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['Id'] = id;
+      request.fields['EmployeeId'] = employeeId;
+      request.fields['EmployeeType'] = employeeType;
+      request.fields['LongitudeLatitude'] = longitudeLatitude;
+
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
 }

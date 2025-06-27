@@ -539,6 +539,7 @@ class Step1CamNote extends StatelessWidget {
                     ),
                     onChanged: (value) {
                       camNoteController.selectedPackage.value =  value?.id;
+                      camNoteController.camPackageAmtController.text=value?.amount.toString() ??"0";
                       if(camNoteController.selectedPackage.value!=null){
                         camNoteController.getPackageDetailsByIdApi(packageId: camNoteController.selectedPackage.toString());
                       }

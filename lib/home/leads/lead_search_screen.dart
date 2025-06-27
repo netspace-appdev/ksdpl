@@ -1674,9 +1674,9 @@ class LeadSearchScreen extends StatelessWidget {
                 fromDate: leadListController.fromDateController.value.text.isEmpty?"":Helper.convertToIso8601(leadListController.fromDateController.value.text),
                 toDate: leadListController.toDateController.value.text.isEmpty?"":Helper.convertToIso8601(leadListController.toDateController.value.text),
                 branch: leadDDController.selectedKsdplBr.value??"0",
-                uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
-                leadMobileNumber: searchLeadController.leadMobileNumberController.text,
-                leadName: searchLeadController.leadNameController.text,
+                uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text.trim().toString(),
+                leadMobileNumber: searchLeadController.leadMobileNumberController.text.trim().toString(),
+                leadName: searchLeadController.leadNameController.text.trim().toString(),
               );
               Get.back();
             }else{

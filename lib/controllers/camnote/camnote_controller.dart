@@ -321,7 +321,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   ];
   var infoFilledBankers = <String>{}.obs;
   var selectedBankers = <String>{}.obs;
-
+  var isGenerateCibilVisible = false.obs;
   Map<String, String> bankerBranchMap = {};
   void markBankerAsSubmitted(String boxId) {
     infoFilledBankers.add(boxId);
@@ -406,10 +406,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var isLoadingPackage = false.obs;
 
   void nextStep(int tappedIndex) {
-    print("tappedIndex===>${tappedIndex.toString()}");
     if (currentStep.value < 2) {
       currentStep.value++;
-      print("currentStep.value in next===>${currentStep.value.toString()}");
       if(currentStep.value==2){
 
         forBankDetailSubmit();
@@ -424,6 +422,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     if(tappedIndex==2){
       saveForm();
     }
+
   }
 
   void previousStep() {
@@ -434,15 +433,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   void jumpToStep(int step) {
-    print("step--->${step}");
+
     if(step==1 || step==2){
       setAgeFromDob(camDobController, camEarningCustomerAgeController);
     }
 
-
-
     currentStep.value = step;
-    print("currentStep.value===>${currentStep.value.toString()}");
+
     if(currentStep.value==2){
       forBankDetailSubmit();
     }
@@ -496,9 +493,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         ToastMessage.msg("Please select gender");
       }else {
         Addleadcontroller addLeadController =Get.find();
-
-
-        print("camSelectedIndexRelBank===>${camSelectedIndexRelBank.value}");
 
         await addLeadController.fillLeadFormApi(
           id: getLeadId.value.toString(),
@@ -570,7 +564,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
             List<File> residencePhotos = getImages("residence_photo");
             List<File> officePhotos = getImages("office_photo");
 
-            print("propertyPhotos===>${propertyPhotos.toString()}");
+
 
             addCamNoteDetailApi(
               Id:"0",
@@ -623,49 +617,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
- /* void saveForm(){
-    final productList = getProductDetailsByFilterModel.value?.data ?? [];
-     if(productList.isNotEmpty){
-       print("selectedBankers: $selectedBankers");
-        for (var bankerId in selectedBankers) {
-
-
-          final matchingProducts = productList.where((product) => product.id.toString() == bankerId);
-
-          print("matchingProducts: $matchingProducts");
-          for (var product in matchingProducts) {
-            print("product: =---inside");
-            final bankId = product.bankId;
-            final bankersName = product.bankersName;
-            final bankersMobileNumber = product.bankersMobileNumber;
-            final bankersWhatsAppNumber = product.bankersWhatsAppNumber;
-            final bankersEmailID = product.bankersEmailID;
-            final specialBranchId = product.specialBranchId;
-
-
-            final branchId = bankerBranchMap[bankId.toString()];
-
-            if (branchId != null) {
-              print("Found stored branchId: $branchId for bankId: $bankId");
-              // Use this in your next API call
-            } else {
-              print("No branchId stored yet for bankId: $bankId");
-            }
-// Now call API with extracted values
-
-            List<File> propertyPhotos = getImages("property_photo");
-            List<File> residencePhotos = getImages("residence_photo");
-            List<File> officePhotos = getImages("office_photo");
-
-            print("propertyPhotos===>Camnote API will run");
-
-
-          }
-        }
-      }else{
-        SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select a bank first");
-      }
-  }*/
 
 
 
@@ -1621,6 +1572,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     addIncomeList.clear();
     Addleadcontroller addLeadController =Get.find();
     addLeadController.addIncomeList.clear();
+    isGenerateCibilVisible.value=false;
   }
 
   void clearStep2(){
@@ -2151,10 +2103,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         getPackageDetailsByIdModel.value= GetPackageDetailsByIdModel.fromJson(data);
         final cibilPackages = getPackageDetailsByIdModel.value!.data?.where((d) => d.isCibilService).toList();
-        if(cibilPackages!.length<0){
-          print("cibil exist--.");
-        }else{
+
+        if(cibilPackages!.isEmpty){
           print("cibil not exist--.");
+          isGenerateCibilVisible.value=false;
+        }else{
+          print("cibil  exist--.");
+          isGenerateCibilVisible.value=true;
         }
 
 

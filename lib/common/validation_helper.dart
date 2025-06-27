@@ -69,6 +69,41 @@ class ValidationHelper {
 
     return null; // Email is valid
   }
+
+
+  static String? validateEmailOfficial(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Email is required";
+    }
+
+    // Regular expression for a valid email format
+    String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    RegExp regex = RegExp(emailPattern);
+
+    if (!regex.hasMatch(value)) {
+      return "Enter a valid email address";
+    }
+
+    // Block common public email providers
+    List<String> blockedDomains = [
+      "gmail.com",
+      "yahoo.com",
+      "hotmail.com",
+      "outlook.com",
+      "aol.com",
+      "rediffmail.com",
+      "icloud.com"
+    ];
+
+    String domain = value.split('@').last.toLowerCase();
+    if (blockedDomains.contains(domain)) {
+      return "Please enter an official/company email address";
+    }
+
+    return null; // Email is valid and not from a blocked domain
+  }
+
+
   /// Validate Email
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
