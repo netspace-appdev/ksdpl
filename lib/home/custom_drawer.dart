@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
+import '../controllers/attendance/attendance_controller.dart';
 import '../controllers/camnote/camnote_controller.dart';
 import '../controllers/leads/income_step_controller.dart';
 import '../controllers/leads/leadlist_controller.dart';
@@ -197,6 +198,40 @@ class _CustomDrawerState extends State<CustomDrawer> {
                    ),
                  ],
                ),
+
+               ExpansionTile(
+                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                 title:const Text(AppText.manageAttendance, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                 leading: Image.asset(AppImage.product, height: 20,),
+                 children: [
+                   ListTile(
+
+                     leading:  Icon(Icons.add_task,color: AppColor.blackColor),
+                     title:  Text(AppText.attendance, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                     onTap: () {
+                       var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+                       AttendanceController attendanceController=Get.put(AttendanceController());
+                       attendanceController.clearFields();
+                       attendanceController.getAttendanceListOfEmployeesByEmployeeIdApi(employeeId: empId);
+                       Get.toNamed("/viewAttendanceScreen");
+
+                     },
+                   ),
+                   ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
+                     leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
+                     title:  Text(AppText.manageLeaves, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                     onTap: () {
+                       var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+                       AttendanceController attendanceController=Get.put(AttendanceController());
+                       attendanceController.clearFields();
+                       attendanceController.getAllLeaveTypeApi();
+                       attendanceController.getAllLeaveDetailByEmployeeIdApi(employeeId: empId);
+                       Get.toNamed("/manageLeaveScreen");
+                     },
+                   ),
+                 ],
+               ),
+
 
                CustomListTile(
                  title:  "Web Panel",

@@ -16,10 +16,12 @@ import '../controllers/greeting_controller.dart';
 import '../controllers/lead_dd_controller.dart';
 import '../controllers/leads/infoController.dart';
 import '../custom_widgets/CustomBigDialogBox.dart';
+import '../custom_widgets/CustomDialogBox.dart';
 import '../custom_widgets/CustomDropdown.dart';
 import '../custom_widgets/CustomLabelPickerTextField.dart';
 import '../custom_widgets/CustomLabeledTextField.dart';
 import '../custom_widgets/CustomLabeledTimePicker.dart';
+import '../custom_widgets/CustomLoadingOverlay.dart';
 import '../custom_widgets/line_chart.dart';
 import '../services/call_service.dart';
 import 'custom_drawer.dart';
@@ -52,99 +54,101 @@ class _DashboardScreenState extends State<DashboardScreen> {
       key: _scaffoldKey,
       backgroundColor: AppColor.backgroundColor,
       drawer:   const CustomDrawer(),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await dashboardController.refreshItems();
-        },
-        child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          children: [
-            Stack(
+      body: Obx((){
+        return Stack(children: [
+          RefreshIndicator(
+            onRefresh: () async {
+              await dashboardController.refreshItems();
+            },
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               children: [
-                // Gradient Background
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppColor.primaryLight, AppColor.primaryDark],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child:Column(
-                    children: [
-                      const SizedBox(
-                        height: 20,
+                Stack(
+                  children: [
+                    // Gradient Background
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.7,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColor.primaryLight, AppColor.primaryDark],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
                       ),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child:Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
 
-                      header(),
+                          header(),
 
-                      const SizedBox(
-                        height: 20,
-                      ),
+                          const SizedBox(
+                            height: 20,
+                          ),
 
-                      attendanceContainer(),
+                          attendanceContainer(),
 
-                      const SizedBox(
-                        height: 20,
-                      ),
+                          const SizedBox(
+                            height: 20,
+                          ),
 
-                      offerContainer(),
+                          offerContainer(),
 
-                    ],
-                  ),
-                ),
-
-                // White Container
-                Align(
-                  alignment: Alignment.topCenter,  // Centers it
-                  child: Container(
-                    margin:  const EdgeInsets.only(
-                        top: 370  // 250
-                    ), // <-- Moves it 30px from top
-                    width: double.infinity,
-                    //height: MediaQuery.of(context).size.height,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                    decoration: const BoxDecoration(
-                      color: AppColor.backgroundColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(45),
-                        topRight: Radius.circular(45),
+                        ],
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min, // Prevents extra spacing
-                      children: [
 
-                        todayWorkStatus(),
-
-                        const SizedBox(
-                          height: 20,
+                    // White Container
+                    Align(
+                      alignment: Alignment.topCenter,  // Centers it
+                      child: Container(
+                        margin:  const EdgeInsets.only(
+                            top: 370  // 250
+                        ), // <-- Moves it 30px from top
+                        width: double.infinity,
+                        //height: MediaQuery.of(context).size.height,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                        decoration: const BoxDecoration(
+                          color: AppColor.backgroundColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(45),
+                            topRight: Radius.circular(45),
+                          ),
                         ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                          children: [
+
+                            todayWorkStatus(),
+
+                            const SizedBox(
+                              height: 20,
+                            ),
 
 
-                        reminders(),
+                            reminders(),
 
-                        const  SizedBox(
-                          height: 20,//20
-                        ),
+                            const  SizedBox(
+                              height: 20,//20
+                            ),
 
-                        birthday(),
+                            birthday(),
 
-                        const SizedBox(
-                          height: 20,
-                        ),
+                            const SizedBox(
+                              height: 20,
+                            ),
 
-                        latestNews(),
+                            latestNews(),
 
-                        const  SizedBox(
-                          height: 20,
-                        ),
+                            const  SizedBox(
+                              height: 20,
+                            ),
 
 
-                        /*  curveChart(),
+                            /*  curveChart(),
 
                   const SizedBox(height: 30),
 
@@ -152,16 +156,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                   const SizedBox(height: 30),*/
 
-                      ],
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
 
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-      ),
+            ),
+          ),
+          Positioned(
+              child: Center(child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: dashboardController.isAttendanceLoading.value? CustomLoadingOverlay(loaderColor: AppColor.primaryColor,):Container(),
+              )))
+        ],);
+      }),
     );
   }
 
@@ -598,74 +610,208 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
 
-  Widget attendanceContainer(){
-    return Container(
+/*  Widget attendanceContainer(){
+    return Obx((){
+      return Container(
 
-      decoration: BoxDecoration(
-        gradient:   LinearGradient(
-          colors: [AppColor.appWhite, AppColor.appOffWhite],
-          begin: Alignment.centerRight,
-          end: Alignment.centerLeft,
-        ),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            spreadRadius: 2,
+        decoration: BoxDecoration(
+          gradient:   LinearGradient(
+            colors: [AppColor.appWhite, AppColor.appOffWhite],
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green.shade600, // start = green
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                icon: const Icon(Icons.play_arrow, color: Colors.white),
-                label: const Text(
-                  "Start Day",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-             //    dashboardController.getCurrentLocation();
-                },
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade600, // end = red
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                icon: const Icon(Icons.stop, color: Colors.white),
-                label: const Text(
-                  "End Day",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  // End day logic
-                },
-              ),
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 10,
+              spreadRadius: 2,
             ),
           ],
         ),
-      ),
-    );
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                    dashboardController.isDataInDayStart.value==true?Colors.green.shade200:
+                    Colors.green.shade600, // start = green
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  icon: const Icon(Icons.play_arrow, color: Colors.white),
+                  label: const Text(
+                    "Start Day",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed:
+                  dashboardController.isDataInDayStart.value==true?() {
+                    ToastMessage.msg("You can't start day");
+                  }:
+                      () {
+                    dashboardController.markAttendance();
+                  },
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                    dashboardController.isDataInDayStart.value==false?Colors.red.shade200:
+                    Colors.red.shade600, // end = red
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  icon: const Icon(Icons.stop, color: Colors.white),
+                  label: const Text(
+                    "End Day",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed:
+                  dashboardController.isDataInDayStart.value==false?(){
+                    ToastMessage.msg("You can't end day");
+                  }:
+                      ()  {
+                    dashboardController.markAttendance();
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
 
+
+  }*/
+
+  Widget attendanceContainer() {
+    final dashboardController = Get.find<DashboardController>();
+
+    return Obx(() {
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppColor.appWhite, AppColor.appOffWhite],
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
+          ),
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 10,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: dashboardController.isStartDayDone.value
+                        ? Colors.green.shade200
+                        : Colors.green.shade600,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  icon: const Icon(Icons.play_arrow, color: Colors.white),
+                  label: const Text(
+                    "Start Day",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    if (dashboardController.isStartDayDone.value && dashboardController.isEndDayDone.value) {
+                      ToastMessage.msg("You can't start day. It's already ended.");
+                    } else if (dashboardController.isStartDayDone.value) {
+                      ToastMessage.msg("You have already started your day.");
+                    } else {
+
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomDialogBox(
+                            title: "Are you sure? You want to start you day",
+
+                            onYes: () {
+                            dashboardController.markAttendance();
+                            },
+                            onNo: () {
+                              Get.back();
+
+                            },
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: !dashboardController.isStartDayDone.value ||
+                        dashboardController.isEndDayDone.value
+                        ? Colors.red.shade200
+                        : Colors.red.shade600,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  icon: const Icon(Icons.stop, color: Colors.white),
+                  label: const Text(
+                    "End Day",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    if (!dashboardController.isStartDayDone.value) {
+                      ToastMessage.msg("You can't end the day before starting.");
+                    } else if (dashboardController.isEndDayDone.value) {
+                      ToastMessage.msg("You have already ended your day.");
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomDialogBox(
+                            title: "Are you sure? You want to end you day",
+
+                            onYes: () {
+                             dashboardController.markAttendance();
+                            },
+                            onNo: () {
+                              Get.back();
+
+                            },
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
+
 
   Widget barChart(){
     return Column(

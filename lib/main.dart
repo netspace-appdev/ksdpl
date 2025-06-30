@@ -74,18 +74,10 @@ void main() async{
   await Permission.microphone.request();
   await Permission.phone.request();
   await Permission.storage.request();
+  await Permission.location.request();
 
   Get.put(ThemeController());
-  ///reminder
-  /*tz.initializeTimeZones();
 
-  const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  const InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid);
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);*/
   await NotificationHelper.init();
   ///rm end
   runApp(const MyApp());

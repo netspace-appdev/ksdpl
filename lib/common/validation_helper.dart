@@ -277,4 +277,22 @@ class ValidationHelper {
 
     return null; // ✅ All good
   }
+
+
+  static String? validateFromDateNew(String? value) {
+    if (value == null || value.isEmpty) {
+      return "From date is required";
+    }
+
+    return null; // Name is valid
+  }
+
+
+  static String? validateToDateNew(String? value) {
+    if (value == null || value.isEmpty) {
+      return "To date is required";
+    }
+
+    return null; // Name is valid
+  }
 }

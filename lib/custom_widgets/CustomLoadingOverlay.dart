@@ -15,11 +15,11 @@ class CustomLoadingOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor,
-      child: const Center(
+      child:  Center(
         child: SizedBox(
           width: 50,
           height: 50,
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(color: loaderColor,),
         ),
       ),
     );

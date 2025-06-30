@@ -13,6 +13,8 @@ import '../enforcement_panel/upload_common_task.dart';
 import '../exp.dart';
 import '../home/EditProfile2.dart';
 import '../home/LeadListScreen.dart';
+import '../home/attandance/manage_leave_screen.dart';
+import '../home/attandance/view_attendance.dart';
 import '../home/camnote/cam_note_details.dart';
 import '../home/camnote/cam_note_single.dart';
 import '../home/camnote/camnote_group_screen.dart';
@@ -76,4 +78,6 @@ final routes = [
   GetPage(name: '/forgotPasswordScreen', page: () => ForgotPasswordScreen()),
   GetPage(name: '/camNoteDetailsScreen', page: () => CamNoteDetailsScreen()),
   GetPage(name: '/camNoteSingle', page: () => CamNoteSingle()),
+  GetPage(name: '/viewAttendanceScreen', page: () => ViewAttendanceScreen()),
+  GetPage(name: '/manageLeaveScreen', page: () => ManageLeaveScreen()),
 ];

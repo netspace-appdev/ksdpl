@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
 import '../../common/helper.dart';
 import '../../common/notification_helper.dart';
 import '../../common/storage_service.dart';
@@ -27,7 +29,11 @@ import 'package:flutter/material.dart';
 import '../../services/home_service.dart';
 class DashboardController extends GetxController {
   var isOfferLoading = false.obs;
+  var isAttendanceLoading = false.obs;
   var isLoading = false.obs;
+  /*var isDataInDayStart = false.obs;*/
+  var isStartDayDone = false.obs;
+  var isEndDayDone = false.obs;
   GetEmployeeModel? getEmployeeModel;
   var getCountOfLeadsModel = Rxn<GetCountOfLeadsModel>(); //
   var getDetailsCountOfLeads = Rxn<GetDetailsCountOfLeadsForDashboardModel>(); //
@@ -119,6 +125,7 @@ class DashboardController extends GetxController {
         );
          todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
          getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
+        getTodayAttendanceDetailOfEmployeeIdApi(employeeId: getEmployeeModel!.data!.id.toString());
          await getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
 
 
@@ -515,13 +522,17 @@ class DashboardController extends GetxController {
 
         getToAttendanceDeEmId.value= GetToAttendanceDeEmId.fromJson(data); //change it
 
+        final last = getToAttendanceDeEmId.value!.data!.last;
+        isStartDayDone.value = last.checkInTime != null && last.checkInTime!.isNotEmpty;
+        isEndDayDone.value = last.checkOutTime != null && last.checkOutTime!.isNotEmpty;
 
         isLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
-
-        getToAttendanceDeEmId.value=null;
+        getToAttendanceDeEmId.value = null;
+        isStartDayDone.value = false;
+        isEndDayDone.value = false;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
@@ -561,7 +572,10 @@ class DashboardController extends GetxController {
 
         startDayEndEmpModel.value= StartDayEndEmpModel.fromJson(data); //change it
 
-
+        var eId=StorageService.get(StorageService.EMPLOYEE_ID);
+        await getTodayAttendanceDetailOfEmployeeIdApi(employeeId: eId);
+        ToastMessage.msg(startDayEndEmpModel.value!.message.toString());
+        isAttendanceLoading(false);
         isLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -584,8 +598,69 @@ class DashboardController extends GetxController {
     }
   }
 
+  void markAttendance() async {
+    isAttendanceLoading(true);
+    Position? position = await getCurrentLocation();
+    var eId=StorageService.get(StorageService.EMPLOYEE_ID);
+    var rawRole = StorageService.get(StorageService.ROLE).toString();
+    var role = rawRole.replaceAll('[', '').replaceAll(']', '');
+    var id="0";
 
-/*
+
+    if (position != null) {
+      double lat = position.latitude;
+      double lon = position.longitude;
+
+      print("lat-->${lat} and lon--->${lon}");
+
+      await getTodayAttendanceDetailOfEmployeeIdApi(employeeId: eId);
+
+      final last = getToAttendanceDeEmId.value?.data?.last;
+
+      if (last == null) {
+        // Start day for the first time
+        id = "0";
+        await startDayOrEndDayOfEmployeeApi(
+          id: id,
+          employeeId: eId,
+          employeeType: role,
+          longitudeLatitude: "$lon,$lat",
+        );
+      } else {
+        // Parse check-in time and compare time difference
+        final checkIn = DateTime.parse(last.checkInTime!);
+        final now = DateTime.now();
+        final diff = now.difference(checkIn);
+
+        if (diff.inHours >= 24) {
+          ToastMessage.msg("You can only start or end the day within 24 hours.");
+          isAttendanceLoading(false);
+          return;
+        }
+
+        if (last.checkOutTime == null || last.checkOutTime!.isEmpty) {
+          // Time to end the day
+          id = last.id.toString();
+          await startDayOrEndDayOfEmployeeApi(
+            id: id,
+            employeeId: eId,
+            employeeType: role,
+            longitudeLatitude: "$lon,$lat",
+          );
+        } else {
+          isAttendanceLoading(false);
+          ToastMessage.msg("You have already ended your day.");
+        }
+      }
+
+    } else {
+      // Show error or ask user to enable location
+      isAttendanceLoading(false);
+      ToastMessage.msg("Unable to fetch location.");
+    }
+  }
+
+
   Future<Position?> getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -618,9 +693,11 @@ class DashboardController extends GetxController {
     return await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
+
+    //await Geolocator.getCurrentPosition(locationSettings: locationSettings);
   }
   final LocationSettings locationSettings = LocationSettings(
     accuracy: LocationAccuracy.high,
     distanceFilter: 100,
-  );*/
+  );
 }

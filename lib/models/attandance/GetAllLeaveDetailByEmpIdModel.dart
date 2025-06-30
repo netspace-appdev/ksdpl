@@ -1,0 +1,106 @@
+
+class GetAllLeaveDetailByEmpIdModel {
+  String? status;
+  bool? success;
+  List<Data>? data;
+  String? message;
+
+  GetAllLeaveDetailByEmpIdModel(
+      {this.status, this.success, this.data, this.message});
+
+  GetAllLeaveDetailByEmpIdModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    success = json['success'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+    message = json['message'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['success'] = this.success;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    data['message'] = this.message;
+    return data;
+  }
+}
+
+class Data {
+  int? id;
+  int? employeeId;
+  String? employeeName;
+  int? leaveType;
+  String? leaveTypeName;
+  String? startDate;
+  String? endDate;
+  int? totalDays;
+  String? reason;
+  String? status;
+  String? appliedDate;
+  int? approvedBy;
+  String? approvedDate;
+  String? comments;
+  String? approvedByName;
+
+  Data(
+      {this.id,
+        this.employeeId,
+        this.employeeName,
+        this.leaveType,
+        this.leaveTypeName,
+        this.startDate,
+        this.endDate,
+        this.totalDays,
+        this.reason,
+        this.status,
+        this.appliedDate,
+        this.approvedBy,
+        this.approvedDate,
+        this.comments,
+        this.approvedByName});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    employeeId = json['employeeId'];
+    employeeName = json['employeeName'];
+    leaveType = json['leaveType'];
+    leaveTypeName = json['leaveTypeName'];
+    startDate = json['startDate'];
+    endDate = json['endDate'];
+    totalDays = json['totalDays'];
+    reason = json['reason'];
+    status = json['status'];
+    appliedDate = json['appliedDate'];
+    approvedBy = json['approvedBy'];
+    approvedDate = json['approvedDate'];
+    comments = json['comments'];
+    approvedByName = json['approvedByName'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['employeeId'] = this.employeeId;
+    data['employeeName'] = this.employeeName;
+    data['leaveType'] = this.leaveType;
+    data['leaveTypeName'] = this.leaveTypeName;
+    data['startDate'] = this.startDate;
+    data['endDate'] = this.endDate;
+    data['totalDays'] = this.totalDays;
+    data['reason'] = this.reason;
+    data['status'] = this.status;
+    data['appliedDate'] = this.appliedDate;
+    data['approvedBy'] = this.approvedBy;
+    data['approvedDate'] = this.approvedDate;
+    data['comments'] = this.comments;
+    data['approvedByName'] = this.approvedByName;
+    return data;
+  }
+}

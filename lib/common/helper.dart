@@ -724,7 +724,19 @@ class AppText{
   static const String sanctionStampDuty = "Sanction Stamp Duty";
   static const String softSanctionDate = "Soft Sanction Date";
   static const String rejectReason = "Reject Reason";
-
+  static const String manageAttendance = "Manage Attendance";
+  static const String manageLeaves = "Manage Leaves";
+  static const String attendance = "Attendance";
+  static const String leaveStatus = "Leave Status";
+  static const String reqLeave="Request a Leave";
+  static const String leaveType="Leave Type";
+  static const String startDate="Start Date";
+  static const String endDate="End Date";
+  static const String enterStartDate="Please Enter Start Date";
+  static const String enterEndDate="Please Enter End Date";
+  static const String totalDays="Total Days";
+  static const String reason="Reason";
+  static const String enterReason="Please Enter Reason";
 }
 
 class AppColor{
@@ -1097,7 +1109,20 @@ class Helper{
     return parts.join(" ");
   }
 
+  static String attendanceDateFormat(String dateTime) {
+    // Split the string at 'T' to get the date part
+    String datePart = dateTime.split('T')[0];
 
+    // Split the date into year, month, and day
+    List<String> parts = datePart.split('-');
+
+    // Get the current year
+    String currentYear = DateTime.now().year.toString();
+
+    // Return the date in DD-MM-YYYY format with the current year
+    // return '${parts[2]}-${parts[1]}-$currentYear';
+    return '$currentYear-${parts[1]}-${parts[2]}';
+  }
 
   static String convertUnixTo12HourFormat(int timestamp) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
