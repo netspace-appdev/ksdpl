@@ -204,8 +204,6 @@ class LeadApiService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(fillLeadForm, request.fields);
-      Helper.ApiRes(fillLeadForm, response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
@@ -303,8 +301,6 @@ class LeadApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(individualLeadUpload, request.fields);
-      Helper.ApiRes(individualLeadUpload, response.body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

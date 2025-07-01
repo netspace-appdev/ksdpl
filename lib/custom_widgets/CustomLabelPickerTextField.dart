@@ -15,7 +15,7 @@ class CustomLabeledPickerTextField extends StatelessWidget {
   final bool isDateField;
   final bool enabled;
   final bool isFutureDisabled;
-
+  final VoidCallback? onDateSelected;
   const CustomLabeledPickerTextField({
     Key? key,
     required this.label,
@@ -29,6 +29,7 @@ class CustomLabeledPickerTextField extends StatelessWidget {
     this.isDateField = false, // Default: Not a date field
     this.enabled = true,
     this.isFutureDisabled = false,
+    this.onDateSelected
 
   }) : super(key: key);
 
@@ -109,6 +110,7 @@ class CustomLabeledPickerTextField extends StatelessWidget {
     if (pickedDate != null) {
       controller.text = DateFormat("yyyy-MM-dd").format(pickedDate);
       print("pick date===>${controller.text}");
+      onDateSelected?.call();
     }
   }
 }

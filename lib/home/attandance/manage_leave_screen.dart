@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/leads/income_step_controller.dart';
+import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
@@ -125,6 +127,7 @@ class ManageLeaveScreen extends StatelessWidget {
                               ),
                               InkWell(
                                 onTap: (){
+                                  attendanceController.clearFields();
                                   showCustomBottomSheet(context);
                                 },
                                 child: const Row(
@@ -395,31 +398,68 @@ class ManageLeaveScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Chip(
-                                  label: Text(
-                                    data.status.toString(),
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: data.status!.toLowerCase()=="pending"
-                                          ? Colors.orange :
-                                      data.status!.toLowerCase()=="accept"
-                                          ? Colors.green:
-                                      data.status!.toLowerCase()=="reject"
-                                          ? Colors.red
-                                          : Colors.red.shade700,
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Status: ",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
-                                  backgroundColor: data.status!.toLowerCase()=="pending"
-                                      ? Colors.orange.shade100:
-                                  data.status!.toLowerCase()=="accept"
-                                      ? Colors.green.shade100:
-                                  data.status!.toLowerCase()=="reject"
-                                      ? Colors.red.shade100
-                                      : Colors.green.shade100,
+                                    Chip(
+                                      label: Text(
+                                        data.status.toString(),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: data.status!.toLowerCase()=="pending"
+                                              ? Colors.orange :
+                                          data.status!.toLowerCase()=="accept"
+                                              ? Colors.green:
+                                          data.status!.toLowerCase()=="reject"
+                                              ? Colors.red
+                                              : Colors.red.shade700,
+                                        ),
+                                      ),
+                                      backgroundColor: data.status!.toLowerCase()=="pending"
+                                          ? Colors.orange.shade100:
+                                      data.status!.toLowerCase()=="accept"
+                                          ? Colors.green.shade100:
+                                      data.status!.toLowerCase()=="reject"
+                                          ? Colors.red.shade100
+                                          : Colors.green.shade100,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
+
+                            Divider(),
+
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Reason: ",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.primaryColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Text("${data.reason}",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                )
+                              ],
+                            )
                           ],
                         ),
                       ),
@@ -550,15 +590,41 @@ class ManageLeaveScreen extends StatelessWidget {
   }
 
   void onPressed(){
-    print("onpressed===>");
+
 
     if (_formKey.currentState!.validate()) {
-      var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-      attendanceController.getAttendanceListOfEmployeesByEmployeeIdApi(
-        employeeId: empId,
-        fromDate: Helper.attendanceDateFormat(attendanceController.atFromDateController.text),
-        toDate: Helper.attendanceDateFormat(attendanceController.atFromDateController.text),
-      );
+      final fromText = attendanceController.atStartDateController.text;
+      final toText = attendanceController.atEndDateController.text;
+
+      if (fromText.isNotEmpty && toText.isNotEmpty) {
+
+        try {
+          final fromDate = DateFormat('yyyy-MM-dd').parse(fromText);
+          final toDate = DateFormat('yyyy-MM-dd').parse(toText);
+
+          if (fromDate.isAfter(toDate)) {
+            // Invalid case
+            attendanceController.atTotalDaysController.text = '';
+            SnackbarHelper.showSnackbar(title: "Invalid Date", message: "Start date cannot be after End date");
+
+            return;
+          }
+
+          var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+          attendanceController.addEmployeeLeaveDetailApi(
+            id: "0",
+            employeeId:  empId,
+            startDate:   Helper.attendanceDateFormat(attendanceController.atStartDateController.text),
+            endDate:     Helper.attendanceDateFormat(attendanceController.atEndDateController.text),
+            totalDays:   attendanceController.atTotalDaysController.text.trim().toString(),
+            leaveType:   attendanceController.selectedLeaveType.toString(),
+            reason:      attendanceController.atReasonController.text.trim().toString(),
+          );
+
+        } catch (e) {
+          attendanceController.atTotalDaysController.text = '';
+        }
+      }
 
     }
   }
@@ -622,13 +688,17 @@ class ManageLeaveScreen extends StatelessWidget {
                             CustomLabeledPickerTextField(
                               label: AppText.startDate,
 
-                              controller: attendanceController.atFromDateController,
+                              controller: attendanceController.atStartDateController,
                               inputType: TextInputType.name,
                               hintText: AppText.mmddyyyy,
 
                               isDateField: true,
 
                               validator: ValidationHelper.validateFromDate,
+
+                              onDateSelected: () {
+                                attendanceController.calculateTotalDays();
+                              },
                             ),
 
                             CustomLabeledPickerTextField(
@@ -641,6 +711,9 @@ class ManageLeaveScreen extends StatelessWidget {
                               isDateField: true,
 
                               validator: ValidationHelper.validateToDateNew,
+                              onDateSelected: () {
+                                attendanceController.calculateTotalDays();
+                              },
                             ),
                             CustomLabeledTextField(
                               label: AppText.totalDays,
@@ -672,7 +745,7 @@ class ManageLeaveScreen extends StatelessWidget {
 
                   // Sticky Submit Button
                   Obx(() {
-                    if (attendanceController.isLoading.value) {
+                    if (attendanceController.isSendLoading.value) {
                       return const SizedBox(
                         height: 50,
                         child: Center(
@@ -693,9 +766,7 @@ class ManageLeaveScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          onPressed: () {
-
-                          },
+                          onPressed: onPressed,
                           child: const Text(
                             AppText.submit,
                             style: TextStyle(
@@ -717,6 +788,9 @@ class ManageLeaveScreen extends StatelessWidget {
 
     );
   }
+
+
+
 }
 
 

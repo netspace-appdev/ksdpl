@@ -400,9 +400,9 @@ class ViewAttendanceScreen extends StatelessWidget {
                             ),
 
                             SizedBox(height: 16),
-                            Divider(),
+                          //  Divider(),
 
-                            // Branch Info
+                           /* // Branch Info
                             Row(
                               children: [
                                 Icon(Icons.location_on, size: 18, color: Colors.indigo),
@@ -435,7 +435,7 @@ class ViewAttendanceScreen extends StatelessWidget {
                                       : Colors.green.shade100,
                                 ),
                               ],
-                            ),
+                            ),*/
                           ],
                         ),
                       ),

@@ -76,8 +76,7 @@ class NewDDService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(getBankerDetailsByBranchId, request.fields);
-      Helper.ApiRes(getBankerDetailsByBranchId, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -111,8 +110,7 @@ class NewDDService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(getBankerDetailsById, request.fields);
-      Helper.ApiRes(getBankerDetailsById, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

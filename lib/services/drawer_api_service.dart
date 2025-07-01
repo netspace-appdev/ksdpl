@@ -437,11 +437,12 @@ class DrawerApiService {
     required id,
     required stage,
     required active,
+    required empId,
   }) async {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse( updateLeadStage),
+        Uri.parse(updateLeadStage),
       );
 
       // Headers
@@ -454,9 +455,12 @@ class DrawerApiService {
       request.fields['Id'] = id;
       request.fields['Stage'] = stage;
       request.fields['Active'] = active;
+      request.fields['EmployeeId'] = empId;
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(updateLeadStage,  request.fields);
+      Helper.ApiRes(updateLeadStage,  response.body);
 
 
       if (response.statusCode == 200) {
@@ -737,7 +741,7 @@ class DrawerApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(getAllKsdplProductList, response.body);
+
 
 
       if (response.statusCode == 200) {

@@ -441,8 +441,6 @@ class DashboardApiService{
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(getTodayAttendanceDetailOfEmployeeId, request.fields);
-      Helper.ApiRes(getTodayAttendanceDetailOfEmployeeId, response.body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -493,8 +491,7 @@ class DashboardApiService{
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(startDayOrEndDayOfEmployee, request.fields);
-      Helper.ApiRes(startDayOrEndDayOfEmployee, response.body);
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -513,52 +510,4 @@ class DashboardApiService{
     }
   }
 
-
-
-
- /* static Future<Map<String, dynamic>> getAttendanceListOfEmployeesByEmployeeIdApi({
-    required employeeId,
-    required fromDate,
-    required toDate,
-  }) async {
-
-    try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(getAttendanceListOfEmployeesByEmployeeId),
-      );
-
-
-
-      var header=await MyHeader.getHeaders2();
-
-      request.headers.addAll(header);
-      request.fields['EmployeeId'] = employeeId;
-      request.fields['dateDTO.FromDate'] = fromDate;
-      request.fields['dateDTO.ToDate'] = toDate;
-
-
-      // Sending request
-      var streamedResponse = await request.send();
-      var response = await http.Response.fromStream(streamedResponse);
-
-      Helper.ApiReq(startDayOrEndDayOfEmployee, request.fields);
-      Helper.ApiRes(startDayOrEndDayOfEmployee, response.body);
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-
-        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
-
-          return jsonResponse;
-        } else {
-          //throw Exception('Invalid API response');
-          return jsonResponse;
-        }
-      } else {
-        throw Exception('Failed to load data: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
-  }*/
 }

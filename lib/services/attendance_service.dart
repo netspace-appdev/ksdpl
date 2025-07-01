@@ -14,6 +14,7 @@ class AttendanceService {
   static const String getAttendanceListOfEmployeesByEmployeeId = BaseUrl.baseUrl + 'Employee/GetAttendanceListOfEmployeesByEmployeeId';
   static const String getAllLeaveType = BaseUrl.baseUrl + 'Leave/GetAllLeaveType';
   static const String getAllLeaveDetailByEmployeeId = BaseUrl.baseUrl + 'Leave/GetAllLeaveDetailByEmployeeId';
+  static const String addEmployeeLeaveDetail = BaseUrl.baseUrl + 'Leave/AddEmployeeLeaveDetail';
 
 
   static Future<Map<String, dynamic>> getAttendanceListOfEmployeesByEmployeeIdApi({
@@ -41,8 +42,6 @@ class AttendanceService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(getAttendanceListOfEmployeesByEmployeeId, request.fields);
-      Helper.ApiRes(getAttendanceListOfEmployeesByEmployeeId, response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
@@ -71,7 +70,7 @@ class AttendanceService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiRes(getAllLeaveType, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -106,8 +105,7 @@ class AttendanceService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(getAllLeaveDetailByEmployeeId, request.fields);
-      Helper.ApiRes(getAllLeaveDetailByEmployeeId, response.body);
+
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
@@ -119,5 +117,47 @@ class AttendanceService {
     }
   }
 
+  static Future<Map<String, dynamic>> addEmployeeLeaveDetailApi({
 
+    required String id,
+    required String employeeId,
+    required String leaveType,
+    required String startDate,
+    required String endDate,
+    required String totalDays,
+    required String reason,
+  }) async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(addEmployeeLeaveDetail),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', id,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'EmployeeId', employeeId,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LeaveType', leaveType,fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'StartDate', startDate);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'EndDate', endDate,);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalDays', totalDays,fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Reason', reason,);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
+    }
+  }
 }

@@ -553,14 +553,6 @@ class Step1CamNote extends StatelessWidget {
                 }),
                 SizedBox(height: 20,),
 
-              /*  CustomLabeledTextField(
-                  label: AppText.packageName,
-                  controller: camNoteController.camPackageNameController,
-                  inputType: TextInputType.name,
-                  hintText: AppText.enterPackageName,
-
-                ),
-*/
                 CustomLabeledTextField(
                   label: AppText.packageAmount,
                   controller: camNoteController.camPackageAmtController,

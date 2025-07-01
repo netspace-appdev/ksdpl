@@ -139,8 +139,6 @@ class CamNoteService {
       var response = await http.Response.fromStream(streamedResponse);
 
 
-      Helper.ApiRes(getAllPackageMaster, response.body);
-
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

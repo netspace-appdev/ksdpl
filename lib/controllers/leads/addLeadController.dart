@@ -209,6 +209,11 @@ class Addleadcontroller extends GetxController{
 
         createdByWhichEmployee.value=getLeadDetailModel.value?.data?.assignedEmployeeId.toString()??"";
 
+        camNoteController.selectedPackage.value=getLeadDetailModel.value?.data?.packageId??0;
+        camNoteController.camPackageAmtController.text=getLeadDetailModel.value?.data?.packageAmount.toString()??"0";
+        camNoteController.camReceivableAmtController.text=getLeadDetailModel.value?.data?.receiveableAmount.toString()??"0";
+        camNoteController.camTransactionDetailsController.text=getLeadDetailModel.value?.data?.transactionDetails.toString()??"0";
+        camNoteController.camRemarkController.text=getLeadDetailModel.value?.data?.remark.toString()??"0";
 
         camNoteController.getAddIncUniqueLeadApi(uniqueLeadNumber:getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"0");
 
@@ -221,7 +226,7 @@ class Addleadcontroller extends GetxController{
 
 
     } catch (e) {
-
+      print("exception--->${e}");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);

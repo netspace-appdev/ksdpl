@@ -265,27 +265,15 @@ class LeadListController extends GetxController {
       formattedDateTime=td.toString();
 
     }
+    var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
     
     updateLeadStageApiForCall(
       id:leadId.toString(),
       active: leadDDController.selectedStageActive.value.toString(),
       // stage:selectedStage==""?currentLeadStage: selectedStage
-      stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage
+      stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
+      empId: empId
     ).then((_){
-    /*  workOnLeadApi(
-        // id:callStatus=="1"?id.toString():"0",
-        id:id.toString(),
-        leadId: leadId.toString(),
-        leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
-        feedbackRelatedToCall: callFeedbackController.text.trim(),
-        feedbackRelatedToLead: leadFeedbackController.text.trim(),
-        callStatus: callStatus,
-        callDuration: callDuration,
-        callStartTime: callStartTime,
-        callEndTime: callEndTime,
-        callReminder: formattedDateTime,
-        reminderStatus:  isCallReminder.value?"1":"0",
-      ).then((_){*/
 
         SearchLeadController searchLeadController=Get.put(SearchLeadController());
 
@@ -306,9 +294,6 @@ class LeadListController extends GetxController {
         DashboardController dashboardController=Get.find();
         dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
 
-
-
-      /*});*/
     });
 
 
@@ -701,6 +686,7 @@ class LeadListController extends GetxController {
     required id,
     required stage,
     required active,
+    required empId,
 
   }) async {
     try {
@@ -710,7 +696,8 @@ class LeadListController extends GetxController {
       var data = await DrawerApiService.updateLeadStageApi(
           id:id,
           stage: stage,
-          active: active
+          active: active,
+          empId: empId
       );
 
 
@@ -763,7 +750,7 @@ class LeadListController extends GetxController {
     required id,
     required stage,
     required active,
-
+    required empId,
   }) async {
     try {
       isLoading(true);
@@ -772,7 +759,8 @@ class LeadListController extends GetxController {
       var data = await DrawerApiService.updateLeadStageApi(
           id:id,
           stage: stage,
-          active: active
+          active: active,
+          empId: empId
       );
 
 
@@ -1025,10 +1013,12 @@ class LeadListController extends GetxController {
         }else {
 
         }
+        var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
         updateLeadStageNewApi(
             id: leadId,
             stage: leadStageStatus,
-            active: leadDDController.selectedStageActive.value.toString()
+            active: leadDDController.selectedStageActive.value.toString(),
+          empId: empId
         );
 
         isLoading(false);
@@ -1071,7 +1061,7 @@ class LeadListController extends GetxController {
     required id,
     required stage,
     required active,
-
+    required empId,
   }) async {
     try {
       isLoading(true);
@@ -1080,7 +1070,9 @@ class LeadListController extends GetxController {
       var data = await DrawerApiService.updateLeadStageApi(
           id:id,
           stage: stage,
-          active: active
+          active: active,
+        empId: empId,
+
       );
 
 
