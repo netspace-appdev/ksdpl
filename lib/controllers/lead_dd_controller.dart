@@ -22,6 +22,7 @@ import '../services/drawer_api_service.dart';
 import '../services/home_service.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
+import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
 
 class LeadDDController extends GetxController{
   var isLoading=false.obs;
@@ -199,6 +200,48 @@ class LeadDDController extends GetxController{
       activeStatus.value="0";
     }
   }
+  List<stage.Data> getFilteredStagesByLeadStageId(String currentLeadStage) {
+    try {
+      int leadCode = int.tryParse(currentLeadStage) ?? 0;
+
+      print("leadCode passed to filter ===> $leadCode");
+
+      List<int> allowedStageIds;
+
+      switch (leadCode) {
+        case 2:
+        case 3:
+        case 5:
+        case 13:
+          allowedStageIds = [4, 5];
+          break;
+        case 4:
+        case 6:
+        case 7:
+          allowedStageIds = [6, 7];
+          break;
+        default:
+          allowedStageIds = [];
+      }
+
+      final allStages = getAllLeadStageModel.value?.data ?? [];
+
+      final filteredStages = allStages
+          .where((lead) => lead.id != 1 && allowedStageIds.contains(lead.id))
+          .toList();
+
+      print("Allowed IDs for leadCode $leadCode: $allowedStageIds");
+      for (var ele in filteredStages) {
+        print("Filtered stage: ${ele.stageName}");
+      }
+
+      return filteredStages;
+    } catch (e) {
+      print("Error in getFilteredStagesByLeadStageId: $e");
+      return [];
+    }
+  }
+
 
   void  getAllStateApi() async {
     try {

@@ -1012,10 +1012,14 @@ class LeadSearchScreen extends StatelessWidget {
           );
         }else if (label_code == "change_lead_st"){
 
+          final filteredStages = leadDDController.getFilteredStagesByLeadStageId(
+            currentLeadStage.toString(),
+          );
           showFilterDialog(
             context: context,
             leadId: leadId,
-            leadStageId: currentLeadStage
+            leadStageId: currentLeadStage,
+            filteredStages: filteredStages
           );
         } else if (label_code == "cam_note_details") {
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
@@ -1580,7 +1584,9 @@ class LeadSearchScreen extends StatelessWidget {
     required BuildContext context,
     required leadId,
     required leadStageId,
+    required List<stage.Data> filteredStages,
   }) {
+
 
     showDialog(
       context: context,
@@ -1588,6 +1594,9 @@ class LeadSearchScreen extends StatelessWidget {
         Future.microtask(() {
           leadDDController.selectedStage.value = leadStageId;
           leadDDController.changeActiveStatus(leadStageId.toString());
+
+          print("ledaStageid dia--->${leadStageId}");
+          print("ledaStageid dia--->${leadDDController.selectedStage.value}");
         });
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
@@ -1607,8 +1616,8 @@ class LeadSearchScreen extends StatelessWidget {
 
                 SizedBox(height: 10),
 
-
-                Obx((){
+                ///old code
+               /* Obx((){
                   if (leadDDController.isLeadStageLoading.value) {
                     return  Center(child:CustomSkelton.leadShimmerList(context));
                   }
@@ -1642,6 +1651,54 @@ class LeadSearchScreen extends StatelessWidget {
 
 
                       }
+
+                    },
+                  );
+                }),*/
+
+                ///new code
+                Obx((){
+                  if (leadDDController.isLeadStageLoading.value) {
+                    return  Center(child:CustomSkelton.leadShimmerList(context));
+                  }
+
+                  return CustomDropdown<stage.Data>(
+                    items: filteredStages,
+                    getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                    getName: (item) => item.stageName.toString(),
+                    selectedValue: filteredStages.firstWhereOrNull(
+                          (item) => item.id.toString() == leadDDController.selectedStage.value,
+
+                    ),
+                    onChanged: (value) {
+                      leadDDController.selectedStage.value =  value?.id?.toString();
+
+                      if( leadDDController.selectedStage.value!=null){
+                        if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                          leadDDController.selectedStageActive.value = 1;
+
+                        } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                          leadDDController.selectedStageActive.value = 1;
+                          leadListController.isFBDetailsShow.value=true;
+
+                        } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                          leadDDController.selectedStageActive.value = 0;
+                          leadListController.isFBDetailsShow.value=false;
+                        }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                          leadDDController.selectedStageActive.value = 1;
+                          leadListController.isFBDetailsShow.value=true;
+                        } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                          leadDDController.selectedStageActive.value = 0;
+                          leadListController.isFBDetailsShow.value=false;
+                        }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                          leadDDController.selectedStageActive.value = 0;
+                        }else {
+
+                        }
+
+
+                      }
+
 
                     },
                   );
