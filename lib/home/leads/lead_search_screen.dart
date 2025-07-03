@@ -52,7 +52,7 @@ class LeadSearchScreen extends StatelessWidget {
   final _formKey2 = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
   LeadListController leadListController =Get.put(LeadListController());
-  SearchLeadController searchLeadController=Get.put(SearchLeadController());
+  SearchLeadController searchLeadController=Get.find();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());
 
@@ -815,7 +815,8 @@ class LeadSearchScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
 
-
+                        if(lead.leadStage.toString()=="2" || lead.leadStage.toString()=="3" ||  lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="13"
+                        )...[
                           _buildTextButton(
                             label:AppText.changeLeadStatus,
                             context: context,
@@ -826,6 +827,7 @@ class LeadSearchScreen extends StatelessWidget {
                             currentLeadStage: lead.leadStage.toString(),
                             uln: lead.uniqueLeadNumber.toString(),
                           ),
+                          ]
 
                           /*_buildTextButton(
                             label:AppText.addFollowUp,
@@ -1133,7 +1135,7 @@ class LeadSearchScreen extends StatelessWidget {
 
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//phoneNumber,//phoneNumber,//"+919399299880",//phoneNumber
+            phoneNumber:"+919630749382",//phoneNumber,//phoneNumber,//phoneNumber,//"+919399299880",//phoneNumber
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -1616,45 +1618,6 @@ class LeadSearchScreen extends StatelessWidget {
 
                 SizedBox(height: 10),
 
-                ///old code
-               /* Obx((){
-                  if (leadDDController.isLeadStageLoading.value) {
-                    return  Center(child:CustomSkelton.leadShimmerList(context));
-                  }
-
-
-                  return CustomDropdown<stage.Data>(
-                    items: leadDDController.getAllLeadStageModel.value!.data!.where((lead) => lead.id != 1).toList(),
-                    getId: (item) =>item.id.toString(),  // Adjust based on your model structure
-                    getName: (item) => item.stageName.toString(),
-                    selectedValue: leadDDController.getAllLeadStageModel.value?.data?.firstWhereOrNull(
-                          (item) => item.id.toString() == leadDDController.selectedStage.value,
-                    ),
-                    onChanged: (value) {
-                      leadDDController.selectedStage.value =  value?.id?.toString();
-                      if( leadDDController.selectedStage.value!=null){
-                        if (int.parse(leadDDController.selectedStage.value!) == 3) {
-                          leadDDController.selectedStageActive.value = 1;
-                        } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
-                          leadDDController.selectedStageActive.value = 1;
-                        } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
-                          leadDDController.selectedStageActive.value = 0;
-                        }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
-                          leadDDController.selectedStageActive.value = 1;
-                        } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
-                          leadDDController.selectedStageActive.value = 0;
-                        }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
-                          leadDDController.selectedStageActive.value = 0;
-                        }else {
-
-                        }
-
-
-                      }
-
-                    },
-                  );
-                }),*/
 
                 ///new code
                 Obx((){
@@ -1672,34 +1635,6 @@ class LeadSearchScreen extends StatelessWidget {
                     ),
                     onChanged: (value) {
                       leadDDController.selectedStage.value =  value?.id?.toString();
-
-                      if( leadDDController.selectedStage.value!=null){
-                        if (int.parse(leadDDController.selectedStage.value!) == 3) {
-                          leadDDController.selectedStageActive.value = 1;
-
-                        } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
-                          leadDDController.selectedStageActive.value = 1;
-                          leadListController.isFBDetailsShow.value=true;
-
-                        } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
-                          leadDDController.selectedStageActive.value = 0;
-                          leadListController.isFBDetailsShow.value=false;
-                        }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
-                          leadDDController.selectedStageActive.value = 1;
-                          leadListController.isFBDetailsShow.value=true;
-                        } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
-                          leadDDController.selectedStageActive.value = 0;
-                          leadListController.isFBDetailsShow.value=false;
-                        }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
-                          leadDDController.selectedStageActive.value = 0;
-                        }else {
-
-                        }
-
-
-                      }
-
-
                     },
                   );
                 }),
@@ -1716,10 +1651,19 @@ class LeadSearchScreen extends StatelessWidget {
           onSubmit: (){
             if (leadDDController.selectedStage.value!=null || leadDDController.selectedStage.value!="") {
 
-              leadListController.workOnLeadAndStageUpdateApi(
+            /*  leadListController.workOnLeadAndStageUpdateApi(
                 leadId: leadId.toString(),
                 leadStageStatus:leadDDController.selectedStage.value.toString(),
 
+              );*/
+
+              var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+              var isActive = leadListController.changeActiveStatus(leadDDController.selectedStage.value.toString());
+              leadListController.updateLeadStageApiForCall(
+                  id:leadId.toString(),
+                  active: isActive.toString(),
+                  stage:leadDDController.selectedStage.value,
+                  empId: empId.toString()
               );
               leadListController.getFilteredLeadsApi(
                 employeeId: leadListController.eId.value.toString(),

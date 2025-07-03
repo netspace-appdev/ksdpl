@@ -257,7 +257,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  },
                ),
                SizedBox(
-                 height: MediaQuery.of(context).size.height*0.06,
+                 height: 5,
                ),
 
 

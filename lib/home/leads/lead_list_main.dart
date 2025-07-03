@@ -13,6 +13,7 @@ import 'package:lottie/lottie.dart';
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
+import '../../common/storage_service.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
@@ -329,6 +330,7 @@ class LeadListMain extends StatelessWidget {
             itemBuilder: (context, index) {
 
               final lead = leadListController.getAllLeadsModel.value!.data![index];
+              print("lead.id.toString()==${lead.leadStage.toString()}");
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -411,7 +413,7 @@ class LeadListMain extends StatelessWidget {
                             ],
                           ),
 
-                          if(leadListController.leadCode.value=="4" ||leadListController.leadCode.value=="6" )
+                          if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6" )
                             _buildTextButton(
                               label:AppText.openPoll,
                               context: context,
@@ -759,7 +761,7 @@ overflow: TextOverflow.ellipsis,
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber: phoneNumber,//"+919630749382",//phoneNumber,//phoneNumber,//"+919238513910",//"+919201963012",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
+            phoneNumber:"+919630749382",// phoneNumber,//"+919630749382",//phoneNumber,//phoneNumber,//"+919238513910",//"+919201963012",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -916,36 +918,47 @@ overflow: TextOverflow.ellipsis,
                 title: "Are you sure?",
 
                 onYes: () {
-
+                  var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
                   if (label_code == "interested") {
-                    leadListController.workOnLeadAndStageUpdateApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"4",
 
+                    var isActive = leadListController.changeActiveStatus("4");
+                    leadListController.updateLeadStageApiForCall(
+                        id:leadId.toString(),
+                        active: isActive.toString(),
+                        stage:"4",
+                        empId: empId.toString()
                     );
                   } else if (label_code == "not_interested") {
-                    leadListController.workOnLeadAndStageUpdateApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"5",
-
+                    var isActive = leadListController.changeActiveStatus("5");
+                    leadListController.updateLeadStageApiForCall(
+                        id:leadId.toString(),
+                        active: isActive.toString(),
+                        stage:"5",
+                        empId: empId.toString()
                     );
                   } else if (label_code == "doable") {
-                    leadListController.workOnLeadAndStageUpdateApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"6",
-
+                    var isActive = leadListController.changeActiveStatus("6");
+                    leadListController.updateLeadStageApiForCall(
+                        id:leadId.toString(),
+                        active: isActive.toString(),
+                        stage:"6",
+                        empId: empId.toString()
                     );
                   } else if (label_code == "not_doable") {
-                    leadListController.workOnLeadAndStageUpdateApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"7",
-
+                    var isActive = leadListController.changeActiveStatus("7");
+                    leadListController.updateLeadStageApiForCall(
+                        id:leadId.toString(),
+                        active: isActive.toString(),
+                        stage:"7",
+                        empId: empId.toString()
                     );
                   } else if (label_code == "cc") {
-                    leadListController.workOnLeadAndStageUpdateApi(
-                      leadId: leadId.toString(),
-                      leadStageStatus:"13",
-
+                    var isActive = leadListController.changeActiveStatus("13");
+                    leadListController.updateLeadStageApiForCall(
+                        id:leadId.toString(),
+                        active: isActive.toString(),
+                        stage:"13",
+                        empId: empId.toString()
                     );
                   }
                 },

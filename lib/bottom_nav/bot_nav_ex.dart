@@ -9,6 +9,7 @@ import '../controllers/bot_nav_controller.dart';
 import '../controllers/lead_dd_controller.dart';
 import '../controllers/leads/addLeadController.dart';
 import '../controllers/leads/leadlist_controller.dart';
+import '../controllers/leads/seachLeadController.dart';
 import '../controllers/open_poll_filter_controller.dart';
 import '../home/dashboard_screen.dart';
 import '../home/leads/add_lead_screen.dart';
@@ -105,6 +106,8 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
               leadDDController.selectedDistrict.value = null;
               leadDDController.selectedCity.value = null;
               LeadListController leadListController = Get.find();
+              SearchLeadController searchLeadController=Get.put(SearchLeadController());
+              searchLeadController.clearSearchFilter();
               leadListController.filteredGetAllLeadsModel.value=null;
               Get.toNamed("/leadSearchScreen");
             },

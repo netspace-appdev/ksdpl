@@ -266,11 +266,16 @@ class LeadListController extends GetxController {
 
     }
     var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-    
+    ///new code 3 july 2025 for status change in call
+   /* if(callStatus=="0" && currentLeadStage=="13" && isCallReminder.value){
+
+    }else{
+
+    }*/
+    ///new code end
     updateLeadStageApiForCall(
       id:leadId.toString(),
       active: leadDDController.selectedStageActive.value.toString(),
-      // stage:selectedStage==""?currentLeadStage: selectedStage
       stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
       empId: empId
     ).then((_){
@@ -950,6 +955,27 @@ class LeadListController extends GetxController {
     }
   }
 
+  int changeActiveStatus(String leadStageStatus) {
+    int stageId = int.tryParse(leadStageStatus) ?? 0;
+    int selectedStageActive;
+
+    switch (stageId) {
+      case 3:
+      case 4:
+      case 6:
+        selectedStageActive = 1;
+        break;
+      case 5:
+      case 7:
+      case 13:
+        selectedStageActive = 0;
+        break;
+      default:
+        selectedStageActive = 1; // or maybe 0 or null depending on your logic
+    }
+
+    return selectedStageActive;
+  }
 
   Future<void> workOnLeadAndStageUpdateApi({
     required String leadId,

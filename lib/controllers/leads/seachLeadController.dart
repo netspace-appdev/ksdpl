@@ -31,6 +31,12 @@ class SearchLeadController extends GetxController{
     print("on delete list");
     Get.delete<LeadListController>(tag: 'list');
   }*/
+  void clearSearchFilter(){
+    uniqueLeadNumberController.clear();
+    leadMobileNumberController.clear();
+    leadNameController.clear();
+
+  }
 
   @override
   void onClose() {
@@ -52,59 +58,6 @@ class SearchLeadController extends GetxController{
       KsdplBranchId: leadDDController.selectedKsdplBr.value??"0",
     );
   }
-
-
-/*  void  getAllLeadsApi({
-    required String employeeId,
-    required String leadStage,
-    required stateId,
-    required distId,
-    required cityId,
-    required campaign,
-  }) async {
-    try {
-      isLoading(true);
-
-
-      var data = await DrawerApiService.getAllLeadsApi(
-          employeeId:employeeId,
-          leadStage: leadStage,
-          stateId: stateId,
-          distId: distId,
-          cityId: cityId,
-          campaign: campaign,
-        pageNumber:
-      );
-
-
-      if(data['success'] == true){
-
-        getAllLeadsModel.value= GetAllLeadsModel.fromJson(data);
-
-
-        isLoading(false);
-
-      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
-        //  leadStageName2.value=leadStageName.value;
-        getAllLeadsModel.value=null;
-      }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-
-
-    } catch (e) {
-      print("Error getAllLeadsApi: $e");
-
-      ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
-    } finally {
-
-      isLoading(false);
-    }
-  }*/
-
-
 
 
 
