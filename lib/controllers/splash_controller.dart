@@ -25,6 +25,7 @@ class SplashController extends GetxController {
 
 
   void checkTokenAndNavigate() async {
+
     bool isValid = await DashboardApiService.validateToken();
 
     if (isValid) {

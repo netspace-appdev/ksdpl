@@ -889,7 +889,7 @@ class DrawerApiService {
       request.headers.addAll(header);
 
       // Required fields
-      request.fields['Id'] = id;
+      request.fields['Id'] = "0";
       request.fields['LeadId'] = leadId;
       request.fields['LeadStage_Status'] = leadStageStatus;
       request.fields['Lead_Percent'] = leadPercent;
@@ -907,17 +907,6 @@ class DrawerApiService {
       if (callReminder != "string") request.fields['Call_Reminder'] = callReminder ?? "null";
 
       if (feedbackRelatedToCall != "string") request.fields['FeedBack_Related_To_Call'] = feedbackRelatedToCall ?? "null";
-
-      // File Upload: Only attach if file exists
-      /* if (callRecordingPathUrl != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'Call_Recording_PathURL',
-            callRecordingPathUrl.path,
-            contentType: MediaType('image', 'png'), // Adjust based on file type
-          ),
-        );
-      }*/
 
       // Sending request
       var streamedResponse = await request.send();

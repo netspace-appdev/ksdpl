@@ -223,13 +223,16 @@ class DashboardApiService{
   }
 
   static Future<bool> validateToken() async {
+
     try {
+
       var request = http.MultipartRequest(
         'POST',
         Uri.parse(getBreakingNews),
       );
 
       var header = await MyHeader.getHeaders2(); // Includes token
+
       request.headers.addAll(header);
 
       var streamedResponse = await request.send();

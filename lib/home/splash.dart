@@ -65,6 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
   onLoad(){
     var userId=StorageService.get(StorageService.USER_ID);
+    print("userId===>${userId}");
     if(userId!=null){
       SplashController splashController=Get.put(SplashController());
       splashController.checkTokenAndNavigate();

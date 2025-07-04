@@ -230,7 +230,7 @@ class LeadListController extends GetxController {
     String? id,
     required fromWhere,
     required selectedStage,
-  }){
+  }) async{
 
 
     String selectedDate = followDateController.text; // MM/DD/YYYY
@@ -266,14 +266,9 @@ class LeadListController extends GetxController {
 
     }
     var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-    ///new code 3 july 2025 for status change in call
-   /* if(callStatus=="0" && currentLeadStage=="13" && isCallReminder.value){
+    ///old code
 
-    }else{
-
-    }*/
-    ///new code end
-    updateLeadStageApiForCall(
+    /* updateLeadStageApiForCall(
       id:leadId.toString(),
       active: leadDDController.selectedStageActive.value.toString(),
       stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
@@ -299,10 +294,128 @@ class LeadListController extends GetxController {
         DashboardController dashboardController=Get.find();
         dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
 
-    });
+    });*/
 
+    ///old code end
 
+    ///new code 3 july 2025 for status change in call
+    try {
+      // 1. Choose and call appropriate API
+      if (callStatus=="0" && isCallReminder.value==false) {
+        await updateLeadStageApiForCall(
+        id: leadId,
+        active: leadDDController.selectedStageActive.value.toString(),
+        stage: (callStatus == "0" && currentLeadStage == "13")
+            ? currentLeadStage
+            : selectedStage,
+        empId: empId,
+        );
+      } else if (callStatus=="0" && isCallReminder.value==true) {
+        print("see here--->${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
+        await workOnLeadApi(
+          // id:callStatus=="1"?id.toString():"0",
+          id:"0",
+          leadId: leadId.toString(),
+          leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
+          feedbackRelatedToCall: callFeedbackController.text.trim(),
+          feedbackRelatedToLead: leadFeedbackController.text.trim(),
+          callStatus: callStatus,
+          callDuration: callDuration,
+          callStartTime: callStartTime,
+          callEndTime: callEndTime,
+          callReminder: formattedDateTime,
+          reminderStatus:  isCallReminder.value?"1":"0",
+        );
+      }
+      else if (callStatus=="1" && selectedStage=="4") {
+        // Add more if needed
+        await workOnLeadApi(
+          // id:callStatus=="1"?id.toString():"0",
+          id:"0",
+          leadId: leadId.toString(),
+          leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
+          feedbackRelatedToCall: callFeedbackController.text.trim(),
+          feedbackRelatedToLead: leadFeedbackController.text.trim(),
+          callStatus: callStatus,
+          callDuration: callDuration,
+          callStartTime: callStartTime,
+          callEndTime: callEndTime,
+          callReminder: formattedDateTime,
+          reminderStatus:  isCallReminder.value?"1":"0",
+        );
+      }else if (callStatus=="1" && selectedStage=="5") {
+        print("see here--->${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
+        await updateLeadStageApiForCall(
+          id: leadId,
+          active: leadDDController.selectedStageActive.value.toString(),
+          stage: (callStatus == "0" && currentLeadStage == "13")
+              ? currentLeadStage
+              : selectedStage,
+          empId: empId,
+        );
+      }else if (callStatus=="1" && selectedStage=="6") {
+        // Add more if needed
+        await workOnLeadApi(
+          // id:callStatus=="1"?id.toString():"0",
+          id:"0",
+          leadId: leadId.toString(),
+          leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
+          feedbackRelatedToCall: callFeedbackController.text.trim(),
+          feedbackRelatedToLead: leadFeedbackController.text.trim(),
+          callStatus: callStatus,
+          callDuration: callDuration,
+          callStartTime: callStartTime,
+          callEndTime: callEndTime,
+          callReminder: formattedDateTime,
+          reminderStatus:  isCallReminder.value?"1":"0",
+        );
+      }else if (callStatus=="1" && selectedStage=="7") {
+        print("see here--->${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
+        await updateLeadStageApiForCall(
+          id: leadId,
+          active: leadDDController.selectedStageActive.value.toString(),
+          stage: (callStatus == "0" && currentLeadStage == "13")
+              ? currentLeadStage
+              : selectedStage,
+          empId: empId,
+        );
+      }
+
+      // 2. Then call common actions
+      await callPostLeadUpdateAPIs();
+    } catch (e) {
+      print("Error in lead update: $e");
+    }
+    ///new code end
   }
+
+  Future<void> callPostLeadUpdateAPIs() async {
+    // You can even extract these as services if it grows further
+    final SearchLeadController searchLeadController = Get.put(SearchLeadController());
+
+    await getFilteredLeadsApi(
+      employeeId: eId.value.toString(),
+      leadStage: selectedPrevStage.value ?? "0",
+      stateId: leadDDController.selectedState.value ?? "0",
+      distId: leadDDController.selectedDistrict.value ?? "0",
+      cityId: leadDDController.selectedCity.value ?? "0",
+      campaign: leadDDController.selectedCampaign.value ?? "",
+      fromDate: fromDateController.value.text.isEmpty
+          ? ""
+          : Helper.convertToIso8601(fromDateController.value.text),
+      toDate: toDateController.value.text.isEmpty
+          ? ""
+          : Helper.convertToIso8601(toDateController.value.text),
+      branch: leadDDController.selectedKsdplBr.value ?? "0",
+      uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
+      leadMobileNumber: searchLeadController.leadMobileNumberController.text,
+      leadName: searchLeadController.leadNameController.text,
+    );
+
+    final DashboardController dashboardController = Get.find();
+    await dashboardController.getRemindersApi(employeeId: getEmployeeModel!.data!.id.toString());
+  }
+
 
 
   void onlyFollowupSubmit({
@@ -489,7 +602,7 @@ class LeadListController extends GetxController {
 
 
 ///new code for filter
-  void getFilteredLeadsApi({
+  Future<void> getFilteredLeadsApi({
     required String employeeId,
     required String leadStage,
     required stateId,

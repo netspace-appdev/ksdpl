@@ -105,23 +105,31 @@ class CallService {
       print("✅ Call was connected and lasted ${lastCall.duration} seconds. which is ${callDuration} ");
       print("✅ callStartTime ${callStartTime} seconds. ");
       print("✅ callEndTime ${callEndTime} seconds. ");
-      print("Good");
+      print("Good===>1");
       leadListController.callFeedbackController.clear();
+      print("Good===>2");
       leadListController.leadFeedbackController.clear();
+      print("Good===>3");
       DateTime now = DateTime.now();
+      print("Good===>4");
       var td=DateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(now);
+      print("Good===>5");
       leadListController.isCallReminder.value =false;
+      print("Good===>6");
       var formattedDateTime=td.toString();
+      print("Good===>7");
       if (lastCall.duration! > 0) {
+        print("Good===>8");
         leadListController.workOnLeadApi(
           leadId: leadId.toString(),
-          leadStageStatus: currentLeadStage,
+          leadStageStatus:currentLeadStage=="2"?"3": currentLeadStage,
           callStatus: "1",
           callDuration: callDuration,
           callStartTime: callStartTime,
           callEndTime: callEndTime,
           callReminder: formattedDateTime,
         ).then((_){
+          print("Good===>9");
           print("lead state before===>${currentLeadStage}");
           print("lead state after===>${leadListController.workOnLeadModel!.data!.leadStageStatus}");
           showFeedbackDialog(
@@ -137,17 +145,20 @@ class CallService {
 
 
       } else {
+        print("Good===>10");
         leadListController.couldNotController.text="Could not Connect";
+        print("Good===>11");
         print("lead state not connnected===>${currentLeadStage}");
         leadListController.workOnLeadApi(
           leadId: leadId.toString(),
-          leadStageStatus: currentLeadStage,
+          leadStageStatus: (currentLeadStage=="2" || currentLeadStage=="3")?"3":leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),
           callStatus: "0",
           callDuration: callDuration,
           callStartTime: callStartTime,
           callEndTime: callEndTime,
           callReminder: formattedDateTime,
         ).then((_){
+          print("Good===>12");
           showFeedbackDialog(
             leadId: leadId,
             currentLeadStage: (currentLeadStage=="2" || currentLeadStage=="3")?"13":leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),

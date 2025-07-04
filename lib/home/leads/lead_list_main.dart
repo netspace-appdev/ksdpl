@@ -435,12 +435,12 @@ class LeadListMain extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
                         children: [
-                          _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString()),
-                          _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
-                          _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  "),
-                          _buildDetailRow("Status", lead.stageName.toString()??""),
+                          _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString(), lead.leadStage),
+                          _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString(),lead.leadStage),
+                          _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  ",lead.leadStage),
+                          _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage),
                           if(lead.leadStage==4)
-                            _buildDetailRow("Cam Note Count", lead.camNoteCount.toString()??"0"),
+                            _buildDetailRow("Cam Note Count", lead.camNoteCount.toString()??"0",lead.leadStage),
 
                         ],
                       ),
@@ -493,7 +493,7 @@ class LeadListMain extends StatelessWidget {
                       mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        if(leadListController.leadCode.value=="4")...[
+                        if(lead.leadStage.toString()=="4")...[
 
 
                           _buildTextButton(
@@ -515,7 +515,7 @@ class LeadListMain extends StatelessWidget {
                               uln: lead.uniqueLeadNumber.toString()
                           )
                         ]
-                        else if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="13" || leadListController.leadCode.value=="3" )...[
+                        else if(lead.leadStage.toString()=="2" || lead.leadStage.toString()=="13" || lead.leadStage.toString()=="3" )...[
 
                           _buildTextButton(
                             label:AppText.interested,
@@ -544,7 +544,7 @@ class LeadListMain extends StatelessWidget {
                     Row(
                       mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
                       children: [
-                        if(leadListController.leadCode.value=="2" || leadListController.leadCode.value=="3" )...[
+                        if(lead.leadStage.toString()=="2" || lead.leadStage.toString()=="3" )...[
 
                           _buildTextButton(
                             label:AppText.couldntConneect,
@@ -574,7 +574,7 @@ class LeadListMain extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        if(leadListController.leadCode.value=="4" )
+                        if(lead.leadStage.toString()=="4" )
                           _buildTextButton(
                             label:AppText.fillLeadForm,
                             context: context,
@@ -585,8 +585,8 @@ class LeadListMain extends StatelessWidget {
                             currentLeadStage: lead.leadStage.toString(),
                               uln: lead.uniqueLeadNumber.toString()
                           ),
-                        if(leadListController.leadCode.value=="4" || leadListController.leadCode.value=="6" ||leadListController.leadCode.value=="0" ||
-                            leadListController.leadCode.value=="5" || leadListController.leadCode.value=="7"
+                        if(lead.leadStage.toString()=="4" || lead.leadStage.toString()=="6" ||lead.leadStage.toString()=="0" ||
+                            lead.leadStage.toString()=="5" || lead.leadStage.toString()=="7"
                         )...[
                           _buildTextButton(
                             label:AppText.addFollowUp,
@@ -604,7 +604,7 @@ class LeadListMain extends StatelessWidget {
                     ),
 
 
-                    if(leadListController.leadCode.value=="6" )
+                    if(lead.leadStage.toString()=="6" )
                       Column(
                       children: [
                         SizedBox(height: 10),
@@ -612,7 +612,7 @@ class LeadListMain extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                            if(leadListController.leadCode.value=="6" )
+                            if(lead.leadStage.toString()=="6" )
                               _buildTextButton(
                                 label:AppText.loanApplicationForm,
                                 context: context,
@@ -631,7 +631,7 @@ class LeadListMain extends StatelessWidget {
 
                     SizedBox(height: 10),
 
-                    if(lead.leadStage==4 )
+                    if(lead.leadStage.toString()=="4" )
                       _buildTextButton(
                           label:"Cam Note Details",
                           context: context,
@@ -694,8 +694,8 @@ class LeadListMain extends StatelessWidget {
     });
   }
 
-  Widget _buildDetailRow(String label, String value) {
-
+  Widget _buildDetailRow(String label, String value, leadStage) {
+    print("leadStage=======>${leadStage}");
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -726,14 +726,14 @@ class LeadListMain extends StatelessWidget {
             child: Text(
              "${value}",
 overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: AppColor.primaryColor),
+              style: TextStyle(color:  AppColor.primaryColor),
             ),
           ):
           Expanded(
             child: Text(
               label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ": ${value}",
 
-              style: TextStyle(color: Colors.black87),
+              style: const TextStyle(color:Colors.black87),
             ),
           ),
         ],
@@ -761,7 +761,7 @@ overflow: TextOverflow.ellipsis,
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:"+919630749382",// phoneNumber,//"+919630749382",//phoneNumber,//phoneNumber,//"+919238513910",//"+919201963012",//phoneNumber,//"+919399299880",//phoneNumber //"+919179317427"
+            phoneNumber:phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
