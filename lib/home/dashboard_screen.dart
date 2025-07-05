@@ -1571,7 +1571,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                       CallService callService = CallService();
                                       callService.makePhoneCall(
-                                        phoneNumber: data.leadMobileNo.toString(),
+                                        phoneNumber: data.leadMobileNo.toString(),//data.leadMobileNo.toString(),
                                         leadId: data.leadId.toString(),
                                         currentLeadStage: data.leadStageStatus.toString(),
                                         context: context,
@@ -1634,40 +1634,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 Helper.convertDateTime(data.callReminder.toString()),
                               ),
 
-                            /*  SizedBox(height: 10,),
 
-                              /// Call Now button
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColor.secondaryColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                ),
-                                icon: const Icon(Icons.phone,color: AppColor.appWhite),
-                                label:  Text(
-                                  "Call Now",
-                                  style: TextStyle(fontSize: 14, color: AppColor.appWhite),
-                                ),
-                                onPressed: () {
-                                  leadListController.isFBDetailsShow.value = false;
-                                  leadListController.followDateController.text = "";
-                                  leadListController.followTimeController.text = "";
-                                  leadDDController.selectedStage.value = data.leadStageStatus.toString();
-                                  leadListController.leadCode.value =
-                                      leadDDController.selectedStage.value ?? "0";
-
-                                  CallService callService = CallService();
-                                  callService.makePhoneCall(
-                                    phoneNumber: data.leadMobileNo.toString(),
-                                    leadId: data.leadId.toString(),
-                                    currentLeadStage: data.leadStageStatus.toString(),
-                                    context: context,
-                                    showFeedbackDialog: showCallFeedbackDialog,
-                                  );
-                                },
-                              ),*/
                             ],
                           ),
                         );
@@ -2065,34 +2032,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             if (leadDDController.isLeadStageLoading.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
                             }
-                            int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
 
-                            // Allowed stage IDs based on leadCode
-                            List<int> allowedStageIds = [];
-
-                            if (leadCode == 2) {
-                              allowedStageIds = [4, 5];
-                            }else if (leadCode == 3) {
-                              allowedStageIds = [4, 5,];
-                            } else if (leadCode == 4) {
-                              allowedStageIds = [6, 7,];
-                            }else if (leadCode == 5) {
-                              allowedStageIds = [4, 5,];
-                            }else if (leadCode == 6) {
-                              allowedStageIds = [6, 7];
-                            }else if (leadCode == 7) {
-                              allowedStageIds = [6, 7];
-                            }else if (leadCode == 13) {
-                              allowedStageIds = [4, 5,];
-                            } else {
-                              allowedStageIds = [4,5]; // Default to all or handle as needed
-                            }
-
-                            List<stage.Data> filteredStages = leadDDController
-                                .getAllLeadStageModel.value!.data!
-                                .where((lead) =>
-                            lead.id != 1 && allowedStageIds.contains(lead.id))
-                                .toList();
+                            final filteredStages = leadDDController.getFilteredStagesByLeadStageId(
+                              currentLeadStage.toString(),
+                            );
 
                             return CustomDropdown<stage.Data>(
                               items: filteredStages,

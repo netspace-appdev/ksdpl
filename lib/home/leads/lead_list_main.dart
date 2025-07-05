@@ -435,12 +435,12 @@ class LeadListMain extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
                         children: [
-                          _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString(), lead.leadStage),
-                          _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString(),lead.leadStage),
-                          _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  ",lead.leadStage),
-                          _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage),
+                          _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString(), lead.leadStage??0),
+                          _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString(),lead.leadStage??0),
+                          _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  ",lead.leadStage??0),
+                          _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage??0),
                           if(lead.leadStage==4)
-                            _buildDetailRow("Cam Note Count", lead.camNoteCount.toString()??"0",lead.leadStage),
+                            _buildDetailRow("Cam Note Count", lead.camNoteCount.toString()??"0",lead.leadStage??0),
 
                         ],
                       ),
@@ -694,7 +694,7 @@ class LeadListMain extends StatelessWidget {
     });
   }
 
-  Widget _buildDetailRow(String label, String value, leadStage) {
+  Widget _buildDetailRow(String label, String value, int leadStage) {
     print("leadStage=======>${leadStage}");
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -729,11 +729,13 @@ overflow: TextOverflow.ellipsis,
               style: TextStyle(color:  AppColor.primaryColor),
             ),
           ):
+          leadStage==3 && label=="Status"?
+          StatusChip(label: value, color: Colors.orange):
           Expanded(
             child: Text(
               label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ": ${value}",
 
-              style: const TextStyle(color:Colors.black87),
+              style:  TextStyle(color:Colors.black87),
             ),
           ),
         ],
@@ -1717,3 +1719,21 @@ overflow: TextOverflow.ellipsis,
   }
 }
 
+class StatusChip extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  StatusChip({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColor.greenColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(label, style: TextStyle(color: AppColor.appWhite, fontSize: 12)),
+    );
+  }
+}

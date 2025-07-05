@@ -365,6 +365,10 @@ class DashboardApiService{
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      /*Helper.ApiReq(getReminderCallListTodayAndTomorrow, request.fields);
+      Helper.ApiRes(getReminderCallListTodayAndTomorrow, response.body);*/
+
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

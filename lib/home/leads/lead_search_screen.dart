@@ -1306,16 +1306,10 @@ class LeadSearchScreen extends StatelessWidget {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
                             }
 
-
-
-                            print("currentLeadStage we need it=======>${currentLeadStage}");
-                            print("filteredleadCode we need it=======>${leadListController.filteredleadCode.value}");
-
                             final filteredStages = leadDDController.getFilteredStagesByLeadStageId(
                               currentLeadStage.toString(),
                             );
 
-                            print("filteredStages we need it=======>${filteredStages.toString()}");
                             // Allowed stage IDs based on leadCode
 
                             return CustomDropdown<stage.Data>(

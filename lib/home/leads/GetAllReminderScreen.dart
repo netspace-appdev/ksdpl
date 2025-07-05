@@ -383,7 +383,7 @@ class GetAllReminderScreen extends StatelessWidget {
         leadListController.leadCode.value=temp;
         CallService callService = CallService();
         callService.makePhoneCall(
-          phoneNumber:leadMobileNo.toString(),//leadMobileNo.toString(),//leadMobileNo.toString(),//"+919399299880"
+          phoneNumber:leadMobileNo.toString(),//leadMobileNo.toString(),//leadMobileNo.toString(),//leadMobileNo.toString(),//"+919399299880"
           leadId:  leadId.toString(),
           currentLeadStage:  leadStageStatus.toString(),
           context: context,
@@ -686,7 +686,7 @@ class GetAllReminderScreen extends StatelessWidget {
                             if (leadDDController.isLeadStageLoading.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
                             }
-                            int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
+                            /*int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
 
                             // Allowed stage IDs based on leadCode
                             List<int> allowedStageIds = [];
@@ -714,7 +714,14 @@ class GetAllReminderScreen extends StatelessWidget {
                                 .where((lead) =>
                             lead.id != 1 && allowedStageIds.contains(lead.id))
                                 .toList();
+                           */ print("currentLeadStage we need it=======>${currentLeadStage}");
+                            print("filteredleadCode we need it=======>${leadListController.filteredleadCode.value}");
 
+                            final filteredStages = leadDDController.getFilteredStagesByLeadStageId(
+                              currentLeadStage.toString(),
+                            );
+
+                            print("filteredStages we need it=======>${filteredStages.toString()}");
                             return CustomDropdown<stage.Data>(
                               items: filteredStages,
                               getId: (item) =>item.id.toString(),  // Adjust based on your model structure
