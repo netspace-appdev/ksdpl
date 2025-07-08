@@ -27,6 +27,8 @@ class CamNoteService {
   static const String getCamNoteDetailById = BaseUrl.baseUrl + 'CamNoteDetail/GetCamNoteDetailById';
   static const String editCamNoteDetail = BaseUrl.baseUrl + 'CamNoteDetail/EditCamNoteDetail';
   static const String getPackageDetailsById = BaseUrl.baseUrl + 'CamNoteDetail/GetPackageDetailsById';
+  static const String fetchBankDetailBySegmentIdAndKSDPLProductId = BaseUrl.baseUrl + 'ProductList/FetchBankDetailBySegmentIdAndKSDPLProductId';
+  static const String GetProductDetailBySegmentAndProduct = BaseUrl.baseUrl + 'ProductList/GetProductDetailBySegmentAndProduct';
 
 
 
@@ -345,7 +347,6 @@ class CamNoteService {
     String? LoanSegment,
     String? LoanProduct,
     String? OfferedSecurityType,
-    String? GeoLocationOfProperty,
     String? IncomeType,
     String? EarningCustomerAge,
     String? NonEarningCustomerAge,
@@ -359,12 +360,14 @@ class CamNoteService {
     String? FOIR,
     String? LTV,
     String? BranchOfBank,
-    String? GeoLocationOfResidence,
+    String? SanctionProcessingCharges,
+
+   /* String? GeoLocationOfResidence,
     String? GeoLocationOfOffice,
+    String? GeoLocationOfProperty,
     List<File>? PhotosOfProperty,
     List<File>? PhotosOfResidence,
-    List<File>? PhotosOfOffice,
-    String? SanctionProcessingCharges,
+    List<File>? PhotosOfOffice,*/
 
   }) async {
     try {
@@ -396,7 +399,7 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanSegment', LoanSegment,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanProduct', LoanProduct,fallback: "0");
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'OfferedSecurityType', OfferedSecurityType);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfProperty', GeoLocationOfProperty);
+
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'IncomeType', IncomeType);
 
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'EarningCustomerAge', EarningCustomerAge,fallback: "0");
@@ -411,21 +414,23 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'FOIR', FOIR,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'LTV', LTV,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'BranchOfBank', BranchOfBank,fallback: "0");
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfResidence', GeoLocationOfResidence);
+
+
+    /*  MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfResidence', GeoLocationOfResidence);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfProperty', GeoLocationOfProperty);*/
 
 
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'SanctionProcessingCharges', SanctionProcessingCharges,fallback: "0");
 
-
+/*
     if(PhotosOfProperty!=null ||PhotosOfProperty!.isNotEmpty ){
       // 📸 Add multiple images for "PhotosOfProperty"
       for (int i = 0; i < PhotosOfProperty.length; i++) {
         var file = await http.MultipartFile.fromPath(
           'PhotosOfProperty',
           PhotosOfProperty[i].path,
-         /* contentType: MediaType('image', 'jpeg'), // adjust if needed*/
+         *//* contentType: MediaType('image', 'jpeg'), // adjust if needed*//*
         );
         request.files.add(file);
       }
@@ -436,7 +441,7 @@ class CamNoteService {
           var file = await http.MultipartFile.fromPath(
             'PhotosOfResidence',
             PhotosOfResidence[i].path,
-            /* contentType: MediaType('image', 'jpeg'), // adjust if needed*/
+            *//* contentType: MediaType('image', 'jpeg'), // adjust if needed*//*
           );
           request.files.add(file);
         }
@@ -448,11 +453,11 @@ class CamNoteService {
           var file = await http.MultipartFile.fromPath(
             'PhotosOfOffice',
             PhotosOfOffice[i].path,
-            /* contentType: MediaType('image', 'jpeg'), // adjust if needed*/
+            *//* contentType: MediaType('image', 'jpeg'), // adjust if needed*//*
           );
           request.files.add(file);
         }
-      }
+      }*/
 
       var streamedResponse = await request.send();
 
@@ -714,7 +719,7 @@ class CamNoteService {
     String? LoanSegment,
     String? LoanProduct,
     String? OfferedSecurityType,
-    String? GeoLocationOfProperty,
+
     String? IncomeType,
     String? EarningCustomerAge,
     String? NonEarningCustomerAge,
@@ -728,13 +733,14 @@ class CamNoteService {
     String? FOIR,
     String? LTV,
     String? BranchOfBank,
+    String? SanctionProcessingCharges,
+
+    /*String? GeoLocationOfProperty,
     String? GeoLocationOfResidence,
     String? GeoLocationOfOffice,
     String? PhotosOfProperty,
     String? PhotosOfResidence,
-    String? PhotosOfOffice,
-    String? SanctionProcessingCharges,
-
+    String? PhotosOfOffice,*/
   }) async {
     try {
       var request = http.MultipartRequest(
@@ -765,7 +771,7 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanSegment', LoanSegment,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanProduct', LoanProduct,fallback: "0");
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'OfferedSecurityType', OfferedSecurityType);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfProperty', GeoLocationOfProperty);
+
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'IncomeType', IncomeType);
 
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'EarningCustomerAge', EarningCustomerAge,fallback: "0");
@@ -780,10 +786,9 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'FOIR', FOIR,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'LTV', LTV,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'BranchOfBank', BranchOfBank,fallback: "0");
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfResidence', GeoLocationOfResidence);
+  /*    MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfResidence', GeoLocationOfResidence);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
-
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfProperty', GeoLocationOfProperty);*/
 
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'SanctionProcessingCharges', SanctionProcessingCharges,fallback: "0");
 
@@ -836,6 +841,80 @@ class CamNoteService {
       throw Exception('Error: $e');
     }
   }
+
+
+
+  static Future<Map<String, dynamic>> fetchBankDetailBySegmentIdAndKSDPLProductIdApi({
+    required String segmentVerticalId,
+    required String KSDPLProductId,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(fetchBankDetailBySegmentIdAndKSDPLProductId),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'SegmentVerticalId', segmentVerticalId, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'KSDPLProductId', KSDPLProductId, fallback: "0");
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(fetchBankDetailBySegmentIdAndKSDPLProductId, request.fields);
+      Helper.ApiRes(fetchBankDetailBySegmentIdAndKSDPLProductId, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error: $e');
+    }
+  }
+
+
+
+
+  static Future<Map<String, dynamic>> getProductDetailBySegmentAndProductApi({
+    required String segmentVerticalId,
+    required String kSDPLProductId,
+    required String bankId,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(fetchBankDetailBySegmentIdAndKSDPLProductId),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'SegmentVerticalId', segmentVerticalId, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'KSDPLProductId', kSDPLProductId, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'BankId', bankId, fallback: "0");
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(fetchBankDetailBySegmentIdAndKSDPLProductId, request.fields);
+      Helper.ApiRes(fetchBankDetailBySegmentIdAndKSDPLProductId, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error: $e');
+    }
+  }
+
   static void printInChunks(String text, {int chunkSize = 2048}) {
     final pattern = RegExp('.{1,$chunkSize}', dotAll: true);
     for (final match in pattern.allMatches(text)) {

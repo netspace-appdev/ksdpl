@@ -110,7 +110,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                                           onTap:
 
                                           (camNoteController.currentStep.value==0 && camNoteController.selectedPackage.value!=null && camNoteController.camTransactionDetailsController.text.isEmpty )?(){
-                                            ToastMessage.msg("Please enter package's transaction details first");
+                                            ToastMessage.msg("Please enter package's UTR first");
                                           }:
 
                                               () => camNoteController.jumpToStep(index),
@@ -210,7 +210,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                                       ElevatedButton(
                                         onPressed:
                                         (camNoteController.currentStep.value==0 && camNoteController.selectedPackage.value!=null && camNoteController.camTransactionDetailsController.text.isEmpty )?(){
-                                          ToastMessage.msg("Please enter package's transaction details first");
+                                          ToastMessage.msg("Please enter package's UTR first");
                                         }:
                                         camNoteController.currentStep.value < 3
                                             ? ()=>camNoteController.nextStep(camNoteController.currentStep.value)

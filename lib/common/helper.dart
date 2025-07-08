@@ -705,8 +705,8 @@ class AppText{
   static const String enterReceivableAmount = "Enter Receivable Amount";
   static const String receivableDate = "Receivable Date";
   static const String enterReceivableDate  = "Enter Receivable Date";
-  static const String transactionDetails  = "Transaction Details";
-  static const String enterTransactionDetails  = "Enter Transaction Details";
+  static const String transactionDetails  = "UTR";
+  static const String enterTransactionDetails  = "Enter UTR";
   static const String remark  = "Remark";
   static const String enterRemark  = "Enter Remark";
   static const String enterZipcode  = "Please Add Zipcode in Step 1";

@@ -28,9 +28,11 @@ import '../../models/camnote/GetBankerDetailsByIdModel.dart';
 import '../../models/camnote/GetCamNoteDetailByIdModeli.dart';
 import '../../models/camnote/GetCamNoteLeadIdModel.dart';
 import '../../models/camnote/GetPackageDetailsByIdModel.dart';
+import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart';
 import '../../models/camnote/GetProductDetailsByFilterModel.dart';
 import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
+import '../../models/camnote/fetchBankDetailSegKSDPLProdModel.dart';
 import '../../models/camnote/special_model/IncomeModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
@@ -83,6 +85,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var generateCibilAadharModel = Rxn<GenerateCibilAadharModel>(); //
   var addCibilDetailsModel = Rxn<AddCibilDetailsModel>(); //
   var editCamNoteDetail = Rxn<AddCamNoteDetail>(); //
+  var fetchBankDetailSegKSDPLProdModel = Rxn<FetchBankDetailSegKSDPLProdModel>(); //
+  var getProductDetailBySegmentAndProductModel = Rxn<GetProductDetailBySegmentAndProductModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
 
 
@@ -408,10 +412,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   void nextStep(int tappedIndex) {
     if (currentStep.value < 2) {
       currentStep.value++;
-      if(currentStep.value==2){
+     /* if(currentStep.value==2){
 
         forBankDetailSubmit();
-      }
+      }*/
       scrollToStep(currentStep.value);
     }
 
@@ -440,9 +444,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     currentStep.value = step;
 
-    if(currentStep.value==2){
+   /* if(currentStep.value==2){
       forBankDetailSubmit();
-    }
+    }*/
     scrollToStep(step);
   }
 
@@ -466,7 +470,21 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   void saveForm() async {
     print("Form Saved!");
 
-    if(selectedBankers.isEmpty){
+    if(camFullNameController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
+    }else if(camDobController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter DOB");
+    }else if(camPhoneController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
+    }else if(selectedGender.value==null){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
+    }else if(camLoanAmtReqController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Amount");
+    }else if(camSelectedProdSegment.value==null ||  camSelectedProdSegment.value==0){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Segment");
+    }else if(camSelectedProdType.value==null || camSelectedProdType.value=="0"){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter KSDPL Product");
+    }else if(selectedBankers.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select a bank first");
     }else{
       isAllCamnoteSubmit(true);
@@ -493,6 +511,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         ToastMessage.msg("Please select gender");
       }else {
         Addleadcontroller addLeadController =Get.find();
+// Now call API with extracted values
+
+        List<File> propertyPhotos = getImages("property_photo");
+        List<File> residencePhotos = getImages("residence_photo");
+        List<File> officePhotos = getImages("office_photo");
 
         await addLeadController.fillLeadFormApi(
           id: getLeadId.value.toString(),
@@ -530,6 +553,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           remark:camRemarkController.text.toString(),
           leadSegment:camSelectedProdSegment.value.toString(),
 
+          GeoLocationOfProperty:camGeoLocationPropertyLatController.text.trim().toString()+"-"+camGeoLocationPropertyLongController.text.trim().toString(),
+          GeoLocationOfResidence:camGeoLocationResidenceLatController.text.trim().toString()+"-"+camGeoLocationResidenceLongController.text.trim().toString(),
+          GeoLocationOfOffice:camGeoLocationOfficeLatController.text.trim().toString()+"-"+camGeoLocationOfficeLongController.text.trim().toString(),
+          PhotosOfProperty: propertyPhotos??[],
+          PhotosOfResidence: residencePhotos??[],
+          PhotosOfOffice: officePhotos??[],
         );
       }
 
@@ -558,12 +587,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
             } else {
               print("No branchId stored yet for bankId: $bankId");
             }
-// Now call API with extracted values
-
-            List<File> propertyPhotos = getImages("property_photo");
-            List<File> residencePhotos = getImages("residence_photo");
-            List<File> officePhotos = getImages("office_photo");
-
 
 
             addCamNoteDetailApi(
@@ -578,12 +601,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               TotalOverdueCasesAsPerCibil:camTotalOverdueCasesController.text.trim().toString(),
               TotalOverdueAmountAsPerCibil:camTotalOverdueAmountController.text.trim().toString(),
               TotalEnquiriesMadeAsPerCibil:camTotalEnquiriesController.text.trim().toString(),
-              GeoLocationOfProperty:camGeoLocationPropertyLatController.text.trim().toString()+"-"+camGeoLocationPropertyLongController.text.trim().toString(),
-              GeoLocationOfResidence:camGeoLocationResidenceLatController.text.trim().toString()+"-"+camGeoLocationResidenceLongController.text.trim().toString(),
-              GeoLocationOfOffice:camGeoLocationOfficeLatController.text.trim().toString()+"-"+camGeoLocationOfficeLongController.text.trim().toString(),
-              PhotosOfProperty: propertyPhotos??[],
-              PhotosOfResidence: residencePhotos??[],
-              PhotosOfOffice: officePhotos??[],
+
               IncomeType: selectedCamIncomeTypeList.value.toString(),
               EarningCustomerAge: camEarningCustomerAgeController.text.trim().toString(),
               NonEarningCustomerAge: camNonEarningCustomerAgeController.text.trim().toString(),
@@ -1298,12 +1316,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           TotalOverdueCasesAsPerCibil:dataNew.totalOverdueCasesAsPerCibil.toString(),
           TotalOverdueAmountAsPerCibil:dataNew.totalOverdueAmountAsPerCibil.toString(),
           TotalEnquiriesMadeAsPerCibil:dataNew.totalEnquiriesMadeAsPerCibil.toString(),
-          GeoLocationOfProperty:dataNew.geoLocationOfProperty,
+          /*GeoLocationOfProperty:dataNew.geoLocationOfProperty,
           GeoLocationOfResidence:dataNew.geoLocationOfResidence,
           GeoLocationOfOffice:dataNew.geoLocationOfOffice.toString(),
           PhotosOfProperty: dataNew.photosOfProperty.toString(),
           PhotosOfResidence: dataNew.photosOfResidence.toString(),
-          PhotosOfOffice: dataNew.photosOfOffice.toString(),
+          PhotosOfOffice: dataNew.photosOfOffice.toString(),*/
           IncomeType: dataNew.incomeType.toString(),
           EarningCustomerAge: dataNew.earningCustomerAge.toString(),
           NonEarningCustomerAge: dataNew.nonEarningCustomerAge.toString(),
@@ -1472,7 +1490,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         LoanSegment: LoanSegment,
         LoanProduct: LoanProduct,
         OfferedSecurityType: OfferedSecurityType,
-        GeoLocationOfProperty: GeoLocationOfProperty,
+
         IncomeType: IncomeType,
         EarningCustomerAge: EarningCustomerAge,
         NonEarningCustomerAge: NonEarningCustomerAge,
@@ -1486,11 +1504,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         FOIR: FOIR,
         LTV: LTV,
         BranchOfBank: BranchOfBank,
-        GeoLocationOfResidence: GeoLocationOfResidence,
-        GeoLocationOfOffice: GeoLocationOfOffice,
-        PhotosOfProperty: PhotosOfProperty,
-        PhotosOfResidence: PhotosOfResidence,
-        PhotosOfOffice: PhotosOfOffice,
         SanctionProcessingCharges: SanctionProcessingCharges,
       );
 
@@ -1980,7 +1993,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? LoanSegment,
     String? LoanProduct,
     String? OfferedSecurityType,
-    String? GeoLocationOfProperty,
     String? IncomeType,
     String? EarningCustomerAge,
     String? NonEarningCustomerAge,
@@ -1994,13 +2006,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? FOIR,
     String? LTV,
     String? BranchOfBank,
-    String? GeoLocationOfResidence,
+   /* String? GeoLocationOfResidence,
     String? GeoLocationOfOffice,
-    String? SanctionProcessingCharges,
+    String? GeoLocationOfProperty,
     String? PhotosOfProperty,
     String? PhotosOfResidence,
-    String? PhotosOfOffice,
-
+    String? PhotosOfOffice,*/
+    String? SanctionProcessingCharges,
   }) async {
     try {
 
@@ -2026,7 +2038,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         LoanSegment: LoanSegment,
         LoanProduct: LoanProduct,
         OfferedSecurityType: OfferedSecurityType,
-        GeoLocationOfProperty: GeoLocationOfProperty,
+
         IncomeType: IncomeType,
         EarningCustomerAge: EarningCustomerAge,
         NonEarningCustomerAge: NonEarningCustomerAge,
@@ -2040,11 +2052,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         FOIR: FOIR,
         LTV: LTV,
         BranchOfBank: BranchOfBank,
+       /* GeoLocationOfProperty: GeoLocationOfProperty,
         GeoLocationOfResidence: GeoLocationOfResidence,
         GeoLocationOfOffice: GeoLocationOfOffice,
         PhotosOfProperty: PhotosOfProperty,
         PhotosOfResidence: PhotosOfResidence,
-        PhotosOfOffice: PhotosOfOffice,
+        PhotosOfOffice: PhotosOfOffice,*/
         SanctionProcessingCharges: SanctionProcessingCharges,
       );
 
@@ -2105,10 +2118,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         final cibilPackages = getPackageDetailsByIdModel.value!.data?.where((d) => d.isCibilService).toList();
 
         if(cibilPackages!.isEmpty){
-          print("cibil not exist--.");
+
           isGenerateCibilVisible.value=false;
         }else{
-          print("cibil  exist--.");
+
           isGenerateCibilVisible.value=true;
         }
 
@@ -2120,6 +2133,99 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
         getPackageDetailsByIdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getPackageDetailsByIdApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isBankerSuperiorLoading(false);
+    } finally {
+
+
+      isBankerSuperiorLoading(false);
+    }
+  }
+
+
+
+  Future<void>  fetchBankDetailBySegmentIdAndKSDPLProductIdApi({
+    required String segmentVerticalId,
+    required String KSDPLProductId,
+  }) async {
+    try {
+
+      isBankerSuperiorLoading(true);
+
+
+      var data = await CamNoteService.fetchBankDetailBySegmentIdAndKSDPLProductIdApi(
+          segmentVerticalId: segmentVerticalId,
+          KSDPLProductId:KSDPLProductId
+      );
+
+
+      if(data['success'] == true){
+
+        fetchBankDetailSegKSDPLProdModel.value= FetchBankDetailSegKSDPLProdModel.fromJson(data);
+
+        isBankerSuperiorLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        fetchBankDetailSegKSDPLProdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getPackageDetailsByIdApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isBankerSuperiorLoading(false);
+    } finally {
+
+
+      isBankerSuperiorLoading(false);
+    }
+  }
+
+
+
+
+  Future<void> getProductDetailBySegmentAndProductApiApi({
+    required String segmentVerticalId,
+    required String kSDPLProductId,
+    required String bankId,
+  }) async {
+    try {
+
+      isBankerSuperiorLoading(true);
+
+
+      var data = await CamNoteService.getProductDetailBySegmentAndProductApi(
+          segmentVerticalId: segmentVerticalId,
+          kSDPLProductId:kSDPLProductId,
+          bankId:bankId
+      );
+
+
+      if(data['success'] == true){
+
+        getProductDetailBySegmentAndProductModel.value= GetProductDetailBySegmentAndProductModel.fromJson(data);
+
+        isBankerSuperiorLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getProductDetailBySegmentAndProductModel.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }

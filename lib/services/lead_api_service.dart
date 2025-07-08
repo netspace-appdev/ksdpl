@@ -150,6 +150,13 @@ class LeadApiService {
     String? transactionDetails,
     String? remark,
     String? leadSegment,
+
+    String? GeoLocationOfResidence,
+    String? GeoLocationOfOffice,
+    String? GeoLocationOfProperty,
+    List<File>? PhotosOfProperty,
+    List<File>? PhotosOfResidence,
+    List<File>? PhotosOfOffice,
   }) async {
     try {
 
@@ -200,9 +207,53 @@ class LeadApiService {
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'TransactionDetails', transactionDetails);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Remark', remark);
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'LeadSegment', leadSegment,fallback: "0");
+
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfResidence', GeoLocationOfResidence);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfProperty', GeoLocationOfProperty);
+
+
+      if(PhotosOfProperty!=null ||PhotosOfProperty!.isNotEmpty ){
+        // 📸 Add multiple images for "PhotosOfProperty"
+        for (int i = 0; i < PhotosOfProperty.length; i++) {
+          var file = await http.MultipartFile.fromPath(
+            'PhotosOfProperty',
+            PhotosOfProperty[i].path,
+            /* contentType: MediaType('image', 'jpeg'), // adjust if needed*/
+          );
+          request.files.add(file);
+        }
+      }
+      if(PhotosOfResidence!=null ||PhotosOfResidence!.isNotEmpty ){
+        // 📸 Add multiple images for "PhotosOfProperty"
+        for (int i = 0; i < PhotosOfResidence.length; i++) {
+          var file = await http.MultipartFile.fromPath(
+            'PhotosOfResidence',
+            PhotosOfResidence[i].path,
+            /* contentType: MediaType('image', 'jpeg'), // adjust if needed*/
+          );
+          request.files.add(file);
+        }
+      }
+
+      if(PhotosOfOffice!=null ||PhotosOfOffice!.isNotEmpty ){
+        // 📸 Add multiple images for "PhotosOfProperty"
+        for (int i = 0; i < PhotosOfOffice.length; i++) {
+          var file = await http.MultipartFile.fromPath(
+            'PhotosOfOffice',
+            PhotosOfOffice[i].path,
+            /* contentType: MediaType('image', 'jpeg'), // adjust if needed*/
+          );
+          request.files.add(file);
+        }
+      }
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
+
+
+      Helper.ApiReq(fillLeadForm, request.fields);
+      Helper.ApiRes(fillLeadForm, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

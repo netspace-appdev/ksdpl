@@ -428,9 +428,10 @@ class Step1CamNote extends StatelessWidget {
 
 
                 Obx((){
-                  if (addleadcontroller.isLoadingProductSegment.value) {
+                  if (addProductController.isLoadingProductCategory.value) {
                     return  Center(child:CustomSkelton.leadShimmerList(context));
                   }
+
 
                   return CustomDropdown<productSegment.Data>(
                     items: addProductController.productCategoryList  ?? [],
@@ -443,21 +444,26 @@ class Step1CamNote extends StatelessWidget {
                       camNoteController.camSelectedProdSegment.value =  value?.id;
                     },
                     onClear: (){
-                      camNoteController.camSelectedProdSegment.value = 0;
-                      addProductController.productCategoryList.clear(); // reset dependent dropdown
+                      camNoteController.camSelectedProdSegment.value = null;
+
 
                     },
                   );
                 }),
                 SizedBox(height: 30,),
 
-                const Text(
+              /*  const Text(
                   AppText.productTypeInt,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColor.grey2,
                   ),
+                ),*/
+                CustomTextLabel(
+                  label: AppText.productTypeInt,
+                  isRequired: true,
+
                 ),
                 const SizedBox(height: 10),
                 Obx((){
@@ -476,6 +482,11 @@ class Step1CamNote extends StatelessWidget {
                     onChanged: (value) {
                       camNoteController.camSelectedProdType.value =  value?.id?.toString();
                     },
+                      onClear: (){
+                        camNoteController.camSelectedProdType.value = null;
+
+
+                      }
                   );
                 }),
 
@@ -525,9 +536,10 @@ class Step1CamNote extends StatelessWidget {
 
 
                 Obx((){
-                  if (camNoteController.isLoadingPackage.value) {
+                  if (camNoteController.isPackageLoading.value) {
                     return  Center(child:CustomSkelton.leadShimmerList(context));
                   }
+
 
                   return CustomDropdown<pkg.Data>(
                     items: camNoteController.packageList  ?? [],

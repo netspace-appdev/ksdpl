@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/leads/special_model/AddIncModel.dart';
 import '../../services/drawer_api_service.dart';
 import '../../services/lead_api_service.dart';
+import '../product/add_product_controller.dart';
 import '../registration_dd_controller.dart';
 import 'add_income_model_controller.dart';
 
@@ -153,6 +155,8 @@ class Addleadcontroller extends GetxController{
         streetAddController.text=getLeadDetailModel.value?.data?.streetAddress??"";
         camNoteController.camStreetAddController.text = getLeadDetailModel.value?.data?.streetAddress ?? "";
 
+        await leadDDController.getAllStateApi();
+
         leadDDController.selectedState.value=getLeadDetailModel.value!.data!.state!.toString();
         camNoteController.camSelectedState.value = getLeadDetailModel.value!.data!.state!.toString();
 
@@ -192,13 +196,17 @@ class Addleadcontroller extends GetxController{
         branchLocController.text=getLeadDetailModel.value?.data?.branch??"";
         camNoteController.camBranchLocController.text = getLeadDetailModel.value?.data?.branch ?? "";
 
+
+        await leadDDController.getAllKsdplProductApi();
+
         leadDDController.selectedProdType.value=getLeadDetailModel.value?.data?.productType??"";
         camNoteController.camSelectedProdType.value=getLeadDetailModel.value?.data?.productType??"";
 
-
+        AddProductController addProductController = Get.find();
+        await addProductController.getAllProductCategoryApi();
         camNoteController.camSelectedProdSegment.value=int.parse(getLeadDetailModel.value?.data?.leadsegment.toString()??"0")??0;
 
-        print("relb--->${getLeadDetailModel.value?.data?.existinRelaationshipWithBank}");
+        print("prod seg--->${camNoteController.camSelectedProdSegment.value}");
 
         camNoteController.camSelectedIndexRelBank.value=getLeadDetailModel.value?.data?.existinRelaationshipWithBank==""?-1:getLeadDetailModel.value?.data?.existinRelaationshipWithBank=="Yes"?0:1;
         connNameController.text=getLeadDetailModel.value?.data?.connectorName??"";
@@ -209,8 +217,14 @@ class Addleadcontroller extends GetxController{
 
         createdByWhichEmployee.value=getLeadDetailModel.value?.data?.assignedEmployeeId.toString()??"";
 
+
+        await camNoteController.getAllPackageMasterApi();
         camNoteController.selectedPackage.value=getLeadDetailModel.value?.data?.packageId??0;
+
         camNoteController.camPackageAmtController.text=getLeadDetailModel.value?.data?.packageAmount.toString()??"0";
+
+        camNoteController.camReceivableDateController.text=getLeadDetailModel.value!.data!.receiveableDate==""?"": Helper.convertFromIso8601(getLeadDetailModel.value!.data!.receiveableDate) ?? '';
+
         camNoteController.camReceivableAmtController.text=getLeadDetailModel.value?.data?.receiveableAmount.toString()??"0";
         camNoteController.camTransactionDetailsController.text=getLeadDetailModel.value?.data?.transactionDetails.toString()??"0";
         camNoteController.camRemarkController.text=getLeadDetailModel.value?.data?.remark.toString()??"0";
@@ -272,6 +286,13 @@ class Addleadcontroller extends GetxController{
    String? transactionDetails,
    String? remark,
    String? leadSegment,
+
+    String? GeoLocationOfResidence,
+    String? GeoLocationOfOffice,
+    String? GeoLocationOfProperty,
+    List<File>? PhotosOfProperty,
+    List<File>? PhotosOfResidence,
+    List<File>? PhotosOfOffice,
   }) async {
     try {
       isLoading(true);
@@ -313,6 +334,14 @@ class Addleadcontroller extends GetxController{
         transactionDetails:transactionDetails,
         remark:remark,
         leadSegment:leadSegment,
+
+
+        GeoLocationOfProperty: GeoLocationOfProperty,
+        GeoLocationOfResidence: GeoLocationOfResidence,
+        GeoLocationOfOffice: GeoLocationOfOffice,
+        PhotosOfProperty: PhotosOfProperty,
+        PhotosOfResidence: PhotosOfResidence,
+        PhotosOfOffice: PhotosOfOffice,
       );
 
 

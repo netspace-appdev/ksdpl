@@ -242,7 +242,7 @@ class LeadDDController extends GetxController{
   }
 
 
-  void  getAllStateApi() async {
+  Future<void>  getAllStateApi() async {
     try {
       isLoading(true);
       isStateLoading(true);

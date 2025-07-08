@@ -49,6 +49,39 @@ class Step3CamNote extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: (){
+                      camNoteController.forBankDetailSubmit();
+
+                    },
+                    child: Text(
+                      "Get Bank Details",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: (){
+
+
+                    },
+                    child: const Padding(
+
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: Text(
+                        "Get Other Banks",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
               bankerSection(context)
             ],
           ),
@@ -59,7 +92,7 @@ class Step3CamNote extends StatelessWidget {
   Widget _noDataCard(BuildContext context) {
     return Center(
       child: Container(
-        height: 160,
+        height: 180,
         width: MediaQuery.of(context).size.width * 0.85,
         decoration: BoxDecoration(
           color: AppColor.appWhite,
@@ -78,12 +111,20 @@ class Step3CamNote extends StatelessWidget {
                       AppImage.moneyStack,
                       repeat: false
                   )),
-              Text(
+             /* Text(
                   "No Data Found",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColor.grey1,
+                  )),*/
+
+              Text(
+                  "Please Get Bank Details",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.blackColor,
                   )),
             ],
           ),
@@ -180,6 +221,15 @@ class Step3CamNote extends StatelessWidget {
                             iconColor:isSelected ? camNoteController.bankerThemes[1]["iconColor"] :   camNoteController.bankerThemes[0]["iconColor"],
                             boxId: banker.id.toString(),
                           ),
+
+                      ],
+                    ),
+
+                    SizedBox(height: 10,),
+
+                    Column(
+                      children: [
+                        StatusChip(label: "Cam Note Alert : Sent", color: Colors.orange)
 
                       ],
                     ),
@@ -637,4 +687,24 @@ class Step3CamNote extends StatelessWidget {
   }
 
 
+}
+
+class StatusChip extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  StatusChip({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColor.greenColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Center(child: Text(label, style: TextStyle(color: AppColor.appWhite, fontSize: 12))),
+    );
+  }
 }

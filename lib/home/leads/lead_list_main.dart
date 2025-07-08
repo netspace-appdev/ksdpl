@@ -763,7 +763,7 @@ overflow: TextOverflow.ellipsis,
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
+            phoneNumber:"+919238513910",//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -892,6 +892,7 @@ overflow: TextOverflow.ellipsis,
           camNoteController.clearImages("office_photo");
           camNoteController.enableAllCibilFields.value=true;
           leadDDController.getAllKsdplProductApi();
+          camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

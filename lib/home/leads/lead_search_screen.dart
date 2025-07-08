@@ -977,6 +977,7 @@ class LeadSearchScreen extends StatelessWidget {
           camNoteController.clearImages("office_photo");
           camNoteController.enableAllCibilFields.value=true;
           leadDDController.getAllKsdplProductApi();
+          camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {
@@ -1137,7 +1138,7 @@ class LeadSearchScreen extends StatelessWidget {
 
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//phoneNumber,//phoneNumber,//phoneNumber,//"+919399299880",//phoneNumber
+            phoneNumber:"+919238513910",//phoneNumber,//phoneNumber,//phoneNumber,//phoneNumber,//"+919399299880",//phoneNumber
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
