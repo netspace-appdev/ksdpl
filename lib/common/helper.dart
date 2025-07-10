@@ -97,7 +97,7 @@ class AppText{
   static const String darkTheme="Dark Theme";
   static const String systemTheme="System Theme";
   static const String changeTheme="Change Theme";
-
+  static const String pleaseSelectproduct ="Please select a product";
 
   static const String sNo="S No";
   static const String branchName="Branch Name";
@@ -737,6 +737,7 @@ class AppText{
   static const String totalDays="Total Days";
   static const String reason="Reason";
   static const String enterReason="Please Enter Reason";
+  static const String camNoteSentMessage="You have already sent Cam Note to this bank";
 }
 
 class AppColor{
@@ -842,6 +843,7 @@ class AppImage{
   static const String searchIcon2="assets/images/searchIcon2.png";
   static const String filterIcon="assets/images/filterIcon.png";
   static const String call1="assets/images/call1.png";
+  static const String call_disable="assets/images/call_disable.png";
   static const String chat1="assets/images/chat1.png";
   static const String message1="assets/images/message1.png";
   static const String whatsapp="assets/images/whatsapp.png";

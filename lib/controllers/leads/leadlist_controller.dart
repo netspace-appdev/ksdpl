@@ -203,6 +203,7 @@ class LeadListController extends GetxController {
 
   void filterSubmit(){
     var eId=StorageService.get(StorageService.EMPLOYEE_ID);
+    print("leadCode.value on filter===>${leadCode.value}");
     getAllLeadsApi(
         leadStage: leadCode.value,
         employeeId:eId.toString(),
@@ -266,37 +267,6 @@ class LeadListController extends GetxController {
 
     }
     var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-    ///old code
-
-    /* updateLeadStageApiForCall(
-      id:leadId.toString(),
-      active: leadDDController.selectedStageActive.value.toString(),
-      stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
-      empId: empId
-    ).then((_){
-
-        SearchLeadController searchLeadController=Get.put(SearchLeadController());
-
-        getFilteredLeadsApi(
-          employeeId: eId.value.toString(),
-          leadStage: selectedPrevStage.value??"0",
-          stateId: leadDDController.selectedState.value??"0",
-          distId: leadDDController.selectedDistrict.value??"0",
-          cityId:leadDDController.selectedCity.value??"0",
-          campaign: leadDDController.selectedCampaign.value??"",
-          fromDate:fromDateController.value.text.isEmpty?"":Helper.convertToIso8601(fromDateController.value.text),
-          toDate: toDateController.value.text.isEmpty?"":Helper.convertToIso8601(toDateController.value.text),
-          branch: leadDDController.selectedKsdplBr.value??"0",
-          uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
-          leadMobileNumber: searchLeadController.leadMobileNumberController.text,
-          leadName: searchLeadController.leadNameController.text,
-        );
-        DashboardController dashboardController=Get.find();
-        dashboardController.getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
-
-    });*/
-
-    ///old code end
 
     ///new code 3 july 2025 for status change in call
     try {

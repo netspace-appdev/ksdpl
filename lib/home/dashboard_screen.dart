@@ -547,7 +547,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     SizedBox(
                       width: 50,
                       child: Text(
-                        stageName,
+                        stageName=="Fresh Leads"?"Fresh+\nOngoing": stageName,
                         style: const TextStyle(fontSize: 8, color: AppColor.blackColor),
                       ),
                     ),

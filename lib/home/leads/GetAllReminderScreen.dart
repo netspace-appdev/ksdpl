@@ -383,7 +383,7 @@ class GetAllReminderScreen extends StatelessWidget {
         leadListController.leadCode.value=temp;
         CallService callService = CallService();
         callService.makePhoneCall(
-          phoneNumber:"+919238513910",//leadMobileNo.toString(),//leadMobileNo.toString(),//leadMobileNo.toString(),//leadMobileNo.toString(),//"+919399299880"
+          phoneNumber:leadMobileNo.toString(),//leadMobileNo.toString(),
           leadId:  leadId.toString(),
           currentLeadStage:  leadStageStatus.toString(),
           context: context,

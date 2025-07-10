@@ -427,9 +427,10 @@ class ProductService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print("request===>==>getProductListByIdApi===>${request.fields.toString()}");
-      print("response.statusCode===>${response.statusCode}");
-      print("response==>getProductListByIdApi==>${response.body.toString()}");
+      Helper.ApiReq(getProductListById, request.fields);
+      Helper.ApiRes(getProductListById, response.body);
+
+
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

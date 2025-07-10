@@ -771,8 +771,9 @@ class LeadSearchScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-
-                          _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                          lead.leadStage.toString()=="3"?
+                          _buildIconButton(icon: AppImage.call_disable, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call_disable", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context)
+                          :_buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
                           _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
                           _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
                           //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
@@ -978,6 +979,7 @@ class LeadSearchScreen extends StatelessWidget {
           camNoteController.enableAllCibilFields.value=true;
           leadDDController.getAllKsdplProductApi();
           camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
+          camNoteController.getProductDetailsByFilterModel.value=null;
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {
@@ -1138,7 +1140,7 @@ class LeadSearchScreen extends StatelessWidget {
 
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:"+919238513910",//phoneNumber,//phoneNumber,//phoneNumber,//phoneNumber,//"+919399299880",//phoneNumber
+            phoneNumber:phoneNumber,//phoneNumber,//phoneNumber,//phoneNumber,//phoneNumber,//"+919399299880",//phoneNumber
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -1152,6 +1154,9 @@ class LeadSearchScreen extends StatelessWidget {
         }
         if(label=="message"){
           leadListController.sendSMS(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
+        }
+        if(label=="call_disable"){
+
         }
 
       },

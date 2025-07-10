@@ -28,11 +28,11 @@ import '../../models/camnote/GetBankerDetailsByIdModel.dart';
 import '../../models/camnote/GetCamNoteDetailByIdModeli.dart';
 import '../../models/camnote/GetCamNoteLeadIdModel.dart';
 import '../../models/camnote/GetPackageDetailsByIdModel.dart';
-import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart';
-import '../../models/camnote/GetProductDetailsByFilterModel.dart';
+import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart' as otherBankBranch;
+import '../../models/camnote/GetProductDetailsByFilterModel.dart' as pdFModel;
 import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
-import '../../models/camnote/fetchBankDetailSegKSDPLProdModel.dart';
+import '../../models/camnote/fetchBankDetailSegKSDPLProdModel.dart' as otherBank;
 import '../../models/camnote/special_model/IncomeModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
@@ -57,6 +57,9 @@ import 'package:flutter/material.dart';
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
 import 'calculateCibilData.dart';
+import '../../models/product/GetProductListById.dart'as gpli;
+
+
 var getBankerDetailsByIdModel = Rxn<GetBankerDetailsByIdModel>(); //
 var getPackageDetailsByIdModel = Rxn<GetPackageDetailsByIdModel>(); //
 
@@ -85,8 +88,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var generateCibilAadharModel = Rxn<GenerateCibilAadharModel>(); //
   var addCibilDetailsModel = Rxn<AddCibilDetailsModel>(); //
   var editCamNoteDetail = Rxn<AddCamNoteDetail>(); //
-  var fetchBankDetailSegKSDPLProdModel = Rxn<FetchBankDetailSegKSDPLProdModel>(); //
-  var getProductDetailBySegmentAndProductModel = Rxn<GetProductDetailBySegmentAndProductModel>(); //
+  var fetchBankDetailSegKSDPLProdModel = Rxn<otherBank.FetchBankDetailSegKSDPLProdModel>(); //
+  var getProductDetailBySegmentAndProductModel = Rxn<otherBankBranch.GetProductDetailBySegmentAndProductModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
 
 
@@ -135,7 +138,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var getAllProductCategoryModel = Rxn<productCat.GetAllProductCategoryModel>(); //
   var addProductListModel = Rxn<AddProductListModel>(); //
   var addProductDocumentModel = Rxn<AddProductDocumentModel>(); //
-  var getProductDetailsByFilterModel = Rxn<GetProductDetailsByFilterModel>(); //
+  var getProductDetailsByFilterModel = Rxn<pdFModel.GetProductDetailsByFilterModel>(); //
   var getCamNoteLeadIdModel = Rxn<GetCamNoteLeadIdModel>(); //
   var getCamNoteDetailByIdModel = Rxn<GetCamNoteDetailByIdModel>(); //
   RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
@@ -187,7 +190,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   TextEditingController chipText2Controller = TextEditingController();
   TextEditingController chipText3Controller = TextEditingController();
 
-  var getProductListById = Rxn<GetProductListById>(); //
+  // var getProductListById = Rxn<GetProductListById>(); //
   var getDocumentProductIdModel = Rxn<GetDocumentProductIdModel>(); //
 
 ///cam note
@@ -283,18 +286,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   void selectCheckboxCibil(int index) {
     selectedIndexGenCibil.value = index;
-
-    print("selectedIndexGenCibil===>${selectedIndexGenCibil}");
-   /* if( selectedIndex.value==0){
-      isLeadCountYearly.value="false";
-
-    } else if( selectedIndex.value==1){
-      isLeadCountYearly.value="true";
-
-
-    }else{
-
-    }*/
   }
   final List<Map<String, dynamic>> bankerThemes = [
     {
@@ -306,6 +297,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       "containerColor": Colors.green,
       "textColor": AppColor.appWhite,
       "iconColor": AppColor.appWhite,
+    },
+
+    {
+      "containerColor": Colors.transparent,
+      "textColor": Colors.grey,
+      "iconColor": Colors.grey,
     },
 
   ];
@@ -346,6 +343,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   bool isBankerSelected(String bankId) => selectedBankers.contains(bankId);
+  final RxSet<String> camNoteLeadBankIds = <String>{}.obs;
 
   void clearBankerDetails(){
 
@@ -408,6 +406,15 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
   RxList<pkg.Data> packageList = <pkg.Data>[].obs;
   var isLoadingPackage = false.obs;
+
+  RxList<otherBank.Data> getOtherBankList = <otherBank.Data>[].obs;
+  RxList<otherBankBranch.Data> getOtherBankBranchList = <otherBankBranch.Data>[].obs;
+
+  var selectedOtherBank = 0.obs;
+  var selectedOtherBankBranch = 0.obs;
+  var isOtherBankLoading = false.obs;
+  var isOtherBankBrLoading = false.obs;
+  var getProductListById = Rxn<gpli.GetProductListById>(); //
 
   void nextStep(int tappedIndex) {
     if (currentStep.value < 2) {
@@ -664,6 +671,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         maximumTenorEligibilityCriteria:"",
         customerAddress:camStreetAddController.text.trim().toString(),
 
+        totalOverdueCases:camTotalOverdueCasesController.text.trim().toString(),
+        totalOverdueAmount:camTotalOverdueAmountController.text.trim().toString(),
+        totalEnquiries:camTotalEnquiriesController.text.trim().toString(),
+        kSDPLProductId:camSelectedProdType.value.toString(),
+
     );
   }
 
@@ -827,6 +839,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? roi,
     String? maximumTenorEligibilityCriteria,
     String? customerAddress,
+
+
+    String? totalOverdueCases,
+    String? totalOverdueAmount,
+    String? totalEnquiries,
+    String? kSDPLProductId,
   }) async {
     try {
       isBankerLoading(true);
@@ -847,13 +865,18 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         roi:roi,
         maximumTenorEligibilityCriteria:maximumTenorEligibilityCriteria,
         customerAddress:customerAddress,
+
+        totalOverdueCases:totalOverdueCases,
+        totalOverdueAmount:totalOverdueAmount,
+        totalEnquiries:totalEnquiries,
+        kSDPLProductId:kSDPLProductId,
       );
 
 
       if(data['success'] == true){
 
 
-        getProductDetailsByFilterModel.value= GetProductDetailsByFilterModel.fromJson(data);
+        getProductDetailsByFilterModel.value= pdFModel.GetProductDetailsByFilterModel.fromJson(data);
 
 
 
@@ -1898,6 +1921,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       if(data['success'] == true){
 
         getCamNoteLeadIdModel.value= GetCamNoteLeadIdModel.fromJson(data);
+        print("hello=======1");
+        // Extract bankIds and update observable set
+        final ids = getCamNoteLeadIdModel.value!.data?.map((e) => e.bankId.toString()).toSet() ?? {};
+        print("hello=======2");
+        camNoteLeadBankIds.value = ids;
+        print("hello=======3");
+        print("hello=======>${camNoteLeadBankIds.value}");
 
         isLoadingMainScreen(false);
 
@@ -1907,6 +1937,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
         getCamNoteLeadIdModel.value=null;
+        camNoteLeadBankIds.clear();
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
@@ -2159,7 +2190,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }) async {
     try {
 
-      isBankerSuperiorLoading(true);
+      isOtherBankLoading(true);
 
 
       var data = await CamNoteService.fetchBankDetailBySegmentIdAndKSDPLProductIdApi(
@@ -2170,9 +2201,33 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       if(data['success'] == true){
 
-        fetchBankDetailSegKSDPLProdModel.value= FetchBankDetailSegKSDPLProdModel.fromJson(data);
+        fetchBankDetailSegKSDPLProdModel.value= otherBank.FetchBankDetailSegKSDPLProdModel.fromJson(data);
 
-        isBankerSuperiorLoading(false);
+        /*final List<otherBank.Data> allBk = fetchBankDetailSegKSDPLProdModel.value?.data ?? [];
+
+        final List<otherBank.Data> bks = allBk;
+
+        getOtherBankList.value = bks;*/
+
+        final List<otherBank.Data> allBk =
+            fetchBankDetailSegKSDPLProdModel.value?.data ?? [];
+
+        /// Get bankIds from API 1 (getProductDetailsByFilterApi)
+        final Set<dynamic> existingBankIds = getProductDetailsByFilterModel.value?.data
+            ?.map((bank) => bank.bankId)
+            .toSet() ??
+            {};
+
+        /// 👉 Filter only banks NOT present in existing bankIds
+        final List<otherBank.Data> filteredNewBanks = allBk
+            .where((bank) => !existingBankIds.contains(bank.bankId))
+            .toList();
+
+        getOtherBankList.value = filteredNewBanks;
+
+
+
+        isOtherBankLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -2188,11 +2243,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       ToastMessage.msg(AppText.somethingWentWrong);
 
-      isBankerSuperiorLoading(false);
+      isOtherBankLoading(false);
     } finally {
 
 
-      isBankerSuperiorLoading(false);
+      isOtherBankLoading(false);
     }
   }
 
@@ -2206,7 +2261,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }) async {
     try {
 
-      isBankerSuperiorLoading(true);
+      isOtherBankBrLoading(true);
 
 
       var data = await CamNoteService.getProductDetailBySegmentAndProductApi(
@@ -2218,9 +2273,21 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       if(data['success'] == true){
 
-        getProductDetailBySegmentAndProductModel.value= GetProductDetailBySegmentAndProductModel.fromJson(data);
+          getProductDetailBySegmentAndProductModel.value =
+              otherBankBranch.GetProductDetailBySegmentAndProductModel.fromJson(
+                  data);
 
-        isBankerSuperiorLoading(false);
+
+          final List<otherBankBranch
+              .Data> allBr = getProductDetailBySegmentAndProductModel.value
+              ?.data ?? [];
+
+          final List<otherBankBranch.Data> brs = allBr;
+
+          getOtherBankBranchList.value = brs;
+
+          isOtherBankBrLoading(false);
+
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -2236,13 +2303,68 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       ToastMessage.msg(AppText.somethingWentWrong);
 
-      isBankerSuperiorLoading(false);
+      isOtherBankBrLoading(false);
     } finally {
 
 
-      isBankerSuperiorLoading(false);
+      isOtherBankBrLoading(false);
     }
   }
+
+
+  void  getProductListByIdApi({
+    required String id
+  }) async {
+    try {
+      isLoading(true);
+
+      var data = await ProductService.getProductListByIdApi(id: id);
+
+      if(data['success'] == true){
+
+
+
+
+        getProductListById.value= gpli.GetProductListById.fromJson(data);
+
+        CamNoteController camNoteController=Get.put(CamNoteController());
+
+          final existingList = camNoteController.getProductDetailsByFilterModel.value?.data ?? [];
+
+          final productData = getProductListById.value!.data;
+
+          if (productData != null) {
+
+            existingList.add(productData.toFilterData());
+
+            camNoteController.getProductDetailsByFilterModel.value = pdFModel.GetProductDetailsByFilterModel(
+              status: getProductListById.value!.status,
+              success: getProductListById.value!.success,
+              message: getProductListById.value!.message,
+              data: existingList,
+            );
+          }
+
+
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllProductListModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
 
 
   int calculateAge(DateTime birthDate) {
@@ -2306,3 +2428,63 @@ String cleanText(String text) {
 }
 
 
+extension ProductDataMapper on gpli.Data {
+  pdFModel.Data toFilterData() {
+    return pdFModel.Data(
+      id: id,
+      bankId: bankId,
+      bankersName: bankersName,
+      bankersMobileNumber: bankersMobileNumber,
+      bankersWhatsAppNumber: bankersWhatsAppNumber,
+      bankersEmailID: bankersEmailID,
+      minCIBIL: minCIBIL,
+      segmentVertical: segmentVertical,
+      product: product,
+      productDescription: productDescription,
+      customerCategory: customerCategory,
+      collateralSecurityCategory: collateralSecurityCategory,
+      collateralSecurityExcluded: collateralSecurityExcluded,
+      incomeTypes: incomeTypes,
+      profileExcluded: profileExcluded,
+      ageLimitEarningApplicants: ageLimitEarningApplicants,
+      ageLimitNonEarningCoApplicant: ageLimitNonEarningCoApplicant,
+      minimumAgeEarningApplicants: minimumAgeEarningApplicants,
+      minimumAgeNonEarningApplicants: minimumAgeNonEarningApplicants,
+      minimumIncomeCriteria: minimumIncomeCriteria,
+      minimumLoanAmount: minimumLoanAmount,
+      maximumLoanAmount: maximumLoanAmount,
+      minTenor: minTenor,
+      maximumTenor: maximumTenor,
+      minimumROI: minimumROI,
+      maximumROI: maximumROI,
+      maximumTenorEligibilityCriteria: maximumTenorEligibilityCriteria,
+      geoLimit: geoLimit,
+      negativeProfiles: negativeProfiles,
+      negativeAreas: negativeAreas,
+      maximumTAT: maximumTAT,
+      minimumPropertyValue: minimumPropertyValue,
+      maximumIIR: maximumIIR,
+      maximumFOIR: maximumFOIR,
+      maximumLTV: maximumLTV,
+      processingFee: processingFee,
+      legalFee: legalFee,
+      technicalFee: technicalInspectionFee, // careful: different name
+      adminFee: adminFee,
+      foreclosureCharges: foreclosureCharges,
+      otherCharges: otherCharges,
+      stampDuty: stampDuty,
+      tsRYears: tsRYears,
+      tsRCharges: tsRCharges,
+      valuationCharges: valuationCharges,
+      noOfDocument: noOfDocument,
+      productValidateFromDate: productValidateFromDate,
+      productValidateToDate: productValidateToDate,
+      ksdplProductId: ksdplProductId,
+      profitPercentage: profitPercentage,
+      bankName: bankName,
+      ksdplProduct: ksdplProductName,
+      productSegment: productCategoryName,
+      specialBranchId: null, // You can map this if needed later
+    );
+  }
+}

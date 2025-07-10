@@ -454,7 +454,9 @@ class LeadListMain extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
 
-                          _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                          (lead.leadStage.toString()=="3" && lead.reminderDate.toString()=="null")?
+                           _buildIconButton(icon: AppImage.call_disable, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call_disable", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context)
+                          :_buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
                           _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
                           _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
 
@@ -755,6 +757,7 @@ overflow: TextOverflow.ellipsis,
   }) {
     return IconButton(
       onPressed: () {
+        print("leadId on call tap===>${leadId}");
 
         if(label=="call"){
           leadListController.isFBDetailsShow.value=false;
@@ -763,7 +766,7 @@ overflow: TextOverflow.ellipsis,
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:"+919238513910",//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
+            phoneNumber:phoneNumber,//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
             context: context,
@@ -777,6 +780,9 @@ overflow: TextOverflow.ellipsis,
         }
         if(label=="message"){
           leadListController.sendSMS(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
+        }
+        if(label=="call_disable"){
+
         }
 
       },
@@ -885,6 +891,7 @@ overflow: TextOverflow.ellipsis,
           camNoteController.getAllPackageMasterApi();
           camNoteController.currentStep.value=0;
           camNoteController.infoFilledBankers.clear();
+          camNoteController.infoFilledBankers.clear();
           camNoteController.selectedBankers.clear();
           camNoteController.bankerBranchMap.clear();
           camNoteController.clearImages("property_photo");
@@ -893,6 +900,7 @@ overflow: TextOverflow.ellipsis,
           camNoteController.enableAllCibilFields.value=true;
           leadDDController.getAllKsdplProductApi();
           camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
+          camNoteController.getProductDetailsByFilterModel.value=null;
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {
@@ -1398,34 +1406,13 @@ overflow: TextOverflow.ellipsis,
                             if (leadDDController.isLeadStageLoading.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
                             }
-                            int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
 
-                            // Allowed stage IDs based on leadCode
-                            List<int> allowedStageIds = [];
 
-                            if (leadCode == 2) {
-                              allowedStageIds = [4, 5];
-                            }else if (leadCode == 3) {
-                              allowedStageIds = [4, 5,];
-                            } else if (leadCode == 4) {
-                              allowedStageIds = [6, 7,];
-                            }else if (leadCode == 5) {
-                              allowedStageIds = [4, 5,];
-                            }else if (leadCode == 6) {
-                              allowedStageIds = [6, 7];
-                            }else if (leadCode == 7) {
-                              allowedStageIds = [6, 7];
-                            }else if (leadCode == 13) {
-                              allowedStageIds = [4, 5,];
-                            } else {
-                              allowedStageIds = [4,5]; // Default to all or handle as needed
-                            }
 
-                            List<stage.Data> filteredStages = leadDDController
-                                .getAllLeadStageModel.value!.data!
-                                .where((lead) =>
-                            lead.id != 1 && allowedStageIds.contains(lead.id))
-                                .toList();
+                            final filteredStages = leadDDController.getFilteredStagesByLeadStageId(
+                              currentLeadStage.toString(),
+                            );
+
 
                             return CustomDropdown<stage.Data>(
                               items: filteredStages,
@@ -1458,7 +1445,7 @@ overflow: TextOverflow.ellipsis,
                                   }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
                                     leadDDController.selectedStageActive.value = 0;
                                   }else {
-
+                                    leadListController.isFBDetailsShow.value=true;
                                   }
 
 

@@ -28,7 +28,7 @@ class CamNoteService {
   static const String editCamNoteDetail = BaseUrl.baseUrl + 'CamNoteDetail/EditCamNoteDetail';
   static const String getPackageDetailsById = BaseUrl.baseUrl + 'CamNoteDetail/GetPackageDetailsById';
   static const String fetchBankDetailBySegmentIdAndKSDPLProductId = BaseUrl.baseUrl + 'ProductList/FetchBankDetailBySegmentIdAndKSDPLProductId';
-  static const String GetProductDetailBySegmentAndProduct = BaseUrl.baseUrl + 'ProductList/GetProductDetailBySegmentAndProduct';
+  static const String getProductDetailBySegmentAndProduct = BaseUrl.baseUrl + 'ProductList/GetProductDetailBySegmentAndProduct';
 
 
 
@@ -51,6 +51,11 @@ class CamNoteService {
     String? roi,
     String? maximumTenorEligibilityCriteria,
     String? customerAddress,
+
+    String? totalOverdueCases,
+    String? totalOverdueAmount,
+    String? totalEnquiries,
+    String? kSDPLProductId,
 
   }) async {
     try {
@@ -77,6 +82,10 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'MaximumTenorEligibilityCriteria',  maximumTenorEligibilityCriteria,fallback: "0");
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CustomerAddress', customerAddress);
 
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueCases',  totalOverdueCases,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueAmount',  totalOverdueAmount,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalEnquiries',  totalEnquiries,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'KSDPLProductId',  kSDPLProductId,fallback: "0");
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
@@ -888,7 +897,7 @@ class CamNoteService {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(fetchBankDetailBySegmentIdAndKSDPLProductId),
+        Uri.parse(getProductDetailBySegmentAndProduct),
       );
 
       var header=await MyHeader.getHeaders2();

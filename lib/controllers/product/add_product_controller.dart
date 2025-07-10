@@ -426,11 +426,15 @@ class AddProductController extends GetxController{
     }else if(selectedProductCategory.value==null){
       jumpToStep(0);
 
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Product Segment");
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Loan Segment");
     }else if(prodProductNameController.text.isEmpty){
       jumpToStep(0);
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please name the product");
+    }else if(selectedBank.value==null){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select a bank");
     }else{
 
       addProductListApi(
@@ -511,6 +515,26 @@ class AddProductController extends GetxController{
       jumpToStep(0);
 
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select KSDPL Product");
+    }else if(prodFromAmtController.text.isEmpty){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter from amount range");
+    }else if(prodToAmtController.text.isEmpty){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter to amount range");
+    }else if(selectedProductCategory.value==null){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Loan Segment");
+    }else if(prodProductNameController.text.isEmpty){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please name the product");
+    }else if(selectedBank.value==null){
+      jumpToStep(0);
+
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select a bank");
     }else{
       var productId=0;
 

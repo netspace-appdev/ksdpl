@@ -13,17 +13,21 @@ import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
+import '../../controllers/product/product_detail_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
 import 'package:ksdpl/models/GetBranchDistrictByZipBankModel.dart' as branchByZip;
 import 'package:ksdpl/models/camnote/GetBankerDetailsByBranchIdModel.dart' as banker;
 
+import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLoadingOverlay.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
 import '../../models/camnote/GetProductDetailsByFilterModel.dart' as proFilter;
+import '../../models/camnote/fetchBankDetailSegKSDPLProdModel.dart' as otherBank;
+import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart' as otherBankBranch;
 class Step3CamNote extends StatelessWidget {
 
   LeadDDController leadDDController = Get.put(LeadDDController());
@@ -32,6 +36,7 @@ class Step3CamNote extends StatelessWidget {
   final ViewProductController viewProductController = Get.put(ViewProductController());
   NewDDController newDDController=Get.put(NewDDController());
   final _formKey = GlobalKey<FormState>();
+
 
 
   @override
@@ -56,17 +61,30 @@ class Step3CamNote extends StatelessWidget {
                   InkWell(
                     onTap: (){
                       camNoteController.forBankDetailSubmit();
-
                     },
                     child: Text(
                       "Get Bank Details",
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
                     ),
                   ),
+
+
+
+
+
                   InkWell(
                     onTap: (){
-
-
+                      camNoteController.fetchBankDetailBySegmentIdAndKSDPLProductIdApi(
+                        segmentVerticalId:camNoteController.camSelectedProdSegment.value.toString(),
+                        KSDPLProductId: camNoteController.camSelectedProdType.value.toString()
+                      );
+                      camNoteController.selectedOtherBankBranch.value  = 0;
+                      camNoteController.selectedOtherBank.value  = 0;
+                      showGetBankDialog(
+                        context: context,
+                        segmentVerticalId: camNoteController.camSelectedProdSegment.value.toString(),
+                        kSDPLProductId: camNoteController.camSelectedProdType.value.toString()
+                      );
                     },
                     child: const Padding(
 
@@ -166,6 +184,19 @@ class Step3CamNote extends StatelessWidget {
       return  Column(
         children: [
 
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Total Bank (${camNoteController.getProductDetailsByFilterModel.value!.data!.length.toString()})",
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColor.blackColor),
+              ),
+
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           ListView.builder(
             itemCount:camNoteController.getProductDetailsByFilterModel.value!.data!.length,//viewProductController.getAllProductListModel.value!.data!.length,
             shrinkWrap: true,
@@ -196,6 +227,18 @@ class Step3CamNote extends StatelessWidget {
 
                     Column(
                       children: [
+                        camNoteController.camNoteLeadBankIds.contains(banker.bankId.toString())?
+                        _buildTextButton(
+                          label:"Add",
+                          code:"add_disable" ,
+                          context:context,
+                          containerColor: camNoteController.bankerThemes[2]["containerColor"],
+                          icon: Icons.add_task,
+                          bankId:banker.bankId.toString(),
+                          textColor: camNoteController.bankerThemes[2]["textColor"],
+                          iconColor:camNoteController.bankerThemes[2]["iconColor"],
+                          boxId: banker.id.toString(),
+                        ):
                         _buildTextButton(
                           label:"Add",
                           code:"add" ,
@@ -217,8 +260,8 @@ class Step3CamNote extends StatelessWidget {
                             containerColor: isSelected ? camNoteController.bankerThemes[1]["containerColor"] :   camNoteController.bankerThemes[0]["containerColor"],
                             icon: isSelected ? Icons.check_box : Icons.check_box_outline_blank,
                             bankId:banker.bankId.toString(),
-                            textColor:isSelected ? camNoteController.bankerThemes[1]["textColor"] :   camNoteController.bankerThemes[0]["textColor"],
-                            iconColor:isSelected ? camNoteController.bankerThemes[1]["iconColor"] :   camNoteController.bankerThemes[0]["iconColor"],
+                            textColor:isSelected ? camNoteController.bankerThemes[1]["textColor"]:camNoteController.bankerThemes[0]["textColor"],
+                            iconColor:isSelected ? camNoteController.bankerThemes[1]["iconColor"]:camNoteController.bankerThemes[0]["iconColor"],
                             boxId: banker.id.toString(),
                           ),
 
@@ -227,10 +270,10 @@ class Step3CamNote extends StatelessWidget {
 
                     SizedBox(height: 10,),
 
-                    Column(
+                    if (camNoteController.camNoteLeadBankIds.contains(banker.bankId.toString()))
+                      Column(
                       children: [
                         StatusChip(label: "Cam Note Alert : Sent", color: Colors.orange)
-
                       ],
                     ),
 
@@ -242,24 +285,7 @@ class Step3CamNote extends StatelessWidget {
             },
           ),
 
-         /* if (viewProductController.hasMore.value && viewProductController.filteredProducts.length > 1)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: ElevatedButton(
-                onPressed: () {
-                  viewProductController.getAllProductListApi(
-                      isLoadMore: true
-                  );
-                },
-                child:
-                viewProductController.isMainListMoreLoading.value //isDashboardLeadListMoreLoading
-                    ? Container(
-                    width: 15,
-                    height: 15,
-                    child: Center(child: CircularProgressIndicator(color: AppColor.primaryColor, strokeWidth: 2,)))
-                    : Text("Load More"),
-              ),
-            ),*/
+
         ],
       );
     });
@@ -382,6 +408,8 @@ class Step3CamNote extends StatelessWidget {
             newDDController.getBranchListOfDistrictByZipAndBankApi(bankId: bankId, zipcode:  camNoteController.camZipController.text);
             showCustomBottomSheet(context, bankId, boxId);
           }
+        }else if(code=="add_disable"){
+          ToastMessage.msg(AppText.camNoteSentMessage);
         }
 
 
@@ -396,7 +424,7 @@ class Step3CamNote extends StatelessWidget {
             decoration: BoxDecoration(
 
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: AppColor.grey700),
+                border: Border.all(color: code=="add_disable"?Colors.grey: AppColor.grey700),
               color: containerColor
 
             ),
@@ -535,6 +563,7 @@ class Step3CamNote extends StatelessWidget {
                                    hintText: AppText.enterBankerMobile,
                                    isRequired: true,
                                    validator: ValidationHelper.validatePhoneNumber,
+                                   maxLength: 10,
                                  ),
                                  CustomLabeledTextField(
                                    label: AppText.bankerName,
@@ -550,7 +579,9 @@ class Step3CamNote extends StatelessWidget {
                                    inputType: TextInputType.number,
                                    hintText: AppText.enterBankerWhatsapp,
                                    isRequired: true,
-                                   validator: ValidationHelper.validateWhatsapp
+                                   validator: ValidationHelper.validateWhatsapp,
+                                   maxLength: 10,
+
                                  ),
                                  CustomLabeledTextField(
                                    label: AppText.bankerEmail,
@@ -565,7 +596,7 @@ class Step3CamNote extends StatelessWidget {
                                    controller: camNoteController.camBankerSuperiorMobController,
                                    inputType: TextInputType.number,
                                    hintText: AppText.enterSuperiorMobile,
-
+                                   maxLength: 10,
                                  ),
                                  CustomLabeledTextField(
                                    label: AppText.superiorName,
@@ -579,7 +610,7 @@ class Step3CamNote extends StatelessWidget {
                                    controller: camNoteController.camBankerSuperiorWhatsappController,
                                    inputType: TextInputType.number,
                                    hintText: AppText.enterSuperiorWhatsapp,
-
+                                   maxLength: 10,
                                  ),
                                  CustomLabeledTextField(
                                    label: AppText.superiorEmail,
@@ -683,6 +714,126 @@ class Step3CamNote extends StatelessWidget {
         }
 
 
+    );
+  }
+
+
+
+  void showGetBankDialog({
+    required BuildContext context,
+    required segmentVerticalId,
+    required kSDPLProductId,
+
+
+  }) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Get Bank",
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+
+                    CustomTextLabel(
+                      label: AppText.bank,
+                      isRequired: true,
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Obx(() {
+                      if (camNoteController.isOtherBankLoading.value) {
+                        return Center(child: CustomSkelton.leadShimmerList(context));
+                      }
+
+                      return CustomDropdown<otherBank.Data>(
+                        items: camNoteController.getOtherBankList ?? [],
+                        getId: (item) => item.bankId.toString(),
+                        getName: (item) => item.bankName.toString(),
+                        selectedValue: camNoteController.getOtherBankList.firstWhereOrNull(
+                                (item) => item.bankId == camNoteController.selectedOtherBank.value),
+                        onChanged: (value) {
+                          camNoteController.selectedOtherBank.value = value?.bankId??0;
+
+                          if(camNoteController.selectedOtherBank.value!=0){
+
+                            camNoteController.getProductDetailBySegmentAndProductApiApi(
+                              bankId: camNoteController.selectedOtherBank.value.toString(),
+                              segmentVerticalId:segmentVerticalId,
+                              kSDPLProductId: kSDPLProductId
+                            );
+                          }
+
+                        },
+                        onClear: () {
+                          camNoteController.selectedOtherBank.value  = 0;
+
+                        },
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+
+                    CustomTextLabel(
+                      label: AppText.products,
+                      isRequired: true,
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Obx(() {
+                      if (camNoteController.isOtherBankBrLoading.value) {
+                        return Center(child: CustomSkelton.leadShimmerList(context));
+                      }
+
+                      return CustomDropdown<otherBankBranch.Data>(
+                        items: camNoteController.getOtherBankBranchList ?? [],
+                        getId: (item) => item.bankId.toString(),
+                        getName: (item) => item.product.toString(),
+                        selectedValue: camNoteController.getOtherBankBranchList.firstWhereOrNull(
+                                (item) => item.bankId == camNoteController.selectedOtherBankBranch.value),
+                        onChanged: (value) {
+                          camNoteController.selectedOtherBankBranch.value = value?.bankId??0;
+
+
+
+                        },
+                        onClear: () {
+                          camNoteController.selectedOtherBankBranch.value  = 0;
+
+                        },
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onSubmit: () {
+
+            if(camNoteController.selectedOtherBank.value==0){
+              ToastMessage.msg(AppText.pleaseSelectBank);
+            }else if( camNoteController.selectedOtherBankBranch.value  == 0){
+              ToastMessage.msg(AppText.pleaseSelectproduct);
+            }else{
+
+              camNoteController.getProductListByIdApi(id: camNoteController.selectedOtherBankBranch.value.toString());
+              Get.back();
+            }
+
+          },
+        );
+      },
     );
   }
 
