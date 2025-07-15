@@ -540,19 +540,23 @@ class LeadListController extends GetxController {
       if (data['success'] == true) {
         var newLeads = GetAllLeadsModel.fromJson(data);
 
-        if (isLoadMore) {
+       /* if (isLoadMore) {
           getAllLeadsModel.value!.data!.addAll(newLeads.data!);
         } else {
           getAllLeadsModel.value = newLeads;
-        }
+        }*/
+        getAllLeadsModel.value = newLeads;///new change
 
         leadStageName2.value = leadStageName.value;
 
+        print("hello hasMore.value=======>${hasMore.value}");
         // If less data returned than requested pageSize, mark as no more
         if (newLeads.data!.length < pageSize) {
           hasMore.value = false;
+          print("hello hasMore.value=======>if----${hasMore.value}");
         } else {
           currentPage.value++; // Ready for next page
+          print("hello hasMore.value=======>else----${hasMore.value}");
         }
         leadListLength.value=getAllLeadsModel.value!.data!.length;
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
@@ -617,12 +621,13 @@ class LeadListController extends GetxController {
 
       if (data['success'] == true) {
         var newLeads = GetAllLeadsModel.fromJson(data);
-
+/*
         if (isLoadMore) {
           filteredGetAllLeadsModel.value!.data!.addAll(newLeads.data!);
         } else {
           filteredGetAllLeadsModel.value = newLeads;
-        }
+        }*/
+        filteredGetAllLeadsModel.value = newLeads;
 
         filteredLeadListLength.value=filteredGetAllLeadsModel.value!.data!.length;
 
@@ -677,13 +682,14 @@ class LeadListController extends GetxController {
       if (data['success'] == true) {
         var newLeads = GetAllLeadsModel.fromJson(data);
 
-        if (isLoadMore) {
+        /*if (isLoadMore) {
           getAllLeadsModel.value!.data!.addAll(newLeads.data!);
         } else {
           getAllLeadsModel.value = newLeads;
-        }
+        }*/
+        getAllLeadsModel.value = newLeads;
 
-        //leadStageName2.value = leadStageName.value;
+
 
         // If less data returned than requested pageSize, mark as no more
         if (newLeads.data!.length < pageSize) {

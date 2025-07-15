@@ -47,7 +47,7 @@ class DashboardController extends GetxController {
   UpdateFCMTokenModel? updateFCMTokenModel;
   List<int> fixedLeadIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  var isLeadCountYearly = 'false'.obs;
+  var isLeadCountYearly = '0'.obs;
 
   var selectedIndex = (0).obs;
   @override
@@ -66,10 +66,14 @@ class DashboardController extends GetxController {
 
     selectedIndex.value = index;
     if( selectedIndex.value==0){
-     isLeadCountYearly.value="false";
+     isLeadCountYearly.value="0";
 
     } else if( selectedIndex.value==1){
-      isLeadCountYearly.value="true";
+      isLeadCountYearly.value="1";
+
+
+    }else if( selectedIndex.value==2){
+      isLeadCountYearly.value="2";
 
 
     }else{

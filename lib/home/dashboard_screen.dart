@@ -516,7 +516,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                     }
                     leadListController.getDetailsListOfLeadsForDashboardApi(
-                      applyDateFilter: "false",
+                      applyDateFilter: dashboardController.isLeadCountYearly.toString(), //correct it
                       stageId: stageId.toString(),
                     );
                   },
@@ -567,7 +567,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
 
     //working leads is now ongoing call
-    List<String> options = ["Yearly Lead Counts","Monthly Lead Counts"];
+    List<String> options = ["Yearly Lead Counts","Monthly Lead Counts","Daily Lead Counts"];
     showDialog(
       context: context,
       builder: (BuildContext context) {

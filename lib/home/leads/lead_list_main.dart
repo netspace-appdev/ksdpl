@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
+import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/leads/loan_appl_controller.dart';
 import 'package:lottie/lottie.dart';
@@ -657,9 +658,10 @@ class LeadListMain extends StatelessWidget {
                 onPressed: () {
                   print("load more===>00${leadListController.fromWhereLeads.value}");
 
+                  DashboardController dashboardController = Get.find();
                   leadListController.fromWhereLeads.value=="dashboard"?
                   leadListController.getDetailsListOfLeadsForDashboardApi(
-                    applyDateFilter: "false",
+                    applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
                     stageId: leadListController.leadCode.value,
                     isLoadMore: true
                   ):

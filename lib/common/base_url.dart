@@ -12,9 +12,9 @@ class BaseUrl{
 
   static const String imageBaseUrl = 'https://ksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
-  //static const String devVersion = 'Dev App Version 1.0.18';
+ // static const String devVersion = 'Dev App Version 1.0.19';
   static const String devVersion = 'UAT';
-  static const String buildDate = 'Build Date : 10 July 2025';
+  static const String buildDate = 'Build Date : 15 July 2025';
 }
 
 
