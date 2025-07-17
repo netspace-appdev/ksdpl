@@ -300,7 +300,7 @@ class LeadDetailsMain extends StatelessWidget {
             phoneNumber:phoneNumber,//"+919399299880",//phoneNumber,
             leadId: leadId,
             currentLeadStage: leadStage,//newLeadStage,
-            context: context,
+
             showFeedbackDialog:showCallFeedbackDialog,
           );
 
@@ -335,7 +335,7 @@ class LeadDetailsMain extends StatelessWidget {
 
 
   void showCallFeedbackDialog({
-    required BuildContext context,
+   /* required BuildContext context,*/
     required leadId,
     required currentLeadStage,
     required callDuration,
@@ -345,9 +345,11 @@ class LeadDetailsMain extends StatelessWidget {
   }) {
     showDialog(
       barrierDismissible: false,
-      context: context,
+      context: Get.context!,
       builder: (BuildContext context) {
-
+        if(currentLeadStage=="6"){
+          leadListController.isFBDetailsShow.value=true;
+        }
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: AppText.addFAndF,
@@ -393,34 +395,10 @@ class LeadDetailsMain extends StatelessWidget {
                             if (leadDDController.isLeadStageLoading.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
                             }
-                            int leadCode = int.parse(leadListController.leadCode.value); // Assuming this is reactive or available
+                            final filteredStages = leadDDController.getFilteredStagesByLeadStageId(
+                              currentLeadStage.toString(),
+                            );
 
-                            // Allowed stage IDs based on leadCode
-                            List<int> allowedStageIds = [];
-
-                            if (leadCode == 2) {
-                              allowedStageIds = [4, 5];
-                            }else if (leadCode == 3) {
-                              allowedStageIds = [4, 5,];
-                            } else if (leadCode == 4) {
-                              allowedStageIds = [6, 7,];
-                            }else if (leadCode == 5) {
-                              allowedStageIds = [4, 5,];
-                            }else if (leadCode == 6) {
-                              allowedStageIds = [6, 7];
-                            }else if (leadCode == 7) {
-                              allowedStageIds = [6, 7];
-                            }else if (leadCode == 13) {
-                              allowedStageIds = [4, 5,];
-                            } else {
-                              allowedStageIds = [4,5]; // Default to all or handle as needed
-                            }
-
-                            List<stage.Data> filteredStages = leadDDController
-                                .getAllLeadStageModel.value!.data!
-                                .where((lead) =>
-                            lead.id != 1 && allowedStageIds.contains(lead.id))
-                                .toList();
 
                             return CustomDropdown<stage.Data>(
                               items: filteredStages,

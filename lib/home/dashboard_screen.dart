@@ -1571,10 +1571,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                       CallService callService = CallService();
                                       callService.makePhoneCall(
-                                        phoneNumber: data.leadMobileNo.toString(),//data.leadMobileNo.toString(),
+                                        phoneNumber: data.leadMobileNo.toString(),//data.leadMobileNo.toString(),//data.leadMobileNo.toString(),
                                         leadId: data.leadId.toString(),
                                         currentLeadStage: data.leadStageStatus.toString(),
-                                        context: context,
+                                       /* context: context,*/
                                         showFeedbackDialog: showCallFeedbackDialog,
                                       );
                                     },
@@ -1974,7 +1974,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 ///new
   void showCallFeedbackDialog({
-    required BuildContext context,
+  /*  required BuildContext context,*/
     required leadId,
     required currentLeadStage,
     required callDuration,
@@ -1984,9 +1984,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
     showDialog(
       barrierDismissible: false,
-      context: context,
+     /* context: context,*/
+      context: Get.context!,
       builder: (BuildContext context) {
-
+        if(currentLeadStage=="6"){
+          leadListController.isFBDetailsShow.value=true;
+        }
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: AppText.addFAndF,

@@ -845,6 +845,7 @@ class LeadListController extends GetxController {
     required stage,
     required active,
     required empId,
+
   }) async {
     try {
       isLoading(true);
@@ -879,7 +880,6 @@ class LeadListController extends GetxController {
 
 
 
-
       getAllLeadsApi(
           leadStage: leadCode.value,
           employeeId:eId.value.toString(),
@@ -894,6 +894,15 @@ class LeadListController extends GetxController {
           leadMobileNumber:leadMobileNumberMain.value,
         leadName:leadNameMain.value,
       );
+
+      ///new code 17 jul
+     /* DashboardController dashboardController=Get.find();
+
+      getDetailsListOfLeadsForDashboardApi(
+          applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+          stageId: leadCode.value,
+
+      );*/
 
       isLoading(false);
     }

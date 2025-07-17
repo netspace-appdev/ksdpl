@@ -29,9 +29,9 @@ class CallService {
     required String phoneNumber,
     required String leadId,
     required String currentLeadStage,
-    required BuildContext context,
+    /*required BuildContext context,*/
     required Function({
-    required BuildContext context,
+   /* required BuildContext context,*/
     required String leadId,
     required String currentLeadStage,
     required String callDuration,
@@ -55,7 +55,7 @@ class CallService {
           Future.delayed(Duration(seconds: 2), () => checkCallStatus(
               leadId: leadId,
               currentLeadStage: currentLeadStage,
-              context: context,
+           /*   context: context,*/
             showFeedbackDialog: showFeedbackDialog
           ));
         }
@@ -70,9 +70,9 @@ class CallService {
   Future<void> checkCallStatus({
     required String leadId,
     required String currentLeadStage,
-    required BuildContext context,
+    /*required BuildContext context,*/
     required Function({
-    required BuildContext context,
+  /*  required BuildContext context,*/
     required String leadId,
     required String currentLeadStage,
     required String callDuration,
@@ -135,7 +135,7 @@ class CallService {
           showFeedbackDialog(
             leadId: leadId,
             currentLeadStage: leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),
-            context: context,
+           /* context: context,*/
             callDuration: callDuration.toString(),
             callStartTime:callStartTime.toString(),
             callEndTime: callEndTime.toString(),
@@ -151,7 +151,7 @@ class CallService {
         print("lead state not connnected===>${currentLeadStage}");
         leadListController.workOnLeadApi(
           leadId: leadId.toString(),
-          leadStageStatus: (currentLeadStage=="2" || currentLeadStage=="3")?"3":leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),
+          leadStageStatus: (currentLeadStage=="2" || currentLeadStage=="3")?"3":currentLeadStage.toString(),
           callStatus: "0",
           callDuration: callDuration,
           callStartTime: callStartTime,
@@ -162,7 +162,7 @@ class CallService {
           showFeedbackDialog(
             leadId: leadId,
             currentLeadStage: (currentLeadStage=="2" || currentLeadStage=="3")?"13":leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),
-            context: context,
+           /* context: context,*/
             callDuration: callDuration.toString(),
             callStartTime:callStartTime.toString(),
             callEndTime: callEndTime.toString(),

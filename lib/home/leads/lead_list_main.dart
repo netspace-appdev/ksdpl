@@ -771,7 +771,7 @@ overflow: TextOverflow.ellipsis,
             phoneNumber:phoneNumber,//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
-            context: context,
+          /*  context: context,*/
             showFeedbackDialog:showCallFeedbackDialog,
           );
 
@@ -1350,7 +1350,7 @@ overflow: TextOverflow.ellipsis,
 
 
   void showCallFeedbackDialog({
-    required BuildContext context,
+    /*required BuildContext context,*/
     required leadId,
     required currentLeadStage,
     required callDuration,
@@ -1360,8 +1360,12 @@ overflow: TextOverflow.ellipsis,
   }) {
     showDialog(
       barrierDismissible: false,
-      context: context,
+      /*context: context,*/
+      context: Get.context!,
       builder: (BuildContext context) {
+        if(currentLeadStage=="6"){
+          leadListController.isFBDetailsShow.value=true;
+        }
 
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
