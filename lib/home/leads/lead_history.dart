@@ -25,55 +25,10 @@ class LeadHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-   /* return SafeArea(
-      child: Scaffold(
-
-        backgroundColor: AppColor.backgroundColor,
-
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-
-
-              // White Container
-              Align(
-                alignment: Alignment.topCenter,  // Centers it
-                child: Container(
-                  width: double.infinity,
-                  //height: MediaQuery.of(context).size.height,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  decoration: const BoxDecoration(
-                    color: AppColor.backgroundColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(45),
-                      topRight: Radius.circular(45),
-                    ),
-
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min, // Prevents extra spacing
-                    children: [
-
-                      leadSection(context),
-                      SizedBox(
-                        height: 50,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-      ),
-    );*/
     return  Obx((){
       if (leadHistoryController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-
 
       if (leadHistoryController.getLeadWorkByLeadIdModel.value == null ||
           leadHistoryController.getLeadWorkByLeadIdModel.value!.data == null || leadHistoryController.getLeadWorkByLeadIdModel.value!.data=="") {
@@ -184,8 +139,6 @@ class LeadHistory extends StatelessWidget {
 
         },
       );
-
-
 
     });
   }
