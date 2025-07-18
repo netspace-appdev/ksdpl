@@ -29,7 +29,6 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   final List<Widget> _pages = [
     DashboardScreen(),
     LeadListMain(),
-    //AddLeadScreen(),
     OpenPollFilter(),
     MoreSettingScreen()
   ];
@@ -52,12 +51,6 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
 
-               /* _buildNavItem(Icons.person, "Profile", 1),
-                const SizedBox(width: 50), // Space for FAB
-                _buildNavItem(Icons.settings, "Settings", 2),
-                _buildNavItem(Icons.more_horiz, "More", 3),
-                _buildNavItem(Icons.more_horiz, "More", 3),*/
-
                 _buildNavItem(AppImage.homeIcon, AppImage.homeYellow,"Home", 0),
                 _buildNavItem(AppImage.lead_white, AppImage.lead_yellow, "Leads", 1),
                 const SizedBox(width: 50), // Space for FAB
@@ -67,18 +60,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
             ),
           ),
         ),
-       /* floatingActionButton: FloatingActionButton(
-          backgroundColor:AppColor.secondaryColor, // Yellow color
-          onPressed: () {
-            LeadDDController leadDDController=Get.find();
 
-            leadDDController.selectedStage.value="0";
-            Get.toNamed("/leadSearchScreen");
-          },
-          shape: const CircleBorder(),
-          // child: const Icon(Icons.add, size: 30, color: Colors.white),
-          child:  Image.asset(AppImage.searchIcon, height: 20,),//addIcon
-        ),*/
         floatingActionButton: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
@@ -123,12 +105,15 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
   Widget _buildNavItem(String unSelectedImg, String selectedImg, String label, int index) {
     return InkWell(
       onTap: (){
+        if (index == 1) {  // AddLeadScreen index
+          LeadListController leadListController = Get.find();
+          leadListController.isDashboardLeads.value=false;
+        }
         if (index == 2) {  // AddLeadScreen index
 
           Get.arguments?["leadId"]=0;
           Addleadcontroller addleadcontroller=Get.put(Addleadcontroller());
           addleadcontroller.clearControllers();
-
 
         }
         botNavController.onItemTapped(index);

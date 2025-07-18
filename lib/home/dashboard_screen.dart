@@ -515,6 +515,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     }else{
 
                     }
+                    leadListController.isDashboardLeads.value=true;
                     leadListController.getDetailsListOfLeadsForDashboardApi(
                       applyDateFilter: dashboardController.isLeadCountYearly.toString(), //correct it
                       stageId: stageId.toString(),
@@ -1885,6 +1886,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     label: AppText.ongoingCallYTD,
                     value: data.leadsCalledInYear.toString(),
                     color: Colors.deepPurpleAccent,
+                  ),
+                  const SizedBox(height: 12),
+                  _statusMiniCard(
+                    icon: Icons.do_not_disturb_alt_outlined,
+                    label: AppText.couldntConneect,
+                    value: data.todayNotConnectedCall.toString(),
+                    color: Colors.redAccent,
                   ),
                 ],
               ),

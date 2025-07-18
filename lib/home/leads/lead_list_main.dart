@@ -331,7 +331,6 @@ class LeadListMain extends StatelessWidget {
             itemBuilder: (context, index) {
 
               final lead = leadListController.getAllLeadsModel.value!.data![index];
-              print("lead.id.toString()==${lead.leadStage.toString()}");
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -699,7 +698,7 @@ class LeadListMain extends StatelessWidget {
   }
 
   Widget _buildDetailRow(String label, String value, int leadStage) {
-    print("leadStage=======>${leadStage}");
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -759,6 +758,7 @@ overflow: TextOverflow.ellipsis,
   }) {
     return IconButton(
       onPressed: () {
+        print("currentLeadStage on call tap===>${currentLeadStage}");
         print("leadId on call tap===>${leadId}");
 
         if(label=="call"){
@@ -768,7 +768,7 @@ overflow: TextOverflow.ellipsis,
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
+            phoneNumber:"+919238513910",//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
           /*  context: context,*/
@@ -939,7 +939,7 @@ overflow: TextOverflow.ellipsis,
                         id:leadId.toString(),
                         active: isActive.toString(),
                         stage:"4",
-                        empId: empId.toString()
+                        empId: empId.toString(),
                     );
                   } else if (label_code == "not_interested") {
                     var isActive = leadListController.changeActiveStatus("5");
@@ -1265,7 +1265,7 @@ overflow: TextOverflow.ellipsis,
           ),
           onSubmit: () {
             leadListController.fromWhereLeads.value="main";
-
+            leadListController.isDashboardLeads.value=false;
             leadListController.filterSubmit();
             Navigator.pop(context); // Close dialog after submission
             // Handle submission logic

@@ -154,6 +154,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                        leadListController.cityIdMain.value="0";
                        leadListController.campaignMain.value="";
                        leadListController.fromWhere.value="drawer";
+                       leadListController.isDashboardLeads.value=false;
+
                        Get.toNamed("/leadListMain");
                      },
                    ),

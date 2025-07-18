@@ -90,6 +90,9 @@ class LeadListController extends GetxController {
   RxInt leadListLength = 0.obs;
   RxInt filteredLeadListLength = 0.obs;
   LeadDDController leadDDController=Get.put(LeadDDController());
+
+  var isDashboardLeads = false.obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -713,68 +716,6 @@ class LeadListController extends GetxController {
     }
   }
 
-  ///backup
-/*
-  void getDetailsListOfLeadsForDashboardApi({
-    required stageId,
-    required applyDateFilter,
-    bool isLoadMore = false,
-  }) async {
-
-    try {
-
-      if (isMainListMoreLoading.value || (!hasMore.value && isLoadMore)) return;
-
-      isMainListMoreLoading(true);
-
-      if (!isLoadMore) {
-        currentPage.value = 1; // Reset to first page on fresh load
-        hasMore.value = true;
-      }
-
-      var data = await DrawerApiService.getDetailsListOfLeadsForDashboardApi(
-        stageId: stageId,
-        applyDateFilter:applyDateFilter ,
-        pageNumber: currentPage.value,
-        pageSize: pageSize,
-
-      );
-
-      if (data['success'] == true) {
-        var newLeads = GetAllLeadsModel.fromJson(data);
-
-        if (isLoadMore) {
-          getAllLeadsModel.value!.data!.addAll(newLeads.data!);
-        } else {
-          getAllLeadsModel.value = newLeads;
-        }
-
-        //leadStageName2.value = leadStageName.value;
-
-        // If less data returned than requested pageSize, mark as no more
-        if (newLeads.data!.length < pageSize) {
-          hasMore.value = false;
-        } else {
-          currentPage.value++; // Ready for next page
-        }
-        leadListLength.value=getAllLeadsModel.value!.data!.length;
-      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
-        //leadStageName2.value = leadStageName.value;
-        getAllLeadsModel.value = null;
-        hasMore.value = false;
-      } else {
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-    } catch (e) {
-      print("Error getAllLeadsApi: $e");
-      ToastMessage.msg(AppText.somethingWentWrong);
-    } finally {
-      isMainListMoreLoading(false);
-    }
-  }
-*/
-
-
 
   void  updateLeadStageApi({
     required id,
@@ -845,7 +786,6 @@ class LeadListController extends GetxController {
     required stage,
     required active,
     required empId,
-
   }) async {
     try {
       isLoading(true);
@@ -878,32 +818,32 @@ class LeadListController extends GetxController {
       isLoading(false);
     } finally {
 
+     if(isDashboardLeads.value==false){
+       getAllLeadsApi(
+         leadStage: leadCode.value,
+         employeeId:eId.value.toString(),
+         stateId:stateIdMain.value,
+         distId: distIdMain.value,
+         cityId: cityIdMain.value,
+         campaign: campaignMain.value,
+         fromDate: fromDateMain.value,
+         toDate: toDateMain.value,
+         branch: branchMain.value,
+         uniqueLeadNumber: uniqueLeadNumberMain.value,
+         leadMobileNumber:leadMobileNumberMain.value,
+         leadName:leadNameMain.value,
+       );
+     }else{
+       ///new code 17 jul
 
+        DashboardController dashboardController=Get.find();
 
-      getAllLeadsApi(
-          leadStage: leadCode.value,
-          employeeId:eId.value.toString(),
-          stateId:stateIdMain.value,
-          distId: distIdMain.value,
-          cityId: cityIdMain.value,
-          campaign: campaignMain.value,
-          fromDate: fromDateMain.value,
-          toDate: toDateMain.value,
-          branch: branchMain.value,
-          uniqueLeadNumber: uniqueLeadNumberMain.value,
-          leadMobileNumber:leadMobileNumberMain.value,
-        leadName:leadNameMain.value,
-      );
-
-      ///new code 17 jul
-     /* DashboardController dashboardController=Get.find();
-
-      getDetailsListOfLeadsForDashboardApi(
+        getDetailsListOfLeadsForDashboardApi(
           applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
-          stageId: leadCode.value,
+          stageId: leadCode.value
+        );
 
-      );*/
-
+     }
       isLoading(false);
     }
   }
@@ -1034,7 +974,12 @@ class LeadListController extends GetxController {
 
 
 
-      getAllLeadsApi(
+
+
+
+
+      if(isDashboardLeads.value==false){
+        getAllLeadsApi(
           leadStage: leadCode.value,
           employeeId:eId.value.toString(),
           stateId:stateIdMain.value,
@@ -1046,8 +991,19 @@ class LeadListController extends GetxController {
           branch: branchMain.value,
           uniqueLeadNumber: uniqueLeadNumberMain.value,
           leadMobileNumber:leadMobileNumberMain.value,
-        leadName:leadNameMain.value,
-      );
+          leadName:leadNameMain.value,
+        );
+      }else{
+        ///new code 17 jul
+
+        DashboardController dashboardController=Get.find();
+
+        getDetailsListOfLeadsForDashboardApi(
+            applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+            stageId: leadCode.value
+        );
+
+      }
 
       isLoading(false);
     }
