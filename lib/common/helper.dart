@@ -647,6 +647,7 @@ class AppText{
   static const String sectionA = "Section A";
   static const String sectionB = "Section B";
   static const String sectionC = "Section C";
+  static const String sectionD = "Section D";
 
   static const String todaycall = "Today's Calls";
   static const String convertedToInterested = "Converted to Interested";
@@ -738,6 +739,15 @@ class AppText{
   static const String reason="Reason";
   static const String enterReason="Please Enter Reason";
   static const String camNoteSentMessage="You have already sent Cam Note to this bank";
+  static const String basicDetails="Basic Details";
+  static const String otherDetails="Other Details";
+  static const String geolocationPhotos="Geolocation & Photos";
+  static const String packageDetails="Package Details";
+  static const String sendEmail="Send Email";
+  static const String enterPhone="Please enter phone number";
+  static const String pleaseEnterFullName="Please Enter Full Name";
+  static const String pleaseEnterEmail="Please Enter Email";
+
 }
 
 class AppColor{

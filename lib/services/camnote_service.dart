@@ -29,6 +29,7 @@ class CamNoteService {
   static const String getPackageDetailsById = BaseUrl.baseUrl + 'CamNoteDetail/GetPackageDetailsById';
   static const String fetchBankDetailBySegmentIdAndKSDPLProductId = BaseUrl.baseUrl + 'ProductList/FetchBankDetailBySegmentIdAndKSDPLProductId';
   static const String getProductDetailBySegmentAndProduct = BaseUrl.baseUrl + 'ProductList/GetProductDetailBySegmentAndProduct';
+  static const String sendMailForLocationOfCustomer = BaseUrl.baseUrl + 'LeadDetail/SendMailForLocationOfCustomer';
 
 
 
@@ -90,8 +91,7 @@ class CamNoteService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(getProductDetailsByFilter, request.fields);
-      Helper.ApiRes(getProductDetailsByFilter, response.body);
+
 
 
       if (response.statusCode == 200) {
@@ -119,8 +119,7 @@ class CamNoteService {
       );
      // const JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
-     Helper.ApiReq(addAdditionalSourceIncome, jsonEncode(body));
-     Helper.ApiRes(addAdditionalSourceIncome, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -202,8 +201,7 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(updateBankerDetail, request.fields);
-      Helper.ApiRes(updateBankerDetail, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -256,8 +254,7 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(addBankerDetail, request.fields);
-      Helper.ApiRes(addBankerDetail, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -289,8 +286,6 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(getBankerDetail, request.fields);
-      Helper.ApiRes(getBankerDetail, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -371,12 +366,6 @@ class CamNoteService {
     String? BranchOfBank,
     String? SanctionProcessingCharges,
 
-   /* String? GeoLocationOfResidence,
-    String? GeoLocationOfOffice,
-    String? GeoLocationOfProperty,
-    List<File>? PhotosOfProperty,
-    List<File>? PhotosOfResidence,
-    List<File>? PhotosOfOffice,*/
 
   }) async {
     try {
@@ -425,54 +414,14 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'BranchOfBank', BranchOfBank,fallback: "0");
 
 
-    /*  MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfResidence', GeoLocationOfResidence);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfProperty', GeoLocationOfProperty);*/
-
-
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'SanctionProcessingCharges', SanctionProcessingCharges,fallback: "0");
 
-/*
-    if(PhotosOfProperty!=null ||PhotosOfProperty!.isNotEmpty ){
-      // 📸 Add multiple images for "PhotosOfProperty"
-      for (int i = 0; i < PhotosOfProperty.length; i++) {
-        var file = await http.MultipartFile.fromPath(
-          'PhotosOfProperty',
-          PhotosOfProperty[i].path,
-         *//* contentType: MediaType('image', 'jpeg'), // adjust if needed*//*
-        );
-        request.files.add(file);
-      }
-    }
-      if(PhotosOfResidence!=null ||PhotosOfResidence!.isNotEmpty ){
-        // 📸 Add multiple images for "PhotosOfProperty"
-        for (int i = 0; i < PhotosOfResidence.length; i++) {
-          var file = await http.MultipartFile.fromPath(
-            'PhotosOfResidence',
-            PhotosOfResidence[i].path,
-            *//* contentType: MediaType('image', 'jpeg'), // adjust if needed*//*
-          );
-          request.files.add(file);
-        }
-      }
 
-      if(PhotosOfOffice!=null ||PhotosOfOffice!.isNotEmpty ){
-        // 📸 Add multiple images for "PhotosOfProperty"
-        for (int i = 0; i < PhotosOfOffice.length; i++) {
-          var file = await http.MultipartFile.fromPath(
-            'PhotosOfOffice',
-            PhotosOfOffice[i].path,
-            *//* contentType: MediaType('image', 'jpeg'), // adjust if needed*//*
-          );
-          request.files.add(file);
-        }
-      }*/
 
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(addCamNoteDetail, request.fields);
-      Helper.ApiRes(addCamNoteDetail, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -505,8 +454,7 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(sendMailToBankerAfterGenerateCamNote, request.fields);
-      Helper.ApiRes(sendMailToBankerAfterGenerateCamNote, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -545,8 +493,7 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(generateCibilScoreByAadhar, request.fields);
-      Helper.ApiRes(generateCibilScoreByAadhar, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -580,8 +527,7 @@ class CamNoteService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(generateCibilScoreByPAN, request.fields);
-      Helper.ApiRes(generateCibilScoreByPAN, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -627,8 +573,6 @@ class CamNoteService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(addCibilDetails, request.fields);
-      Helper.ApiRes(addCibilDetails, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -661,8 +605,7 @@ class CamNoteService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(getCamNoteDetailByLeadId, request.fields);
-      Helper.ApiRes(getCamNoteDetailByLeadId, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -693,8 +636,7 @@ class CamNoteService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(getCamNoteDetailById, request.fields);
-      Helper.ApiRes(getCamNoteDetailById, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -805,8 +747,7 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(editCamNoteDetail, request.fields);
-      Helper.ApiRes(editCamNoteDetail, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -837,8 +778,7 @@ class CamNoteService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(getPackageDetailsById, request.fields);
-      Helper.ApiRes(getPackageDetailsById, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -872,8 +812,7 @@ class CamNoteService {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      Helper.ApiReq(fetchBankDetailBySegmentIdAndKSDPLProductId, request.fields);
-      Helper.ApiRes(fetchBankDetailBySegmentIdAndKSDPLProductId, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -907,6 +846,41 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'SegmentVerticalId', segmentVerticalId, fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'KSDPLProductId', kSDPLProductId, fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'BankId', bankId, fallback: "0");
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      Helper.ApiReq(fetchBankDetailBySegmentIdAndKSDPLProductId, request.fields);
+      Helper.ApiRes(fetchBankDetailBySegmentIdAndKSDPLProductId, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> sendMailForLocationOfCustomerApi({
+    required String locationType,
+    required String leadId,
+    required String email,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(sendMailForLocationOfCustomer),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LocationType', locationType, fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'LeadId', leadId);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Email', email,);
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);

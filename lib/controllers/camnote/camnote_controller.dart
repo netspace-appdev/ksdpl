@@ -30,6 +30,7 @@ import '../../models/camnote/GetCamNoteLeadIdModel.dart';
 import '../../models/camnote/GetPackageDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart' as otherBankBranch;
 import '../../models/camnote/GetProductDetailsByFilterModel.dart' as pdFModel;
+import '../../models/camnote/SendMailForLocationOfCustomerModel.dart';
 import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
 import '../../models/camnote/fetchBankDetailSegKSDPLProdModel.dart' as otherBank;
@@ -415,6 +416,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var isOtherBankLoading = false.obs;
   var isOtherBankBrLoading = false.obs;
   var getProductListById = Rxn<gpli.GetProductListById>(); //
+  var sendMailForLocationOfCustomerModel = Rxn<SendMailForLocationOfCustomerModel>(); //
 
   void nextStep(int tappedIndex) {
     if (currentStep.value < 2) {
@@ -2346,6 +2348,43 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           }
 
 
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllProductListModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+
+  Future<void>  sendMailForLocationOfCustomerApi({
+    required String locationType,
+    required String leadId,
+    required String email,
+  }) async {
+    try {
+      isLoading(true);
+
+      var data = await CamNoteService.sendMailForLocationOfCustomerApi(
+          locationType: locationType,
+        leadId: leadId,
+        email: email
+      );
+
+      if(data['success'] == true){
+
+        sendMailForLocationOfCustomerModel.value= SendMailForLocationOfCustomerModel.fromJson(data);
 
         isLoading(false);
 
