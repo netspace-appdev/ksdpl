@@ -99,7 +99,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ],
                       ),
                     ),
-
                     // White Container
                     Align(
                       alignment: Alignment.topCenter,  // Centers it
@@ -127,7 +126,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             const SizedBox(
                               height: 20,
                             ),
-
 
                             reminders(),
 
@@ -160,7 +158,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                       ),
                     ),
-
                   ],
                 )
               ],
@@ -213,7 +210,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       style:  GoogleFonts.roboto(
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
-
                           color: AppColor.grey3
                       ),
                     ),
@@ -222,13 +218,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ],
           ),
-
           InkWell(
             onTap: (){
               showFilterDialogForLeadCount(context: context);
             },
             child: Container(
-
               width: 40,
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),

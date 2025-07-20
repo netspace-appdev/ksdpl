@@ -151,6 +151,7 @@ class AppText{
   static const String headquartLocation="Headquarters Location";
   static const String emailNoStar="Email";
   static const String phoneNumberNoStar="Phone Number";
+  static const String mobilenumber="Mobile Number";
   static const String whatsappNoNoStar="WhatsApp Number";
   static const String fax="Fax";
   static const String website="Website URL";
@@ -178,6 +179,7 @@ class AppText{
   static const String enterFullName="Enter Full Name";
   static const String dateOfBirth="Date of Birth";
   static const String enterPhNumber="Enter Phone Number";
+  static const String enterMBmber="Enter Mobile Number";
   static const String lar="Loan Amount Requested";
   static const String enterLar="Enter Loan Amount Requested";
   static const String enterEA="Enter Email Address";
@@ -433,6 +435,8 @@ class AppText{
   static const String enterBankerWhatsapp = "Enter Banker Whatsapp";
   static const String enterBankerEmail = "Enter Banker Email";
   static const String manageProducts = "Manage Products";
+  static const String managePPT = "View PPT";
+  static const String manageCibil = "MANAGE CIBIL";
 
   ///product
   static const String addProduct = "Add Product";
@@ -579,7 +583,9 @@ class AppText{
   static const String enterOverdueCases = "Enter Overdue Cases";
 
   static const String totalOverdueAmountCibil = "Total Overdue Amount As Per CIBIL";
+  static const String totalAmountCibil = "Amount";
   static const String enterOverdueAmountCibil = "Enter Overdue Amount";
+  static const String enterAmountCibil = "Enter Amount";
 
   static const String totalEnquiries = "Total Enquiries Made As Per CIBIL";
   static const String enterTotalEnquiries = "Enter Number of Enquiries";
@@ -705,6 +711,7 @@ class AppText{
   static const String receivableAmount = "Receivable Amount";
   static const String enterReceivableAmount = "Enter Receivable Amount";
   static const String receivableDate = "Receivable Date";
+  static const String receivedDate = "Received Date";
   static const String enterReceivableDate  = "Enter Receivable Date";
   static const String transactionDetails  = "UTR";
   static const String enterTransactionDetails  = "Enter UTR";
@@ -832,6 +839,8 @@ class AppImage{
   static const String doc="assets/images/doc.png";
   static const String arrow="assets/images/arrow.png";
   static const String addIcon="assets/images/addIcon.png";
+  static const String addcivil="assets/images/loan.png";
+  static const String addppt="assets/images/powerpoint.png";
   static const String addIconYellow="assets/images/addIcon_yellow.png";
   static const String faq="assets/images/faq.png";
   static const String searchGlass="assets/images/searchGlass.png";

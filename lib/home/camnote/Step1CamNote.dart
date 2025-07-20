@@ -582,7 +582,7 @@ class Step1CamNote extends StatelessWidget {
                             textColor: AppColor.appWhite,
                             text: AppText.sendEmail,
                             onPressed: (){
-                             // onSendEmail("1", context);
+                              // onSendEmail("1", context);
                             },
                           ),
                         ),

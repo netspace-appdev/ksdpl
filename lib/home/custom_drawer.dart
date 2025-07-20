@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/base_url.dart';
@@ -7,11 +8,13 @@ import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
+import 'package:ksdpl/home/cibilgenerate/CibilGeneratePage.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
+import '../controllers/WebController.dart';
 import '../controllers/attendance/attendance_controller.dart';
 import '../controllers/camnote/camnote_controller.dart';
 import '../controllers/leads/income_step_controller.dart';
@@ -19,6 +22,7 @@ import '../controllers/leads/leadlist_controller.dart';
 import '../controllers/product/add_product_controller.dart';
 import '../controllers/product/view_product_controller.dart';
 import '../custom_widgets/RoundedInitialContainer.dart';
+import 'RestrictedWebView.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -31,9 +35,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String firstName="user";
   String email="user@email.com";
   String role="";
+
   LeadListController leadListController = Get.find();
   Addleadcontroller addLeadController = Get.find();
   BotNavController botNavController=Get.find();
+  WebController _webController=Get.put(WebController());
+
   @override
   void initState() {
     // TODO: implement initState
@@ -203,6 +210,103 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
                ExpansionTile(
                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                 title: const Text(
+                   AppText.managePPT,
+                   style: TextStyle(
+                     color: AppColor.blackColor,
+                     fontSize: 16,
+                     fontWeight: FontWeight.w500,
+                   ),
+                 ),
+                 leading: Image.asset(AppImage.addppt, height: 20),
+                 children: [
+                   ListTile(
+                     leading: Icon(Icons.add_task, color: AppColor.blackColor),
+                     title: Text(
+                       "हिंदी में पीपीटी देखें",
+                       style: TextStyle(
+                         color: AppColor.blackColor,
+                         fontSize: 16,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+                     onTap: () {
+                       Get.to(() => RestrictedWebView(
+                         url: _webController.hindiUrl,
+                         title: "",
+                       ));
+                     },
+                   ),
+
+                   ListTile(
+                     leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
+                     title: Text(
+                       "View PPT in English",
+                       style: TextStyle(
+                         color: AppColor.blackColor,
+                         fontSize: 16,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+                     onTap: () {
+                       Get.to(() => RestrictedWebView(
+                         url: _webController.englishUrl,
+                         title: "",
+                       ));
+                     },
+                   ),
+                 ],
+               ),
+
+               ExpansionTile(
+                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                 title: const Text(
+                   AppText.manageCibil,
+                   style: TextStyle(
+                     color: AppColor.blackColor,
+                     fontSize: 16,
+                     fontWeight: FontWeight.w500,
+                   ),
+                 ),
+                 leading: Image.asset(AppImage.addcivil, height: 20),
+                 children: [
+                   ListTile(
+                     leading: Icon(Icons.add_task, color: AppColor.blackColor),
+                     title: Text(
+                       "Cibil Generate",
+                       style: TextStyle(
+                         color: AppColor.blackColor,
+                         fontSize: 16,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+                     onTap: () {
+                       Get.to(() => Cibilgeneratepage());
+                     },
+                   ),
+
+                   ListTile(
+                     leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
+                     title: Text(
+                       "Cibil Record List",
+                       style: TextStyle(
+                         color: AppColor.blackColor,
+                         fontSize: 16,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+                     onTap: () {
+                       // Get.to(() => RestrictedWebView(
+                       //   url: _webController.englishUrl,
+                       //   title: "",
+                       // ));
+                     },
+                   ),
+                 ],
+               ),
+
+               ExpansionTile(
+                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                  title:const Text(AppText.manageAttendance, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                  leading: Image.asset(AppImage.product, height: 20,),
                  children: [
@@ -246,7 +350,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  imagePath:AppImage.webImg,
                  onTap: () => _launchURL("https://docs.google.com/spreadsheets/d/1__iYzKKiDthxhfTqh8WEsdVolIcl2ymi0fqnShwNqto/edit?gid=0#gid=0"),
                ),
-
 
 
                // Logout Button

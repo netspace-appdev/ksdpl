@@ -48,8 +48,6 @@ class ManageBranchScreen1State extends State<ManageBranchScreen1> {
   final FocusNode _buttonFocusNode = FocusNode(debugLabel: 'Menu Button');
 
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +59,6 @@ class ManageBranchScreen1State extends State<ManageBranchScreen1> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
