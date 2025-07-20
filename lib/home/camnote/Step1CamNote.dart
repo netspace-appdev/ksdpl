@@ -596,14 +596,13 @@ class Step1CamNote extends StatelessWidget {
                   controller: camNoteController.camTransactionDetailsController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterTransactionDetails,
-
                 ),
+
                 CustomLabeledTextField(
                   label: AppText.remark,
                   controller: camNoteController.camRemarkController,
                   inputType: TextInputType.name,
                   hintText: AppText.enterRemark,
-
                 ),
 
                 Helper.customDivider(color: Colors.grey),

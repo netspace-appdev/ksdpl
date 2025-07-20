@@ -54,6 +54,15 @@ class ValidationHelper {
     return null; // Name is valid
   }
 
+  static String? validateAmt(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Amount is required";
+    }
+
+    return null; // Name is valid
+  }
+
+
   static String? validateEmailNotNull(String? value) {
     if (value == null || value.isEmpty) {
       return "Email is required";
@@ -287,6 +296,21 @@ class ValidationHelper {
     return null; // Name is valid
   }
 
+  static String? validateReceivedDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Received date is required";
+    }
+
+    return null; // Name is valid
+  }
+
+  static String? validateUTR(String? value) {
+    if (value == null || value.isEmpty) {
+      return "UTR Number is required";
+    }
+
+    return null; // Name is valid
+  }
 
   static String? validateToDateNew(String? value) {
     if (value == null || value.isEmpty) {
