@@ -22,7 +22,7 @@ class _TutorialVideoState extends State<TutorialVideo> {
   late BetterPlayerController _betterPlayerController;
   final WebController _webController = Get.find();
 
-  @override
+/*  @override
   void initState() {
     super.initState();
 
@@ -73,6 +73,62 @@ class _TutorialVideoState extends State<TutorialVideo> {
     ]);
 
     super.dispose();
+  }*/
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Force landscape + fullscreen
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+    _betterPlayerController = BetterPlayerController(
+      BetterPlayerConfiguration(
+        autoPlay: true,
+        aspectRatio: 16 / 9,
+        fullScreenByDefault: true,
+        autoDetectFullscreenDeviceOrientation: true,
+        autoDetectFullscreenAspectRatio: true,
+        allowedScreenSleep: false,
+        handleLifecycle: true,
+        controlsConfiguration: BetterPlayerControlsConfiguration(
+          enableFullscreen: true,
+          enablePlaybackSpeed: true,
+          enableSkips: true,
+        ),
+      ),
+      betterPlayerDataSource: BetterPlayerDataSource(
+        BetterPlayerDataSourceType.network,
+        widget.url,
+      ),
+    );
+
+    _betterPlayerController.addEventsListener((event) {
+      if (event.betterPlayerEventType == BetterPlayerEventType.hideFullscreen) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _betterPlayerController.dispose();
+
+    // Restore to portrait and normal UI when leaving the screen
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+    super.dispose();
   }
 
   @override
@@ -84,20 +140,26 @@ class _TutorialVideoState extends State<TutorialVideo> {
         body: Stack(
           children: [
             Positioned.fill(child: _videoContainer(context)),
-            Container(
-              color: AppColor.primaryColor,
-              child: Positioned(
-                top: MediaQuery.of(context).padding.top + 10, // Keeps it below status bar
-                left: 0,
-                right: 0,
+
+            // Header always visible above video
+            Positioned(
+              top: MediaQuery.of(context).padding.top,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: AppColor.primaryColor,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 child: _header(context, widget.title),
               ),
             ),
           ],
         ),
+
+
       ),
     );
   }
+
 
 
   Widget _gradientBackground(BuildContext context) {

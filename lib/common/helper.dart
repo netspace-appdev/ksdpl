@@ -760,6 +760,8 @@ class AppText{
   static const String pleaseEnterFullName="Please Enter Full Name";
   static const String pleaseEnterEmail="Please Enter Email";
   static const String cncMessage="Lead moved to could not connect successfully";
+  static const String robmLogin="RO/BM Login";
+  static const String aicLogin="AIC Login";
 
 }
 

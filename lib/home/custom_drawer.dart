@@ -307,12 +307,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ),
                       ),
                       onTap: () {
-                        //  Get.to(() => TutorialVideo(
-                        //  url: _webController.tutorial_video_Url,
-                        // title: "Staff",
-                        //));
+                         Get.to(() => TutorialVideo(
+                         url: _webController.tutorial_video_Url,
+                        title: "Staff",
+                        ));
 
-                        _launchURL(_webController.tutorial_video_Url);
                       },
                     ),
                   ],
@@ -344,7 +343,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       },
                     ),
 
-                    ListTile(
+                    /*ListTile(
                       leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
                       title: Text(
                         "Cibil Record List",
@@ -360,7 +359,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         //   title: "",
                         // ));
                       },
-                    ),
+                    ),*/
                   ],
                 ),
 
@@ -402,12 +401,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   onTap: () => _launchURL("https://kanchaneshver.in/"),
                 ),
                 CustomListTile(
-                  title:  "Sales",
+                  title:  AppText.robmLogin,
                   imagePath:AppImage.webImg,
                   onTap: () => _launchURL("https://sales.kanchaneshver.com/"),
                 ),
                 CustomListTile(
-                  title:  "AIC",
+                  title:  AppText.aicLogin,
                   imagePath:AppImage.webImg,
                   onTap: () => _launchURL("https://aic.kanchaneshver.com/"),
                 ),
@@ -453,6 +452,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ),
                 ),
+
+                SizedBox(
+                  height: 50,
+                )
 
               ],
             ),

@@ -20,21 +20,7 @@ class Cibilgeneratepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: AppColor.backgroundColor,
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   title: Text(
-        //     'Generate Cibil',
-        //   //  widget.title,
-        //     style: TextStyle(
-        //       fontSize: 18,
-        //       fontWeight: FontWeight.w600,
-        //       color: AppColor.appWhite,
-        //     ),
-        //   ),
-        //   iconTheme: IconThemeData(color: Colors.white),
-        //   backgroundColor: AppColor.primaryColor,
-        //   centerTitle: true,
-        // ),
+
 
       body: Form(
         key:  cibilGenerateController.formKey ,

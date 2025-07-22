@@ -329,8 +329,8 @@ class ValidationHelper {
     if (amount == null) {
       return "Amount must be a valid number";
     }
-    if (amount < 180) {
-      return "Amount must not be less than 180";
+    if (amount < 118) {
+      return "Amount must not be less than 118";
     }
     return null;
   }

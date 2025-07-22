@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/services/generate_cibil_services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
@@ -43,14 +44,7 @@ class CibilGenerateController extends GetxController{
       if (data['success'] == true) {
         generateCibilResponseModel.value = GenerateCibilResponseModel.fromJson(data);
         ToastMessage.msg(data['message']);
-        print('data is here ${data['message']}');
-        print('data is here ${data['data']['data']['redirect_url']}');
-
-          Get.to(() => RestrictedWebView(
-
-            url: generateCibilResponseModel.value?.data?.cibilData?.redirectUrl??'',
-            title: "Cibil Generate",
-          ));
+        _launchURL(generateCibilResponseModel.value?.data?.cibilData?.redirectUrl??'');
 
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
         // Handle empty case
@@ -64,4 +58,13 @@ class CibilGenerateController extends GetxController{
       isLoading(false);
     }
   }
+
+
+  _launchURL(String url) async {
+    final Uri _url = Uri.parse(url);
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
 }
+

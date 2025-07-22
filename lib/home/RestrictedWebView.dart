@@ -44,6 +44,7 @@ class _RestrictedWebViewState extends State<RestrictedWebView> {
             Get.snackbar("Error", "Failed to load page.");
           },
           onNavigationRequest: (request) {
+            print("request--->${request}");
             final requestedUrl = request.url;
             if (requestedUrl.endsWith(".pdf") &&
                 !requestedUrl.contains("docs.google.com")) {

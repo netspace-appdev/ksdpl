@@ -1416,7 +1416,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           borderRadius: BorderRadius.circular(5),
                                           border: Border.all(color: AppColor.grey700)
                                       ),
-                                      child: Row(
+                                      child: const Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Icon(Icons.newspaper, color:AppColor.grey700, size: 16),
@@ -1483,7 +1483,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
 
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   colors: [AppColor.primaryLight, AppColor.primaryDark],
                   begin: Alignment.centerRight,
                   end: Alignment.centerLeft,
@@ -1517,7 +1517,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           onTap: () {
                             Get.toNamed("/getAllReminder");
                           },
-                          child: Text(
+                          child: const Text(
                             "View All",
                             style: TextStyle(
                               fontSize: 16,
@@ -1575,15 +1575,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         showFeedbackDialog: showCallFeedbackDialog,
                                       );
                                     },
-                                    child: CircleAvatar(
+                                    child: const CircleAvatar(
                                       backgroundColor: AppColor.secondaryColor,
                                       radius: 24,
-                                     /* child: Text(
-                                        data.leadCustomerName!.isNotEmpty
-                                            ? data.leadCustomerName![0].toUpperCase()
-                                            : "U",
-                                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                                      ),*/
+
                                       child: Icon(Icons.phone, color: AppColor.appWhite,),
                                     ),
                                   ),
