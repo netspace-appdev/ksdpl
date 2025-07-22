@@ -50,7 +50,6 @@ class ManageLeaveScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-
         backgroundColor: AppColor.backgroundColor,
         drawer:   CustomDrawer(),
         body: SingleChildScrollView(
@@ -71,17 +70,13 @@ class ManageLeaveScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     child:Column(
                       children: [
-
                         const SizedBox(
                           height: 20,
                         ),
-
                         header(context),
-
                       ],
                     ),
                   ),
-
                   // White Container
                   Align(
                     alignment: Alignment.topCenter,  // Centers it

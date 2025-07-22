@@ -720,6 +720,7 @@ class AppText{
   static const String enterZipcode  = "Please Add Zipcode in Step 1";
   static const String forgotMsg  = "We’ve sent a password reset link to your email address. Please check your inbox";
   static const String genAadhar  = "Generate by Aadhar";
+  static const String genCibil  = "Generate Cibil";
   static const String genPan  = "Generate by PAN";
   static const String camNoteDetails = "Cam Note Details";
   static const String bankName = "Bank Name";

@@ -14,7 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
-import '../controllers/WebController.dart';
+import '../controllers/webController.dart';
 import '../controllers/attendance/attendance_controller.dart';
 import '../controllers/camnote/camnote_controller.dart';
 import '../controllers/leads/income_step_controller.dart';
@@ -44,7 +44,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   void initState() {
     // TODO: implement initState
-
     super.initState();
     loadData();
   }
@@ -52,12 +51,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-
         padding: EdgeInsets.zero,
         children: [
-
           DrawerHeader(
-
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [AppColor.primaryDark, AppColor.primaryLight],
@@ -233,7 +229,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                      onTap: () {
                        Get.to(() => RestrictedWebView(
                          url: _webController.hindiUrl,
-                         title: "",
+                         title: "अंग्रेजी में पीपीटी",
                        ));
                      },
                    ),
@@ -241,7 +237,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                    ListTile(
                      leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
                      title: Text(
-                       "View PPT in English",
+                       "PPT in English",
                        style: TextStyle(
                          color: AppColor.blackColor,
                          fontSize: 16,
@@ -251,7 +247,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                      onTap: () {
                        Get.to(() => RestrictedWebView(
                          url: _webController.englishUrl,
-                         title: "",
+                         title: "PPT in English",
                        ));
                      },
                    ),
