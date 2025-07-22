@@ -175,7 +175,8 @@ class CamNoteService {
     String? superiorEmail,
     String? createdBy,
 
-  }) async {
+  })
+  async {
     try {
       var request = http.MultipartRequest(
         'POST',

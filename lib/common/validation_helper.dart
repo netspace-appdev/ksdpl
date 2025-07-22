@@ -319,4 +319,20 @@ class ValidationHelper {
 
     return null; // Name is valid
   }
+
+
+  static String? validatecibilamount(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Amount is required";
+    }
+    final amount = double.tryParse(value);
+    if (amount == null) {
+      return "Amount must be a valid number";
+    }
+    if (amount < 180) {
+      return "Amount must not be less than 180";
+    }
+    return null;
+  }
+
 }

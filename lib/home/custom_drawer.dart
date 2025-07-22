@@ -13,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
-import '../controllers/WebController.dart';
+import '../controllers/webController.dart';
 import '../controllers/attendance/attendance_controller.dart';
 import '../controllers/camnote/camnote_controller.dart';
 import '../controllers/leads/income_step_controller.dart';
@@ -43,7 +43,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   void initState() {
     // TODO: implement initState
-
     super.initState();
     loadData();
   }
@@ -51,12 +50,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-
         padding: EdgeInsets.zero,
         children: [
-
           DrawerHeader(
-
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [AppColor.primaryDark, AppColor.primaryLight],
@@ -115,282 +111,280 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
           ),
           // Navigation Items
-         Padding(
-           padding: const EdgeInsets.only(left: 17.0),
-           child: Column(
-             children: [
-               CustomListTile(
-                 title:  AppText.home,
-                 imagePath:AppImage.home2,
-                 onTap: () {
-                   Navigator.pop(context);
-                   botNavController.selectedIndex.value = 0;
-                 },
+          Padding(
+            padding: const EdgeInsets.only(left: 17.0),
+            child: Column(
+              children: [
+                CustomListTile(
+                  title:  AppText.home,
+                  imagePath:AppImage.home2,
+                  onTap: () {
+                    Navigator.pop(context);
+                    botNavController.selectedIndex.value = 0;
+                  },
 
-               ),
+                ),
 
-               ExpansionTile(
-                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                 title:const Text(AppText.leads, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                 leading: Image.asset(AppImage.manInBlack, height: 20,),
-                 children: [
-                   ListTile(
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title:const Text(AppText.leads, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                  leading: Image.asset(AppImage.manInBlack, height: 20,),
+                  children: [
+                    ListTile(
 
-                     leading:  Icon(Icons.add_task,color: AppColor.blackColor),
-                     title:  Text("Add", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                     onTap: () {
-                       LeadDDController leadDDController=Get.find();
-                       leadDDController.getAllKsdplProductApi();
-                       AddProductController addProductController =Get.put(AddProductController());
-                       addProductController.getAllProductCategoryApi();
+                      leading:  Icon(Icons.add_task,color: AppColor.blackColor),
+                      title:  Text("Add", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      onTap: () {
+                        LeadDDController leadDDController=Get.find();
+                        leadDDController.getAllKsdplProductApi();
+                        AddProductController addProductController =Get.put(AddProductController());
+                        addProductController.getAllProductCategoryApi();
 
-                       addLeadController.fromWhere.value="drawer";
+                        addLeadController.fromWhere.value="drawer";
 
-                       addLeadController.clearControllers();
-                       CamNoteController camNoteController=Get.put(CamNoteController());
+                        addLeadController.clearControllers();
+                        CamNoteController camNoteController=Get.put(CamNoteController());
                         Get.toNamed("/addLeadScreen");
-                     },
-                   ),
-                   ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
-                     leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
-                     title:  Text("View",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
-                     onTap: () {
-                       leadListController.stateIdMain.value="0";
-                       leadListController.distIdMain.value="0";
-                       leadListController.cityIdMain.value="0";
-                       leadListController.campaignMain.value="";
-                       leadListController.fromWhere.value="drawer";
-                       leadListController.isDashboardLeads.value=false;
+                      },
+                    ),
+                    ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
+                      leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
+                      title:  Text("View",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                      onTap: () {
+                        leadListController.stateIdMain.value="0";
+                        leadListController.distIdMain.value="0";
+                        leadListController.cityIdMain.value="0";
+                        leadListController.campaignMain.value="";
+                        leadListController.fromWhere.value="drawer";
+                        leadListController.isDashboardLeads.value=false;
 
-                       Get.toNamed("/leadListMain");
-                     },
-                   ),
-                 ],
-               ),
-
-
-               ExpansionTile(
-                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                 title:const Text(AppText.manageProducts, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                 leading: Image.asset(AppImage.product, height: 20,),
-                 children: [
-                   ListTile(
-
-                     leading:  Icon(Icons.add_task,color: AppColor.blackColor),
-                     title:  Text("Add Product", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                     onTap: () {
-                       LeadDDController leadDDController=Get.find();
-                       leadDDController.getAllKsdplProductApi();
-                       AddProductController addProductController =Get.put(AddProductController());
-                       addProductController.getAllProductCategoryApi();
-                       addProductController.getAllNegativeProfileApi();
-                       addProductController.getAllCommonDocumentNameListApi();
-                       addProductController.clearForm();
-                       addProductController.currentStep.value=0;
-                       addProductController.isFirstSave.value=0;
-
-                       Get.toNamed("/addProductScreen");
-
-                     },
-                   ),
-                   ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
-                     leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
-                     title:  Text("View Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
-                     onTap: () {
-                       ViewProductController viewProductController=Get.put(ViewProductController());
-                       viewProductController.getAllProductListApi();
-                       AddProductController addProductController =Get.put(AddProductController());
-                       addProductController.getAllProductCategoryApi();
-                       Get.toNamed("/viewProductScreen");
-                     },
-                   ),
-                 ],
-               ),
+                        Get.toNamed("/leadListMain");
+                      },
+                    ),
+                  ],
+                ),
 
 
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title:const Text(AppText.manageProducts, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                  leading: Image.asset(AppImage.product, height: 20,),
+                  children: [
+                    ListTile(
 
-              /* ExpansionTile(
-                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                 title: const Text(
-                   AppText.manageCibil,
-                   style: TextStyle(
-                     color: AppColor.blackColor,
-                     fontSize: 16,
-                     fontWeight: FontWeight.w500,
-                   ),
-                 ),
-                 leading: Image.asset(AppImage.addcivil, height: 20),
-                 children: [
-                   ListTile(
-                     leading: Icon(Icons.add_task, color: AppColor.blackColor),
-                     title: Text(
-                       "Cibil Generate",
-                       style: TextStyle(
-                         color: AppColor.blackColor,
-                         fontSize: 16,
-                         fontWeight: FontWeight.w500,
-                       ),
-                     ),
-                     onTap: () {
-                       Get.to(() => Cibilgeneratepage());
-                     },
-                   ),
+                      leading:  Icon(Icons.add_task,color: AppColor.blackColor),
+                      title:  Text("Add Product", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      onTap: () {
+                        LeadDDController leadDDController=Get.find();
+                        leadDDController.getAllKsdplProductApi();
+                        AddProductController addProductController =Get.put(AddProductController());
+                        addProductController.getAllProductCategoryApi();
+                        addProductController.getAllNegativeProfileApi();
+                        addProductController.getAllCommonDocumentNameListApi();
+                        addProductController.clearForm();
+                        addProductController.currentStep.value=0;
+                        addProductController.isFirstSave.value=0;
 
-                   ListTile(
-                     leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
-                     title: Text(
-                       "Cibil Record List",
-                       style: TextStyle(
-                         color: AppColor.blackColor,
-                         fontSize: 16,
-                         fontWeight: FontWeight.w500,
-                       ),
-                     ),
-                     onTap: () {
-                       // Get.to(() => RestrictedWebView(
-                       //   url: _webController.englishUrl,
-                       //   title: "",
-                       // ));
-                     },
-                   ),
-                 ],
-               ),*/
+                        Get.toNamed("/addProductScreen");
 
-               ExpansionTile(
-                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                 title:const Text(AppText.manageAttendance, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                 leading: Image.asset(AppImage.product, height: 20,),
-                 children: [
-                   ListTile(
+                      },
+                    ),
+                    ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
+                      leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
+                      title:  Text("View Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                      onTap: () {
+                        ViewProductController viewProductController=Get.put(ViewProductController());
+                        viewProductController.getAllProductListApi();
+                        AddProductController addProductController =Get.put(AddProductController());
+                        addProductController.getAllProductCategoryApi();
+                        Get.toNamed("/viewProductScreen");
+                      },
+                    ),
+                  ],
+                ),
 
-                     leading:  Icon(Icons.add_task,color: AppColor.blackColor),
-                     title:  Text(AppText.attendance, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                     onTap: () {
-                       var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-                       AttendanceController attendanceController=Get.put(AttendanceController());
-                       attendanceController.clearFields();
-                       attendanceController.getAttendanceListOfEmployeesByEmployeeIdApi(employeeId: empId);
-                       Get.toNamed("/viewAttendanceScreen");
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title: const Text(
+                    AppText.managePPT,
+                    style: TextStyle(
+                      color: AppColor.blackColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  leading: Image.asset(AppImage.addppt, height: 20),
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.add_task, color: AppColor.blackColor),
+                      title: Text(
+                        "हिंदी में पीपीटी देखें",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        Get.to(() => RestrictedWebView(
+                          url: _webController.hindiUrl,
+                          title: "अंग्रेजी में पीपीटी",
+                        ));
+                      },
+                    ),
 
-                     },
-                   ),
-                   ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
-                     leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
-                     title:  Text(AppText.manageLeaves, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
-                     onTap: () {
-                       var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-                       AttendanceController attendanceController=Get.put(AttendanceController());
-                       attendanceController.clearFields();
-                       attendanceController.getAllLeaveTypeApi();
-                       attendanceController.getAllLeaveDetailByEmployeeIdApi(employeeId: empId);
-                       Get.toNamed("/manageLeaveScreen");
-                     },
-                   ),
-                 ],
-               ),
+                    ListTile(
+                      leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
+                      title: Text(
+                        "PPT in English",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        Get.to(() => RestrictedWebView(
+                          url: _webController.englishUrl,
+                          title: "PPT in English",
+                        ));
+                      },
+                    ),
+                  ],
+                ),
+
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title: const Text(
+                    AppText.manageCibil,
+                    style: TextStyle(
+                      color: AppColor.blackColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  leading: Image.asset(AppImage.addcivil, height: 20),
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.add_task, color: AppColor.blackColor),
+                      title: Text(
+                        "Cibil Generate",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        Get.to(() => Cibilgeneratepage());
+                      },
+                    ),
+
+                    ListTile(
+                      leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
+                      title: Text(
+                        "Cibil Record List",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        // Get.to(() => RestrictedWebView(
+                        //   url: _webController.englishUrl,
+                        //   title: "",
+                        // ));
+                      },
+                    ),
+                  ],
+                ),
+
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title:const Text(AppText.manageAttendance, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                  leading: Image.asset(AppImage.product, height: 20,),
+                  children: [
+                    ListTile(
+
+                      leading:  Icon(Icons.add_task,color: AppColor.blackColor),
+                      title:  Text(AppText.attendance, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      onTap: () {
+                        var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+                        AttendanceController attendanceController=Get.put(AttendanceController());
+                        attendanceController.clearFields();
+                        attendanceController.getAttendanceListOfEmployeesByEmployeeIdApi(employeeId: empId);
+                        Get.toNamed("/viewAttendanceScreen");
+
+                      },
+                    ),
+                    ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
+                      leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
+                      title:  Text(AppText.manageLeaves, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                      onTap: () {
+                        var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+                        AttendanceController attendanceController=Get.put(AttendanceController());
+                        attendanceController.clearFields();
+                        attendanceController.getAllLeaveTypeApi();
+                        attendanceController.getAllLeaveDetailByEmployeeIdApi(employeeId: empId);
+                        Get.toNamed("/manageLeaveScreen");
+                      },
+                    ),
+                  ],
+                ),
 
 
-               ExpansionTile(
-                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                 title: const Text(
-                   AppText.managePPT,
-                   style: TextStyle(
-                     color: AppColor.blackColor,
-                     fontSize: 16,
-                     fontWeight: FontWeight.w500,
-                   ),
-                 ),
-                 leading: Image.asset(AppImage.addppt, height: 20),
-                 children: [
-                   ListTile(
-                     leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
-                     title: Text(
-                       "View PPT in English",
-                       style: TextStyle(
-                         color: AppColor.blackColor,
-                         fontSize: 16,
-                         fontWeight: FontWeight.w500,
-                       ),
-                     ),
-                     onTap: () {
-                       Get.to(() => RestrictedWebView(
-                         url: _webController.englishUrl,
-                         title: "",
-                       ));
-                     },
-                   ),
-                   ListTile(
-                     leading: Icon(Icons.add_task, color: AppColor.blackColor),
-                     title: Text(
-                       "View PPT in Hindi",
-                       style: TextStyle(
-                         color: AppColor.blackColor,
-                         fontSize: 16,
-                         fontWeight: FontWeight.w500,
-                       ),
-                     ),
-                     onTap: () {
-                       Get.to(() => RestrictedWebView(
-                         url: _webController.hindiUrl,
-                         title: "",
-                       ));
-                     },
-                   ),
-                 ],
-               ),
+                CustomListTile(
+                  title:  "Web Panel",
+                  imagePath:AppImage.webImg,
+                  onTap: () => _launchURL("https://kanchaneshver.in/"),
+                ),
+
+                CustomListTile(
+                  title:  "Bank Credentials",
+                  imagePath:AppImage.webImg,
+                  onTap: () => _launchURL("https://docs.google.com/spreadsheets/d/1__iYzKKiDthxhfTqh8WEsdVolIcl2ymi0fqnShwNqto/edit?gid=0#gid=0"),
+                ),
 
 
-               CustomListTile(
-                 title:  "Web Panel",
-                 imagePath:AppImage.webImg,
-                 onTap: () => _launchURL("https://kanchaneshver.in/"),
-               ),
-
-               CustomListTile(
-                 title:  "Bank Credentials",
-                 imagePath:AppImage.webImg,
-                 onTap: () => _launchURL("https://docs.google.com/spreadsheets/d/1__iYzKKiDthxhfTqh8WEsdVolIcl2ymi0fqnShwNqto/edit?gid=0#gid=0"),
-               ),
-
-
-               // Logout Button
-               CustomListTile(
-                 title:  AppText.logout,
-                 imagePath:AppImage.powerIcon,
-                 onTap: () {
-                   StorageService.clear();
-                   Get.offNamed("/login");
-                 },
-               ),
-               SizedBox(
-                 height: 5,
-               ),
+                // Logout Button
+                CustomListTile(
+                  title:  AppText.logout,
+                  imagePath:AppImage.powerIcon,
+                  onTap: () {
+                    StorageService.clear();
+                    Get.offNamed("/login");
+                  },
+                ),
+                SizedBox(
+                  height: 5,
+                ),
 
 
-               Text(
-                 BaseUrl.devVersion,
-                 style: TextStyle(
-                   fontSize: 14,
-                   color: Colors.grey[600],
-                   fontStyle: FontStyle.italic,
-                 ),
-               ),
+                Text(
+                  BaseUrl.devVersion,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
 
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 10.0),
-                 child: Text(
-                   BaseUrl.buildDate,
-                   style: TextStyle(
-                     fontSize: 10,
-                     color: Colors.grey[600],
-                     fontStyle: FontStyle.italic,
-                   ),
-                 ),
-               ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Text(
+                    BaseUrl.buildDate,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
 
-             ],
-           ),
-         )
+              ],
+            ),
+          )
         ],
       ),
     );

@@ -7,9 +7,14 @@ import '../common/base_url.dart';
 class WebController extends GetxController {
   late InAppWebViewController webViewController;
 
+<<<<<<< HEAD:lib/controllers/WebController.dart
   final String englishUrl = BaseUrl.imageBaseUrl+"PPT/KSDPL+The+Best+Loan%2C+Without+Any+Guesswork.pdf";
   // final String hindiUrl =   BaseUrl.imageBaseUrl+"PPT/KSDPL+The+Best+Loan%2C+Without+Any+Guesswork+in+hindi.pdf";
   final String hindiUrl =   "https://ksdpl-uploads.s3.ap-south-1.amazonaws.com/PPT/KSDPL+The+Best+Loan%2C+Without+Any+Guesswork+in+hindi.pdf";
+=======
+  final String hindiUrl =   BaseUrl.imageBaseUrl+"PPT/KSDPL+The+Best+Loan%2C+Without+Any+Guesswork+in+hindi.pdf";
+  final String englishUrl = BaseUrl.imageBaseUrl+"PPT/KSDPL+The+Best+Loan%2C+Without+Any+Guesswork.pdf";
+>>>>>>> manshi:lib/controllers/webController.dart
 
   void onDownloadAttempt(DownloadStartRequest request) {
     print("Blocked download from: ${request.url}");
