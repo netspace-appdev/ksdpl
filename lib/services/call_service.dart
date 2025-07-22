@@ -151,23 +151,23 @@ class CallService {
         print("lead state not connnected===>${currentLeadStage}");
         leadListController.workOnLeadApi(
           leadId: leadId.toString(),
-          leadStageStatus: (currentLeadStage=="2" || currentLeadStage=="3")?"3":currentLeadStage.toString(),
+          leadStageStatus: (currentLeadStage=="2" || currentLeadStage=="3")?"13":currentLeadStage.toString(),
           callStatus: "0",
           callDuration: callDuration,
           callStartTime: callStartTime,
           callEndTime: callEndTime,
           callReminder: formattedDateTime,
         ).then((_){
-          print("Good===>12");
-          showFeedbackDialog(
+
+          print("1 baar work lead chal gayi");
+         /* showFeedbackDialog(
             leadId: leadId,
             currentLeadStage: (currentLeadStage=="2" || currentLeadStage=="3")?"13":leadListController.workOnLeadModel!.data!.leadStageStatus.toString(),
-           /* context: context,*/
             callDuration: callDuration.toString(),
             callStartTime:callStartTime.toString(),
             callEndTime: callEndTime.toString(),
             callStatus: "0",
-          );
+          );*/
         });
         print("❌ Call was not answered or disconnected immediately.");
       }

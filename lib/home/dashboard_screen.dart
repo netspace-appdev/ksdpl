@@ -430,7 +430,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     }else if(globalIndex==3){
                       stageId=4;
                       leadListController.selectCheckbox(1);
-                      leadListController.leadStageName2.value ="Fresh Leads";
+                      leadListController.leadStageName2.value ="Fresh + Ongoing";
                       botNavController.selectedIndex.value = 1;
                       leadListController.leadCode.value="4";
                     }else if(globalIndex==4){

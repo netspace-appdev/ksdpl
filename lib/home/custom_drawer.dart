@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/base_url.dart';
@@ -208,57 +207,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                  ],
                ),
 
-               ExpansionTile(
-                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                 title: const Text(
-                   AppText.managePPT,
-                   style: TextStyle(
-                     color: AppColor.blackColor,
-                     fontSize: 16,
-                     fontWeight: FontWeight.w500,
-                   ),
-                 ),
-                 leading: Image.asset(AppImage.addppt, height: 20),
-                 children: [
-                   ListTile(
-                     leading: Icon(Icons.add_task, color: AppColor.blackColor),
-                     title: Text(
-                       "हिंदी में पीपीटी देखें",
-                       style: TextStyle(
-                         color: AppColor.blackColor,
-                         fontSize: 16,
-                         fontWeight: FontWeight.w500,
-                       ),
-                     ),
-                     onTap: () {
-                       Get.to(() => RestrictedWebView(
-                         url: _webController.hindiUrl,
-                         title: "",
-                       ));
-                     },
-                   ),
 
-                   ListTile(
-                     leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
-                     title: Text(
-                       "View PPT in English",
-                       style: TextStyle(
-                         color: AppColor.blackColor,
-                         fontSize: 16,
-                         fontWeight: FontWeight.w500,
-                       ),
-                     ),
-                     onTap: () {
-                       Get.to(() => RestrictedWebView(
-                         url: _webController.englishUrl,
-                         title: "",
-                       ));
-                     },
-                   ),
-                 ],
-               ),
 
-               ExpansionTile(
+              /* ExpansionTile(
                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                  title: const Text(
                    AppText.manageCibil,
@@ -303,7 +254,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                      },
                    ),
                  ],
-               ),
+               ),*/
 
                ExpansionTile(
                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -333,6 +284,56 @@ class _CustomDrawerState extends State<CustomDrawer> {
                        attendanceController.getAllLeaveTypeApi();
                        attendanceController.getAllLeaveDetailByEmployeeIdApi(employeeId: empId);
                        Get.toNamed("/manageLeaveScreen");
+                     },
+                   ),
+                 ],
+               ),
+
+
+               ExpansionTile(
+                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                 title: const Text(
+                   AppText.managePPT,
+                   style: TextStyle(
+                     color: AppColor.blackColor,
+                     fontSize: 16,
+                     fontWeight: FontWeight.w500,
+                   ),
+                 ),
+                 leading: Image.asset(AppImage.addppt, height: 20),
+                 children: [
+                   ListTile(
+                     leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
+                     title: Text(
+                       "View PPT in English",
+                       style: TextStyle(
+                         color: AppColor.blackColor,
+                         fontSize: 16,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+                     onTap: () {
+                       Get.to(() => RestrictedWebView(
+                         url: _webController.englishUrl,
+                         title: "",
+                       ));
+                     },
+                   ),
+                   ListTile(
+                     leading: Icon(Icons.add_task, color: AppColor.blackColor),
+                     title: Text(
+                       "View PPT in Hindi",
+                       style: TextStyle(
+                         color: AppColor.blackColor,
+                         fontSize: 16,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+                     onTap: () {
+                       Get.to(() => RestrictedWebView(
+                         url: _webController.hindiUrl,
+                         title: "",
+                       ));
                      },
                    ),
                  ],

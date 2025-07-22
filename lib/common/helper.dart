@@ -436,7 +436,7 @@ class AppText{
   static const String enterBankerEmail = "Enter Banker Email";
   static const String manageProducts = "Manage Products";
   static const String managePPT = "View PPT";
-  static const String manageCibil = "MANAGE CIBIL";
+  static const String manageCibil = "Manage CIBIL";
 
   ///product
   static const String addProduct = "Add Product";
@@ -754,6 +754,7 @@ class AppText{
   static const String enterPhone="Please enter phone number";
   static const String pleaseEnterFullName="Please Enter Full Name";
   static const String pleaseEnterEmail="Please Enter Email";
+  static const String cncMessage="Lead moved to could not connect successfully";
 
 }
 

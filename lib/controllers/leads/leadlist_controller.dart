@@ -437,24 +437,7 @@ class LeadListController extends GetxController {
 
     }
 
-
-
-
-
-
-
-    // callStatus=="0" && currentLeadStage=="13"
-
-
-/*
-    updateLeadStageApiForCall(
-        id:leadId.toString(),
-        active: leadDDController.selectedStageActive.value.toString(),
-        // stage:selectedStage==""?currentLeadStage: selectedStage
-        stage:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage
-    ).then((_){*/
       workOnLeadApi(
-        // id:callStatus=="1"?id.toString():"0",
         id:id.toString(),
         leadId: leadId.toString(),
         leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
@@ -490,7 +473,7 @@ class LeadListController extends GetxController {
 
 
       });
- /*   });*/
+
 
 
   }
@@ -971,13 +954,6 @@ class LeadListController extends GetxController {
       isLoading(false);
     } finally {
 
-
-
-
-
-
-
-
       if(isDashboardLeads.value==false){
         getAllLeadsApi(
           leadStage: leadCode.value,
@@ -992,6 +968,22 @@ class LeadListController extends GetxController {
           uniqueLeadNumber: uniqueLeadNumberMain.value,
           leadMobileNumber:leadMobileNumberMain.value,
           leadName:leadNameMain.value,
+        );
+        SearchLeadController searchLeadController=Get.put(SearchLeadController());
+        getFilteredLeadsApi(
+
+            employeeId: eId.value.toString(),
+            leadStage:leadDDController.selectedStage.value??"0",
+            stateId: leadDDController.selectedState.value??"0",
+            distId: leadDDController.selectedDistrict.value??"0",
+            cityId:leadDDController.selectedCity.value??"0",
+            campaign: leadDDController.selectedCampaign.value??"",
+            fromDate: fromDateController.value.text.isEmpty?"":Helper.convertToIso8601(fromDateController.value.text),
+            toDate: toDateController.value.text.isEmpty?"":Helper.convertToIso8601(toDateController.value.text),
+            branch: leadDDController.selectedKsdplBr.value??"0",
+            uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
+            leadMobileNumber: searchLeadController.leadMobileNumberController.text,
+            leadName: searchLeadController.leadNameController.text,
         );
       }else{
         ///new code 17 jul
