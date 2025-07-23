@@ -231,7 +231,64 @@ class Addleadcontroller extends GetxController{
 
         camNoteController.getAddIncUniqueLeadApi(uniqueLeadNumber:getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"0");
 
+        final geoLocationProp = getLeadDetailModel.value!.data!.geoLocationOfProperty;
 
+
+        if (geoLocationProp != null && geoLocationProp.contains('-')) {
+          final parts = geoLocationProp.split('-');
+          if (parts.length == 2) {
+            camNoteController.camGeoLocationPropertyLatController.text = parts[0]; // 23.1802024
+            camNoteController.camGeoLocationPropertyLongController.text = parts[1]; // 75.7926982
+            camNoteController.geoLocPropLatEnabled.value=false;
+            camNoteController.geoLocPropLongEnabled.value=false;
+          }
+        }
+
+
+        final geoLocationRes = getLeadDetailModel.value!.data!.geoLocationOfResidence;
+
+
+        if (geoLocationRes != null && geoLocationRes.contains('-')) {
+          final parts = geoLocationRes.split('-');
+          if (parts.length == 2) {
+            camNoteController.camGeoLocationResidenceLatController.text = parts[0]; // 23.1802024
+            camNoteController.camGeoLocationResidenceLongController.text = parts[1]; // 75.7926982
+            camNoteController.geoLocResLatEnabled.value=false;
+            camNoteController.geoLocResLongEnabled.value=false;
+          }
+        }
+
+
+        final geoLocationOff = getLeadDetailModel.value!.data!.geoLocationOfOffice;
+
+
+        if (geoLocationOff != null && geoLocationOff.contains('-')) {
+          final parts = geoLocationOff.split('-');
+          if (parts.length == 2) {
+            camNoteController.camGeoLocationOfficeLatController.text = parts[0]; // 23.1802024
+            camNoteController.camGeoLocationOfficeLongController.text = parts[1]; // 75.7926982
+            camNoteController.geoLocOffLatEnabled.value=false;
+            camNoteController.geoLocOffLongEnabled.value=false;
+          }
+        }
+
+        final photoProp = getLeadDetailModel.value?.data?.photosOfProperty;
+        if (photoProp != null && photoProp.isNotEmpty) {
+          camNoteController.loadApiImagesForKey('property_photo', photoProp);
+          camNoteController.photosPropEnabled.value=false;
+        }
+
+        final photoRes = getLeadDetailModel.value?.data?.photosOfResidence;
+        if (photoRes != null && photoRes.isNotEmpty) {
+          camNoteController.loadApiImagesForKey('residence_photo', photoRes);
+          camNoteController.photosResEnabled.value=false;
+        }
+
+        final photoOff = getLeadDetailModel.value?.data?.photosOfOffice;
+        if (photoOff != null && photoOff.isNotEmpty) {
+          camNoteController.loadApiImagesForKey('office_photo', photoOff);
+          camNoteController.photosResEnabled.value=false;
+        }
         isLoading(false);
 
       }else{

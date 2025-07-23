@@ -13,8 +13,10 @@ import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
 import 'package:ksdpl/services/camnote_service.dart';
 import 'package:ksdpl/services/product_service.dart';
 
+import '../../common/base_url.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
+import '../../custom_widgets/CamImage.dart';
 import '../../custom_widgets/ImagePickerMixin.dart';
 import '../../models/camnote/AddAdSrcIncomModel.dart';
 import '../../models/camnote/AddBankerDetail.dart';
@@ -277,7 +279,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var uniqueLeadNUmber="";
   var loanApplicationNumber="";
 
-  final Map<String, RxList<File>> imageMap = {};
+
   var isPackageLoading = false.obs;
   var selectedPackage = Rxn<int>();
   var selectedBankBranch = Rxn<int>();
@@ -288,6 +290,17 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   void selectCheckboxCibil(int index) {
     selectedIndexGenCibil.value = index;
   }
+  // final Map<String, RxList<File>> imageMap = {};
+  final Map<String, RxList<CamImage>> _imageMap = {};
+  @override
+  Map<String, RxList<CamImage>> get imageMap => _imageMap;
+  void loadApiImagesForKey(String key, String imageUrlsFromApi) {
+    final urls = imageUrlsFromApi.split(',');
+    final fullUrls = urls.map((path) => BaseUrl.imageBaseUrl + path).toList(); // adjust base url
+    addNetworkImages(key, fullUrls);
+  }
+
+
   final List<Map<String, dynamic>> bankerThemes = [
     {
       "containerColor": Colors.transparent,
@@ -325,6 +338,21 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var selectedBankers = <String>{}.obs;
   var isGenerateCibilVisible = false.obs;
   Map<String, String> bankerBranchMap = {};
+
+  var geoLocPropLatEnabled =true.obs;
+  var geoLocPropLongEnabled =true.obs;
+
+  var geoLocResLatEnabled =true.obs;
+  var geoLocResLongEnabled =true.obs;
+
+  var geoLocOffLatEnabled =true.obs;
+  var geoLocOffLongEnabled =true.obs;
+
+
+  var photosPropEnabled =true.obs;
+  var photosResEnabled =true.obs;
+  var photosOffEnabled =true.obs;
+
   void markBankerAsSubmitted(String boxId) {
     infoFilledBankers.add(boxId);
   }
@@ -521,10 +549,24 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       }else {
         Addleadcontroller addLeadController =Get.find();
 // Now call API with extracted values
-
-        List<File> propertyPhotos = getImages("property_photo");
+        ///working code
+       /* List<File> propertyPhotos = getImages("property_photo");
         List<File> residencePhotos = getImages("residence_photo");
-        List<File> officePhotos = getImages("office_photo");
+        List<File> officePhotos = getImages("office_photo");*/
+        List<File> propertyPhotos = getImages("property_photo")
+            .where((img) => img.isLocal)
+            .map((img) => img.file!)
+            .toList();
+
+        List<File> residencePhotos = getImages("residence_photo")
+            .where((img) => img.isLocal)
+            .map((img) => img.file!)
+            .toList();
+
+        List<File> officePhotos = getImages("office_photo")
+            .where((img) => img.isLocal)
+            .map((img) => img.file!)
+            .toList();
 
         await addLeadController.fillLeadFormApi(
           id: getLeadId.value.toString(),
@@ -565,9 +607,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           GeoLocationOfProperty:camGeoLocationPropertyLatController.text.trim().toString()+"-"+camGeoLocationPropertyLongController.text.trim().toString(),
           GeoLocationOfResidence:camGeoLocationResidenceLatController.text.trim().toString()+"-"+camGeoLocationResidenceLongController.text.trim().toString(),
           GeoLocationOfOffice:camGeoLocationOfficeLatController.text.trim().toString()+"-"+camGeoLocationOfficeLongController.text.trim().toString(),
-          PhotosOfProperty: propertyPhotos??[],
-          PhotosOfResidence: residencePhotos??[],
-          PhotosOfOffice: officePhotos??[],
+          PhotosOfProperty: propertyPhotos,
+          PhotosOfResidence: residencePhotos,
+          PhotosOfOffice: officePhotos,
         );
       }
 
@@ -2385,6 +2427,73 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       if(data['success'] == true){
 
         sendMailForLocationOfCustomerModel.value= SendMailForLocationOfCustomerModel.fromJson(data);
+
+
+        Addleadcontroller addLeadController =Get.find();
+// Now call API with extracted values
+
+        /*List<File> propertyPhotos = getImages("property_photo");
+        List<File> residencePhotos = getImages("residence_photo");
+        List<File> officePhotos = getImages("office_photo");*/
+
+        List<File> propertyPhotos = getImages("property_photo")
+            .where((img) => img.isLocal)
+            .map((img) => img.file!)
+            .toList();
+
+        List<File> residencePhotos = getImages("residence_photo")
+            .where((img) => img.isLocal)
+            .map((img) => img.file!)
+            .toList();
+
+        List<File> officePhotos = getImages("office_photo")
+            .where((img) => img.isLocal)
+            .map((img) => img.file!)
+            .toList();
+
+        await addLeadController.fillLeadFormApi(
+          id: getLeadId.value.toString(),
+          dob: camDobController.text.toString(),
+          gender: selectedGender.toString(),
+          loanAmtReq:camLoanAmtReqController.text.toString(),
+          email: camEmailController.text.toString(),
+          aadhar: camAadharController.text.toString(),
+          pan: camPanController.text.toString(),
+          streetAdd: camStreetAddController.text.toString(),
+          state:  camSelectedState.value.toString(),
+          district: camSelectedDistrict.value.toString(),
+          city: camSelectedCity.value.toString(),
+          zip: camZipController.text.toString(),
+          nationality: camNationalityController.text.toString(),
+          currEmpSt: camCurrEmpStatus.value,
+          employerName: camEmployerNameController.text.toString(),
+          monthlyIncome:camMonthlyIncomeController.text.toString(),
+          ///Now this is not working, Have different API for Additional source of income
+          addSrcIncome: "",
+          prefBank: camSelectedBank.value.toString(),
+          exRelBank:camSelectedIndexRelBank.value==-1?"":camSelectedIndexRelBank.value==0?"Yes":"No",
+          branchLoc:camBranchLocController.text.toString(),
+          prodTypeInt: camSelectedProdType.value.toString(),
+          /// connection name mob and percent are not sent
+          loanApplNo: loanApplicationNumber.toString(),
+
+          name: camFullNameController.text.toString(),
+          mobileNumber: camPhoneController.text.toString(),
+          packageId: selectedPackage.value.toString(),
+          packageAmount: camPackageAmtController.text.toString(),
+          receivableAmount:camReceivableAmtController.text.toString(),
+          receivableDate:camReceivableDateController.text.toString(),
+          transactionDetails:camTransactionDetailsController.text.toString(),
+          remark:camRemarkController.text.toString(),
+          leadSegment:camSelectedProdSegment.value.toString(),
+
+          GeoLocationOfProperty:camGeoLocationPropertyLatController.text.trim().toString()+"-"+camGeoLocationPropertyLongController.text.trim().toString(),
+          GeoLocationOfResidence:camGeoLocationResidenceLatController.text.trim().toString()+"-"+camGeoLocationResidenceLongController.text.trim().toString(),
+          GeoLocationOfOffice:camGeoLocationOfficeLatController.text.trim().toString()+"-"+camGeoLocationOfficeLongController.text.trim().toString(),
+          PhotosOfProperty: propertyPhotos,
+          PhotosOfResidence: residencePhotos,
+          PhotosOfOffice: officePhotos,
+        );
 
         isLoading(false);
 

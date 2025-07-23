@@ -94,6 +94,13 @@ class Data {
   String? receiveableDate;
   String? transactionDetails;
   String? remark;
+  String? geoLocationOfOffice;
+  String? geoLocationOfResidence;
+  String? geoLocationOfProperty;
+  String? photosOfProperty;
+  String? photosOfResidence;
+  String? photosOfOffice;
+  String? cibilJSON;
   Data(
       {this.id,
         this.name,
@@ -161,7 +168,14 @@ class Data {
         this.receiveableAmount,
         this.receiveableDate,
         this.transactionDetails,
-        this.remark});
+        this.remark,
+        this.geoLocationOfOffice,
+        this.geoLocationOfResidence,
+        this.geoLocationOfProperty,
+        this.photosOfProperty,
+        this.photosOfResidence,
+        this.photosOfOffice,
+        this.cibilJSON});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -231,6 +245,13 @@ class Data {
     receiveableDate = json['receiveableDate'];
     transactionDetails = json['transactionDetails'];
     remark = json['remark'];
+    geoLocationOfOffice = json['geoLocationOfOffice'];
+    geoLocationOfResidence = json['geoLocationOfResidence'];
+    geoLocationOfProperty = json['geoLocationOfProperty'];
+    photosOfProperty = json['photosOfProperty'];
+    photosOfResidence = json['photosOfResidence'];
+    photosOfOffice = json['photosOfOffice'];
+    cibilJSON = json['cibilJSON'];
   }
 
   Map<String, dynamic> toJson() {
@@ -302,6 +323,13 @@ class Data {
     data['receiveableDate'] = this.receiveableDate;
     data['transactionDetails'] = this.transactionDetails;
     data['remark'] = this.remark;
+    data['geoLocationOfOffice'] = this.geoLocationOfOffice;
+    data['geoLocationOfResidence'] = this.geoLocationOfResidence;
+    data['geoLocationOfProperty'] = this.geoLocationOfProperty;
+    data['photosOfProperty'] = this.photosOfProperty;
+    data['photosOfResidence'] = this.photosOfResidence;
+    data['photosOfOffice'] = this.photosOfOffice;
+    data['cibilJSON'] = this.cibilJSON;
     return data;
   }
 }

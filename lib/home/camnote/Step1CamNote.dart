@@ -1,3 +1,6 @@
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -568,12 +571,14 @@ class Step1CamNote extends StatelessWidget {
                           controller: camNoteController.camGeoLocationPropertyLatController,
                           inputType: TextInputType.number,
                           hintText: AppText.enterLatitude,
+                          isInputEnabled:camNoteController.geoLocPropLatEnabled.value,
                         ),
                         CustomLabeledTextField(
                           label: "",
                           controller: camNoteController.camGeoLocationPropertyLongController,
                           inputType: TextInputType.number,
                           hintText: AppText.enterLongitude,
+                          isInputEnabled:camNoteController.geoLocPropLongEnabled.value,
                         ),
                         Align(
                           alignment: Alignment.centerRight,
@@ -582,7 +587,7 @@ class Step1CamNote extends StatelessWidget {
                             textColor: AppColor.appWhite,
                             text: AppText.sendEmail,
                             onPressed: (){
-                              // onSendEmail("1", context);
+                              onSendEmail("1", context);
                             },
                           ),
                         ),
@@ -595,19 +600,36 @@ class Step1CamNote extends StatelessWidget {
                           controller: camNoteController.camGeoLocationResidenceLatController,
                           inputType: TextInputType.number,
                           hintText: AppText.enterLatitude,
+                          isInputEnabled:camNoteController.geoLocResLatEnabled.value,
                         ),
                         CustomLabeledTextField(
                           label: "",
                           controller: camNoteController.camGeoLocationResidenceLongController,
                           inputType: TextInputType.number,
                           hintText: AppText.enterLongitude,
+                          isInputEnabled:camNoteController.geoLocResLongEnabled.value,
                         ),
 
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomShortButton(
+                            backgroundColor: Colors.green,
+                            textColor: AppColor.appWhite,
+                            text: AppText.sendEmail,
+                            onPressed: (){
+                              onSendEmail("2", context);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                         CustomLabeledTextField(
                           label: AppText.geoLocationOffice,
                           controller: camNoteController.camGeoLocationOfficeLatController,
                           inputType: TextInputType.number,
                           hintText: AppText.enterLatitude,
+                          isInputEnabled:camNoteController.geoLocOffLatEnabled.value,
                         ),
 
                         CustomLabeledTextField(
@@ -615,14 +637,30 @@ class Step1CamNote extends StatelessWidget {
                           controller: camNoteController.camGeoLocationOfficeLongController,
                           inputType: TextInputType.number,
                           hintText: AppText.enterLongitude,
+                          isInputEnabled:camNoteController.geoLocOffLongEnabled.value,
                         ),
 
-
-
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomShortButton(
+                            backgroundColor: Colors.green,
+                            textColor: AppColor.appWhite,
+                            text: AppText.sendEmail,
+                            onPressed: (){
+                              onSendEmail("3", context);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                         CustomPhotoPickerWidget(
                           controller: camNoteController,
                           imageKey: 'property_photo',
                           label: 'Upload Property Photos',
+                          isCloseVisible:camNoteController.photosPropEnabled.value,
+                          isUploadActive: camNoteController.photosPropEnabled.value,
+                          toastMessage: "you can not upload photos now",
                         ),
 
                         const SizedBox(height: 20,),
@@ -631,6 +669,9 @@ class Step1CamNote extends StatelessWidget {
                           controller: camNoteController,
                           imageKey: 'residence_photo',
                           label: 'Upload Residence Photos',
+                          isCloseVisible:camNoteController.photosResEnabled.value,
+                          isUploadActive: camNoteController.photosResEnabled.value,
+                          toastMessage: "you can not upload photos now",
                         ),
 
                         const SizedBox(height: 20,),
@@ -639,6 +680,9 @@ class Step1CamNote extends StatelessWidget {
                           controller: camNoteController,
                           imageKey: 'office_photo',
                           label: 'Upload Office Photos',
+                          isCloseVisible:camNoteController.photosOffEnabled.value,
+                          isUploadActive: camNoteController.photosOffEnabled.value,
+                          toastMessage: "you can not upload photos now",
                         ),
 
                         const SizedBox(height: 20,),
@@ -925,8 +969,58 @@ class Step1CamNote extends StatelessWidget {
               camNoteController.sendMailForLocationOfCustomerApi(
                   locationType: locationType,
                   email:camNoteController.camEmailController.text.trim().toString(),
-                  leadId: camNoteController.leadId.toString()
+                  leadId: camNoteController.getLeadId.value.toString()
               );
+
+                /*  .then((_){
+                Addleadcontroller addLeadController =Get.find();
+                List<File> propertyPhotos = camNoteController.getImages("property_photo");
+                List<File> residencePhotos = camNoteController.getImages("residence_photo");
+                List<File> officePhotos = camNoteController.getImages("office_photo");
+                  addLeadController.fillLeadFormApi(
+                  id: camNoteController.getLeadId.value.toString(),
+                  dob: camNoteController.camDobController.text.toString(),
+                  gender: camNoteController.selectedGender.toString(),
+                  loanAmtReq:camNoteController.camLoanAmtReqController.text.toString(),
+                  email: camNoteController.camEmailController.text.toString(),
+                  aadhar: camNoteController.camAadharController.text.toString(),
+                  pan: camNoteController.camPanController.text.toString(),
+                  streetAdd: camNoteController.camStreetAddController.text.toString(),
+                  state:  camNoteController.camSelectedState.value.toString(),
+                  district: camNoteController.camSelectedDistrict.value.toString(),
+                  city: camNoteController.camSelectedCity.value.toString(),
+                  zip: camNoteController.camZipController.text.toString(),
+                  nationality: camNoteController.camNationalityController.text.toString(),
+                  currEmpSt: camNoteController.camCurrEmpStatus.value,
+                  employerName: camNoteController.camEmployerNameController.text.toString(),
+                  monthlyIncome:camNoteController.camMonthlyIncomeController.text.toString(),
+                  ///Now this is not working, Have different API for Additional source of income
+                  addSrcIncome: "",
+                  prefBank: camNoteController.camSelectedBank.value.toString(),
+                  exRelBank:camNoteController.camSelectedIndexRelBank.value==-1?"":camNoteController.camSelectedIndexRelBank.value==0?"Yes":"No",
+                  branchLoc:camNoteController.camBranchLocController.text.toString(),
+                  prodTypeInt: camNoteController.camSelectedProdType.value.toString(),
+                  /// connection name mob and percent are not sent
+                  loanApplNo: camNoteController.loanApplicationNumber.toString(),
+
+                  name: camNoteController.camFullNameController.text.toString(),
+                  mobileNumber: camNoteController.camPhoneController.text.toString(),
+                  packageId: camNoteController.selectedPackage.value.toString(),
+                  packageAmount: camNoteController.camPackageAmtController.text.toString(),
+                  receivableAmount:camNoteController.camReceivableAmtController.text.toString(),
+                  receivableDate:camNoteController.camReceivableDateController.text.toString(),
+                  transactionDetails:camNoteController.camTransactionDetailsController.text.toString(),
+                  remark:camNoteController.camRemarkController.text.toString(),
+                  leadSegment:camNoteController.camSelectedProdSegment.value.toString(),
+
+                  GeoLocationOfProperty:camNoteController.camGeoLocationPropertyLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationPropertyLongController.text.trim().toString(),
+                  GeoLocationOfResidence:camNoteController.camGeoLocationResidenceLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationResidenceLongController.text.trim().toString(),
+                  GeoLocationOfOffice:camNoteController.camGeoLocationOfficeLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationOfficeLongController.text.trim().toString(),
+                  PhotosOfProperty: propertyPhotos??[],
+                  PhotosOfResidence: residencePhotos??[],
+                  PhotosOfOffice: officePhotos??[],
+                );
+              });*/
             },
             onNo: () {
 
