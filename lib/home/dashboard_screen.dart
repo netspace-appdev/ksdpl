@@ -1220,65 +1220,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: thColor, width: 1),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          /// Avatar
-                          Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: thColor,
-                              border: Border.all(color: thColor),
-                            ),
-                            child: Center(
-                              child: Text(
-                                birthday.employeeName!.isNotEmpty
-                                    ? birthday.employeeName![0].toUpperCase()
-                                    : "U",
-                                style: const TextStyle(color: Colors.white),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            /// Avatar
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: thColor,
+                                border: Border.all(color: thColor),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  birthday.employeeName!.isNotEmpty
+                                      ? birthday.employeeName![0].toUpperCase()
+                                      : "U",
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
-                          ),
-
-                          /// Name
-                          Text(
-                            birthday.employeeName.toString(),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.blackLight,
-                            ),
-                          ),
-
-                          /// Date
-                          Text(
-                            Helper.birthdayFormat(birthday.dateOfBirth.toString()),
-                            style: const TextStyle(fontSize: 14, color: AppColor.blackLight),
-                          ),
-
-                          /// Send wishes button
-                          Container(
-                            height: 40,
-                            width: double.infinity,
-                            margin: const EdgeInsets.only(top: 8),
-                            decoration: BoxDecoration(
-                              color: thColor,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: TextButton(
-                              onPressed: () {
-                                // Add action for sending wishes
-                              },
-                              child: const Text(
-                                "Send Wishes",
-                                style: TextStyle(color: Colors.white, fontSize: 14),
+                        
+                            /// Name
+                            Text(
+                              birthday.employeeName.toString(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.blackLight,
                               ),
                             ),
-                          ),
-                        ],
+                        
+                            /// Date
+                            Text(
+                              Helper.birthdayFormat(birthday.dateOfBirth.toString()),
+                              style: const TextStyle(fontSize: 14, color: AppColor.blackLight),
+                            ),
+                        
+                            /// Send wishes button
+                            Container(
+                              height: 40,
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(top: 8),
+                              decoration: BoxDecoration(
+                                color: thColor,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  // Add action for sending wishes
+                                },
+                                child: const Text(
+                                  "Send Wishes",
+                                  style: TextStyle(color: Colors.white, fontSize: 14),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

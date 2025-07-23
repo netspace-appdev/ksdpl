@@ -8,6 +8,7 @@ import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/home/cibilgenerate/CibilGeneratePage.dart';
+import 'package:ksdpl/home/tutorial_screen/tutorial_video.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -203,10 +204,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ],
                 ),
 
+
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title: const Text(
-                    AppText.managePPT,
+                    AppText.manageTutorial,
                     style: TextStyle(
                       color: AppColor.blackColor,
                       fontSize: 16,
@@ -218,7 +220,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ListTile(
                       leading: Icon(Icons.add_task, color: AppColor.blackColor),
                       title: Text(
-                        "हिंदी में पीपीटी देखें",
+                        "Banker",
                         style: TextStyle(
                           color: AppColor.blackColor,
                           fontSize: 16,
@@ -226,17 +228,78 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ),
                       ),
                       onTap: () {
-                        Get.to(() => RestrictedWebView(
-                          url: _webController.hindiUrl,
-                          title: "अंग्रेजी में पीपीटी",
+                        Get.to(() => TutorialVideo(
+                          url: _webController.tutorial_video_Url,
+                          title: "Banker",
                         ));
                       },
                     ),
+                    // Keep rest of the ExpansionTile unchanged...
+                    ListTile(
+                      leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
+                      title: Text(
+                        "customer",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        _webController.isCustomerExpanded.toggle(); // cleaner toggle syntax
+                      },
+                    ),
+
+// ✅ Wrap the conditional block in Obx to reactively show/hide
+                    Obx(() {
+                      if (!_webController.isCustomerExpanded.value) return SizedBox();
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: Icon(Icons.circle, color: AppColor.blackColor,size: 10,),
+                              title: Text(
+                                "PPT in Hindi",
+                                style: TextStyle(
+                                  color: AppColor.blackColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onTap: () {
+                                Get.to(() => RestrictedWebView(
+                                  url: _webController.hindiUrl,
+                                  title: "PPT in Hindi",
+                                ));
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.circle, color: AppColor.blackColor,size: 10,),
+                              title: Text(
+                                "PPT in English",
+                                style: TextStyle(
+                                  color: AppColor.blackColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onTap: () {
+                                Get.to(() => RestrictedWebView(
+                                  url: _webController.englishUrl,
+                                  title: "PPT in English",
+                                ));
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
 
                     ListTile(
                       leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
                       title: Text(
-                        "PPT in English",
+                        "Staff",
                         style: TextStyle(
                           color: AppColor.blackColor,
                           fontSize: 16,
@@ -244,15 +307,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ),
                       ),
                       onTap: () {
-                        Get.to(() => RestrictedWebView(
-                          url: _webController.englishUrl,
-                          title: "PPT in English",
-                        ));
+                        //  Get.to(() => TutorialVideo(
+                        //  url: _webController.tutorial_video_Url,
+                        // title: "Staff",
+                        //));
+
+                        _launchURL(_webController.tutorial_video_Url);
                       },
                     ),
                   ],
                 ),
-
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title: const Text(
@@ -332,12 +396,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ],
                 ),
-
-
                 CustomListTile(
                   title:  "Web Panel",
                   imagePath:AppImage.webImg,
                   onTap: () => _launchURL("https://kanchaneshver.in/"),
+                ),
+                CustomListTile(
+                  title:  "Sales",
+                  imagePath:AppImage.webImg,
+                  onTap: () => _launchURL("https://sales.kanchaneshver.com/"),
+                ),
+                CustomListTile(
+                  title:  "AIC",
+                  imagePath:AppImage.webImg,
+                  onTap: () => _launchURL("https://aic.kanchaneshver.com/"),
                 ),
 
                 CustomListTile(

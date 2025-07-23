@@ -9,6 +9,7 @@ class BaseUrl{
 // static const String baseUrl = 'https://api.kanchaneshver.com/api/';
 
   static const String imageBaseUrl = 'https://ksdpl-uploads.s3.ap-south-1.amazonaws.com/';
+   static const String tutorialVideoBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
   static const String devVersion = 'Dev App Version 1.0.20';
  // static const String devVersion = 'UAT';
