@@ -436,6 +436,7 @@ class AppText{
   static const String enterBankerEmail = "Enter Banker Email";
   static const String manageProducts = "Manage Products";
   static const String managePPT = "View PPT";
+  static const String manageTutorial = "Tutorial";
   static const String manageCibil = "MANAGE CIBIL";
 
   ///product
