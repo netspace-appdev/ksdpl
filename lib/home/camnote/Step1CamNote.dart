@@ -677,8 +677,8 @@ class Step1CamNote extends StatelessWidget {
                         const SizedBox(height: 20,),
 
                         CustomPhotoPickerWidget(
-                          controller: camNoteController,
                           imageKey: 'office_photo',
+                          controller: camNoteController,
                           label: 'Upload Office Photos',
                           isCloseVisible:camNoteController.photosOffEnabled.value,
                           isUploadActive: camNoteController.photosOffEnabled.value,

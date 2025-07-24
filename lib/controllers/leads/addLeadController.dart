@@ -287,7 +287,7 @@ class Addleadcontroller extends GetxController{
         final photoOff = getLeadDetailModel.value?.data?.photosOfOffice;
         if (photoOff != null && photoOff.isNotEmpty) {
           camNoteController.loadApiImagesForKey('office_photo', photoOff);
-          camNoteController.photosResEnabled.value=false;
+          camNoteController.photosOffEnabled.value=false;
         }
         isLoading(false);
 
