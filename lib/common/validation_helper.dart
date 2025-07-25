@@ -29,7 +29,6 @@ class ValidationHelper {
 
     return null; // Phone is valid
   }
-
   static String? validateDob(String? value) {
     if (value == null || value.isEmpty) {
       return "DOB is required";
@@ -62,7 +61,6 @@ class ValidationHelper {
     return null; // Name is valid
   }
 
-
   static String? validateEmailNotNull(String? value) {
     if (value == null || value.isEmpty) {
       return "Email is required";
@@ -78,7 +76,6 @@ class ValidationHelper {
 
     return null; // Email is valid
   }
-
 
   static String? validateEmailOfficial(String? value) {
     if (value == null || value.isEmpty) {
@@ -112,13 +109,11 @@ class ValidationHelper {
     return null; // Email is valid and not from a blocked domain
   }
 
-
   /// Validate Email
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return null;
+      return "Enter a email address";
     }
-
     // Regular expression for a valid email format
     String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     RegExp regex = RegExp(emailPattern);
@@ -126,7 +121,6 @@ class ValidationHelper {
     if (!regex.hasMatch(value!)) {
       return "Enter a valid email address";
     }
-
     return null; // Email is valid
   }
 

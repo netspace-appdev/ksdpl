@@ -424,7 +424,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   imagePath:AppImage.powerIcon,
                   onTap: () {
                     StorageService.clear();
-                    Get.offNamed("/login");
+                    Get.offAllNamed("/login");
                   },
                 ),
                 SizedBox(
