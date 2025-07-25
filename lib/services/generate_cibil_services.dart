@@ -60,47 +60,5 @@ class GenerateCibilServices {
     }
   }
 
- /* static Future<Map<String, dynamic>> addCustomerCibilRequestApi({
-    required String Id,
-    required String Name,
-    required String Mobile,
-    required String Amount,
-    required String ReceiveDate,
-    required String Utr,
-    required String User_ID,
-  }) async {
-    try {
-      final response = await http.post(
-        Uri.parse(addCustomerCibilRequest),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          "Id": Id,
-          "Name": Name,
-          "Mobile": Mobile,
-          "Amount": Amount,
-          "ReceiveDate": ReceiveDate,
-          "Utr": Utr,
-          "User_ID": User_ID,
-        }),
-      );
-      Helper.ApiReq(addCustomerCibilRequest, request.fields);
-      Helper.ApiRes(addCustomerCibilRequest, response.body);
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        return {
-          "success": false,
-          "message": "Server error: ${response.statusCode}"
-        };
-      }
-    } catch (e) {
-      print("API error: $e");
-      return {
-        "success": false,
-        "message": "API call failed"
-      };
-    }
-  }*/
+ 
 }

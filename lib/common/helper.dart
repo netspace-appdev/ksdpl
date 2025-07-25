@@ -85,6 +85,8 @@ class AppText{
   static const String manageProfile ="Manage Profile";
   static const String editProfile ="Edit Profile";
   static const String changePassword ="Change Password";
+  static const String changePhoneNum ="Change Phone Number";
+  static const String changeEmail ="Change Email";
   static const String lenderCode ="Lender Code";
   static const String oldPassword ="Old Password*";
   static const String newPassword ="New Password*";
@@ -833,6 +835,9 @@ class AppImage{
   static const String handshake="assets/lottie/handshake.json";
   static const String searchLotie="assets/lottie/search_glass.json";
   static const String moneyStack="assets/lottie/money_stack.json";
+  static const String loginJson="assets/lottie/Login.json";
+  static const String AuthenticationJson="assets/lottie/Authentication.json";
+  static const String login_successJson="assets/lottie/login_success.json";
 
   static const String drawerIcon="assets/svgIcon/drawerIcon.svg";
 
@@ -885,6 +890,12 @@ class AppImage{
   static const String img_not_found="assets/images/img_not_found.jpg";
   static const String webImg="assets/images/webImg.png";
   static const String product="assets/images/product.png";
+
+  static const String logout="assets/images/logout.png";
+  static const String email="assets/images/email.png";
+  static const String telephone="assets/images/telephone.png";
+  static const String lock="assets/images/lock.png";
+  static const String user="assets/images/user.png";
 
 }
 

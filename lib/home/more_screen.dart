@@ -2,25 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
-import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
-import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
-import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
-import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
-import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
-import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
-import '../../common/skelton.dart';
-import '../../common/validation_helper.dart';
-import '../../controllers/drawer_controller.dart';
 import '../../controllers/greeting_controller.dart';
-import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
-import '../../custom_widgets/CustomDropdown.dart';
-import '../../custom_widgets/CustomLabelPickerTextField.dart';
-import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../common/storage_service.dart';
 import 'custom_drawer.dart';
+import 'more/changeContactNumer.dart';
+import 'more/changeEmail.dart';
+import 'more/changePassword.dart';
 
 
 
@@ -35,6 +25,18 @@ class MoreSettingScreen extends StatelessWidget {
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
   @override
   Widget build(BuildContext context) {
+
+    final menuItems = [
+     //_MenuItem(AppImage.user, "My Profile", () => Get.to(Changepassword())),
+      _MenuItem(AppImage.lock, "Change Password", () => Get.to(Changepassword())),
+      _MenuItem(AppImage.telephone, "Change Phone No", () => Get.to(ChangeContactNumber())),
+      _MenuItem(AppImage.email, "Change Email", () => Get.to(ChangeEmail())),
+    /*  _MenuItem(AppImage.logout, "Logout", () {
+        StorageService.clear();
+        Get.offNamed("/login");
+      }),*/
+    ];
+
 
     return SafeArea(
       child: Scaffold(
@@ -63,9 +65,7 @@ class MoreSettingScreen extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-
                         header(context),
-
                       ],
                     ),
                   ),
@@ -86,56 +86,35 @@ class MoreSettingScreen extends StatelessWidget {
                           topLeft: Radius.circular(45),
                           topRight: Radius.circular(45),
                         ),
-
                       ),
                       child: Form(
                         key: _formKey,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                           children: [
+                            SizedBox(height: MediaQuery.of(context).size.height*0.05,),
 
-                            SizedBox(
-                              height: 300,
-                              child: ListView(
-                                padding: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
-                                children: [
-                                  CustomExpansionTile(
-                                    image: AppImage.manInBlack,
-                                    title: AppText.myProfile,
-                                    onTap: (){
-                                      Navigator.pop(context);
-                                    },
-                                    children: [
-                                      ListTile(
-
-                                        leading:  Icon(Icons.home,color: Theme.of(context).brightness == Brightness.dark?Colors.white54:AppColor.black54),
-                                        title:  Text("Edit profile", style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
-                                        onTap: () {
-                                            Get.toNamed("/editProfile2");
-                                        },
-                                      ),
-                                    /*  ListTile(
-                                        leading:  Icon(Icons.lock,color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),
-                                        title:  Text(AppText.changePassword,style: TextStyle(color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54),),
-                                        onTap: () {
-                                          //  Get.toNamed("/changePassword");
-                                        },
-                                      ),*/
-                                    ],
-                                  ),
-                               /*   CustomExpansionTile(
-                                    image: AppImage.manInBlack,
-                                    title: AppText.aboutUs,
-                                    onTap: (){
-                                      Navigator.pop(context);
-                                    },
-
-                                  ),
-*/
-                                ],
-                              ),
-                            )
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: List.generate(menuItems.length, (index) {
+                                final item = menuItems[index];
+                                return Column(
+                                  children: [
+                                    SizedBox(height: MediaQuery.of(context).size.height*0.02,),
+                                    ListTile(
+                                      leading: Image.asset(item.image_Path,height: 18,width: 18,),
+                                      title: Text(item.label,
+                                          style:  TextStyle( color: AppColor.blackColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,)),
+                                      onTap: item.onTap,
+                                    ),
+                                    if (index != menuItems.length - 1)
+                                      const Divider(height: 1, thickness: 0.5, color: Colors.amber),
+                                  ],
+                                );
+                              }),
+                            ),
                           ],
                         ),
                       ),
@@ -237,6 +216,17 @@ class MoreSettingScreen extends StatelessWidget {
   }
 
 
+}
+
+
+
+
+class _MenuItem {
+  final String image_Path;
+  final String label;
+  final VoidCallback onTap;
+
+  _MenuItem(this.image_Path, this.label, this.onTap);
 }
 
 class CustomExpansionTile extends StatelessWidget {
