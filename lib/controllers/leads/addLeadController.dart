@@ -351,9 +351,10 @@ class Addleadcontroller extends GetxController{
     List<File>? PhotosOfResidence,
     List<File>? PhotosOfOffice,
   }) async {
+   CamNoteController camNoteController=Get.find();
     try {
       isLoading(true);
-
+      camNoteController.isAllCamnoteSubmit(true);
 
       var data = await LeadApiService.fillLeadFormApi(
         id: id,
@@ -410,7 +411,7 @@ class Addleadcontroller extends GetxController{
 
         clearControllers();
         isLoading(false);
-
+        camNoteController.isAllCamnoteSubmit(false);
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
@@ -420,9 +421,11 @@ class Addleadcontroller extends GetxController{
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
+      camNoteController.isAllCamnoteSubmit(false);
     } finally {
 
       isLoading(false);
+      camNoteController.isAllCamnoteSubmit(false);
     }
   }
 

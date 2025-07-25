@@ -201,7 +201,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                                             : null,
                                         child:  Text('Prev', style: TextStyle(color:camNoteController.currentStep.value > 0? AppColor.appWhite: AppColor.black87) ),
                                         style: ElevatedButton.styleFrom(
-                                          minimumSize: Size(130, 40),
+                                          minimumSize: Size(130, 40), //130,40
 
                                           backgroundColor: AppColor.primaryColor,
                                         ),
@@ -246,7 +246,30 @@ class CamNoteGroupScreen extends StatelessWidget {
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     child: camNoteController.isAllCamnoteSubmit.value? CustomLoadingOverlay():Container(),
-                  )))
+                  ))),
+
+              if(camNoteController.currentStep.value == 0)
+                Positioned(
+                bottom: 10,
+                left: 16,
+                right: 16,
+                child: ElevatedButton(
+                  onPressed: () {
+                    camNoteController.saveSubmitDetails();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    backgroundColor: AppColor.secondaryColor,
+                  ),
+                  child:  const Text(
+                    AppText.submitBasicDetails,
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+              ),
             ],
           );
         }),

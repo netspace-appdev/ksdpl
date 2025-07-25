@@ -548,11 +548,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         ToastMessage.msg("Please select gender");
       }else {
         Addleadcontroller addLeadController =Get.find();
-// Now call API with extracted values
-        ///working code
-       /* List<File> propertyPhotos = getImages("property_photo");
-        List<File> residencePhotos = getImages("residence_photo");
-        List<File> officePhotos = getImages("office_photo");*/
+
         List<File> propertyPhotos = getImages("property_photo")
             .where((img) => img.isLocal)
             .map((img) => img.file!)
@@ -684,6 +680,204 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select a bank first");
       }
     }
+  }
+
+  bool packageFieldsIfRequired() {
+    // If no package is selected, skip validation
+    if (selectedPackage.value == 0) return true;
+
+    // Start validating each required field
+    if (camPackageAmtController.text.isEmpty) {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 1", message: "Please enter package amount");
+      return false;
+    } else if (camReceivableAmtController.text.isEmpty) {
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1",
+          message: "Please enter received amount");
+      return false;
+    }
+    /*else if (int.parse(camReceivableAmtController.text ?? "0") < 118) {
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1",
+          message: "Amount must not be less than 118");
+      return false;
+    }*/
+    else if (camReceivableDateController.text.isEmpty) {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 1", message: "Please enter received date");
+      return false;
+    } else if (camTransactionDetailsController.text.isEmpty) {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 1", message: "Please enter UTR");
+    }
+
+    // All fields are filled
+    return true;
+  }
+
+
+
+  void saveSubmitDetails() async{
+    print("saveSubmitDetails");
+
+    if(camFullNameController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
+      return;
+    }else if(camDobController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter DOB");
+      return;
+    }else if(camPhoneController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
+      return;
+    }else if(selectedGender.value==null){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
+      return;
+    }else if(camLoanAmtReqController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Amount");
+      return;
+    }else if(camEmailController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter email");
+      return;
+    }else if(camAadharController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Aadhar");
+      return;
+    }else if(camSelectedState.value==null){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select state");
+      return;
+    }else if(camSelectedDistrict.value == null){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select district");
+      return;
+    }else if(camSelectedCity.value == null){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select district");
+      return;
+    }else if(camZipController.text.isEmpty ){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select zipcode");
+      return;
+    }else if(camSelectedProdSegment.value==null ||  camSelectedProdSegment.value==0){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Segment");
+      return;
+    }else if(camSelectedProdType.value==null || camSelectedProdType.value=="0"){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter KSDPL Product");
+    return;
+    }
+
+    if (!packageFieldsIfRequired()) return;
+
+  /*  if(selectedPackage.value != 0) {
+      print("I am here-===>1");
+      if (camPackageAmtController.text.isEmpty) {
+        SnackbarHelper.showSnackbar(
+            title: "Incomplete Step 1", message: "Please enter package amount");
+        return false;
+      } else if (camReceivableAmtController.text.isEmpty) {
+        SnackbarHelper.showSnackbar(title: "Incomplete Step 1",
+            message: "Please enter received amount");
+        return false;
+      } else if (int.parse(camReceivableAmtController.text ?? "0") < 118) {
+        SnackbarHelper.showSnackbar(title: "Incomplete Step 1",
+            message: "Amount must not be less than 118");
+        return false;
+      } else if (camReceivableDateController.text.isEmpty) {
+        SnackbarHelper.showSnackbar(
+            title: "Incomplete Step 1", message: "Please enter received date");
+        return false;
+      } else if (camTransactionDetailsController.text.isEmpty) {
+        SnackbarHelper.showSnackbar(
+            title: "Incomplete Step 1", message: "Please enter UTR");
+      }
+      return false;
+    }*/
+      print("I am here-===>2");
+   // }else{
+      print("I am here-===>3");
+      isAllCamnoteSubmit(true);
+      final List<IncomeModel> addIncomeSrcModels = [];
+
+      for (var ai in addIncomeList) {
+        final aiModel = IncomeModel(
+          uniqueLeadNumber: uniqueLeadNUmber,
+          description: cleanText(ai.aiSourceController.text),
+          amount: ai.aiIncomeController.text.toDoubleOrZero(),
+        );
+
+        addIncomeSrcModels.add(aiModel);
+      }
+
+      List<Map<String, dynamic>> aiPayload = addIncomeSrcModels.map((e) => e.toMap()).toList();
+
+      if(aiPayload.isNotEmpty){
+        await addAdditionalSourceIncomeApi(aiPayload:aiPayload);
+      }
+
+
+      if (selectedGender.value==null) {
+        ToastMessage.msg("Please select gender");
+      }else {
+        Addleadcontroller addLeadController =Get.find();
+// Now call API with extracted values
+        ///working code
+        /* List<File> propertyPhotos = getImages("property_photo");
+        List<File> residencePhotos = getImages("residence_photo");
+        List<File> officePhotos = getImages("office_photo");*/
+        List<File> propertyPhotos = getImages("property_photo")
+            .where((img) => img.isLocal)
+            .map((img) => img.file!)
+            .toList();
+
+        List<File> residencePhotos = getImages("residence_photo")
+            .where((img) => img.isLocal)
+            .map((img) => img.file!)
+            .toList();
+
+        List<File> officePhotos = getImages("office_photo")
+            .where((img) => img.isLocal)
+            .map((img) => img.file!)
+            .toList();
+
+        await addLeadController.fillLeadFormApi(
+          id: getLeadId.value.toString(),
+          dob: camDobController.text.toString(),
+          gender: selectedGender.toString(),
+          loanAmtReq:camLoanAmtReqController.text.toString(),
+          email: camEmailController.text.toString(),
+          aadhar: camAadharController.text.toString(),
+          pan: camPanController.text.toString(),
+          streetAdd: camStreetAddController.text.toString(),
+          state:  camSelectedState.value.toString(),
+          district: camSelectedDistrict.value.toString(),
+          city: camSelectedCity.value.toString(),
+          zip: camZipController.text.toString(),
+          nationality: camNationalityController.text.toString(),
+          currEmpSt: camCurrEmpStatus.value,
+          employerName: camEmployerNameController.text.toString(),
+          monthlyIncome:camMonthlyIncomeController.text.toString(),
+          ///Now this is not working, Have different API for Additional source of income
+          addSrcIncome: "",
+          prefBank: camSelectedBank.value.toString(),
+          exRelBank:camSelectedIndexRelBank.value==-1?"":camSelectedIndexRelBank.value==0?"Yes":"No",
+          branchLoc:camBranchLocController.text.toString(),
+          prodTypeInt: camSelectedProdType.value.toString(),
+          /// connection name mob and percent are not sent
+          loanApplNo: loanApplicationNumber.toString(),
+
+          name: camFullNameController.text.toString(),
+          mobileNumber: camPhoneController.text.toString(),
+          packageId: selectedPackage.value.toString(),
+          packageAmount: camPackageAmtController.text.toString(),
+          receivableAmount:camReceivableAmtController.text.toString(),
+          receivableDate:camReceivableDateController.text.toString(),
+          transactionDetails:camTransactionDetailsController.text.toString(),
+          remark:camRemarkController.text.toString(),
+          leadSegment:camSelectedProdSegment.value.toString(),
+
+          GeoLocationOfProperty:camGeoLocationPropertyLatController.text.trim().toString()+"-"+camGeoLocationPropertyLongController.text.trim().toString(),
+          GeoLocationOfResidence:camGeoLocationResidenceLatController.text.trim().toString()+"-"+camGeoLocationResidenceLongController.text.trim().toString(),
+          GeoLocationOfOffice:camGeoLocationOfficeLatController.text.trim().toString()+"-"+camGeoLocationOfficeLongController.text.trim().toString(),
+          PhotosOfProperty: propertyPhotos,
+          PhotosOfResidence: residencePhotos,
+          PhotosOfOffice: officePhotos,
+        );
+      }
+   // }
   }
 
 

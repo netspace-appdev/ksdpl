@@ -154,7 +154,7 @@ class Step1CamNote extends StatelessWidget {
 
                         CustomLabeledTextField(
                           label: AppText.eml,
-                          isRequired: false,
+                          isRequired: true,
 
                           controller: camNoteController.camEmailController,
                           inputType: TextInputType.emailAddress,
@@ -196,14 +196,9 @@ class Step1CamNote extends StatelessWidget {
                           hintText: AppText.enterStreetAdd,
 
                         ),
-
-                        const Text(
-                          AppText.state,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.grey2,
-                          ),
+                        CustomTextLabel(
+                            label: AppText.state,
+                          isRequired: true,
                         ),
 
                         SizedBox(height: 10),
@@ -225,6 +220,7 @@ class Step1CamNote extends StatelessWidget {
                               leadDDController.getDistrictByStateIdApi(stateId: camNoteController.camSelectedState.value);
                             },
                             onClear: (){
+                              camNoteController.camSelectedState.value=null;
                               camNoteController.camSelectedDistrict.value = null;
                               leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
 
@@ -237,13 +233,10 @@ class Step1CamNote extends StatelessWidget {
 
                         const SizedBox(height: 20),
 
-                        const Text(
-                          AppText.district,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.grey2,
-                          ),
+
+                        CustomTextLabel(
+                          label: AppText.district,
+                          isRequired: true,
                         ),
 
                         const SizedBox(height: 10),
@@ -277,13 +270,10 @@ class Step1CamNote extends StatelessWidget {
                         const SizedBox(height: 20),
 
 
-                        const Text(
-                          AppText.city,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.grey2,
-                          ),
+
+                        CustomTextLabel(
+                          label: AppText.city,
+                          isRequired: true,
                         ),
 
                         const SizedBox(height: 10),
@@ -704,7 +694,7 @@ class Step1CamNote extends StatelessWidget {
                       children: [
                         CustomTextLabel(
                           label: AppText.packageName,
-                          isRequired: true,
+                          isRequired: camNoteController.selectedPackage.value==0?false:true,
 
                         ),
 
@@ -735,6 +725,11 @@ class Step1CamNote extends StatelessWidget {
                             },
                             onClear: (){
                               camNoteController.selectedPackage.value = 0;
+                              camNoteController.camPackageAmtController..clear();
+                              camNoteController.camReceivableAmtController.clear();
+                              camNoteController.camReceivableDateController.clear();
+                              camNoteController.camTransactionDetailsController.clear();
+                              camNoteController.camRemarkController.clear();
 
                             },
                           );
@@ -747,7 +742,7 @@ class Step1CamNote extends StatelessWidget {
                           inputType: TextInputType.number,
                           hintText: AppText.enterPackageAmount,
                           isInputEnabled: false,
-                          isRequired: true,
+                          isRequired: camNoteController.selectedPackage.value==0?false:true,
                         ),
 
                         CustomLabeledTextField(
@@ -755,7 +750,7 @@ class Step1CamNote extends StatelessWidget {
                           controller: camNoteController.camReceivableAmtController,
                           inputType: TextInputType.number,
                           hintText: AppText.enterReceivableAmount,
-                          isRequired: true,
+                          isRequired: camNoteController.selectedPackage.value==0?false:true,
 
                         ),
 
@@ -766,7 +761,8 @@ class Step1CamNote extends StatelessWidget {
                           inputType: TextInputType.name,
                           hintText: AppText.mmddyyyy,
                           isDateField: true,
-                          isRequired: true,
+                          isFutureDisabled: true,
+                          isRequired: camNoteController.selectedPackage.value==0?false:true,
                         ),
 
                         CustomLabeledTextField(
@@ -774,7 +770,7 @@ class Step1CamNote extends StatelessWidget {
                           controller: camNoteController.camTransactionDetailsController,
                           inputType: TextInputType.name,
                           hintText: AppText.enterTransactionDetails,
-                          isRequired: true,
+                          isRequired: camNoteController.selectedPackage.value==0?false:true,
                         ),
 
                         CustomLabeledTextField(
@@ -931,8 +927,11 @@ class Step1CamNote extends StatelessWidget {
           }),
         );
       }),
+
     );
   }
+
+
   Widget _buildRadioOption(String gender) {
     return Row(
       children: [
@@ -971,56 +970,6 @@ class Step1CamNote extends StatelessWidget {
                   email:camNoteController.camEmailController.text.trim().toString(),
                   leadId: camNoteController.getLeadId.value.toString()
               );
-
-                /*  .then((_){
-                Addleadcontroller addLeadController =Get.find();
-                List<File> propertyPhotos = camNoteController.getImages("property_photo");
-                List<File> residencePhotos = camNoteController.getImages("residence_photo");
-                List<File> officePhotos = camNoteController.getImages("office_photo");
-                  addLeadController.fillLeadFormApi(
-                  id: camNoteController.getLeadId.value.toString(),
-                  dob: camNoteController.camDobController.text.toString(),
-                  gender: camNoteController.selectedGender.toString(),
-                  loanAmtReq:camNoteController.camLoanAmtReqController.text.toString(),
-                  email: camNoteController.camEmailController.text.toString(),
-                  aadhar: camNoteController.camAadharController.text.toString(),
-                  pan: camNoteController.camPanController.text.toString(),
-                  streetAdd: camNoteController.camStreetAddController.text.toString(),
-                  state:  camNoteController.camSelectedState.value.toString(),
-                  district: camNoteController.camSelectedDistrict.value.toString(),
-                  city: camNoteController.camSelectedCity.value.toString(),
-                  zip: camNoteController.camZipController.text.toString(),
-                  nationality: camNoteController.camNationalityController.text.toString(),
-                  currEmpSt: camNoteController.camCurrEmpStatus.value,
-                  employerName: camNoteController.camEmployerNameController.text.toString(),
-                  monthlyIncome:camNoteController.camMonthlyIncomeController.text.toString(),
-                  ///Now this is not working, Have different API for Additional source of income
-                  addSrcIncome: "",
-                  prefBank: camNoteController.camSelectedBank.value.toString(),
-                  exRelBank:camNoteController.camSelectedIndexRelBank.value==-1?"":camNoteController.camSelectedIndexRelBank.value==0?"Yes":"No",
-                  branchLoc:camNoteController.camBranchLocController.text.toString(),
-                  prodTypeInt: camNoteController.camSelectedProdType.value.toString(),
-                  /// connection name mob and percent are not sent
-                  loanApplNo: camNoteController.loanApplicationNumber.toString(),
-
-                  name: camNoteController.camFullNameController.text.toString(),
-                  mobileNumber: camNoteController.camPhoneController.text.toString(),
-                  packageId: camNoteController.selectedPackage.value.toString(),
-                  packageAmount: camNoteController.camPackageAmtController.text.toString(),
-                  receivableAmount:camNoteController.camReceivableAmtController.text.toString(),
-                  receivableDate:camNoteController.camReceivableDateController.text.toString(),
-                  transactionDetails:camNoteController.camTransactionDetailsController.text.toString(),
-                  remark:camNoteController.camRemarkController.text.toString(),
-                  leadSegment:camNoteController.camSelectedProdSegment.value.toString(),
-
-                  GeoLocationOfProperty:camNoteController.camGeoLocationPropertyLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationPropertyLongController.text.trim().toString(),
-                  GeoLocationOfResidence:camNoteController.camGeoLocationResidenceLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationResidenceLongController.text.trim().toString(),
-                  GeoLocationOfOffice:camNoteController.camGeoLocationOfficeLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationOfficeLongController.text.trim().toString(),
-                  PhotosOfProperty: propertyPhotos??[],
-                  PhotosOfResidence: residencePhotos??[],
-                  PhotosOfOffice: officePhotos??[],
-                );
-              });*/
             },
             onNo: () {
 

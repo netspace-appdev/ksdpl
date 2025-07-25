@@ -714,11 +714,11 @@ class AppText{
   static const String enterPackageName = "Enter Package Name";
   static const String packageAmount = "Package Amount";
   static const String enterPackageAmount = "Enter Package Amount";
-  static const String receivableAmount = "Receivable Amount";
-  static const String enterReceivableAmount = "Enter Receivable Amount";
-  static const String receivableDate = "Receivable Date";
+  static const String receivableAmount = "Received Amount";
+  static const String enterReceivableAmount = "Enter Received Amount";
+  static const String receivableDate = "Received Date";
   static const String receivedDate = "Received Date";
-  static const String enterReceivableDate  = "Enter Receivable Date";
+  static const String enterReceivableDate  = "Enter Received Date";
   static const String transactionDetails  = "UTR";
   static const String enterTransactionDetails  = "Enter UTR";
   static const String remark  = "Remark";
@@ -764,6 +764,7 @@ class AppText{
   static const String cncMessage="Lead moved to could not connect successfully";
   static const String robmLogin="RO/BM Login";
   static const String aicLogin="AIC Login";
+  static const String submitBasicDetails="Submit Basic Details";
 
 }
 
