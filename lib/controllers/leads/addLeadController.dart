@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -289,6 +291,23 @@ class Addleadcontroller extends GetxController{
           camNoteController.loadApiImagesForKey('office_photo', photoOff);
           camNoteController.photosOffEnabled.value=false;
         }
+
+
+   /*     getLeadDetailModel.value?.data?.cibilJSON!="{\"code\":200,\"timestamp\":1752489745728,\"transaction_id\":\"53e80005b82b4d2c8c8546952df3d693\",\"sub_code\":\"SUCCESS\",\"message\":\"Credit report fetched successfully.\",\"data\":{\"pan\":null,\"mobile\":\"9522517237\",\"name\":\"ABHAY SOLANKI \",\"credit_score\":\"790\",\"pdf_url\":\"https://deepvue.s3.ap-south-1.amazonaws.com/credit-reports/equifax/report-pdf/ABHAY_SOLANKI__20250714104225.pdf\",\"credit_report\":{\"InquiryResponseHeader\":{\"ClientID\":\"007FP17166\",\"CustRefField\":null,\"ReportOrderNO\":\"2033124256\",\"ProductCode\":[\"IDCCR\"],\"SuccessCode\":\"1\",\"Date\":\"2025-07-14\",\"Time\":\"16:12:25\",\"HitCode\":null,\"CustomerName\":null},\"InquiryRequestInfo\":{\"InquiryPurpose\":\"05\",\"TransactionAmount\":null,\"FirstName\":\"ABHAY\",\"InquiryAddresses\":[{\"seq\":\"1\",\"AddressType\":null,\"AddressLine1\":\"Deepvue Technologies Private Limited, Garuda Behive Workspace, BTM 2nd Stage, BLR\",\"City\":null,\"State\":\"KA\",\"Postal\":\"560076\"}],\"InquiryPhones\":[{\"seq\":\"1\",\"PhoneType\":[\"M\"],\"Number\":\"9522517237\"}],\"IDDetails\":[{\"seq\":\"1\",\"IDType\":\"T\",\"IDValue\":\"OAMPS6745G\"}],\"DOB\":\"2001-04-28\",\"Gender\":null},\"Score\":[{\"Type\":\"ERS\",\"Version\":\"4.0\"}],\"CCRResponse\":{\"Status\":\"1\",\"CIRReportDataLst\":[{\"InquiryResponseHeader\":{\"ClientID\":null,\"CustRefField\":null,\"ReportOrderNO\":\"2033124256\",\"ProductCode\":[\"ICCRR\"],\"SuccessCode\":\"1\",\"Date\":\"2025-07-14\",\"Time\":\"16:12:25\",\"HitCode\":\"10\",\"CustomerName\":\"NYLV\"},\"InquiryRequestInfo\":{\"InquiryPurpose\":\"Personal Loan\",\"TransactionAmount\":null,\"FirstName\":\"ABHAY\",\"InquiryAddresses\":[{\"seq\":\"1\",\"AddressType\":null,\"AddressLine1\":\"Deepvue Technologies Private Limited, Garuda Behive Workspace, BTM 2nd Stage, BLR\",\"City\":null,\"State\":\"KA\",\"Postal\":\"560076\"}],\"InquiryPhones\":[{\"seq\":\"1\",\"PhoneType\":[\"M\"],\"Number\":\"9522517237\"}],\"IDDetails\":[{\"seq\":\"1\",\"IDType\":\"T\",\"IDValue\":\"OAMPS6745G\"}],\"DOB\":\"2001-04-28\",\"Gender\":null},\"Score\":[{\"Type\":\"ERS\",\"Version\":\"4.0\"}],\"CIRReportData\":{\"IDAndContactInfo\":{\"PersonalInfo\":{\"Name\":{\"FullName\":\"ABHAY SOLANKI \",\"FirstName\":\"ABHAY \",\"MiddleName\":\"SOLANKI \",\"LastName\":null},\"AliasName\":null,\"DateOfBirth\":\"2001-04-28\",\"Gender\":\"Male\",\"Age\":{\"Age\":\"24\"},\"PlaceOfBirthInfo\":{},\"TotalIncome\":null,\"Occupation\":null},\"IdentityInfo\":{\"PANId\":[{\"seq\":\"1\",\"ReportedDate\":\"2025-06-30\",\"IdNumber\":\"OAMPS6745G\"}],\"NationalIDCard\":null},\"AddressInfo\":[{\"Seq\":\"1\",\"ReportedDate\":\"2025-06-30\",\"Address\":\"112 MAHAVEER NAGAR  PIPLINAKA UJJAIN PIPLINAKA UJJAIN MADHYA PRADESH\",\"State\":\"MP\",\"Postal\":\"456006\",\"Type\":\"Rents,Primary\"},{\"Seq\":\"2\",\"ReportedDate\":\"2025-03-05\",\"Address\":\"S/O DEVENDRA SOLANKI 112 MAHAVEER NAGAR  UJJAIN GHATIYA UJJAIN UJJAIN CITY  1823 MADHYA PRADESH\",\"State\":\"MP\",\"Postal\":\"456006\",\"Type\":null},{\"Seq\":\"3\",\"ReportedDate\":\"2025-01-04\",\"Address\":\"S/O DEVENDRA SOLANKI 112 MAHAVEER NAGAR  UJJAIN GHATIYA UJJAIN UJJAIN CITY  1823 MADHYA PRADESH\",\"State\":\"MP\",\"Postal\":\"456006\",\"Type\":null},{\"Seq\":\"4\",\"ReportedDate\":\"2024-12-15\",\"Address\":\"112 MAHAVEER NAGAR  PIPLINAKA UJJAIN PIPLINAKA UJJAIN MADHYA PRADESH\",\"State\":\"MP\",\"Postal\":\"456006\",\"Type\":\"Rents,Primary\"}],\"PhoneInfo\":[{\"seq\":\"1\",\"typeCode\":\"H\",\"ReportedDate\":\"2025-03-05\",\"Number\":\"9522517237\"},{\"seq\":\"2\",\"typeCode\":\"M\",\"ReportedDate\":\"2025-06-30\",\"Number\":\"9522517237\"}],\"EmailAddressInfo\":null},\"RetailAccountDetails\":[{\"seq\":\"1\",\"AccountNumber\":\"XXXXXXXXXXX6599\",\"Institution\":\"CapFloat Financial Services Private Limited\",\"AccountType\":\"Consumer Loan\",\"OwnershipType\":\"Individual\",\"Balance\":\"0\",\"PastDueAmount\":\"0\",\"Open\":\"Yes\",\"SanctionAmount\":\"3000\",\"LastPaymentDate\":\"2025-06-02\",\"DateReported\":\"2025-06-30\",\"DateOpened\":\"2023-12-18\",\"DateClosed\":null,\"Reason\":null,\"TermFrequency\":\"Monthly\",\"AccountStatus\":\"Current Account\",\"AssetClassification\":\"Standard\",\"source\":\"INDIVIDUAL\",\"History48Months\":[{\"Key\":\"06-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"05-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"},{\"Key\":\"04-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"03-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"02-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"01-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"12-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"11-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"10-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"09-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"08-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"07-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"06-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"05-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"04-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"03-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"02-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"01-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"12-23\",\"PaymentStatus\":\"NEW\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"}]},{\"seq\":\"2\",\"AccountNumber\":\"XXXXXXXXXXX6599\",\"Institution\":\"Karur Vysya Bank\",\"AccountType\":\"Consumer Loan\",\"OwnershipType\":\"Individual\",\"Balance\":\"0\",\"PastDueAmount\":\"0\",\"Open\":\"Yes\",\"SanctionAmount\":\"12000\",\"LastPaymentDate\":\"2025-06-02\",\"DateReported\":\"2025-06-30\",\"DateOpened\":\"2023-12-18\",\"DateClosed\":null,\"Reason\":null,\"TermFrequency\":\"Monthly\",\"AccountStatus\":\"Current Account\",\"AssetClassification\":\"Standard\",\"source\":\"INDIVIDUAL\",\"History48Months\":[{\"Key\":\"06-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"05-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"},{\"Key\":\"04-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"03-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"02-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"01-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"12-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"11-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"10-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"09-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"08-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"07-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"06-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"05-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"04-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"03-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"02-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"01-24\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"},{\"Key\":\"12-23\",\"PaymentStatus\":\"NEW\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"STD\"}]},{\"seq\":\"3\",\"AccountNumber\":\"XXXXXXXXXXXXXX2054\",\"Institution\":\"IDFC First Bank Ltd\",\"AccountType\":\"Consumer Loan\",\"OwnershipType\":\"Individual\",\"Balance\":\"11363\",\"PastDueAmount\":\"0\",\"Open\":\"Yes\",\"SanctionAmount\":\"22028\",\"LastPaymentDate\":\"2025-06-08\",\"DateReported\":\"2025-06-16\",\"DateOpened\":\"2025-03-04\",\"DateClosed\":null,\"Reason\":null,\"TermFrequency\":\"Monthly\",\"AccountStatus\":\"Current Account\",\"AssetClassification\":null,\"source\":\"INDIVIDUAL\",\"History48Months\":[{\"Key\":\"06-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"},{\"Key\":\"05-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"},{\"Key\":\"04-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"},{\"Key\":\"03-25\",\"PaymentStatus\":\"NEW\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"}]},{\"seq\":\"4\",\"AccountNumber\":\"XXXXXXXXXXXXXX5133\",\"Institution\":\"IDFC First Bank Ltd\",\"AccountType\":\"Consumer Loan\",\"OwnershipType\":\"Individual\",\"Balance\":\"0\",\"PastDueAmount\":\"0\",\"Open\":\"No\",\"SanctionAmount\":\"30000\",\"LastPaymentDate\":\"2025-04-01\",\"DateReported\":\"2025-05-26\",\"DateOpened\":\"2025-01-03\",\"DateClosed\":\"2025-05-26\",\"Reason\":null,\"TermFrequency\":\"Monthly\",\"AccountStatus\":\"Closed Account\",\"AssetClassification\":null,\"source\":\"INDIVIDUAL\",\"History48Months\":[{\"Key\":\"05-25\",\"PaymentStatus\":\"CLSD\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"},{\"Key\":\"04-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"},{\"Key\":\"03-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"},{\"Key\":\"02-25\",\"PaymentStatus\":\"000\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"},{\"Key\":\"01-25\",\"PaymentStatus\":\"NEW\",\"SuitFiledStatus\":\"*\",\"AssetClassificationStatus\":\"*\"}]}]}},{\"InquiryResponseHeader\":{\"ClientID\":\"007FP17166\",\"CustRefField\":null,\"ReportOrderNO\":\"2033124256\",\"ProductCode\":[\"ICCRM\"],\"SuccessCode\":\"0\",\"Date\":\"2025-07-14\",\"Time\":\"16:12:25\",\"HitCode\":\"00\",\"CustomerName\":null},\"InquiryRequestInfo\":{\"InquiryPurpose\":\"05\",\"TransactionAmount\":null,\"FirstName\":\"ABHAY\",\"InquiryAddresses\":[{\"seq\":\"1\",\"AddressType\":null,\"AddressLine1\":\"Deepvue Technologies Private Limited, Garuda Behive Workspace, BTM 2nd Stage, BLR\",\"City\":null,\"State\":\"KA\",\"Postal\":\"560076\"}],\"InquiryPhones\":[{\"seq\":\"1\",\"PhoneType\":[\"M\"],\"Number\":\"9522517237\"}],\"IDDetails\":[{\"seq\":\"1\",\"IDType\":\"T\",\"IDValue\":\"OAMPS6745G\"}],\"DOB\":\"2001-04-28\",\"Gender\":null},\"Score\":null,\"CIRReportData\":null}]}}}}";
+
+        if (getLeadDetailModel.value?.data?.cibilJSON!=null) {
+          final result = await parseCibilData(
+            cibilJson: getLeadDetailModel.value?.data?.cibilJSON,
+            annualInterestRate: 18.0,
+            tenureMonths: 12,
+          );
+
+          print("CIBIL Score: ${result['Cibil']}");
+          print("Total Loan Availed: ${result['TotalLoanAvailedOnCibil']}");
+        }
+*/
+
+
         isLoading(false);
 
       }else{
@@ -306,8 +325,78 @@ class Addleadcontroller extends GetxController{
       isLoading(false);
     }
   }
+  double calculateEMI(double principal, double annualInterestRate, int months) {
+    double monthlyInterest = annualInterestRate / 12 / 100;
+    return (principal * monthlyInterest * pow(1 + monthlyInterest, months)) /
+        (pow(1 + monthlyInterest, months) - 1);
+  }
 
- Future<void>fillLeadFormApi({
+  Future<Map<String, dynamic>> parseCibilData({
+    required String? cibilJson,
+    required double annualInterestRate,
+    required int tenureMonths,
+  }) async {
+    if (cibilJson == null) return {};
+
+    final parsedData = json.decode(cibilJson);
+    final cibilData = parsedData['data'];
+    final addressList = cibilData?['credit_report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountDetails'];
+
+    if (addressList == null || addressList is! List) return {};
+
+    final accounts = addressList.map<CibilAccount>((e) => CibilAccount.fromJson(e)).toList();
+
+    double totalLoanAvailed = 0;
+    int totalLiveLoan = 0;
+    double totalEMI = 0;
+    int emiWillContinue = 0;
+    int overdueCases = 0;
+    double totalOverdueAmount = 0;
+
+    for (var account in accounts) {
+      final amount = double.tryParse(account.sanctionAmount ?? '0') ?? 0;
+      totalLoanAvailed += amount;
+
+      if (account.open == "Yes") {
+        totalLiveLoan += 1;
+
+        if (account.sanctionAmount != null) {
+          totalEMI += calculateEMI(amount, annualInterestRate, tenureMonths);
+        }
+
+        if (account.dateClosed == null) {
+          emiWillContinue += 1;
+        }
+      }
+
+      final overdueAmount = double.tryParse(account.pastDueAmount ?? '0') ?? 0;
+      if (overdueAmount > 0) {
+        totalOverdueAmount += overdueAmount;
+        overdueCases += 1;
+      } else if (account.history48Months != null) {
+        bool hasOverdueHistory = account.history48Months!.any((entry) =>
+            ['30+', '60+', '90+', '120+', 'SUB', 'SPM']
+                .contains(entry.paymentStatus));
+        if (hasOverdueHistory) overdueCases += 1;
+      }
+    }
+
+    return {
+      'Cibil': cibilData?['credit_score'] ?? '0',
+      'TotalLoanAvailedOnCibil': totalLoanAvailed,
+      'TotalLiveLoan': totalLiveLoan,
+      'TotalEMI': totalEMI,
+      'EMIWillContinue': emiWillContinue,
+      'TotalOverdueCasesAsPerCibil': overdueCases,
+      'TotalOverdueAmountAsPerCibil': totalOverdueAmount,
+      'TotalEnquiriesMadeAsPerCibil':
+      cibilData?['credit_report']?['CCRResponse']?['CIRReportDataLst']?.length ?? 0,
+    };
+  }
+
+
+
+  Future<void>fillLeadFormApi({
    required String id,
    required String dob,
    required String gender,
@@ -737,4 +826,42 @@ class Addleadcontroller extends GetxController{
   }
 
 
+}
+
+class CibilAccount {
+  final String? open;
+  final String? sanctionAmount;
+  final String? dateClosed;
+  final String? pastDueAmount;
+  final List<HistoryEntry>? history48Months;
+
+  CibilAccount({
+    this.open,
+    this.sanctionAmount,
+    this.dateClosed,
+    this.pastDueAmount,
+    this.history48Months,
+  });
+
+  factory CibilAccount.fromJson(Map<String, dynamic> json) {
+    return CibilAccount(
+      open: json['Open'],
+      sanctionAmount: json['SanctionAmount'],
+      dateClosed: json['DateClosed'],
+      pastDueAmount: json['PastDueAmount'],
+      history48Months: (json['History48Months'] as List?)
+          ?.map((e) => HistoryEntry.fromJson(e))
+          .toList(),
+    );
+  }
+}
+
+class HistoryEntry {
+  final String? paymentStatus;
+
+  HistoryEntry({this.paymentStatus});
+
+  factory HistoryEntry.fromJson(Map<String, dynamic> json) {
+    return HistoryEntry(paymentStatus: json['PaymentStatus']);
+  }
 }

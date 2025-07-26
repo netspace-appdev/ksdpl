@@ -21,6 +21,7 @@ class ProductService {
   static const String getAllCommonDocumentNameList = BaseUrl.baseUrl + 'KsdplProductList/GetAllCommonDocumentNameList';
 
 
+
   static Future<Map<String, dynamic>> getAllProductCategoryApi() async {
     try {
       var request = http.MultipartRequest(
@@ -560,6 +561,7 @@ class ProductService {
       throw Exception('Error while submitting: $e');
     }
   }
+
 
   static void printInChunks(String text, {int chunkSize = 2048}) {
     final pattern = RegExp('.{1,$chunkSize}', dotAll: true);

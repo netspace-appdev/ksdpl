@@ -32,6 +32,7 @@ import '../../models/camnote/GetCamNoteLeadIdModel.dart';
 import '../../models/camnote/GetPackageDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart' as otherBankBranch;
 import '../../models/camnote/GetProductDetailsByFilterModel.dart' as pdFModel;
+import '../../models/camnote/RequestForFinancialServicesModel.dart';
 import '../../models/camnote/SendMailForLocationOfCustomerModel.dart';
 import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
@@ -144,6 +145,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var getProductDetailsByFilterModel = Rxn<pdFModel.GetProductDetailsByFilterModel>(); //
   var getCamNoteLeadIdModel = Rxn<GetCamNoteLeadIdModel>(); //
   var getCamNoteDetailByIdModel = Rxn<GetCamNoteDetailByIdModel>(); //
+  var requestForFinancialServicesModel = Rxn<RequestForFinancialServicesModel>(); //
   RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
   var isLoadingProductCategory = false.obs;
   var isProductLoading = false.obs;
@@ -449,15 +451,14 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   void nextStep(int tappedIndex) {
     if (currentStep.value < 2) {
       currentStep.value++;
-     /* if(currentStep.value==2){
 
-        forBankDetailSubmit();
-      }*/
       scrollToStep(currentStep.value);
     }
 
     if(currentStep.value==1 || currentStep.value==2){
       setAgeFromDob(camDobController, camEarningCustomerAgeController);
+
+
     }
 
     if(tappedIndex==2){
@@ -481,9 +482,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     currentStep.value = step;
 
-   /* if(currentStep.value==2){
-      forBankDetailSubmit();
-    }*/
     scrollToStep(step);
   }
 
@@ -696,7 +694,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           message: "Please enter received amount");
       return false;
     }
-    /*else if (int.parse(camReceivableAmtController.text ?? "0") < 118) {
+   /* else if (int.parse(camReceivableAmtController.text ?? "0") < 118) {
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1",
           message: "Amount must not be less than 118");
       return false;
@@ -2708,6 +2706,39 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
 
+  void  requestForFinancialServicesApi({
+    required String leadId
+  }) async {
+    try {
+      isLoading(true);
+
+      var data = await CamNoteService.requestForFinancialServicesApi(leadID: leadId);
+
+      if(data['success'] == true){
+
+
+
+
+        requestForFinancialServicesModel.value= RequestForFinancialServicesModel.fromJson(data);
+
+        ToastMessage.msg(requestForFinancialServicesModel.value!.message.toString());
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error requestForFinancialServicesApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
 
   int calculateAge(DateTime birthDate) {
     DateTime today = DateTime.now();

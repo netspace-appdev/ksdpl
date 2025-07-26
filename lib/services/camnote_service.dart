@@ -30,7 +30,7 @@ class CamNoteService {
   static const String fetchBankDetailBySegmentIdAndKSDPLProductId = BaseUrl.baseUrl + 'ProductList/FetchBankDetailBySegmentIdAndKSDPLProductId';
   static const String getProductDetailBySegmentAndProduct = BaseUrl.baseUrl + 'ProductList/GetProductDetailBySegmentAndProduct';
   static const String sendMailForLocationOfCustomer = BaseUrl.baseUrl + 'LeadDetail/SendMailForLocationOfCustomer';
-
+  static const String requestForFinancialServices = BaseUrl.baseUrl + 'FileUpload/RequestForFinancialServices';
 
 
 
@@ -896,6 +896,40 @@ class CamNoteService {
     } catch (e) {
       print("Error: $e");
       throw Exception('Error: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>>requestForFinancialServicesApi({
+    required String leadID
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(requestForFinancialServices),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['LeadID'] = leadID.toString();
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(requestForFinancialServices, request.fields);
+      Helper.ApiRes(requestForFinancialServices, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
     }
   }
 

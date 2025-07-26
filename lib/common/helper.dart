@@ -567,7 +567,7 @@ class AppText{
 
 
   /// cam note
-  static const String totalLoanAvaileCibil = "Total Loan Availed On CIBIL";
+  static const String totalLoanAvaileCibil = "Total Loan Availed On CIBIL (No)";
   static const String enterTotalLoanAvaileCibil = "Enter Total Loan Availed";
 
   static const String totalLiveLoan = "Total Live Loan";
@@ -765,6 +765,8 @@ class AppText{
   static const String robmLogin="RO/BM Login";
   static const String aicLogin="AIC Login";
   static const String submitBasicDetails="Submit Basic Details";
+  static const String sendEmailToCustomer="Send Email to Customer";
+  static const String reqCibilMsg="Do you want to send an email requesting the CIBIL report?";
 
 }
 

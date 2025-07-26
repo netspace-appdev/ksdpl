@@ -13,7 +13,9 @@ import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
+import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
+import '../../custom_widgets/CustomIconDilogBox.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLoadingOverlay.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart' as customTF;
@@ -86,10 +88,10 @@ class Step2CamNote extends StatelessWidget {
                                          camNoteController.selectedIndexGenCibil.value=-1;
                                          camNoteController.camCibilMobController.text=camNoteController.camPhoneController.text;
                                          camNoteController.selectedGenderGenCibil.value=camNoteController.selectedGender.value;
-                                         showDialogGenCibil(context:context);
+                                         showDialogSendEmailCibil(context:context);
                                        },
                                        child: const Text(
-                                        "Need to generate ?",
+                                        AppText.sendEmailToCustomer,
                                          style: TextStyle(
                                            fontSize: 16,
                                            fontWeight: FontWeight.bold,
@@ -117,6 +119,7 @@ class Step2CamNote extends StatelessWidget {
                        hintText: AppText.enterCibilScore,
                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                      ),
+                     SizedBox(height: 15,),
 
                      CustomLabeledTextField(
                        label: AppText.totalLoanAvaileCibil,
@@ -193,91 +196,6 @@ class Step2CamNote extends StatelessWidget {
 
                 childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
                 title:const Text(AppText.sectionB, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                leading: const Icon(Icons.list_alt, size: 20,),
-                children: [
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      CustomLabeledTextField(
-                        label: AppText.geoLocationProperty,
-                        controller: camNoteController.camGeoLocationPropertyLatController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterLatitude,
-                      ),
-                      CustomLabeledTextField(
-                        label: "",
-                        controller: camNoteController.camGeoLocationPropertyLongController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterLongitude,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.geoLocationResidence,
-                        controller: camNoteController.camGeoLocationResidenceLatController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterLatitude,
-                      ),
-                      CustomLabeledTextField(
-                        label: "",
-                        controller: camNoteController.camGeoLocationResidenceLongController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterLongitude,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.geoLocationOffice,
-                        controller: camNoteController.camGeoLocationOfficeLatController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterLatitude,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: "",
-                        controller: camNoteController.camGeoLocationOfficeLongController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterLongitude,
-                      ),
-
-
-
-                      CustomPhotoPickerWidget(
-                        controller: camNoteController,
-                        imageKey: 'property_photo',
-                        label: 'Upload Property Photos',
-                      ),
-
-                      const SizedBox(height: 20,),
-
-                      CustomPhotoPickerWidget(
-                        controller: camNoteController,
-                        imageKey: 'residence_photo',
-                        label: 'Upload Residence Photos',
-                      ),
-
-                      const SizedBox(height: 20,),
-
-                      CustomPhotoPickerWidget(
-                        controller: camNoteController,
-                        imageKey: 'office_photo',
-                        label: 'Upload Office Photos',
-                      ),
-
-                      const SizedBox(height: 20,),
-                    ],
-                  )
-
-
-                ],
-              ),
-
-              ExpansionTile(
-                initiallyExpanded: true,
-
-
-                childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
-                title:const Text(AppText.sectionC, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                 leading: const Icon(Icons.list_alt, size: 20,),
                 children: [
 
@@ -369,6 +287,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camProposedEmiController,
                         inputType: TextInputType.number,
                         hintText: AppText.autoCalculatedProposedEmi,
+                       isInputEnabled: false,
                       ),
 
                       CustomLabeledTextField(
@@ -391,6 +310,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camLtvController,
                         inputType: TextInputType.number,
                         hintText: AppText.autoCalculatedLtv,
+                        isInputEnabled: false,
                       ),
 
                       CustomLabeledTextField(
@@ -414,6 +334,7 @@ class Step2CamNote extends StatelessWidget {
   }
 
 
+/*
   void showDialogGenCibil({
     required BuildContext context,
   }) {
@@ -593,6 +514,33 @@ class Step2CamNote extends StatelessWidget {
       },
     );
   }
+*/
+
+
+  void showDialogSendEmailCibil({
+    required BuildContext context,
+  }) {
+
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return CustomIconDialogBox(
+          title: "Are you sure?",
+          icon: Icons.info_outline,
+          iconColor: AppColor.secondaryColor,
+          description: AppText.reqCibilMsg,
+          onYes: () {
+            camNoteController.requestForFinancialServicesApi(leadId: camNoteController.getLeadId.toString());
+          },
+          onNo: () {
+            Get.back();
+          },
+        );
+      },
+    );
+  }
+
 
 
   Widget _buildRadioOption(String gender) {

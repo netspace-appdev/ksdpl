@@ -31,8 +31,6 @@ class CamNoteGroupScreen extends StatelessWidget {
     Step1CamNote(),
     Step2CamNote(),
     Step3CamNote(),
-
-
   ];
   @override
   Widget build(BuildContext context) {
@@ -107,13 +105,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                                         }
 
                                         return InkWell(
-                                          onTap:
-
-                                          (camNoteController.currentStep.value==0 && camNoteController.selectedPackage.value!=null && camNoteController.camTransactionDetailsController.text.isEmpty )?(){
-                                            ToastMessage.msg("Please enter package's UTR first");
-                                          }:
-
-                                              () => camNoteController.jumpToStep(index),
+                                          onTap: () => camNoteController.jumpToStep(index),
                                           child: Row(
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
@@ -209,16 +201,13 @@ class CamNoteGroupScreen extends StatelessWidget {
 
                                       ElevatedButton(
                                         onPressed:
-                                        (camNoteController.currentStep.value==0 && camNoteController.selectedPackage.value!=null && camNoteController.camTransactionDetailsController.text.isEmpty )?(){
-                                          ToastMessage.msg("Please enter package's UTR first");
-                                        }:
                                         camNoteController.currentStep.value < 3
                                             ? ()=>camNoteController.nextStep(camNoteController.currentStep.value)
                                             : null,
-                                        child:  Text(camNoteController.currentStep.value==2?"Save":'Next',style: TextStyle(color: AppColor.appWhite),),
+                                        child:  Text(camNoteController.currentStep.value==2?"Submit":'Next',style: TextStyle(color: AppColor.appWhite),),
                                         style: ElevatedButton.styleFrom(
                                           minimumSize: Size(130, 40),
-                                          backgroundColor: AppColor.greenColor,
+                                          backgroundColor: camNoteController.currentStep.value == 0 ||camNoteController.currentStep.value == 1?AppColor.greenColor: AppColor.secondaryColor,
                                         ),
                                       ),
                                     ],
