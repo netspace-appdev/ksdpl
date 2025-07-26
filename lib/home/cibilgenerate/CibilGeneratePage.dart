@@ -18,58 +18,57 @@ class Cibilgeneratepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      backgroundColor: AppColor.backgroundColor,
-
-
-      body: Form(
-        key:  cibilGenerateController.formKey ,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  // Gradient Background
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.9,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColor.primaryLight, AppColor.primaryDark],
-                        begin: Alignment.centerRight,
-                        end: Alignment.centerLeft,
+    return  SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColor.backgroundColor,
+      
+      
+        body: Form(
+          key:  cibilGenerateController.formKey ,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    // Gradient Background
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.9,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColor.primaryLight, AppColor.primaryDark],
+                          begin: Alignment.centerRight,
+                          end: Alignment.centerLeft,
+                        ),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child:Column(
+                        children: [
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          header(context),
+                        ],
                       ),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child:Column(
-                      children: [
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        header(context),
-                      ],
-                    ),
-                  ),
-                  // White Container
-                  Align(
-                    alignment: Alignment.topCenter,  // Centers it
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 18.0),
-                      child: Container(
-                        margin:  EdgeInsets.only(
-                            top:90 // MediaQuery.of(context).size.height * 0.22
-                        ), // <-- Moves it 30px from top
-                        width: double.infinity,
-                          height: MediaQuery.of(context).size.height/1.2,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                        decoration: const BoxDecoration(
-                          color: AppColor.backgroundColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(45),
-                            topRight: Radius.circular(45),
+                    // White Container
+                    Align(
+                      alignment: Alignment.topCenter,  // Centers it
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 18.0),
+                        child: Container(
+                          margin:  EdgeInsets.only(
+                              top:90 // MediaQuery.of(context).size.height * 0.22
+                          ), // <-- Moves it 30px from top
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                          decoration: const BoxDecoration(
+                            color: AppColor.backgroundColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(45),
+                              topRight: Radius.circular(45),
+                            ),
+
                           ),
-          
-                        ),
-                        child: SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min, // Prevents extra spacing
@@ -91,7 +90,7 @@ class Cibilgeneratepage extends StatelessWidget {
                             validator: ValidationHelper.validatePhoneNumber,
                             maxLength: 10,
                           ),
-                          
+
                           CustomLabeledTextField(
                             label: AppText.totalAmountCibil,
                             controller: cibilGenerateController.camTotalOverdueAmountController,
@@ -101,7 +100,7 @@ class Cibilgeneratepage extends StatelessWidget {
                             validator:ValidationHelper.validatecibilamount ,
                             //isInputEnabled: cibilGenerateController.enableAllCibilFields.value,
                           ),
-                          
+
                           CustomLabeledPickerTextField(
                             label: AppText.receivedDate,
                             controller: cibilGenerateController.camReceivableDateController,
@@ -111,9 +110,9 @@ class Cibilgeneratepage extends StatelessWidget {
                             isRequired: true,
                             isFutureDisabled: true,
                             validator:ValidationHelper.validateReceivedDate ,
-          
+
                           ),
-                          
+
                           CustomLabeledTextField(
                             label: AppText.transactionDetails,
                             controller: cibilGenerateController.camTransactionDetailsController,
@@ -121,9 +120,9 @@ class Cibilgeneratepage extends StatelessWidget {
                             isRequired: true,
                             hintText: AppText.enterTransactionDetails,
                             validator:ValidationHelper.validateUTR ,
-          
+
                           ),
-          
+
                           SizedBox(
                             width: double.infinity,
                             height: 50,
@@ -137,7 +136,7 @@ class Cibilgeneratepage extends StatelessWidget {
                               // onPressed: onPressed,
                               onPressed: () {
                                 if (cibilGenerateController.formKey.currentState?.validate() ?? false) {
-          
+
                                   cibilGenerateController.addCustomerCibilRequestApi();
                                   // All validations passed
                                   print("Form is valid");
@@ -162,14 +161,14 @@ class Cibilgeneratepage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
-          
-          
-                ],
-              ),
-          
-          
-            ],
+
+
+                  ],
+                ),
+
+
+              ],
+            ),
           ),
         ),
       ),

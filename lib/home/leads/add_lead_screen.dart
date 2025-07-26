@@ -90,7 +90,7 @@ class AddLeadScreen extends StatelessWidget {
                           top:90 // MediaQuery.of(context).size.height * 0.22
                       ), // <-- Moves it 30px from top
                       width: double.infinity,
-                      //height: MediaQuery.of(context).size.height,
+
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                       decoration: const BoxDecoration(
                         color: AppColor.backgroundColor,

@@ -33,7 +33,7 @@ class ExpenceDataById {
   String? description;
   String? documents;
   int? status;
-  Null? statusDate;
+  String? statusDate;
   String? employeeName;
 
   ExpenceDataById(

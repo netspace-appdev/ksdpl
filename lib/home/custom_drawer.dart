@@ -209,117 +209,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ],
                 ),
 
-                ExpansionTile(
-                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                  title: const Text(
-                    AppText.manageTutorial,
-                    style: TextStyle(
-                      color: AppColor.blackColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  leading: Image.asset(AppImage.addppt, height: 20),
-                  children: [
-                    ListTile(
-                      leading: Icon(Icons.add_task, color: AppColor.blackColor),
-                      title: Text(
-                        "Banker",
-                        style: TextStyle(
-                          color: AppColor.blackColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      onTap: () {
-                        Get.to(() => TutorialVideo(
-                          url: _webController.tutorial_video_Url,
-                          title: "Banker",
-                        ));
-                      },
-                    ),
-                    // Keep rest of the ExpansionTile unchanged...
-                    ListTile(
-                      leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
-                      title: Text(
-                        "customer",
-                        style: TextStyle(
-                          color: AppColor.blackColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      onTap: () {
-                        _webController.isCustomerExpanded.toggle(); // cleaner toggle syntax
-                      },
-                    ),
 
-// ✅ Wrap the conditional block in Obx to reactively show/hide
-                    Obx(() {
-                      if (!_webController.isCustomerExpanded.value) return SizedBox();
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 20.0),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(Icons.circle, color: AppColor.blackColor,size: 10,),
-                              title: Text(
-                                "PPT in Hindi",
-                                style: TextStyle(
-                                  color: AppColor.blackColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onTap: () {
-                                Get.to(() => RestrictedWebView(
-                                  url: _webController.hindiUrl,
-                                  title: "PPT in Hindi",
-                                ));
-                              },
-                            ),
-                            ListTile(
-                              leading: Icon(Icons.circle, color: AppColor.blackColor,size: 10,),
-                              title: Text(
-                                "PPT in English",
-                                style: TextStyle(
-                                  color: AppColor.blackColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onTap: () {
-                                Get.to(() => RestrictedWebView(
-                                  url: _webController.englishUrl,
-                                  title: "PPT in English",
-                                ));
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-
-                    ListTile(
-                      leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
-                      title: Text(
-                        "Staff",
-                        style: TextStyle(
-                          color: AppColor.blackColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      onTap: () {
-                         Get.to(() => TutorialVideo(
-                         url: _webController.tutorial_video_Url,
-                        title: "Staff",
-                        ));
-
-                      },
-                    ),
-                  ],
-                ),
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title: const Text(
@@ -424,8 +314,121 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ],
                 ),
+
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title: const Text(
+                    AppText.manageTutorial,
+                    style: TextStyle(
+                      color: AppColor.blackColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  leading: Image.asset(AppImage.addppt, height: 20),
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.add_task, color: AppColor.blackColor),
+                      title: Text(
+                        "Banker",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        Get.to(() => TutorialVideo(
+                          url: _webController.tutorial_video_Url,
+                          title: "Banker",
+                        ));
+                      },
+                    ),
+                    // Keep rest of the ExpansionTile unchanged...
+                    ListTile(
+                      leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
+                      title: Text(
+                        "customer",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        _webController.isCustomerExpanded.toggle(); // cleaner toggle syntax
+                      },
+                    ),
+
+// ✅ Wrap the conditional block in Obx to reactively show/hide
+                    Obx(() {
+                      if (!_webController.isCustomerExpanded.value) return SizedBox();
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: Icon(Icons.circle, color: AppColor.blackColor,size: 10,),
+                              title: Text(
+                                "PPT in Hindi",
+                                style: TextStyle(
+                                  color: AppColor.blackColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onTap: () {
+                                Get.to(() => RestrictedWebView(
+                                  url: _webController.hindiUrl,
+                                  title: "PPT in Hindi",
+                                ));
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.circle, color: AppColor.blackColor,size: 10,),
+                              title: Text(
+                                "PPT in English",
+                                style: TextStyle(
+                                  color: AppColor.blackColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onTap: () {
+                                Get.to(() => RestrictedWebView(
+                                  url: _webController.englishUrl,
+                                  title: "PPT in English",
+                                ));
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+
+                    ListTile(
+                      leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
+                      title: Text(
+                        "Staff",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onTap: () {
+                        Get.to(() => TutorialVideo(
+                          url: _webController.tutorial_video_Url,
+                          title: "Staff",
+                        ));
+
+                      },
+                    ),
+                  ],
+                ),
+                
                 CustomListTile(
-                  title:  "Web Panel",
+                  title:  "Website",
                   imagePath:AppImage.webImg,
                   onTap: () => _launchURL("https://kanchaneshver.in/"),
                 ),

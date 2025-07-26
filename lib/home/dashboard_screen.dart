@@ -88,11 +88,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             height: 20,
                           ),
 
-                          attendanceContainer(),
+                          /*attendanceContainer(),
 
                           const SizedBox(
                             height: 20,
-                          ),
+                          ),*/
 
                           offerContainer(),
 
@@ -104,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       alignment: Alignment.topCenter,  // Centers it
                       child: Container(
                         margin:  const EdgeInsets.only(
-                            top: 370  // 250
+                            top: 280  //370for start day
                         ), // <-- Moves it 30px from top
                         width: double.infinity,
                         //height: MediaQuery.of(context).size.height,

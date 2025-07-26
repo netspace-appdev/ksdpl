@@ -79,11 +79,17 @@ class CibilRecordListController extends GetxController{
   }
 
   Future<void> launchInBrowser(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch $url';
+    try {
+      final Uri uri = Uri.parse(url);
+
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        //  ToastMessage.msg('Could not launch URL: $url');
+      }
+    } catch (e) {
+      print("❌ Error launching URL: $e");
+      // ToastMessage.msg('Something went wrong while opening the link.');
     }
   }
 }
