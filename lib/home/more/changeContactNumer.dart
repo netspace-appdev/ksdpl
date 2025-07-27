@@ -88,10 +88,12 @@ class ChangeContactNumber extends StatelessWidget {
                                   Container(
                                       height: 120,
                                       width: MediaQuery.of(context).size.width * 0.85,
-                                      child: Lottie.asset(
-                                          AppImage.loginJson,
-                                          repeat: false
-                                      )),
+                                      child:    Container(
+                                        height: MediaQuery.of(context).size.width * 0.45,
+                                        width: MediaQuery.of(context).size.width * 0.85,
+                                        child: Image.asset(AppImage.changePhone),
+
+                                      ),),
                                   CustomLabeledTextField(
                                     inputType:  TextInputType.phone,
                                     controller: changeContactController.mobileController,

@@ -82,7 +82,7 @@ class AppText{
   static const String pleaseSelectTnC ="Please select Terms and conditions";
   static const String phoneInUse ="This phone number is already in use";
 
-  static const String manageProfile ="Manage Profile";
+  static const String manageProfile ="Manage Expense";
   static const String editProfile ="Edit Profile";
   static const String changePassword ="Change Password";
   static const String changePhoneNum ="Change Phone Number";
@@ -258,6 +258,9 @@ class AppText{
   static const String selectTime = "Select Time";
   static const String enterDetails = "Enter Follow-up details";
   static const String addFeedback = "Add Feedback";
+  static const String addExpenses = "Add Expense";
+  static const String editExpenses = "Edit Expense";
+  static const String viewExpenses = "View Expense";
   static const String callFeedback = "Call Feedback / Follow up Note";
   static const String leadFeedback = "Lead Feedback";
   static const String enterCallFeedback = "Enter the details";
@@ -541,6 +544,7 @@ class AppText{
   static const String documentDescriptionsHint = "Type and press Enter to add";
 
   static const String productDescriptions = "Product Descriptions";
+  static const String pofileDescriptions = "Descriptions";
   static const String enterProductDescriptions = "Enter Product Descriptions";
   static const String productSegment = "Loan Segment";
   static const String enterProductSegment = "Enter Product Segment";
@@ -574,6 +578,7 @@ class AppText{
   static const String enterTotalLiveLoan = "Enter Total Live Loan";
 
   static const String cibil = "CIBIL";
+  static const String cibilRecord = "CIBIL Record List";
   static const String enterCibilScore = "Enter CIBIL Score";
 
   static const String totalEmi = "Total EMI";
@@ -718,7 +723,12 @@ class AppText{
   static const String enterReceivableAmount = "Enter Received Amount";
   static const String receivableDate = "Received Date";
   static const String receivedDate = "Received Date";
+
   static const String enterReceivableDate  = "Enter Received Date";
+
+  static const String expenseDate = "Expense Date";
+  // static const String enterReceivableDate  = "Enter Received Date";
+
   static const String transactionDetails  = "UTR";
   static const String enterTransactionDetails  = "Enter UTR";
   static const String remark  = "Remark";
@@ -899,6 +909,10 @@ class AppImage{
   static const String telephone="assets/images/telephone.png";
   static const String lock="assets/images/lock.png";
   static const String user="assets/images/user.png";
+  static const String changePassword="assets/images/change_password.png";
+  static const String changePhone="assets/images/change_number.png";
+  static const String changeEmail="assets/images/change_email.png";
+  static const String choosefile="assets/images/choosefile.png";
 
 }
 

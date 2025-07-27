@@ -143,6 +143,8 @@ class Step1CamNote extends StatelessWidget {
                         const SizedBox(height: 20),
 
 
+
+
                         CustomLabeledTextField(
                           label: AppText.lar,
                           isRequired: true,

@@ -84,10 +84,9 @@ class Changepassword extends StatelessWidget {
                                   Container(
                                       height: MediaQuery.of(context).size.width * 0.45,
                                       width: MediaQuery.of(context).size.width * 0.85,
-                                      child: Lottie.asset(
-                                          AppImage.AuthenticationJson,
-                                          repeat: false
-                                      )),
+                                      child: Image.asset(AppImage.changePassword),
+
+                                  ),
                                   Obx(()=> CustomTextFieldPrefix(
                                     inputType:  TextInputType.text,
                                     controller: changePasswordController.oldPasswordController,
@@ -134,49 +133,59 @@ class Changepassword extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Align(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              child: SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColor.secondaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                            Obx((){
+                              if(addleadcontroller.isLoading.value){
+                                return SizedBox(
+                                  height: 30,
+                                  width: 30,
+                                  child: CircularProgressIndicator(
+                                    color: AppColor.primaryColor,
                                   ),
-                                  // onPressed: onPressed,
-                                  onPressed: () {
+                                );
+                              }
+                              return Align(
+                                alignment: Alignment.bottomCenter,
 
-                                      if (changePasswordController.formKey.currentState?.validate() ?? false) {
-                                        // Compare new and confirm password
-                                        if (changePasswordController.newPasswordController.text !=
-                                            changePasswordController.confirmPasswordController.text) {
-                                          ToastMessage.msg(AppText.passwordMustBeSame);
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColor.secondaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                                            onPressed: () {
+                                if (changePasswordController.formKey.currentState?.validate() ?? false) {
+                                  // Compare new and confirm password
+                                  if (changePasswordController.newPasswordController.text !=
+                                      changePasswordController.confirmPasswordController.text) {
+                                    ToastMessage.msg(AppText.passwordMustBeSame);
 
-                                          return;
-                                        }
+                                    return;
+                                  }
 
-                                        changePasswordController.CheckOldPasswordRequestApi();
-                                        // ✅ All validations passed
-                                        print("Form is valid");
-                                        // call your API or logic here
-                                      } else {
-                                        print("Form is not valid");
-                                      }
-                                  },
-                                  child: const Text(
-                                    AppText.submit,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                  changePasswordController.CheckOldPasswordRequestApi();
+                                  // ✅ All validations passed
+                                  print("Form is valid");
+                                  // call your API or logic here
+                                } else {
+                                  print("Form is not valid");
+                                }
+                                                            },
+                                    child: const Text(
+                                      AppText.submit,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                            })
                           ],
                         ),
                       ),
