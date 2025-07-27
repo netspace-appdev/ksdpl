@@ -1,0 +1,89 @@
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
+import 'package:ksdpl/common/base_url.dart';
+import 'package:ksdpl/controllers/lead_dd_controller.dart';
+import 'package:ksdpl/models/GetCustomerCibilDetailModel/GetCustomerCibilDetailModel.dart';
+import 'package:ksdpl/services/generate_cibil_services.dart';
+import 'package:ksdpl/services/product_service.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../common/helper.dart';
+import '../../common/storage_service.dart';
+import '../../models/AddEmployeeExpenseDetails/addEmployeeExpenseDetailsModel.dart';
+import '../../models/IndividualLeadUploadModel.dart';
+import '../../models/attandance/GetAllLeaveDetailByEmpIdModel.dart';
+import '../../models/drawer/GetLeadDetailModel.dart';
+import '../../models/product/GetAllProductListModel.dart' as prod;
+import '../../services/drawer_api_service.dart';
+import '../../services/lead_api_service.dart';
+import '../registration_dd_controller.dart';
+
+class CibilRecordListController extends GetxController{
+
+  var isLoading = false.obs;
+  var employee_id =  StorageService.get(StorageService.EMPLOYEE_ID).toString();
+  var expenseList = <ExpenseData>[].obs;
+  var CibilDetailList = <CibilData>[].obs;
+  var getCustomerCibilDetailModel = Rxn<GetCustomerCibilDetailModel>();
+
+  String? empId = StorageService.get(StorageService.EMPLOYEE_ID);
+
+
+  String formatDate(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) return '';
+    try {
+      DateTime parsedDate = DateTime.parse(dateStr);
+      return DateFormat('dd-MM-yy').format(parsedDate);
+    } catch (e) {
+      return '';
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    getCustomerCibilDetailByUserIdApi();
+  }
+
+
+  Future<void> getCustomerCibilDetailByUserIdApi() async {
+    print('cibil_list call .....');
+
+    try {
+      isLoading(true);
+      var data = await GenerateCibilServices. getCustomerCibilDetailByUserIdApiRequest(
+        userId: empId??'',
+      );
+
+      if (data['success'] == true) {
+        getCustomerCibilDetailModel.value = GetCustomerCibilDetailModel.fromJson(data);
+
+        // Assuming your model has: List<ExpenseData> data;
+        CibilDetailList.value = getCustomerCibilDetailModel.value?.data ?? [];
+
+        print('cibil_list${CibilDetailList.value}');
+
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        expenseList.clear();
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error GetExpenseByEmployeeID: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> launchInBrowser(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+}

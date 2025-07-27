@@ -36,6 +36,13 @@ class ValidationHelper {
 
     return null; // Name is valid
   }
+  static String? validateDescription(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Description is required";
+    }
+
+    return null; // Name is valid
+  }
 
   static String? validateFromDate(String? value) {
     if (value == null || value.isEmpty) {
@@ -285,6 +292,14 @@ class ValidationHelper {
   static String? validateFromDateNew(String? value) {
     if (value == null || value.isEmpty) {
       return "From date is required";
+    }
+
+    return null; // Name is valid
+  }
+
+  static String? validateExpenseDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Expense Date is required";
     }
 
     return null; // Name is valid

@@ -17,6 +17,7 @@ class CustomTextFieldPrefix extends StatefulWidget {
   final bool isInputEnabled;
   final bool isSecret;
   final int secretDigit;
+  final int maxline;
   final bool isCapital;
   const CustomTextFieldPrefix({
     Key? key,
@@ -35,6 +36,7 @@ class CustomTextFieldPrefix extends StatefulWidget {
     this.isInputEnabled = true,
     this.isSecret = false,
     this.secretDigit = 4,
+    this.maxline=3 ,
     this.isCapital = false,
   }) : super(key: key);
 

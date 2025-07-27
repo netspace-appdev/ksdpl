@@ -39,8 +39,6 @@ class NewsDetailsScreen extends StatelessWidget {
                         ),
 
                         header(context),
-
-
                       ],
                     ),
                   ),

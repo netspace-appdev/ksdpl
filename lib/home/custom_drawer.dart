@@ -9,11 +9,14 @@ import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/home/cibilgenerate/CibilGeneratePage.dart';
 import 'package:ksdpl/home/tutorial_screen/tutorial_video.dart';
+import 'package:ksdpl/home/viewExpense/viewExpense.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
+import '../controllers/cibilgenerate_controller/cibilRecordListController.dart';
+import '../controllers/viewExpenseController/viewExpenseController.dart';
 import '../controllers/webController.dart';
 import '../controllers/attendance/attendance_controller.dart';
 import '../controllers/camnote/camnote_controller.dart';
@@ -23,6 +26,8 @@ import '../controllers/product/add_product_controller.dart';
 import '../controllers/product/view_product_controller.dart';
 import '../custom_widgets/RoundedInitialContainer.dart';
 import 'RestrictedWebView.dart';
+import 'addEmployeeExpenseDetails/addEmployeeExpenseDetails.dart';
+import 'cibilgenerate/cibilRecordList.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -204,7 +209,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ],
                 ),
 
-
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title: const Text(
@@ -342,9 +346,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         Get.to(() => Cibilgeneratepage());
                       },
                     ),
-
-                    /*ListTile(
-                      leading: Icon(Icons.view_stream_outlined, color: AppColor.blackColor),
+                    ListTile(
+                      leading: Icon(Icons.menu, color: AppColor.blackColor),
                       title: Text(
                         "Cibil Record List",
                         style: TextStyle(
@@ -354,12 +357,38 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ),
                       ),
                       onTap: () {
-                        // Get.to(() => RestrictedWebView(
-                        //   url: _webController.englishUrl,
-                        //   title: "",
-                        // ));
+                        CibilRecordListController cibilrecordListcontroller=Get.put(CibilRecordListController());
+                        cibilrecordListcontroller.getCustomerCibilDetailByUserIdApi();
+                        Get.to(() => CibilRecordListScreen());
                       },
-                    ),*/
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title:const Text(AppText.manageProfile, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                  leading: Image.asset(AppImage.user, height: 20,),
+                  children: [
+                    ListTile(
+                      leading:  Icon(Icons.add_task,color: AppColor.blackColor),
+                      title:  Text(AppText.addExpenses, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      onTap: () {
+                        Get.to(() => AddEmployeeExpenseDetails());
+                      },
+                    ),
+                    ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
+                      leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
+                      title:  Text(AppText.viewExpenses, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                      onTap: () {
+                        ViewExpenseController viewExpenseController=Get.put(ViewExpenseController());
+                        viewExpenseController.getExpenseByEmployeeIDApi();
+                      //  AddProductController addProductController =Get.put(AddProductController());
+                       // addProductController.getAllProductCategoryApi();
+                        Get.to(ViewExpenseScreen());
+
+                       // Get.toNamed("/viewProductScreen");
+                      },
+                    ),
                   ],
                 ),
 

@@ -88,13 +88,15 @@ class ChangeEmail extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                                 children: [
                                   Center(
-                                    child: Container(
+                                    child:   Container(
+                                      height: 120,
+                                      width: MediaQuery.of(context).size.width * 0.85,
+                                      child:    Container(
                                         height: MediaQuery.of(context).size.width * 0.45,
                                         width: MediaQuery.of(context).size.width * 0.85,
-                                        child: Lottie.asset(
-                                            AppImage.login_successJson,
-                                            repeat: false
-                                        )),
+                                        child: Image.asset(AppImage.changeEmail),
+
+                                      ),),
                                   ),
 
                                  SizedBox(height: MediaQuery.of(context).size.height*0.04,),
