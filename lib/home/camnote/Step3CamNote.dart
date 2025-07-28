@@ -21,6 +21,7 @@ import 'package:ksdpl/models/camnote/GetBankerDetailsByBranchIdModel.dart' as ba
 
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
+import '../../custom_widgets/CustomIconDilogBox.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLoadingOverlay.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
@@ -395,6 +396,26 @@ class Step3CamNote extends StatelessWidget {
 
         if(code=="select"){
           camNoteController.toggleBankerSelection(bankId);
+          if(camNoteController.selectedBankers.isNotEmpty){
+            showDialog(
+              context: context,
+              builder: (context) {
+                return CustomIconDialogBox(
+                  title: "Are you sure?",
+                  icon: Icons.info_outline,
+                  iconColor: AppColor.secondaryColor,
+                  description: AppText.sendCamMsg,
+                  onYes: () {
+                    camNoteController.saveForm();
+                  },
+                  onNo: () {
+
+                  },
+                );
+              },
+            );
+          }
+
         }else if(code=="add"){
 
           camNoteController.clearBankDetails();

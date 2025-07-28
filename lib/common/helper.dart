@@ -777,6 +777,7 @@ class AppText{
   static const String submitBasicDetails="Submit Basic Details";
   static const String sendEmailToCustomer="Send Email to Customer";
   static const String reqCibilMsg="Do you want to send an email requesting the CIBIL report?";
+  static const String sendCamMsg="Do you want to send a cam note for this bank? If it is sent once, you will not be able to make any changed in it.";
 
 }
 

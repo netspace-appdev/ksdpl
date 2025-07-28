@@ -191,7 +191,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                                         onPressed: camNoteController.currentStep.value > 0
                                             ? camNoteController.previousStep
                                             : null,
-                                        child:  Text('Prev', style: TextStyle(color:camNoteController.currentStep.value > 0? AppColor.appWhite: AppColor.black87) ),
+                                        child:  Text('Prev', style: TextStyle(color:AppColor.appWhite) ),
                                         style: ElevatedButton.styleFrom(
                                           minimumSize: Size(130, 40), //130,40
 
@@ -201,13 +201,13 @@ class CamNoteGroupScreen extends StatelessWidget {
 
                                       ElevatedButton(
                                         onPressed:
-                                        camNoteController.currentStep.value < 3
+                                        camNoteController.currentStep.value < 2
                                             ? ()=>camNoteController.nextStep(camNoteController.currentStep.value)
                                             : null,
-                                        child:  Text(camNoteController.currentStep.value==2?"Submit":'Next',style: TextStyle(color: AppColor.appWhite),),
+                                        child:  Text('Next',style: TextStyle(color: AppColor.appWhite),),
                                         style: ElevatedButton.styleFrom(
                                           minimumSize: Size(130, 40),
-                                          backgroundColor: camNoteController.currentStep.value == 0 ||camNoteController.currentStep.value == 1?AppColor.greenColor: AppColor.secondaryColor,
+                                          backgroundColor: AppColor.greenColor,
                                         ),
                                       ),
                                     ],
