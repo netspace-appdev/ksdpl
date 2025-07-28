@@ -395,6 +395,8 @@ class Step3CamNote extends StatelessWidget {
       onTap: () {
 
         if(code=="select"){
+          print("boxId--->${boxId}");
+          print("bankId--->${bankId}");
           camNoteController.toggleBankerSelection(bankId);
           if(camNoteController.selectedBankers.isNotEmpty){
             showDialog(

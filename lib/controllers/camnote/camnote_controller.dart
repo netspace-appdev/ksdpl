@@ -559,17 +559,26 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     if (!packageFieldsIfRequired()) return;
 
-    isAllCamnoteSubmit(true);
+    //isAllCamnoteSubmit(true);
 
       final productList = getProductDetailsByFilterModel.value?.data ?? [];
 
       if(productList.isNotEmpty){
+        print("inside this-->1===>${productList}");
+
+
         for (var bankerId in selectedBankers) {
+          print("bankerId-->2.1===>${bankerId} and ${selectedBankers}");
+          print("inside this-->2");
 
+          productList.forEach((ele){
 
-          final matchingProducts = productList.where((product) => product.id.toString() == bankerId);
+            print("ele--------->${ele.bankId}");
+          });
+          final matchingProducts = productList.where((product) => product.bankId.toString() == bankerId);
+          print("matchingProducts-->${matchingProducts}");
           for (var product in matchingProducts) {
-
+            print("inside this-->3");
             final bankId = product.bankId;
             final bankersName = product.bankersName;
             final bankersMobileNumber = product.bankersMobileNumber;
@@ -587,7 +596,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               print("No branchId stored yet for bankId: $bankId");
             }
 
-
+            print("inside this-->4");
             addCamNoteDetailApi(
               Id:"0",
               LeadID:getLeadId.value.toString(),
@@ -1652,7 +1661,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   }) async {
     try {
-
+      print("addCamNoteDetailApi-->1");
       isLoading(true);
 
       var data = await CamNoteService.addCamNoteDetailApi(
