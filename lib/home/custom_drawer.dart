@@ -287,7 +287,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   title:const Text(AppText.manageAttendance, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                   leading: Image.asset(AppImage.product, height: 20,),
                   children: [
-                    ListTile(
+                   /* ListTile(
 
                       leading:  Icon(Icons.add_task,color: AppColor.blackColor),
                       title:  Text(AppText.attendance, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -299,7 +299,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         Get.toNamed("/viewAttendanceScreen");
 
                       },
-                    ),
+                    ),*/
                     ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
                       leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
                       title:  Text(AppText.manageLeaves, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),

@@ -339,6 +339,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var infoFilledBankers = <String>{}.obs;
   var selectedBankers = <String>{}.obs;
   var isGenerateCibilVisible = false.obs;
+  var isRequiredVisibleSecure = false.obs;
   Map<String, String> bankerBranchMap = {};
 
   var geoLocPropLatEnabled =true.obs;
@@ -498,23 +499,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   void saveForm() async {
     print("final Form Saved!");
 
-  /*  if(camFullNameController.text.isEmpty){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
-    }else if(camDobController.text.isEmpty){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter DOB");
-    }else if(camPhoneController.text.isEmpty){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
-    }else if(selectedGender.value==null){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
-    }else if(camLoanAmtReqController.text.isEmpty){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Amount");
-    }else if(camSelectedProdSegment.value==null ||  camSelectedProdSegment.value==0){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Segment");
-    }else if(camSelectedProdType.value==null || camSelectedProdType.value=="0"){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter KSDPL Product");
-    }else if(selectedBankers.isEmpty){
-      SnackbarHelper.showSnackbar(title: "Incomplete Data", message: "Please select a bank first");
-    }else{*/
 
     if(camFullNameController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
@@ -525,7 +509,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camPhoneController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
       return;
-    }else if(selectedGender.value==null){
+    }else if(selectedGender.value==null || selectedGender.value==""){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
       return;
     }else if(camLoanAmtReqController.text.isEmpty){
@@ -679,6 +663,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   void saveSubmitDetails() async{
     print("saveSubmitDetails");
+    print("camSelectedState.value===>${camSelectedState.value}");
+    print("camSelectedDistrict.value===>${camSelectedDistrict.value}");
+    print("camSelectedCity.value===>${camSelectedCity.value}");
 
     if(camFullNameController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
@@ -689,7 +676,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camPhoneController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
       return;
-    }else if(selectedGender.value==null){
+    }else if(selectedGender.value==null || selectedGender.value==""){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
       return;
     }else if(camLoanAmtReqController.text.isEmpty){
@@ -701,14 +688,14 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camAadharController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Aadhar");
       return;
-    }else if(camSelectedState.value==null){
+    }else if(camSelectedState.value==null || camSelectedState.value=="0"){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select state");
       return;
-    }else if(camSelectedDistrict.value == null){
+    }else if(camSelectedDistrict.value == null || camSelectedDistrict.value=="0"){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select district");
       return;
-    }else if(camSelectedCity.value == null){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select district");
+    }else if(camSelectedCity.value == null || camSelectedCity.value=="0"){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select city");
       return;
     }else if(camZipController.text.isEmpty ){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select zipcode");
@@ -1092,8 +1079,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       if(data['success'] == true){
 
         addAdSrcIncomModel.value= AddAdSrcIncomModel.fromJson(data);
-        ToastMessage.msg( addAdSrcIncomModel.value!.message!.toString());
-
         isLoading(false);
 
       }else{
@@ -1780,6 +1765,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     Addleadcontroller addLeadController =Get.find();
     addLeadController.addIncomeList.clear();
     isGenerateCibilVisible.value=false;
+    isRequiredVisibleSecure.value=false;
   }
 
   void clearStep2(){

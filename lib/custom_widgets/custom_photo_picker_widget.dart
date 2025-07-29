@@ -141,6 +141,7 @@ class CustomPhotoPickerWidget extends StatelessWidget {
   final bool isCloseVisible; // <-- New flag
   final bool isUploadActive;
   final String? toastMessage;
+  final bool isRequired;
   const CustomPhotoPickerWidget({
     super.key,
     required this.controller,
@@ -149,6 +150,7 @@ class CustomPhotoPickerWidget extends StatelessWidget {
     this.isCloseVisible = true, // default to true
     this.isUploadActive = true,
     this.toastMessage,
+    this.isRequired = false,
   });
 
   void _showSourceSelector(BuildContext context) {
@@ -200,7 +202,36 @@ class CustomPhotoPickerWidget extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded( // This allows the label text to wrap
+                child: Text.rich(
+                  TextSpan(
+                    text: label,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.grey2,
+                    ),
+                    children: isRequired
+                        ? [
+                      TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                          color: AppColor.redColor,
+                        ),
+                      ),
+                    ]
+                        : [],
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+        //  Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
           Row(
             children: [
@@ -225,61 +256,6 @@ class CustomPhotoPickerWidget extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: images.length,
                     separatorBuilder: (_, __) => const SizedBox(width: 8),
-                   /* itemBuilder: (_, index) {
-                      final image = images[index];
-                      return Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: image.isLocal
-                                ? Image.file(
-                              image.file!,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            )
-                                : Image.network(
-                              image.url!,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          *//*Positioned(
-                            top: 4,
-                            right: 4,
-                            child: GestureDetector(
-                              onTap: () => controller.removeImage(imageKey, image),
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.red,
-                                ),
-                                padding: const EdgeInsets.all(2),
-                                child: const Icon(Icons.close, color: Colors.white, size: 16),
-                              ),
-                            ),
-                          ),*//*
-                          Positioned(
-                            top: 4,
-                            right: 4,
-                            child: isCloseVisible
-                                ? GestureDetector(
-                              onTap: () => controller.removeImage(imageKey, image),
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.red,
-                                ),
-                                padding: const EdgeInsets.all(2),
-                                child: const Icon(Icons.close, color: Colors.white, size: 16),
-                              ),
-                            )
-                                : const SizedBox.shrink(), // don't show anything if false
-                          ),
-                        ],
-                      );
-                    },*/
                       itemBuilder: (_, index) {
                         final image = images[index];
                         return Stack(

@@ -466,6 +466,8 @@ class Step1CamNote extends StatelessWidget {
                                   (item) => item.id == camNoteController.camSelectedProdSegment.value,
                             ),
                             onChanged: (value) {
+                              ///start from here
+                              print(" camNoteController.camSelectedProdSegment.value===>${ camNoteController.camSelectedProdSegment.value}");
                               camNoteController.camSelectedProdSegment.value =  value?.id;
                             },
                             onClear: (){
@@ -564,6 +566,7 @@ class Step1CamNote extends StatelessWidget {
                           inputType: TextInputType.number,
                           hintText: AppText.enterLatitude,
                           isInputEnabled:camNoteController.geoLocPropLatEnabled.value,
+                          isRequired: true,
                         ),
                         CustomLabeledTextField(
                           label: "",
@@ -593,6 +596,7 @@ class Step1CamNote extends StatelessWidget {
                           inputType: TextInputType.number,
                           hintText: AppText.enterLatitude,
                           isInputEnabled:camNoteController.geoLocResLatEnabled.value,
+                          isRequired: true,
                         ),
                         CustomLabeledTextField(
                           label: "",
@@ -622,6 +626,7 @@ class Step1CamNote extends StatelessWidget {
                           inputType: TextInputType.number,
                           hintText: AppText.enterLatitude,
                           isInputEnabled:camNoteController.geoLocOffLatEnabled.value,
+                          isRequired: true,
                         ),
 
                         CustomLabeledTextField(
@@ -653,6 +658,7 @@ class Step1CamNote extends StatelessWidget {
                           isCloseVisible:camNoteController.photosPropEnabled.value,
                           isUploadActive: camNoteController.photosPropEnabled.value,
                           toastMessage: "you can not upload photos now",
+                          isRequired: true,
                         ),
 
                         const SizedBox(height: 20,),
@@ -664,6 +670,7 @@ class Step1CamNote extends StatelessWidget {
                           isCloseVisible:camNoteController.photosResEnabled.value,
                           isUploadActive: camNoteController.photosResEnabled.value,
                           toastMessage: "you can not upload photos now",
+                          isRequired: true,
                         ),
 
                         const SizedBox(height: 20,),
@@ -675,6 +682,7 @@ class Step1CamNote extends StatelessWidget {
                           isCloseVisible:camNoteController.photosOffEnabled.value,
                           isUploadActive: camNoteController.photosOffEnabled.value,
                           toastMessage: "you can not upload photos now",
+                          isRequired: true,
                         ),
 
                         const SizedBox(height: 20,),
