@@ -135,11 +135,13 @@ class Changepassword extends StatelessWidget {
                             ),
                             Obx((){
                               if(addleadcontroller.isLoading.value){
-                                return SizedBox(
-                                  height: 30,
-                                  width: 30,
-                                  child: CircularProgressIndicator(
-                                    color: AppColor.primaryColor,
+                                return Center(
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      color: AppColor.primaryColor,
+                                    ),
                                   ),
                                 );
                               }

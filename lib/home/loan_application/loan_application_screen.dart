@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ksdpl/home/loan_application/Step9Form.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
@@ -21,6 +22,7 @@ import '../../controllers/leads/loan_appl_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import 'Step10Form.dart';
 import 'Step1Form.dart';
 import 'Step2Form.dart';
 import 'Step3Form.dart';
@@ -51,6 +53,8 @@ class LoanApplicationScreen extends StatelessWidget {
     Step6Form(),
     Step7Form(),
     Step8Form(),
+    Step9Form(),
+    Step10Form(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -236,7 +240,7 @@ class LoanApplicationScreen extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: loanApplicationController.currentStep.value < 6
+                onPressed: loanApplicationController.currentStep.value < 9
                     ? loanApplicationController.nextStep
                     : null,
                 child: const Text('Next',style: TextStyle(color: AppColor.appWhite),),

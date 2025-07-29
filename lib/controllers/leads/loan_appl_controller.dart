@@ -127,6 +127,20 @@ class LoanApplicationController extends GetxController{
   final TextEditingController bankerWhatsappController = TextEditingController();
   final TextEditingController bankerEmailController = TextEditingController();
 
+  //manshi
+  final TextEditingController chargesDetailProcessingFees = TextEditingController();
+  final TextEditingController chargesDetailAdminFeeChargess = TextEditingController();
+  final TextEditingController chargesDetailForeclosureCharges = TextEditingController();
+  final TextEditingController chargesDetailStampDuty = TextEditingController();
+  final TextEditingController chargesDetailLegalVettingCharges = TextEditingController();
+  final TextEditingController chargesDetailTechnicalInspectionCharges = TextEditingController();
+  final TextEditingController chargesDetailOtherCharges = TextEditingController();
+  final TextEditingController chargesDetailTSRLegalCharges = TextEditingController();
+  final TextEditingController chargesDetailValuationCharges = TextEditingController();
+  final TextEditingController chargesDetailProcessingCharges = TextEditingController();
+
+
+
 
   var selectedStateProp = Rxn<String>();
   var selectedDistrictProp = Rxn<String>();
@@ -139,10 +153,12 @@ class LoanApplicationController extends GetxController{
   var referencesList = <ReferenceController>[].obs;
 
   var currentStep = 0.obs;
-  var stepCompleted = List<bool>.filled(8, false).obs;
+  var stepCompleted = List<bool>.filled(10, false).obs;
   LeadDDController leadDController=Get.find();
   final List<String> titles = [
-    'Personal Information', 'Co-Applicant Details', 'Property Details', 'Family Members', 'Credit Cards', 'Financial Details', 'References\n', "Banker Details"
+    'Personal Information', 'Co-Applicant Details', 'Property Details',
+    'Family Members', 'Credit Cards', 'Financial Details', 'References\n',
+    "Banker Details" ,"Charges Detail",'Final Submission'
   ];
 
   var selectedBank = Rxn<int>();
@@ -151,7 +167,7 @@ class LoanApplicationController extends GetxController{
 
   final scrollController = ScrollController();
   void nextStep() {
-    if (currentStep.value < 6) {
+    if (currentStep.value < 10) {
       currentStep.value++;
       scrollToStep(currentStep.value);
     }

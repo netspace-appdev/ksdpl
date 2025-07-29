@@ -102,9 +102,7 @@ class Step1Form extends StatelessWidget {
                             leadDDController.getAllBranchByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
                             leadDDController.getProductListByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
                           }
-
-
-                        },
+                       },
                         onClear: (){
                           loanApplicationController.selectedBank.value =  0;
                           loanApplicationController.selectedBankBranch.value = 0;

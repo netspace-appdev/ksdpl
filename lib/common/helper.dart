@@ -14,6 +14,7 @@ class AppText{
   static const String home="Home";
   static const String category="Category";
   static const String all="All";
+  static const String UploadDoc="Upload Document";
   static const String cart="Cart";
   static const String sc_home="Science Home";
   static const String search="Search";
@@ -81,6 +82,7 @@ class AppText{
   static const String pleaseSelectAdminSupervisor ="Please select a Admin Supervisor";
   static const String pleaseSelectTnC ="Please select Terms and conditions";
   static const String phoneInUse ="This phone number is already in use";
+  static const String uploaddoc ="Please upload a document";
 
   static const String manageProfile ="Manage Expense";
   static const String editProfile ="Edit Profile";
@@ -431,6 +433,7 @@ class AppText{
 
   static const String bankerDetails="Banker Details";
   static const String bankerName="Banker Name";
+  static const String ChargesDetails="Charges Details";
   static const String bankerMobile="Banker Mobile";
   static const String bankerWhatsapp="Banker Whatsapp";
   static const String bankerEmail="Banker Email";
@@ -660,6 +663,7 @@ class AppText{
   static const String autoCalculatedFoir = "Auto-calculated FOIR";
 
   static const String ltv = "LTV";
+  static const String doc = "Doc1";
   static const String autoCalculatedLtv = "Auto-calculated LTV";
   static const String sectionA = "Section A";
   static const String sectionB = "Section B";
@@ -777,7 +781,20 @@ class AppText{
   static const String submitBasicDetails="Submit Basic Details";
   static const String sendEmailToCustomer="Send Email to Customer";
   static const String reqCibilMsg="Do you want to send an email requesting the CIBIL report?";
+
   static const String sendCamMsg="Do you want to send a cam note for this bank? If it is sent once, you will not be able to make any changed in it.";
+
+  static const String AdminFeeCharges="Admin Fee Charges";
+  static const String ForeclosureCharges="Foreclosure Charges";
+  static const String StampDuty="Stamp Duty (%)";
+  static const String LegalVettingCharges="Legal Vetting Charges";
+  static const String TechnicalInspectionCharges="Technical Inspection Charges";
+  static const String OtherCharges="Other Charges";
+  static const String TSRLegalCharges="TSR Legal Charges";
+  static const String ValuationCharges="Valuation Charges";
+  static const String ProcessingCharges="Processing Charges";
+  static const String ProcessingFees = "Processing Fees";
+  static const String ChargesDetailshint= "0";
 
 }
 

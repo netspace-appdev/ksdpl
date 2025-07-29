@@ -63,7 +63,7 @@ class CustomFilePickerWidget extends StatelessWidget {
                   ),
                   children: const [
                     TextSpan(
-                      text: ' *',
+                      text: '',
                       style: TextStyle(color: Colors.red),
                     ),
                   ],

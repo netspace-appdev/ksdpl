@@ -2,18 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:ksdpl/controllers/viewExpenseController/viewExpenseController.dart';
-
+import 'package:ksdpl/common/base_url.dart';
 import 'package:ksdpl/custom_widgets/CamImage.dart';
 import 'package:ksdpl/services/generate_cibil_services.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../custom_widgets/ImagePickerMixin.dart';
-import '../../models/AddEmployeeExpenseDetails/addEmployeeExpenseDetailsModel.dart';
 import '../../models/AddEmployeeExpenseDetails/getExpenseDetailById.dart';
-import '../../models/GenerateCibilResponseModel.dart';
 import '../FilePickerController.dart';
 
 class AddEmployeeExpenseDetailsController extends GetxController with ImagePickerMixin {
@@ -73,7 +69,8 @@ class AddEmployeeExpenseDetailsController extends GetxController with ImagePicke
   //getProductListByIdApi
   Future<void> getEmployeeExpenseByIDRequest({
     required String ExpenseId
-  }) async {
+  })
+  async {
     try {
       isLoading(true);
 
@@ -115,13 +112,66 @@ class AddEmployeeExpenseDetailsController extends GetxController with ImagePicke
   void clearFormFields() {
     camDescriptionController.clear();
     camExpenseDateController.clear();
-    //filePickerController.getFiles('docs').clear();
 
   }
   @override
   // TODO: implement imageMap
   Map<String, RxList<CamImage>> get imageMap => throw UnimplementedError();
 
+
+  Future<void> launchURL() async {
+    final String? documentPath = getExpenseDetailById.value?.data?.documents;
+
+    if (documentPath == null || documentPath.isEmpty) {
+      // Handle null or empty case safely
+      Get.snackbar('Error', 'Document URL is missing');
+      return;
+    }
+
+    final String fullUrl = BaseUrl.imageBaseUrl + documentPath;
+    final Uri uri = Uri.parse(fullUrl);
+
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $uri');
+    }
+  }
+
+  Future <void> updateExpenseDetailsRequestApi() async {
+
+    try {
+      isLoading(true);
+      String? empId = StorageService.get(StorageService.EMPLOYEE_ID);
+
+      // Prepare file list
+      List<http.MultipartFile> fileList = [];
+      var pickedFiles = filePickerController.getFiles("docs");
+      for (var file in pickedFiles) {
+        fileList.add(await http.MultipartFile.fromPath('Documents', file.file.path));
+    }
+
+    var data = await GenerateCibilServices.addUdateExpenseDetailsRequest(
+    employeeId: empId ?? '',
+    entryDate: camExpenseDateController.text.trim(),     // Add this controller
+    expenseDate: camExpenseDateController.text.trim(), // Add this controller
+    description: camDescriptionController.text.trim(), // Add this controller
+    documents: fileList,
+    );
+
+    if (data['success'] == true) {
+    ToastMessage.msg(data['message']);
+    clearFormFields();
+    Get.back();
+    // Do something (e.g. clear form, refresh)
+    } else {
+    ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+    }
+    } catch (e) {
+    print("Error in addEmployeeExpenseDetailsApi: $e");
+    ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+    isLoading(false);
+    }
+  }
 
 
 }
