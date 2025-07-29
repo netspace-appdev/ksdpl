@@ -17,7 +17,6 @@ class AddEmployeeExpenseDetails extends StatelessWidget {
   AddEmployeeExpenseDetailsController addExpenseController = Get.put(AddEmployeeExpenseDetailsController());
   final FilePickerController filePickerController = Get.put(FilePickerController());
 
-
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -99,12 +98,12 @@ class AddEmployeeExpenseDetails extends StatelessWidget {
                                         label: "Upload Documents",
                                         isCloseVisible: true,
                                         isUploadActive: true,
-                                        toastMessage: "File upload disabled at this stage.",
+                                        toastMessage: "",
                                         validator: (val) {
                                           if (filePickerController
                                               .getFiles("docs")
                                               .isEmpty) {
-                                            return "Please upload a document.";
+                                            return AppText.uploaddoc;
                                           }
                                           return null;
                                         },
@@ -124,37 +123,52 @@ class AddEmployeeExpenseDetails extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Align(
-                                alignment: AlignmentDirectional.bottomCenter,
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColor.secondaryColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+
+                              Obx((){
+                                if(addExpenseController.isLoading.value){
+                                  return
+                                    const Center(
+                                      child: SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: CircularProgressIndicator(
+                                        color: AppColor.primaryColor,
+                                      ),
+                                                                        ),
+                                    );
+                                }
+                                return Align(
+                                  alignment: AlignmentDirectional.bottomCenter,
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: 50,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColor.secondaryColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        if (addExpenseController.formKey.currentState?.validate() ?? false) {
+                                          //   print("Form is valid");
+                                          addExpenseController.addEmployeeExpenseDetailsApi();
+                                        } else {
+                                          // Some validation failed
+                                          print("Form is not valid");
+                                        }
+                                      }, child: const Text(
+                                      AppText.submit,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
                                       ),
                                     ),
-                                    onPressed: () {
-                                      if (addExpenseController.formKey.currentState?.validate() ?? false) {
-                                      //   print("Form is valid");
-                                        addExpenseController.addEmployeeExpenseDetailsApi();
-                                       } else {
-                                         // Some validation failed
-                                         print("Form is not valid");
-                                       }
-                                    }, child: const Text(
-                                    AppText.submit,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
                                     ),
                                   ),
-                                  ),
-                                ),
-                              ),
+                                );
+                              })
                             ],
                           ),
                         ),

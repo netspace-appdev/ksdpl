@@ -122,27 +122,40 @@ class ChangeContactNumber extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Align(
-                              alignment: AlignmentDirectional.bottomCenter,
-                              child: SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColor.secondaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+
+                            Obx((){
+                              if(changeContactController.isLoading.value){
+                                return const Center(
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      color: AppColor.primaryColor,
                                     ),
                                   ),
-                                  onPressed: () {
-                                    if (changeContactController.formKey.currentState?.validate() ?? false) {
-                                      print("Form is valid");
-                                      changeContactController.changePhoneNumberRequestApi();
-                                    } else {
-                                      // Some validation failed
-                                      print("Form is not valid");
-                                    }
-                                  }, child: const Text(
+                                );
+                              }
+                              return   Align(
+                                alignment: AlignmentDirectional.bottomCenter,
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColor.secondaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      if (changeContactController.formKey.currentState?.validate() ?? false) {
+                                        print("Form is valid");
+                                        changeContactController.changePhoneNumberRequestApi();
+                                      } else {
+                                        // Some validation failed
+                                        print("Form is not valid");
+                                      }
+                                    }, child: const Text(
                                     AppText.submit,
                                     style: TextStyle(
                                       fontSize: 18,
@@ -150,9 +163,11 @@ class ChangeContactNumber extends StatelessWidget {
                                       color: Colors.white,
                                     ),
                                   ),
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            })
+
                           ],
                         ),
                       ),

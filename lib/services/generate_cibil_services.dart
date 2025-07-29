@@ -10,6 +10,7 @@ class GenerateCibilServices {
   static const String getExpenseByIDRequest = BaseUrl.baseUrl + 'Employee/GetExpenseByID';
   static const String addEmployeeExpenseRequest = BaseUrl.baseUrl + 'Employee/AddEmployeeExpenseDetails';
   static const String getCustomerCibilDetailRequest = BaseUrl.baseUrl + 'FileUpload/GetCustomerCibilDetailByUserId';
+  static const String udateExpenseDetailsRequest = BaseUrl.baseUrl + 'FileUpload/GetCustomerCibilDetailByUserId';
 
 
 
@@ -148,7 +149,8 @@ class GenerateCibilServices {
     required String expenseDate,
     required String description,
     required List<http.MultipartFile> documents,
-  }) async {
+  }) async
+  {
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -185,6 +187,54 @@ class GenerateCibilServices {
       throw Exception('Error while addEmployeeExpenseRequest : $e');
     }
   }
+
+
+  static Future<Map<String, dynamic>> addUdateExpenseDetailsRequest({
+    required String employeeId,
+    required String entryDate,
+    required String expenseDate,
+    required String description,
+    required List<http.MultipartFile> documents,
+  }) async
+  {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(udateExpenseDetailsRequest),
+      );
+
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Add form fields
+      MultipartFieldHelper.addField(request.fields, 'Id', '0');
+      MultipartFieldHelper.addField(request.fields, 'EmployeeId', employeeId);
+      MultipartFieldHelper.addField(request.fields, 'EntryDate', entryDate);
+      MultipartFieldHelper.addField(request.fields, 'ExpenseDate', expenseDate);
+      MultipartFieldHelper.addField(request.fields, 'Description', description);
+
+      // Add documents as files
+      request.files.addAll(documents);
+
+      // Send request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(udateExpenseDetailsRequest, request.fields);
+      Helper.ApiRes(udateExpenseDetailsRequest, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to udateExpenseDetailsRequest: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while udateExpenseDetailsRequest : $e');
+    }
+  }
+
+
 
   static Future<Map<String, dynamic>>  getCustomerCibilDetailByUserIdApiRequest(
       {required String userId}

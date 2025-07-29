@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/customFilePicker.dart';
 import '../../common/helper.dart';
@@ -12,7 +13,7 @@ import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 
 class EditEmployeeExpenseDetail extends StatelessWidget {
- // const EditEmployeeExpenseDetail({super.key});
+  // const EditEmployeeExpenseDetail({super.key});
 
   AddEmployeeExpenseDetailsController addExpenseController = Get.put(AddEmployeeExpenseDetailsController());
   final FilePickerController filePickerController = Get.find();
@@ -77,7 +78,7 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min, // Prevents extra spacing
                                   children: [
                                     Container(
-                                      height: MediaQuery.of(context).size.width * 0.45,
+                                      height: MediaQuery.of(context).size.width * 0.35,
                                       //       width: MediaQuery.of(context).size.width * 0.45,
                                       child: Center(child: Image.asset(AppImage.choosefile)),
                                     ),
@@ -88,7 +89,7 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
                                       inputType: TextInputType.name,
                                       hintText: AppText.mmddyyyy,
                                       isDateField: true,
-                                      isRequired: true,
+                                      isRequired: false,
                                       isFutureDisabled: true,
                                       validator:ValidationHelper.validateExpenseDate ,
                                     ),
@@ -96,15 +97,15 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
                                     CustomFilePickerWidget(
                                       controller: filePickerController,
                                       fileKey: "docs",
-                                      label: "Upload Documents",
+                                      label:AppText.UploadDoc,
                                       isCloseVisible: true,
                                       isUploadActive: true,
-                                      toastMessage: "File upload disabled at this stage.",
+                                      toastMessage: "",
                                       validator: (val) {
                                         if (filePickerController
                                             .getFiles("docs")
                                             .isEmpty) {
-                                          return "Please upload a document.";
+                                          return AppText.uploaddoc;
                                         }
                                         return null;
                                       },
@@ -114,47 +115,100 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
 
                                     CustomLabeledTextField(
                                       label: AppText.pofileDescriptions,
-                                      isRequired: true,
+                                      isRequired: false,
                                       controller: addExpenseController.camDescriptionController,
                                       inputType: TextInputType.name,
                                       hintText: AppText.pofileDescriptions,
                                       validator: ValidationHelper.validateDescription,
                                     ),
+                                    const Text(
+                                       AppText.UploadDoc,
+                                    style:  TextStyle(color: AppColor.grey2,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                    SizedBox(height: 5),
+                                     InkWell(
+                                      onTap: (){
+                                         addExpenseController.launchURL();
+                                      },
+                                      child: Container(
+                                        padding:  EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.blue), // Border color
+                                          borderRadius: BorderRadius.circular(6), // Corner radius
+                                          color: Colors.white, // Optional background
+                                        ),
+                                        child:  Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Icon(Icons.download, size: 20, color: Colors.blue),
+                                            const SizedBox(width: 6),
+                                            Container(
+                                              width: MediaQuery.of(context).size.width/1.4,
+                                              child: Text(
+                                                addExpenseController.getExpenseDetailById.value?.data?.documents.toString()??'',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
 
                                   ],
                                 ),
                               ),
-                              Align(
-                                alignment: AlignmentDirectional.bottomCenter,
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColor.secondaryColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                              Obx((){
+                                if(addExpenseController.isLoading.value){
+                                  return Center(
+                                    child: SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: CircularProgressIndicator(
+                                        color: AppColor.primaryColor,
                                       ),
                                     ),
-                                    onPressed: () {
-                                      if (addExpenseController.formKey.currentState?.validate() ?? false) {
-                                        //   print("Form is valid");
-                                        addExpenseController.addEmployeeExpenseDetailsApi();
-                                      } else {
-                                        // Some validation failed
-                                        print("Form is not valid");
-                                      }
-                                    }, child: const Text(
-                                    AppText.submit,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                  );
+                                }
+                                return   Align(
+                                  alignment: AlignmentDirectional.bottomCenter,
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: 50,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColor.secondaryColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        if (addExpenseController.formKey.currentState?.validate() ?? false) {
+                                          //   print("Form is valid");
+                                          addExpenseController.updateExpenseDetailsRequestApi();
+                                        } else {
+                                          // Some validation failed
+                                          print("Form is not valid");
+                                        }
+                                      }, child: const Text(
+                                      AppText.submit,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                     ),
                                   ),
-                                  ),
-                                ),
-                              ),
+                                );
+                              })
+
                             ],
                           ),
                         ),
