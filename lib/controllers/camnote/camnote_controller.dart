@@ -628,6 +628,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   bool packageFieldsIfRequired() {
+    print("amt--->${camReceivableAmtController.text}");
     // If no package is selected, skip validation
     if (selectedPackage.value == 0) return true;
 
@@ -640,12 +641,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1",
           message: "Please enter received amount");
       return false;
-    }
-   /* else if (int.parse(camReceivableAmtController.text ?? "0") < 118) {
+    } else if (double.tryParse(camReceivableAmtController.text ?? "0")! < 118) {
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1",
           message: "Amount must not be less than 118");
       return false;
-    }*/
+    }
     else if (camReceivableDateController.text.isEmpty) {
       SnackbarHelper.showSnackbar(
           title: "Incomplete Step 1", message: "Please enter received date");
@@ -653,13 +653,55 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     } else if (camTransactionDetailsController.text.isEmpty) {
       SnackbarHelper.showSnackbar(
           title: "Incomplete Step 1", message: "Please enter UTR");
+      return false;
     }
-
     // All fields are filled
     return true;
   }
 
+  bool securedFieldsIfRequired() {
+    // If no package is selected, skip validation
+    if (!isRequiredVisibleSecure.value) return true;
 
+    // Start validating each required field
+    if (camGeoLocationPropertyLatController.text.isEmpty) {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 1", message: "Please enter latitude of property");
+      return false;
+    }else if (camGeoLocationPropertyLongController.text.isEmpty)  {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 1", message: "Please enter longitude of property");
+      return false;
+    }else if (camGeoLocationResidenceLatController.text.isEmpty)  {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 1", message: "Please enter latitude of residence");
+      return false;
+    }else if (camGeoLocationResidenceLongController.text.isEmpty)  {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 1", message: "Please enter longitude of residence");
+      return false;
+    }else if (camGeoLocationOfficeLatController.text.isEmpty)  {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 1", message: "Please enter latitude of office");
+      return false;
+    }else if (camGeoLocationOfficeLongController.text.isEmpty)  {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 1", message: "Please enter longitude of office");
+      return false;
+    }
+
+    final images = getImages('property_photo');
+
+    if (images.isEmpty) {
+      SnackbarHelper.showSnackbar(
+        title: "Incomplete Step 1",
+        message: "Please upload at least one property photo.",
+      );
+      return false;
+    }
+    // All fields are filled
+    return true;
+  }
 
   void saveSubmitDetails() async{
     print("saveSubmitDetails");
@@ -709,7 +751,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
 
     if (!packageFieldsIfRequired()) return;
-
+    if (!securedFieldsIfRequired()) return;
 
       print("I am here-===>2");
 

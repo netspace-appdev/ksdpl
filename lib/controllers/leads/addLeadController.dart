@@ -210,6 +210,12 @@ class Addleadcontroller extends GetxController{
 
         print("prod seg--->${camNoteController.camSelectedProdSegment.value}");
 
+        if(camNoteController.camSelectedProdSegment.value==1){
+          camNoteController.isRequiredVisibleSecure.value=true;
+        }else{
+          camNoteController.isRequiredVisibleSecure.value=false;
+        }
+
         camNoteController.camSelectedIndexRelBank.value=getLeadDetailModel.value?.data?.existinRelaationshipWithBank==""?-1:getLeadDetailModel.value?.data?.existinRelaationshipWithBank=="Yes"?0:1;
         connNameController.text=getLeadDetailModel.value?.data?.connectorName??"";
 
@@ -239,6 +245,7 @@ class Addleadcontroller extends GetxController{
         camNoteController.getAddIncUniqueLeadApi(uniqueLeadNumber:getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"0");
 
         final geoLocationProp = getLeadDetailModel.value!.data!.geoLocationOfProperty;
+        print("geoLocationProp--->${geoLocationProp}");
 
 
         if (geoLocationProp != null && geoLocationProp.contains('-')) {
@@ -249,11 +256,14 @@ class Addleadcontroller extends GetxController{
             camNoteController.geoLocPropLatEnabled.value=false;
             camNoteController.geoLocPropLongEnabled.value=false;
           }
+        }else{
+          camNoteController.geoLocPropLatEnabled.value=true;
+          camNoteController.geoLocPropLongEnabled.value=true;
         }
 
 
         final geoLocationRes = getLeadDetailModel.value!.data!.geoLocationOfResidence;
-
+        print("geoLocationRes--->${geoLocationRes}");
 
         if (geoLocationRes != null && geoLocationRes.contains('-')) {
           final parts = geoLocationRes.split('-');
@@ -263,12 +273,15 @@ class Addleadcontroller extends GetxController{
             camNoteController.geoLocResLatEnabled.value=false;
             camNoteController.geoLocResLongEnabled.value=false;
           }
+        }else{
+          camNoteController.geoLocResLatEnabled.value=true;
+          camNoteController.geoLocResLongEnabled.value=true;
         }
 
 
         final geoLocationOff = getLeadDetailModel.value!.data!.geoLocationOfOffice;
 
-
+        print("geoLocationOff--->${geoLocationOff}");
         if (geoLocationOff != null && geoLocationOff.contains('-')) {
           final parts = geoLocationOff.split('-');
           if (parts.length == 2) {
@@ -277,6 +290,9 @@ class Addleadcontroller extends GetxController{
             camNoteController.geoLocOffLatEnabled.value=false;
             camNoteController.geoLocOffLongEnabled.value=false;
           }
+        }else{
+          camNoteController.geoLocOffLatEnabled.value=true;
+          camNoteController.geoLocOffLongEnabled.value=true;
         }
 
         final photoProp = getLeadDetailModel.value?.data?.photosOfProperty;

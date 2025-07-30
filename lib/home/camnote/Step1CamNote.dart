@@ -38,6 +38,7 @@ class Step1CamNote extends StatelessWidget {
   Addleadcontroller addleadcontroller = Get.find();
   AddProductController addProductController = Get.find();
   IncomeStepController incomeStepController = Get.put(IncomeStepController());
+
   @override
   Widget build(BuildContext context) {
 
@@ -54,7 +55,7 @@ class Step1CamNote extends StatelessWidget {
               return  Center(child: CustomSkelton.productShimmerList(context));
             }
 
-            print("addIncomeList obx==>${camNoteController.addIncomeList.length}");
+            print("geoLocPropLatEnabled here==>${camNoteController.geoLocPropLatEnabled.value}");
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min, // Prevents extra spacing
@@ -199,7 +200,7 @@ class Step1CamNote extends StatelessWidget {
 
                         ),
                         CustomTextLabel(
-                            label: AppText.state,
+                          label: AppText.state,
                           isRequired: true,
                         ),
 
@@ -467,8 +468,16 @@ class Step1CamNote extends StatelessWidget {
                             ),
                             onChanged: (value) {
                               ///start from here
-                              print(" camNoteController.camSelectedProdSegment.value===>${ camNoteController.camSelectedProdSegment.value}");
+
                               camNoteController.camSelectedProdSegment.value =  value?.id;
+                              print(" camNoteController.camSelectedProdSegment.value===>${ camNoteController.camSelectedProdSegment.value}");
+                              print(" mNoteController.isRequiredVisibleSecure.value===>${ camNoteController.isRequiredVisibleSecure.value}");
+                              if(camNoteController.camSelectedProdSegment.value==1){
+                                camNoteController.isRequiredVisibleSecure.value=true;
+                              }else{
+                                camNoteController.isRequiredVisibleSecure.value=false;
+                              }
+                              print(" mNoteController.isRequiredVisibleSecure.value===>af==>${ camNoteController.isRequiredVisibleSecure.value}");
                             },
                             onClear: (){
                               camNoteController.camSelectedProdSegment.value = null;
@@ -566,7 +575,7 @@ class Step1CamNote extends StatelessWidget {
                           inputType: TextInputType.number,
                           hintText: AppText.enterLatitude,
                           isInputEnabled:camNoteController.geoLocPropLatEnabled.value,
-                          isRequired: true,
+                          isRequired: camNoteController.isRequiredVisibleSecure.value,
                         ),
                         CustomLabeledTextField(
                           label: "",
@@ -596,7 +605,7 @@ class Step1CamNote extends StatelessWidget {
                           inputType: TextInputType.number,
                           hintText: AppText.enterLatitude,
                           isInputEnabled:camNoteController.geoLocResLatEnabled.value,
-                          isRequired: true,
+                          isRequired: camNoteController.isRequiredVisibleSecure.value,
                         ),
                         CustomLabeledTextField(
                           label: "",
@@ -626,7 +635,7 @@ class Step1CamNote extends StatelessWidget {
                           inputType: TextInputType.number,
                           hintText: AppText.enterLatitude,
                           isInputEnabled:camNoteController.geoLocOffLatEnabled.value,
-                          isRequired: true,
+                          isRequired: camNoteController.isRequiredVisibleSecure.value,
                         ),
 
                         CustomLabeledTextField(
@@ -658,7 +667,7 @@ class Step1CamNote extends StatelessWidget {
                           isCloseVisible:camNoteController.photosPropEnabled.value,
                           isUploadActive: camNoteController.photosPropEnabled.value,
                           toastMessage: "you can not upload photos now",
-                          isRequired: true,
+                          isRequired: camNoteController.isRequiredVisibleSecure.value,
                         ),
 
                         const SizedBox(height: 20,),
@@ -670,7 +679,7 @@ class Step1CamNote extends StatelessWidget {
                           isCloseVisible:camNoteController.photosResEnabled.value,
                           isUploadActive: camNoteController.photosResEnabled.value,
                           toastMessage: "you can not upload photos now",
-                          isRequired: true,
+                          isRequired: camNoteController.isRequiredVisibleSecure.value,
                         ),
 
                         const SizedBox(height: 20,),
@@ -682,7 +691,7 @@ class Step1CamNote extends StatelessWidget {
                           isCloseVisible:camNoteController.photosOffEnabled.value,
                           isUploadActive: camNoteController.photosOffEnabled.value,
                           toastMessage: "you can not upload photos now",
-                          isRequired: true,
+                          isRequired: camNoteController.isRequiredVisibleSecure.value,
                         ),
 
                         const SizedBox(height: 20,),
@@ -939,6 +948,8 @@ class Step1CamNote extends StatelessWidget {
       }),
 
     );
+
+
   }
 
 
