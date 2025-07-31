@@ -366,6 +366,7 @@ class CamNoteService {
     String? LTV,
     String? BranchOfBank,
     String? SanctionProcessingCharges,
+    String? Autoindividual,
 
 
   }) async {
@@ -416,6 +417,7 @@ class CamNoteService {
 
 
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'SanctionProcessingCharges', SanctionProcessingCharges,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Autoindividual', Autoindividual,fallback: "0");
 
 
 
@@ -608,7 +610,8 @@ class CamNoteService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-
+      Helper.ApiReq(getCamNoteDetailByLeadId, request.fields);
+      Helper.ApiReq(getCamNoteDetailByLeadId,response.statusCode);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

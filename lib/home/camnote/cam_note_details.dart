@@ -394,7 +394,7 @@ class CamNoteDetailsScreen extends StatelessWidget {
     return InkWell(
       onTap: ()  {
         if (code == "detail") {
-          AddProductController addProductController = Get.put(AddProductController());
+
           camNoteController.getCamNoteDetailByIdApi(id: id);
 
          Get.toNamed("/camNoteSingle");

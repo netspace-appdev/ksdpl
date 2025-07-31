@@ -584,6 +584,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
             addCamNoteDetailApi(
               Id:"0",
               LeadID:getLeadId.value.toString(),
+              BankId: bankId.toString(),
+              BankersName: bankersName,
+              BankersMobileNumber: bankersMobileNumber,
+              BankersEmailID: bankersEmailID,
+              BankersWhatsAppNumber: bankersWhatsAppNumber,
               Cibil: camCibilController.text.trim().toString(),
               TotalLoanAvailedOnCibil: camTotalLoanAvailedController.text.trim().toString(),
               TotalLiveLoan: camTotalLiveLoanController.text.trim().toString(),
@@ -593,7 +598,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               TotalOverdueCasesAsPerCibil:camTotalOverdueCasesController.text.trim().toString(),
               TotalOverdueAmountAsPerCibil:camTotalOverdueAmountController.text.trim().toString(),
               TotalEnquiriesMadeAsPerCibil:camTotalEnquiriesController.text.trim().toString(),
-
+              LoanSegment:camSelectedProdSegment.value.toString(),
+              LoanProduct:camSelectedProdType.value.toString(),
+              OfferedSecurityType: camOfferedSecurityTypeController.text.trim().toString(),
               IncomeType: selectedCamIncomeTypeList.value.toString(),
               EarningCustomerAge: camEarningCustomerAgeController.text.trim().toString(),
               NonEarningCustomerAge: camNonEarningCustomerAgeController.text.trim().toString(),
@@ -606,16 +613,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               PropertyValueAsPerCustomer: camPropertyValueController.text.trim().toString(),
               FOIR: camFoirController.text.trim().toString(),
               LTV: camLtvController.text.trim().toString(),
-              OfferedSecurityType: camOfferedSecurityTypeController.text.trim().toString(),
-              LoanProduct:camSelectedProdType.value.toString(),
-              LoanSegment:camSelectedProdSegment.value.toString(),
-              BankersName: bankersName,
-              BankersMobileNumber: bankersMobileNumber,
-              BankersEmailID: bankersEmailID,
-              BankersWhatsAppNumber: bankersWhatsAppNumber,
-              BankId: bankId.toString(),
               BranchOfBank: branchId.toString(),
-              SanctionProcessingCharges:"",
+              SanctionProcessingCharges:"0",
+              Autoindividual: "1" //correct it
 
             );
 
@@ -1665,7 +1665,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? LoanSegment,
     String? LoanProduct,
     String? OfferedSecurityType,
-    String? GeoLocationOfProperty,
     String? IncomeType,
     String? EarningCustomerAge,
     String? NonEarningCustomerAge,
@@ -1679,12 +1678,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? FOIR,
     String? LTV,
     String? BranchOfBank,
-    String? GeoLocationOfResidence,
-    String? GeoLocationOfOffice,
     String? SanctionProcessingCharges,
-    List<File>? PhotosOfProperty,
-    List<File>? PhotosOfResidence,
-    List<File>? PhotosOfOffice,
+    String? Autoindividual,
 
   }) async {
     try {
@@ -1711,7 +1706,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         LoanSegment: LoanSegment,
         LoanProduct: LoanProduct,
         OfferedSecurityType: OfferedSecurityType,
-
         IncomeType: IncomeType,
         EarningCustomerAge: EarningCustomerAge,
         NonEarningCustomerAge: NonEarningCustomerAge,
@@ -1726,6 +1720,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         LTV: LTV,
         BranchOfBank: BranchOfBank,
         SanctionProcessingCharges: SanctionProcessingCharges,
+        Autoindividual: Autoindividual,
       );
 
 

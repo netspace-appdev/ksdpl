@@ -204,7 +204,7 @@ class Addleadcontroller extends GetxController{
         leadDDController.selectedProdType.value=getLeadDetailModel.value?.data?.productType??"";
         camNoteController.camSelectedProdType.value=getLeadDetailModel.value?.data?.productType??"";
 
-        AddProductController addProductController = Get.find();
+        AddProductController addProductController = Get.put(AddProductController()); //change on 31 july
         await addProductController.getAllProductCategoryApi();
         camNoteController.camSelectedProdSegment.value=int.parse(getLeadDetailModel.value?.data?.leadsegment.toString()??"0")??0;
 
