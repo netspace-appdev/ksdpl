@@ -1078,7 +1078,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         getProductDetailsByFilterModel.value= pdFModel.GetProductDetailsByFilterModel.fromJson(data);
 
-
+        getProductDetailsByFilterModel.value?.data?.forEach((item) {
+          item.autoindividual = "1";
+        });
+        print("here data for auto=========>${getProductDetailsByFilterModel.value?.data?.first.autoindividual.toString()}");
 
         isBankerLoading(false);
 
@@ -1537,12 +1540,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           TotalOverdueCasesAsPerCibil:dataNew.totalOverdueCasesAsPerCibil.toString(),
           TotalOverdueAmountAsPerCibil:dataNew.totalOverdueAmountAsPerCibil.toString(),
           TotalEnquiriesMadeAsPerCibil:dataNew.totalEnquiriesMadeAsPerCibil.toString(),
-          /*GeoLocationOfProperty:dataNew.geoLocationOfProperty,
-          GeoLocationOfResidence:dataNew.geoLocationOfResidence,
-          GeoLocationOfOffice:dataNew.geoLocationOfOffice.toString(),
-          PhotosOfProperty: dataNew.photosOfProperty.toString(),
-          PhotosOfResidence: dataNew.photosOfResidence.toString(),
-          PhotosOfOffice: dataNew.photosOfOffice.toString(),*/
           IncomeType: dataNew.incomeType.toString(),
           EarningCustomerAge: dataNew.earningCustomerAge.toString(),
           NonEarningCustomerAge: dataNew.nonEarningCustomerAge.toString(),
@@ -2528,6 +2525,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           final productData = getProductListById.value!.data;
 
           if (productData != null) {
+
+            //31 jul
+            final filterData = productData.toFilterData();
+            filterData.autoindividual = "2"; // 🔥 This is the line that matters!
+            //end
 
             existingList.add(productData.toFilterData());
 

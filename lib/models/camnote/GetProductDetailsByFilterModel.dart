@@ -87,6 +87,7 @@ class Data {
   String? productSegment;
   String? ksdplProduct;
   num? specialBranchId;
+  String? autoindividual; // <-- Add this in your data model
   Data(
       {this.id,
         this.bankId,
@@ -142,6 +143,7 @@ class Data {
         this.productSegment,
         this.ksdplProduct,
         this.specialBranchId, // 👈 include in constructor
+        this.autoindividual, // 👈 include in constructor
       });
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -326,6 +328,7 @@ class Data {
       profitPercentage: profitPercentage,
       bankName: bankName,
       productSegment: productSegment,
+      autoindividual: autoindividual,
     );
   }
 
