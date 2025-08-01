@@ -239,7 +239,7 @@ class Step3CamNote extends StatelessWidget {
                           textColor: camNoteController.bankerThemes[2]["textColor"],
                           iconColor:camNoteController.bankerThemes[2]["iconColor"],
                           boxId: banker.id.toString(),
-                          autoindividual: banker.autoindividual.toString()
+                          autoIndividual: banker.autoindividual.toString()
                         ):
                         _buildTextButton(
                           label:"Add",
@@ -251,7 +251,7 @@ class Step3CamNote extends StatelessWidget {
                           textColor: camNoteController.bankerThemes[0]["textColor"],
                           iconColor:camNoteController.bankerThemes[0]["iconColor"],
                           boxId: banker.id.toString(),
-                            autoindividual: banker.autoindividual.toString()
+                          autoIndividual: banker.autoindividual.toString()
                         ),
                         SizedBox(height: 10,),
 
@@ -266,7 +266,7 @@ class Step3CamNote extends StatelessWidget {
                             textColor:isSelected ? camNoteController.bankerThemes[1]["textColor"]:camNoteController.bankerThemes[0]["textColor"],
                             iconColor:isSelected ? camNoteController.bankerThemes[1]["iconColor"]:camNoteController.bankerThemes[0]["iconColor"],
                             boxId: banker.id.toString(),
-                              autoindividual: banker.autoindividual.toString()
+                            autoIndividual: banker.autoindividual.toString()
                           ),
 
                       ],
@@ -393,15 +393,15 @@ class Step3CamNote extends StatelessWidget {
     required Color textColor,
     required Color iconColor,
     required String boxId,
-    required String autoindividual,
+    required String autoIndividual,
 }) {
     return GestureDetector(
       onTap: () {
-        print("autoindividual.toString()--->first==>${autoindividual.toString()}");
+        print("autoindividual.toString()--->first==>${autoIndividual.toString()}");
         if(code=="select"){
           print("boxId--->${boxId}");
           print("bankId--->${bankId}");
-          print("autoindividual.toString()--->in select =====${autoindividual.toString()}");
+          print("autoindividual.toString()--->in select =====${autoIndividual.toString()}");
           camNoteController.toggleBankerSelection(bankId);
           if(camNoteController.selectedBankers.isNotEmpty){
             showDialog(
@@ -413,7 +413,7 @@ class Step3CamNote extends StatelessWidget {
                   iconColor: AppColor.secondaryColor,
                   description: AppText.sendCamMsg,
                   onYes: () {
-                    camNoteController.saveForm();
+                    camNoteController.saveForm(autoIndividual);
                   },
                   onNo: () {
 
@@ -424,7 +424,7 @@ class Step3CamNote extends StatelessWidget {
           }
 
         }else if(code=="add"){
-          print("autoindividual.toString()--->in add =====${autoindividual.toString()}");
+          print("autoindividual.toString()--->in add =====${autoIndividual.toString()}");
           camNoteController.clearBankDetails();
 
           if(camNoteController.camZipController.text.isEmpty){

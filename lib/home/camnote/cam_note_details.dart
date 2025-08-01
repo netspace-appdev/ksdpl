@@ -558,6 +558,7 @@ class CamNoteDetailsScreen extends StatelessWidget {
                                     hintText: AppText.enterBankerMobile,
                                     isRequired: true,
                                     validator: ValidationHelper.validatePhoneNumber,
+                                    maxLength: 10,
                                   ),
                                   CustomLabeledTextField(
                                     label: AppText.bankerName,
@@ -573,7 +574,9 @@ class CamNoteDetailsScreen extends StatelessWidget {
                                       inputType: TextInputType.number,
                                       hintText: AppText.enterBankerWhatsapp,
                                       isRequired: true,
-                                      validator: ValidationHelper.validateWhatsapp
+                                      validator: ValidationHelper.validateWhatsapp,
+                                      maxLength: 10,
+
                                   ),
                                   CustomLabeledTextField(
                                       label: AppText.bankerEmail,
@@ -588,6 +591,7 @@ class CamNoteDetailsScreen extends StatelessWidget {
                                     controller: camNoteController.camBankerSuperiorMobController,
                                     inputType: TextInputType.number,
                                     hintText: AppText.enterSuperiorMobile,
+                                    maxLength: 10,
 
                                   ),
                                   CustomLabeledTextField(
@@ -602,6 +606,7 @@ class CamNoteDetailsScreen extends StatelessWidget {
                                     controller: camNoteController.camBankerSuperiorWhatsappController,
                                     inputType: TextInputType.number,
                                     hintText: AppText.enterSuperiorWhatsapp,
+                                    maxLength: 10,
 
                                   ),
                                   CustomLabeledTextField(

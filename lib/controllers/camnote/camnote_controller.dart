@@ -497,8 +497,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     stepCompleted[currentStep.value] = true;
   }
 
-  void saveForm() async {
-    print("final Form Saved!");
+  void saveForm(String autoIndividual) async {
+    print("final Form Saved! addCamNoteDetailApi");
+
 
 
     if(camFullNameController.text.isEmpty){
@@ -522,14 +523,14 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camAadharController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Aadhar");
       return;
-    }else if(camSelectedState.value==null){
+    }else if(camSelectedState.value==null || camSelectedState.value=="0"){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select state");
       return;
-    }else if(camSelectedDistrict.value == null){
+    }else if(camSelectedDistrict.value == null || camSelectedDistrict.value=="0"){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select district");
       return;
-    }else if(camSelectedCity.value == null){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select district");
+    }else if(camSelectedCity.value == null || camSelectedCity.value=="0"){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select city");
       return;
     }else if(camZipController.text.isEmpty ){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select zipcode");
@@ -543,8 +544,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
 
     if (!packageFieldsIfRequired()) return;
+    if (!securedFieldsIfRequired()) return;
 
-    //isAllCamnoteSubmit(true);
+    isAllCamnoteSubmit(true);
 
       final productList = getProductDetailsByFilterModel.value?.data ?? [];
 
@@ -616,7 +618,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               LTV: camLtvController.text.trim().toString(),
               BranchOfBank: branchId.toString(),
               SanctionProcessingCharges:"0",
-              Autoindividual: "1" //correct it
+              Autoindividual: autoIndividual //correct it
 
             );
 
@@ -1509,14 +1511,17 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
        }
     }else if(whichScreen=="update_camnote"){
+
       index = getCamNoteLeadIdModel.value!.data!
           .indexWhere((element) => element.bankId.toString() == bankId);
 
-      print("index===>${index.toString()}");
+      print("index===>${index.toString()} and $whichScreen{}");
+
 
       if (index != -1) {
+        print("here ===>1");
         final old = getCamNoteLeadIdModel.value!.data![index];
-
+        print("here ===>2");
         // Update relevant fields
         final updatedBanker =  getCamNoteLeadIdModel.value!.data![index] = old.copyWith(
           bankersName: updatedFields['bankersName'],
@@ -1524,11 +1529,15 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           bankersWhatsAppNumber: updatedFields['bankersWhatsAppNumber'],
           bankersEmailID: updatedFields['bankersEmailID'],
         );
+        print("here ===>3");
         getCamNoteLeadIdModel.value!.data![index] = updatedBanker;
+        print("here ===>4");
         // Refresh the list
         getCamNoteLeadIdModel.refresh();
+        print("here ===>5");
         var dataNew=getCamNoteLeadIdModel.value!.data![index];
         print("leadid on tap edit--->${dataNew.leadID}");
+        print("dataNew autoindividual on tap edit--->${dataNew.autoindividual.toString()}");
         editCamNoteDetailApi(
           Id:dataNew.id.toString(),
           LeadID:dataNew.leadID.toString(),
@@ -1563,6 +1572,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           BankId: dataNew.bankId.toString(),
           BranchOfBank: dataNew.branchId.toString(),
           SanctionProcessingCharges:dataNew.sanctionProcessingFees.toString(),
+          Autoindividual: dataNew.autoindividual.toString(),
+
 
         );
 
@@ -1754,10 +1765,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       ToastMessage.msg(AppText.somethingWentWrong);
 
       isLoading(false);
+      isAllCamnoteSubmit(false);
     } finally {
 
 
       isLoading(false);
+      isAllCamnoteSubmit(false);
     }
   }
 
@@ -2229,13 +2242,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? FOIR,
     String? LTV,
     String? BranchOfBank,
-   /* String? GeoLocationOfResidence,
-    String? GeoLocationOfOffice,
-    String? GeoLocationOfProperty,
-    String? PhotosOfProperty,
-    String? PhotosOfResidence,
-    String? PhotosOfOffice,*/
     String? SanctionProcessingCharges,
+    String? Autoindividual,
   }) async {
     try {
 
@@ -2275,13 +2283,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         FOIR: FOIR,
         LTV: LTV,
         BranchOfBank: BranchOfBank,
-       /* GeoLocationOfProperty: GeoLocationOfProperty,
-        GeoLocationOfResidence: GeoLocationOfResidence,
-        GeoLocationOfOffice: GeoLocationOfOffice,
-        PhotosOfProperty: PhotosOfProperty,
-        PhotosOfResidence: PhotosOfResidence,
-        PhotosOfOffice: PhotosOfOffice,*/
         SanctionProcessingCharges: SanctionProcessingCharges,
+        Autoindividual: Autoindividual,
       );
 
 
@@ -2524,15 +2527,19 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           final existingList = camNoteController.getProductDetailsByFilterModel.value?.data ?? [];
 
           final productData = getProductListById.value!.data;
-
+        print("productData ==>${productData.toString()}");
           if (productData != null) {
 
-            //31 jul
+           /* //31 jul
             final filterData = productData.toFilterData();
             filterData.autoindividual = "2"; // 🔥 This is the line that matters!
             //end
 
-            existingList.add(productData.toFilterData());
+            existingList.add(productData.toFilterData());*/
+
+
+
+            existingList.add(productData.toFilterData("2"));
 
             camNoteController.getProductDetailsByFilterModel.value = pdFModel.GetProductDetailsByFilterModel(
               status: getProductListById.value!.status,
@@ -2540,6 +2547,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               message: getProductListById.value!.message,
               data: existingList,
             );
+            print("getProductListById in other bank API after assign 2==>${getProductListById.value!.data.toString()}");
           }
 
 
@@ -2763,7 +2771,7 @@ String cleanText(String text) {
 
 
 extension ProductDataMapper on gpli.Data {
-  pdFModel.Data toFilterData() {
+  pdFModel.Data toFilterData(String autoindividual) {
     return pdFModel.Data(
       id: id,
       bankId: bankId,
@@ -2819,6 +2827,7 @@ extension ProductDataMapper on gpli.Data {
       ksdplProduct: ksdplProductName,
       productSegment: productCategoryName,
       specialBranchId: null, // You can map this if needed later
+      autoindividual: autoindividual, // You can map this if needed later
     );
   }
 }

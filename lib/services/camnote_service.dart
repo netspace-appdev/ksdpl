@@ -690,13 +690,8 @@ class CamNoteService {
     String? LTV,
     String? BranchOfBank,
     String? SanctionProcessingCharges,
+    String? Autoindividual,
 
-    /*String? GeoLocationOfProperty,
-    String? GeoLocationOfResidence,
-    String? GeoLocationOfOffice,
-    String? PhotosOfProperty,
-    String? PhotosOfResidence,
-    String? PhotosOfOffice,*/
   }) async {
     try {
       var request = http.MultipartRequest(
@@ -742,16 +737,18 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'FOIR', FOIR,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'LTV', LTV,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'BranchOfBank', BranchOfBank,fallback: "0");
-  /*    MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfResidence', GeoLocationOfResidence);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfProperty', GeoLocationOfProperty);*/
 
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'SanctionProcessingCharges', SanctionProcessingCharges,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Autoindividual', Autoindividual,fallback: "0");
 
 
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
+
+
+      Helper.ApiReq(editCamNoteDetail, request.fields);
+      Helper.ApiReq(editCamNoteDetail, response.body);
 
 
       if (response.statusCode == 200) {

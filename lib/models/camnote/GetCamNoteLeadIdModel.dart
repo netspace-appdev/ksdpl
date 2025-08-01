@@ -85,7 +85,7 @@ class Data {
   String? photosOfProperty;
   String? photosOfResidence;
   String? photosOfOffice;
-
+  int? autoindividual;
   Data(
       {this.id,
         this.leadID,
@@ -138,7 +138,8 @@ class Data {
         this.geoLocationOfOffice,
         this.photosOfProperty,
         this.photosOfResidence,
-        this.photosOfOffice});
+        this.photosOfOffice,
+        this.autoindividual});
 
   Data.fromJson(Map<String, dynamic> json) {
 
@@ -195,7 +196,7 @@ class Data {
     photosOfProperty = json['photosOfProperty'];
     photosOfResidence = json['photosOfResidence'];
     photosOfOffice = json['photosOfOffice'];
-
+    autoindividual = json['autoindividual'];
   }
 
   Map<String, dynamic> toJson() {
@@ -252,6 +253,7 @@ class Data {
     data['photosOfProperty'] = this.photosOfProperty;
     data['photosOfResidence'] = this.photosOfResidence;
     data['photosOfOffice'] = this.photosOfOffice;
+    data['autoindividual'] = this.autoindividual;
     return data;
   }
 
@@ -308,6 +310,7 @@ class Data {
     String? photosOfProperty,
     String? photosOfResidence,
     String? photosOfOffice,
+    int? autoindividual,
   }) {
     return Data(
       id: id ?? this.id,
@@ -362,6 +365,7 @@ class Data {
       photosOfProperty: photosOfProperty ?? this.photosOfProperty,
       photosOfResidence: photosOfResidence ?? this.photosOfResidence,
       photosOfOffice: photosOfOffice ?? this.photosOfOffice,
+      autoindividual: autoindividual?? this.autoindividual,
     );
   }
 
