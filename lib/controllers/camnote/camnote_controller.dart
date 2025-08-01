@@ -2530,13 +2530,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         print("productData ==>${productData.toString()}");
           if (productData != null) {
 
-           /* //31 jul
-            final filterData = productData.toFilterData();
-            filterData.autoindividual = "2"; // 🔥 This is the line that matters!
-            //end
-
-            existingList.add(productData.toFilterData());*/
-
 
 
             existingList.add(productData.toFilterData("2"));
