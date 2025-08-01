@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/home/loan_application/Step9Form.dart';
+import 'package:ksdpl/home/loan_application/submitDocument.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
@@ -42,6 +43,11 @@ class LoanApplicationScreen extends StatelessWidget {
 
 
   final _formKey = GlobalKey<FormState>();
+
+  final List<GlobalKey<FormState>> _formKeys =
+  List.generate(10, (_) => GlobalKey<FormState>());
+
+
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());/// Remove it
   final LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
   final List<Widget> stepForms = [
@@ -54,6 +60,7 @@ class LoanApplicationScreen extends StatelessWidget {
     Step7Form(),
     Step8Form(),
     Step9Form(),
+    SubmitDocument(),
     Step10Form(),
   ];
   @override
@@ -230,7 +237,7 @@ class LoanApplicationScreen extends StatelessWidget {
                     : null,
                 child: const Text('Prev'),
               ),
-              ElevatedButton(
+               ElevatedButton(
                 onPressed: (){
                   loanApplicationController.onSaveLoanAppl();
                 },
@@ -243,6 +250,22 @@ class LoanApplicationScreen extends StatelessWidget {
                 onPressed: loanApplicationController.currentStep.value < 9
                     ? loanApplicationController.nextStep
                     : null,
+                /*onPressed: () {
+                  final index = loanApplicationController.currentStep.value;
+                  final isValid = _formKeys[index].currentState?.validate() ?? false;
+                  if (isValid) {
+                    loanApplicationController.stepCompleted[index] = true;
+                    if (index < 9) {
+                      loanApplicationController.currentStep.value++;
+                    } else {
+                      // Submit logic
+                      loanApplicationController.onSaveLoanAppl();
+                    }
+                  } else {
+                    ToastMessage.msg("Please complete required fields");
+                  }
+                },*/
+
                 child: const Text('Next',style: TextStyle(color: AppColor.appWhite),),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.primaryColor,

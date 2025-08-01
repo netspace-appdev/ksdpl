@@ -4,9 +4,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../custom_widgets/CamImage.dart';
+import '../custom_widgets/DocumentCamImage.dart';
 
 class AppText{
   static const String brandName="KSDPL";
@@ -677,6 +683,7 @@ class AppText{
   static const String leadCallYear = "Leads Called in The Year";
   static const String ongoingCallYTD= "Ongoing Call (YTD)";
   static const String employee = "Employee";
+  static const String employeeName = "Employee Name";
 
   static const String bankerMobileNo = "Banker Mobile No";
   static const String enterBankerMobileNo = "Enter Banker Mobile No";
@@ -718,6 +725,7 @@ class AppText{
   static const String income = "Income";
   static const String enterIncome = "Enter the Income";
   static const String documents = "Documents";
+  static const String documentsName = "Document Name";
   static const String viewProducts = "View Products";
   static const String packageName = "Package Name";
   static const String enterPackageName = "Enter Package Name";
@@ -1229,6 +1237,83 @@ class Helper{
 
 
 }
+
+
+class HelperClass {
+
+
+  static Future<DocumentCamImage?> pickImage({BuildContext? context}) async {
+    final picker = ImagePicker();
+
+    if (context == null) {
+      // If no context is passed, use gallery directly
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        return DocumentCamImage(file: File(pickedFile.path));
+      }
+      return null;
+    }
+
+    // If context is provided, show camera/gallery dialog
+    final result = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (_) => _buildImagePickerSheet(),
+    );
+
+    if (result != null) {
+      final pickedFile = await picker.pickImage(source: result);
+      if (pickedFile != null) {
+        return DocumentCamImage(file: File(pickedFile.path));
+      }
+    }
+
+    return null;
+  }
+
+  static Widget _buildImagePickerSheet() {
+    return SafeArea(
+      child: Wrap(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.photo_camera),
+            title: const Text("Take Photo"),
+            onTap: () => Navigator.of(Get.context!).pop(ImageSource.camera),
+          ),
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: const Text("Choose from Gallery"),
+            onTap: () => Navigator.of(Get.context!).pop(ImageSource.gallery),
+          ),
+          ListTile(
+            leading: const Icon(Icons.close),
+            title: const Text("Cancel"),
+            onTap: () => Navigator.of(Get.context!).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Future<DocumentCamImage?> pickImageFromCamera() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (picked != null) {
+      return DocumentCamImage(file: File(picked.path), isLocal: true);
+    }
+    return null;
+  }
+
+  static Future<DocumentCamImage?> pickImageFromGallery() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      return DocumentCamImage(file: File(picked.path), isLocal: true);
+    }
+    return null;
+  }
+
+}
+
+
+
 
 
 class ToastMessage {

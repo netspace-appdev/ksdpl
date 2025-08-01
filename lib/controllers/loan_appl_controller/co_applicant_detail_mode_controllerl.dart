@@ -125,7 +125,7 @@ class CoApplicantDetailController {
 
 
     } catch (e) {
-      print("Error getAllStateApi: $e");
+      print("Error getAllStateApi:co applicant $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
 
@@ -168,7 +168,7 @@ class CoApplicantDetailController {
 
 
     } catch (e) {
-      print("Error getAllStateApi: $e");
+      print("Error getAllStateApi:coapplicant model $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
 

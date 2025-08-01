@@ -20,7 +20,9 @@ import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import '../../custom_widgets/CustomTextLabel.dart';
 
 class Step1Form extends StatelessWidget {
-  final loanApplicationController = Get.find<LoanApplicationController>();
+  final loanApplicationController = Get.put(LoanApplicationController(), permanent: true);
+
+//  final loanApplicationController = Get.find<LoanApplicationController>();
   LeadDDController leadDDController = Get.put(LeadDDController());
 
   @override
@@ -73,8 +75,7 @@ class Step1Form extends StatelessWidget {
 
                     CustomTextLabel(
                       label: AppText.bankNostar,
-
-
+                      isRequired: true,
                     ),
 
                     const SizedBox(height: 10),
@@ -156,7 +157,7 @@ class Step1Form extends StatelessWidget {
 
                     CustomTextLabel(
                       label: AppText.loanType,
-
+                      isRequired: true,
                     ),
 
                     const SizedBox(height: 10),
@@ -945,7 +946,10 @@ class Step1Form extends StatelessWidget {
                               (item) => item.id.toString() == leadDDController.selectedStatePerm.value,
                         ),
                         onChanged: (value) {
+
                           leadDDController.selectedStatePerm.value =  value?.id?.toString();
+
+                          print('stateid is herev ${leadDDController.selectedStatePerm.value}');
                           if( leadDDController.selectedStatePerm.value!=null){
                             leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value);
                           }
