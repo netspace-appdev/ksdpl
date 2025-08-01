@@ -1,12 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
+import 'package:ksdpl/custom_widgets/CamImage.dart';
 
+import '../../common/base_url.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
+import '../../custom_widgets/DocumentCamImage.dart';
+import '../../custom_widgets/ImagePickerMixin.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
+import '../../home/leads/lead_list_main.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
+import '../../models/leads/UploadDocumentModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
 import '../../models/loan_application/GetLoanApplIdModel.dart';
 import '../../models/loan_application/special_model/CoApplicantModel.dart';
@@ -14,30 +22,35 @@ import '../../models/loan_application/special_model/CreditCardModel.dart';
 import '../../models/loan_application/special_model/FamilyMemberModel.dart';
 import '../../models/loan_application/special_model/ReferenceModel.dart';
 import '../../services/loan_appl_service.dart';
+import '../addDocumentControler/addDocumentModel/DocumentUploadModel.dart';
+import '../addDocumentControler/addDocumentModel/addDocumentModel.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
 
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
+import 'add_income_model_controller.dart';
 
-class LoanApplicationController extends GetxController{
+class LoanApplicationController extends GetxController with ImagePickerMixin {
 
   var getLoanApplIdModel = Rxn<GetLoanApplIdModel>();
-  var leadId="".obs;
-  var firstName="".obs;
-  var email="".obs;
+  var leadId = "".obs;
+  var firstName = "".obs;
+  var email = "".obs;
   var isLoading = false.obs;
   var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
+  var uploadDocumentModel = Rxn<UploadDocumentModel>(); //
   var selectedGender = Rxn<String>();
+
   String get selectedGenderValue => selectedGender.value ?? "";
   var selectedGenderCoAP = Rxn<String>();
   var selectedGenderDependent = Rxn<String>();
   List<String> optionsPrevLoanAppl = ["Yes", "No"];
   var selectedPrevLoanAppl = (-1).obs;
-  var ownershipList=["Owned", "Rented","Leased", "Jointly Owned", "Other"];
-  var countryList=["India",];
+  var ownershipList = ["Owned", "Rented", "Leased", "Jointly Owned", "Other"];
+  var countryList = ["India",];
   var selectedOwnershipList = Rxn<String>();
   var selectedCountry = Rxn<String>();
   var selectedCountryPerm = Rxn<String>();
@@ -45,6 +58,13 @@ class LoanApplicationController extends GetxController{
   var loanApplId = 0;
   var isSameAddressApl = false.obs;
   LeadDDController leadDDController = Get.find();
+
+  Map<String, dynamic>? detailMap;
+
+  var photosPropEnabled = true.obs;
+  var photosResEnabled = true.obs;
+  var photosOffEnabled = true.obs;
+
 
   final TextEditingController dsaCodeController = TextEditingController();
   final TextEditingController lanController = TextEditingController();
@@ -70,7 +90,7 @@ class LoanApplicationController extends GetxController{
   final TextEditingController dobController = TextEditingController();
   final TextEditingController qualiController = TextEditingController();
   final TextEditingController maritalController = TextEditingController();
-  final TextEditingController emplStatusController = TextEditingController();
+  TextEditingController emplStatusController = TextEditingController();
   final TextEditingController nationalityController = TextEditingController();
   final TextEditingController occupationController = TextEditingController();
   final TextEditingController occSectorController = TextEditingController();
@@ -97,7 +117,6 @@ class LoanApplicationController extends GetxController{
   final TextEditingController streetNamePermController = TextEditingController();
   final TextEditingController pinCodePermController = TextEditingController();
   final TextEditingController talukaPermController = TextEditingController();
-
 
 
   final TextEditingController propPropIdController = TextEditingController();
@@ -138,8 +157,7 @@ class LoanApplicationController extends GetxController{
   final TextEditingController chargesDetailTSRLegalCharges = TextEditingController();
   final TextEditingController chargesDetailValuationCharges = TextEditingController();
   final TextEditingController chargesDetailProcessingCharges = TextEditingController();
-
-
+  final TextEditingController submintdocumentName = TextEditingController();
 
 
   var selectedStateProp = Rxn<String>();
@@ -151,14 +169,44 @@ class LoanApplicationController extends GetxController{
   var familyMemberApplList = <FamilyMemberController>[].obs;
   var creditCardsList = <CreditCardsController>[].obs;
   var referencesList = <ReferenceController>[].obs;
+  RxList<DocumentCamImage> selectedImages = <DocumentCamImage>[].obs;
+
+  var addDocumentList = <AdddocumentModel>[].obs;
+
+  void addAdditionalSrcDocument() {
+    addDocumentList.add(AdddocumentModel());
+  }
+
+  void removeAdditionalSrcDocument(int index) {
+    if (addDocumentList.length <= 1) {
+      ToastMessage.msg("You can not delete this");
+      return;
+    }
+    if (index >= 0 && index < addDocumentList.length) {
+      // Hold reference to the item to be disposed
+      final removed = addDocumentList[index];
+
+      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
+      addDocumentList.removeAt(index);
+      addDocumentList.refresh(); // If you're using an RxList
+
+      // Dispose AFTER rebuild
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        removed.aiSourceController.dispose();
+        removed.aiIncomeController.dispose();
+      });
+    } else {
+      print("🧯 Invalid index passed to removeCoApplicant: $index");
+    }
+  }
 
   var currentStep = 0.obs;
-  var stepCompleted = List<bool>.filled(10, false).obs;
-  LeadDDController leadDController=Get.find();
+  var stepCompleted = List<bool>.filled(11, false).obs;
+  LeadDDController leadDController = Get.find();
   final List<String> titles = [
     'Personal Information', 'Co-Applicant Details', 'Property Details',
     'Family Members', 'Credit Cards', 'Financial Details', 'References\n',
-    "Banker Details" ,"Charges Detail",'Final Submission'
+    "Banker Details", "Charges Detail", "Submit Document", 'Final Submission'
   ];
 
   var selectedBank = Rxn<int>();
@@ -166,8 +214,9 @@ class LoanApplicationController extends GetxController{
   var selectedChannel = Rxn<int>();
 
   final scrollController = ScrollController();
+
   void nextStep() {
-    if (currentStep.value < 10) {
+    if (currentStep.value < 11) {
       currentStep.value++;
       scrollToStep(currentStep.value);
     }
@@ -182,7 +231,7 @@ class LoanApplicationController extends GetxController{
 
   void jumpToStep(int step) {
     // We only mark previous step completed if jumping forward
-  /*  if (step > currentStep.value) {
+    /*  if (step > currentStep.value) {
       stepCompleted[currentStep.value] = true;
     }*/
     currentStep.value = step;
@@ -209,15 +258,20 @@ class LoanApplicationController extends GetxController{
   void saveForm() {
 
   }
+
+  bool isPhotoUploaded(String key) {
+    return _imageMap[key]?.isNotEmpty ?? false;
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     leadId.value = Get.arguments['uln'];
-    ulnController.text =  leadId.value;
-    getLoanApplicationDetailsByIdApi(id:leadId.value);
-
+    ulnController.text = leadId.value;
+    getLoanApplicationDetailsByIdApi(id: leadId.value);
   }
+
   void copyPresentToPermanentAddress() {
     // Text field values
     houseFlatPermController.text = houseFlatController.text;
@@ -230,30 +284,43 @@ class LoanApplicationController extends GetxController{
     selectedCountryPerm.value = selectedCountry.value;
 
     // Copy state
-    leadDDController.selectedStatePerm.value = leadDDController.selectedStateCurr.value;
+    leadDDController.selectedStatePerm.value =
+        leadDDController.selectedStateCurr.value;
 
     // Now fetch districts and wait for the lists to update
-    leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value).then((_) {
-      leadDDController.districtListPerm.value = List.from(leadDDController.districtListCurr);
-      leadDDController.selectedDistrictPerm.value = leadDDController.selectedDistrictCurr.value;
+    if (leadDDController.selectedStatePerm.value != null ||
+        leadDDController.selectedStatePerm.value!.isNotEmpty) {
+      leadDDController.getDistrictByStateIdPermApi(
+          stateId: leadDDController.selectedStatePerm.value).then((_) {
+        leadDDController.districtListPerm.value =
+            List.from(leadDDController.districtListCurr);
+        leadDDController.selectedDistrictPerm.value =
+            leadDDController.selectedDistrictCurr.value;
 
-      // Now fetch cities and wait for the city list to update
-      leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value).then((_) {
-        leadDDController.cityListPerm.value = List.from(leadDDController.cityListCurr);
-        leadDDController.selectedCityPerm.value = leadDDController.selectedCityCurr.value;
+        // Now fetch cities and wait for the city list to update
+        leadDDController.getCityByDistrictIdPermApi(
+            districtId: leadDDController.selectedDistrictPerm.value).then((_) {
+          leadDDController.cityListPerm.value =
+              List.from(leadDDController.cityListCurr);
+          leadDDController.selectedCityPerm.value =
+              leadDDController.selectedCityCurr.value;
+        });
       });
-    });
+    }
   }
 
   void addCoApplicant() {
     coApplicantList.add(CoApplicantDetailController());
   }
+
   void addFamilyMember() {
     familyMemberApplList.add(FamilyMemberController());
   }
+
   void addCreditCard() {
     creditCardsList.add(CreditCardsController());
   }
+
   void addReference() {
     referencesList.add(ReferenceController());
   }
@@ -320,7 +387,6 @@ class LoanApplicationController extends GetxController{
 
         removed.cityListPerm.clear();
         removed.cityListCurr.clear();
-
       });
     } else {
       print("🧯 Invalid index passed to removeCoApplicant: $index");
@@ -351,7 +417,6 @@ class LoanApplicationController extends GetxController{
 
         removed.selectedGenderFam.value = null;
         removed.selectedFamDependent.value = null;
-
       });
     } else {
       print("🧯 Invalid index passed to removeCoApplicant: $index");
@@ -413,22 +478,22 @@ class LoanApplicationController extends GetxController{
         removed.selectedDistrictPerm.value = null;
         removed.selectedCityPerm.value = null;
         removed.selectedCountry.value = null;
-
       });
     } else {
       print("🧯 Invalid index passed to removeCoApplicant: $index");
     }
   }
+
   @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    leadDController.selectedStateCurr.value=null;
-    leadDController.selectedDistrictCurr.value=null;
-    leadDController.selectedCityCurr.value=null;
-    leadDController. selectedStatePerm.value=null;
-    leadDController.selectedDistrictPerm.value=null;
-    leadDController.selectedCityPerm.value=null;
+    leadDController.selectedStateCurr.value = null;
+    leadDController.selectedDistrictCurr.value = null;
+    leadDController.selectedCityCurr.value = null;
+    leadDController.selectedStatePerm.value = null;
+    leadDController.selectedDistrictPerm.value = null;
+    leadDController.selectedCityPerm.value = null;
 
     dsaCodeController.dispose();
     lanController.dispose();
@@ -521,7 +586,6 @@ class LoanApplicationController extends GetxController{
     creditCardsList.clear();
     referencesList.clear();
     referencesList.clear();
-
   }
 
   void onSaveLoanAppl() {
@@ -532,17 +596,20 @@ class LoanApplicationController extends GetxController{
 
     for (var coAp in coApplicantList) {
       final AddressModel presentAddress = AddressModel(
-        houseFlatNo: cleanText(coAp.coApCurrHouseFlatController.text),
-        buildingNo: cleanText(coAp.coApCurrBuildingNoController.text),
-        societyName: cleanText(coAp.coApCurrSocietyNameController.text),
-        locality: cleanText(coAp.coApCurrLocalityController.text),
-        streetName: cleanText(coAp.coApCurrStreetNameController.text),
-        city: cleanText(coAp.selectedCityCurr.value.toIntOrZero().toString()),
-        taluka: cleanText(coAp.coApCurrTalukaController.text),
-        district: cleanText(coAp.selectedDistrictCurr.value.toIntOrZero().toString()),
-        state: cleanText(coAp.selectedStateCurr.value.toIntOrZero().toString()),
-        country: cleanText(coAp.selectedCountrCurr.value.toIntOrZero().toString()),
-        pinCode: cleanText(coAp.coApCurrPinCodeController.text)
+          houseFlatNo: cleanText(coAp.coApCurrHouseFlatController.text),
+          buildingNo: cleanText(coAp.coApCurrBuildingNoController.text),
+          societyName: cleanText(coAp.coApCurrSocietyNameController.text),
+          locality: cleanText(coAp.coApCurrLocalityController.text),
+          streetName: cleanText(coAp.coApCurrStreetNameController.text),
+          city: cleanText(coAp.selectedCityCurr.value.toIntOrZero().toString()),
+          taluka: cleanText(coAp.coApCurrTalukaController.text),
+          district: cleanText(
+              coAp.selectedDistrictCurr.value.toIntOrZero().toString()),
+          state: cleanText(
+              coAp.selectedStateCurr.value.toIntOrZero().toString()),
+          country: cleanText(
+              coAp.selectedCountrCurr.value.toIntOrZero().toString()),
+          pinCode: cleanText(coAp.coApCurrPinCodeController.text)
       );
 
       final AddressModel permanentAddress = AddressModel(
@@ -553,39 +620,48 @@ class LoanApplicationController extends GetxController{
           streetName: cleanText(coAp.coApPermStreetNameController.text),
           city: cleanText(coAp.selectedCityPerm.value.toIntOrZero().toString()),
           taluka: cleanText(coAp.coApPermTalukaController.text),
-          district: cleanText(coAp.selectedDistrictPerm.value.toIntOrZero().toString()),
-          state: cleanText(coAp.selectedStatePerm.value.toIntOrZero().toString()),
-          country: cleanText(coAp.selectedCountryPerm.value.toIntOrZero().toString()),
+          district: cleanText(
+              coAp.selectedDistrictPerm.value.toIntOrZero().toString()),
+          state: cleanText(
+              coAp.selectedStatePerm.value.toIntOrZero().toString()),
+          country: cleanText(
+              coAp.selectedCountryPerm.value.toIntOrZero().toString()),
           pinCode: cleanText(coAp.coApPermPinCodeController.text)
       );
 
-      final EmployerDetailsModel employerDetails=EmployerDetailsModel(
-          organizationName: cleanText(coAp.coApOrgNameController.text),
-          ownershipType: coAp.selectedCityPerm.value.toIntOrZero().toString(),
-          natureOfBusiness:cleanText(coAp.coApNatureOfBizController.text),
-          staffStrength: coAp.coApStaffStrengthController.toIntOrZero(),
-          dateOfSalary:coAp.coApSalaryDateController.text.isNotEmpty?Helper.convertToIso8601(coAp.coApSalaryDateController.text):"",                ///its static
+      final EmployerDetailsModel employerDetails = EmployerDetailsModel(
+        organizationName: cleanText(coAp.coApOrgNameController.text),
+        ownershipType: coAp.selectedCityPerm.value.toIntOrZero().toString(),
+        natureOfBusiness: cleanText(coAp.coApNatureOfBizController.text),
+        staffStrength: coAp.coApStaffStrengthController.toIntOrZero(),
+        dateOfSalary: coAp.coApSalaryDateController.text.isNotEmpty ? Helper
+            .convertToIso8601(coAp.coApSalaryDateController.text) : "",
+
+        ///its static
       );
-
-
 
 
       final coApModel = CoApplicantModel(
         name: cleanText(coAp.coApFullNameController.text),
-        fatherName:cleanText(coAp.coApFatherNameController.text),
-        gender: coAp.selectedGenderCoAP.value?? "",
-        dateOfBirth:coAp.coApDobController.text.isNotEmpty?Helper.convertToIso8601(coAp.coApDobController.text):"",                ///its static
+        fatherName: cleanText(coAp.coApFatherNameController.text),
+        gender: coAp.selectedGenderCoAP.value ?? "",
+        dateOfBirth: coAp.coApDobController.text.isNotEmpty ? Helper
+            .convertToIso8601(coAp.coApDobController.text) : "",
+
+        ///its static
         qualification: cleanText(coAp.coApQualiController.text),
-        emailID:  cleanText(coAp.coApEmailController.text),
+        emailID: cleanText(coAp.coApEmailController.text),
         maritalStatus: cleanText(coAp.coApMaritalController.text),
-        status:cleanText(coAp.coApEmplStatusController.text),                                            ///its static
+        status: cleanText(coAp.coApEmplStatusController.text),
+
+        ///its static
         nationality: cleanText(coAp.coApNationalityController.text),
         occupation: cleanText(coAp.coApOccupationController.text),
         occupationSector: cleanText(coAp.coApOccupationController.text),
         mobile: cleanText(coAp.coApMobController.text),
-        presentAddress:presentAddress,
-        permanentAddress:permanentAddress,
-        employerDetails:employerDetails,
+        presentAddress: presentAddress,
+        permanentAddress: permanentAddress,
+        employerDetails: employerDetails,
       );
       coApplicantModels.add(coApModel);
     }
@@ -593,13 +669,16 @@ class LoanApplicationController extends GetxController{
 
     for (var fam in familyMemberApplList) {
       final famModel = FamilyMemberModel(
-        name: cleanText(fam.famNameController.text),
-        birthDate: fam.famDobController.text.isNotEmpty?Helper.convertToIso8601(fam.famDobController.text):"",                      ///its static
-        gender: fam.selectedGenderFam.value?? "",
-        relationWithApplicant: cleanText(fam.famRelWithApplController.text),
-        dependent: fam.isFamDependent,
-        monthlyIncome: fam.famMonthlyIncomeController.toIntOrZero(),
-        employedWith: cleanText(fam.famEmployedWithController.text)
+          name: cleanText(fam.famNameController.text),
+          birthDate: fam.famDobController.text.isNotEmpty ? Helper
+              .convertToIso8601(fam.famDobController.text) : "",
+
+          ///its static
+          gender: fam.selectedGenderFam.value ?? "",
+          relationWithApplicant: cleanText(fam.famRelWithApplController.text),
+          dependent: fam.isFamDependent,
+          monthlyIncome: fam.famMonthlyIncomeController.toIntOrZero(),
+          employedWith: cleanText(fam.famEmployedWithController.text)
       );
       familyMembersModels.add(famModel);
     }
@@ -608,7 +687,10 @@ class LoanApplicationController extends GetxController{
       final ccModel = CreditCardModel(
         companyBank: cleanText(cc.ccCompBankController.text),
         cardNumber: cleanText(cc.ccCardNumberController.text),
-        havingSince:cc.ccHavingSinceController.text.isNotEmpty?Helper.convertToIso8601(cc.ccHavingSinceController.text):"",                                   ///its static
+        havingSince: cc.ccHavingSinceController.text.isNotEmpty ? Helper
+            .convertToIso8601(cc.ccHavingSinceController.text) : "",
+
+        ///its static
         avgMonthlySpending: cc.ccAvgMonSpendingController.toIntOrZero(),
       );
       creditCardModel.add(ccModel);
@@ -617,34 +699,39 @@ class LoanApplicationController extends GetxController{
 
     for (var ref in referencesList) {
       final refModel = ReferenceModel(
-      name:  cleanText(ref.refNameController.text),
-      address:  cleanText(ref.refAddController.text),
-      city: ref.selectedCityPerm.value.ddToString(),
-      district: ref.selectedDistrictPerm.value.ddToString(),
-      state: ref.selectedStatePerm.value.ddToString(),
-      country: ref.selectedCountry.value.ddToString(),
-      pinCode: cleanText(ref.refPincodeController.text),
-      phone: cleanText(ref.refPhoneController.text),
-      mobile: cleanText(ref.refMobController.text),
-      relationWithApplicant: cleanText(ref.refRelWithApplController.text),
+        name: cleanText(ref.refNameController.text),
+        address: cleanText(ref.refAddController.text),
+        city: ref.selectedCityPerm.value.ddToString(),
+        district: ref.selectedDistrictPerm.value.ddToString(),
+        state: ref.selectedStatePerm.value.ddToString(),
+        country: ref.selectedCountry.value.ddToString(),
+        pinCode: cleanText(ref.refPincodeController.text),
+        phone: cleanText(ref.refPhoneController.text),
+        mobile: cleanText(ref.refMobController.text),
+        relationWithApplicant: cleanText(ref.refRelWithApplController.text),
       );
       referenceModel.add(refModel);
     }
-    List<Map<String, dynamic>> coApPayload = coApplicantModels.map((e) => e.toMap()).toList();
-    List<Map<String, dynamic>> famPayload = familyMembersModels.map((e) => e.toJson()).toList();
-    List<Map<String, dynamic>>  ccPayload = creditCardModel.map((e) => e.toMap()).toList();
-    List<Map<String, dynamic>>  refPayload = referenceModel.map((e) => e.toMap()).toList();
+
+    List<Map<String, dynamic>> coApPayload = coApplicantModels.map((e) =>
+        e.toMap()).toList();
+    List<Map<String, dynamic>> famPayload = familyMembersModels.map((e) =>
+        e.toJson()).toList();
+    List<Map<String, dynamic>> ccPayload = creditCardModel.map((e) => e.toMap())
+        .toList();
+    List<Map<String, dynamic>> refPayload = referenceModel.map((e) => e.toMap())
+        .toList();
 
 
     addLoanApplicationApi(
-      coApPayload:coApPayload,
+      coApPayload: coApPayload,
       famPayload: famPayload,
       ccPayload: ccPayload,
       refPayload: refPayload,
     );
   }
 
-  Future<void>addLoanApplicationApi({
+  Future<void> addLoanApplicationApi({
     required List<Map<String, dynamic>> coApPayload,
     required List<Map<String, dynamic>> famPayload,
     required List<Map<String, dynamic>> ccPayload,
@@ -655,163 +742,194 @@ class LoanApplicationController extends GetxController{
       var uln = Get.arguments['uln'];
 
 
-
       var data = await LoanApplService.addLoanApplicationApi(
-        body:[
-          {
-            "id":loanApplId,
-            "dsaCode": cleanText(dsaCodeController.text),
-            "loanApplicationNo": cleanText(lanController.text),
-            "bankId": selectedBank.value??0,
-            "branchId": selectedBankBranch.value??0,
-            "typeOfLoanId": selectedProdTypeOrTypeLoan.value??0,
-            "panCardNumber":  cleanText(panController.text),
-            "addharCardNumber":  cleanText(aadharController.text),
-            "loanAmountApplied": laAppliedController.toIntOrZero(),
-            "uniqueLeadNumber": uln,
-            "channelId": selectedChannel.value,
-            "channelCode": cleanText(chCodeController.text),
-            "detailForLoanApplication": {
-              "branch":selectedBankBranch.value,
+          body: [
+            {
+              "id": loanApplId,
               "dsaCode": cleanText(dsaCodeController.text),
-              "dsaStaffName": cleanText(dsaStaffNController.text),
-              "loanApplicationNo":cleanText(lanController.text),
-              "processingFee":proFeeController.toIntOrZero(),
-              "chqDdSlipNo": cleanText(chqDDSNController.text),
-              "processingFeeDate":proFeeDateController.text.isNotEmpty?Helper.convertToIso8601(proFeeDateController.text):null,
-              "loanPurpose": cleanText(loPurposeController.text),
-              "scheme": cleanText(schemeController.text),
-              "repaymentType": cleanText(repayTpeController.text),
-              "typeOfLoan": cleanText(loanTenureYController.text),
-              "loanAmountApplied": laAppliedController.text.toIntOrZero(),
-              "loanTenureYears": loanTenureYController.toIntOrZero(),
-              "monthlyInstallment":monthInstaController.toIntOrZero() ,
-              "previousLoanApplied": isPreviousLoanApplied ?? false,
-              "applicant": {
-                "name": cleanText(applFullNameController.text),
-                "fatherName": cleanText(fatherNameController.text),
-                "gender": selectedGender.value.ddToString(),
-                "dateOfBirth": dobController.text.isNotEmpty?Helper.convertToIso8601(dobController.text):null,
-                "qualification": cleanText(qualiController.text),
-                "maritalStatus": cleanText(maritalController.text),
-                "status": cleanText(emplStatusController.text),
-                "nationality": cleanText(nationalityController.text),
-                "occupation":cleanText(occupationController.text),
-                "occupationSector": cleanText(occSectorController.text),
-                "presentAddress": {
-                  "houseFlatNo": cleanText(houseFlatController.text),
-                  "buildingNo": cleanText(buildingNoController.text),
-                  "societyName": cleanText(societyNameController.text),
-                  "locality": cleanText(localityController.text),
-                  "streetName": cleanText(streetNameController.text),
-                  "city": leadDDController.selectedCityCurr.value.ddToString(),
-                  "taluka": cleanText(talukaController.text),
-                  "district": leadDDController.selectedDistrictCurr.value.ddToString(),
-                  "state": leadDDController.selectedStateCurr.value.ddToString(),
-                  "country": selectedCountry.value.ddToString(),
-                  "pinCode": cleanText(pinCodeController.text)
-                },
-                "permanentAddress": {
-                  "houseFlatNo": cleanText(houseFlatPermController.text),
-                  "buildingNo": cleanText(buildingNoPermController.text),
-                  "societyName": cleanText(societyNamePermController.text),
-                  "locality": cleanText(localityPermController.text),
-                  "streetName":cleanText(streetNamePermController.text),
-                  "city": leadDDController.selectedStatePerm.value.ddToString(),
-                  "taluka": cleanText(talukaPermController.text),
-                  "district": leadDDController.selectedDistrictPerm.value.ddToString(),
-                  "state": leadDDController.selectedStatePerm.value.ddToString(),
-                  "country": selectedCountryPerm.value.ddToString(),
-                  "pinCode": cleanText(pinCodePermController.text)
-                },
-                "emailID": cleanText(applEmailController.text),
-                "mobile": cleanText(applMobController.text),
-                "employerDetails": {
-                  "organizationName": cleanText(orgNameController.text),
-                  "ownershipType": selectedOwnershipList.value.ddToString(),//"string",
-                  "natureOfBusiness": cleanText(natureOfBizController.text),
-                  "staffStrength": staffStrengthController.toIntOrZero(),
-                  "dateOfSalary":salaryDateController.text.isNotEmpty?Helper.convertToIso8601(salaryDateController.text):null,             ///its static
+              "loanApplicationNo": cleanText(lanController.text),
+              "bankId": selectedBank.value ?? 0,
+              "branchId": selectedBankBranch.value ?? 0,
+              "typeOfLoanId": selectedProdTypeOrTypeLoan.value ?? 0,
+              "panCardNumber": cleanText(panController.text),
+              "addharCardNumber": cleanText(aadharController.text),
+              "loanAmountApplied": laAppliedController.toIntOrZero(),
+              "uniqueLeadNumber": uln,
+              "channelId": selectedChannel.value,
+              "channelCode": cleanText(chCodeController.text),
+              "detailForLoanApplication": {
+                "branch": selectedBankBranch.value,
+                "dsaCode": cleanText(dsaCodeController.text),
+                "dsaStaffName": cleanText(dsaStaffNController.text),
+                "loanApplicationNo": cleanText(lanController.text),
+                "processingFee": proFeeController.toIntOrZero(),
+                "chqDdSlipNo": cleanText(chqDDSNController.text),
+                "processingFeeDate": proFeeDateController.text.isNotEmpty
+                    ? Helper.convertToIso8601(proFeeDateController.text)
+                    : null,
+                "loanPurpose": cleanText(loPurposeController.text),
+                "scheme": cleanText(schemeController.text),
+                "repaymentType": cleanText(repayTpeController.text),
+                "typeOfLoan": cleanText(loanTenureYController.text),
+                "loanAmountApplied": laAppliedController.text.toIntOrZero(),
+                "loanTenureYears": loanTenureYController.toIntOrZero(),
+                "monthlyInstallment": monthInstaController.toIntOrZero(),
+                "previousLoanApplied": isPreviousLoanApplied ?? false,
+                "applicant": {
+                  "name": cleanText(applFullNameController.text),
+                  "fatherName": cleanText(fatherNameController.text),
+                  "gender": selectedGender.value.ddToString(),
+                  "dateOfBirth": dobController.text.isNotEmpty ? Helper
+                      .convertToIso8601(dobController.text) : null,
+                  "qualification": cleanText(qualiController.text),
+                  "maritalStatus": cleanText(maritalController.text),
+                  "status": cleanText(emplStatusController.text),
+                  "nationality": cleanText(nationalityController.text),
+                  "occupation": cleanText(occupationController.text),
+                  "occupationSector": cleanText(occSectorController.text),
+                  "presentAddress": {
+                    "houseFlatNo": cleanText(houseFlatController.text),
+                    "buildingNo": cleanText(buildingNoController.text),
+                    "societyName": cleanText(societyNameController.text),
+                    "locality": cleanText(localityController.text),
+                    "streetName": cleanText(streetNameController.text),
+                    "city": leadDDController.selectedCityCurr.value
+                        .ddToString(),
+                    "taluka": cleanText(talukaController.text),
+                    "district": leadDDController.selectedDistrictCurr.value
+                        .ddToString(),
+                    "state": leadDDController.selectedStateCurr.value
+                        .ddToString(),
+                    "country": selectedCountry.value.ddToString(),
+                    "pinCode": cleanText(pinCodeController.text)
+                  },
+                  "permanentAddress": {
+                    "houseFlatNo": cleanText(houseFlatPermController.text),
+                    "buildingNo": cleanText(buildingNoPermController.text),
+                    "societyName": cleanText(societyNamePermController.text),
+                    "locality": cleanText(localityPermController.text),
+                    "streetName": cleanText(streetNamePermController.text),
+                    "city": leadDDController.selectedStatePerm.value
+                        .ddToString(),
+                    "taluka": cleanText(talukaPermController.text),
+                    "district": leadDDController.selectedDistrictPerm.value
+                        .ddToString(),
+                    "state": leadDDController.selectedStatePerm.value
+                        .ddToString(),
+                    "country": selectedCountryPerm.value.ddToString(),
+                    "pinCode": cleanText(pinCodePermController.text)
+                  },
+                  "emailID": cleanText(applEmailController.text),
+                  "mobile": cleanText(applMobController.text),
+                  "employerDetails": {
+                    "organizationName": cleanText(orgNameController.text),
+                    "ownershipType": selectedOwnershipList.value.ddToString(),
+                    //"string",
+                    "natureOfBusiness": cleanText(natureOfBizController.text),
+                    "staffStrength": staffStrengthController.toIntOrZero(),
+                    "dateOfSalary": salaryDateController.text.isNotEmpty
+                        ? Helper.convertToIso8601(salaryDateController.text)
+                        : null,
+
+                    ///its static
+                  }
                 }
-              }
-            },
-            "coApplicant": coApPayload,
-            "propertyDetails": {
+              },
+              "coApplicant": coApPayload,
+              "propertyDetails": {
 
-              "propertyId": cleanText(propPropIdController.text),
-              "surveyNo": cleanText(propSurveyNoController.text),
-              "finalPlotNo": cleanText(propFinalPlotNoNoController.text),
-              "blockNo": cleanText(propBlockNoController.text),
-              "flatHouseNo": cleanText(propHouseFlatController.text),
-              "societyBuildingName":  cleanText(propBuildingNameController.text),
-              "streetName":  cleanText(propStreetNameController.text),
-              "locality":  cleanText(propLocalityController.text),
-              "city": selectedCityProp.value.ddToString(),
-              "taluka":  cleanText(propTalukaController.text),
-              "district": selectedDistrictProp.value.ddToString(),
-              "state": selectedStateProp.value.ddToString(),
-              "pincode":  cleanText(propPinCodeController.text),
-            },
-            "familyMembers":famPayload,
-            "creditCards": ccPayload,
-            "financialDetails": {
-              "grossMonthlySalary": fdGrossMonthlySalaryController.toIntOrZero(),
-              "netMonthlySalary": fdnNtMonthlySalaryController.toIntOrZero(),
-              "annualBonus": fdAnnualBonusController.toIntOrZero(),
-              "avgMonthlyOvertime": fdAvgMonOvertimeController.toIntOrZero(),
-              "avgMonthlyCommission": fdAvgMonCommissionController.toIntOrZero(),
-              "monthlyPFDeduction": fdAMonthlyPfDeductionController.toIntOrZero(),
-              "otherMonthlyIncome": fdOtherMonthlyIncomeController.toIntOrZero(),
-            },
-            "references": refPayload,
-            "bankerName": cleanText(bankerNameController.text),
-            "bankerMobile": cleanText(bankerMobileController.text),
-            "bankerWatsapp": cleanText(bankerWhatsappController.text),
-            "bankerEmail": cleanText(bankerEmailController.text)
-          }
+                "propertyId": cleanText(propPropIdController.text),
+                "surveyNo": cleanText(propSurveyNoController.text),
+                "finalPlotNo": cleanText(propFinalPlotNoNoController.text),
+                "blockNo": cleanText(propBlockNoController.text),
+                "flatHouseNo": cleanText(propHouseFlatController.text),
+                "societyBuildingName": cleanText(
+                    propBuildingNameController.text),
+                "streetName": cleanText(propStreetNameController.text),
+                "locality": cleanText(propLocalityController.text),
+                "city": selectedCityProp.value.ddToString(),
+                "taluka": cleanText(propTalukaController.text),
+                "district": selectedDistrictProp.value.ddToString(),
+                "state": selectedStateProp.value.ddToString(),
+                "pincode": cleanText(propPinCodeController.text),
+              },
+              "familyMembers": famPayload,
+              "creditCards": ccPayload,
+              "financialDetails": {
+                "grossMonthlySalary": fdGrossMonthlySalaryController
+                    .toIntOrZero(),
+                "netMonthlySalary": fdnNtMonthlySalaryController.toIntOrZero(),
+                "annualBonus": fdAnnualBonusController.toIntOrZero(),
+                "avgMonthlyOvertime": fdAvgMonOvertimeController.toIntOrZero(),
+                "avgMonthlyCommission": fdAvgMonCommissionController
+                    .toIntOrZero(),
+                "monthlyPFDeduction": fdAMonthlyPfDeductionController
+                    .toIntOrZero(),
+                "otherMonthlyIncome": fdOtherMonthlyIncomeController
+                    .toIntOrZero(),
+              },
+              "references": refPayload,
+              "bankerName": cleanText(bankerNameController.text),
+              "bankerMobile": cleanText(bankerMobileController.text),
+              "bankerWatsapp": cleanText(bankerWhatsappController.text),
+              "bankerEmail": cleanText(bankerEmailController.text),
+              "chargesDetailsDTO:": {
+                "adminFeeCharges": chargesDetailAdminFeeChargess.toIntOrZero(),
+                "foreclosureChargesCharges": chargesDetailForeclosureCharges
+                    .toIntOrZero(),
+                "legalVettingCharges": chargesDetailLegalVettingCharges
+                    .toIntOrZero(),
+                "otherCharges": chargesDetailOtherCharges.toIntOrZero(),
+                "processingCharges": chargesDetailProcessingCharges
+                    .toIntOrZero(),
+                "processingFees": chargesDetailProcessingFees.toIntOrZero(),
+                "stampDutyPercentage": chargesDetailStampDuty.toIntOrZero(),
+                "technicalInspectionCharges": chargesDetailTechnicalInspectionCharges
+                    .toIntOrZero(),
+                "tsrLegalCharges": chargesDetailTSRLegalCharges.toIntOrZero(),
+                "valuationCharges": chargesDetailValuationCharges.toIntOrZero(),
+              },
+            }
 
 
-        ]
+          ]
       );
 
 
-
-      if(data['success'] == true){
-
-        addLoanApplicationModel.value= AddLoanApplicationModel.fromJson(data);
-        ToastMessage.msg( addLoanApplicationModel.value!.message!.toString());
+      if (data['success'] == true) {
+        addLoanApplicationModel.value = AddLoanApplicationModel.fromJson(data);
+        ToastMessage.msg(addLoanApplicationModel.value!.message!.toString());
 
 
-        clearForm();
+        //  clearForm();
 
         isLoading(false);
 
-      }else{
+        Get.to(LeadListMain());
+
+        //   Get.back();
+
+      } else {
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
-
-
     } catch (e) {
       print("Error getLeadDetailByIdApi: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-
       isLoading(false);
     }
-
-
   }
 
   void clearForm() {
     // Clear text fields
-    leadDController.selectedStateCurr.value=null;
-    leadDController.selectedDistrictCurr.value=null;
-    leadDController.selectedCityCurr.value=null;
-    leadDController. selectedStatePerm.value=null;
-    leadDController.selectedDistrictPerm.value=null;
-    leadDController.selectedCityPerm.value=null;
+    leadDController.selectedStateCurr.value = null;
+    leadDController.selectedDistrictCurr.value = null;
+    leadDController.selectedCityCurr.value = null;
+    leadDController.selectedStatePerm.value = null;
+    leadDController.selectedDistrictPerm.value = null;
+    leadDController.selectedCityPerm.value = null;
 
     dsaCodeController.dispose();
     lanController.dispose();
@@ -907,10 +1025,10 @@ class LoanApplicationController extends GetxController{
   }
 
 
-
-
   String cleanText(String text) {
-    return text.trim().isEmpty ? "" : text.trim();
+    return text
+        .trim()
+        .isEmpty ? "" : text.trim();
   }
 
   int cleanInt(Rxn<String> rxnString) {
@@ -919,6 +1037,7 @@ class LoanApplicationController extends GetxController{
     }
     return 0;
   }
+
   String cleanDateText(String? controller) {
     if (controller == null) return "null";
     final text = controller.trim();
@@ -927,10 +1046,10 @@ class LoanApplicationController extends GetxController{
 
 
   bool? get isPreviousLoanApplied {
-    if (selectedPrevLoanAppl.value == -1) return null; // Means user didn't select anything
+    if (selectedPrevLoanAppl.value == -1)
+      return null; // Means user didn't select anything
     return selectedPrevLoanAppl.value == 0; // 0 index = "Yes", so true
   }
-
 
 
   void debugPrintKeyVal(String key, dynamic value) {
@@ -938,8 +1057,7 @@ class LoanApplicationController extends GetxController{
   }
 
 
-
-  Future<void>getLoanApplicationDetailsByIdApi({
+  Future<void> getLoanApplicationDetailsByIdApi({
     required String id,
   }) async {
     try {
@@ -949,14 +1067,14 @@ class LoanApplicationController extends GetxController{
       var req = await LoanApplService.getLoanApplicationDetailsByIdApi(id: id);
 
       var uln = Get.arguments['uln'];
-      if(req['success'] == true){
+      if (req['success'] == true) {
+        getLoanApplIdModel.value = GetLoanApplIdModel.fromJson(req);
 
-        getLoanApplIdModel.value= GetLoanApplIdModel.fromJson(req);
-        Map<String, dynamic>? detailMap;
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
-
-          detailMap = jsonDecode(getLoanApplIdModel.value!.data!.detailForLoanApplication!);
-
+          detailMap = jsonDecode(
+              getLoanApplIdModel.value!.data!.detailForLoanApplication!);
+          print('here i get vloan id ${getLoanApplIdModel.value!.data!.id
+              .toString()}');
 
           dsaStaffNController.text = detailMap?['DsaStaffName'] ?? '';
           proFeeController.text = detailMap?['ProcessingFee']?.toString() ?? '';
@@ -964,18 +1082,24 @@ class LoanApplicationController extends GetxController{
           loPurposeController.text = detailMap?['LoanPurpose'] ?? '';
           schemeController.text = detailMap?['Scheme'] ?? '';
           repayTpeController.text = detailMap?['RepaymentType'] ?? '';
-          loanTenureYController.text = detailMap?['LoanTenureYears']?.toString() ?? '';
-          monthInstaController.text = detailMap?['MonthlyInstallment']?.toString() ?? '';
-          selectedPrevLoanAppl.value = detailMap?['PreviousLoanApplied']?.toString()=="null"?-1:
-          detailMap?['PreviousLoanApplied']?.toString()=="true"?0:1;
-          proFeeDateController.text = Helper.convertFromIso8601(detailMap?['ProcessingFeeDate']) ?? 'null';
+          loanTenureYController.text =
+              detailMap?['LoanTenureYears']?.toString() ?? '';
+          monthInstaController.text =
+              detailMap?['MonthlyInstallment']?.toString() ?? '';
+          selectedPrevLoanAppl.value =
+          detailMap?['PreviousLoanApplied']?.toString() == "null" ? -1 :
+          detailMap?['PreviousLoanApplied']?.toString() == "true" ? 0 : 1;
+          proFeeDateController.text =
+              Helper.convertFromIso8601(detailMap?['ProcessingFeeDate']) ??
+                  'null';
 // For applicant
           final applicant = detailMap?['Applicant'];
           applFullNameController.text = applicant?['Name'] ?? '';
           fatherNameController.text = applicant?['FatherName'] ?? '';
-          selectedGender.value = applicant?['Gender']?? '-1';
+          selectedGender.value = applicant?['Gender'] ?? '-1';
 
-          dobController.text = Helper.convertFromIso8601(applicant?['DateOfBirth']) ?? 'null';
+          dobController.text =
+              Helper.convertFromIso8601(applicant?['DateOfBirth']) ?? 'null';
           qualiController.text = applicant?['Qualification'] ?? '';
           maritalController.text = applicant?['MaritalStatus'] ?? '';
           emplStatusController.text = applicant?['Status'] ?? '';
@@ -988,28 +1112,35 @@ class LoanApplicationController extends GetxController{
 // Employer
           final employer = applicant?['EmployerDetails'];
           orgNameController.text = employer?['OrganizationName'] ?? '';
-          selectedOwnershipList.value = employer?['OwnershipType']?? 'null';
+          selectedOwnershipList.value = employer?['OwnershipType'] ?? 'null';
           natureOfBizController.text = employer?['NatureOfBusiness'] ?? '';
-          staffStrengthController.text = employer?['StaffStrength']?.toString() ?? '0';
+          staffStrengthController.text =
+              employer?['StaffStrength']?.toString() ?? '0';
 
-          salaryDateController.text =  Helper.convertFromIso8601(applicant?['DateOfSalary']) ?? 'null';
- // Present Add
+          salaryDateController.text =
+              Helper.convertFromIso8601(applicant?['DateOfSalary']) ?? 'null';
+          // Present Add
           final presentAdd = applicant?['PresentAddress'];
           houseFlatController.text = presentAdd?['HouseFlatNo'] ?? '';
           buildingNoController.text = presentAdd?['BuildingNo'] ?? '';
           societyNameController.text = presentAdd?['SocietyName'] ?? '';
           localityController.text = presentAdd?['Locality'] ?? '';
           streetNameController.text = presentAdd?['StreetName'] ?? '';
-          leadDDController.selectedStateCurr.value = presentAdd?['State']==""?"0":presentAdd?['State'] ?? '0';
+          leadDDController.selectedStateCurr.value =
+          presentAdd?['State'] == "" ? "0" : presentAdd?['State'] ?? '0';
 
-          await leadDDController.getDistrictByStateIdCurrApi(stateId: leadDDController.selectedStateCurr.value);
-          leadDDController.selectedDistrictCurr.value =presentAdd?['District']==""?"0": presentAdd?['District'] ?? '0';
+          await leadDDController.getDistrictByStateIdCurrApi(
+              stateId: leadDDController.selectedStateCurr.value);
+          leadDDController.selectedDistrictCurr.value =
+          presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
 
-          await leadDDController.getCityByDistrictIdCurrApi(districtId: leadDDController.selectedDistrictCurr.value);
-          leadDDController.selectedCityCurr.value = presentAdd?['City']==""?"0":presentAdd?['City'] ?? '0';
+          await leadDDController.getCityByDistrictIdCurrApi(
+              districtId: leadDDController.selectedDistrictCurr.value);
+          leadDDController.selectedCityCurr.value =
+          presentAdd?['City'] == "" ? "0" : presentAdd?['City'] ?? '0';
 
           talukaController.text = presentAdd?['Taluka'] ?? '';
-          selectedCountry.value= presentAdd?['Country'] ?? '0';
+          selectedCountry.value = presentAdd?['Country'] ?? '0';
           pinCodeController.text = presentAdd?['PinCode'] ?? '';
 
 // Permanet Add
@@ -1019,49 +1150,54 @@ class LoanApplicationController extends GetxController{
           societyNamePermController.text = permanentAdd?['SocietyName'] ?? '';
           localityPermController.text = permanentAdd?['Locality'] ?? '';
           streetNamePermController.text = permanentAdd?['StreetName'] ?? '';
-          leadDDController.selectedStatePerm.value = permanentAdd?['State']==""?"0":permanentAdd?['State'] ?? '0';
+          leadDDController.selectedStatePerm.value =
+          permanentAdd?['State'] == "" ? "0" : permanentAdd?['State'] ?? '0';
 
-          await leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value);
-          leadDDController.selectedDistrictPerm.value =permanentAdd?['District']==""?"0": permanentAdd?['District'] ?? '0';
+          await leadDDController.getDistrictByStateIdPermApi(
+              stateId: leadDDController.selectedStatePerm.value);
+          leadDDController.selectedDistrictPerm.value =
+          permanentAdd?['District'] == "" ? "0" : permanentAdd?['District'] ??
+              '0';
 
-          await leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value);
+          await leadDDController.getCityByDistrictIdPermApi(
+              districtId: leadDDController.selectedDistrictPerm.value);
 
 
-          leadDDController.selectedCityPerm.value = permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0';
+          leadDDController.selectedCityPerm.value =
+          permanentAdd?['City'] == "" ? "0" : permanentAdd?['City'] ?? '0';
 
           talukaPermController.text = permanentAdd?['Taluka'] ?? '';
-          selectedCountryPerm.value= permanentAdd?['Country'] ?? '0';
+          selectedCountryPerm.value = permanentAdd?['Country'] ?? '0';
           pinCodePermController.text = permanentAdd?['PinCode'] ?? '';
-
-
-
         }
         final data = getLoanApplIdModel.value!.data;
 
         dsaCodeController.text = data?.dsaCode ?? '';
         lanController.text = data?.loanApplicationNo ?? '';
 
-        selectedBank.value =  data?.bankId ?? 0;
+        selectedBank.value = data?.bankId ?? 0;
 
-        await leadDDController.getAllBranchByBankIdApi(bankId: data?.bankId.toString() ?? "0");
+        await leadDDController.getAllBranchByBankIdApi(
+            bankId: data?.bankId.toString() ?? "0");
 
         selectedBankBranch.value = data?.branchId ?? 0;
 
-        if(data?.bankId!=0){
-          await leadDDController.getProductListByBankIdApi(bankId: data?.branchId ?? 0);
+        if (data?.bankId != 0) {
+          await leadDDController.getProductListByBankIdApi(
+              bankId: data?.branchId ?? 0);
         }
-        selectedProdTypeOrTypeLoan.value=data?.typeOfLoan ?? 0;
+        selectedProdTypeOrTypeLoan.value = data?.typeOfLoan ?? 0;
         panController.text = data?.panCardNumber ?? '';
         aadharController.text = data?.addharCardNumber ?? '';
-        laAppliedController.text = data?.loanAmountApplied.toString()?? "0";
+        laAppliedController.text = data?.loanAmountApplied.toString() ?? "0";
         ulnController.text = uln;
         selectedChannel.value = data?.channelId ?? 0;
         chCodeController.text = data?.channelCode ?? '';
-        bankerNameController.text=data?.bankerName ?? '';
-        bankerMobileController.text=data?.bankerMobile ?? '';
-        bankerWhatsappController.text=data?.bankerWatsapp ?? '';
-        bankerEmailController.text=data?.bankerEmail ?? '';
-        loanApplId=data?.id ?? 0;
+        bankerNameController.text = data?.bankerName ?? '';
+        bankerMobileController.text = data?.bankerMobile ?? '';
+        bankerWhatsappController.text = data?.bankerWatsapp ?? '';
+        bankerEmailController.text = data?.bankerEmail ?? '';
+        loanApplId = data?.id ?? 0;
 
         populateCoApplicantControllers();
         populatePropertyDetails();
@@ -1070,25 +1206,20 @@ class LoanApplicationController extends GetxController{
         populateCreditCardControllers();
         populateReferenceControllers();
         isLoadingMainScreen(false);
-
-
-      }else{
+      } else {
         ToastMessage.msg(req['message'] ?? AppText.somethingWentWrong);
       }
-
-
     } catch (e) {
       print("Error getLeadDetailByIdApi: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoadingMainScreen(false);
     } finally {
-
       isLoadingMainScreen(false);
     }
   }
 
-  void populateCoApplicantControllers() async{
+  void populateCoApplicantControllers() async {
     coApplicantList.clear();
     final jsonStr = getLoanApplIdModel.value!.data!.coApplicantDetail;
 
@@ -1101,50 +1232,84 @@ class LoanApplicationController extends GetxController{
           final coApController = CoApplicantDetailController();
 
           coApController.coApFullNameController.text = item["Name"] ?? '';
-          coApController.coApFatherNameController.text = item["FatherName"] ?? '';
+          coApController.coApFatherNameController.text =
+              item["FatherName"] ?? '';
           coApController.selectedGenderCoAP.value = item["Gender"] ?? '';
-          coApController.coApDobController.text =item["DateOfBirth"]==""?"": Helper.convertFromIso8601(item["DateOfBirth"]) ?? '';
+          coApController.coApDobController.text =
+          item["DateOfBirth"] == "" ? "" : Helper.convertFromIso8601(
+              item["DateOfBirth"]) ?? '';
           coApController.coApQualiController.text = item["Qualification"] ?? '';
-          coApController.coApMaritalController.text = item["MaritalStatus"] ?? '';
+          coApController.coApMaritalController.text =
+              item["MaritalStatus"] ?? '';
           coApController.coApEmplStatusController.text = item["Status"] ?? '';
-          coApController.coApNationalityController.text = item["Nationality"] ?? '';
-          coApController.coApOccupationController.text = item["Occupation"] ?? '';
-          coApController.coApOccSectorController.text = item["OccupationSector"] ?? '';
+          coApController.coApNationalityController.text =
+              item["Nationality"] ?? '';
+          coApController.coApOccupationController.text =
+              item["Occupation"] ?? '';
+          coApController.coApOccSectorController.text =
+              item["OccupationSector"] ?? '';
           coApController.coApEmailController.text = item["EmailID"] ?? '';
           coApController.coApMobController.text = item["Mobile"] ?? '';
 
           final presentAdd = item?['PresentAddress'];
-          coApController.coApCurrHouseFlatController.text = presentAdd?["HouseFlatNo"] ?? '';
-          coApController.coApCurrBuildingNoController.text = presentAdd?["BuildingNo"] ?? '';
-          coApController.coApCurrSocietyNameController.text = presentAdd?["SocietyName"] ?? '';
-          coApController.coApCurrLocalityController.text = presentAdd?["Locality"] ?? '';
-          coApController.coApCurrStreetNameController.text = presentAdd?["StreetName"] ?? '';
-          coApController.coApCurrPinCodeController.text = presentAdd?["PinCode"] ?? '';
-          coApController.selectedStateCurr.value =presentAdd?['State']==""?"0":presentAdd?['State'] ?? '0';
-          await coApController.getDistrictByStateIdCurrApi(stateId:  coApController.selectedStateCurr.value);
-          coApController.selectedDistrictCurr.value =presentAdd?['District']==""?"0":presentAdd?['District'] ?? '0';
-          await coApController.getCityByDistrictIdCurrApi(districtId: coApController.selectedDistrictCurr.value);
-          coApController.selectedCityCurr.value =presentAdd?['City']==""?"0":presentAdd?['City'] ?? '0';
-          coApController.coApCurrTalukaController.text = presentAdd?["Taluka"] ?? '';
+          coApController.coApCurrHouseFlatController.text =
+              presentAdd?["HouseFlatNo"] ?? '';
+          coApController.coApCurrBuildingNoController.text =
+              presentAdd?["BuildingNo"] ?? '';
+          coApController.coApCurrSocietyNameController.text =
+              presentAdd?["SocietyName"] ?? '';
+          coApController.coApCurrLocalityController.text =
+              presentAdd?["Locality"] ?? '';
+          coApController.coApCurrStreetNameController.text =
+              presentAdd?["StreetName"] ?? '';
+          coApController.coApCurrPinCodeController.text =
+              presentAdd?["PinCode"] ?? '';
+          coApController.selectedStateCurr.value =
+          presentAdd?['State'] == "" ? "0" : presentAdd?['State'] ?? '0';
+          await coApController.getDistrictByStateIdCurrApi(
+              stateId: coApController.selectedStateCurr.value);
+          coApController.selectedDistrictCurr.value =
+          presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
+          await coApController.getCityByDistrictIdCurrApi(
+              districtId: coApController.selectedDistrictCurr.value);
+          coApController.selectedCityCurr.value =
+          presentAdd?['City'] == "" ? "0" : presentAdd?['City'] ?? '0';
+          coApController.coApCurrTalukaController.text =
+              presentAdd?["Taluka"] ?? '';
 
-          coApController.selectedCountrCurr.value =presentAdd?['Country']==""?"":presentAdd?['Country'];
+          coApController.selectedCountrCurr.value =
+          presentAdd?['Country'] == "" ? "" : presentAdd?['Country'];
 
 
           final permanentAdd = item?['PermanentAddress'];
-          coApController.coApPermHouseFlatController.text = permanentAdd?["HouseFlatNo"] ?? '';
-          coApController.coApPermBuildingNoController.text = permanentAdd?["BuildingNo"] ?? '';
-          coApController.coApPermSocietyNameController.text = permanentAdd?["SocietyName"] ?? '';
-          coApController.coApPermLocalityController.text = permanentAdd?["Locality"] ?? '';
-          coApController.coApPermStreetNameController.text = permanentAdd?["StreetName"] ?? '';
-          coApController.coApPermPinCodeController.text = permanentAdd?["PinCode"] ?? '';
-          coApController.selectedStatePerm.value =permanentAdd?['State']==""?"0":permanentAdd?['State'] ?? '0';
-          await coApController.getDistrictByStateIdPermApi(stateId:  coApController.selectedStatePerm.value);
-          coApController.selectedDistrictPerm.value =permanentAdd?['District']==""?"0":permanentAdd?['District'] ?? '0';
-          await coApController.getCityByDistrictIdPermApi(districtId: coApController.selectedDistrictPerm.value);
-          coApController.selectedCityPerm.value =permanentAdd?['City']==""?"0":permanentAdd?['City'] ?? '0';
-          coApController.coApPermTalukaController.text = permanentAdd?["Taluka"] ?? '';
+          coApController.coApPermHouseFlatController.text =
+              permanentAdd?["HouseFlatNo"] ?? '';
+          coApController.coApPermBuildingNoController.text =
+              permanentAdd?["BuildingNo"] ?? '';
+          coApController.coApPermSocietyNameController.text =
+              permanentAdd?["SocietyName"] ?? '';
+          coApController.coApPermLocalityController.text =
+              permanentAdd?["Locality"] ?? '';
+          coApController.coApPermStreetNameController.text =
+              permanentAdd?["StreetName"] ?? '';
+          coApController.coApPermPinCodeController.text =
+              permanentAdd?["PinCode"] ?? '';
+          coApController.selectedStatePerm.value =
+          permanentAdd?['State'] == "" ? "0" : permanentAdd?['State'] ?? '0';
+          await coApController.getDistrictByStateIdPermApi(
+              stateId: coApController.selectedStatePerm.value);
+          coApController.selectedDistrictPerm.value =
+          permanentAdd?['District'] == "" ? "0" : permanentAdd?['District'] ??
+              '0';
+          await coApController.getCityByDistrictIdPermApi(
+              districtId: coApController.selectedDistrictPerm.value);
+          coApController.selectedCityPerm.value =
+          permanentAdd?['City'] == "" ? "0" : permanentAdd?['City'] ?? '0';
+          coApController.coApPermTalukaController.text =
+              permanentAdd?["Taluka"] ?? '';
 
-          coApController.selectedCountryPerm.value =permanentAdd?['Country']==""?"":permanentAdd?['Country'];
+          coApController.selectedCountryPerm.value =
+          permanentAdd?['Country'] == "" ? "" : permanentAdd?['Country'];
 
           coApplicantList.add(coApController);
         }
@@ -1154,12 +1319,10 @@ class LoanApplicationController extends GetxController{
     }
   }
 
-  void populatePropertyDetails() async{
+  void populatePropertyDetails() async {
     Map<String, dynamic>? propDetails;
     if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
-
       propDetails = jsonDecode(getLoanApplIdModel.value!.data!.loanDetails!);
-
 
 
       propPropIdController.text = propDetails?['PropertyId'] ?? '';
@@ -1167,40 +1330,51 @@ class LoanApplicationController extends GetxController{
       propFinalPlotNoNoController.text = propDetails?['FinalPlotNo'] ?? '';
       propBlockNoController.text = propDetails?['BlockNo'] ?? '';
       propHouseFlatController.text = propDetails?['FlatHouseNo'] ?? '';
-      propBuildingNameController.text = propDetails?['SocietyBuildingName'] ?? '';
+      propBuildingNameController.text =
+          propDetails?['SocietyBuildingName'] ?? '';
       propStreetNameController.text = propDetails?['StreetName'] ?? '';
       propLocalityController.text = propDetails?['Locality'] ?? '';
       propLocalityController.text = propDetails?['Locality'] ?? '';
       propTalukaController.text = propDetails?['Taluka'] ?? '';
       propPinCodeController.text = propDetails?['Pincode'] ?? '';
-      selectedStateProp.value = propDetails?['State']==""?"0":propDetails?['State'] ?? '0';
-      await leadDDController.getDistrictByStateIdCurrApi(stateId: selectedStateProp.value);
-      selectedDistrictProp.value =propDetails?['District']==""?"0":propDetails?['District'] ?? '0';
-      await leadDDController.getCityByDistrictIdCurrApi(districtId: selectedDistrictProp.value);
-      selectedCityProp.value = propDetails?['City']==""?"0":propDetails?['City'] ?? '0';
+      selectedStateProp.value =
+      propDetails?['State'] == "" ? "0" : propDetails?['State'] ?? '0';
+      await leadDDController.getDistrictByStateIdCurrApi(
+          stateId: selectedStateProp.value);
+      selectedDistrictProp.value =
+      propDetails?['District'] == "" ? "0" : propDetails?['District'] ?? '0';
+      await leadDDController.getCityByDistrictIdCurrApi(
+          districtId: selectedDistrictProp.value);
+      selectedCityProp.value =
+      propDetails?['City'] == "" ? "0" : propDetails?['City'] ?? '0';
     }
   }
 
-  void populateFinancialDetails() async{
+  void populateFinancialDetails() async {
     Map<String, dynamic>? finDetails;
     if (getLoanApplIdModel.value!.data!.financialDetails != null) {
+      finDetails =
+          jsonDecode(getLoanApplIdModel.value!.data!.financialDetails!);
 
-      finDetails = jsonDecode(getLoanApplIdModel.value!.data!.financialDetails!);
 
-
-
-      fdGrossMonthlySalaryController.text = finDetails?['GrossMonthlySalary'].toString() ?? '';
-      fdnNtMonthlySalaryController.text = finDetails?['NetMonthlySalary'].toString() ?? '';
-      fdAnnualBonusController.text = finDetails?['AnnualBonus'].toString() ?? '';
-      fdAvgMonOvertimeController.text = finDetails?['AvgMonthlyOvertime'].toString() ?? '';
-      fdAvgMonCommissionController.text = finDetails?['AvgMonthlyCommission'].toString() ?? '';
-      fdAMonthlyPfDeductionController.text = finDetails?['MonthlyPFDeduction'].toString() ?? '';
-      fdOtherMonthlyIncomeController.text = finDetails?['OtherMonthlyIncome'].toString() ?? '';
-
+      fdGrossMonthlySalaryController.text =
+          finDetails?['GrossMonthlySalary'].toString() ?? '';
+      fdnNtMonthlySalaryController.text =
+          finDetails?['NetMonthlySalary'].toString() ?? '';
+      fdAnnualBonusController.text =
+          finDetails?['AnnualBonus'].toString() ?? '';
+      fdAvgMonOvertimeController.text =
+          finDetails?['AvgMonthlyOvertime'].toString() ?? '';
+      fdAvgMonCommissionController.text =
+          finDetails?['AvgMonthlyCommission'].toString() ?? '';
+      fdAMonthlyPfDeductionController.text =
+          finDetails?['MonthlyPFDeduction'].toString() ?? '';
+      fdOtherMonthlyIncomeController.text =
+          finDetails?['OtherMonthlyIncome'].toString() ?? '';
     }
   }
 
-  void populateFamilyControllers() async{
+  void populateFamilyControllers() async {
     familyMemberApplList.clear();
     final jsonStr = getLoanApplIdModel.value!.data!.familyMembers;
 
@@ -1214,13 +1388,19 @@ class LoanApplicationController extends GetxController{
 
 
           // famController.coApFullNameController.text = item["Name"] ?? '';
-          famController.famNameController.text= item["Name"] ?? '';
-          famController.famDobController.text =item["BirthDate"]==""?"": Helper.convertFromIso8601(item["BirthDate"]) ?? '';
+          famController.famNameController.text = item["Name"] ?? '';
+          famController.famDobController.text =
+          item["BirthDate"] == "" ? "" : Helper.convertFromIso8601(
+              item["BirthDate"]) ?? '';
           famController.selectedGenderFam.value = item["Gender"] ?? '';
-          famController.famRelWithApplController.text= item["RelationWithApplicant"] ?? '';
-          famController.selectedFamDependent.value= item["Dependent"]== true ? "Yes" : "No";
-          famController.famMonthlyIncomeController.text= item["MonthlyIncome"].toString() ?? '';
-          famController.famEmployedWithController.text= item["EmployedWith"] ?? '';
+          famController.famRelWithApplController.text =
+              item["RelationWithApplicant"] ?? '';
+          famController.selectedFamDependent.value =
+          item["Dependent"] == true ? "Yes" : "No";
+          famController.famMonthlyIncomeController.text =
+              item["MonthlyIncome"].toString() ?? '';
+          famController.famEmployedWithController.text =
+              item["EmployedWith"] ?? '';
 
           familyMemberApplList.add(famController);
         }
@@ -1230,7 +1410,7 @@ class LoanApplicationController extends GetxController{
     }
   }
 
-  void populateCreditCardControllers() async{
+  void populateCreditCardControllers() async {
     creditCardsList.clear();
     final jsonStr = getLoanApplIdModel.value!.data!.creditCards;
 
@@ -1243,11 +1423,13 @@ class LoanApplicationController extends GetxController{
           final ccController = CreditCardsController();
 
 
-
-           ccController.ccCompBankController.text= item["CompanyBank"] ?? '';
-           ccController.ccCardNumberController.text= item["CardNumber"] ?? '';
-           ccController.ccHavingSinceController.text=item["HavingSince"]==""?"": Helper.convertFromIso8601(item["HavingSince"]) ?? '';
-           ccController.ccAvgMonSpendingController.text= item["AvgMonthlySpending"].toString() ?? '';
+          ccController.ccCompBankController.text = item["CompanyBank"] ?? '';
+          ccController.ccCardNumberController.text = item["CardNumber"] ?? '';
+          ccController.ccHavingSinceController.text =
+          item["HavingSince"] == "" ? "" : Helper.convertFromIso8601(
+              item["HavingSince"]) ?? '';
+          ccController.ccAvgMonSpendingController.text =
+              item["AvgMonthlySpending"].toString() ?? '';
 
 
           creditCardsList.add(ccController);
@@ -1259,7 +1441,7 @@ class LoanApplicationController extends GetxController{
   }
 
 
-  void populateReferenceControllers() async{
+  void populateReferenceControllers() async {
     referencesList.clear();
     final jsonStr = getLoanApplIdModel.value!.data!.referenceDetails;
 
@@ -1272,19 +1454,25 @@ class LoanApplicationController extends GetxController{
           final refController = ReferenceController();
 
 
-
-          refController.refNameController.text= item["Name"] ?? '';
-          refController.refAddController.text= item["Address"] ?? '';
-          refController.refMobController.text= item["Mobile"] ?? '';
-          refController.refPhoneController.text= item["Phone"] ?? '';
-          refController.refRelWithApplController.text= item["RelationWithApplicant"] ?? '';
-          refController.selectedStatePerm.value = item?['State']==""?"0":item?['State'] ?? '0';
-          await refController.getDistrictByStateIdPermApi(stateId:   refController.selectedStatePerm.value);
-          refController.selectedDistrictPerm.value  =item?['District']==""?"0":item?['District'] ?? '0';
-          await refController.getCityByDistrictIdPermApi(districtId:  refController.selectedDistrictPerm.value );
-          refController.selectedCityPerm.value = item?['City']==""?"0":item?['City'] ?? '0';
-          refController.refPincodeController.text= item?["PinCode"] ?? '';
-          refController.selectedCountry.value =item?['Country']==""?"":item?['Country'] ?? '0';
+          refController.refNameController.text = item["Name"] ?? '';
+          refController.refAddController.text = item["Address"] ?? '';
+          refController.refMobController.text = item["Mobile"] ?? '';
+          refController.refPhoneController.text = item["Phone"] ?? '';
+          refController.refRelWithApplController.text =
+              item["RelationWithApplicant"] ?? '';
+          refController.selectedStatePerm.value =
+          item?['State'] == "" ? "0" : item?['State'] ?? '0';
+          await refController.getDistrictByStateIdPermApi(
+              stateId: refController.selectedStatePerm.value);
+          refController.selectedDistrictPerm.value =
+          item?['District'] == "" ? "0" : item?['District'] ?? '0';
+          await refController.getCityByDistrictIdPermApi(
+              districtId: refController.selectedDistrictPerm.value);
+          refController.selectedCityPerm.value =
+          item?['City'] == "" ? "0" : item?['City'] ?? '0';
+          refController.refPincodeController.text = item?["PinCode"] ?? '';
+          refController.selectedCountry.value =
+          item?['Country'] == "" ? "" : item?['Country'] ?? '0';
           referencesList.add(refController);
         }
       } else {
@@ -1294,6 +1482,172 @@ class LoanApplicationController extends GetxController{
   }
 
 
+  final Map<String, RxList<CamImage>> _imageMap = {};
+
+  @override
+  Map<String, RxList<CamImage>> get imageMap => _imageMap;
+
+  void loadApiImagesForKey(String key, String imageUrlsFromApi) {
+    final urls = imageUrlsFromApi.split(',');
+    final fullUrls = urls.map((path) => BaseUrl.imageBaseUrl + path)
+        .toList(); // adjust base url
+    addNetworkImages(key, fullUrls);
+  }
+
+  List<File> getPropertyImageFiles() {
+    return getImages('property_photo')
+        .where((img) => img.isLocal && img.file != null)
+        .map((img) => img.file!)
+        .toList();
+  }
+
+  Future<void> onSubmitDocuments() async {
+    final List<DocumentUploadModel> documents = [];
+
+    for (var doc in addDocumentList) {
+      final name = doc.aiSourceController.text.trim();
+      final List<File> images = doc.selectedImages
+          .where((img) => img.isLocal)
+          .map((img) => img.file!)
+          .toList();
+
+      if (name.isEmpty || images.isEmpty) {
+        SnackbarHelper.showSnackbar(
+          title: "Submit Document Page",
+          message: "Please enter document name and upload at least one image for all documents.",
+        );
+        return;
+      }
+
+      documents.add(DocumentUploadModel(name: name, images: images));
+    }
+
+    final List<Map<String, dynamic>> payload =
+    documents.map((e) => e.toMap()).toList();
+
+    try {
+      isLoading(true);
+      await addAdditionalDocumentApi(documentPayload: payload);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> addAdditionalDocumentApi({
+    required List<Map<String, dynamic>> documentPayload,
+  }) async {
+    // Handle API call here
+    print("Payload: $documentPayload");
+
+    // Call your service
+    // await LoanApplService.SubmittLoanDocumentApi(
+    //   id: '0',
+    //   LoanId: 'your-loan-id',
+    //   documentList: documentPayload, // Adjust according to your API format
+    // );
+  }
+
+
+  Future<void> submitDoc() async {
+    final loanId = getLoanApplIdModel.value?.data?.id.toString() ?? '';
+
+    for (int i = 0; i < addDocumentList.length; i++) {
+      final doc = addDocumentList[i];
+
+      final docName = doc.aiSourceController.text
+          .trim(); // or another text field for document name
+
+      if (docName.isEmpty) {
+        SnackbarHelper.showSnackbar(
+          title: "Submit Document Page",
+          message: "Document name is missing for entry ${i + 1}",
+        );
+        return;
+      }
+
+      final images = doc.selectedImages
+          .where((img) => img.file != null)
+          .map((img) => img.file!)
+          .toList();
+
+      if (images.isEmpty) {
+        SnackbarHelper.showSnackbar(
+          title: "Submit Document Page",
+          message: "Please upload at least one image for document ${i + 1}",
+        );
+        return;
+      }
+
+      List<Map<String, dynamic>> imageMap = images.map((file) {
+        return {
+          'fileName': file.path
+              .split('/')
+              .last,
+          'filePath': file.path,
+        };
+      }).toList();
+
+      // 🔁 Call the API per document
+      await SubmittLoanDocumentApi(
+        id: '0',
+        LoanId: loanId,
+        ImageName: docName,
+        imageMap: imageMap,
+      );
+
+      print('✅ Document ${i + 1} submitted with ${images.length} image(s)');
+    }
+
+    SnackbarHelper.showSnackbar(
+      title: "Success",
+      message: "All documents submitted successfully!",
+    );
+  }
+
+
+  Future<void> SubmittLoanDocumentApi({
+    required String id,
+    required String LoanId,
+    required String ImageName,
+    required List<Map<String, dynamic>> imageMap,
+  }) async {
+    try {
+      isLoading(true);
+      // API Call
+      var data = await LoanApplService.SubmittLoanDocumentApi(
+        id: id,
+        LoanId: LoanId,
+        ImageName: ImageName,
+        imageMap: imageMap,
+      );
+
+      // Handle response
+      if (data['success'] == true) {
+        uploadDocumentModel.value = UploadDocumentModel.fromJson(data);
+        //ToastMessage.msg(uploadDocumentModel.value!.message.toString());
+        clearField();
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error SubmittLoanDocumentApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  List<File> getUploadedImageFiles(String key) {
+    return getImages(key)
+        .where((img) => img.isLocal && img.file != null)
+        .map((img) => img.file!)
+        .toList();
+  }
+
+
+  void clearField() {
+    Get.back();
+  }
 }
 
 extension ParseStringExtension on String? {

@@ -5,9 +5,12 @@ import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/leads/add_income_model_controller.dart';
 
+import 'loan_appl_controller.dart';
+
 class IncomeStepController extends GetxController{
   Addleadcontroller addleadcontroller=Get.find();
   CamNoteController camNoteController=Get.find();
+
   @override
   void onInit() {
     // TODO: implement onInit

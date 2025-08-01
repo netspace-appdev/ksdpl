@@ -402,6 +402,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   var addIncomeList = <AddIncomeModelController>[].obs;
+
   void addAdditionalSrcIncome() {
     addIncomeList.add(AddIncomeModelController());
   }

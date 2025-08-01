@@ -38,6 +38,7 @@ class Step1CamNote extends StatelessWidget {
   Addleadcontroller addleadcontroller = Get.find();
   AddProductController addProductController = Get.find();
   IncomeStepController incomeStepController = Get.put(IncomeStepController());
+
   @override
   Widget build(BuildContext context) {
 
@@ -800,7 +801,6 @@ class Step1CamNote extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
 
-
                                 SizedBox(height: 20,),
 
 
@@ -829,8 +829,6 @@ class Step1CamNote extends StatelessWidget {
 
                                   ],
                                 ),
-
-
 
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
