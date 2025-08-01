@@ -72,7 +72,7 @@ class ReferenceController {
 
 
     } catch (e) {
-      print("Error getAllStateApi: $e");
+      print("Error getAllStateApi refrence model: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
 

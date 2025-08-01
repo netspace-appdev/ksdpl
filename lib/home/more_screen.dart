@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ksdpl/home/more/ProfileScreen.dart';
 import '../../common/helper.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
@@ -23,11 +24,11 @@ class MoreSettingScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
+
   @override
   Widget build(BuildContext context) {
-
     final menuItems = [
-     //_MenuItem(AppImage.user, "My Profile", () => Get.to(Changepassword())),
+      _MenuItem(AppImage.user, "My Profile", () => Get.to(ProfileScreen())),
       _MenuItem(AppImage.lock, "Change Password", () => Get.to(Changepassword())),
       _MenuItem(AppImage.telephone, "Change Phone No", () => Get.to(ChangeContactNumber())),
       _MenuItem(AppImage.email, "Change Email", () => Get.to(ChangeEmail())),

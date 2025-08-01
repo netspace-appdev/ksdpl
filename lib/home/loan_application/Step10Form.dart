@@ -19,6 +19,7 @@ import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import '../../custom_widgets/CustomTextLabel.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
 
 class Step10Form extends StatelessWidget {
   final loanApplicationController = Get.find<LoanApplicationController>();
@@ -27,8 +28,8 @@ class Step10Form extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      /*height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,*/
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,33 +38,52 @@ class Step10Form extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               SizedBox(
-                height: MediaQuery.of(context).size.height/4.5,
-              ),
-
-      SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColor.primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          onPressed:(){
-
-          },
-          child: const Text(
-            AppText.submit,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      )
+               Padding(
+                 padding: const EdgeInsets.only(top: 18.0),
+                 child: SizedBox(
+                   width: double.infinity,
+                   height: 50,
+                   child: ElevatedButton(
+                     style: ElevatedButton.styleFrom(
+                       backgroundColor: AppColor.secondaryColor,
+                       shape: RoundedRectangleBorder(
+                         borderRadius: BorderRadius.circular(10),
+                       ),
+                     ),
+                     onPressed:(){
+                       print('loanApplicationController.selectedBank.value${loanApplicationController.selectedBank.value}');
+                       if(loanApplicationController.selectedBank.value==0||loanApplicationController.selectedBank.value==null){
+                         SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Bank Name");
+                         return;
+                       } if(loanApplicationController.selectedProdTypeOrTypeLoan.value==0||loanApplicationController.selectedProdTypeOrTypeLoan.value==null){
+                         SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Loan Type");
+                         return;
+                       } if(loanApplicationController.bankerNameController.text.trim().toString().isEmpty){
+                         SnackbarHelper.showSnackbar(title: "Incomplete Step 8", message: "Please Enter Banker Name");
+                         return;
+                       } if(loanApplicationController.bankerMobileController.text.trim().toString().isEmpty){
+                         SnackbarHelper.showSnackbar(title: "Incomplete Step 8", message: "Please Enter Banker Mobile ");
+                         return;
+                       } if(loanApplicationController.bankerWhatsappController.text.trim().toString().isEmpty){
+                         SnackbarHelper.showSnackbar(title: "Incomplete Step 8", message: "Please Enter Banker WhatsUp ");
+                         return;
+                       } if(loanApplicationController.bankerEmailController.text.trim().toString().isEmpty){
+                         SnackbarHelper.showSnackbar(title: "Incomplete Step 8", message: "Please Enter Email ");
+                         return;
+                       }else
+                       loanApplicationController.onSaveLoanAppl();
+                     },
+                     child: const Text(
+                       AppText.submit,
+                       style: TextStyle(
+                         fontSize: 18,
+                         fontWeight: FontWeight.bold,
+                         color: Colors.white,
+                       ),
+                     ),
+                   ),
+                 ),
+               ),
             ],
           ),
 

@@ -9,4 +9,5 @@ class CamImage {
 
   bool get isLocal => file != null;
   bool get isNetwork => url != null;
+  
 }

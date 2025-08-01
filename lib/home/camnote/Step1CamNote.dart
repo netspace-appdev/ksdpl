@@ -817,7 +817,6 @@ class Step1CamNote extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
 
-
                                 SizedBox(height: 20,),
 
 
@@ -846,8 +845,6 @@ class Step1CamNote extends StatelessWidget {
 
                                   ],
                                 ),
-
-
 
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,

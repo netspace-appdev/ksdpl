@@ -290,7 +290,7 @@ class LeadDDController extends GetxController{
 
 
     } catch (e) {
-      print("Error getAllStateApi: $e");
+      print("Error getAllStateApi:lead_dd $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -336,7 +336,7 @@ class LeadDDController extends GetxController{
 
 
     } catch (e) {
-      print("Error getAllStateApi: $e");
+      print("Error getAllStateApi:leadcontroller $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
@@ -737,7 +737,9 @@ class LeadDDController extends GetxController{
     required stateId
   }) async {
     try {
+
       print("stateId___>${stateId}");
+      print("stateId___>here am facing big problem");
 
       isDistrictLoadingCurr(true);
 
@@ -780,6 +782,8 @@ class LeadDDController extends GetxController{
  Future<void>  getDistrictByStateIdPermApi({
     required stateId
   }) async {
+
+    print('state id is :'+stateId);
     try {
 
       isDistrictLoadingPerm(true);
@@ -808,7 +812,7 @@ class LeadDDController extends GetxController{
 
 
     } catch (e) {
-      print("Error getAllStateApi: $e");
+      print("Error getAllStateApi:lead controller ______ $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
 
