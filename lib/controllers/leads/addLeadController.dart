@@ -120,6 +120,7 @@ class Addleadcontroller extends GetxController{
       if(data['success'] == true){
 
         getLeadDetailModel.value= GetLeadDetailModel.fromJson(data);
+       // print("camnotecount in API====>${getLeadDetailModel.value!.data!.camNoteCount!.toString()}");
 
         LeadDDController leadDDController=Get.put(LeadDDController());
         CamNoteController camNoteController=Get.put(CamNoteController());

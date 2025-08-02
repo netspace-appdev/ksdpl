@@ -53,7 +53,9 @@ import '../../models/product/GetProductListById.dart';
 import '../../models/product/AddProductDocumentModel.dart';
 import '../../services/loan_appl_service.dart';
 import '../../services/new_dd_service.dart';
+import '../dashboard/DashboardController.dart';
 import '../leads/add_income_model_controller.dart';
+import '../leads/leadlist_controller.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
@@ -1745,6 +1747,32 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         clearStep2();
         clearBankDetails();
         Get.back();
+        ///new code
+        DashboardController dashboardController = Get.find();
+        LeadListController leadListController = Get.find();
+        leadListController.fromWhereLeads.value=="dashboard"?
+        leadListController.getDetailsListOfLeadsForDashboardApi(
+            applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+            stageId: leadListController.leadCode.value,
+            isLoadMore: true
+        ):
+
+        leadListController.getAllLeadsApi(
+          employeeId: leadListController.eId.value.toString(),
+          leadStage:leadListController.leadCode.value.toString(),
+          stateId: leadListController.stateIdMain.value.toString(),
+          distId: leadListController.distIdMain.value.toString(),
+          cityId:leadListController.cityIdMain.value.toString(),
+          campaign: leadListController.campaignMain.value.toString(),
+          fromDate: leadListController.fromDateMain.value,
+          toDate: leadListController.toDateMain.value,
+          branch: leadListController.branchMain.value.toString(),
+          uniqueLeadNumber:leadListController.uniqueLeadNumberMain.value.toString(),
+          leadMobileNumber:leadListController.leadMobileNumberMain.value.toString(),
+          leadName:leadListController.leadNameMain.value.toString(),
+          isLoadMore: true,
+        );
+        ///new code end
         isAllCamnoteSubmit(false);
         isLoading(false);
 

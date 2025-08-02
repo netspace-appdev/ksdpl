@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
+import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import '../../common/helper.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
+import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/product/add_product_controller.dart';
 
@@ -24,6 +26,7 @@ class CamNoteGroupScreen extends StatelessWidget {
   LeadDDController leadDDController = Get.put(LeadDDController());
   GreetingController greetingController = Get.put(GreetingController());
   InfoController infoController = Get.put(InfoController());
+  Addleadcontroller addLeadController=Get.find();
 
   final AddProductController addProductController =Get.put(AddProductController());
   final CamNoteController camNoteController =Get.find();
@@ -45,7 +48,7 @@ class CamNoteGroupScreen extends StatelessWidget {
 
               RefreshIndicator(
                 onRefresh: () async {
-                  await camNoteController.getCamNoteDetailByLeadIdApi(leadId: camNoteController.getLeadId.toString());
+                  await addLeadController.getLeadDetailByIdApi(leadId: camNoteController.getLeadId.toString());
                 },
                 child: SingleChildScrollView(
                   child: Column(
@@ -243,28 +246,50 @@ class CamNoteGroupScreen extends StatelessWidget {
                     child: camNoteController.isAllCamnoteSubmit.value? CustomLoadingOverlay():Container(),
                   ))),
 
-              if(camNoteController.currentStep.value == 0)
-                Positioned(
-                bottom: 10,
-                left: 16,
-                right: 16,
-                child: ElevatedButton(
-                  onPressed: () {
-                    camNoteController.saveSubmitDetails();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              if(camNoteController.isLoadingMainScreen.value==true)
+                Container()
+              else
+                if(camNoteController.currentStep.value == 0 && camNoteController.getCamNoteLeadIdModel.value!.data!.isEmpty )
+
+                  Positioned(
+                    bottom: 0,
+                    left: 5,
+                    right: 5,
+                    child: Container(
+                      height: 70, // <-- You can adjust this as needed
+                      padding: const EdgeInsets.all(10), // Optional: add inner spacing
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          camNoteController.saveSubmitDetails();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          backgroundColor: AppColor.secondaryColor,
+                          elevation: 0,
+                        ),
+                        child: const Text(
+                          AppText.submitBasicDetails,
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ),
                     ),
-                    backgroundColor: AppColor.secondaryColor,
                   ),
-                  child:  const Text(
-                    AppText.submitBasicDetails,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
-              ),
+
+
             ],
           );
         }),
