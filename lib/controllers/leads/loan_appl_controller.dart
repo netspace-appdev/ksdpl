@@ -15,6 +15,8 @@ import '../../custom_widgets/SnackBarHelper.dart';
 import '../../home/leads/lead_list_main.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/leads/UploadDocumentModel.dart';
+import '../../models/loanApplicationDocumentByLoanIdModel.dart';
+import '../../models/loanRemoveApplicationDocumentModel/RemovedLoanApplicationDocumentModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
 import '../../models/loan_application/GetLoanApplIdModel.dart';
 import '../../models/loan_application/special_model/CoApplicantModel.dart';
@@ -39,9 +41,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var firstName = "".obs;
   var email = "".obs;
   var isLoading = false.obs;
+  var isloadData = false.obs;
   var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
   var uploadDocumentModel = Rxn<UploadDocumentModel>(); //
+  var loanApplicationDocumentByLoanIdModel = Rxn<LoanApplicationDocumentByLoanIdModel>(); //
+  var removedLoanApplicationDocumentModel = Rxn<RemovedLoanApplicationDocumentModel>(); //
   var selectedGender = Rxn<String>();
 
   String get selectedGenderValue => selectedGender.value ?? "";
@@ -905,7 +910,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
         isLoading(false);
 
-        Get.to(LeadListMain());
+        //Get.to(LeadListMain());
 
         //   Get.back();
 
@@ -1075,6 +1080,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
               getLoanApplIdModel.value!.data!.detailForLoanApplication!);
           print('here i get vloan id ${getLoanApplIdModel.value!.data!.id
               .toString()}');
+          getLoanApplicationDocumentByLoanIdApi(loanId: getLoanApplIdModel.value?.data?.id.toString()??'');
 
           dsaStaffNController.text = detailMap?['DsaStaffName'] ?? '';
           proFeeController.text = detailMap?['ProcessingFee']?.toString() ?? '';
@@ -1539,19 +1545,71 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     // Handle API call here
     print("Payload: $documentPayload");
 
-    // Call your service
-    // await LoanApplService.SubmittLoanDocumentApi(
-    //   id: '0',
-    //   LoanId: 'your-loan-id',
-    //   documentList: documentPayload, // Adjust according to your API format
-    // );
   }
 
 
-  Future<void> submitDoc() async {
-    final loanId = getLoanApplIdModel.value?.data?.id.toString() ?? '';
+  Future<void> submitDoc({required AdddocumentModel doc}) async {
+    print('imageMap${doc.selectedImages}');
 
-    for (int i = 0; i < addDocumentList.length; i++) {
+      final loanId = getLoanApplIdModel.value?.data?.id.toString() ?? '';
+      final docName = doc.aiSourceController.text.trim();
+
+      if (docName.isEmpty) {
+        SnackbarHelper.showSnackbar(
+          title: "Submit Document Page",
+          message: "Please enter the document name.",
+        );
+        return;
+      }
+
+      final images = doc.selectedImages
+          .where((img) => img.file != null)
+          .map((img) => img.file!)
+          .toList();
+
+      if (images.isEmpty) {
+        SnackbarHelper.showSnackbar(
+          title: "Submit Document Page",
+          message: "Please upload at least one image.",
+        );
+        return;
+      }
+
+      List<Map<String, dynamic>> imageMap = images.map((file) {
+        return {
+          'fileName': file.path.split('/').last,
+          'filePath': file.path,
+        };
+      }).toList();
+
+      isLoading(true);
+      print('imageMap______${imageMap}');
+      try {
+        await SubmittLoanDocumentApi(
+          id: '0',
+          LoanId: loanId,
+          ImageName: docName,
+          imageMap: imageMap,
+          doc:doc
+        );
+
+        // SnackbarHelper.showSnackbar(
+        //   title: "Success",
+        //   message: "Document submitted successfully!",
+        // );
+
+
+      } catch (e) {
+        SnackbarHelper.showSnackbar(
+          title: "Error",
+          message: "Failed to submit document.",
+        );
+      } finally {
+        isLoading(false);
+      }
+    }
+
+    /*   for (int i = 0; i < addDocumentList.length; i++) {
       final doc = addDocumentList[i];
 
       final docName = doc.aiSourceController.text
@@ -1601,8 +1659,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     SnackbarHelper.showSnackbar(
       title: "Success",
       message: "All documents submitted successfully!",
-    );
-  }
+    );*/
+
 
 
   Future<void> SubmittLoanDocumentApi({
@@ -1610,7 +1668,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     required String LoanId,
     required String ImageName,
     required List<Map<String, dynamic>> imageMap,
-  }) async {
+    required AdddocumentModel doc,
+  })
+  async {
     try {
       isLoading(true);
       // API Call
@@ -1625,7 +1685,15 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       if (data['success'] == true) {
         uploadDocumentModel.value = UploadDocumentModel.fromJson(data);
         //ToastMessage.msg(uploadDocumentModel.value!.message.toString());
-        clearField();
+        // ✅ Clear data after success
+        print('loan idd  ${LoanId}');
+        getLoanApplicationDocumentByLoanIdApi(loanId: LoanId);
+
+        doc.aiSourceController.clear();
+        doc.selectedImages.clear();
+
+       // clearField();
+
       } else {
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
@@ -1648,6 +1716,62 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   void clearField() {
     Get.back();
   }
+
+  Future<void> getLoanApplicationDocumentByLoanIdApi({
+    required String loanId
+  })
+  async {
+
+      try {
+        isloadData(true);
+
+        var data = await LoanApplService.getLoanApplicationDocumentByLoanIdApi(
+          loanId: loanId,
+        );
+
+        // Handle response
+        if (data['success'] == true) {
+          loanApplicationDocumentByLoanIdModel.value = LoanApplicationDocumentByLoanIdModel.fromJson(data);
+          //ToastMessage.msg(uploadDocumentModel.value!.message.toString());
+        } else {
+        //  ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+        }
+      } catch (e) {
+        print("Error SubmittLoanDocumentApi: $e");
+        ToastMessage.msg(AppText.somethingWentWrong);
+      } finally {
+        isloadData(false);
+      }
+  }
+
+
+  Future<void> submitRemoveDocumentApi({
+    required String DocumentId
+  })
+  async {
+
+    try {
+      isLoading(true);
+
+      var data = await LoanApplService.getLoanApplicationRemoveDocumentApi(
+        DocumentId: DocumentId,
+      );
+      // Handle response
+      if (data['success'] == true) {
+        removedLoanApplicationDocumentModel.value = RemovedLoanApplicationDocumentModel.fromJson(data);
+        getLoanApplicationDocumentByLoanIdApi(loanId: getLoanApplIdModel.value?.data?.id.toString()??'');
+        //ToastMessage.msg(uploadDocumentModel.value!.message.toString());
+      } else {
+        //  ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error SubmittLoanDocumentApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }
+
 }
 
 extension ParseStringExtension on String? {

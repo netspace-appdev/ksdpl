@@ -21,6 +21,7 @@ class AppText{
   static const String category="Category";
   static const String all="All";
   static const String UploadDoc="Upload Document";
+  static const String UploadedDoc="Uploaded Document";
   static const String cart="Cart";
   static const String sc_home="Science Home";
   static const String search="Search";
@@ -866,6 +867,7 @@ class AppFSize{
 class AppImage{
 
   static const String ok="assets/lottie/ok.json";
+  static const String empty="assets/lottie/empty.json";
   static const String noDataGirl="assets/lottie/nodata_girl.json";
   static const String nodataCofee="assets/lottie/nodata_cofee.json";
   static const String noBirthday="assets/lottie/no_birthday.json";
@@ -913,6 +915,7 @@ class AppImage{
   static const String noti_icon="assets/images/noti_icon.png";
   static const String searchIcon2="assets/images/searchIcon2.png";
   static const String filterIcon="assets/images/filterIcon.png";
+  static const String deleteIcon="assets/images/trash.svg";
   static const String call1="assets/images/call1.png";
   static const String call_disable="assets/images/call_disable.png";
   static const String chat1="assets/images/chat1.png";

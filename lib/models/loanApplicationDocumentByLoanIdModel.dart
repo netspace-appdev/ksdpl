@@ -1,15 +1,21 @@
-class UploadDocumentModel {
+class LoanApplicationDocumentByLoanIdModel {
   String? status;
   bool? success;
-  Data? data;
+  List<LoanUploadData>? data;
   String? message;
 
-  UploadDocumentModel({this.status, this.success, this.data, this.message});
+  LoanApplicationDocumentByLoanIdModel(
+      {this.status, this.success, this.data, this.message});
 
-  UploadDocumentModel.fromJson(Map<String, dynamic> json) {
+  LoanApplicationDocumentByLoanIdModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     success = json['success'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    if (json['data'] != null) {
+      data = <LoanUploadData>[];
+      json['data'].forEach((v) {
+        data!.add(new LoanUploadData.fromJson(v));
+      });
+    }
     message = json['message'];
   }
 
@@ -18,22 +24,22 @@ class UploadDocumentModel {
     data['status'] = this.status;
     data['success'] = this.success;
     if (this.data != null) {
-      data['data'] = this.data!.toJson();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     data['message'] = this.message;
     return data;
   }
 }
 
-class Data {
+class LoanUploadData {
   int? id;
   int? loanId;
   String? imageName;
   String? imagePath;
 
-  Data({this.id, this.loanId, this.imageName, this.imagePath});
+  LoanUploadData({this.id, this.loanId, this.imageName, this.imagePath});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  LoanUploadData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     loanId = json['loanId'];
     imageName = json['imageName'];

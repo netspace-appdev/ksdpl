@@ -115,6 +115,7 @@ class Data {
   }
 }
 */
+
 class GetLoanApplIdModel {
   String? status;
   bool? success;
