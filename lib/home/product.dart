@@ -118,20 +118,16 @@ class _ProductScreenState extends State<ProductScreen> {
                           Container(
                             width: MediaQuery.of(context).size.width,
                             height: 320.0,
-
                             decoration: BoxDecoration(
                                 color: AppColor.appWhite,
                                 borderRadius: BorderRadius.circular(10.0)
-
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-
                                 children: [
                                   Container(
-
                                     width: MediaQuery.of(context).size.width,
                                     height: 200.0,
                                     decoration: BoxDecoration(

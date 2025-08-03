@@ -14,6 +14,11 @@ import 'package:flutter/material.dart';
 class LoanApplService {
   static const String addLoanApplicationDetails = BaseUrl.baseUrl + 'LeadDetail/AddLoanApplicationDetails';
   static const String SubmittLoanDocument = BaseUrl.baseUrl + 'LeadDetail/SubmittLoanDocument';
+  static const String GetLoanApplicationDocumentByLoanIdApi = BaseUrl.baseUrl +'LeadDetail/GetLoanApplicationDocumentByLoanId';
+  static const String RemovedLoanApplicationDocumentApi = BaseUrl.baseUrl +'LeadDetail/RemovedLoanApplicationDocument';
+
+
+
   // static const String getLoanApplicationDetailsById = BaseUrl.baseUrl +
   // 'LeadDetail/GetLoanApplicationDetailsById';
   static const String getLoanApplicationDetailsByUniqueLeadNumber =
@@ -96,7 +101,8 @@ class LoanApplService {
     required String LoanId,
     required String ImageName,
     required List<Map<String, dynamic>> imageMap,
-  }) async {
+  })
+  async {
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -126,6 +132,7 @@ class LoanApplService {
         }
       }
 
+
       // Send request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
@@ -144,6 +151,81 @@ class LoanApplService {
       throw Exception('Error: $e');
     }
   }
+
+  static Future<Map<String, dynamic>> getLoanApplicationDocumentByLoanIdApi({
+    required String loanId,
+
+  })
+  async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(GetLoanApplicationDocumentByLoanIdApi),
+      );
+
+      // Add headers
+      var headers = await MyHeader.getHeaders2();
+      request.headers.addAll(headers);
+
+      // Add fields
+      request.fields['loanId'] = loanId;
+
+      // Send request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      // Debug
+      Helper.ApiReq(GetLoanApplicationDocumentByLoanIdApi, request.fields);
+      Helper.ApiRes(GetLoanApplicationDocumentByLoanIdApi, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to GetLoanApplicationDocumentByLoanId document: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("❌ Error while submitting document: $e");
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getLoanApplicationRemoveDocumentApi({
+    required String DocumentId,
+
+  })
+  async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(RemovedLoanApplicationDocumentApi),
+      );
+
+      // Add headers
+      var headers = await MyHeader.getHeaders2();
+      request.headers.addAll(headers);
+
+      // Add fields
+      request.fields['DocumentId'] = DocumentId;
+
+      // Send request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      // Debug
+      Helper.ApiReq(RemovedLoanApplicationDocumentApi, request.fields);
+      Helper.ApiRes(RemovedLoanApplicationDocumentApi, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to RemovedLoanApplicationDocumentApi document: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("❌ Error while submitting document: $e");
+      throw Exception('Error: $e');
+    }
+  }
+
 
 
 }

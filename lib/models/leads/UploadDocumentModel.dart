@@ -27,7 +27,7 @@ class UploadDocumentModel {
 
 class Data {
   int? id;
-  String? loanId;
+  int? loanId;
   String? imageName;
   String? imagePath;
 
