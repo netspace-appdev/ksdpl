@@ -1035,7 +1035,8 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-
+      Helper.ApiReq(getCommonLeadListByFilter, request.fields);
+      Helper.ApiRes(getCommonLeadListByFilter, response.body);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
