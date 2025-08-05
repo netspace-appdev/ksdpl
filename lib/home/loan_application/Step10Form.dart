@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
@@ -38,6 +39,13 @@ class Step10Form extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: Container(
+                    height: MediaQuery.of(context).size.height/3,
+
+                  //  width: 150,
+                    child: Lottie.asset(AppImage.applicationcompleted, repeat: false)),
+              ),
                Padding(
                  padding: const EdgeInsets.only(top: 18.0),
                  child: SizedBox(
@@ -71,7 +79,7 @@ class Step10Form extends StatelessWidget {
                          SnackbarHelper.showSnackbar(title: "Incomplete Step 8", message: "Please Enter Email ");
                          return;
                        }else
-                       loanApplicationController.onSaveLoanAppl();
+                       loanApplicationController.onSaveLoanAppl(status:"1", context: context,);
                      },
                      child: const Text(
                        AppText.submit,

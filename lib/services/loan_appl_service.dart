@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 class LoanApplService {
   static const String addLoanApplicationDetails = BaseUrl.baseUrl + 'LeadDetail/AddLoanApplicationDetails';
   static const String SubmittLoanDocument = BaseUrl.baseUrl + 'LeadDetail/SubmittLoanDocument';
+  static const String SendMailToBankerAfterLoanApplicationSubmit = BaseUrl.baseUrl + 'LeadDetail/SendMailToBankerAfterLoanApplicationSubmit';
   static const String GetLoanApplicationDocumentByLoanIdApi = BaseUrl.baseUrl +'LeadDetail/GetLoanApplicationDocumentByLoanId';
   static const String RemovedLoanApplicationDocumentApi = BaseUrl.baseUrl +'LeadDetail/RemovedLoanApplicationDocument';
 
@@ -224,6 +225,40 @@ class LoanApplService {
       print("❌ Error while submitting document: $e");
       throw Exception('Error: $e');
     }
+  }
+
+  static Future<Map<String, dynamic>> sendMailToBankerAfterLoanApplicationSubmit({required String id})async {
+
+      try {
+        var request = http.MultipartRequest(
+          'POST',
+          Uri.parse(SendMailToBankerAfterLoanApplicationSubmit),
+        );
+
+        // Add headers
+        var headers = await MyHeader.getHeaders2();
+        request.headers.addAll(headers);
+
+        // Add fields
+        request.fields['Id'] = id;
+
+        // Send request
+        var streamedResponse = await request.send();
+        var response = await http.Response.fromStream(streamedResponse);
+
+        // Debug
+        Helper.ApiReq(SendMailToBankerAfterLoanApplicationSubmit, request.fields);
+        Helper.ApiRes(SendMailToBankerAfterLoanApplicationSubmit, response.body);
+
+        if (response.statusCode == 200) {
+          return jsonDecode(response.body);
+        } else {
+          throw Exception('Failed to SendMailToBankerAfterLoanApplicationSubmit document: ${response.statusCode}');
+        }
+      } catch (e) {
+        print("❌ Error while submitting document: $e");
+        throw Exception('Error: $e');
+      }
   }
 
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:ksdpl/common/CustomIconNewDialogBox.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
 import 'package:ksdpl/custom_widgets/CamImage.dart';
@@ -9,6 +10,7 @@ import 'package:ksdpl/custom_widgets/CamImage.dart';
 import '../../common/base_url.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
+import '../../custom_widgets/CustomIconDilogBox.dart';
 import '../../custom_widgets/DocumentCamImage.dart';
 import '../../custom_widgets/ImagePickerMixin.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
@@ -23,6 +25,7 @@ import '../../models/loan_application/special_model/CoApplicantModel.dart';
 import '../../models/loan_application/special_model/CreditCardModel.dart';
 import '../../models/loan_application/special_model/FamilyMemberModel.dart';
 import '../../models/loan_application/special_model/ReferenceModel.dart';
+import '../../models/sendMailAfterLoanSubmitModel/SendMailAfterLoanApplicationSubmitModel.dart';
 import '../../services/loan_appl_service.dart';
 import '../addDocumentControler/addDocumentModel/DocumentUploadModel.dart';
 import '../addDocumentControler/addDocumentModel/addDocumentModel.dart';
@@ -47,6 +50,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var uploadDocumentModel = Rxn<UploadDocumentModel>(); //
   var loanApplicationDocumentByLoanIdModel = Rxn<LoanApplicationDocumentByLoanIdModel>(); //
   var removedLoanApplicationDocumentModel = Rxn<RemovedLoanApplicationDocumentModel>(); //
+  var sendMailAfterLoanApplicationSubmitModel = Rxn<SendMailAfterLoanApplicationSubmitModel>(); //
   var selectedGender = Rxn<String>();
 
   String get selectedGenderValue => selectedGender.value ?? "";
@@ -593,7 +597,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     referencesList.clear();
   }
 
-  void onSaveLoanAppl() {
+  void onSaveLoanAppl({required String status, required BuildContext context}) {
     final List<CoApplicantModel> coApplicantModels = [];
     final List<FamilyMemberModel> familyMembersModels = [];
     final List<CreditCardModel> creditCardModel = [];
@@ -732,7 +736,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       coApPayload: coApPayload,
       famPayload: famPayload,
       ccPayload: ccPayload,
-      refPayload: refPayload,
+      refPayload: refPayload,status: status,context:context
     );
   }
 
@@ -740,7 +744,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     required List<Map<String, dynamic>> coApPayload,
     required List<Map<String, dynamic>> famPayload,
     required List<Map<String, dynamic>> ccPayload,
-    required List<Map<String, dynamic>> refPayload,
+    required List<Map<String, dynamic>> refPayload, required String status,
+    required BuildContext context,
+
   }) async {
     try {
       isLoading(true);
@@ -895,20 +901,38 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
                 "valuationCharges": chargesDetailValuationCharges.toIntOrZero(),
               },
             }
-
-
           ]
       );
 
 
       if (data['success'] == true) {
         addLoanApplicationModel.value = AddLoanApplicationModel.fromJson(data);
-        ToastMessage.msg(addLoanApplicationModel.value!.message!.toString());
+        //ToastMessage.msg(addLoanApplicationModel.value!.message!.toString());
+        if(status=="0"){
+          showDialog(
+           context: context,
+            builder: (context) {
+              return CustomIconDialogNewBox(
+                title: "Save Data",
+                icon: Icons.info_outline,
+                iconColor: AppColor.secondaryColor,
+                description: addLoanApplicationModel.value!.message!.toString() ,
+                onYes: () {
+                },
 
+              );
+            },
+          );
+        }
 
         //  clearForm();
-
         isLoading(false);
+
+        if(status=="1"){
+          print('status${status}');
+          sendMailToBankerAfterLoanApplicationSubmit(id:getLoanApplIdModel.value?.data?.id.toString()??'',
+          status:status,context:context);
+        }
 
         //Get.to(LeadListMain());
 
@@ -1771,6 +1795,48 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       isLoading(false);
     }
   }
+
+ Future <void> sendMailToBankerAfterLoanApplicationSubmit( {
+   required String id, required String status, required BuildContext context})
+ async {
+   try {
+     isLoading(true);
+
+     var data = await LoanApplService.sendMailToBankerAfterLoanApplicationSubmit(
+       id: id,
+     );
+     // Handle response
+     if (data['success'] == true) {
+       sendMailAfterLoanApplicationSubmitModel.value = SendMailAfterLoanApplicationSubmitModel.fromJson(data);
+       if(status=="1"){
+         showDialog(
+           context: context,
+            barrierDismissible:false,
+           builder: (context) {
+             return CustomIconDialogNewBox(
+               title: "Save Data",
+               icon: Icons.check_circle_outline,
+               iconColor: AppColor.secondaryColor,
+               description: sendMailAfterLoanApplicationSubmitModel.value!.message!.toString() ,
+               onYes: () {
+                 Get.back();
+               //  Get.toNamed("/addLeadScreen");
+               },
+
+             );
+           },
+         );
+       }
+     } else {
+       //  ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+     }
+   } catch (e) {
+     print("Error SendMailAfterLoanApplicationSubmitModel: $e");
+     ToastMessage.msg(AppText.somethingWentWrong);
+   } finally {
+     isLoading(false);
+   }
+ }
 
 }
 

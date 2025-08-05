@@ -16,6 +16,7 @@ class ProfileController extends GetxController{
 
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  var selectedGender = Rxn<String>();
 
 
   var isLoading=false.obs;
@@ -29,7 +30,7 @@ class ProfileController extends GetxController{
   void onInit() {
     super.onInit();
     if (phone != null) {
-      mobileController.text = phone.toString();
+     // mobileController.text = phone.toString();
     }
   }
 

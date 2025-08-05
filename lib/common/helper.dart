@@ -867,6 +867,7 @@ class AppFSize{
 class AppImage{
 
   static const String ok="assets/lottie/ok.json";
+  static const String applicationcompleted="assets/lottie/applicationcompleted.json";
   static const String empty="assets/lottie/empty.json";
   static const String noDataGirl="assets/lottie/nodata_girl.json";
   static const String nodataCofee="assets/lottie/nodata_cofee.json";

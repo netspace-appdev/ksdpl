@@ -237,9 +237,11 @@ class LoanApplicationScreen extends StatelessWidget {
                     : null,
                 child: const Text('Prev'),
               ),
-               ElevatedButton(
+              loanApplicationController.currentStep.value==9|| loanApplicationController.currentStep.value==10?SizedBox(): ElevatedButton(
                 onPressed: (){
-                  loanApplicationController.onSaveLoanAppl();
+                  print(loanApplicationController.currentStep.value);
+
+                  loanApplicationController.onSaveLoanAppl(status: '0', context: context,);
                 },
                 child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
                 style: ElevatedButton.styleFrom(
@@ -247,7 +249,7 @@ class LoanApplicationScreen extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: loanApplicationController.currentStep.value < 9
+                onPressed: loanApplicationController.currentStep.value < 10
                     ? loanApplicationController.nextStep
                     : null,
                 /*onPressed: () {

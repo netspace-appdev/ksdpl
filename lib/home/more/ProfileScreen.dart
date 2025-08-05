@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ksdpl/custom_widgets/CustomDropdown.dart';
 
 import '../../common/helper.dart';
 import '../../common/validation_helper.dart';
@@ -76,19 +77,90 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       child: Form(
                         key: _formKey,
-                        child:  Column(
-                          children: [
-                            SizedBox(height: MediaQuery.of(context).size.height*0.05,),
-                            CustomLabeledTextField(
-                              label: AppText.employeeName,
-                              isRequired: false,
-                              controller: profileController.mobileController,
-                              inputType: TextInputType.name,
-                              hintText: AppText.employeeName,
-                              validator: ValidationHelper.validateDescription,
-                            ),
-                           
-                          ],
+                        child:  SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(height: MediaQuery.of(context).size.height*0.05,),
+                              CustomLabeledTextField(
+                                label: AppText.employeeName,
+                                isRequired: false,
+                                controller: profileController.mobileController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.employeeName,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+                              const Row(
+                                children: [
+                                  Text(
+                                    AppText.gender,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.grey2,
+                                    ),
+                                  ),
+                                  Text(
+                                    " *",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.redColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          
+                              const SizedBox(height: 10),
+                              Obx(()=>  Row(
+                                children: [
+                                  _buildRadioOption("Male"),
+                                  _buildRadioOption("Female"),
+                                  _buildRadioOption("Other"),
+                                ],
+                              )
+                              ),
+                                CustomLabeledTextField(
+                                label: AppText.dateOfBirth,
+                                isRequired: false,
+                                controller: profileController.mobileController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.dateOfBirth,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.emailNoStar,
+                                isRequired: false,
+                                controller: profileController.mobileController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.enterEA,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.phoneNumberNoStar,
+                                isRequired: false,
+                                controller: profileController.mobileController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.enterPhNumber,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.whatsappNoNoStar,
+                                isRequired: false,
+                                controller: profileController.mobileController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.whatsappNoNoStar,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.employeeName,
+                                isRequired: false,
+                                controller: profileController.mobileController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.employeeName,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -155,6 +227,21 @@ class ProfileScreen extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildRadioOption(String gender) {
+    return Row(
+      children: [
+        Radio<String>(
+          value: gender,
+          groupValue: profileController.selectedGender.value,
+          onChanged: (value) {
+            profileController.selectedGender.value=value;
+          },
+        ),
+        Text(gender),
+      ],
     );
   }
 }
