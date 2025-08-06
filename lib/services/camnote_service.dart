@@ -148,6 +148,8 @@ class CamNoteService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
+      Helper.ApiReq(getAllPackageMaster, request.fields);
+      Helper.ApiRes(getAllPackageMaster, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -815,7 +817,8 @@ class CamNoteService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-
+      Helper.ApiReq(fetchBankDetailBySegmentIdAndKSDPLProductId, request.fields);
+      Helper.ApiRes(fetchBankDetailBySegmentIdAndKSDPLProductId, response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

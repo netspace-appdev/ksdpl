@@ -829,9 +829,9 @@ class Step3CamNote extends StatelessWidget {
                         getId: (item) => item.bankId.toString(),
                         getName: (item) => item.product.toString(),
                         selectedValue: camNoteController.getOtherBankBranchList.firstWhereOrNull(
-                                (item) => item.bankId == camNoteController.selectedOtherBankBranch.value),
+                                (item) => item.id == camNoteController.selectedOtherBankBranch.value),
                         onChanged: (value) {
-                          camNoteController.selectedOtherBankBranch.value = value?.bankId??0;
+                          camNoteController.selectedOtherBankBranch.value = value?.id??0;
 
 
 

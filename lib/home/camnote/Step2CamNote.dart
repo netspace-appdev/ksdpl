@@ -534,7 +534,7 @@ class Step2CamNote extends StatelessWidget {
             camNoteController.requestForFinancialServicesApi(leadId: camNoteController.getLeadId.toString());
           },
           onNo: () {
-            Get.back();
+
           },
         );
       },

@@ -254,12 +254,27 @@ class Addleadcontroller extends GetxController{
           if (parts.length == 2) {
             camNoteController.camGeoLocationPropertyLatController.text = parts[0]; // 23.1802024
             camNoteController.camGeoLocationPropertyLongController.text = parts[1]; // 75.7926982
-            camNoteController.geoLocPropLatEnabled.value=false;
-            camNoteController.geoLocPropLongEnabled.value=false;
+            if(camNoteController.camGeoLocationPropertyLatController.text.isNotEmpty){
+              camNoteController.geoLocPropLatEnabled.value=false;
+            }else{
+              camNoteController.geoLocPropLatEnabled.value=true;
+            }
+            if( camNoteController.camGeoLocationPropertyLongController.text.isNotEmpty){
+              camNoteController.geoLocPropLongEnabled.value=false;
+            }else{
+              camNoteController.geoLocPropLatEnabled.value=true;
+            }
+
           }
-        }else{
-          camNoteController.geoLocPropLatEnabled.value=true;
-          camNoteController.geoLocPropLongEnabled.value=true;
+        }else {
+          if (camNoteController.camGeoLocationPropertyLatController.text
+              .isEmpty ) {
+            camNoteController.geoLocPropLatEnabled.value = true;
+          }
+          if (camNoteController.camGeoLocationPropertyLongController.text
+              .isEmpty) {
+            camNoteController.geoLocPropLongEnabled.value = true;
+          }
         }
 
 
@@ -271,12 +286,28 @@ class Addleadcontroller extends GetxController{
           if (parts.length == 2) {
             camNoteController.camGeoLocationResidenceLatController.text = parts[0]; // 23.1802024
             camNoteController.camGeoLocationResidenceLongController.text = parts[1]; // 75.7926982
-            camNoteController.geoLocResLatEnabled.value=false;
-            camNoteController.geoLocResLongEnabled.value=false;
+
+            if(camNoteController.camGeoLocationResidenceLatController.text.isNotEmpty){
+              camNoteController.geoLocResLatEnabled.value=false;
+            }else{
+              camNoteController.geoLocResLatEnabled.value=true;
+            }
+            if( camNoteController.camGeoLocationResidenceLongController.text.isNotEmpty){
+              camNoteController.geoLocResLongEnabled.value=false;
+            }else{
+              camNoteController.geoLocResLongEnabled.value=true;
+            }
           }
         }else{
-          camNoteController.geoLocResLatEnabled.value=true;
-          camNoteController.geoLocResLongEnabled.value=true;
+
+          if (camNoteController.camGeoLocationResidenceLatController.text
+              .isEmpty) {
+            camNoteController.geoLocResLatEnabled.value = true;
+          }
+          if (camNoteController.camGeoLocationResidenceLongController.text
+              .isEmpty) {
+            camNoteController.geoLocResLongEnabled.value = true;
+          }
         }
 
 
@@ -288,30 +319,53 @@ class Addleadcontroller extends GetxController{
           if (parts.length == 2) {
             camNoteController.camGeoLocationOfficeLatController.text = parts[0]; // 23.1802024
             camNoteController.camGeoLocationOfficeLongController.text = parts[1]; // 75.7926982
-            camNoteController.geoLocOffLatEnabled.value=false;
-            camNoteController.geoLocOffLongEnabled.value=false;
+
+            if(camNoteController.camGeoLocationOfficeLatController.text.isNotEmpty){
+              camNoteController.geoLocOffLatEnabled.value=false;
+            }else{
+              camNoteController.geoLocOffLatEnabled.value=true;
+            }
+            if( camNoteController.camGeoLocationOfficeLongController.text.isNotEmpty){
+              camNoteController.geoLocOffLongEnabled.value=false;
+            }else{
+              camNoteController.geoLocOffLongEnabled.value=true;
+            }
           }
         }else{
-          camNoteController.geoLocOffLatEnabled.value=true;
-          camNoteController.geoLocOffLongEnabled.value=true;
+
+          if (camNoteController.camGeoLocationOfficeLatController.text
+              .isEmpty) {
+            camNoteController.geoLocOffLatEnabled.value = true;
+          }
+          if (camNoteController.camGeoLocationOfficeLongController.text
+              .isEmpty) {
+            camNoteController.geoLocOffLongEnabled.value = true;
+          }
         }
 
         final photoProp = getLeadDetailModel.value?.data?.photosOfProperty;
         if (photoProp != null && photoProp.isNotEmpty) {
           camNoteController.loadApiImagesForKey('property_photo', photoProp);
           camNoteController.photosPropEnabled.value=false;
+        }else{
+
+          camNoteController.photosPropEnabled.value=true;
         }
 
         final photoRes = getLeadDetailModel.value?.data?.photosOfResidence;
         if (photoRes != null && photoRes.isNotEmpty) {
           camNoteController.loadApiImagesForKey('residence_photo', photoRes);
           camNoteController.photosResEnabled.value=false;
+        }else{
+          camNoteController.photosResEnabled.value=true;
         }
 
         final photoOff = getLeadDetailModel.value?.data?.photosOfOffice;
         if (photoOff != null && photoOff.isNotEmpty) {
           camNoteController.loadApiImagesForKey('office_photo', photoOff);
           camNoteController.photosOffEnabled.value=false;
+        }else{
+          camNoteController.photosOffEnabled.value=true;
         }
 
 

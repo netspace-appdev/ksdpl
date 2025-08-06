@@ -2370,6 +2370,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         getPackageDetailsByIdModel.value= GetPackageDetailsByIdModel.fromJson(data);
         final cibilPackages = getPackageDetailsByIdModel.value!.data?.where((d) => d.isCibilService).toList();
+        print("cibilPackages====>${cibilPackages}");
 
         if(cibilPackages!.isEmpty){
 
@@ -2557,6 +2558,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           final productData = getProductListById.value!.data;
         print("productData ==>${productData.toString()}");
           if (productData != null) {
+            existingList.forEach((ele){
+              print("existingList bankName--->${ele.bankName}");
+            });
 
 
 
@@ -2569,6 +2573,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               data: existingList,
             );
             print("getProductListById in other bank API after assign 2==>${getProductListById.value!.data.toString()}");
+
+
+            camNoteController.getProductDetailsByFilterModel.value!.data!.forEach((ele){
+              print("ChangedList bankName--->${ele.bankName}");
+            });
           }
 
 
