@@ -440,8 +440,13 @@ class LeadDDController extends GetxController{
 
       if(data['success'] == true){
 
-        getAllKsdplProductModel.value= ksdplProduct.GetAllKsdplProductModel.fromJson(data);
+        getAllKsdplProductModel.value = ksdplProduct.GetAllKsdplProductModel.fromJson(data);
 
+        // ✅ PRINT ALL PRODUCTS
+        print("🔽 All KSDPL Products:");
+        for (var item in ksdplProductList) {
+          print("🆔 ID: ${item.id}, 📦 Name: ${item.productName}");
+        }
 
         final List<ksdplProduct.Data> tempAllPro = getAllKsdplProductModel.value?.data ?? [];
         ksdplProductList.value = List<ksdplProduct.Data>.from(tempAllPro);
@@ -449,7 +454,6 @@ class LeadDDController extends GetxController{
         isLoading(false);
         isProductLoading(false);
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
 
         getAllKsdplProductModel.value=null;
       }else{

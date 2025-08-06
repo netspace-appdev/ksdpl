@@ -6,16 +6,11 @@ import 'package:ksdpl/common/CustomIconNewDialogBox.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
 import 'package:ksdpl/custom_widgets/CamImage.dart';
-
 import '../../common/base_url.dart';
 import '../../common/helper.dart';
-import '../../common/storage_service.dart';
-import '../../custom_widgets/CustomIconDilogBox.dart';
 import '../../custom_widgets/DocumentCamImage.dart';
 import '../../custom_widgets/ImagePickerMixin.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
-import '../../home/leads/lead_list_main.dart';
-import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/leads/UploadDocumentModel.dart';
 import '../../models/loanApplicationDocumentByLoanIdModel.dart';
 import '../../models/loanRemoveApplicationDocumentModel/RemovedLoanApplicationDocumentModel.dart';
@@ -30,12 +25,10 @@ import '../../services/loan_appl_service.dart';
 import '../addDocumentControler/addDocumentModel/DocumentUploadModel.dart';
 import '../addDocumentControler/addDocumentModel/addDocumentModel.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
-import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
-
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
-import 'add_income_model_controller.dart';
+
 
 class LoanApplicationController extends GetxController with ImagePickerMixin {
 
@@ -747,7 +740,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     required List<Map<String, dynamic>> refPayload, required String status,
     required BuildContext context,
 
-  }) async {
+  }) async
+  {
     try {
       isLoading(true);
       var uln = Get.arguments['uln'];
@@ -909,6 +903,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         addLoanApplicationModel.value = AddLoanApplicationModel.fromJson(data);
         //ToastMessage.msg(addLoanApplicationModel.value!.message!.toString());
         if(status=="0"){
+
           showDialog(
            context: context,
             builder: (context) {
@@ -1120,8 +1115,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           detailMap?['PreviousLoanApplied']?.toString() == "null" ? -1 :
           detailMap?['PreviousLoanApplied']?.toString() == "true" ? 0 : 1;
           proFeeDateController.text =
-              Helper.convertFromIso8601(detailMap?['ProcessingFeeDate']) ??
-                  'null';
+              Helper.convertFromIso8601(detailMap?['ProcessingFeeDate']) ?? '';
 // For applicant
           final applicant = detailMap?['Applicant'];
           applFullNameController.text = applicant?['Name'] ?? '';
@@ -1212,10 +1206,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
         selectedBankBranch.value = data?.branchId ?? 0;
 
-        if (data?.bankId != 0) {
+      /*  if (data?.bankId != 0) {
           await leadDDController.getProductListByBankIdApi(
               bankId: data?.branchId ?? 0);
-        }
+
+        }*/
+
         selectedProdTypeOrTypeLoan.value = data?.typeOfLoan ?? 0;
         panController.text = data?.panCardNumber ?? '';
         aadharController.text = data?.addharCardNumber ?? '';
@@ -1227,6 +1223,17 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         bankerMobileController.text = data?.bankerMobile ?? '';
         bankerWhatsappController.text = data?.bankerWatsapp ?? '';
         bankerEmailController.text = data?.bankerEmail ?? '';
+        chargesDetailProcessingFees.text = data?.chargesDetails?.processingFees?.toString() ?? '';
+        chargesDetailAdminFeeChargess.text = data?.chargesDetails?.adminFeeCharges?.toString() ?? '';
+        chargesDetailForeclosureCharges.text = data?.chargesDetails?.foreclosureChargesCharges?.toString() ?? '';
+        chargesDetailStampDuty.text = data?.chargesDetails?.stampDutyPercentage?.toString() ?? '';
+        chargesDetailLegalVettingCharges.text = data?.chargesDetails?.legalVettingCharges?.toString() ?? '';
+        chargesDetailTechnicalInspectionCharges.text = data?.chargesDetails?.technicalInspectionCharges?.toString() ?? '';
+        chargesDetailOtherCharges.text = data?.chargesDetails?.otherCharges?.toString() ?? '';
+        chargesDetailTSRLegalCharges.text = data?.chargesDetails?.tsrLegalCharges?.toString() ?? '';
+        chargesDetailValuationCharges.text = data?.chargesDetails?.valuationCharges?.toString() ?? '';
+        chargesDetailProcessingCharges.text = data?.chargesDetails?.processingCharges?.toString() ?? '';
+
         loanApplId = data?.id ?? 0;
 
         populateCoApplicantControllers();
@@ -1473,40 +1480,37 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
   void populateReferenceControllers() async {
     referencesList.clear();
-    final jsonStr = getLoanApplIdModel.value!.data!.referenceDetails;
-
-    if (jsonStr != null) {
-      final decoded = jsonDecode(jsonStr);
-
-      // Check if it's actually a List of Maps
-      if (decoded is List) {
-        for (var item in decoded) {
-          final refController = ReferenceController();
+    final refList = getLoanApplIdModel.value?.data?.referenceDetails;
+    print('here referal${refList?.first.name}');
 
 
-          refController.refNameController.text = item["Name"] ?? '';
-          refController.refAddController.text = item["Address"] ?? '';
-          refController.refMobController.text = item["Mobile"] ?? '';
-          refController.refPhoneController.text = item["Phone"] ?? '';
-          refController.refRelWithApplController.text =
-              item["RelationWithApplicant"] ?? '';
-          refController.selectedStatePerm.value =
-          item?['State'] == "" ? "0" : item?['State'] ?? '0';
-          await refController.getDistrictByStateIdPermApi(
-              stateId: refController.selectedStatePerm.value);
-          refController.selectedDistrictPerm.value =
-          item?['District'] == "" ? "0" : item?['District'] ?? '0';
-          await refController.getCityByDistrictIdPermApi(
-              districtId: refController.selectedDistrictPerm.value);
-          refController.selectedCityPerm.value =
-          item?['City'] == "" ? "0" : item?['City'] ?? '0';
-          refController.refPincodeController.text = item?["PinCode"] ?? '';
-          refController.selectedCountry.value =
-          item?['Country'] == "" ? "" : item?['Country'] ?? '0';
-          referencesList.add(refController);
-        }
-      } else {
-        print("Expected a List but got: ${decoded.runtimeType}");
+    if (refList != null) {
+      for (var item in refList) {
+        final refController = ReferenceController();
+print('here referal');
+print('here referal${item.name}');
+        refController.refNameController.text = item.name ?? '';
+        refController.refAddController.text = item.address ?? '';
+        refController.refMobController.text = item.mobile ?? '';
+        refController.refPhoneController.text = item.phone ?? '';
+        refController.refRelWithApplController.text = item.relationWithApplicant ?? '';
+        refController.selectedStatePerm.value = item.state == "" ? "0" : item.state ?? '0';
+
+        await refController.getDistrictByStateIdPermApi(
+          stateId: refController.selectedStatePerm.value,
+        );
+
+        refController.selectedDistrictPerm.value = item.district == "" ? "0" : item.district ?? '0';
+
+        await refController.getCityByDistrictIdPermApi(
+          districtId: refController.selectedDistrictPerm.value,
+        );
+
+        refController.selectedCityPerm.value = item.city == "" ? "0" : item.city ?? '0';
+        refController.refPincodeController.text = item.pinCode ?? '';
+        refController.selectedCountry.value = item.country == "" ? "" : item.country ?? '0';
+
+        referencesList.add(refController);
       }
     }
   }
@@ -1708,7 +1712,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       // Handle response
       if (data['success'] == true) {
         uploadDocumentModel.value = UploadDocumentModel.fromJson(data);
-        //ToastMessage.msg(uploadDocumentModel.value!.message.toString());
+        ToastMessage.msg(uploadDocumentModel.value!.message.toString());
         // ✅ Clear data after success
         print('loan idd  ${LoanId}');
         getLoanApplicationDocumentByLoanIdApi(loanId: LoanId);
@@ -1808,7 +1812,11 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
      // Handle response
      if (data['success'] == true) {
        sendMailAfterLoanApplicationSubmitModel.value = SendMailAfterLoanApplicationSubmitModel.fromJson(data);
+
        if(status=="1"){
+         await Future.delayed(Duration(milliseconds: 300));
+         isLoading(true);
+
          showDialog(
            context: context,
             barrierDismissible:false,

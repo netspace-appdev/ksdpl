@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/home/loan_application/Step9Form.dart';
-import 'package:ksdpl/home/loan_application/submitDocument.dart';
+import 'package:ksdpl/home/loan_application/Step10Form.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
@@ -23,7 +23,8 @@ import '../../controllers/leads/loan_appl_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
-import 'Step10Form.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
+import 'Step11Form.dart';
 import 'Step1Form.dart';
 import 'Step2Form.dart';
 import 'Step3Form.dart';
@@ -60,8 +61,9 @@ class LoanApplicationScreen extends StatelessWidget {
     Step7Form(),
     Step8Form(),
     Step9Form(),
-    SubmitDocument(),
     Step10Form(),
+    Step11Form(),
+
   ];
   @override
   Widget build(BuildContext context) {
@@ -225,59 +227,98 @@ class LoanApplicationScreen extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: Obx(() => Container(
-          color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                onPressed: loanApplicationController.currentStep.value > 0
-                    ? loanApplicationController.previousStep
-                    : null,
-                child: const Text('Prev'),
-              ),
-              loanApplicationController.currentStep.value==9|| loanApplicationController.currentStep.value==10?SizedBox(): ElevatedButton(
-                onPressed: (){
-                  print(loanApplicationController.currentStep.value);
+          bottomNavigationBar: Obx(() =>
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Prev button
+                    ElevatedButton(
+                      onPressed: loanApplicationController.currentStep.value > 0
+                          ? loanApplicationController.previousStep
+                          : null,
+                      child: const Text('Prev'),
+                    ),
 
-                  loanApplicationController.onSaveLoanAppl(status: '0', context: context,);
-                },
-                child: const Text('Save', style: TextStyle(color: AppColor.appWhite),),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                    // Save button
+                    loanApplicationController.currentStep.value == 9 || loanApplicationController.currentStep.value == 10
+                        ? const SizedBox()
+                        : ElevatedButton(
+                      onPressed: loanApplicationController.isLoading.value
+                          ? null
+                          : () {
+                        print(loanApplicationController.currentStep.value);
+
+                        final pan = loanApplicationController.panController.text.trim();
+                        if (pan.isNotEmpty) {
+                          final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
+                          if (!panRegex.hasMatch(pan)) {
+                            SnackbarHelper.showSnackbar(title: "Invalid PAN", message: "Please enter a valid PAN number");
+                            return;
+                          }
+                        }
+
+                        final aadhar = loanApplicationController.aadharController.text.trim();
+                        if (aadhar.isNotEmpty) {
+                          final aadharRegex = RegExp(r'^\d{12}$');
+                          if (!aadharRegex.hasMatch(aadhar)) {
+                            SnackbarHelper.showSnackbar(title: "Invalid Aadhar", message: "Aadhar number must be exactly 12 digits.");
+                            return;
+                          }
+                        }
+
+                        loanApplicationController.onSaveLoanAppl(
+                          status: '0',
+                          context: context,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      child: loanApplicationController.isLoading.value
+                          ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          SizedBox(
+                            height: 18,
+                            width: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Saving...',
+                            style: TextStyle(color: AppColor.appWhite),
+                          ),
+                        ],
+                      )
+                          : const Text(
+                        'Save',
+                        style: TextStyle(color: AppColor.appWhite),
+                      ),
+                    ),
+
+                    // Next button
+                    ElevatedButton(
+                      onPressed: loanApplicationController.currentStep.value < 10
+                          ? loanApplicationController.nextStep
+                          : null,
+                      child: const Text(
+                        'Next',
+                        style: TextStyle(color: AppColor.appWhite),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor.primaryColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: loanApplicationController.currentStep.value < 10
-                    ? loanApplicationController.nextStep
-                    : null,
-                /*onPressed: () {
-                  final index = loanApplicationController.currentStep.value;
-                  final isValid = _formKeys[index].currentState?.validate() ?? false;
-                  if (isValid) {
-                    loanApplicationController.stepCompleted[index] = true;
-                    if (index < 9) {
-                      loanApplicationController.currentStep.value++;
-                    } else {
-                      // Submit logic
-                      loanApplicationController.onSaveLoanAppl();
-                    }
-                  } else {
-                    ToastMessage.msg("Please complete required fields");
-                  }
-                },*/
-
-                child: const Text('Next',style: TextStyle(color: AppColor.appWhite),),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColor.primaryColor,
-                ),
-              ),
-            ],
-          ),
-        )),
-
-
+          )
       ),
     );
   }

@@ -20,14 +20,14 @@ import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import '../../custom_widgets/CustomTextLabel.dart';
 
 class Step1Form extends StatelessWidget {
-  final loanApplicationController = Get.put(LoanApplicationController(), permanent: true);
 
 //  final loanApplicationController = Get.find<LoanApplicationController>();
   LeadDDController leadDDController = Get.put(LeadDDController());
+  final loanApplicationController = Get.put(LoanApplicationController(), permanent: true);
+
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       /*height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,*/
@@ -42,8 +42,6 @@ class Step1Form extends StatelessWidget {
           children: [
             ExpansionTile(
               initiallyExpanded: true,
-
-
               childrenPadding: EdgeInsets.symmetric(horizontal: 20),
               title:const Text( AppText.personInformation, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
               leading: Icon(Icons.list_alt, size: 20,),
@@ -163,10 +161,18 @@ class Step1Form extends StatelessWidget {
                     const SizedBox(height: 10),
                     ///exp
                     Obx((){
+                      final productList = leadDDController.getAllKsdplProductModel.value?.data ?? [];
+
+                      print("🔍 Product List:${leadDDController.getAllKsdplProductModel.value?.data!.first.productName}");
+                      for (var item in productList) {
+                        print("ID: ${item.id}, Name: ${item.productName}");
+                      }
+
+                      print("Selected Product ID: ${loanApplicationController.selectedProdTypeOrTypeLoan.value}");
+
                       if (leadDDController.isProductLoading.value) {
                         return  Center(child:CustomSkelton.leadShimmerList(context));
                       }
-
 
                       return CustomDropdown<product.Data>(
                         items: leadDDController.getAllKsdplProductModel.value?.data ?? [],

@@ -75,6 +75,10 @@ class LoanApplService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      // Debug
+      Helper.ApiReq(getLoanApplicationDetailsByUniqueLeadNumber, request.fields);
+      Helper.ApiRes(getLoanApplicationDetailsByUniqueLeadNumber, response.body);
+
 
 
       if (response.statusCode == 200) {
