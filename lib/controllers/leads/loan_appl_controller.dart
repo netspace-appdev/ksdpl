@@ -1484,11 +1484,13 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     print('here referal${refList?.first.name}');
 
 
+
     if (refList != null) {
       for (var item in refList) {
         final refController = ReferenceController();
-print('here referal');
-print('here referal${item.name}');
+        print('here referal');
+        print('here referal${item.name}');
+
         refController.refNameController.text = item.name ?? '';
         refController.refAddController.text = item.address ?? '';
         refController.refMobController.text = item.mobile ?? '';
@@ -1514,7 +1516,6 @@ print('here referal${item.name}');
       }
     }
   }
-
 
   final Map<String, RxList<CamImage>> _imageMap = {};
 
@@ -1625,7 +1626,6 @@ print('here referal${item.name}');
         //   title: "Success",
         //   message: "Document submitted successfully!",
         // );
-
 
       } catch (e) {
         SnackbarHelper.showSnackbar(

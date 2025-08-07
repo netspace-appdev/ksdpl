@@ -14,8 +14,18 @@ class ProfileController extends GetxController{
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  final TextEditingController employeeNameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController dateOfBirthController = TextEditingController();
+  final TextEditingController profileEmailController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController whatsappNoController = TextEditingController();
+  final TextEditingController hireDateController = TextEditingController();
+  final TextEditingController jobRoleController = TextEditingController();
+  final TextEditingController workPlaceController = TextEditingController();
+  final TextEditingController HireDateController = TextEditingController();
+  final TextEditingController JobRoleController = TextEditingController();
+  final TextEditingController WorkPlaceController = TextEditingController();
   var selectedGender = Rxn<String>();
 
 
@@ -24,6 +34,8 @@ class ProfileController extends GetxController{
 
   var obscurePassword = true.obs;
   String? phone = StorageService.get(StorageService.PHONE);
+
+
 
 
   @override
@@ -70,7 +82,7 @@ class ProfileController extends GetxController{
 */
 
   void clearFormFields() {
-    emailController.clear();
+  //  emailController.clear();
 
   }
 
