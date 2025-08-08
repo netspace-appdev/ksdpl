@@ -289,7 +289,7 @@ class CamNoteDetailsScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      if(camNote.softsanction==0 || camNote.softsanction==2)
+                      if( camNoteController.fromDoableOrInterested.value=="4" && (camNote.softsanction==0 || camNote.softsanction==2))
                         _buildTextButton("Update", context, Colors.purple, Icons.edit, camNote.id.toString(), "update", camNote.softsanction??-2, camNote.bankId, camNote.leadID),
                       _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file, camNote.id.toString(), "detail", camNote.softsanction??-2,camNote.bankId,  camNote.leadID ),
                     ],
@@ -415,9 +415,11 @@ class CamNoteDetailsScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             width:
+            camNoteController.fromDoableOrInterested.value=="4"?
             softSanction==0 || softSanction==2?
             MediaQuery.of(context).size.width*0.40:
-            MediaQuery.of(context).size.width*0.80,
+            MediaQuery.of(context).size.width*0.80
+            :MediaQuery.of(context).size.width*0.80,
             decoration: BoxDecoration(
 
                 borderRadius: BorderRadius.circular(5),

@@ -290,7 +290,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var selectedBankerBranch = Rxn<int>();
   var selectedIndexGenCibil = (-1).obs;
   var enableAllCibilFields = true.obs;
-
+  var fromDoableOrInterested="".obs;
   void selectCheckboxCibil(int index) {
     selectedIndexGenCibil.value = index;
   }
@@ -1748,7 +1748,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         clearStep1();
         clearStep2();
         clearBankDetails();
-        Get.back();
+        forBankDetailSubmit();
         ///new code
         DashboardController dashboardController = Get.find();
         LeadListController leadListController = Get.find();
@@ -2328,7 +2328,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         sendMailToBankerAfterGenerateCamNoteApi(id: editCamNoteDetail.value!.data!.id.toString());
 
         clearBankDetails();
-        Get.back();
+        getCamNoteDetailByLeadIdApi(leadId: LeadID.toString());
         isLoading(false);
 
 

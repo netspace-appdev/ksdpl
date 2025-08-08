@@ -633,7 +633,7 @@ class LeadListMain extends StatelessWidget {
 
                     SizedBox(height: 10),
 
-                    if(lead.leadStage.toString()=="4" )
+                    if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6")
                       _buildTextButton(
                           label:"Cam Note Details",
                           context: context,
@@ -998,6 +998,11 @@ overflow: TextOverflow.ellipsis,
           CamNoteController camNoteController=Get.put(CamNoteController());
 
           camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
+          if(currentLeadStage=="4"){
+            camNoteController.fromDoableOrInterested.value="4";
+          }else{
+            camNoteController.fromDoableOrInterested.value="6";
+          }
           Get.toNamed("/camNoteDetailsScreen");
 
         }else{
