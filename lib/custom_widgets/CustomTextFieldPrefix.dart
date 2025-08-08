@@ -199,6 +199,7 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
 
   @override
   Widget build(BuildContext context) {
+
     return Focus(
       onFocusChange: _onFocusChange,
       child: TextFormField(

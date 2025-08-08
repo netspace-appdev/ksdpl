@@ -10,6 +10,7 @@ import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 
 import '../../common/helper.dart';
+import '../../common/storage_service.dart';
 import '../../models/IndividualLeadUploadModel.dart';
 import '../../models/camnote/special_model/IncomeModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
@@ -247,6 +248,15 @@ class Addleadcontroller extends GetxController{
 
         final geoLocationProp = getLeadDetailModel.value!.data!.geoLocationOfProperty;
         print("geoLocationProp--->${geoLocationProp}");
+
+        var rawRole = StorageService.get(StorageService.ROLE).toString();
+        var role = rawRole.replaceAll('[', '').replaceAll(']', '');
+        print("role--->${role}");
+        if(role=="Area Incharge"){
+          camNoteController.isUserAIC.value=true;
+        }else{
+          camNoteController.isUserAIC.value=false;
+        }
 
 
         if (geoLocationProp != null && geoLocationProp.contains('-')) {
