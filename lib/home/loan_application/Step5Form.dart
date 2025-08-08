@@ -54,7 +54,7 @@ class Step5Form extends StatelessWidget {
                         label: AppText.cardNumber,
                         isRequired: false,
                         controller: cc.ccCardNumberController,
-                        inputType: TextInputType.name,
+                        inputType: TextInputType.number,
                         hintText: AppText.enterCardNumber,
                         validator:  ValidationHelper.validateName,
                       ),

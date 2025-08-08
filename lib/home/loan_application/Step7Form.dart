@@ -80,6 +80,7 @@ class Step7Form extends StatelessWidget {
                           CustomLabeledTextField(
                             label: AppText.mobNo,
                             isRequired: false,
+                            maxLength: 10,
                             controller: ref.refMobController,
                             inputType: TextInputType.number,
                             hintText: AppText.enterReferenceMob,
@@ -91,6 +92,7 @@ class Step7Form extends StatelessWidget {
                             controller: ref.refPhoneController,
                             inputType: TextInputType.number,
                             hintText: AppText.enterReferencePhone,
+                            maxLength: 10,
                             validator:  ValidationHelper.validateName,
                           ),
 
@@ -238,6 +240,7 @@ class Step7Form extends StatelessWidget {
                             controller: ref.refPincodeController,
                             inputType: TextInputType.number,
                             hintText: AppText.enterPinCode,
+                            maxLength: 6,
                             validator: ValidationHelper.validateName,
                           ),
 

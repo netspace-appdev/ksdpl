@@ -112,6 +112,7 @@ class Step3Form extends StatelessWidget {
                 controller: loanApplicationController.propPinCodeController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterPinCode,
+                maxLength: 6,
                 validator: ValidationHelper.validateName,
               ),
 

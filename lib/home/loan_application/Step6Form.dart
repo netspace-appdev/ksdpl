@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-
 import '../../common/helper.dart';
-import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/loan_appl_controller.dart';
-import '../../custom_widgets/CustomDropdown.dart';
-import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
@@ -67,7 +63,7 @@ class Step6Form extends StatelessWidget {
                 label: AppText.avgMonOvertime,
                 isRequired: false,
                 controller: loanApplicationController.fdAvgMonOvertimeController,
-                inputType: TextInputType.name,
+                inputType: TextInputType.number,
                 hintText: AppText.enterAvgMonOvertime,
                 validator:  ValidationHelper.validateName,
               ),

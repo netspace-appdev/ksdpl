@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/common/base_url.dart';
+import 'package:ksdpl/common/validation_helper.dart';
 import 'package:lottie/lottie.dart';
 import '../../common/helper.dart';
 import '../../controllers/addDocumentControler/documentSubmit_step_controller.dart';
@@ -53,10 +54,11 @@ class Step10Form extends StatelessWidget {
 
                             CustomLabeledTextField(
                               label: AppText.documentsName,
-                              isRequired: false,
+                              isRequired: true,
                               controller: ai.aiSourceController,
                               inputType: TextInputType.name,
                               hintText: AppText.documentsName,
+                              validator: ValidationHelper.validateDocName,
                             ),
 
                             CustomDocumentPhotoPickerWidget(

@@ -61,14 +61,14 @@ class Step1Form extends StatelessWidget {
                       hintText: AppText.enterDsaCode,
                       validator:  ValidationHelper.validateName,
                     ),
-                    CustomLabeledTextField(
+                    /*CustomLabeledTextField(
                       label: AppText.loanApplicationNo,
 
                       controller: loanApplicationController.lanController,
                       inputType: TextInputType.name,
                       hintText: AppText.enterLoanApplicationNo,
                       validator:  ValidationHelper.validateName,
-                    ),
+                    ),*/
 
 
                     CustomTextLabel(
@@ -680,6 +680,7 @@ class Step1Form extends StatelessWidget {
                       isRequired: false,
                       controller: loanApplicationController.pinCodeController,
                       inputType: TextInputType.number,
+                      maxLength: 6,
                       hintText: AppText.enterPinCode,
                       validator: ValidationHelper.validateName,
                     ),
@@ -927,6 +928,7 @@ class Step1Form extends StatelessWidget {
                       isRequired: false,
                       controller: loanApplicationController.pinCodePermController,
                       inputType: TextInputType.number,
+                      maxLength: 6,
                       hintText: AppText.enterPinCode,
                       validator: ValidationHelper.validateName,
                     ),

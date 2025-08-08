@@ -44,6 +44,14 @@ class ValidationHelper {
     return null; // Name is valid
   }
 
+  static String? validateDocName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Document Name is required";
+    }
+
+    return null; // Name is valid
+  }
+
   static String? validateFromDate(String? value) {
     if (value == null || value.isEmpty) {
       return null;

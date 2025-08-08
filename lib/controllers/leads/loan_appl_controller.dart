@@ -45,6 +45,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var removedLoanApplicationDocumentModel = Rxn<RemovedLoanApplicationDocumentModel>(); //
   var sendMailAfterLoanApplicationSubmitModel = Rxn<SendMailAfterLoanApplicationSubmitModel>(); //
   var selectedGender = Rxn<String>();
+  final RxList<GlobalKey<FormState>> documentFormKeys = <GlobalKey<FormState>>[].obs;
+
 
   String get selectedGenderValue => selectedGender.value ?? "";
   var selectedGenderCoAP = Rxn<String>();
@@ -177,6 +179,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
   void addAdditionalSrcDocument() {
     addDocumentList.add(AdddocumentModel());
+    documentFormKeys.add(GlobalKey<FormState>());
+
   }
 
   void removeAdditionalSrcDocument(int index) {
@@ -190,6 +194,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
       // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
       addDocumentList.removeAt(index);
+      documentFormKeys.removeAt(index);
+
       addDocumentList.refresh(); // If you're using an RxList
 
       // Dispose AFTER rebuild
