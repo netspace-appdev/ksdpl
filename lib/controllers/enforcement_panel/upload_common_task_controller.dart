@@ -10,6 +10,8 @@ import '../../custom_widgets/SnackBarHelper.dart';
 
 class UploadCommonTaskController extends GetxController{
   Rx<File?> selectedFile = Rx<File?>(null);
+  final selectedFileName = ''.obs;
+
 
   Future<void> pickExcelFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -20,6 +22,8 @@ class UploadCommonTaskController extends GetxController{
     if (result != null && result.files.single.path != null) {
 
       selectedFile.value= File(result.files.single.path!);
+      selectedFileName.value = result.files.single.name;
+
 
     } else {
 

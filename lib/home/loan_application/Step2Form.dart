@@ -277,6 +277,7 @@ class Step2Form extends StatelessWidget {
                               controller: coAp.coApCurrPinCodeController,
                               inputType: TextInputType.number,
                               hintText: AppText.enterPinCode,
+                              maxLength: 6,
                               validator: ValidationHelper.validateName,
                             ),
 
@@ -507,6 +508,7 @@ class Step2Form extends StatelessWidget {
                             CustomLabeledTextField(
                               label: AppText.pinCode,
                               isRequired: false,
+                              maxLength: 6,
                               controller: coAp.coApPermPinCodeController,
                               inputType: TextInputType.number,
                               hintText: AppText.enterPinCode,

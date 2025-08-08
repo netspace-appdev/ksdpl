@@ -5,24 +5,13 @@ import 'package:get/get.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
-import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
-import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
-import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
-import 'package:ksdpl/models/GetCampaignNameModel.dart' as campaign;
 import 'package:ksdpl/models/leads/GetAllKsdplBranchModel.dart' as ksdplBranch;
 import 'package:lottie/lottie.dart';
-import '../../../common/CustomSearchBar.dart';
 import '../../../common/helper.dart';
 import '../../../common/skelton.dart';
-import '../../../common/validation_helper.dart';
-import '../../../controllers/drawer_controller.dart';
-import '../../../controllers/greeting_controller.dart';
 import '../../../controllers/lead_dd_controller.dart';
 import '../../../controllers/leads/addLeadController.dart';
-import '../../../controllers/leads/infoController.dart';
 import '../../../custom_widgets/CustomDropdown.dart';
-import '../../../custom_widgets/CustomLabelPickerTextField.dart';
-import '../../../custom_widgets/CustomLabeledTextField.dart';
 import '../../common/storage_service.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 import '../../controllers/open_poll_filter_controller.dart';
@@ -590,10 +579,7 @@ class OpenPollFilter extends StatelessWidget {
                   color: AppColor.grey2,
                 ),
               ),
-
               SizedBox(height: 10),
-
-
               Obx((){
                 if (leadDDController.isStateLoading.value) {
                   return  Center(child:CustomSkelton.leadShimmerList(context));
@@ -612,9 +598,7 @@ class OpenPollFilter extends StatelessWidget {
                   },
                 );
               }),
-
               const SizedBox(height: 20),
-
               const Text(
                 AppText.district,
                 style: TextStyle(
@@ -623,10 +607,7 @@ class OpenPollFilter extends StatelessWidget {
                   color: AppColor.grey2,
                 ),
               ),
-
               const SizedBox(height: 10),
-
-
               Obx((){
                 if (leadDDController.isDistrictLoading.value) {
                   return  Center(child:CustomSkelton.leadShimmerList(context));
@@ -646,11 +627,8 @@ class OpenPollFilter extends StatelessWidget {
                   },
                 );
               }),
-
-                  const SizedBox(height: 20),
-
-
-                const Text(
+              const SizedBox(height: 20),
+              const Text(
                   AppText.city,
                   style: TextStyle(
                     fontSize: 16,
@@ -658,10 +636,7 @@ class OpenPollFilter extends StatelessWidget {
                     color: AppColor.grey2,
                   ),
                 ),
-
                 const SizedBox(height: 10),
-
-
                 Obx((){
                   if (leadDDController.isCityLoading.value) {
                     return  Center(child:CustomSkelton.leadShimmerList(context));
@@ -680,8 +655,6 @@ class OpenPollFilter extends StatelessWidget {
                     },
                   );
                 }),
-
-
               const SizedBox(height: 20),
 
 

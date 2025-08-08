@@ -45,7 +45,7 @@ class Step8Form extends StatelessWidget {
                 controller: loanApplicationController.bankerNameController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterBankerName,
-                validator:  ValidationHelper.validateName,
+              //  validator:  ValidationHelper.validateName,
               ),
               CustomLabeledTextField(
                 label: AppText.bankerMobile,
@@ -53,7 +53,7 @@ class Step8Form extends StatelessWidget {
                 controller: loanApplicationController.bankerMobileController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterBankerMobile,
-                validator:  ValidationHelper.validatePhoneNumber,
+            //   validator:  ValidationHelper.validatePhoneNumber,
               ),
               CustomLabeledTextField(
                 label: AppText.bankerWhatsapp,
@@ -61,7 +61,7 @@ class Step8Form extends StatelessWidget {
                 controller: loanApplicationController.bankerWhatsappController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterBankerWhatsapp,
-                validator:  ValidationHelper.validatePhoneNumber,
+             //   validator:  ValidationHelper.validatePhoneNumber,
               ),
               CustomLabeledTextField(
                 label: AppText.bankerEmail,
@@ -69,7 +69,7 @@ class Step8Form extends StatelessWidget {
                 controller: loanApplicationController.bankerEmailController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterBankerEmail,
-                validator:  ValidationHelper.validateEmail,
+            //    validator:  ValidationHelper.validateEmail,
               ),
 
 

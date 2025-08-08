@@ -1,17 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/custom_widgets/CustomDropdown.dart';
-
 import '../../common/helper.dart';
+import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
+import '../../controllers/enforcement_panel/upload_common_task_controller.dart';
 import '../../controllers/greeting_controller.dart';
+import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/more/ProfileController.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
+import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
+import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
+
+import 'ProfileScreen.dart';
+
+
 
 class ProfileScreen extends StatelessWidget {
  // const ProfileScreen({super.key});
@@ -25,6 +33,10 @@ class ProfileScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
+  LeadDDController leadDDController = Get.put(LeadDDController());
+  UploadCommonTaskController uploadCommonTaskController=Get.put(UploadCommonTaskController());
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +91,14 @@ class ProfileScreen extends StatelessWidget {
                         key: _formKey,
                         child:  SingleChildScrollView(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: MediaQuery.of(context).size.height*0.05,),
                               CustomLabeledTextField(
                                 label: AppText.employeeName,
                                 isRequired: false,
-                                controller: profileController.mobileController,
+                                controller: profileController.employeeNameController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.employeeName,
                                 validator: ValidationHelper.validateDescription,
@@ -122,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                                 CustomLabeledTextField(
                                 label: AppText.dateOfBirth,
                                 isRequired: false,
-                                controller: profileController.mobileController,
+                                controller: profileController.dateOfBirthController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.dateOfBirth,
                                 validator: ValidationHelper.validateDescription,
@@ -130,7 +144,7 @@ class ProfileScreen extends StatelessWidget {
                               CustomLabeledTextField(
                                 label: AppText.emailNoStar,
                                 isRequired: false,
-                                controller: profileController.mobileController,
+                                controller: profileController.profileEmailController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.enterEA,
                                 validator: ValidationHelper.validateDescription,
@@ -138,7 +152,7 @@ class ProfileScreen extends StatelessWidget {
                               CustomLabeledTextField(
                                 label: AppText.phoneNumberNoStar,
                                 isRequired: false,
-                                controller: profileController.mobileController,
+                                controller: profileController.phoneNumberController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.enterPhNumber,
                                 validator: ValidationHelper.validateDescription,
@@ -146,17 +160,197 @@ class ProfileScreen extends StatelessWidget {
                               CustomLabeledTextField(
                                 label: AppText.whatsappNoNoStar,
                                 isRequired: false,
-                                controller: profileController.mobileController,
+                                controller: profileController.whatsappNoController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.whatsappNoNoStar,
                                 validator: ValidationHelper.validateDescription,
                               ),
                               CustomLabeledTextField(
-                                label: AppText.employeeName,
+                                label: AppText.HireDate,
                                 isRequired: false,
+                                controller: profileController.HireDateController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.HireDate,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.JobRole,
+                                isRequired: false,
+                                controller: profileController.JobRoleController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.JobRole,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.WorkPlace,
+                                isRequired: true,
+                                controller: profileController.WorkPlaceController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.WorkPlace,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.ManagerName,
+                                isRequired: true,
                                 controller: profileController.mobileController,
                                 inputType: TextInputType.name,
-                                hintText: AppText.employeeName,
+                                hintText: AppText.ManagerName,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+
+                              CustomLabeledTextField(
+                                label: AppText.address,
+                                isRequired: true,
+                                controller: profileController.mobileController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.address,
+                                validator: ValidationHelper.validateDescription,
+                              ),
+
+                              const Text(
+                                AppText.state,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.grey2,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Obx((){
+                                if (leadDDController.isStateLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+                                return CustomDropdown<Data>(
+                                  items: leadDDController.getAllStateModel.value?.data ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.stateName.toString(),
+                                  selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                                        (item) => item.id.toString() == leadDDController.selectedState.value,
+                                  ),
+                                  onChanged: (value) {
+                                    leadDDController.selectedState.value =  value?.id?.toString();
+                                    leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+                                  },
+                                );
+                              }),
+                              const SizedBox(height: 20),
+                              const Text(
+                                AppText.district,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.grey2,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Obx((){
+                                if (leadDDController.isDistrictLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+
+                                return CustomDropdown<dist.Data>(
+                                  items: leadDDController.getDistrictByStateModel.value?.data ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.districtName.toString(),
+                                  selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
+                                        (item) => item.id.toString() == leadDDController.selectedDistrict.value,
+                                  ),
+                                  onChanged: (value) {
+                                    leadDDController.selectedDistrict.value =  value?.id?.toString();
+                                    leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+                                  },
+                                );
+                              }),
+                              const SizedBox(height: 20),
+                              const Text(
+                                AppText.city,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.grey2,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Obx((){
+                                if (leadDDController.isCityLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+                                return CustomDropdown<city.Data>(
+                                  items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.cityName.toString(),
+                                  selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
+                                        (item) => item.id.toString() == leadDDController.selectedCity.value,
+                                  ),
+                                  onChanged: (value) {
+                                    leadDDController.selectedCity.value =  value?.id?.toString();
+                                  },
+                                );
+                              }),
+                              const SizedBox(height: 20),
+
+                              const Text(
+                                AppText.uploadImage,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.grey2,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+
+                              Obx(() => Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColor.black1,),
+                                  borderRadius: BorderRadius.circular(4.0),
+                                  color: Colors.grey.shade100,
+                                ),
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: uploadCommonTaskController.pickExcelFile,
+                                      child: Container(
+                                        height: double.infinity,
+                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                        decoration: const BoxDecoration(
+                                          border: Border(
+                                            right: BorderSide(color: AppColor.black1),
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            AppText.chooseFile,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: AppColor.black1,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        uploadCommonTaskController.selectedFileName.value,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.black87,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                              const SizedBox(height: 20),
+
+                              CustomLabeledTextField(
+                                label: AppText.EmployeeadharNo,
+                                isRequired: true,
+                                controller: profileController.mobileController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.enterEmployeeadharNo,
                                 validator: ValidationHelper.validateDescription,
                               ),
                             ],
@@ -244,4 +438,7 @@ class ProfileScreen extends StatelessWidget {
       ],
     );
   }
+}
+
+class HireDateController {
 }

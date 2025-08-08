@@ -148,6 +148,9 @@ class AppText{
   static const String noFileChosen="No File Chosen";
   static const String chooseFile="Chosen File";
   static const String preview="Preview";
+  static const String uploadImage="Upload Image";
+  static const String EmployeeadharNo="Employee Aadhar No";
+  static const String enterEmployeeadharNo="Enter Employee Aadhar No";
 
   static const String enterAccDetails="Enter your account details below";
   static const String createNewAccount="Create new account";
@@ -685,6 +688,10 @@ class AppText{
   static const String ongoingCallYTD= "Ongoing Call (YTD)";
   static const String employee = "Employee";
   static const String employeeName = "Employee Name";
+  static const String HireDate = "Hire Date";
+  static const String JobRole = "Job Role";
+  static const String WorkPlace = "Work Place";
+  static const String ManagerName = "Manager Name";
 
   static const String bankerMobileNo = "Banker Mobile No";
   static const String enterBankerMobileNo = "Enter Banker Mobile No";

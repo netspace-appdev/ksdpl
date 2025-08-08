@@ -392,7 +392,6 @@ class Step1CamNote extends StatelessWidget {
                         CustomLabeledTextField(
                           label: AppText.monIncome,
                           isRequired: false,
-
                           controller: camNoteController.camMonthlyIncomeController ,
                           inputType: TextInputType.number,
                           hintText: AppText.enterMonIncome,
@@ -402,7 +401,6 @@ class Step1CamNote extends StatelessWidget {
                         CustomLabeledTextField(
                           label: AppText.brLoc,
                           isRequired: false,
-
                           controller: camNoteController.camBranchLocController,
                           inputType: TextInputType.name,
                           hintText: AppText.enterBrLoc,
