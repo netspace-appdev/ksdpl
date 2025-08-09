@@ -40,6 +40,7 @@ class Step1Form extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             ExpansionTile(
               initiallyExpanded: true,
               childrenPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -98,8 +99,10 @@ class Step1Form extends StatelessWidget {
 
 
                           if( loanApplicationController.selectedBank.value!=null){
+                            print('bankID${loanApplicationController.selectedBank.value.toString()}');
+
                             leadDDController.getAllBranchByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
-                            leadDDController.getProductListByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
+                           // leadDDController.getProductListByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
                           }
                        },
                         onClear: (){
@@ -163,7 +166,7 @@ class Step1Form extends StatelessWidget {
                     Obx((){
                       final productList = leadDDController.getAllKsdplProductModel.value?.data ?? [];
 
-                      print("🔍 Product List:${leadDDController.getAllKsdplProductModel.value?.data!.first.productName}");
+                     // print("🔍 Product List:${leadDDController.getAllKsdplProductModel.value?.data!.first.productName}");
                       for (var item in productList) {
                         print("ID: ${item.id}, Name: ${item.productName}");
                       }
@@ -195,12 +198,12 @@ class Step1Form extends StatelessWidget {
                       controller: loanApplicationController.panController,
                       inputType: TextInputType.name,
                       hintText: AppText.enterPanCardNo,
+                      maxLength: 10,
                       validator:  ValidationHelper.validatePanCard,
                     ),
 
                     CustomLabeledTextField(
                       label: AppText.aadharCardNo,
-
                       controller: loanApplicationController.aadharController,
                       inputType: TextInputType.number,
                       hintText: AppText.enterAadharCardNo,
@@ -222,7 +225,6 @@ class Step1Form extends StatelessWidget {
 
                     CustomLabeledTextField(
                       label: AppText.dsaStaffName,
-
                       controller: loanApplicationController.dsaStaffNController,
                       inputType: TextInputType.name,
                       hintText: AppText.enterDsaStaffName,
@@ -243,17 +245,14 @@ class Step1Form extends StatelessWidget {
 
                     CustomTextLabel(
                       label: AppText.channel,
-
                     ),
 
                     const SizedBox(height: 10),
-
 
                     Obx((){
                       if (leadDDController.isChannelLoading.value) {
                         return  Center(child:CustomSkelton.leadShimmerList(context));
                       }
-
 
                       return CustomDropdown<channel.Data>(
                         items: leadDDController.getAllChannelModel.value?.data ?? [],
@@ -265,8 +264,6 @@ class Step1Form extends StatelessWidget {
                         onChanged: (value) {
 
                           loanApplicationController.selectedChannel.value =  value?.id;
-
-
                         },
                       );
                     }),
@@ -537,7 +534,7 @@ class Step1Form extends StatelessWidget {
 
               ],
             ),
-
+            //Current Applicant's Employer Details
             ExpansionTile(
               childrenPadding: EdgeInsets.symmetric(horizontal: 20),
               title:const Text( AppText.applicantEmployerDetails, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -616,10 +613,7 @@ class Step1Form extends StatelessWidget {
                 ),
               ],
             ),
-
-
-            ///Current AKA Present Address
-
+            //Current AKA Present Address
             ExpansionTile(
               childrenPadding: EdgeInsets.symmetric(horizontal: 20),
               title:const Text( AppText.presentAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -865,9 +859,7 @@ class Step1Form extends StatelessWidget {
                 ),
               ],
             ),
-
-
-            ///Permanent Address
+            //Permanent Address
             ExpansionTile(
               childrenPadding: EdgeInsets.symmetric(horizontal: 20),
               title:const Text( AppText.permanentAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -1090,7 +1082,6 @@ class Step1Form extends StatelessWidget {
               ],
             )
 
-            ///
           ],
         );
       }),

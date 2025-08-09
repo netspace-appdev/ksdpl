@@ -26,6 +26,7 @@ class Step7Form extends StatelessWidget {
   final loanApplicationController = Get.find<LoanApplicationController>();
 
   LeadDDController leadDDController = Get.put(LeadDDController());
+
   Step7Controller step7Controller = Get.put(Step7Controller());
   @override
   Widget build(BuildContext context) {

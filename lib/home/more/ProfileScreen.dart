@@ -69,7 +69,7 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-      
+
                   // White Container
                   Align(
                     alignment: Alignment.topCenter,  // Centers it
@@ -95,263 +95,404 @@ class ProfileScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: MediaQuery.of(context).size.height*0.05,),
-                              CustomLabeledTextField(
-                                label: AppText.employeeName,
-                                isRequired: false,
-                                controller: profileController.employeeNameController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.employeeName,
-                                validator: ValidationHelper.validateDescription,
-                              ),
-                              const Row(
+                              ExpansionTile(
+                                initiallyExpanded: true,
+                                childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                                title:const Text( AppText.Profile, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                                leading: Icon(Icons.list_alt, size: 20,),
                                 children: [
-                                  Text(
-                                    AppText.gender,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.grey2,
-                                    ),
-                                  ),
-                                  Text(
-                                    " *",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.redColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                          
-                              const SizedBox(height: 10),
-                              Obx(()=>  Row(
-                                children: [
-                                  _buildRadioOption("Male"),
-                                  _buildRadioOption("Female"),
-                                  _buildRadioOption("Other"),
-                                ],
-                              )
-                              ),
-                                CustomLabeledTextField(
-                                label: AppText.dateOfBirth,
-                                isRequired: false,
-                                controller: profileController.dateOfBirthController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.dateOfBirth,
-                                validator: ValidationHelper.validateDescription,
-                              ),
-                              CustomLabeledTextField(
-                                label: AppText.emailNoStar,
-                                isRequired: false,
-                                controller: profileController.profileEmailController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.enterEA,
-                                validator: ValidationHelper.validateDescription,
-                              ),
-                              CustomLabeledTextField(
-                                label: AppText.phoneNumberNoStar,
-                                isRequired: false,
-                                controller: profileController.phoneNumberController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.enterPhNumber,
-                                validator: ValidationHelper.validateDescription,
-                              ),
-                              CustomLabeledTextField(
-                                label: AppText.whatsappNoNoStar,
-                                isRequired: false,
-                                controller: profileController.whatsappNoController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.whatsappNoNoStar,
-                                validator: ValidationHelper.validateDescription,
-                              ),
-                              CustomLabeledTextField(
-                                label: AppText.HireDate,
-                                isRequired: false,
-                                controller: profileController.HireDateController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.HireDate,
-                                validator: ValidationHelper.validateDescription,
-                              ),
-                              CustomLabeledTextField(
-                                label: AppText.JobRole,
-                                isRequired: false,
-                                controller: profileController.JobRoleController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.JobRole,
-                                validator: ValidationHelper.validateDescription,
-                              ),
-                              CustomLabeledTextField(
-                                label: AppText.WorkPlace,
-                                isRequired: true,
-                                controller: profileController.WorkPlaceController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.WorkPlace,
-                                validator: ValidationHelper.validateDescription,
-                              ),
-                              CustomLabeledTextField(
-                                label: AppText.ManagerName,
-                                isRequired: true,
-                                controller: profileController.mobileController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.ManagerName,
-                                validator: ValidationHelper.validateDescription,
-                              ),
 
-                              CustomLabeledTextField(
-                                label: AppText.address,
-                                isRequired: true,
-                                controller: profileController.mobileController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.address,
-                                validator: ValidationHelper.validateDescription,
-                              ),
-
-                              const Text(
-                                AppText.state,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.grey2,
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Obx((){
-                                if (leadDDController.isStateLoading.value) {
-                                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                                }
-                                return CustomDropdown<Data>(
-                                  items: leadDDController.getAllStateModel.value?.data ?? [],
-                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                  getName: (item) => item.stateName.toString(),
-                                  selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                                        (item) => item.id.toString() == leadDDController.selectedState.value,
-                                  ),
-                                  onChanged: (value) {
-                                    leadDDController.selectedState.value =  value?.id?.toString();
-                                    leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
-                                  },
-                                );
-                              }),
-                              const SizedBox(height: 20),
-                              const Text(
-                                AppText.district,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.grey2,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Obx((){
-                                if (leadDDController.isDistrictLoading.value) {
-                                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                                }
-
-                                return CustomDropdown<dist.Data>(
-                                  items: leadDDController.getDistrictByStateModel.value?.data ?? [],
-                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                  getName: (item) => item.districtName.toString(),
-                                  selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
-                                        (item) => item.id.toString() == leadDDController.selectedDistrict.value,
-                                  ),
-                                  onChanged: (value) {
-                                    leadDDController.selectedDistrict.value =  value?.id?.toString();
-                                    leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
-                                  },
-                                );
-                              }),
-                              const SizedBox(height: 20),
-                              const Text(
-                                AppText.city,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.grey2,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Obx((){
-                                if (leadDDController.isCityLoading.value) {
-                                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                                }
-                                return CustomDropdown<city.Data>(
-                                  items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
-                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                                  getName: (item) => item.cityName.toString(),
-                                  selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
-                                        (item) => item.id.toString() == leadDDController.selectedCity.value,
-                                  ),
-                                  onChanged: (value) {
-                                    leadDDController.selectedCity.value =  value?.id?.toString();
-                                  },
-                                );
-                              }),
-                              const SizedBox(height: 20),
-
-                              const Text(
-                                AppText.uploadImage,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.grey2,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-
-                              Obx(() => Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColor.black1,),
-                                  borderRadius: BorderRadius.circular(4.0),
-                                  color: Colors.grey.shade100,
-                                ),
-                                child: Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: uploadCommonTaskController.pickExcelFile,
-                                      child: Container(
-                                        height: double.infinity,
-                                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            right: BorderSide(color: AppColor.black1),
-                                          ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      CustomLabeledTextField(
+                                        label: AppText.employeeName,
+                                        isRequired: false,
+                                        controller: profileController.employeeNameController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.employeeName,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.dateOfBirth,
+                                        isRequired: false,
+                                        controller: profileController.dateOfBirthController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.dateOfBirth,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.emailNoStar,
+                                        isRequired: false,
+                                        controller: profileController.profileEmailController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterEA,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.phoneNumberNoStar,
+                                        isRequired: false,
+                                        controller: profileController.phoneNumberController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterPhNumber,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.whatsappNoNoStar,
+                                        isRequired: false,
+                                        controller: profileController.whatsappNoController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.whatsappNoNoStar,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.EducationType,
+                                        isRequired: false,
+                                        controller: profileController.HireDateController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.EducationType,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.JobRole,
+                                        isRequired: false,
+                                        controller: profileController.JobRoleController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.JobRole,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.WorkPlace,
+                                        isRequired: true,
+                                        controller: profileController.WorkPlaceController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.WorkPlace,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.ManagerName,
+                                        isRequired: true,
+                                        controller: profileController.mobileController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.ManagerName,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.address,
+                                        isRequired: true,
+                                        controller: profileController.mobileController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.address,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      const Text(
+                                        AppText.state,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.grey2,
                                         ),
-                                        child: const Center(
-                                          child: Text(
-                                            AppText.chooseFile,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Obx((){
+                                        if (leadDDController.isStateLoading.value) {
+                                          return  Center(child:CustomSkelton.leadShimmerList(context));
+                                        }
+                                        return CustomDropdown<Data>(
+                                          items: leadDDController.getAllStateModel.value?.data ?? [],
+                                          getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                          getName: (item) => item.stateName.toString(),
+                                          selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                                                (item) => item.id.toString() == leadDDController.selectedState.value,
+                                          ),
+                                          onChanged: (value) {
+                                            leadDDController.selectedState.value =  value?.id?.toString();
+                                            leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+                                          },
+                                        );
+                                      }),
+                                      const SizedBox(height: 20),
+                                      const Text(
+                                        AppText.district,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.grey2,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Obx((){
+                                        if (leadDDController.isDistrictLoading.value) {
+                                          return  Center(child:CustomSkelton.leadShimmerList(context));
+                                        }
+
+                                        return CustomDropdown<dist.Data>(
+                                          items: leadDDController.getDistrictByStateModel.value?.data ?? [],
+                                          getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                          getName: (item) => item.districtName.toString(),
+                                          selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
+                                                (item) => item.id.toString() == leadDDController.selectedDistrict.value,
+                                          ),
+                                          onChanged: (value) {
+                                            leadDDController.selectedDistrict.value =  value?.id?.toString();
+                                            leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+                                          },
+                                        );
+                                      }),
+                                      const SizedBox(height: 20),
+                                      const Text(
+                                        AppText.city,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.grey2,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Obx((){
+                                        if (leadDDController.isCityLoading.value) {
+                                          return  Center(child:CustomSkelton.leadShimmerList(context));
+                                        }
+                                        return CustomDropdown<city.Data>(
+                                          items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
+                                          getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                          getName: (item) => item.cityName.toString(),
+                                          selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
+                                                (item) => item.id.toString() == leadDDController.selectedCity.value,
+                                          ),
+                                          onChanged: (value) {
+                                            leadDDController.selectedCity.value =  value?.id?.toString();
+                                          },
+                                        );
+                                      }),
+                                      const SizedBox(height: 20),
+                                      const Text(
+                                        AppText.uploadImage,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.grey2,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Obx(() => Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: AppColor.black1,),
+                                          borderRadius: BorderRadius.circular(4.0),
+                                          color: Colors.grey.shade100,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: uploadCommonTaskController.pickImageFile,
+                                              child: Container(
+                                                height: double.infinity,
+                                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                decoration: const BoxDecoration(
+                                                  border: Border(
+                                                    right: BorderSide(color: AppColor.black1),
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    AppText.chooseFile,
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: AppColor.black1,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: Text(
+                                                uploadCommonTaskController.selectedFileName.value.isEmpty?'No file Choosen':
+                                                uploadCommonTaskController.selectedFileName.value,
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black87,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                      const SizedBox(height: 20),
+                                      CustomLabeledTextField(
+                                        label: AppText.EmployeeadharNo,
+                                        isRequired: true,
+                                        controller: profileController.mobileController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterEmployeeadharNo,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      Align(
+                                        alignment: AlignmentDirectional.topEnd,
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context).size.width*0.44,
+                                          height: 50,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: AppColor.primaryColor,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                            onPressed: () {
+
+                                            }, child: const Text(
+                                            AppText.adharVarify,
                                             style: TextStyle(
-                                                fontSize: 14,
-                                                color: AppColor.black1,
-                                                fontWeight: FontWeight.w500),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Text(
-                                        uploadCommonTaskController.selectedFileName.value,
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.black87,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                              const SizedBox(height: 20),
+                                      const SizedBox(height: 10),
 
-                              CustomLabeledTextField(
-                                label: AppText.EmployeeadharNo,
-                                isRequired: true,
-                                controller: profileController.mobileController,
-                                inputType: TextInputType.name,
-                                hintText: AppText.enterEmployeeadharNo,
-                                validator: ValidationHelper.validateDescription,
+                                    ],
+                                  ),
+
+
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              ExpansionTile(
+                                initiallyExpanded: true,
+                                childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                                title:const Text( AppText.Academics, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                                leading: Icon(Icons.list_alt, size: 20,),
+                                children: [
+
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      CustomLabeledTextField(
+                                        label: AppText.qualification,
+                                        isRequired: false,
+                                        controller: profileController.employeeNameController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.qualification,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.Specialization,
+                                        isRequired: false,
+                                        controller: profileController.dateOfBirthController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.Specialization,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.InstitutionName,
+                                        isRequired: false,
+                                        controller: profileController.profileEmailController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.InstitutionName,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.UniversityName,
+                                        isRequired: false,
+                                        controller: profileController.phoneNumberController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.UniversityName,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.YearofPassing,
+                                        isRequired: false,
+                                        controller: profileController.whatsappNoController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.whatsappNoNoStar,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.GradePercentage,
+                                        isRequired: false,
+                                        controller: profileController.HireDateController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.GradePercentage,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.EducationType,
+                                        isRequired: false,
+                                        controller: profileController.JobRoleController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.EducationType,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      const Text(
+                                        AppText.UploadDoc,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.grey2,
+                                        ),
+                                      ),const Text(
+                                        'Only PDF files. Max 2 MB',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          color: AppColor.grey2,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5,),
+                                      Obx(() => Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: AppColor.black1,),
+                                          borderRadius: BorderRadius.circular(4.0),
+                                          color: Colors.grey.shade100,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: uploadCommonTaskController.pickImageFile,
+                                              child: Container(
+                                                height: double.infinity,
+                                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                decoration: const BoxDecoration(
+                                                  border: Border(
+                                                    right: BorderSide(color: AppColor.black1),
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    AppText.chooseFile,
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: AppColor.black1,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: Text(
+                                                uploadCommonTaskController.selectedFileName.value,
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black87,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ],
                           ),

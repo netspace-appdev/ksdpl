@@ -32,6 +32,7 @@ class AppText{
   static const String mobileNumber="Mobile Number";
   static const String password="Password";
   static const String submit="Submit";
+  static const String adharVarify="Aadhar Verify";
   static const String phoneNumberRequired="Mobile number is required";
   static const String enterValidPhone="Enter a valid 10-digit phone number";
   static const String passwordRequired="Password is required";
@@ -165,9 +166,12 @@ class AppText{
   static const String headquartLocation="Headquarters Location";
   static const String emailNoStar="Email";
   static const String phoneNumberNoStar="Phone Number";
+  static const String UniversityName="University Name";
   static const String mobilenumber="Mobile Number";
   static const String whatsappNoNoStar="WhatsApp Number";
+  static const String YearofPassing="Year of Passing";
   static const String fax="Fax";
+  static const String InstitutionName="Institution Name";
   static const String website="Website URL";
   static const String linkedIn="LinkedIn";
   static const String facebook="Facebook";
@@ -190,6 +194,7 @@ class AppText{
   static const String leadDetails="Lead Details";
   static const String addLead="Add Lead";
   static const String fullName="Full Name";
+  static const String Specialization="Specialization";
   static const String enterFullName="Enter Full Name";
   static const String dateOfBirth="Date of Birth";
   static const String enterPhNumber="Enter Phone Number";
@@ -306,6 +311,7 @@ class AppText{
   static const String changeLeadStatus = "Change Status";
   static const String personInformation = "Person Information";
   static const String applFNmae = "Applicant's Full Name";
+  static const String Academics = "Academics";
 
 
   static const String dsaCode = "DSA Code";
@@ -466,6 +472,7 @@ class AppText{
   static const String enterCollateralSecurityExcluded = "Enter Prime Security Excluded";
 
   static const String profileExcluded = "Profile Excluded";
+  static const String Profile = "Profile";
   static const String enterProfileExcluded = "Enter Profile Excluded";
 
   static const String ageLimitEarningApplicants = "Age at the time of loan maturity (earning applicant)"; //"Age limit earning applicant" should be changed to "Age at the time of loan maturity (earning applicant)".
@@ -688,10 +695,11 @@ class AppText{
   static const String ongoingCallYTD= "Ongoing Call (YTD)";
   static const String employee = "Employee";
   static const String employeeName = "Employee Name";
-  static const String HireDate = "Hire Date";
+  static const String GradePercentage = "Grade/Percentage";
   static const String JobRole = "Job Role";
   static const String WorkPlace = "Work Place";
   static const String ManagerName = "Manager Name";
+  static const String EducationType = "Education Type";
 
   static const String bankerMobileNo = "Banker Mobile No";
   static const String enterBankerMobileNo = "Enter Banker Mobile No";

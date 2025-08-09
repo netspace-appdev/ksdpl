@@ -32,6 +32,21 @@ class UploadCommonTaskController extends GetxController{
 
     }
   }
+
+  Future<void> pickImageFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false, // set to true if you want to pick multiple images
+    );
+
+    if (result != null && result.files.single.path != null) {
+      selectedFile.value = File(result.files.single.path!);
+      selectedFileName.value = result.files.single.name;
+    } else {
+      ToastMessage.msg(AppText.noFileSelected);
+    }
+  }
+
   void clearFile() {
     selectedFile.value= null;
   }
