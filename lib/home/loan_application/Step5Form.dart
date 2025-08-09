@@ -115,7 +115,7 @@ class Step5Form extends StatelessWidget {
                           loanApplicationController.addCreditCard();
                         },
                         child: const Text(
-                          "Add New Co-Applicant",
+                          "Add New Card Details",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -156,7 +156,7 @@ class Step5Form extends StatelessWidget {
                           loanApplicationController.removeCreditCard(index);
                         },
                         child: const Text(
-                          "Remove This Co-Applicant",
+                          "Remove This Card Details",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

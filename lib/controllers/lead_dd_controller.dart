@@ -310,9 +310,7 @@ class LeadDDController extends GetxController{
       isLoading(true);
       isDistrictLoading(true);
 
-
       var data = await DrawerApiService.getDistrictByStateIdApi(stateId: stateId);
-
 
       if(data['success'] == true){
 
@@ -322,13 +320,10 @@ class LeadDDController extends GetxController{
         districtListCurr.value = List<dist.Data>.from(districts);
         districtListPerm.value = List<dist.Data>.from(districts);
 
-
         isLoading(false);
         isDistrictLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
-
         getDistrictByStateModel.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
@@ -663,6 +658,7 @@ class LeadDDController extends GetxController{
     try {
       isLoading(true);
       isBranchLoading(true);
+      print('bankID check${bankId}');
 
 
       var data = await DrawerApiService.getAllBranchByBankIdApi(bankId: bankId);

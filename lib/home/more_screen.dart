@@ -28,7 +28,7 @@ class MoreSettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final menuItems = [
-     // _MenuItem(AppImage.user, "My Profile", () => Get.to(ProfileScreen())),
+    //  _MenuItem(AppImage.user, "My Profile", () => Get.to(ProfileScreen())),
       _MenuItem(AppImage.lock, "Change Password", () => Get.to(Changepassword())),
       _MenuItem(AppImage.telephone, "Change Phone No", () => Get.to(ChangeContactNumber())),
       _MenuItem(AppImage.email, "Change Email", () => Get.to(ChangeEmail())),
@@ -37,7 +37,6 @@ class MoreSettingScreen extends StatelessWidget {
         Get.offNamed("/login");
       }),*/
     ];
-
 
     return SafeArea(
       child: Scaffold(

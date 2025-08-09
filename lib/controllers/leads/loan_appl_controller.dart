@@ -164,6 +164,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   final TextEditingController submintdocumentName = TextEditingController();
 
 
+
+
   var selectedStateProp = Rxn<String>();
   var selectedDistrictProp = Rxn<String>();
   var selectedCityProp = Rxn<String>();
@@ -884,22 +886,34 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
               "bankerMobile": cleanText(bankerMobileController.text),
               "bankerWatsapp": cleanText(bankerWhatsappController.text),
               "bankerEmail": cleanText(bankerEmailController.text),
-              "chargesDetailsDTO:": {
-                "adminFeeCharges": chargesDetailAdminFeeChargess.toIntOrZero(),
-                "foreclosureChargesCharges": chargesDetailForeclosureCharges
+              /*"chargesDetailsDTO:": {
+                "adminFeeCharges": chargesDetailAdminFeeChargess.text.toIntOrZero(),
+                "foreclosureChargesCharges": chargesDetailForeclosureCharges.text
                     .toIntOrZero(),
-                "legalVettingCharges": chargesDetailLegalVettingCharges
+                "legalVettingCharges": chargesDetailLegalVettingCharges.text
                     .toIntOrZero(),
-                "otherCharges": chargesDetailOtherCharges.toIntOrZero(),
-                "processingCharges": chargesDetailProcessingCharges
+                "otherCharges": chargesDetailOtherCharges.text.toIntOrZero(),
+                "processingCharges": chargesDetailProcessingCharges.text
                     .toIntOrZero(),
-                "processingFees": chargesDetailProcessingFees.toIntOrZero(),
-                "stampDutyPercentage": chargesDetailStampDuty.toIntOrZero(),
-                "technicalInspectionCharges": chargesDetailTechnicalInspectionCharges
+                "processingFees": chargesDetailProcessingFees.text.toIntOrZero(),
+                "stampDutyPercentage": chargesDetailStampDuty.text.toIntOrZero(),
+                "technicalInspectionCharges": chargesDetailTechnicalInspectionCharges.text
                     .toIntOrZero(),
-                "tsrLegalCharges": chargesDetailTSRLegalCharges.toIntOrZero(),
-                "valuationCharges": chargesDetailValuationCharges.toIntOrZero(),
-              },
+                "tsrLegalCharges": chargesDetailTSRLegalCharges.text.toIntOrZero(),
+                "valuationCharges": chargesDetailValuationCharges.text.toIntOrZero(),
+              },*/
+              "chargesDetailsDTO": {
+                "adminFeeCharges": int.tryParse(chargesDetailAdminFeeChargess.text) ?? 0,
+                "foreclosureChargesCharges": int.tryParse(chargesDetailForeclosureCharges.text) ?? 0,
+                "legalVettingCharges": int.tryParse(chargesDetailLegalVettingCharges.text) ?? 0,
+                "otherCharges": int.tryParse(chargesDetailOtherCharges.text) ?? 0,
+                "processingCharges": int.tryParse(chargesDetailProcessingCharges.text) ?? 0,
+                "processingFees": int.tryParse(chargesDetailProcessingFees.text) ?? 0,
+                "stampDutyPercentage": int.tryParse(chargesDetailStampDuty.text) ?? 0,
+                "technicalInspectionCharges": int.tryParse(chargesDetailTechnicalInspectionCharges.text) ?? 0,
+                "tsrLegalCharges": int.tryParse(chargesDetailTSRLegalCharges.text) ?? 0,
+                "valuationCharges": int.tryParse(chargesDetailValuationCharges.text) ?? 0,
+              }
             }
           ]
       );
@@ -1230,6 +1244,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         bankerWhatsappController.text = data?.bankerWatsapp ?? '';
         bankerEmailController.text = data?.bankerEmail ?? '';
         chargesDetailProcessingFees.text = data?.chargesDetails?.processingFees?.toString() ?? '';
+        print('hfiufhsfhwowrffhoweowhje ${ data?.chargesDetails?.adminFeeCharges?.toString()}');
         chargesDetailAdminFeeChargess.text = data?.chargesDetails?.adminFeeCharges?.toString() ?? '';
         chargesDetailForeclosureCharges.text = data?.chargesDetails?.foreclosureChargesCharges?.toString() ?? '';
         chargesDetailStampDuty.text = data?.chargesDetails?.stampDutyPercentage?.toString() ?? '';
