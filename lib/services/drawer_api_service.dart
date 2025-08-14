@@ -36,6 +36,8 @@ class DrawerApiService {
   static const String getAllLeadStage = baseUrl + 'LeadStage/GetAllLeadStage';
   static const String getAllBranchByBankId = baseUrl + 'Branch/GetAllBranchByBankId';
   static const String getAllChannelList = baseUrl + 'ChannelMaster/GetAllChannelList';
+  static const String getBankerDetailApi = baseUrl + 'CamNoteDetail/GetBankerDetail';
+  static const String getAddDisburseHistoryApi = baseUrl + 'CamNoteDetail/AddDisburseHistory';
 
   static const String addSanctionDetail = baseUrl + 'CamNoteDetail/AddSanctionDetails';
   static const String getSoftSanctionByLeadIdAndBankIdApi = baseUrl + 'CamNoteDetail/GetSoftSanctionByLeadIdAndBankId';
@@ -1247,7 +1249,7 @@ class DrawerApiService {
     }
   }
 
-  static addSanctionDetailscallApi({required String UniqueLeadNo,
+  static Future<dynamic> addSanctionDetailscallApi({required String UniqueLeadNo,
     required String SanctionDate,
     required String SanctionAmount}) async {
 
@@ -1322,6 +1324,99 @@ class DrawerApiService {
       print("Error: $e");
       throw Exception('Error while submitting: $e');
     }
+  }
+
+  static Future<dynamic> callGetBankerDetailSanctionApi({required String PhoneNo}) async {
+    try {
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getBankerDetailApi),
+      );
+
+      // Headers
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Add form field for lead number
+      request.fields['PhoneNo'] = PhoneNo;
+
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getBankerDetailApi, request.fields);
+      Helper.ApiRes(getBankerDetailApi, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+  static Future<dynamic> callUpdateDisburseHistoryApi({required String sanctionAmount,
+    required String totalDisburseAmount,
+    required String uniqueLeadNo,
+    required String disburseDate,
+    required String disburseAmount,
+    required String transactionDetails,
+    required String contactNo,
+    required String disbursedBy}) async {
+
+    var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+
+    try {
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAddDisburseHistoryApi),
+      );
+
+      // Headers
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Id
+      // UniqueLeadNo
+      // ActualDate
+      // ActualAmount
+      // TransactionDetails
+      // DisbursedBy
+      // ContactNo
+      // EmployeeId
+
+      request.fields['UniqueLeadNo'] = uniqueLeadNo;
+      request.fields['ActualDate'] = disburseDate;
+      request.fields['ActualAmount'] = disburseAmount;
+      request.fields['TransactionDetails'] = transactionDetails;
+      request.fields['DisbursedBy'] = disbursedBy;
+      request.fields['ContactNo'] = contactNo;
+      request.fields['EmployeeId'] = empId.toString();
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getAddDisburseHistoryApi, request.fields);
+      Helper.ApiRes(getAddDisburseHistoryApi, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+
+
   }
 
 

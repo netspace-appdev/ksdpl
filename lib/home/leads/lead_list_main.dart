@@ -27,6 +27,7 @@ import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomIconDilogBox.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 import '../../services/call_service.dart';
@@ -538,7 +539,7 @@ class LeadListMain extends StatelessWidget {
                                         leadListController.updateLeadStageApiForCall(
                                           id:lead.id.toString(),
                                           active: '1',
-                                          stage:'13',
+                                          stage:'9',
                                           empId: empId.toString(),
                                         );
                                     },
@@ -768,7 +769,7 @@ class LeadListMain extends StatelessWidget {
 
                     SizedBox(height: 10),
 
-                    if(lead.leadStage.toString()=="6")
+                    if(lead.leadStage.toString()=="6"&&lead.loanDetail!>0)
                       _buildTextButton(
                           label:"Update Loan Application",
                           context: context,
@@ -2187,12 +2188,17 @@ overflow: TextOverflow.ellipsis,
                   const SizedBox(height: 12),
 
                   // Contact No
-                  CustomLabeledTextField(
+                  CustomLabeledTextField2(
                     label: "Contact No*",
                     isRequired: true,
                     controller: leadListController.contactNoController,
                     hintText: "Enter Contact No",
                     inputType: TextInputType.text,
+                    onChanged: (value) {
+                      if (value.length == 10) {
+                        leadListController.callGetBankerDetailSanction(value);
+                      }
+                    },
                   ),
                   const SizedBox(height: 12),
 
@@ -2215,7 +2221,7 @@ overflow: TextOverflow.ellipsis,
                       ),
                       onPressed: () {
                     //    Navigator.pop(context);
-                        //leadListController.call
+                        leadListController.callUpdateDisburseHistory();
                       },
                       child: const Text(
                         "Submit",

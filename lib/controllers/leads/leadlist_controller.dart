@@ -11,7 +11,9 @@ import 'package:ksdpl/controllers/leads/seachLeadController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
+import '../../models/GetBankerDetailSanctionModel/GetBankerDetailSanctionModel.dart';
 import '../../models/addSanctionDetails/AddSanctionDetailsModel.dart';
+import '../../models/camnote/GetBankerDetailsByBranchIdModel.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
 import '../../models/dashboard/GetRemindersModel.dart';
@@ -35,8 +37,7 @@ class LeadListController extends GetxController {
 
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
   ///newly added for filter
-  var filteredGetAllLeadsModel = Rxn<GetAllLeadsModel>();
-  var softSanctionByLeadIdModel = Rxn<SoftSanctionByLeadIdModel>();
+
   var isFilteredLoading = false.obs;
   var filteredHasMore = true.obs;
   var filteredCurrentPage = 1.obs;
@@ -47,6 +48,9 @@ class LeadListController extends GetxController {
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
   var updateLoanFormModel = Rxn<UpdateLoanFormModel>(); //
   var addSanctionDetailsModel = Rxn<AddSanctionDetailsModel>(); //
+  var filteredGetAllLeadsModel = Rxn<GetAllLeadsModel>();
+  var softSanctionByLeadIdModel = Rxn<SoftSanctionByLeadIdModel>();
+  var getBankerDetailSanctionModel = Rxn<GetBankerDetailSanctionModel>();
 
   UpdateLeadStageModel? updateLeadStageModel;
   LeadMoveToCommonTaskModel? leadMoveToCommonTaskModel;
@@ -1384,5 +1388,78 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
       isLoad(false);
     }
   }
+
+  Future<void> callGetBankerDetailSanction(String phoneNo) async {
+    try {
+      isLoad(true);
+
+      var data = await DrawerApiService.callGetBankerDetailSanctionApi(PhoneNo: phoneNo);
+
+      if (data['success'] == true) {
+        getBankerDetailSanctionModel.value = GetBankerDetailSanctionModel.fromJson(data);
+        ToastMessage.msg(getBankerDetailSanctionModel.value?.message??'');
+        disbursedByController.text=getBankerDetailSanctionModel.value?.data?.bankersName.toString()??'';
+
+        isLoad(false);
+       // clear();
+      //  Get.back();
+      }
+      else if (data['success'] == false && data['data'] is List && (data['data'] as List).isEmpty) {
+        //    ToastMessage.msg("Old password incorrect or empty");
+        isLoad(false);
+        // Get.back();
+      }
+      else {
+        ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error in checkOldPasswordRequestApi: ${e.toString()}");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoad(false);
+    }
+  }
+
+ Future<void> callUpdateDisburseHistory() async {
+   try {
+     isLoad(true);
+
+     var data = await DrawerApiService.callUpdateDisburseHistoryApi(
+       sanctionAmount: sanctionAmount2Controller.text,
+       totalDisburseAmount: totalDisburseAmountController.text,
+       uniqueLeadNo: uniqueLeadNoController.text,
+       disburseDate: disburseDateController.text,
+       disburseAmount: partialAmountController.text, // partialAmount is actually disburseAmount
+       transactionDetails: transactionDetailsController.text,
+       contactNo: contactNoController.text,
+       disbursedBy: disbursedByController.text,
+
+     );
+
+     if (data['success'] == true) {
+       getBankerDetailSanctionModel.value = GetBankerDetailSanctionModel.fromJson(data);
+       ToastMessage.msg(getBankerDetailSanctionModel.value?.message??'');
+       disbursedByController.text=getBankerDetailSanctionModel.value?.data?.bankersName.toString()??'';
+
+       isLoad(false);
+       // clear();
+       //  Get.back();
+     }
+     else if (data['success'] == false && data['data'] is List && (data['data'] as List).isEmpty) {
+       //    ToastMessage.msg("Old password incorrect or empty");
+       isLoad(false);
+       // Get.back();
+     }
+     else {
+       ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
+     }
+   } catch (e) {
+     print("Error in checkOldPasswordRequestApi: ${e.toString()}");
+     ToastMessage.msg(AppText.somethingWentWrong);
+   } finally {
+     isLoad(false);
+   }
+
+ }
 
 }
