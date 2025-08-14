@@ -490,10 +490,12 @@ class LeadListMain extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     //mamshi add new api
-                    lead.leadStage==10?Padding(
+                    lead.leadStage==10||lead.leadStage==11||lead.leadStage==12?Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 8.0),
                           child: InkWell(
                             onTap:(){
+                              print('dvashgvdvad${lead.uniqueLeadNumber}');
+                              leadListController.callGetdisburseHistoryByUniqueLeadNoApi(lead.uniqueLeadNumber);
                               showUpdateDisburseHistorySheet(context);
                              },
                             child: Container(
@@ -1537,41 +1539,49 @@ overflow: TextOverflow.ellipsis,
   void showFilterDialog({
     required BuildContext context,
     required leadId,
-  }) {
+  })
+  {
 
    //working leads is now ongoing call
     List<String> options = ["All Leads","Fresh Leads","Ongoing Call","Could Not Connect", "Interested Leads",
-      "Not Interested", "Doable Leads","Not Doable","Logged in","Under Review","Sanction"];
+      "Not Interested", "Doable Leads","Not Doable","Logged in","Under Review","Sanction","Partial Disbursed","Fully Disbursed"];
+
     showDialog(
       context: context,
+      barrierDismissible: false,
+
       builder: (BuildContext context) {
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
-
           title: "Filter",
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
-                child:  Obx(()=>Column(
-                  children: options.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    String option = entry.value;
-
-                    return CheckboxListTile(
-                      activeColor: AppColor.secondaryColor,
-
-                      title: Text(option),
-                      value: leadListController.selectedIndex.value == index,
-                      onChanged: (value) => leadListController.selectCheckbox(index),
-                    );
-                  }).toList(),
-                )),
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(Get.context!).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
+                    child:  Obx(()=>Column(
+                      children: options.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        String option = entry.value;
+              
+                        return CheckboxListTile(
+                          activeColor: AppColor.secondaryColor,
+                          title: Text(option),
+                          value: leadListController.selectedIndex.value == index,
+                          onChanged: (value) => leadListController.selectCheckbox(index),
+                        );
+                      }).toList(),
+                    )),
+                  ),
+              
+                ],
               ),
-
-            ],
+            ),
           ),
           onSubmit: () {
             leadListController.fromWhereLeads.value="main";
@@ -1665,7 +1675,8 @@ overflow: TextOverflow.ellipsis,
     required callStartTime,
     required callEndTime,
     required callStatus,
-  }) {
+  })
+  {
     showDialog(
       barrierDismissible: false,
       /*context: context,*/
@@ -2107,15 +2118,8 @@ overflow: TextOverflow.ellipsis,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Center(
-                    child: Text(
-                      "Update Disburse History",
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                  ),
                   const SizedBox(height: 16),
 
-                  // Row for Sanction Amount & Total Disburse Amount
                   Row(
                     children: [
                       Expanded(
@@ -2132,10 +2136,9 @@ overflow: TextOverflow.ellipsis,
                       const SizedBox(width: 12),
                       Expanded(
                         child: CustomLabeledTextField(
-                          label: "Total Disburse Amount",
+                          label: "Total Amount",
                           isRequired: false,
-                          controller:
-                          leadListController.totalDisburseAmountController,
+                          controller: leadListController.totalDisburseAmountController,
                           hintText: "Total Disburse Amount",
                           isTextArea: false,
                           inputType: TextInputType.text,
@@ -2154,12 +2157,12 @@ overflow: TextOverflow.ellipsis,
                     isTextArea: false,
                     inputType: TextInputType.text,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 0),
 
                   CustomLabeledPickerTextField(
                     label: AppText.sanctionDate,
                     isRequired: true,
-                    controller: leadListController.sanctionDateController,
+                    controller: leadListController.disburseDateController,
                     inputType: TextInputType.datetime,
                     hintText: AppText.mmddyyyy,
                     isDateField: true,
@@ -2212,20 +2215,26 @@ overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 20),
 
-                  // Submit Button
                   SizedBox(
                     width: double.infinity,
+                    height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0D47A1),
+                        backgroundColor: AppColor.secondaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      onPressed: () {
-                    //    Navigator.pop(context);
+                      onPressed:() {
                         leadListController.callUpdateDisburseHistory();
-                      },
+                    },
                       child: const Text(
-                        "Submit",
-                        style: TextStyle(color: Colors.white),
+                        AppText.submit,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),

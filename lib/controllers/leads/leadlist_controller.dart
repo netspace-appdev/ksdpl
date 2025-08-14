@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../models/GetBankerDetailSanctionModel/GetBankerDetailSanctionModel.dart';
+import '../../models/addDisburseHistory/AddDisburseHistoryModel.dart';
 import '../../models/addSanctionDetails/AddSanctionDetailsModel.dart';
 import '../../models/camnote/GetBankerDetailsByBranchIdModel.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
@@ -21,6 +22,7 @@ import '../../models/dashboard/LeadMoveToCommonTaskModel.dart';
 import '../../models/dashboard/WorkOnLeadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/drawer/UpdateLeadStageModel.dart';
+import '../../models/getDisburseHistoryByUniqueLeadNo/GetDisburseHistoryByUniqueLeadNoModel.dart';
 import '../../models/softSanctionByLeadId/SoftSanctionByLeadIdModel.dart';
 import '../../models/update_loan_formModel/UpdateLoanFormModel.dart';
 import '../../services/dashboard_api_service.dart';
@@ -51,6 +53,8 @@ class LeadListController extends GetxController {
   var filteredGetAllLeadsModel = Rxn<GetAllLeadsModel>();
   var softSanctionByLeadIdModel = Rxn<SoftSanctionByLeadIdModel>();
   var getBankerDetailSanctionModel = Rxn<GetBankerDetailSanctionModel>();
+  var getDisburseHistoryByUniqueLeadNoModel = Rxn<GetDisburseHistoryByUniqueLeadNoModel>();
+  var addDisburseHistoryModel = Rxn<AddDisburseHistoryModel>();
 
   UpdateLeadStageModel? updateLeadStageModel;
   LeadMoveToCommonTaskModel? leadMoveToCommonTaskModel;
@@ -236,6 +240,14 @@ class LeadListController extends GetxController {
     else if(selectedIndex.value==10){
       leadCode.value="10";
       leadStageName.value="Sanction";
+    }
+    else if(selectedIndex.value==11){
+      leadCode.value="11";
+      leadStageName.value="Partial Disbursed";
+    }
+    else if(selectedIndex.value==12){
+      leadCode.value="12";
+      leadStageName.value="Fully Disbursed";
     }
   }
 
@@ -1437,13 +1449,13 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
      );
 
      if (data['success'] == true) {
-       getBankerDetailSanctionModel.value = GetBankerDetailSanctionModel.fromJson(data);
-       ToastMessage.msg(getBankerDetailSanctionModel.value?.message??'');
-       disbursedByController.text=getBankerDetailSanctionModel.value?.data?.bankersName.toString()??'';
+       addDisburseHistoryModel.value = AddDisburseHistoryModel.fromJson(data);
+       ToastMessage.msg(addDisburseHistoryModel.value?.message??'');
+       // disbursedByController.text=getBankerDetailSanctionModel.value?.data?.bankersName.toString()??'';
 
        isLoad(false);
-       // clear();
-       //  Get.back();
+        clearhistory();
+         Get.back();
      }
      else if (data['success'] == false && data['data'] is List && (data['data'] as List).isEmpty) {
        //    ToastMessage.msg("Old password incorrect or empty");
@@ -1461,5 +1473,55 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
    }
 
  }
+
+  Future<void> callGetdisburseHistoryByUniqueLeadNoApi(String? loanApplicationNo) async {
+    try {
+      isLoad(true);
+
+      var data = await DrawerApiService.callGetdisburseHistoryByUniqueNoApi(
+        loanApplicationNo: loanApplicationNo,
+      );
+
+      if (data['success'] == true) {
+        getDisburseHistoryByUniqueLeadNoModel.value = GetDisburseHistoryByUniqueLeadNoModel.fromJson(data);
+      //  ToastMessage.msg(getDisburseHistoryByUniqueLeadNoModel.value?.message??'');
+
+
+        sanctionAmount2Controller.text=getDisburseHistoryByUniqueLeadNoModel.value?.data!.sanctionAmount.toString()??'';
+        totalDisburseAmountController.text=getDisburseHistoryByUniqueLeadNoModel.value?.data!.disburseAmount.toString()??'';
+        uniqueLeadNoController.text=getDisburseHistoryByUniqueLeadNoModel.value?.data!.uniqueLeadNumber.toString()??'';
+
+        isLoad(false);
+        // clear();
+        //  Get.back();
+      }
+      else if (data['success'] == false && data['data'] is List && (data['data'] as List).isEmpty) {
+        //    ToastMessage.msg("Old password incorrect or empty");
+        isLoad(false);
+        // Get.back();
+      }
+      else {
+     //   ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+  //    print("Error in checkOldPasswordRequestApi: ${e.toString()}");
+    //  ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoad(false);
+    }
+  }
+
+  void clearhistory() {
+     sanctionAmount2Controller.clear();
+     totalDisburseAmountController.clear();
+     uniqueLeadNoController.clear();
+     disburseDateController.clear();
+     partialAmountController.clear(); // partialAmount is actually disburseAmount
+     transactionDetailsController.clear();
+     contactNoController.clear();
+     disbursedByController.clear();
+
+
+  }
 
 }

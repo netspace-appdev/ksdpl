@@ -38,6 +38,7 @@ class DrawerApiService {
   static const String getAllChannelList = baseUrl + 'ChannelMaster/GetAllChannelList';
   static const String getBankerDetailApi = baseUrl + 'CamNoteDetail/GetBankerDetail';
   static const String getAddDisburseHistoryApi = baseUrl + 'CamNoteDetail/AddDisburseHistory';
+  static const String getDisburseHistoryByUniqueLeadNoApi = baseUrl + 'LeadDetail/GetLeadDetailByUniqueLeadNumber';
 
   static const String addSanctionDetail = baseUrl + 'CamNoteDetail/AddSanctionDetails';
   static const String getSoftSanctionByLeadIdAndBankIdApi = baseUrl + 'CamNoteDetail/GetSoftSanctionByLeadIdAndBankId';
@@ -1360,7 +1361,8 @@ class DrawerApiService {
     }
   }
 
-  static Future<dynamic> callUpdateDisburseHistoryApi({required String sanctionAmount,
+  static Future<dynamic> callUpdateDisburseHistoryApi({
+    required String sanctionAmount,
     required String totalDisburseAmount,
     required String uniqueLeadNo,
     required String disburseDate,
@@ -1417,6 +1419,39 @@ class DrawerApiService {
     }
 
 
+  }
+
+  static Future<dynamic> callGetdisburseHistoryByUniqueNoApi({String? loanApplicationNo}) async {
+
+    try {
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getDisburseHistoryByUniqueLeadNoApi),
+      );
+
+      // Headers
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      request.fields['UniqueLeadNumber'] = loanApplicationNo!;
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getDisburseHistoryByUniqueLeadNoApi, request.fields);
+      Helper.ApiRes(getDisburseHistoryByUniqueLeadNoApi, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
   }
 
 
