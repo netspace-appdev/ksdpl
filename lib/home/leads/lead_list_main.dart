@@ -472,7 +472,7 @@ class LeadListMain extends StatelessWidget {
                                 color: AppColor.orangeColor, // Button background color
                                 borderRadius: BorderRadius.circular(2), // Rounded corners
                               ),
-                              child: Row(
+                              child: const Row(
                                 children: [
                                   Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
                                   SizedBox(width: 5,),
@@ -836,64 +836,74 @@ class LeadListMain extends StatelessWidget {
     });
   }
 
-  void showSanctionDialog(BuildContext context, String uid){
+  void showSanctionDialog(BuildContext context, String uid) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
           title: "",
-          content: Form(
-            key: _formKey2,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-
-                // Sanction Amount Field
-                CustomLabeledTextField(
-                  label: AppText.sanctionAmount,
-                  isRequired: true,
-                  controller: leadListController.sanctionAmountController,
-                  inputType: TextInputType.number,
-                  hintText: AppText.hintsanctionAmount,
-                  isTextArea: false,
-                  validator: validateSanctionAmount,
+          content: Obx(() {
+            if (leadListController.isLoad.value) {
+              return const Center(
+                child: SizedBox(
+                  height: 22,
+                  width: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    color: AppColor.orangeColor,
+                  ),
                 ),
+              );
+            }
 
-                const SizedBox(height: 15),
+            return Form(
+              key: _formKey2,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
 
-                // Sanction Date Field
-                CustomLabeledPickerTextField(
-                  label: AppText.sanctionDate,
-                  isRequired: true,
-                  controller: leadListController.sanctionDateController,
-                  inputType: TextInputType.datetime,
-                  hintText: AppText.mmddyyyy,
-                  isDateField: true,
-                  validator:validateSanctionDate,
+                  // Sanction Amount Field
+                  CustomLabeledTextField(
+                    label: AppText.sanctionAmount,
+                    isRequired: true,
+                    controller: leadListController.sanctionAmountController,
+                    inputType: TextInputType.number,
+                    hintText: AppText.hintsanctionAmount,
+                    isTextArea: false,
+                    validator: validateSanctionAmount,
+                  ),
 
-                ),
+                  const SizedBox(height: 15),
 
-                const SizedBox(height: 20),
-              ],
-            ),
-          ),
+                  // Sanction Date Field
+                  CustomLabeledPickerTextField(
+                    label: AppText.sanctionDate,
+                    isRequired: true,
+                    controller: leadListController.sanctionDateController,
+                    inputType: TextInputType.datetime,
+                    hintText: AppText.mmddyyyy,
+                    isDateField: true,
+                    validator: validateSanctionDate,
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            );
+          }),
 
           // Submit button
           onSubmit: () {
             if (_formKey2.currentState!.validate()) {
-              leadListController.addSanctionDetailsApi(
-                  uln: uid
-              );
-              Get.back();
+              leadListController.addSanctionDetailsApi(uln: uid);
             }
           },
         );
       },
     );
-
   }
 
   Widget _buildDetailRow(String label, String value, int leadStage) {
@@ -1210,7 +1220,7 @@ overflow: TextOverflow.ellipsis,
 
         }
         else if (label_code == "update_loan_update") {
-          showUpdateLoanApplicationBottomSheet(context,uln);
+          showUpdateLoanApplicationDialog(context,uln);
         }
 
 
@@ -1428,47 +1438,38 @@ overflow: TextOverflow.ellipsis,
       },
     );
   }
-  void showUpdateLoanApplicationBottomSheet(BuildContext context, String uln) {
-
-    showModalBottomSheet(
+  void showUpdateLoanApplicationDialog(BuildContext context, String uln) {
+    showDialog(
       context: context,
-      isScrollControlled: true, // so it can resize with keyboard
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.45,
-          minChildSize: 0.3,
-          maxChildSize: 0.8,
-          builder: (context, scrollController) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: AppColor.primaryColor),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-              ),
-              child:  leadListController.isLoading.value
-                  ? const SizedBox(
-                height: 24,
-                width: 24,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  strokeWidth: 2,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "",
+          content: Obx(() {
+            if (leadListController.isLoad.value) {
+              return const Center(
+                child: SizedBox(
+                  height: 22,
+                  width: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 5,
+                    color: AppColor.orangeColor,
+                  ),
                 ),
-              )
-                  : Form(
-                key: formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              );
+            }
+
+            return Form(
+              key: formKey,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                       const SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
-                      // Label
-
-                      const SizedBox(height: 6),
                       CustomLabeledTextField(
                         label: AppText.loanApplicationNo,
                         isRequired: true,
@@ -1479,40 +1480,17 @@ overflow: TextOverflow.ellipsis,
                         validator: validateLoanApplicationNo,
                       ),
 
-                      const SizedBox(height: 20),
-
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColor.secondaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                leadListController.updateLoanFormApiCall(uln);
-                              }
-                          },
-                          child: const Text(
-                            AppText.submit,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ), ],
+                      const SizedBox(height: 6),
+                    ],
                   ),
                 ),
               ),
             );
+          }),
+          onSubmit: () {
+            if (formKey.currentState!.validate()) {
+              leadListController.updateLoanFormApiCall(uln);
+            }
           },
         );
       },
@@ -2098,150 +2076,158 @@ overflow: TextOverflow.ellipsis,
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        final screenHeight = MediaQuery.of(context).size.height;
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.8, // Initial height (80% of screen)
+          minChildSize: 0.4,     // Minimum height
+          maxChildSize: 0.95,    // Maximum height
+          builder: (context, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 16,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+              ),
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
 
-        return SizedBox(
-          height: screenHeight * 0.7,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 16,
-              right: 16,
-              top: 16,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 16),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomLabeledTextField(
-                          label: "Sanction Amount",
-                          isRequired: false,
-                          controller:
-                          leadListController.sanctionAmount2Controller,
-                          hintText: "Sanction Amount",
-                          isTextArea: false,
-                           inputType: TextInputType.text,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomLabeledTextField(
+                            label: "Sanction Amount",
+                            isRequired: false,
+                            controller: leadListController.sanctionAmount2Controller,
+                            hintText: "Sanction Amount",
+                            isTextArea: false,
+                            inputType: TextInputType.number,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: CustomLabeledTextField(
-                          label: "Total Amount",
-                          isRequired: false,
-                          controller: leadListController.totalDisburseAmountController,
-                          hintText: "Total Disburse Amount",
-                          isTextArea: false,
-                          inputType: TextInputType.text,
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: CustomLabeledTextField(
+                            label: "Total Amount",
+                            isRequired: false,
+                            controller: leadListController.totalDisburseAmountController,
+                            hintText: "Total Disburse Amount",
+                            isTextArea: false,
+                            inputType: TextInputType.number,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
 
-                  // Unique Lead No
-                  CustomLabeledTextField(
-                    label: "Unique Lead No",
-                    isRequired: false,
-                    controller: leadListController.uniqueLeadNoController,
-                    hintText: "Unique Lead No",
-                    isTextArea: false,
-                    inputType: TextInputType.text,
-                  ),
-                  const SizedBox(height: 0),
+                    CustomLabeledTextField(
+                      label: "Unique Lead No",
+                      isRequired: false,
+                      controller: leadListController.uniqueLeadNoController,
+                      hintText: "Unique Lead No",
+                      isTextArea: false,
+                      inputType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 12),
 
-                  CustomLabeledPickerTextField(
-                    label: AppText.sanctionDate,
-                    isRequired: true,
-                    controller: leadListController.disburseDateController,
-                    inputType: TextInputType.datetime,
-                    hintText: AppText.mmddyyyy,
-                    isDateField: true,
-                    validator:validateSanctionDate,
-                  ),
-                  const SizedBox(height: 12),
+                    CustomLabeledPickerTextField(
+                      label: AppText.sanctionDate,
+                      isRequired: true,
+                      controller: leadListController.disburseDateController,
+                      inputType: TextInputType.datetime,
+                      hintText: AppText.mmddyyyy,
+                      isDateField: true,
+                      validator: validateSanctionDate,
+                    ),
+                    const SizedBox(height: 12),
 
-                  // Partial / Disburse Amount
-                  CustomLabeledTextField(
-                    label: "Partial / Disburse Amount*",
-                    isRequired: true,
-                    controller: leadListController.partialAmountController,
-                    hintText: "Enter Disburse Amount",
-                    inputType: TextInputType.text,
-                  ),
-                  const SizedBox(height: 12),
+                    CustomLabeledTextField(
+                      label: "Partial / Disburse Amount",
+                      isRequired: true,
+                      controller: leadListController.partialAmountController,
+                      hintText: "Enter Disburse Amount",
+                      inputType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 12),
 
-                  // Transaction Details
-                  CustomLabeledTextField(
-                    label: "Transaction Details*",
-                    isRequired: true,
-                    controller: leadListController.transactionDetailsController,
-                    hintText: "Enter Transaction Details",
-                    inputType: TextInputType.text,
-                  ),
-                  const SizedBox(height: 12),
+                    CustomLabeledTextField(
+                      label: "Transaction Details",
+                      isRequired: true,
+                      controller: leadListController.transactionDetailsController,
+                      hintText: "Enter Transaction Details",
+                      inputType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 12),
 
-                  // Contact No
-                  CustomLabeledTextField2(
-                    label: "Contact No*",
-                    isRequired: true,
-                    controller: leadListController.contactNoController,
-                    hintText: "Enter Contact No",
-                    inputType: TextInputType.text,
-                    onChanged: (value) {
-                      if (value.length == 10) {
-                        leadListController.callGetBankerDetailSanction(value);
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 12),
+                    CustomLabeledTextField2(
+                      label: "Contact No",
+                      isRequired: true,
+                      controller: leadListController.contactNoController,
+                      hintText: "Enter Contact No",
+                      inputType: TextInputType.number,
+                      maxLength: 10,
+                      onChanged: (value) {
+                        if (value.length == 10) {
+                          leadListController.callGetBankerDetailSanction(value);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 12),
 
-                  // Disbursed By
-                  CustomLabeledTextField(
-                    label: "Disbursed By*",
-                    isRequired: true,
-                    controller: leadListController.disbursedByController,
-                    hintText: "Enter Disbursed By",
-                    inputType: TextInputType.text,
-                  ),
-                  const SizedBox(height: 20),
+                    CustomLabeledTextField(
+                      label: "Disbursed By",
+                      isRequired: true,
+                      controller: leadListController.disbursedByController,
+                      hintText: "Enter Disbursed By",
+                      inputType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 20),
 
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.secondaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.secondaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                      ),
-                      onPressed:() {
-                        leadListController.callUpdateDisburseHistory();
-                    },
-                      child: const Text(
-                        AppText.submit,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                        onPressed: () {
+                          leadListController.callUpdateDisburseHistory();
+                        },
+                        child: leadListController.isLoad2.value
+                            ? const SizedBox(
+                          height: 22,
+                          width: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 5,
+                            color: Colors.white,
+                          ),
+                        )
+                            : const Text(
+                          AppText.submit,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

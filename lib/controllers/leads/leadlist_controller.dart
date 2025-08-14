@@ -120,6 +120,8 @@ class LeadListController extends GetxController {
 
   var isDashboardLeads = false.obs;
 
+  var isLoad2 = false.obs;
+
 
 
 
@@ -1270,7 +1272,32 @@ print('getLeadDetailModel${getLeadDetailModel.value?.data?.loanApplicationNo}');
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
+      if(isDashboardLeads.value==false){
+        getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value,
+          leadName:leadNameMain.value,
+        );
+      }else{
+        ///new code 17 jul
 
+        DashboardController dashboardController=Get.find();
+
+        getDetailsListOfLeadsForDashboardApi(
+            applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+            stageId: leadCode.value
+        );
+
+      }
       isLoading(false);
     }
   }
@@ -1323,12 +1350,39 @@ print('getLeadDetailModel${getLeadDetailModel.value?.data?.loanApplicationNo}');
      print("Error in checkOldPasswordRequestApi: ${e.toString()}");
      ToastMessage.msg(AppText.somethingWentWrong);
    } finally {
+     if(isDashboardLeads.value==false){
+       getAllLeadsApi(
+         leadStage: leadCode.value,
+         employeeId:eId.value.toString(),
+         stateId:stateIdMain.value,
+         distId: distIdMain.value,
+         cityId: cityIdMain.value,
+         campaign: campaignMain.value,
+         fromDate: fromDateMain.value,
+         toDate: toDateMain.value,
+         branch: branchMain.value,
+         uniqueLeadNumber: uniqueLeadNumberMain.value,
+         leadMobileNumber:leadMobileNumberMain.value,
+         leadName:leadNameMain.value,
+       );
+     }else{
+       ///new code 17 jul
+
+       DashboardController dashboardController=Get.find();
+
+       getDetailsListOfLeadsForDashboardApi(
+           applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+           stageId: leadCode.value
+       );
+
+     }
      isLoad(false);
    }
 
  }
 
   void clear() {
+    updateLoanFormController.clear();
     sanctionAmountController.clear();
     sanctionDateController.clear();
 
@@ -1365,6 +1419,32 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
     print("Error in checkOldPasswordRequestApi: ${e.toString()}");
     ToastMessage.msg(AppText.somethingWentWrong);
   } finally {
+    if(isDashboardLeads.value==false){
+      getAllLeadsApi(
+        leadStage: leadCode.value,
+        employeeId:eId.value.toString(),
+        stateId:stateIdMain.value,
+        distId: distIdMain.value,
+        cityId: cityIdMain.value,
+        campaign: campaignMain.value,
+        fromDate: fromDateMain.value,
+        toDate: toDateMain.value,
+        branch: branchMain.value,
+        uniqueLeadNumber: uniqueLeadNumberMain.value,
+        leadMobileNumber:leadMobileNumberMain.value,
+        leadName:leadNameMain.value,
+      );
+    }else{
+      ///new code 17 jul
+
+      DashboardController dashboardController=Get.find();
+
+      getDetailsListOfLeadsForDashboardApi(
+          applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+          stageId: leadCode.value
+      );
+
+    }
     isLoad(false);
   }
 }
@@ -1397,6 +1477,32 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
       print("Error in checkOldPasswordRequestApi: ${e.toString()}");
       ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
+      if(isDashboardLeads.value==false){
+        getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value,
+          leadName:leadNameMain.value,
+        );
+      }else{
+        ///new code 17 jul
+
+        DashboardController dashboardController=Get.find();
+
+        getDetailsListOfLeadsForDashboardApi(
+            applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+            stageId: leadCode.value
+        );
+
+      }
       isLoad(false);
     }
   }
@@ -1428,6 +1534,32 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
       print("Error in checkOldPasswordRequestApi: ${e.toString()}");
       ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
+      if(isDashboardLeads.value==false){
+        getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value,
+          leadName:leadNameMain.value,
+        );
+      }else{
+        ///new code 17 jul
+
+        DashboardController dashboardController=Get.find();
+
+        getDetailsListOfLeadsForDashboardApi(
+            applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+            stageId: leadCode.value
+        );
+
+      }
       isLoad(false);
     }
   }
@@ -1469,6 +1601,32 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
      print("Error in checkOldPasswordRequestApi: ${e.toString()}");
      ToastMessage.msg(AppText.somethingWentWrong);
    } finally {
+     if(isDashboardLeads.value==false){
+       getAllLeadsApi(
+         leadStage: leadCode.value,
+         employeeId:eId.value.toString(),
+         stateId:stateIdMain.value,
+         distId: distIdMain.value,
+         cityId: cityIdMain.value,
+         campaign: campaignMain.value,
+         fromDate: fromDateMain.value,
+         toDate: toDateMain.value,
+         branch: branchMain.value,
+         uniqueLeadNumber: uniqueLeadNumberMain.value,
+         leadMobileNumber:leadMobileNumberMain.value,
+         leadName:leadNameMain.value,
+       );
+     }else{
+       ///new code 17 jul
+
+       DashboardController dashboardController=Get.find();
+
+       getDetailsListOfLeadsForDashboardApi(
+           applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+           stageId: leadCode.value
+       );
+
+     }
      isLoad(false);
    }
 
@@ -1507,6 +1665,32 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
   //    print("Error in checkOldPasswordRequestApi: ${e.toString()}");
     //  ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
+      if(isDashboardLeads.value==false){
+        getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value,
+          leadName:leadNameMain.value,
+        );
+      }else{
+        ///new code 17 jul
+
+        DashboardController dashboardController=Get.find();
+
+        getDetailsListOfLeadsForDashboardApi(
+            applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+            stageId: leadCode.value
+        );
+
+      }
       isLoad(false);
     }
   }

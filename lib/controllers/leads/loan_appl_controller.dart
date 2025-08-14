@@ -944,7 +944,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         isLoading(false);
 
         if(status=="1"){
-          print('status${status}');
+          print('status${getLoanApplIdModel.value?.data?.id.toString()??""}');
           sendMailToBankerAfterLoanApplicationSubmit(id:getLoanApplIdModel.value?.data?.id.toString()??'',
           status:status,context:context);
         }
@@ -1837,7 +1837,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
        sendMailAfterLoanApplicationSubmitModel.value = SendMailAfterLoanApplicationSubmitModel.fromJson(data);
 
        if(status=="1"){
-         await Future.delayed(Duration(milliseconds: 300));
+      //   await Future.delayed(Duration(milliseconds: 100));
          isLoading(true);
 
          showDialog(
