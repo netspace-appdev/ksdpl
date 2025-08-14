@@ -24,6 +24,7 @@ import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
+import '../../custom_widgets/CustomIconDilogBox.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
@@ -38,10 +39,13 @@ class LeadListMain extends StatelessWidget {
   LeadListController leadListController = Get.put(LeadListController(),);
   final TextEditingController _searchController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());
   LeadDDController leadDDController=Get.find();
   BotNavController botNavController = Get.find();
+
 
   @override
   Widget build(BuildContext context) {
@@ -180,14 +184,10 @@ class LeadListMain extends StatelessWidget {
                               )
                             ],
                           ),
-
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-
                           leadSection(context)
-
-
                         ],
                       ),
                     ),
@@ -200,6 +200,7 @@ class LeadListMain extends StatelessWidget {
       ),
     );
   }
+
   Widget header(context){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -239,13 +240,11 @@ class LeadListMain extends StatelessWidget {
 
             ),
           ),
-
           InkWell(
             onTap: (){
               showFilterDialog(context: context,leadId: "0");
             },
             child: Container(
-
               width: 40,
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -489,6 +488,128 @@ class LeadListMain extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 10),
+                    //mamshi add new api
+                    lead.leadStage==10?Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 8.0),
+                          child: InkWell(
+                            onTap:(){
+                              showUpdateDisburseHistorySheet(context);
+                             },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              width:double.infinity,
+                              decoration: BoxDecoration(
+                                  color: AppColor.primaryColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: AppColor.grey700)
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  AppText.updateDisburseHistory,
+                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
+                                ),
+                              ),
+                            ),
+                          ),
+                    ):SizedBox(),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          if(lead.leadStage.toString()=="8"||lead.leadStage.toString()=="9")...[
+                            lead.leadStage.toString()=="9"?SizedBox(): InkWell(
+                            onTap:(){
+
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CustomIconDialogBox(
+                                    title: "Are you sure?",
+                                    icon: Icons.info_outline,
+                                    iconColor: AppColor.secondaryColor,
+                                    description: "Do you want this lead to be added to Under Review ?",
+                                    onYes: () {
+                                      print('here call update lead stage');
+
+                                      var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+
+                                        leadListController.updateLeadStageApiForCall(
+                                          id:lead.id.toString(),
+                                          active: '1',
+                                          stage:'13',
+                                          empId: empId.toString(),
+                                        );
+                                    },
+                                    onNo: () {
+
+                                    },
+                                  );
+                                },
+                              );
+                             },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                              width:MediaQuery.of(context).size.width/3,
+
+                              decoration: BoxDecoration(
+                                  color: AppColor.primaryColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: AppColor.grey700)
+                              ),
+                              child: Center(
+                                child: Text(
+                                  AppText.underReview,
+                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 6),
+
+                         InkWell(
+                            onTap:() async {
+                              if (lead.leadStage.toString() == "9") {
+                                // Await the API call first
+                                await leadListController.callGetSoftSanctionByLeadIdAndBankIdApi(lead.id.toString());
+
+                                // After API completes, open bottom sheet
+                                showSanctionDialog(
+                                  context,
+                                  lead.uniqueLeadNumber.toString(),
+                                );
+                              } else {
+                                // If condition not met, just open the sheet directly
+                                showSanctionDialog(
+                                  context,
+                                  lead.uniqueLeadNumber.toString(),
+                                );
+                              }
+                           //   lead.leadStage.toString()=="9"? leadListController.callGetSoftSanctionByLeadIdAndBankIdApi():
+                            //  showSanctionDialog(context, lead.uniqueLeadNumber.toString());
+                               },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                              width:lead.leadStage.toString()=="9"?MediaQuery.of(context).size.width*0.76:MediaQuery.of(context).size.width/3,
+                              decoration: BoxDecoration(
+                                  color: AppColor.primaryColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: AppColor.grey700)
+                              ),
+                              child:
+                              const Center(
+                                child: Text(
+                                  AppText.appSaction,
+                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+              ],
+                      ),
+                    ),
 
                     /// Bottom Row Buttons (Assigned, Follow Up, Call Back, Employment)
                     Row(
@@ -496,7 +617,6 @@ class LeadListMain extends StatelessWidget {
                       children: [
 
                         if(lead.leadStage.toString()=="4")...[
-
 
                           _buildTextButton(
                             label:AppText.doable,
@@ -631,7 +751,7 @@ class LeadListMain extends StatelessWidget {
                       ],
                     ),
 
-                    SizedBox(height: 10),
+                    SizedBox(height: 10,),
 
                     if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6")
                       _buildTextButton(
@@ -644,6 +764,22 @@ class LeadListMain extends StatelessWidget {
                           currentLeadStage: lead.leadStage.toString(),
                           uln: lead.uniqueLeadNumber.toString()
                       ),
+
+
+                    SizedBox(height: 10),
+
+                    if(lead.leadStage.toString()=="6")
+                      _buildTextButton(
+                          label:"Update Loan Application",
+                          context: context,
+                          color: Colors.purple,
+                          icon:  Icons.list_alt_rounded,
+                          leadId: lead.id.toString(),
+                          label_code: "update_loan_update",
+                          currentLeadStage: lead.leadStage.toString(),
+                          uln: lead.uniqueLeadNumber.toString()
+                      ),
+
                   ],
                 ),
               );
@@ -697,6 +833,66 @@ class LeadListMain extends StatelessWidget {
     });
   }
 
+  void showSanctionDialog(BuildContext context, String uid){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "",
+          content: Form(
+            key: _formKey2,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+
+                // Sanction Amount Field
+                CustomLabeledTextField(
+                  label: AppText.sanctionAmount,
+                  isRequired: true,
+                  controller: leadListController.sanctionAmountController,
+                  inputType: TextInputType.number,
+                  hintText: AppText.hintsanctionAmount,
+                  isTextArea: false,
+                  validator: validateSanctionAmount,
+                ),
+
+                const SizedBox(height: 15),
+
+                // Sanction Date Field
+                CustomLabeledPickerTextField(
+                  label: AppText.sanctionDate,
+                  isRequired: true,
+                  controller: leadListController.sanctionDateController,
+                  inputType: TextInputType.datetime,
+                  hintText: AppText.mmddyyyy,
+                  isDateField: true,
+                  validator:validateSanctionDate,
+
+                ),
+
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+
+          // Submit button
+          onSubmit: () {
+            if (_formKey2.currentState!.validate()) {
+              leadListController.addSanctionDetailsApi(
+                  uln: uid
+              );
+              Get.back();
+            }
+          },
+        );
+      },
+    );
+
+  }
+
   Widget _buildDetailRow(String label, String value, int leadStage) {
 
     return Padding(
@@ -705,7 +901,6 @@ class LeadListMain extends StatelessWidget {
         children: [
           Container(
             width: 85,
-
             child: Text(
               "$label",
               style: TextStyle(
@@ -719,7 +914,6 @@ class LeadListMain extends StatelessWidget {
               value=="  -  "|| value==""?
               Text(
                 ":  -  ",
-
                 style: TextStyle(color: Colors.black87),
               ):
           Container(
@@ -755,7 +949,8 @@ overflow: TextOverflow.ellipsis,
     required String leadId,
     required String currentLeadStage,
     required BuildContext context,
-  }) {
+  })
+  {
     return IconButton(
       onPressed: () {
         print("currentLeadStage on call tap===>${currentLeadStage}");
@@ -989,7 +1184,10 @@ overflow: TextOverflow.ellipsis,
           'uln': uln.toString(),
           });
 
-        }else if (label_code == "cam_note_details") {
+        }
+
+       //here we are call cam not update form
+        else if (label_code == "cam_note_details") {
           print("leadId on tap-->${leadId}");
 
 
@@ -999,13 +1197,21 @@ overflow: TextOverflow.ellipsis,
 
           camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
           if(currentLeadStage=="4"){
+
+
             camNoteController.fromDoableOrInterested.value="4";
           }else{
             camNoteController.fromDoableOrInterested.value="6";
           }
           Get.toNamed("/camNoteDetailsScreen");
 
-        }else{
+        }
+        else if (label_code == "update_loan_update") {
+          showUpdateLoanApplicationBottomSheet(context,uln);
+        }
+
+
+        else{
 
         }
       },
@@ -1016,7 +1222,7 @@ overflow: TextOverflow.ellipsis,
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
-            label_code=="loan_appl_form" || label_code=="cam_note_details" ?MediaQuery.of(context).size.width*0.82:
+            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" ?MediaQuery.of(context).size.width*0.82:
             (label_code=="add_feedback" ) ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
@@ -1219,11 +1425,108 @@ overflow: TextOverflow.ellipsis,
       },
     );
   }
+  void showUpdateLoanApplicationBottomSheet(BuildContext context, String uln) {
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // so it can resize with keyboard
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.45,
+          minChildSize: 0.3,
+          maxChildSize: 0.8,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppColor.primaryColor),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+              ),
+              child:  leadListController.isLoading.value
+                  ? const SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  strokeWidth: 2,
+                ),
+              )
+                  : Form(
+                key: formKey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                       const SizedBox(height: 20),
+
+                      // Label
+
+                      const SizedBox(height: 6),
+                      CustomLabeledTextField(
+                        label: AppText.loanApplicationNo,
+                        isRequired: true,
+                        controller: leadListController.updateLoanFormController,
+                        inputType: TextInputType.name,
+                        hintText: AppText.enterLoanApplicationNo,
+                        isTextArea: false,
+                        validator: validateLoanApplicationNo,
+                      ),
+
+                      const SizedBox(height: 20),
+
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.secondaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                leadListController.updateLoanFormApiCall(uln);
+                              }
+                          },
+                          child: const Text(
+                            AppText.submit,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ), ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
 
   String? validatePercentage(String? value) {
     if (value == null || value.isEmpty) {
       return AppText.percentageRequired;
+    }
+    return null;
+  }
+
+  String? validateLoanApplicationNo(String? value) {
+    if (value == null || value.isEmpty) {
+      return AppText.loanNumberRequired;
     }
     return null;
   }
@@ -1236,7 +1539,8 @@ overflow: TextOverflow.ellipsis,
   }) {
 
    //working leads is now ongoing call
-    List<String> options = ["All Leads","Fresh Leads","Ongoing Call","Could Not Connect", "Interested Leads", "Not Interested", "Doable Leads","Not Doable"];
+    List<String> options = ["All Leads","Fresh Leads","Ongoing Call","Could Not Connect", "Interested Leads",
+      "Not Interested", "Doable Leads","Not Doable","Logged in","Under Review","Sanction"];
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1303,8 +1607,6 @@ overflow: TextOverflow.ellipsis,
                   height: 10,
                 ),
 
-
-                // 📝 Content (Radio Buttons)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                   child:  Column(
@@ -1595,6 +1897,7 @@ overflow: TextOverflow.ellipsis,
 
 
 
+
   void showFollowupDialog({
     required BuildContext context,
     required leadId,
@@ -1603,7 +1906,8 @@ overflow: TextOverflow.ellipsis,
     required callStartTime,
     required callEndTime,
     required callStatus,
-  }) {
+  })
+  {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -1718,6 +2022,246 @@ overflow: TextOverflow.ellipsis,
       },
     );
   }
+
+
+  void showSuccessDialog({
+    required BuildContext context,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          submitButtonText: "Ok",
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title: "",
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              Container(
+                  height: 150,
+                  width: 150,
+                  child: Lottie.asset(AppImage.ok)),
+
+              const Align(
+                alignment: Alignment.center,
+                child: Text(
+                  AppText.forgotMsg,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.grey2,
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+          onSubmit: () {
+            Get.back();
+          },
+        );
+      },
+    );
+  }
+
+
+    String? validateSanctionAmount(String? value) {
+      if (value == null || value.trim().isEmpty) {
+        return AppText.sanctionAmountRequired;
+      }
+      return null;
+    }
+
+    String? validateSanctionDate(String? value) {
+      if (value == null || value.trim().isEmpty) {
+        return AppText.sanctiondateRequired;
+      }
+      return null;
+    }
+
+  void showUpdateDisburseHistorySheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        final screenHeight = MediaQuery.of(context).size.height;
+
+        return SizedBox(
+          height: screenHeight * 0.7,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Center(
+                    child: Text(
+                      "Update Disburse History",
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Row for Sanction Amount & Total Disburse Amount
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomLabeledTextField(
+                          label: "Sanction Amount",
+                          isRequired: false,
+                          controller:
+                          leadListController.sanctionAmount2Controller,
+                          hintText: "Sanction Amount",
+                          isTextArea: false,
+                           inputType: TextInputType.text,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: CustomLabeledTextField(
+                          label: "Total Disburse Amount",
+                          isRequired: false,
+                          controller:
+                          leadListController.totalDisburseAmountController,
+                          hintText: "Total Disburse Amount",
+                          isTextArea: false,
+                          inputType: TextInputType.text,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Unique Lead No
+                  CustomLabeledTextField(
+                    label: "Unique Lead No",
+                    isRequired: false,
+                    controller: leadListController.uniqueLeadNoController,
+                    hintText: "Unique Lead No",
+                    isTextArea: false,
+                    inputType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 12),
+
+                  CustomLabeledPickerTextField(
+                    label: AppText.sanctionDate,
+                    isRequired: true,
+                    controller: leadListController.sanctionDateController,
+                    inputType: TextInputType.datetime,
+                    hintText: AppText.mmddyyyy,
+                    isDateField: true,
+                    validator:validateSanctionDate,
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Partial / Disburse Amount
+                  CustomLabeledTextField(
+                    label: "Partial / Disburse Amount*",
+                    isRequired: true,
+                    controller: leadListController.partialAmountController,
+                    hintText: "Enter Disburse Amount",
+                    inputType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Transaction Details
+                  CustomLabeledTextField(
+                    label: "Transaction Details*",
+                    isRequired: true,
+                    controller: leadListController.transactionDetailsController,
+                    hintText: "Enter Transaction Details",
+                    inputType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Contact No
+                  CustomLabeledTextField(
+                    label: "Contact No*",
+                    isRequired: true,
+                    controller: leadListController.contactNoController,
+                    hintText: "Enter Contact No",
+                    inputType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Disbursed By
+                  CustomLabeledTextField(
+                    label: "Disbursed By*",
+                    isRequired: true,
+                    controller: leadListController.disbursedByController,
+                    hintText: "Enter Disbursed By",
+                    inputType: TextInputType.text,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Submit Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0D47A1),
+                      ),
+                      onPressed: () {
+                    //    Navigator.pop(context);
+                        //leadListController.call
+                      },
+                      child: const Text(
+                        "Submit",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+
+  Widget _buildDateField(
+      String label, TextEditingController controller, BuildContext context) {
+    return TextField(
+      controller: controller,
+      readOnly: true,
+      onTap: () async {
+        DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+        );
+        if (picked != null) {
+          controller.text = "${picked.month}/${picked.day}/${picked.year}";
+        }
+      },
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6),
+        ),
+        suffixIcon: const Icon(Icons.calendar_today),
+      ),
+    );
+  }
+
+
+
 }
 
 class StatusChip extends StatelessWidget {

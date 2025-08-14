@@ -4,15 +4,14 @@ import 'dart:io';
 import 'package:call_log/call_log.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
-import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/leads/seachLeadController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
+import '../../models/addSanctionDetails/AddSanctionDetailsModel.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
 import '../../models/dashboard/GetRemindersModel.dart';
@@ -20,6 +19,8 @@ import '../../models/dashboard/LeadMoveToCommonTaskModel.dart';
 import '../../models/dashboard/WorkOnLeadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/drawer/UpdateLeadStageModel.dart';
+import '../../models/softSanctionByLeadId/SoftSanctionByLeadIdModel.dart';
+import '../../models/update_loan_formModel/UpdateLoanFormModel.dart';
 import '../../services/dashboard_api_service.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +30,13 @@ import 'lead_history_controller.dart';
 class LeadListController extends GetxController {
   var selectedPrevStage = Rxn<String>();
   var isLoading = false.obs;
+  var isLoad = false.obs;
   // GetAllLeadsModel? getAllLeadsModel;
 
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
   ///newly added for filter
   var filteredGetAllLeadsModel = Rxn<GetAllLeadsModel>();
+  var softSanctionByLeadIdModel = Rxn<SoftSanctionByLeadIdModel>();
   var isFilteredLoading = false.obs;
   var filteredHasMore = true.obs;
   var filteredCurrentPage = 1.obs;
@@ -42,6 +45,9 @@ class LeadListController extends GetxController {
   ///newly added for filter end
 
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
+  var updateLoanFormModel = Rxn<UpdateLoanFormModel>(); //
+  var addSanctionDetailsModel = Rxn<AddSanctionDetailsModel>(); //
+
   UpdateLeadStageModel? updateLeadStageModel;
   LeadMoveToCommonTaskModel? leadMoveToCommonTaskModel;
   WorkOnLeadModel? workOnLeadModel;
@@ -70,6 +76,7 @@ class LeadListController extends GetxController {
 
   var eId="".obs;
   final TextEditingController openPollPercentController = TextEditingController();
+  final TextEditingController updateLoanFormController = TextEditingController();
   final TextEditingController followDateController = TextEditingController();
   final TextEditingController followTimeController = TextEditingController();
   final TextEditingController followDetailsController = TextEditingController();
@@ -80,6 +87,18 @@ class LeadListController extends GetxController {
   final TextEditingController fromDateController = TextEditingController();
   final TextEditingController toDateController = TextEditingController();
   final TextEditingController couldNotController = TextEditingController();
+  final TextEditingController sanctionDateController = TextEditingController();
+  final TextEditingController sanctionAmountController = TextEditingController();
+  final TextEditingController sanctionAmount2Controller = TextEditingController();
+  final TextEditingController totalDisburseAmountController = TextEditingController();
+  final TextEditingController uniqueLeadNoController = TextEditingController();
+  final TextEditingController disburseDateController = TextEditingController();
+  final TextEditingController partialAmountController = TextEditingController();
+  final TextEditingController transactionDetailsController = TextEditingController();
+  final TextEditingController contactNoController = TextEditingController();
+  final TextEditingController disbursedByController = TextEditingController();
+
+
   GetEmployeeModel? getEmployeeModel;
   var isCallReminder=false.obs;
   var isFBDetailsShow=false.obs;
@@ -92,6 +111,9 @@ class LeadListController extends GetxController {
   LeadDDController leadDDController=Get.put(LeadDDController());
 
   var isDashboardLeads = false.obs;
+
+
+
 
   @override
   void onInit() {
@@ -198,6 +220,18 @@ class LeadListController extends GetxController {
     else if(selectedIndex.value==7){
       leadCode.value="7";
       leadStageName.value="Not Doable";
+    }
+    else if(selectedIndex.value==9){
+      leadCode.value="9";
+      leadStageName.value="Under Review";
+    }
+    else if(selectedIndex.value==8){
+      leadCode.value="8";
+      leadStageName.value="logged in";
+    }
+    else if(selectedIndex.value==10){
+      leadCode.value="10";
+      leadStageName.value="Sanction";
     }
   }
 
@@ -773,7 +807,6 @@ class LeadListController extends GetxController {
     try {
       isLoading(true);
 
-
       var data = await DrawerApiService.updateLeadStageApi(
           id:id,
           stage: stage,
@@ -781,10 +814,10 @@ class LeadListController extends GetxController {
           empId: empId
       );
 
-
       if(data['success'] == true){
 
         updateLeadStageModel= UpdateLeadStageModel.fromJson(data);
+        ToastMessage.msg(updateLeadStageModel?.message??'');
 
 
         isLoading(false);
@@ -1098,17 +1131,11 @@ class LeadListController extends GetxController {
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
-
-
     } catch (e) {
       print("Error workOnLeadModel: $e");
-
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-
-
-
 
       getAllLeadsApi(
           leadStage: leadCode.value,
@@ -1149,25 +1176,18 @@ class LeadListController extends GetxController {
 
 
       if(data['success'] == true){
-
         updateLeadStageModel= UpdateLeadStageModel.fromJson(data);
-
         isLoading(false);
 
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
-
-
     } catch (e) {
       print("Error updateLeadStageApi: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-
-
-
 
       getAllLeadsApi(
           leadStage: leadCode.value,
@@ -1201,7 +1221,7 @@ class LeadListController extends GetxController {
       if(data['success'] == true){
 
         getEmployeeModel= GetEmployeeModel.fromJson(data);
-
+print('getLeadDetailModel${getLeadDetailModel.value?.data?.loanApplicationNo}');
 
         StorageService.put(StorageService.EMPLOYEE_ID, getEmployeeModel!.data!.id.toString());
         isLoading(false);
@@ -1223,12 +1243,6 @@ class LeadListController extends GetxController {
          leadMobileNumber:leadMobileNumberMain.value,
           leadName:leadNameMain.value,
         );
-
-
-
-
-
-
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
@@ -1262,6 +1276,113 @@ class LeadListController extends GetxController {
         leadMobileNumber:leadMobileNumberMain.value,
       leadName:leadNameMain.value,
     );
+  }
+
+ Future<void> updateLoanFormApiCall(String leadnumber) async {
+
+   try {
+     isLoad(true);
+
+     var data = await DrawerApiService.updateLoanForm(
+       uniqueLeadNumber: updateLoanFormController.text.trim(),
+       LoanApplicationNumber:leadnumber??'',
+     );
+
+     if (data['success'] == true) {
+       updateLoanFormModel.value = UpdateLoanFormModel.fromJson(data);
+       isLoad(false);
+       clear();
+       Get.back();
+
+     }
+     else if (data['success'] == false && data['data'] is List && (data['data'] as List).isEmpty) {
+       //    ToastMessage.msg("Old password incorrect or empty");
+       isLoad(false);
+      // Get.back();
+     }
+     else {
+       ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
+     }
+   } catch (e) {
+     print("Error in checkOldPasswordRequestApi: ${e.toString()}");
+     ToastMessage.msg(AppText.somethingWentWrong);
+   } finally {
+     isLoad(false);
+   }
+
+ }
+
+  void clear() {
+    sanctionAmountController.clear();
+    sanctionDateController.clear();
+
+  }
+
+Future<void> addSanctionDetailsApi({required String uln}) async {
+  try {
+    isLoad(true);
+
+    var data = await DrawerApiService.addSanctionDetailscallApi(
+      UniqueLeadNo: uln,
+      SanctionDate: sanctionDateController.text.trim()??'',
+      SanctionAmount:sanctionAmountController.text.trim()??'',
+    );
+
+    if (data['success'] == true) {
+      addSanctionDetailsModel.value = AddSanctionDetailsModel.fromJson(data);
+      ToastMessage.msg(addSanctionDetailsModel.value?.message??'');
+
+      isLoad(false);
+      clear();
+      Get.back();
+
+    }
+    else if (data['success'] == false && data['data'] is List && (data['data'] as List).isEmpty) {
+      //    ToastMessage.msg("Old password incorrect or empty");
+      isLoad(false);
+      // Get.back();
+    }
+    else {
+      ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
+    }
+  } catch (e) {
+    print("Error in checkOldPasswordRequestApi: ${e.toString()}");
+    ToastMessage.msg(AppText.somethingWentWrong);
+  } finally {
+    isLoad(false);
+  }
+}
+
+  Future<void>callGetSoftSanctionByLeadIdAndBankIdApi(String leadID) async {
+    try {
+      isLoad(true);
+
+      var data = await DrawerApiService.callSoftSanctionByLeadIdApi(leadID: leadID, BankId: '0'
+      );
+
+      if (data['success'] == true) {
+        addSanctionDetailsModel.value = AddSanctionDetailsModel.fromJson(data);
+        ToastMessage.msg(addSanctionDetailsModel.value?.message??'');
+
+        isLoad(false);
+        clear();
+        Get.back();
+
+      }
+      else if (data['success'] == false && data['data'] is List && (data['data'] as List).isEmpty) {
+        //    ToastMessage.msg("Old password incorrect or empty");
+        isLoad(false);
+        // Get.back();
+      }
+      else {
+        ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error in checkOldPasswordRequestApi: ${e.toString()}");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoad(false);
+    }
   }
 
 }

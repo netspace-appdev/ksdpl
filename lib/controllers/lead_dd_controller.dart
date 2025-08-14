@@ -105,7 +105,6 @@ class LeadDDController extends GetxController{
     print("here KSD prod");
     getAllStateApi();
     getAllBankApi();
-
     getAllKsdplProductApi();
     getCampaignNameApi();
     getAllKsdplBranchApi();
@@ -513,6 +512,7 @@ class LeadDDController extends GetxController{
   }
 
   void  getCampaignNameApi() async {
+    print('here call co applicant job ');
     try {
 
       isLoading(true);
