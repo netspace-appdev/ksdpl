@@ -65,6 +65,11 @@ class AppText{
   static const String administrativeSupervisorEmail ="Administrative Supervisor Email";
   static const String agreeTerms="Agree with the terms and conditions ?";
   static const String termsConditions ="Terms and conditions";
+  static const String underReview ="Add Under Review";
+  static const String updateDisburseHistory ="Update Disburse History";
+  static const String appSaction ="Add Loan Sanction";
+ // static const String sanctionAmount ="Sanction Amount";
+  static const String hintsanctionAmount ="Enter Sanction Amount";
 
   static const String unknownFunctionalSupervisor ="Unknown Functional Supervisor";
   static const String unknownAdminSupervisor ="Unknown Admin Supervisor";
@@ -191,6 +196,7 @@ class AppText{
   static const String logout="Logout";
   static const String notification="Notification";
   static const String percentageRequired="Percentage is required";
+  static const String loanNumberRequired="Loan Application Number  is required";
   static const String leadDetails="Lead Details";
   static const String addLead="Add Lead";
   static const String fullName="Full Name";
@@ -819,6 +825,10 @@ class AppText{
   static const String ProcessingCharges="Processing Charges";
   static const String ProcessingFees = "Processing Fees";
   static const String ChargesDetailshint= "0";
+  static const String sanctionDate= "Sanction Date";
+  static const String sanctionAmountRequired ="Please enter sanction amount";
+  static const String sanctiondateRequired ="Please enter sanction Date";
+
 
 }
 

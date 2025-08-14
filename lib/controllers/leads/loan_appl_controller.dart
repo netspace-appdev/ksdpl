@@ -954,12 +954,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         //   Get.back();
 
       } else {
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      //  ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
     } catch (e) {
       print("Error getLeadDetailByIdApi: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+    //  ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
       isLoading(false);
@@ -1117,8 +1117,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
           detailMap = jsonDecode(
               getLoanApplIdModel.value!.data!.detailForLoanApplication!);
-          print('here i get vloan id ${getLoanApplIdModel.value!.data!.id
-              .toString()}');
+          print('here i get vloan id ${getLoanApplIdModel.value!.data!.id.toString()}');
           getLoanApplicationDocumentByLoanIdApi(loanId: getLoanApplIdModel.value?.data?.id.toString()??'');
 
           dsaStaffNController.text = detailMap?['DsaStaffName'] ?? '';
@@ -1265,12 +1264,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         populateReferenceControllers();
         isLoadingMainScreen(false);
       } else {
-        ToastMessage.msg(req['message'] ?? AppText.somethingWentWrong);
+     //   ToastMessage.msg(req['message'] ?? AppText.somethingWentWrong);
       }
     } catch (e) {
       print("Error getLeadDetailByIdApi: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+     // ToastMessage.msg(AppText.somethingWentWrong);
       isLoadingMainScreen(false);
     } finally {
       isLoadingMainScreen(false);
@@ -1278,7 +1277,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   }
 
   void populateCoApplicantControllers() async {
-    coApplicantList.clear();
+    print('here call co applicant');
+
+  //  coApplicantList.clear();
     final jsonStr = getLoanApplIdModel.value!.data!.coApplicantDetail;
 
     if (jsonStr != null) {
@@ -1500,17 +1501,18 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
 
   void populateReferenceControllers() async {
-    referencesList.clear();
+   // referencesList.clear();
     final refList = getLoanApplIdModel.value?.data?.referenceDetails;
-    print('here referal${refList?.first.name}');
+    print('here referal test here ');
 
 
 
     if (refList != null) {
+        print('here referal${refList.length}');
+
       for (var item in refList) {
         final refController = ReferenceController();
         print('here referal');
-        print('here referal${item.name}');
 
         refController.refNameController.text = item.name ?? '';
         refController.refAddController.text = item.address ?? '';
@@ -1744,11 +1746,11 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
        // clearField();
 
       } else {
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+        //ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
     } catch (e) {
       print("Error SubmittLoanDocumentApi: $e");
-      ToastMessage.msg(AppText.somethingWentWrong);
+   //   ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
       isLoading(false);
     }
@@ -1787,7 +1789,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         }
       } catch (e) {
         print("Error SubmittLoanDocumentApi: $e");
-        ToastMessage.msg(AppText.somethingWentWrong);
+     //   ToastMessage.msg(AppText.somethingWentWrong);
       } finally {
         isloadData(false);
       }
@@ -1815,7 +1817,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       }
     } catch (e) {
       print("Error SubmittLoanDocumentApi: $e");
-      ToastMessage.msg(AppText.somethingWentWrong);
+     // ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
       isLoading(false);
     }
@@ -1861,7 +1863,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
      }
    } catch (e) {
      print("Error SendMailAfterLoanApplicationSubmitModel: $e");
-     ToastMessage.msg(AppText.somethingWentWrong);
+    // ToastMessage.msg(AppText.somethingWentWrong);
    } finally {
      isLoading(false);
    }

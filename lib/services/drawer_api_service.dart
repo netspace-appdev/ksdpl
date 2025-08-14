@@ -36,6 +36,13 @@ class DrawerApiService {
   static const String getAllLeadStage = baseUrl + 'LeadStage/GetAllLeadStage';
   static const String getAllBranchByBankId = baseUrl + 'Branch/GetAllBranchByBankId';
   static const String getAllChannelList = baseUrl + 'ChannelMaster/GetAllChannelList';
+  static const String getBankerDetailApi = baseUrl + 'CamNoteDetail/GetBankerDetail';
+  static const String getAddDisburseHistoryApi = baseUrl + 'CamNoteDetail/AddDisburseHistory';
+  static const String getDisburseHistoryByUniqueLeadNoApi = baseUrl + 'LeadDetail/GetLeadDetailByUniqueLeadNumber';
+
+  static const String addSanctionDetail = baseUrl + 'CamNoteDetail/AddSanctionDetails';
+  static const String getSoftSanctionByLeadIdAndBankIdApi = baseUrl + 'CamNoteDetail/GetSoftSanctionByLeadIdAndBankId';
+  static const String UpdateLoanApplicationNumberByLead = baseUrl + 'LeadDetail/UpdateLoanApplicationNumberByLead';
 
   static const String getDetailsListOfLeadsForDashboard = baseUrl + 'LeadDetail/GetDetailsListOfLeadsForDashboard';
 
@@ -1204,5 +1211,249 @@ class DrawerApiService {
       throw Exception('Error: $e');
     }
   }
+
+  static Future<Map<String, dynamic>> updateLoanForm({
+    required String uniqueLeadNumber, String? LoanApplicationNumber,
+  }) async {
+    try {
+      var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(UpdateLoanApplicationNumberByLead),
+      );
+
+      // Headers
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Add form field for lead number
+      request.fields['uniqueLeadNumber'] = uniqueLeadNumber;
+      request.fields['LoanApplicationNumber'] = LoanApplicationNumber!;
+      request.fields['EmployeeId'] =empId;
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(UpdateLoanApplicationNumberByLead, request.fields);
+      Helper.ApiRes(UpdateLoanApplicationNumberByLead, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+  static Future<dynamic> addSanctionDetailscallApi({required String UniqueLeadNo,
+    required String SanctionDate,
+    required String SanctionAmount}) async {
+
+    try {
+      var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(addSanctionDetail),
+      );
+
+      // Headers
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Add form field for lead number
+      request.fields['UniqueLeadNo'] = UniqueLeadNo;
+      request.fields['SanctionAmount'] = SanctionAmount;
+      request.fields['SanctionDate'] = SanctionDate!;
+      request.fields['EmployeeId'] =empId;
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(addSanctionDetail, request.fields);
+      Helper.ApiRes(addSanctionDetail, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+
+  }
+
+  static Future<dynamic> callSoftSanctionByLeadIdApi({
+  required String leadID, required String BankId}) async {
+    try {
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getSoftSanctionByLeadIdAndBankIdApi),
+      );
+
+      // Headers
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Add form field for lead number
+      request.fields['LeadID'] = leadID;
+      request.fields['BankId'] = BankId;
+
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getSoftSanctionByLeadIdAndBankIdApi, request.fields);
+      Helper.ApiRes(getSoftSanctionByLeadIdAndBankIdApi, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+  static Future<dynamic> callGetBankerDetailSanctionApi({required String PhoneNo}) async {
+    try {
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getBankerDetailApi),
+      );
+
+      // Headers
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Add form field for lead number
+      request.fields['PhoneNo'] = PhoneNo;
+
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getBankerDetailApi, request.fields);
+      Helper.ApiRes(getBankerDetailApi, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+  static Future<dynamic> callUpdateDisburseHistoryApi({
+    required String sanctionAmount,
+    required String totalDisburseAmount,
+    required String uniqueLeadNo,
+    required String disburseDate,
+    required String disburseAmount,
+    required String transactionDetails,
+    required String contactNo,
+    required String disbursedBy}) async {
+
+    var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+
+    try {
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAddDisburseHistoryApi),
+      );
+
+      // Headers
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Id
+      // UniqueLeadNo
+      // ActualDate
+      // ActualAmount
+      // TransactionDetails
+      // DisbursedBy
+      // ContactNo
+      // EmployeeId
+
+      request.fields['UniqueLeadNo'] = uniqueLeadNo;
+      request.fields['ActualDate'] = disburseDate;
+      request.fields['ActualAmount'] = disburseAmount;
+      request.fields['TransactionDetails'] = transactionDetails;
+      request.fields['DisbursedBy'] = disbursedBy;
+      request.fields['ContactNo'] = contactNo;
+      request.fields['EmployeeId'] = empId.toString();
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getAddDisburseHistoryApi, request.fields);
+      Helper.ApiRes(getAddDisburseHistoryApi, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+
+
+  }
+
+  static Future<dynamic> callGetdisburseHistoryByUniqueNoApi({String? loanApplicationNo}) async {
+
+    try {
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getDisburseHistoryByUniqueLeadNoApi),
+      );
+
+      // Headers
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      request.fields['UniqueLeadNumber'] = loanApplicationNo!;
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getDisburseHistoryByUniqueLeadNoApi, request.fields);
+      Helper.ApiRes(getDisburseHistoryByUniqueLeadNoApi, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
 
 }
