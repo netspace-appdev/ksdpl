@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:call_log/call_log.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
@@ -11,13 +10,12 @@ import 'package:ksdpl/controllers/leads/seachLeadController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
 import '../../models/GetBankerDetailSanctionModel/GetBankerDetailSanctionModel.dart';
 import '../../models/addDisburseHistory/AddDisburseHistoryModel.dart';
 import '../../models/addSanctionDetails/AddSanctionDetailsModel.dart';
-import '../../models/camnote/GetBankerDetailsByBranchIdModel.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
-import '../../models/dashboard/GetRemindersModel.dart';
 import '../../models/dashboard/LeadMoveToCommonTaskModel.dart';
 import '../../models/dashboard/WorkOnLeadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
@@ -29,7 +27,6 @@ import '../../services/dashboard_api_service.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
 
-import 'lead_history_controller.dart';
 
 class LeadListController extends GetxController {
   var selectedPrevStage = Rxn<String>();
@@ -81,6 +78,7 @@ class LeadListController extends GetxController {
 
   var selectedIndex = (1).obs;
   var leadId = RxnString();
+  var partialAmount;
 
   var eId="".obs;
   final TextEditingController openPollPercentController = TextEditingController();
@@ -145,7 +143,7 @@ class LeadListController extends GetxController {
     if (await canLaunchUrl(phoneUri)) {
 
       await launchUrl(phoneUri);
-      await Future.delayed(Duration(seconds: 5)); // Wait before checking logs
+      await Future.delayed(const Duration(seconds: 5)); // Wait before checking logs
       checkCallStatus(phoneNumber);
 
 
@@ -156,7 +154,7 @@ class LeadListController extends GetxController {
   }
 
   Future<void> checkCallStatus(String phoneNumber) async {
-    await Future.delayed(Duration(seconds: 3)); // Allow time for call logs to update
+    await Future.delayed(const Duration(seconds: 3)); // Allow time for call logs to update
 
     Iterable<CallLogEntry> callLogs = await CallLog.query(
       number: phoneNumber,
@@ -1515,7 +1513,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
       if (data['success'] == true) {
         getBankerDetailSanctionModel.value = GetBankerDetailSanctionModel.fromJson(data);
-        ToastMessage.msg(getBankerDetailSanctionModel.value?.message??'');
+      //  ToastMessage.msg(getBankerDetailSanctionModel.value?.message??'');
         disbursedByController.text=getBankerDetailSanctionModel.value?.data?.bankersName.toString()??'';
 
         isLoad(false);
@@ -1528,7 +1526,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
         // Get.back();
       }
       else {
-        ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
+       // ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
       }
     } catch (e) {
       print("Error in checkOldPasswordRequestApi: ${e.toString()}");
@@ -1565,71 +1563,84 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
   }
 
  Future<void> callUpdateDisburseHistory() async {
-   try {
-     isLoad(true);
 
-     var data = await DrawerApiService.callUpdateDisburseHistoryApi(
-       sanctionAmount: sanctionAmount2Controller.text,
-       totalDisburseAmount: totalDisburseAmountController.text,
-       uniqueLeadNo: uniqueLeadNoController.text,
-       disburseDate: disburseDateController.text,
-       disburseAmount: partialAmountController.text, // partialAmount is actually disburseAmount
-       transactionDetails: transactionDetailsController.text,
-       contactNo: contactNoController.text,
-       disbursedBy: disbursedByController.text,
+   final disburse = double.tryParse(
+       partialAmountController.text ?? '0'
+   ) ?? 0;
+   if (disburse > partialAmount) {
+     return   SnackbarHelper.showSnackbar(title: "Incomplete Data", message: AppText.partialAmountCannotExceed??'');
 
-     );
+       //ToastMessage.msg(AppText.partialAmountCannotExceed??'');
 
-     if (data['success'] == true) {
-       addDisburseHistoryModel.value = AddDisburseHistoryModel.fromJson(data);
-       ToastMessage.msg(addDisburseHistoryModel.value?.message??'');
-       // disbursedByController.text=getBankerDetailSanctionModel.value?.data?.bankersName.toString()??'';
+   }else {
+     try {
+       isLoad2(true);
 
-       isLoad(false);
-        clearhistory();
+       var data = await DrawerApiService.callUpdateDisburseHistoryApi(
+         sanctionAmount: sanctionAmount2Controller.text,
+         totalDisburseAmount: totalDisburseAmountController.text,
+         uniqueLeadNo: uniqueLeadNoController.text,
+         disburseDate: disburseDateController.text,
+         disburseAmount: partialAmountController.text,
+         // partialAmount is actually disburseAmount
+         transactionDetails: transactionDetailsController.text,
+         contactNo: contactNoController.text,
+         disbursedBy: disbursedByController.text,
+
+       );
+
+       if (data['success'] == true) {
+         addDisburseHistoryModel.value = AddDisburseHistoryModel.fromJson(data);
+         ToastMessage.msg(addDisburseHistoryModel.value?.message ?? '');
+         // disbursedByController.text=getBankerDetailSanctionModel.value?.data?.bankersName.toString()??'';
+
+         isLoad2(false);
+         clearhistory();
          Get.back();
-     }
-     else if (data['success'] == false && data['data'] is List && (data['data'] as List).isEmpty) {
-       //    ToastMessage.msg("Old password incorrect or empty");
-       isLoad(false);
-       // Get.back();
-     }
-     else {
-       ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
-     }
-   } catch (e) {
-     print("Error in checkOldPasswordRequestApi: ${e.toString()}");
-     ToastMessage.msg(AppText.somethingWentWrong);
-   } finally {
-     if(isDashboardLeads.value==false){
-       getAllLeadsApi(
-         leadStage: leadCode.value,
-         employeeId:eId.value.toString(),
-         stateId:stateIdMain.value,
-         distId: distIdMain.value,
-         cityId: cityIdMain.value,
-         campaign: campaignMain.value,
-         fromDate: fromDateMain.value,
-         toDate: toDateMain.value,
-         branch: branchMain.value,
-         uniqueLeadNumber: uniqueLeadNumberMain.value,
-         leadMobileNumber:leadMobileNumberMain.value,
-         leadName:leadNameMain.value,
-       );
-     }else{
-       ///new code 17 jul
+       }
+       else if (data['success'] == false && data['data'] is List &&
+           (data['data'] as List).isEmpty) {
+         //    ToastMessage.msg("Old password incorrect or empty");
+         isLoad2(false);
+         // Get.back();
+       }
+       else {
+         ToastMessage.msg(
+             data['data']?.toString() ?? AppText.somethingWentWrong);
+       }
+     } catch (e) {
+       print("Error in checkOldPasswordRequestApi: ${e.toString()}");
+       ToastMessage.msg(AppText.somethingWentWrong);
+     } finally {
+       if (isDashboardLeads.value == false) {
+         getAllLeadsApi(
+           leadStage: leadCode.value,
+           employeeId: eId.value.toString(),
+           stateId: stateIdMain.value,
+           distId: distIdMain.value,
+           cityId: cityIdMain.value,
+           campaign: campaignMain.value,
+           fromDate: fromDateMain.value,
+           toDate: toDateMain.value,
+           branch: branchMain.value,
+           uniqueLeadNumber: uniqueLeadNumberMain.value,
+           leadMobileNumber: leadMobileNumberMain.value,
+           leadName: leadNameMain.value,
+         );
+       } else {
+         ///new code 17 jul
 
-       DashboardController dashboardController=Get.find();
+         DashboardController dashboardController = Get.find();
 
-       getDetailsListOfLeadsForDashboardApi(
-           applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
-           stageId: leadCode.value
-       );
-
+         getDetailsListOfLeadsForDashboardApi(
+             applyDateFilter: dashboardController.isLeadCountYearly.toString(),
+             //changeit
+             stageId: leadCode.value
+         );
+       }
+       isLoad2(false);
      }
-     isLoad(false);
    }
-
  }
 
   Future<void> callGetdisburseHistoryByUniqueLeadNoApi(String? loanApplicationNo) async {
@@ -1648,6 +1659,16 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
         sanctionAmount2Controller.text=getDisburseHistoryByUniqueLeadNoModel.value?.data!.sanctionAmount.toString()??'';
         totalDisburseAmountController.text=getDisburseHistoryByUniqueLeadNoModel.value?.data!.disburseAmount.toString()??'';
         uniqueLeadNoController.text=getDisburseHistoryByUniqueLeadNoModel.value?.data!.uniqueLeadNumber.toString()??'';
+
+        final sanction = double.tryParse(
+            getDisburseHistoryByUniqueLeadNoModel.value?.data?.sanctionAmount.toString() ?? '0'
+        ) ?? 0;
+
+        final disburse = double.tryParse(
+            getDisburseHistoryByUniqueLeadNoModel.value?.data?.disburseAmount.toString() ?? '0'
+        ) ?? 0;
+
+         partialAmount = sanction - disburse;
 
         isLoad(false);
         // clear();

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
@@ -42,10 +43,12 @@ class LeadListMain extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
+  final _formKey3 = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());
   LeadDDController leadDDController=Get.find();
   BotNavController botNavController = Get.find();
+
 
 
   @override
@@ -490,7 +493,7 @@ class LeadListMain extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     //mamshi add new api
-                    lead.leadStage==10||lead.leadStage==11||lead.leadStage==12?Padding(
+                    lead.leadStage==10||lead.leadStage==11?Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 8.0),
                           child: InkWell(
                             onTap:(){
@@ -2094,136 +2097,163 @@ overflow: TextOverflow.ellipsis,
                 top: 16,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 16,
               ),
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
+              child: Form(
+                key: _formKey3,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
 
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomLabeledTextField(
-                            label: "Sanction Amount",
-                            isRequired: false,
-                            controller: leadListController.sanctionAmount2Controller,
-                            hintText: "Sanction Amount",
-                            isTextArea: false,
-                            inputType: TextInputType.number,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomLabeledTextField(
+                              label: "Sanction Amount",
+                              isRequired: false,
+                              controller: leadListController.sanctionAmount2Controller,
+                              hintText: "Sanction Amount",
+                              isTextArea: false,
+                              inputType: TextInputType.number,
+                              isInputEnabled: false,
+                              // validator: validateSanctionAmount,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: CustomLabeledTextField(
-                            label: "Total Amount",
-                            isRequired: false,
-                            controller: leadListController.totalDisburseAmountController,
-                            hintText: "Total Disburse Amount",
-                            isTextArea: false,
-                            inputType: TextInputType.number,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: CustomLabeledTextField(
+                              label: "Total Disburse Amt",
+                              isRequired: false,
+                              controller: leadListController.totalDisburseAmountController,
+                              hintText: "Total Disburse Amount",
+                              isTextArea: false,
+                              isInputEnabled: false,
+                              inputType: TextInputType.number,
+                           //   validator: validateSanctionAmount,
+
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
 
-                    CustomLabeledTextField(
-                      label: "Unique Lead No",
-                      isRequired: false,
-                      controller: leadListController.uniqueLeadNoController,
-                      hintText: "Unique Lead No",
-                      isTextArea: false,
-                      inputType: TextInputType.text,
-                    ),
-                    const SizedBox(height: 12),
+                      CustomLabeledTextField(
+                        label: "Unique Lead No",
+                        isRequired: false,
+                        controller: leadListController.uniqueLeadNoController,
+                        hintText: "Unique Lead No",
+                        isTextArea: false,
+                        inputType: TextInputType.text,
+                        isInputEnabled: false,
+                        validator: validateLoanApplicationNo,
 
-                    CustomLabeledPickerTextField(
-                      label: AppText.sanctionDate,
-                      isRequired: true,
-                      controller: leadListController.disburseDateController,
-                      inputType: TextInputType.datetime,
-                      hintText: AppText.mmddyyyy,
-                      isDateField: true,
-                      validator: validateSanctionDate,
-                    ),
-                    const SizedBox(height: 12),
+                      ),
+                      const SizedBox(height: 12),
 
-                    CustomLabeledTextField(
-                      label: "Partial / Disburse Amount",
-                      isRequired: true,
-                      controller: leadListController.partialAmountController,
-                      hintText: "Enter Disburse Amount",
-                      inputType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 12),
+                      CustomLabeledPickerTextField(
+                        label: AppText.sanctionDate,
+                        isRequired: true,
+                        controller: leadListController.disburseDateController,
+                        inputType: TextInputType.datetime,
+                        hintText: AppText.mmddyyyy,
+                        isDateField: true,
+                        validator: validateSanctionDate,
+                      ),
+                      const SizedBox(height: 12),
 
-                    CustomLabeledTextField(
-                      label: "Transaction Details",
-                      isRequired: true,
-                      controller: leadListController.transactionDetailsController,
-                      hintText: "Enter Transaction Details",
-                      inputType: TextInputType.text,
-                    ),
-                    const SizedBox(height: 12),
+                      CustomLabeledTextField(
+                        label: "Partial / Disburse Amount",
+                        isRequired: true,
+                        controller: leadListController.partialAmountController,
+                        hintText: "Enter Disburse Amount",
+                        inputType: TextInputType.number,
+                        validator: partialValidation,
+                      ),
+                      const SizedBox(height: 12),
 
-                    CustomLabeledTextField2(
-                      label: "Contact No",
-                      isRequired: true,
-                      controller: leadListController.contactNoController,
-                      hintText: "Enter Contact No",
-                      inputType: TextInputType.number,
-                      maxLength: 10,
-                      onChanged: (value) {
-                        if (value.length == 10) {
-                          leadListController.callGetBankerDetailSanction(value);
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 12),
+                      CustomLabeledTextField(
+                        label: "Transaction Details",
+                        isRequired: true,
+                        controller: leadListController.transactionDetailsController,
+                        hintText: "Enter Transaction Details",
+                        inputType: TextInputType.text,
+                        validator: transuctionValidation,
 
-                    CustomLabeledTextField(
-                      label: "Disbursed By",
-                      isRequired: true,
-                      controller: leadListController.disbursedByController,
-                      hintText: "Enter Disbursed By",
-                      inputType: TextInputType.text,
-                    ),
-                    const SizedBox(height: 20),
+                      ),
+                      const SizedBox(height: 12),
 
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.secondaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {
-                          leadListController.callUpdateDisburseHistory();
+                      CustomLabeledTextField2(
+                        label: AppText.contactNo2,
+                        isRequired: true,
+                        controller: leadListController.contactNoController,
+                        hintText: AppText.hintContact,
+                        inputType: TextInputType.number,
+                        maxLength: 10,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Contact No is required";
+                          }
+                          if (value.length != 10) {
+                            return "Contact No must be 10 digits";
+                          }
+                          return null;
                         },
-                        child: leadListController.isLoad2.value
-                            ? const SizedBox(
-                          height: 22,
-                          width: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 5,
-                            color: Colors.white,
+                        onChanged: (value) {
+                          if (value.length == 10) {
+                            leadListController.callGetBankerDetailSanction(value);
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 12),
+
+                      CustomLabeledTextField(
+                        label: "Disbursed By",
+                        isRequired: true,
+                        controller: leadListController.disbursedByController,
+                        hintText: "Enter Disbursed By",
+                        inputType: TextInputType.text,
+                        validator: validateDisbursedBy,
+                      ),
+                      const SizedBox(height: 20),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.secondaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                        )
-                            : const Text(
-                          AppText.submit,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                          onPressed: () {
+                        if (_formKey3.currentState!.validate()) {
+
+                          leadListController.callUpdateDisburseHistory();
+                        }
+                          },
+                          child: leadListController.isLoad2.value
+                              ? const SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 5,
+                              color: Colors.white,
+                            ),
+                          )
+                              : const Text(
+                            AppText.submit,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -2263,6 +2293,29 @@ overflow: TextOverflow.ellipsis,
 
 
 
+
+  String? partialValidation(String? value) {
+
+    if (value == null || value.trim().isEmpty) {
+      return AppText.partialAmountRequired;
+    }
+    return null; // valid
+  }
+
+
+  String? transuctionValidation(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppText.transuctionDetailRequired;
+    }
+    return null;
+  }
+
+  String? validateDisbursedBy(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppText.disburedbyRequired;
+    }
+    return null;
+  }
 }
 
 class StatusChip extends StatelessWidget {

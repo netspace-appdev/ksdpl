@@ -46,6 +46,8 @@ class AppText{
   static const String lenderName="Lender Name*";
   static const String contactNo="Contact No. (Use for Login)*";
   static const String whatsappNo="Whatsapp No.*";
+  static const String contactNo2="Contact No";
+
   static const String email="Email*";
   static const String passwordStar="Password*";
   static const String alreadyRegistered="Are you already registered? ";
@@ -229,6 +231,7 @@ class AppText{
   static const String conMob="Connector Mobile";
   static const String conShare="Connector Share %";
   static const String enterConName="Enter Connector Name";
+  static const String hintContact="Enter Contact No";
   static const String enterConMob="Enter Connector Mobile";
   static const String enterConShare="Enter Connector Share %";
   static const String mmddyyyy="mm/dd/yyyy";
@@ -828,6 +831,11 @@ class AppText{
   static const String sanctionDate= "Sanction Date";
   static const String sanctionAmountRequired ="Please enter sanction amount";
   static const String sanctiondateRequired ="Please enter sanction Date";
+  static const String partialAmountRequired ="Please enter Partial Amount";
+  static const String transuctionDetailRequired ="Please enter Transuction Detail";
+  static const String disburedbyRequired ="Please enter Name of Disbursed";
+  static const String? enterValidAmount="";
+  static const String? partialAmountCannotExceed = "The actual amount and disbursement amount should not exceed the sanctioned amount";
 
 
 }

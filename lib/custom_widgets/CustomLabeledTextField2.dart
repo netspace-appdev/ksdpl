@@ -8,7 +8,8 @@ class CustomLabeledTextField2 extends StatelessWidget {
   final TextInputType inputType;
   final bool isTextArea;
   final ValueChanged<String>? onChanged;
-  final int? maxLength; // <-- make it nullable
+  final int? maxLength;
+  final FormFieldValidator<String>? validator; // <-- Added validator
 
   const CustomLabeledTextField2({
     Key? key,
@@ -19,7 +20,8 @@ class CustomLabeledTextField2 extends StatelessWidget {
     required this.inputType,
     this.isTextArea = false,
     this.onChanged,
-    this.maxLength, // <-- optional parameter
+    this.maxLength,
+    this.validator, // <-- optional validator
   }) : super(key: key);
 
   @override
@@ -27,16 +29,32 @@ class CustomLabeledTextField2 extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "$label${isRequired ? ' *' : ''}",
-          style: const TextStyle(fontWeight: FontWeight.bold),
+        RichText(
+          text: TextSpan(
+            text: label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+            children: isRequired
+                ? [
+              const TextSpan(
+                text: ' *',
+                style: TextStyle(
+                  color: Colors.red, // red star
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ]
+                : [],
+          ),
         ),
         const SizedBox(height: 5),
         TextFormField(
           controller: controller,
           keyboardType: inputType,
           maxLines: isTextArea ? 3 : 1,
-          maxLength: maxLength, // <-- set max length here
+          maxLength: maxLength,
           decoration: InputDecoration(
             hintText: hintText,
             border: OutlineInputBorder(
@@ -44,6 +62,7 @@ class CustomLabeledTextField2 extends StatelessWidget {
             ),
           ),
           onChanged: onChanged,
+          validator: validator, // <-- hooked up validator
         ),
       ],
     );
