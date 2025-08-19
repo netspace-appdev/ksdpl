@@ -127,6 +127,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   final TextEditingController propSurveyNoController = TextEditingController();
   final TextEditingController propFinalPlotNoNoController = TextEditingController();
   final TextEditingController propBlockNoController = TextEditingController();
+  final TextEditingController  loanApplicationNoController = TextEditingController();
 
   final TextEditingController propHouseFlatController = TextEditingController();
   final TextEditingController propBuildingNameController = TextEditingController();
@@ -178,6 +179,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   RxList<DocumentCamImage> selectedImages = <DocumentCamImage>[].obs;
 
   var addDocumentList = <AdddocumentModel>[].obs;
+
 
   void addAdditionalSrcDocument() {
     addDocumentList.add(AdddocumentModel());
@@ -506,6 +508,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     leadDController.selectedCityPerm.value = null;
 
     dsaCodeController.dispose();
+    loanApplicationNoController.dispose();
     lanController.dispose();
     panController.dispose();
     aadharController.dispose();
@@ -598,7 +601,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     referencesList.clear();
   }
 
-  void onSaveLoanAppl({required String status, required BuildContext context}) {
+  void onSaveLoanAppl({required String status}) {
     final List<CoApplicantModel> coApplicantModels = [];
     final List<FamilyMemberModel> familyMembersModels = [];
     final List<CreditCardModel> creditCardModel = [];
@@ -737,7 +740,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       coApPayload: coApPayload,
       famPayload: famPayload,
       ccPayload: ccPayload,
-      refPayload: refPayload,status: status,context:context
+      refPayload: refPayload,
+        status: status,
     );
   }
 
@@ -745,8 +749,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     required List<Map<String, dynamic>> coApPayload,
     required List<Map<String, dynamic>> famPayload,
     required List<Map<String, dynamic>> ccPayload,
-    required List<Map<String, dynamic>> refPayload, required String status,
-    required BuildContext context,
+    required List<Map<String, dynamic>> refPayload,
+    required String status,
 
   }) async
   {
@@ -922,10 +926,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       if (data['success'] == true) {
         addLoanApplicationModel.value = AddLoanApplicationModel.fromJson(data);
         //ToastMessage.msg(addLoanApplicationModel.value!.message!.toString());
+        print('status______${status}');
+
         if(status=="0"){
 
           showDialog(
-           context: context,
+            context: Get.context!,
             builder: (context) {
               return CustomIconDialogNewBox(
                 title: "Save Data",
@@ -944,9 +950,11 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         isLoading(false);
 
         if(status=="1"){
-          print('status${getLoanApplIdModel.value?.data?.id.toString()??""}');
+
+          print('status print ${getLoanApplIdModel.value?.data?.id.toString()??""}');
           sendMailToBankerAfterLoanApplicationSubmit(id:getLoanApplIdModel.value?.data?.id.toString()??'',
-          status:status,context:context);
+          status:status,
+             );
         }
 
         //Get.to(LeadListMain());
@@ -1121,6 +1129,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           getLoanApplicationDocumentByLoanIdApi(loanId: getLoanApplIdModel.value?.data?.id.toString()??'');
 
           dsaStaffNController.text = detailMap?['DsaStaffName'] ?? '';
+          loanApplicationNoController.text = detailMap?['loanApplicationNo'] ?? '';
           proFeeController.text = detailMap?['ProcessingFee']?.toString() ?? '';
           chqDDSNController.text = detailMap?['ChqDdSlipNo'] ?? '';
           loPurposeController.text = detailMap?['LoanPurpose'] ?? '';
@@ -1216,6 +1225,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         final data = getLoanApplIdModel.value!.data;
 
         dsaCodeController.text = data?.dsaCode ?? '';
+        loanApplicationNoController.text = data?.loanApplicationNo ?? '';
         lanController.text = data?.loanApplicationNo ?? '';
 
         selectedBank.value = data?.bankId ?? 0;
@@ -1242,17 +1252,19 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         bankerMobileController.text = data?.bankerMobile ?? '';
         bankerWhatsappController.text = data?.bankerWatsapp ?? '';
         bankerEmailController.text = data?.bankerEmail ?? '';
-        chargesDetailProcessingFees.text = data?.chargesDetails?.processingFees?.toString() ?? '';
+        chargesDetailProcessingFees.text = data?.chargesDetails?.processingFees?.toString() ?? '0';
+
         print('hfiufhsfhwowrffhoweowhje ${ data?.chargesDetails?.adminFeeCharges?.toString()}');
-        chargesDetailAdminFeeChargess.text = data?.chargesDetails?.adminFeeCharges?.toString() ?? '';
-        chargesDetailForeclosureCharges.text = data?.chargesDetails?.foreclosureChargesCharges?.toString() ?? '';
-        chargesDetailStampDuty.text = data?.chargesDetails?.stampDutyPercentage?.toString() ?? '';
-        chargesDetailLegalVettingCharges.text = data?.chargesDetails?.legalVettingCharges?.toString() ?? '';
-        chargesDetailTechnicalInspectionCharges.text = data?.chargesDetails?.technicalInspectionCharges?.toString() ?? '';
-        chargesDetailOtherCharges.text = data?.chargesDetails?.otherCharges?.toString() ?? '';
-        chargesDetailTSRLegalCharges.text = data?.chargesDetails?.tsrLegalCharges?.toString() ?? '';
-        chargesDetailValuationCharges.text = data?.chargesDetails?.valuationCharges?.toString() ?? '';
-        chargesDetailProcessingCharges.text = data?.chargesDetails?.processingCharges?.toString() ?? '';
+
+        chargesDetailAdminFeeChargess.text = data?.chargesDetails?.adminFeeCharges?.toString() ?? '0';
+        chargesDetailForeclosureCharges.text = data?.chargesDetails?.foreclosureChargesCharges?.toString() ?? '0';
+        chargesDetailStampDuty.text = data?.chargesDetails?.stampDutyPercentage?.toString() ?? '0';
+        chargesDetailLegalVettingCharges.text = data?.chargesDetails?.legalVettingCharges?.toString() ?? '0';
+        chargesDetailTechnicalInspectionCharges.text = data?.chargesDetails?.technicalInspectionCharges?.toString() ?? '0';
+        chargesDetailOtherCharges.text = data?.chargesDetails?.otherCharges?.toString() ?? '0';
+        chargesDetailTSRLegalCharges.text = data?.chargesDetails?.tsrLegalCharges?.toString() ?? '0';
+        chargesDetailValuationCharges.text = data?.chargesDetails?.valuationCharges?.toString() ?? '0';
+        chargesDetailProcessingCharges.text = data?.chargesDetails?.processingCharges?.toString() ?? '0';
 
         loanApplId = data?.id ?? 0;
 
@@ -1824,7 +1836,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   }
 
  Future <void> sendMailToBankerAfterLoanApplicationSubmit( {
-   required String id, required String status, required BuildContext context})
+   required String id,
+   required String status,
+ })
  async {
    try {
      isLoading(true);
@@ -1841,7 +1855,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
          isLoading(true);
 
          showDialog(
-           context: context,
+           context: Get.context!,
             barrierDismissible:false,
            builder: (context) {
              return CustomIconDialogNewBox(

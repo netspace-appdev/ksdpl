@@ -12,18 +12,16 @@ import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/more/ProfileController.dart';
+import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 
-import 'ProfileScreen.dart';
-
 
 
 class ProfileScreen extends StatelessWidget {
- // const ProfileScreen({super.key});
-
+  // const ProfileScreen({super.key});
 
   GreetingController greetingController = Get.put(GreetingController());
   InfoController infoController = Get.put(InfoController());
@@ -35,6 +33,12 @@ class ProfileScreen extends StatelessWidget {
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
   LeadDDController leadDDController = Get.put(LeadDDController());
   UploadCommonTaskController uploadCommonTaskController=Get.put(UploadCommonTaskController());
+  final List<EmploymentType> employmentTypes = [
+    EmploymentType(id: "1", name: "Full-Time"),
+    EmploymentType(id: "2", name: "Part-Time"),
+    EmploymentType(id: "3", name: "Internship"),
+    EmploymentType(id: "4", name: "Contract"),
+  ];
 
 
 
@@ -121,6 +125,7 @@ class ProfileScreen extends StatelessWidget {
                                         hintText: AppText.dateOfBirth,
                                         validator: ValidationHelper.validateDescription,
                                       ),
+
                                       CustomLabeledTextField(
                                         label: AppText.emailNoStar,
                                         isRequired: false,
@@ -129,6 +134,7 @@ class ProfileScreen extends StatelessWidget {
                                         hintText: AppText.enterEA,
                                         validator: ValidationHelper.validateDescription,
                                       ),
+
                                       CustomLabeledTextField(
                                         label: AppText.phoneNumberNoStar,
                                         isRequired: false,
@@ -137,6 +143,7 @@ class ProfileScreen extends StatelessWidget {
                                         hintText: AppText.enterPhNumber,
                                         validator: ValidationHelper.validateDescription,
                                       ),
+
                                       CustomLabeledTextField(
                                         label: AppText.whatsappNoNoStar,
                                         isRequired: false,
@@ -145,6 +152,7 @@ class ProfileScreen extends StatelessWidget {
                                         hintText: AppText.whatsappNoNoStar,
                                         validator: ValidationHelper.validateDescription,
                                       ),
+
                                       CustomLabeledTextField(
                                         label: AppText.EducationType,
                                         isRequired: false,
@@ -153,6 +161,7 @@ class ProfileScreen extends StatelessWidget {
                                         hintText: AppText.EducationType,
                                         validator: ValidationHelper.validateDescription,
                                       ),
+
                                       CustomLabeledTextField(
                                         label: AppText.JobRole,
                                         isRequired: false,
@@ -161,6 +170,7 @@ class ProfileScreen extends StatelessWidget {
                                         hintText: AppText.JobRole,
                                         validator: ValidationHelper.validateDescription,
                                       ),
+
                                       CustomLabeledTextField(
                                         label: AppText.WorkPlace,
                                         isRequired: true,
@@ -169,6 +179,7 @@ class ProfileScreen extends StatelessWidget {
                                         hintText: AppText.WorkPlace,
                                         validator: ValidationHelper.validateDescription,
                                       ),
+
                                       CustomLabeledTextField(
                                         label: AppText.ManagerName,
                                         isRequired: true,
@@ -494,6 +505,188 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                              SizedBox(height: 10,),
+                              ExpansionTile(
+                                initiallyExpanded: true,
+                                childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                                title:const Text( AppText.workExperience, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                                leading: Icon(Icons.list_alt, size: 20,),
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      CustomLabeledTextField(
+                                        label: AppText.companyName,
+                                        isRequired: false,
+                                        controller: profileController.employeeNameController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterCompanyName,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.jobTitle,
+                                        isRequired: false,
+                                        controller: profileController.dateOfBirthController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterJobTitle,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.department,
+                                        isRequired: false,
+                                        controller: profileController.profileEmailController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterDepartment,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledPickerTextField(
+                                        label: AppText.startDate,
+
+                                        controller: profileController.atStartDateController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.mmddyyyy,
+                                        isDateField: true,
+                                        validator: ValidationHelper.validateFromDate,
+                                        onDateSelected: () {
+                                          //     profileController.calculateTotalDays();
+                                        },
+                                      ),
+
+                                      CustomLabeledPickerTextField(
+                                        label: AppText.endDate,
+                                        controller: profileController.atEndDateController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.mmddyyyy,
+                                        isDateField: true,
+                                        validator: ValidationHelper.validateToDateNew,
+                                        onDateSelected: () {
+                                          //   profileController.calculateTotalDays();
+                                        },
+                                      ),
+
+                                      CustomDropdown<EmploymentType>(
+                                        items: employmentTypes,
+                                        getId: (EmploymentType type) => type.id,
+                                        getName: (EmploymentType type) => type.name,
+                                        hintText: "Select Employment Type",
+                                        selectedValue: null, // you can pass a default value here if you want
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            print("Selected: ${value.id} - ${value.name}");
+                                          }
+                                        },
+                                        onClear: () {
+                                          print("Selection cleared");
+                                        },
+                                      ),
+
+                                      CustomLabeledTextField(
+                                        label: AppText.employmentType,
+                                        isRequired: false,
+                                        controller: profileController.whatsappNoController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.whatsappNoNoStar,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+
+                                      CustomLabeledTextField(
+                                        label: AppText.companyAddress,
+                                        isRequired: false,
+                                        controller: profileController.HireDateController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterCompanyAddress,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.reasonForLeaving,
+                                        isRequired: false,
+                                        controller: profileController.HireDateController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterReasonForLeaving,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      CustomLabeledTextField(
+                                        label: AppText.lastDrawnSalary,
+                                        isRequired: false,
+                                        controller: profileController.employeeNameController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterLastDrawnSalary,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+
+                                      CustomLabeledTextField(
+                                        label: AppText.responsibilities,
+                                        isRequired: false,
+                                        controller: profileController.employeeNameController,
+                                        inputType: TextInputType.name,
+                                        hintText: AppText.enterResponsibilities,
+                                        validator: ValidationHelper.validateDescription,
+                                      ),
+                                      const Text(
+                                        AppText.UploadDoc,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.grey2,
+                                        ),
+                                      ),const Text(
+                                        'Only PDF files. Max 2 MB',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          color: AppColor.grey2,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5,),
+                                      Obx(() => Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: AppColor.black1,),
+                                          borderRadius: BorderRadius.circular(4.0),
+                                          color: Colors.grey.shade100,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: uploadCommonTaskController.pickImageFile,
+                                              child: Container(
+                                                height: double.infinity,
+                                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                decoration: const BoxDecoration(
+                                                  border: Border(
+                                                    right: BorderSide(color: AppColor.black1),
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    AppText.chooseFile,
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: AppColor.black1,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: Text(
+                                                uploadCommonTaskController.selectedFileName.value,
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black87,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -505,7 +698,7 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
         ),
-      
+
       ),
     );
   }
@@ -579,6 +772,13 @@ class ProfileScreen extends StatelessWidget {
       ],
     );
   }
+}
+
+class EmploymentType {
+  final String id;
+  final String name;
+
+  EmploymentType({required this.id, required this.name});
 }
 
 class HireDateController {

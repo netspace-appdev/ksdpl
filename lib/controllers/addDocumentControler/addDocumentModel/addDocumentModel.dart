@@ -10,4 +10,11 @@ class AdddocumentModel {
   // List<DocumentCamImage> selectedImages = [];
   RxList<DocumentCamImage> selectedImages = <DocumentCamImage>[].obs;
 
+
+
+  get universityController => null;
+
+  get gradeController => null;
+
+  get institutionController => null;
 }

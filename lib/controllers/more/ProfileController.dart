@@ -4,6 +4,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:ksdpl/models/more/ChangeEmailResponseModel.dart';
 import '../../common/storage_service.dart';
+import '../addDocumentControler/addDocumentModel/addDocumentModel.dart';
 
 class ProfileController extends GetxController{
 
@@ -21,6 +22,9 @@ class ProfileController extends GetxController{
   final TextEditingController HireDateController = TextEditingController();
   final TextEditingController JobRoleController = TextEditingController();
   final TextEditingController WorkPlaceController = TextEditingController();
+  final TextEditingController atStartDateController = TextEditingController();
+  final TextEditingController atEndDateController = TextEditingController();
+
   var selectedGender = Rxn<String>();
 
 
@@ -30,6 +34,8 @@ class ProfileController extends GetxController{
   var obscurePassword = true.obs;
   String? phone = StorageService.get(StorageService.PHONE);
 
+  var addDocumentList = <AdddocumentModel>[].obs;
+
 
   @override
   void onInit() {
@@ -38,6 +44,9 @@ class ProfileController extends GetxController{
      // mobileController.text = phone.toString();
     }
   }
+
+
+
 
 /*
   Future<void>  changeEmailRequestApi() async {

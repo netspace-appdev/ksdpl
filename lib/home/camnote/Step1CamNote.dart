@@ -20,6 +20,7 @@ import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
+import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomMultiSelectDropdown.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../custom_widgets/custom_photo_picker_widget.dart';
@@ -97,16 +98,19 @@ class Step1CamNote extends StatelessWidget {
                           isFutureDisabled: true,
                         ),
 
-                        CustomLabeledTextField(
+                        CustomLabeledTextField2(
                           label: AppText.phoneNumberNoStar,
                           isRequired: true,
-
                           controller: camNoteController.camPhoneController,
                           inputType: TextInputType.phone,
                           hintText: AppText.enterPhNumber,
                           validator: ValidationHelper.validatePhoneNumber,
                           maxLength: 10,
-
+                          onChanged: (value) {
+                            if (value.length == 10) {
+                              camNoteController.getLeadDetailByCustomerNumberApi(value);
+                            }
+                          },
                         ),
 
                         const Row(

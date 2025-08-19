@@ -62,6 +62,15 @@ class Step1Form extends StatelessWidget {
                       hintText: AppText.enterDsaCode,
                       validator:  ValidationHelper.validateName,
                     ),
+
+                    CustomLabeledTextField(
+                      label: AppText.loanApplicationNo,
+                      controller: loanApplicationController.loanApplicationNoController,
+                      inputType: TextInputType.name,
+                      isInputEnabled: false,
+                      hintText: AppText.enterLoanApplicationNo,
+                      validator:  ValidationHelper.validateName,
+                    ),
                     /*CustomLabeledTextField(
                       label: AppText.loanApplicationNo,
 

@@ -39,6 +39,7 @@ import '../../models/camnote/UpdateBankerDetailModel.dart';
 import '../../models/camnote/fetchBankDetailSegKSDPLProdModel.dart' as otherBank;
 import '../../models/camnote/special_model/IncomeModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
+import '../../models/getLeadDetailByCustomerNumber/getLeadDetailByCustomerNumberModel.dart';
 import '../../models/loan_application/AddLoanApplicationModel.dart';
 import '../../models/loan_application/GetLoanApplIdModel.dart';
 import '../../models/loan_application/special_model/CoApplicantModel.dart';
@@ -76,6 +77,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var firstName="".obs;
   var email="".obs;
   var isLoading = false.obs;
+  var isaddedMobileNumber = false.obs;
   var isLoadingCibil = false.obs;
 
   var isAllCamnoteSubmit = false.obs;
@@ -148,6 +150,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var getCamNoteLeadIdModel = Rxn<GetCamNoteLeadIdModel>(); //
   var getCamNoteDetailByIdModel = Rxn<GetCamNoteDetailByIdModel>(); //
   var requestForFinancialServicesModel = Rxn<RequestForFinancialServicesModel>(); //
+  var getLeadDetailByCustomerNumberModel = Rxn<GetLeadDetailByCustomerNumberModel>(); //
   RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
   var isLoadingProductCategory = false.obs;
   var isProductLoading = false.obs;
@@ -725,7 +728,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camPhoneController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
       return;
-    }else if(selectedGender.value==null || selectedGender.value==""){
+    }else if(isaddedMobileNumber.value == false){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+      return;
+    } else if(selectedGender.value==null || selectedGender.value==""){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
       return;
     }else if(camLoanAmtReqController.text.isEmpty){
@@ -2717,9 +2723,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       if(data['success'] == true){
 
-
-
-
         requestForFinancialServicesModel.value= RequestForFinancialServicesModel.fromJson(data);
 
         ToastMessage.msg(requestForFinancialServicesModel.value!.message.toString());
@@ -2760,6 +2763,39 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       } catch (e) {
         print("Invalid DOB format: ${dobController.text}");
       }
+    }
+  }
+
+  Future<void> getLeadDetailByCustomerNumberApi(String phone) async {
+    try {
+      isLoading(true);
+
+      var data = await CamNoteService.requestForgetLeadDetailByCustomerNumberApi(mobileNumber: phone);
+
+      if(data['success'] == true){
+
+        getLeadDetailByCustomerNumberModel.value= GetLeadDetailByCustomerNumberModel.fromJson(data);
+        if(getLeadDetailByCustomerNumberModel.value?.data?.mobileNumber==null){
+          isaddedMobileNumber.value = true;
+        }else {
+          isaddedMobileNumber.value = false;
+        }
+        SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error requestForFinancialServicesApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
     }
   }
 }

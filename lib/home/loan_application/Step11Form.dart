@@ -100,7 +100,7 @@ class Step11Form extends StatelessWidget {
                       }
 
                       // ✅ Call API
-                      loanApplicationController.onSaveLoanAppl(status: "1", context: context);
+                      loanApplicationController.onSaveLoanAppl(status: "1");
                     },
                     child: loanApplicationController.isLoading.value
                         ? const SizedBox(

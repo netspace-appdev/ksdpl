@@ -321,7 +321,33 @@ class AppText{
   static const String personInformation = "Person Information";
   static const String applFNmae = "Applicant's Full Name";
   static const String Academics = "Academics";
+  static const String workExperience = "Work Experience";
+  static const String iAmFresher = "I am a fresher (No prior work experience)";
+  static const String enterCompanyName = "Enter Company Name";
+  static const String jobTitle = "Job Title";
+  static const String enterJobTitle = "Enter Job Title";
 
+  static const String department = "Department";
+  static const String enterDepartment = "Enter Department";
+
+  static const String endDate = "End Date";
+
+  static const String employmentType = "Employment Type";
+  static const String selectEmploymentType = "Select Employment Type";
+
+  static const String enterCompanyAddress = "Enter Company Address";
+
+  static const String reasonForLeaving = "Reason For Leaving";
+  static const String enterReasonForLeaving = "Enter Reason For Leaving";
+
+  static const String lastDrawnSalary = "Last Drawn Salary";
+  static const String enterLastDrawnSalary = "Enter Last Drawn Salary";
+
+  static const String responsibilities = "Responsibilities";
+  static const String enterResponsibilities = "Enter Responsibilities";
+
+  static const String uploadDocuments = "Upload Documents";
+  static const String uploadDocNote = "Only PDF files. Max 2 MB";
 
   static const String dsaCode = "DSA Code";
   static const String enterDsaCode = "Enter DSA Code";
@@ -659,6 +685,7 @@ class AppText{
   static const String pleaseSelectIncomeType = "Please Select";
 
   static const String earningCustomerAge = "Earning Customer Age";
+  static const String cannotupload = "you can not upload photos now";
   static const String enterEarningCustomerAge = "Enter Age";
 
   static const String nonEarningCustomerAge = "Non-Earning Customer Age";
@@ -793,7 +820,6 @@ class AppText{
   static const String reqLeave="Request a Leave";
   static const String leaveType="Leave Type";
   static const String startDate="Start Date";
-  static const String endDate="End Date";
   static const String enterStartDate="Please Enter Start Date";
   static const String enterEndDate="Please Enter End Date";
   static const String totalDays="Total Days";

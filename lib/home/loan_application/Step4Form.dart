@@ -198,7 +198,7 @@ class Step4Form extends StatelessWidget {
                           loanApplicationController.addFamilyMember();
                         },
                         child: const Text(
-                          "Add New Co-Applicant",
+                          "Add Family Member",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -239,7 +239,7 @@ class Step4Form extends StatelessWidget {
                           loanApplicationController.removeFamilyMember(index);
                         },
                         child: const Text(
-                          "Remove This Co-Applicant",
+                          "Remove Family Member",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

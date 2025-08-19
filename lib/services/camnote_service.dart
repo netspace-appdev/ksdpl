@@ -31,6 +31,7 @@ class CamNoteService {
   static const String getProductDetailBySegmentAndProduct = BaseUrl.baseUrl + 'ProductList/GetProductDetailBySegmentAndProduct';
   static const String sendMailForLocationOfCustomer = BaseUrl.baseUrl + 'LeadDetail/SendMailForLocationOfCustomer';
   static const String requestForFinancialServices = BaseUrl.baseUrl + 'FileUpload/RequestForFinancialServices';
+  static const String requestLeadDetailByCustomerNumber = BaseUrl.baseUrl + 'LeadDetail/GetLeadDetailByCustomerNumber';
 
 
 
@@ -906,7 +907,8 @@ class CamNoteService {
 
   static Future<Map<String, dynamic>>requestForFinancialServicesApi({
     required String leadID
-  }) async {
+  })
+  async {
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -944,5 +946,36 @@ class CamNoteService {
     }
   }
 
+  static   requestForgetLeadDetailByCustomerNumberApi({required String mobileNumber})
+    async {
+      try {
+        var request = http.MultipartRequest(
+          'POST',
+          Uri.parse(requestLeadDetailByCustomerNumber),
+        );
+
+        // Headers
+
+        var header=await MyHeader.getHeaders2();
+
+        request.headers.addAll(header);
+        request.fields['MobileNumber'] = mobileNumber.toString();
+        var streamedResponse = await request.send();
+        var response = await http.Response.fromStream(streamedResponse);
+
+        Helper.ApiReq(requestLeadDetailByCustomerNumber, request.fields);
+        Helper.ApiRes(requestLeadDetailByCustomerNumber, response.body);
+
+
+        if (response.statusCode == 200) {
+          return jsonDecode(response.body);
+        } else {
+          throw Exception('Failed : ${response.statusCode}');
+        }
+      } catch (e) {
+        print("Error: $e");
+        throw Exception('Error : $e');
+      }
+    }
 
 }

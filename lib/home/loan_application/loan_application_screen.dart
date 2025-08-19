@@ -271,7 +271,6 @@ class LoanApplicationScreen extends StatelessWidget {
 
                         loanApplicationController.onSaveLoanAppl(
                           status: '0',
-                          context: context,
                         );
                       },
                       style: ElevatedButton.styleFrom(

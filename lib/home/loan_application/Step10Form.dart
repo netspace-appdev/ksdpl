@@ -47,7 +47,6 @@ class Step10Form extends StatelessWidget {
 
                         SizedBox(height: 20,),
 
-
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -66,7 +65,7 @@ class Step10Form extends StatelessWidget {
                               label: AppText.UploadDoc,
                               isCloseVisible: loanApplicationController.photosPropEnabled.value,
                               isUploadActive: loanApplicationController.photosPropEnabled.value,
-                              toastMessage: "you can not upload photos now",
+                              toastMessage: AppText.cannotupload,
                             )
 
                           ],
