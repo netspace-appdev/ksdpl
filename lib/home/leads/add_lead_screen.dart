@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/controllers/leads/income_step_controller.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
@@ -8,19 +7,14 @@ import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
-import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
-import '../../controllers/leads/add_income_model_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
-import '../../models/leads/special_model/AddIncModel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
-import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/storage_service.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/bot_nav_controller.dart';
-import '../../controllers/drawer_controller.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
@@ -588,16 +582,11 @@ class AddLeadScreen extends StatelessWidget {
                                     const SizedBox(height: 10),
                                   ],
                                 ),
-
-
-
                               const SizedBox(
                                 height: 20,
                               ),
-
                               Helper.customDivider(color: Colors.grey),
                               SizedBox(height: 10,),
-
                               CustomTextLabel(
                                 label: AppText.addIncome,
                               ),
@@ -606,15 +595,10 @@ class AddLeadScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: List.generate(addleadcontroller.addIncomeList.length, (index) {
                                   final ai = addleadcontroller.addIncomeList[index];
-
                                   return Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-
-
                                       SizedBox(height: 20,),
-
-
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -624,7 +608,6 @@ class AddLeadScreen extends StatelessWidget {
                                             controller: ai.aiSourceController,
                                             inputType: TextInputType.name,
                                             hintText: AppText.enterSource,
-
                                           ),
                                           CustomLabeledTextField(
                                             label: AppText.income,
@@ -632,14 +615,9 @@ class AddLeadScreen extends StatelessWidget {
                                             controller: ai.aiIncomeController,
                                             inputType: TextInputType.number,
                                             hintText: AppText.enterIncome,
-
                                           ),
-
                                         ],
                                       ),
-
-
-
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
 
@@ -665,23 +643,18 @@ class AddLeadScreen extends StatelessWidget {
                                                     addleadcontroller.addAdditionalSrcIncome();
                                                   },
                                                   icon: Container(
-
-                                                      decoration: BoxDecoration(
+                                                      decoration: const BoxDecoration(
                                                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                                         color: AppColor.primaryColor,
-
                                                       ),
                                                       padding: EdgeInsets.all(10),
-
                                                       child: Icon(Icons.add, color: AppColor.appWhite,)
                                                   )
                                               ),
                                             );
                                           }):
                                           Container(),
-
                                           SizedBox(height: 20),
-
                                           Obx((){
                                             if(addleadcontroller.isLoading.value){
                                               return const Align(
@@ -695,8 +668,6 @@ class AddLeadScreen extends StatelessWidget {
                                                 ),
                                               );
                                             }
-
-
                                             return Align(
                                               alignment: Alignment.centerRight,
                                               child: IconButton(
@@ -704,14 +675,11 @@ class AddLeadScreen extends StatelessWidget {
                                                     addleadcontroller.removeAdditionalSrcIncome(index);
                                                   },
                                                   icon: Container(
-
                                                       decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                                         color: addleadcontroller.addIncomeList.length <= 1?AppColor.lightRed: AppColor.redColor,
-
                                                       ),
                                                       padding: EdgeInsets.all(10),
-
                                                       child: Icon(Icons.remove, color: AppColor.appWhite,)
                                                   )
                                               ),
@@ -723,12 +691,9 @@ class AddLeadScreen extends StatelessWidget {
                                   );
                                 }),
                               )),
-
                               SizedBox(height: 10,),
                               Helper.customDivider(color: Colors.grey),
-
                               Obx(() => Column(
-
                                 children: [
                                   CheckboxListTile(
                                     activeColor: AppColor.secondaryColor,
@@ -749,7 +714,6 @@ class AddLeadScreen extends StatelessWidget {
                                           hintText: AppText.enterConName,
                                           validator: ValidationHelper.validateConnName,
                                         ),
-
                                         CustomLabeledTextField(
                                           label: AppText.conMob,
                                           isRequired: false,

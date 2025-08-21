@@ -12,6 +12,7 @@ class AcademicFormController extends GetxController {
   final TextEditingController universityNameController = TextEditingController();
   final TextEditingController yearOfPassingController = TextEditingController();
   final TextEditingController gradeOrPercentageController = TextEditingController();
+  final TextEditingController educationtypeController = TextEditingController();
 
   // File upload
   var selectedFileName = ''.obs; // To store file name
@@ -26,6 +27,7 @@ class AcademicFormController extends GetxController {
     universityNameController.dispose();
     yearOfPassingController.dispose();
     gradeOrPercentageController.dispose();
+    educationtypeController.dispose();
     super.onClose();
   }
 }

@@ -31,6 +31,7 @@ import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
 import '../../services/call_service.dart';
 import '../custom_drawer.dart';
 import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
@@ -499,7 +500,7 @@ class LeadListMain extends StatelessWidget {
                             onTap:(){
                               print('dvashgvdvad${lead.uniqueLeadNumber}');
                               leadListController.callGetdisburseHistoryByUniqueLeadNoApi(lead.uniqueLeadNumber);
-                              showUpdateDisburseHistorySheet(context);
+                              showUpdateDisburseHistorySheet();
                              },
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 10),
@@ -1223,7 +1224,7 @@ overflow: TextOverflow.ellipsis,
 
         }
         else if (label_code == "update_loan_update") {
-          showUpdateLoanApplicationDialog(context,uln);
+          showUpdateLoanApplicationDialog(uln);
         }
 
 
@@ -1441,9 +1442,9 @@ overflow: TextOverflow.ellipsis,
       },
     );
   }
-  void showUpdateLoanApplicationDialog(BuildContext context, String uln) {
+  void showUpdateLoanApplicationDialog( String uln) {
     showDialog(
-      context: context,
+      context: Get.context!,
       builder: (BuildContext context) {
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
@@ -1497,7 +1498,9 @@ overflow: TextOverflow.ellipsis,
           },
         );
       },
-    );
+    ).whenComplete(() {
+      leadListController.updateLoanFormController.clear();
+    });
   }
 
 
@@ -2075,9 +2078,9 @@ overflow: TextOverflow.ellipsis,
       return null;
     }
 
-  void showUpdateDisburseHistorySheet(BuildContext context) {
+  void showUpdateDisburseHistorySheet() {
     showModalBottomSheet(
-      context: context,
+      context: Get.context!,
       isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
@@ -2162,13 +2165,19 @@ overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 12),
 
-                      CustomLabeledTextField(
+                      CustomLabeledTextField2(
                         label: "Partial / Disburse Amount",
                         isRequired: true,
                         controller: leadListController.partialAmountController,
                         hintText: "Enter Disburse Amount",
                         inputType: TextInputType.number,
                         validator: partialValidation,
+                        onChanged: (value){
+                          final disburse = double.tryParse(value ?? '0') ?? 0;
+                          if (disburse > leadListController.partialAmount) {
+                            return   SnackbarHelper.showSnackbar(title: "Incomplete Data", message: AppText.partialAmountCannotExceed??'');
+                          }
+                        },
                       ),
                       const SizedBox(height: 12),
 
@@ -2220,25 +2229,26 @@ overflow: TextOverflow.ellipsis,
                       SizedBox(
                         width: double.infinity,
                         height: 50,
-                        child: ElevatedButton(
+                        child: Obx(() => ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColor.secondaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          onPressed: () {
-                        if (_formKey3.currentState!.validate()) {
-
-                          leadListController.callUpdateDisburseHistory();
-                        }
+                          onPressed: leadListController.isLoad2.value
+                              ? null // disable button while loading
+                              : () {
+                            if (_formKey3.currentState!.validate()) {
+                              leadListController.callUpdateDisburseHistory();
+                            }
                           },
                           child: leadListController.isLoad2.value
                               ? const SizedBox(
                             height: 22,
                             width: 22,
                             child: CircularProgressIndicator(
-                              strokeWidth: 5,
+                              strokeWidth: 3,
                               color: Colors.white,
                             ),
                           )
@@ -2250,8 +2260,9 @@ overflow: TextOverflow.ellipsis,
                               color: Colors.white,
                             ),
                           ),
-                        ),
-                      ),
+                        )),
+                      )
+
                     ],
                   ),
                 ),
@@ -2260,7 +2271,21 @@ overflow: TextOverflow.ellipsis,
           },
         );
       },
-    );
+    ).whenComplete(() {
+      /// ✅ Reset all controllers when sheet closes
+      leadListController.sanctionAmount2Controller.clear();
+      leadListController.totalDisburseAmountController.clear();
+      leadListController.uniqueLeadNoController.clear();
+      leadListController.partialAmountController.clear();
+      leadListController.transactionDetailsController.clear();
+      leadListController.contactNoController.clear();
+      leadListController.disbursedByController.clear();
+
+      /// ✅ Reset flags
+      leadListController.isLoad2.value = false;
+
+      print("Bottom sheet closed -> form cleared ✅");
+    });
   }
 
 

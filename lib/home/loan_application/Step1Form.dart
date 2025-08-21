@@ -174,13 +174,9 @@ class Step1Form extends StatelessWidget {
                     ///exp
                     Obx((){
                       final productList = leadDDController.getAllKsdplProductModel.value?.data ?? [];
-
-                     // print("🔍 Product List:${leadDDController.getAllKsdplProductModel.value?.data!.first.productName}");
                       for (var item in productList) {
-                        print("ID: ${item.id}, Name: ${item.productName}");
                       }
 
-                      print("Selected Product ID: ${loanApplicationController.selectedProdTypeOrTypeLoan.value}");
 
                       if (leadDDController.isProductLoading.value) {
                         return  Center(child:CustomSkelton.leadShimmerList(context));

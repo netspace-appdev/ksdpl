@@ -20,6 +20,7 @@ class AppText{
   static const String home="Home";
   static const String category="Category";
   static const String all="All";
+  static const String manageVacancy="Manage Vacancy";
   static const String UploadDoc="Upload Document";
   static const String UploadedDoc="Uploaded Document";
   static const String cart="Cart";
@@ -146,6 +147,7 @@ class AppText{
 
   static const String manageBranches="Manage Branches";
   static const String branchList="Branch List";
+  static const String skillRequired="Skill Required";
   static const String manageEnforcement="Manage Enforcement";
   static const String uploadCommonTask="Upload Common Task";
   static const String uctList="Upload Common Task List";
@@ -285,6 +287,7 @@ class AppText{
   static const String enterDetails = "Enter Follow-up details";
   static const String addFeedback = "Add Feedback";
   static const String addExpenses = "Add Expense";
+  static const String vacancyList = "Vacancy List";
   static const String editExpenses = "Edit Expense";
   static const String viewExpenses = "View Expense";
   static const String callFeedback = "Call Feedback / Follow up Note";
@@ -322,6 +325,7 @@ class AppText{
   static const String applFNmae = "Applicant's Full Name";
   static const String Academics = "Academics";
   static const String workExperience = "Work Experience";
+  static const String experience = "Work Experience";
   static const String iAmFresher = "I am a fresher (No prior work experience)";
   static const String enterCompanyName = "Enter Company Name";
   static const String jobTitle = "Job Title";
@@ -331,6 +335,7 @@ class AppText{
   static const String enterDepartment = "Enter Department";
 
   static const String endDate = "End Date";
+  static const String salaryRange = "Salary Range";
 
   static const String employmentType = "Employment Type";
   static const String selectEmploymentType = "Select Employment Type";
@@ -604,6 +609,7 @@ class AppText{
   static const String productSegment = "Loan Segment";
   static const String enterProductSegment = "Enter Product Segment";
   static const String writeYourContent = "Write your content";
+  static const String workLocation = "Work Location";
 
   static const String prodName = "Product Name";
   static const String selectCustomerCategory = "Customer Category";
@@ -730,6 +736,7 @@ class AppText{
   static const String leadCallYear = "Leads Called in The Year";
   static const String ongoingCallYTD= "Ongoing Call (YTD)";
   static const String employee = "Employee";
+  static const String employeeRole = "Employee Role";
   static const String employeeName = "Employee Name";
   static const String GradePercentage = "Grade/Percentage";
   static const String JobRole = "Job Role";
@@ -791,7 +798,12 @@ class AppText{
   static const String enterReceivableDate  = "Enter Received Date";
 
   static const String expenseDate = "Expense Date";
-  // static const String enterReceivableDate  = "Enter Received Date";
+  static const String dateposted = "Date Posted";
+  static const String noOfVacancies = "No Of Vacancies";
+  static const String jobLevel = "Job Level";
+  static const String hiringManager = "Hiring Manager";
+  static const String qualificationRequired = "Qualification Required";
+  static const String jobDescription  = "Job Desicription";
 
   static const String transactionDetails  = "UTR";
   static const String enterTransactionDetails  = "Enter UTR";

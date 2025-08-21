@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ksdpl/controllers/more/profileMultiFormController/employmentFormController .dart';
 import 'package:ksdpl/custom_widgets/CustomDropdown.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
@@ -12,6 +13,7 @@ import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/more/ProfileController.dart';
+import '../../controllers/more/profileMultiFormController/educationFormController.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
@@ -25,21 +27,17 @@ class ProfileScreen extends StatelessWidget {
 
   GreetingController greetingController = Get.put(GreetingController());
   InfoController infoController = Get.put(InfoController());
-  final TextEditingController _searchController = TextEditingController();
   ProfileController profileController = Get.put(ProfileController());
+  EducationFormController educationFormController = Get.put(EducationFormController());
+  EmploymentFormController  workExperienceFormController = Get.put(EmploymentFormController ());
+
+
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
   LeadDDController leadDDController = Get.put(LeadDDController());
   UploadCommonTaskController uploadCommonTaskController=Get.put(UploadCommonTaskController());
-  final List<EmploymentType> employmentTypes = [
-    EmploymentType(id: "1", name: "Full-Time"),
-    EmploymentType(id: "2", name: "Part-Time"),
-    EmploymentType(id: "3", name: "Internship"),
-    EmploymentType(id: "4", name: "Contract"),
-  ];
-
 
 
   @override
@@ -156,7 +154,7 @@ class ProfileScreen extends StatelessWidget {
                                       CustomLabeledTextField(
                                         label: AppText.EducationType,
                                         isRequired: false,
-                                        controller: profileController.HireDateController,
+                                        controller: profileController.educationTypeController,
                                         inputType: TextInputType.name,
                                         hintText: AppText.EducationType,
                                         validator: ValidationHelper.validateDescription,
@@ -375,316 +373,338 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               ExpansionTile(
-                                initiallyExpanded: true,
+                                initiallyExpanded: false,
                                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                                 title:const Text( AppText.Academics, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                                 leading: Icon(Icons.list_alt, size: 20,),
                                 children: [
 
-                                  Column(
+                                  Obx(() => Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      CustomLabeledTextField(
-                                        label: AppText.qualification,
-                                        isRequired: false,
-                                        controller: profileController.employeeNameController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.qualification,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.Specialization,
-                                        isRequired: false,
-                                        controller: profileController.dateOfBirthController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.Specialization,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.InstitutionName,
-                                        isRequired: false,
-                                        controller: profileController.profileEmailController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.InstitutionName,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.UniversityName,
-                                        isRequired: false,
-                                        controller: profileController.phoneNumberController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.UniversityName,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.YearofPassing,
-                                        isRequired: false,
-                                        controller: profileController.whatsappNoController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.whatsappNoNoStar,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.GradePercentage,
-                                        isRequired: false,
-                                        controller: profileController.HireDateController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.GradePercentage,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.EducationType,
-                                        isRequired: false,
-                                        controller: profileController.JobRoleController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.EducationType,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      const Text(
-                                        AppText.UploadDoc,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColor.grey2,
-                                        ),
-                                      ),const Text(
-                                        'Only PDF files. Max 2 MB',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal,
-                                          color: AppColor.grey2,
-                                        ),
-                                      ),
-                                      SizedBox(height: 5,),
-                                      Obx(() => Container(
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: AppColor.black1,),
-                                          borderRadius: BorderRadius.circular(4.0),
-                                          color: Colors.grey.shade100,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            InkWell(
-                                              onTap: uploadCommonTaskController.pickImageFile,
-                                              child: Container(
-                                                height: double.infinity,
-                                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                                decoration: const BoxDecoration(
-                                                  border: Border(
-                                                    right: BorderSide(color: AppColor.black1),
+                                    children: List.generate(
+                                        profileController.acadmicsFormApplList.length,
+                                            (index) {
+                                          final academicFormController = profileController.acadmicsFormApplList[index];
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CustomLabeledTextField(
+                                            label: AppText.qualification,
+                                            isRequired: false,
+                                            controller: academicFormController.qualificationController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.qualification,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.Specialization,
+                                            isRequired: false,
+                                            controller: academicFormController.specializationController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.Specialization,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.InstitutionName,
+                                            isRequired: false,
+                                            controller: academicFormController.institutionNameController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.InstitutionName,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.UniversityName,
+                                            isRequired: false,
+                                            controller: academicFormController.universityNameController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.UniversityName,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.YearofPassing,
+                                            isRequired: false,
+                                            controller: academicFormController.yearOfPassingController,
+                                            inputType: TextInputType.number,
+                                            hintText: AppText.YearofPassing,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.GradePercentage,
+                                            isRequired: false,
+                                            controller: academicFormController.gradeOrPercentageController,
+                                            inputType: TextInputType.text,
+                                            hintText: AppText.GradePercentage,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.EducationType,
+                                            isRequired: false,
+                                            controller: academicFormController.educationtypeController,
+                                            inputType: TextInputType.text,
+                                            hintText: AppText.EducationType,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+
+                                          // Upload file
+                                          const Text(AppText.UploadDoc,
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.grey2)),
+                                          const Text('Only PDF files. Max 2 MB',
+                                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal, color: AppColor.grey2)),
+                                          const SizedBox(height: 5),
+                                          Obx(() => Container(
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: AppColor.black1),
+                                              borderRadius: BorderRadius.circular(4.0),
+                                              color: Colors.grey.shade100,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                InkWell(
+                                                  onTap: uploadCommonTaskController.pickImageFile,
+                                                  child: Container(
+                                                    height: double.infinity,
+                                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                    decoration: const BoxDecoration(
+                                                      border: Border(
+                                                        right: BorderSide(color: AppColor.black1),
+                                                      ),
+                                                    ),
+                                                    child: const Center(
+                                                      child: Text(
+                                                        AppText.chooseFile,
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: AppColor.black1,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
-                                                child: const Center(
+                                                const SizedBox(width: 10),
+                                                Expanded(
                                                   child: Text(
-                                                    AppText.chooseFile,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: AppColor.black1,
-                                                        fontWeight: FontWeight.w500),
+                                                    uploadCommonTaskController.selectedFileName.value,
+                                                    style: const TextStyle(fontSize: 13, color: Colors.black87),
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
-                                            const SizedBox(width: 10),
-                                            Expanded(
-                                              child: Text(
-                                                uploadCommonTaskController.selectedFileName.value,
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  color: Colors.black87,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )),
-                                      const SizedBox(height: 10),
-                                    ],
-                                  ),
+                                          )),
+                                          const SizedBox(height: 10),
+
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+
+                                            children: [
+                                              index== profileController.acadmicsFormApplList.length-1?
+                                              Obx((){
+                                                if(profileController.isLoading.value){
+                                                  return const Align(
+                                                    alignment: Alignment.centerRight,
+                                                    child: SizedBox(
+                                                      height: 30,
+                                                      width: 30,
+                                                      // child: CircularProgressIndicator(
+                                                      //   color: AppColor.primaryColor,
+                                                      // ),
+                                                    ),
+                                                  );
+                                                }
+                                                return Align(
+                                                  alignment: Alignment.centerRight,
+                                                  child: IconButton(
+                                                      onPressed: (){
+                                                        profileController.addFamilyMember();
+                                                      },
+                                                      icon: Container(
+                                                          decoration: const BoxDecoration(
+                                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                                            color: AppColor.primaryColor,
+                                                          ),
+                                                          padding: EdgeInsets.all(10),
+                                                          child: Icon(Icons.add, color: AppColor.appWhite,)
+                                                      )
+                                                  ),
+                                                );
+                                              }):
+                                              Container(),
+
+                                              SizedBox(height: 20),
+
+                                              Obx((){
+                                                if(profileController.isLoading.value){
+                                                  return const Align(
+                                                    alignment: Alignment.center,
+                                                    child: SizedBox(
+                                                      height: 30,
+                                                      width: 30,
+                                                      // child: CircularProgressIndicator(
+                                                      //   color: AppColor.primaryColor,
+                                                      // ),
+                                                    ),
+                                                  );
+                                                }
+                                                return Align(
+                                                  alignment: Alignment.centerRight,
+                                                  child: IconButton(
+                                                      onPressed: profileController.acadmicsFormApplList.length <= 1?(){}: (){
+                                                        profileController.removeAdditionalSrcDocument(index);
+                                                      },
+                                                      icon: Container(
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                                            color: profileController.acadmicsFormApplList.length <= 1?AppColor.lightRed: AppColor.redColor,
+                                                          ),
+                                                          padding: EdgeInsets.all(10),
+                                                          child: Icon(Icons.remove, color: AppColor.appWhite,)
+                                                      )
+                                                  ),
+                                                );
+                                              }),
+                                              //    ),
+                                              // Submit button per document
+
+                                            ],
+                                          )
+                                          // const Divider(thickness: 1, color: Colors.grey),
+                                        ],
+                                      );
+                                    }),
+
+                                  )),
+
                                 ],
                               ),
                               SizedBox(height: 10,),
                               ExpansionTile(
-                                initiallyExpanded: true,
+                                initiallyExpanded: false,
                                 childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                                 title:const Text( AppText.workExperience, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                                 leading: Icon(Icons.list_alt, size: 20,),
                                 children: [
-                                  Column(
+                                  Obx(() => Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      CustomLabeledTextField(
-                                        label: AppText.companyName,
-                                        isRequired: false,
-                                        controller: profileController.employeeNameController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.enterCompanyName,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.jobTitle,
-                                        isRequired: false,
-                                        controller: profileController.dateOfBirthController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.enterJobTitle,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.department,
-                                        isRequired: false,
-                                        controller: profileController.profileEmailController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.enterDepartment,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledPickerTextField(
-                                        label: AppText.startDate,
+                                    children: List.generate(profileController.employmentFormList.length, (index) {
+                                      final employment = profileController.employmentFormList[index];
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CustomLabeledTextField(
+                                            label: AppText.companyName,
+                                            controller: employment.companyNameController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.enterCompanyName,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.jobTitle,
+                                            controller: employment.jobTitleController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.enterJobTitle,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.department,
+                                            controller: employment.departmentController,
+                                            inputType: TextInputType.name,
+                                            hintText: AppText.enterDepartment,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledPickerTextField(
+                                            label: AppText.startDate,
+                                            controller: employment.startDateController,
+                                            inputType: TextInputType.datetime,
+                                            hintText: AppText.mmddyyyy,
+                                            isDateField: true,
+                                            validator: ValidationHelper.validateFromDate,
+                                          ),
+                                          CustomLabeledPickerTextField(
+                                            label: AppText.endDate,
+                                            controller: employment.endDateController,
+                                            inputType: TextInputType.datetime,
+                                            hintText: AppText.mmddyyyy,
+                                            isDateField: true,
+                                            validator: ValidationHelper.validateToDateNew,
+                                          ),
 
-                                        controller: profileController.atStartDateController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.mmddyyyy,
-                                        isDateField: true,
-                                        validator: ValidationHelper.validateFromDate,
-                                        onDateSelected: () {
-                                          //     profileController.calculateTotalDays();
-                                        },
-                                      ),
+                                          CustomLabeledTextField(
+                                            label: AppText.employmentType,
+                                            controller: employment.employmentTypeController,
+                                            inputType: TextInputType.text,
+                                            hintText: AppText.employmentType,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
 
-                                      CustomLabeledPickerTextField(
-                                        label: AppText.endDate,
-                                        controller: profileController.atEndDateController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.mmddyyyy,
-                                        isDateField: true,
-                                        validator: ValidationHelper.validateToDateNew,
-                                        onDateSelected: () {
-                                          //   profileController.calculateTotalDays();
-                                        },
-                                      ),
+                                          CustomLabeledTextField(
+                                            label: AppText.companyAddress,
+                                            controller: employment.companyAddressController,
+                                            inputType: TextInputType.text,
+                                            hintText: AppText.enterCompanyAddress,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.reasonForLeaving,
+                                            controller: employment.reasonForLeavingController,
+                                            inputType: TextInputType.text,
+                                            hintText: AppText.enterReasonForLeaving,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.lastDrawnSalary,
+                                            controller: employment.lastDrawnSalaryController,
+                                            inputType: TextInputType.number,
+                                            hintText: AppText.enterLastDrawnSalary,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
+                                          CustomLabeledTextField(
+                                            label: AppText.responsibilities,
+                                            controller: employment.responsibilitiesController,
+                                            inputType: TextInputType.text,
+                                            hintText: AppText.enterResponsibilities,
+                                            validator: ValidationHelper.validateDescription,
+                                          ),
 
-                                      CustomDropdown<EmploymentType>(
-                                        items: employmentTypes,
-                                        getId: (EmploymentType type) => type.id,
-                                        getName: (EmploymentType type) => type.name,
-                                        hintText: "Select Employment Type",
-                                        selectedValue: null, // you can pass a default value here if you want
-                                        onChanged: (value) {
-                                          if (value != null) {
-                                            print("Selected: ${value.id} - ${value.name}");
-                                          }
-                                        },
-                                        onClear: () {
-                                          print("Selection cleared");
-                                        },
-                                      ),
+                                          const SizedBox(height: 10),
 
-                                      CustomLabeledTextField(
-                                        label: AppText.employmentType,
-                                        isRequired: false,
-                                        controller: profileController.whatsappNoController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.whatsappNoNoStar,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-
-                                      CustomLabeledTextField(
-                                        label: AppText.companyAddress,
-                                        isRequired: false,
-                                        controller: profileController.HireDateController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.enterCompanyAddress,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.reasonForLeaving,
-                                        isRequired: false,
-                                        controller: profileController.HireDateController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.enterReasonForLeaving,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      CustomLabeledTextField(
-                                        label: AppText.lastDrawnSalary,
-                                        isRequired: false,
-                                        controller: profileController.employeeNameController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.enterLastDrawnSalary,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-
-                                      CustomLabeledTextField(
-                                        label: AppText.responsibilities,
-                                        isRequired: false,
-                                        controller: profileController.employeeNameController,
-                                        inputType: TextInputType.name,
-                                        hintText: AppText.enterResponsibilities,
-                                        validator: ValidationHelper.validateDescription,
-                                      ),
-                                      const Text(
-                                        AppText.UploadDoc,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColor.grey2,
-                                        ),
-                                      ),const Text(
-                                        'Only PDF files. Max 2 MB',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal,
-                                          color: AppColor.grey2,
-                                        ),
-                                      ),
-                                      SizedBox(height: 5,),
-                                      Obx(() => Container(
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: AppColor.black1,),
-                                          borderRadius: BorderRadius.circular(4.0),
-                                          color: Colors.grey.shade100,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            InkWell(
-                                              onTap: uploadCommonTaskController.pickImageFile,
-                                              child: Container(
-                                                height: double.infinity,
-                                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                                decoration: const BoxDecoration(
-                                                  border: Border(
-                                                    right: BorderSide(color: AppColor.black1),
+                                          // Add / Remove Buttons
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              if (index == profileController.employmentFormList.length - 1)
+                                                IconButton(
+                                                  onPressed: () => profileController.addEmploymentDetail(),
+                                                  icon: Container(
+                                                    padding: const EdgeInsets.all(10),
+                                                    decoration: const BoxDecoration(
+                                                      color: AppColor.primaryColor,
+                                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                    ),
+                                                    child: const Icon(Icons.add, color: Colors.white),
                                                   ),
                                                 ),
-                                                child: const Center(
-                                                  child: Text(
-                                                    AppText.chooseFile,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: AppColor.black1,
-                                                        fontWeight: FontWeight.w500),
+                                              IconButton(
+                                                onPressed: () => profileController.removeEmploymentDetail(index),
+                                                icon: Container(
+                                                  padding: const EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    color: profileController.employmentFormList.length <= 1
+                                                        ? AppColor.lightRed
+                                                        : AppColor.redColor,
+                                                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                                                   ),
+                                                  child: const Icon(Icons.remove, color: Colors.white),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Expanded(
-                                              child: Text(
-                                                uploadCommonTaskController.selectedFileName.value,
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  color: Colors.black87,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )),
-                                      const SizedBox(height: 10),
-                                    ],
-                                  ),
+                                            ],
+                                          ),
+                                          const Divider(thickness: 1, color: Colors.grey),
+                                        ],
+                                      );
+                                    }),
+                                  ))
                                 ],
                               ),
                             ],
@@ -732,8 +752,6 @@ class ProfileScreen extends StatelessWidget {
                 fontSize: 20,
                 color: AppColor.grey3,
                 fontWeight: FontWeight.w700
-
-
             ),
           ),
 
@@ -757,29 +775,5 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildRadioOption(String gender) {
-    return Row(
-      children: [
-        Radio<String>(
-          value: gender,
-          groupValue: profileController.selectedGender.value,
-          onChanged: (value) {
-            profileController.selectedGender.value=value;
-          },
-        ),
-        Text(gender),
-      ],
-    );
-  }
 }
 
-class EmploymentType {
-  final String id;
-  final String name;
-
-  EmploymentType({required this.id, required this.name});
-}
-
-class HireDateController {
-}

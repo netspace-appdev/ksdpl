@@ -401,7 +401,6 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         removed.cityListCurr.clear();
       });
     } else {
-      print("🧯 Invalid index passed to removeCoApplicant: $index");
     }
   }
 

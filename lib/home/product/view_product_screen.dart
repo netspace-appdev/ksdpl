@@ -39,10 +39,6 @@ import '../../models/product/GetAllProductCategoryModel.dart' as productSegment;
 
 class ViewProductScreen extends StatelessWidget {
 
-
-
-
-
   ViewProductController viewProductController = Get.put(ViewProductController());
   final LeadDDController leadDDController =Get.find();
   final  AddProductController addProductController = Get.find();

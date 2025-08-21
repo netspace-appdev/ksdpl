@@ -377,8 +377,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     } else {
       selectedBankers.add(bankId);
     }
-
-    print("selectedBankers===>${selectedBankers.toString()}");
   }
 
   bool isBankerSelected(String bankId) => selectedBankers.contains(bankId);
@@ -434,7 +432,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         removed.aiIncomeController .dispose();
       });
     } else {
-      print("🧯 Invalid index passed to removeCoApplicant: $index");
     }
   }
   void s(String key) {
@@ -505,10 +502,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   void saveForm(String autoIndividual) async {
-    print("final Form Saved! addCamNoteDetailApi");
-
-
-
     if(camFullNameController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
       return;
@@ -558,16 +551,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       final productList = getProductDetailsByFilterModel.value?.data ?? [];
 
       if(productList.isNotEmpty){
-        print("inside this-->1===>${productList}");
-
-
         for (var bankerId in selectedBankers) {
-          print("bankerId-->2.1===>${bankerId} and ${selectedBankers}");
-          print("inside this-->2");
-
           productList.forEach((ele){
 
-            print("ele--------->${ele.bankId}");
           });
           final matchingProducts = productList.where((product) => product.bankId.toString() == bankerId);
           print("matchingProducts-->${matchingProducts}");

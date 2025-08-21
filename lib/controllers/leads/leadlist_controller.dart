@@ -132,7 +132,8 @@ class LeadListController extends GetxController {
     var phone=StorageService.get(StorageService.PHONE);
     getEmployeeByPhoneNumberApi(phone: phone.toString());
 
-
+    String today = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    disburseDateController.text = today;
 
   }
 
@@ -1563,16 +1564,12 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
   }
 
  Future<void> callUpdateDisburseHistory() async {
-
-   final disburse = double.tryParse(
-       partialAmountController.text ?? '0'
-   ) ?? 0;
+   final disburse = double.tryParse(partialAmountController.text ?? '0') ?? 0;
    if (disburse > partialAmount) {
      return   SnackbarHelper.showSnackbar(title: "Incomplete Data", message: AppText.partialAmountCannotExceed??'');
+   }
+  else {
 
-       //ToastMessage.msg(AppText.partialAmountCannotExceed??'');
-
-   }else {
      try {
        isLoad2(true);
 

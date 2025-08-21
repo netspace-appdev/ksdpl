@@ -7,8 +7,10 @@ import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
+import 'package:ksdpl/controllers/vacancyListController/vacancyListController.dart';
 import 'package:ksdpl/home/cibilgenerate/CibilGeneratePage.dart';
 import 'package:ksdpl/home/tutorial_screen/tutorial_video.dart';
+import 'package:ksdpl/home/vacancyListPage/vacancyListScreen.dart';
 import 'package:ksdpl/home/viewExpense/viewExpense.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -209,7 +211,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ],
                 ),
 
-
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title: const Text(
@@ -254,6 +255,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ],
                 ),
+
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title:const Text(AppText.manageProfile, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -279,6 +281,36 @@ class _CustomDrawerState extends State<CustomDrawer> {
                        // Get.toNamed("/viewProductScreen");
                       },
                     ),
+                  ],
+                ),
+
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title:const Text(AppText.manageVacancy, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                  leading: Image.asset(AppImage.user, height: 20,),
+                  children: [
+                    ListTile(
+                      leading:  Icon(Icons.add_task,color: AppColor.blackColor),
+                      title:  Text(AppText.vacancyList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      onTap: () {
+                        Vacancylistcontroller vacalistcontroller=Get.put(Vacancylistcontroller());
+                        vacalistcontroller.getAllVacancyApi();
+                        Get.to(() => vacancyListScreen());
+                      },
+                    ),
+                   /* ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
+                      leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
+                      title:  Text(AppText.viewExpenses, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                      onTap: () {
+                        ViewExpenseController viewExpenseController=Get.put(ViewExpenseController());
+                        viewExpenseController.getExpenseByEmployeeIDApi();
+                        //  AddProductController addProductController =Get.put(AddProductController());
+                        // addProductController.getAllProductCategoryApi();
+                        Get.to(ViewExpenseScreen());
+
+                        // Get.toNamed("/viewProductScreen");
+                      },
+                    ),*/
                   ],
                 ),
 

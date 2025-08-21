@@ -2,9 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:ksdpl/controllers/more/profileMultiFormController/workExperienceController.dart';
+import 'package:ksdpl/controllers/more/profileMultiFormController/employmentFormController .dart';
 import 'package:ksdpl/models/more/ChangeEmailResponseModel.dart';
+import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../addDocumentControler/addDocumentModel/addDocumentModel.dart';
+import 'profileMultiFormController/ademicsController.dart';
 
 class ProfileController extends GetxController{
 
@@ -16,10 +20,7 @@ class ProfileController extends GetxController{
   final TextEditingController profileEmailController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController whatsappNoController = TextEditingController();
-  final TextEditingController hireDateController = TextEditingController();
-  final TextEditingController jobRoleController = TextEditingController();
-  final TextEditingController workPlaceController = TextEditingController();
-  final TextEditingController HireDateController = TextEditingController();
+  final TextEditingController educationTypeController = TextEditingController();
   final TextEditingController JobRoleController = TextEditingController();
   final TextEditingController WorkPlaceController = TextEditingController();
   final TextEditingController atStartDateController = TextEditingController();
@@ -29,12 +30,14 @@ class ProfileController extends GetxController{
 
 
   var isLoading=false.obs;
-  var _changeEmailResponseModel = Rxn<ChangeEmailResponseModel>();
+  var acadmicsFormApplList = <AcademicFormController>[].obs;
+  var employmentFormList = <WorkExperienceController>[].obs;
+
+
 
   var obscurePassword = true.obs;
   String? phone = StorageService.get(StorageService.PHONE);
 
-  var addDocumentList = <AdddocumentModel>[].obs;
 
 
   @override
@@ -45,7 +48,32 @@ class ProfileController extends GetxController{
     }
   }
 
+  void addFamilyMember() {
+    acadmicsFormApplList.add(AcademicFormController());
+  }
 
+  // void addWorkExperienceDetails() {
+  //   employmentFormList.add(WorkExperienceController());
+  // }
+
+  void addEmploymentDetail() {
+    employmentFormList.add(WorkExperienceController());
+  }
+
+  void removeEmploymentDetail(int index) {
+    if (employmentFormList.length <= 1) {
+      ToastMessage.msg("You must have at least one employment detail");
+      return;
+    }
+
+    final removed = employmentFormList[index];
+    employmentFormList.removeAt(index);
+    employmentFormList.refresh();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      removed.dispose();
+    });
+  }
 
 
 /*
@@ -86,5 +114,37 @@ class ProfileController extends GetxController{
   void clearFormFields() {
   //  emailController.clear();
   }
+
+  void removeAdditionalSrcDocument(int index) {
+    if (acadmicsFormApplList.length <= 1) {
+      ToastMessage.msg("You must have at least one academic detail");
+      return;
+    }
+
+    if (index >= 0 && index < acadmicsFormApplList.length) {
+      // Keep reference of the removed item
+      final removed = acadmicsFormApplList[index];
+
+      // Remove immediately so UI rebuilds without it
+      acadmicsFormApplList.removeAt(index);
+
+      // Refresh UI if using RxList
+      acadmicsFormApplList.refresh();
+
+      // Dispose controllers safely after rebuild
+    /*  WidgetsBinding.instance.addPostFrameCallback((_) {
+        removed.qualification.dispose();
+        removed.specialization.dispose();
+        removed.institution.dispose();
+        removed.university.dispose();
+        removed.year.dispose();
+        removed.grade.dispose();
+        removed.educationType.dispose();
+      });*/
+    } else {
+      debugPrint("🧯 Invalid index passed to removeAcademicDetail: $index");
+    }
+  }
+
 
 }

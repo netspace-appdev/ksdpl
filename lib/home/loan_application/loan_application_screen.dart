@@ -4,26 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/home/loan_application/Step9Form.dart';
 import 'package:ksdpl/home/loan_application/Step10Form.dart';
-import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
-import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
-import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
-import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
-import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
-import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
-import '../../common/skelton.dart';
-import '../../common/validation_helper.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/loan_appl_controller.dart';
-import '../../custom_widgets/CustomDropdown.dart';
-import '../../custom_widgets/CustomLabelPickerTextField.dart';
-import '../../custom_widgets/CustomLabeledTextField.dart';
-import '../../custom_widgets/SnackBarHelper.dart';
 import 'Step11Form.dart';
 import 'Step1Form.dart';
 import 'Step2Form.dart';
@@ -277,9 +264,9 @@ class LoanApplicationScreen extends StatelessWidget {
                         backgroundColor: Colors.green,
                       ),
                       child: loanApplicationController.isLoading.value
-                          ? Row(
+                          ? const Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
+                        children: [
                           SizedBox(
                             height: 18,
                             width: 18,
