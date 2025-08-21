@@ -1,45 +1,22 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:ksdpl/controllers/product/add_product_controller.dart';
-import 'package:ksdpl/controllers/product/product_detail_controller.dart';
-import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
-import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
-import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
-import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
-import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
-import 'package:ksdpl/models/dashboard/GetProductListByBank.dart' as productBank;
-import 'package:ksdpl/models/GetCampaignNameModel.dart' as campaign;
-import 'package:ksdpl/models/leads/GetAllKsdplBranchModel.dart' as ksdplBranch;
+import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
-import '../../../common/CustomSearchBar.dart';
-import '../../../common/helper.dart';
-import '../../../common/skelton.dart';
-import '../../../common/validation_helper.dart';
-import '../../../controllers/drawer_controller.dart';
-import '../../../controllers/greeting_controller.dart';
-import '../../../controllers/lead_dd_controller.dart';
-import '../../../controllers/leads/addLeadController.dart';
-import '../../../controllers/leads/infoController.dart';
-import '../../../custom_widgets/CustomDropdown.dart';
-import '../../../custom_widgets/CustomLabelPickerTextField.dart';
-import '../../../custom_widgets/CustomLabeledTextField.dart';
-import '../../common/storage_service.dart';
-import '../../controllers/leads/leadlist_controller.dart';
-import '../../controllers/open_poll_filter_controller.dart';
-import '../../controllers/product/view_product_controller.dart';
+
+import '../../common/helper.dart';
+import '../../common/skelton.dart';
+import '../../controllers/insuranceLeadsController/insuranceLeadController.dart';
+import '../../controllers/lead_dd_controller.dart';
+import '../../controllers/product/add_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
-import '../../custom_widgets/CustomDialogBox.dart';
-import '../../custom_widgets/CustomTextFieldPrefix.dart';
-import '../../custom_widgets/CustomTextLabel.dart';
+import '../camnote/cam_note_single.dart';
 import '../custom_drawer.dart';
 
-import '../../models/product/GetAllProductCategoryModel.dart' as productSegment;
+class InsuranceLeadScreen extends StatelessWidget {
 
-class ViewProductScreen extends StatelessWidget {
 
-  ViewProductController viewProductController = Get.put(ViewProductController());
+  InsuranceLeadController insuranceLeadController = Get.put(InsuranceLeadController());
   final LeadDDController leadDDController =Get.find();
   final  AddProductController addProductController = Get.find();
 
@@ -117,7 +94,7 @@ class ViewProductScreen extends StatelessWidget {
                               InkWell(
                                 onTap: (){
 
-                                  viewProductController.clearFilter();
+                                //  viewProductController.clearFilter();
 
                                 },
                                 child: Text(
@@ -129,7 +106,7 @@ class ViewProductScreen extends StatelessWidget {
                           ),
 
                           const SizedBox(height: 20),
-                          productSection(context),
+                         // productSection(context),
 
                           const SizedBox(height: 20),
                         ],
@@ -181,8 +158,8 @@ class ViewProductScreen extends StatelessWidget {
 
           InkWell(
             onTap: (){
-              viewProductController.clearForm();
-              showFilterDialogForProduct(context: context);
+            //  viewProductController.clearForm();
+             // showFilterDialogForProduct(context: context);
             },
             child: Container(
 
@@ -205,184 +182,6 @@ class ViewProductScreen extends StatelessWidget {
   }
 
 
-  void showFilterDialogForProduct({
-    required BuildContext context,
-
-  }) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-
-        return CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-          title: "Product Filter",
-          content: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(Get.context!).size.height * 0.7, // Prevents overflow
-            ),
-            child: SingleChildScrollView(
-              child: Form(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
-                      child:  Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-
-                          CustomLabeledTextField(
-                            label: AppText.productName,
-                            isRequired: false,
-                            controller: viewProductController.vpProductNameController ,
-                            inputType: TextInputType.name,
-                            hintText: AppText.enterProductName,
-
-                          ),
-
-                          CustomLabeledTextField(
-                            label: AppText.minCibil,
-                            isRequired: false,
-                            controller: viewProductController.vpMinCibilController ,
-                            inputType: TextInputType.number,
-                            hintText: AppText.enterMinCibil,
-
-                          ),
-
-
-                          const SizedBox(height: 20),
-
-                          CustomTextLabel(
-                            label: AppText.bankNostar,
-
-
-                          ),
-
-                          const SizedBox(height: 10),
-
-
-                          Obx((){
-                            if (leadDDController.isBankLoading.value) {
-                              return  Center(child:CustomSkelton.leadShimmerList(context));
-                            }
-
-
-                            return CustomDropdown<bank.Data>(
-                              items: leadDDController.bankList ?? [],
-                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                              getName: (item) => item.bankName.toString(),
-                              selectedValue:leadDDController.bankList.firstWhereOrNull(
-                                    (item) => item.id == viewProductController.selectedBank.value,
-                              ),
-                              onChanged: (value) {
-
-                                viewProductController.selectedBank.value =  value?.id;
-
-
-                              },
-                              onClear: (){
-                                viewProductController.selectedBank.value=  0;
-                                leadDDController.bankList.clear(); // reset dependent dropdown
-
-                              },
-                            );
-                          }),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          CustomTextLabel(
-                            label: AppText.productSegment,
-                            isRequired: true,
-
-                          ),
-
-                          const SizedBox(height: 10),
-
-
-                          Obx((){
-                            if (viewProductController.isLoadingProductSegment.value) {
-                              return  Center(child:CustomSkelton.leadShimmerList(context));
-                            }
-
-
-                            return CustomDropdown<productSegment.Data>(
-                              items: addProductController.productCategoryList  ?? [],
-                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                              getName: (item) => item.productCategoryName.toString(),
-                              selectedValue: addProductController.productCategoryList.firstWhereOrNull(
-                                    (item) => item.id == viewProductController.selectedProdSegment.value,
-                              ),
-                              onChanged: (value) {
-                                viewProductController.selectedProdSegment.value =  value?.id;
-                              },
-                              onClear: (){
-                                viewProductController.selectedProdSegment.value = 0;
-                                addProductController.productCategoryList.clear(); // reset dependent dropdown
-
-                              },
-                            );
-                          }),
-
-                          const SizedBox(
-                            height: 20,
-                          ),
-
-                          CustomTextLabel(
-                            label: AppText.ksdplProduct,
-                            isRequired: true,
-
-
-                          ),
-
-                          const SizedBox(height: 10),
-
-
-                          Obx((){
-                            if (leadDDController.isProductLoading.value) {
-                              return  Center(child:CustomSkelton.leadShimmerList(context));
-                            }
-
-
-                            return CustomDropdown<product.Data>(
-                              items: leadDDController.ksdplProductList ?? [],
-                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                              getName: (item) => item.productName.toString(),
-                              selectedValue: leadDDController.ksdplProductList.firstWhereOrNull(
-                                    (item) => item.id == viewProductController.selectedKsdplProduct.value,
-                              ),
-                              onChanged: (value) {
-                                viewProductController.selectedKsdplProduct.value =  value?.id;
-                              },
-                              onClear: (){
-                                viewProductController.selectedKsdplProduct.value =  null;
-                              },
-                            );
-                          }),
-
-                          const SizedBox(height: 100),
-
-                        ],
-                      ),
-                    ),
-
-                  ],
-                ),
-              ),
-            ),
-          ),
-          onSubmit: () {
-            viewProductController.submitFilter();
-            Get.back();
-
-          },
-        );
-      },
-    );
-  }
 
   Widget _noDataCard(BuildContext context) {
     return Center(
@@ -420,7 +219,7 @@ class ViewProductScreen extends StatelessWidget {
     );
   }
 
-  Widget productSection(BuildContext context){
+/*  Widget productSection(BuildContext context){
     return Obx((){
       if (viewProductController.isMainListMoreLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
@@ -601,15 +400,15 @@ class ViewProductScreen extends StatelessWidget {
           Get.toNamed("/productDetailScreen");
 
         }else  if (label == "Edit") {
-         AddProductController addProductController = Get.put(AddProductController());
+          AddProductController addProductController = Get.put(AddProductController());
 
 
-         addProductController.getProductListByIdApi(id: id);
-         addProductController.getDocumentListByProductIdApi(productId: id);
-         addProductController.getAllProductCategoryApi();
-         addProductController.clearForm();
-         addProductController.currentStep.value=0;
-         addProductController.isFirstSave.value=1;
+          addProductController.getProductListByIdApi(id: id);
+          addProductController.getDocumentListByProductIdApi(productId: id);
+          addProductController.getAllProductCategoryApi();
+          addProductController.clearForm();
+          addProductController.currentStep.value=0;
+          addProductController.isFirstSave.value=1;
           Get.toNamed("/editProductScreen");
 
         }else{
@@ -643,8 +442,7 @@ class ViewProductScreen extends StatelessWidget {
         ],
       ),
     );
-  }
+  }*/
 
 }
-
 

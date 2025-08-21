@@ -1,19 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/controllers/vacancyListController/vacancyListController.dart';
-
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
-import '../../controllers/product/add_product_controller.dart';
-import '../../controllers/product/product_detail_controller.dart';
 import '../custom_drawer.dart';
 
-class vacancyListScreen extends StatelessWidget {
- // const vacancyListScreen({super.key});
-
-
+class VacancyListScreen extends StatelessWidget {
 
   Vacancylistcontroller productDetailsController = Get.put(Vacancylistcontroller());
   //AddProductController addProductController = Get.find();
@@ -25,7 +17,7 @@ class vacancyListScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColor.backgroundColor,
-        drawer:   CustomDrawer(),
+        drawer:   const CustomDrawer(),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -59,7 +51,7 @@ class vacancyListScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.topCenter,  // Centers it
                     child: Container(
-                      margin:  EdgeInsets.only(
+                      margin:  const EdgeInsets.only(
                           top:90 // MediaQuery.of(context).size.height * 0.22
                       ), // <-- Moves it 30px from top
                       width: double.infinity,
@@ -121,7 +113,7 @@ class vacancyListScreen extends StatelessWidget {
               width: 40,
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              decoration:  BoxDecoration(
+              decoration:  const BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
@@ -130,9 +122,6 @@ class vacancyListScreen extends StatelessWidget {
 
             ),
           )
-
-
-
         ],
       ),
     );
@@ -148,7 +137,7 @@ class vacancyListScreen extends StatelessWidget {
       print('object${data?.jobTitle.toString()}');
       if (data == null || data == "") {
         return /// Header with profile and menu icon
-          Align(
+          const Align(
               alignment: Alignment.center,
               child: Text(
                   "No data found",
@@ -179,92 +168,6 @@ class vacancyListScreen extends StatelessWidget {
               Icons.info_outline
 
           ),
-          //
-          // buildCard("Bank & Contact Info", [
-          //   DetailRow(label: AppText.bankNostar, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.bankerName, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.bankerMobile, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.bankerWhatsapp, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.bankerEmail, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.superiorName, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.superiorMobile, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.superiorEmail, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.superiorWhatsapp, value: data.jobTitle.toString()),
-          // ],
-          //     Icons.phone
-          // ),
-          //
-          // buildCard("Collateral & Profile Restrictions", [
-          //   DetailRow(label: AppText.selectCollateralSecurityCategory, value: data.jobTitle.toString()), //Collateral is Prime now
-          //   DetailRow(label: AppText.collateralSecurityExcluded, value: data.jobTitle.toString()),
-          //   // DetailRow(label: AppText.profileExcluded, value: data.profileExcluded.toString()),
-          //   DetailRow(label: AppText.negativeProfiles, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.negativeAreas, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.geoLimit, value: data.jobTitle.toString()),
-          // ],
-          //     Icons.security
-          // ),
-          //
-          // buildCard("Eligibility Criteria", [
-          //   DetailRow(label: AppText.selectIncomeType, value: data.jobTitle.toString()),
-          //   DetailRow(label:  AppText.ageLimitEarningApplicants, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.ageLimitNonEarningCoApplicant, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.minAgeEarningApplicants, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.minAgeNonEarningApplicants, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.minIncomeCriteria, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.minLoanAmount, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.maxLoanAmount, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.minRoi, value: data.jobTitle.toString()),
-          //   DetailRow(label:  AppText.maxRoi, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.minTenor, value: data.jobTitle.toString()),
-          //   DetailRow(label:  AppText.maxTenor, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.ageAtMaturity, value: data.jobTitle.toString()),
-          // ],
-          //     Icons.rule
-          // ),
-          //
-          // buildCard("Financial Limits", [
-          //   DetailRow(label: AppText.minPropertyValue, value: data.jobTitle.toString()),
-          //   DetailRow(label:  AppText.maxIir, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.maxFoir, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.maxLtv, value: data.jobTitle.toString()),
-          // ],
-          //     Icons.radar
-          // ),
-          //
-          // buildCard("Charges & Fees", [
-          //   DetailRow(label: AppText.processingFee, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.processingCharges, value: data.jobTitle.toString()),
-          //   DetailRow(label:  AppText.legalFee, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.technicalFee, value: data.jobTitle.toString()),
-          //   DetailRow(label:  AppText.adminFee, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.foreclosureCharges, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.otherCharges, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.stampDuty, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.tsrYears, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.tsrCharges, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.valuationCharges, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.fromAmtRange, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.toAmtRange, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.totalOverdueCases2, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.totalOverdueAmount, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.totalEnquiries2, value: data.jobTitle.toString()),
-          // ],
-          //     Icons.attach_money
-          // ),
-          //
-          // buildCard("Administrative Info", [
-          //   DetailRow(label: AppText.noOfDocuments, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.ksdplProduct, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.eligibleProfitPercent, value: data.jobTitle.toString()),
-          //   DetailRow(label: AppText.maxTat, value: data.jobTitle.toString()),
-          // ],
-          //     Icons.admin_panel_settings_sharp
-          // ),
-
-            //  Icons.list_alt_rounded
-       //   ),
-
           SizedBox(height: 20),
         ],
       );
@@ -327,73 +230,8 @@ class vacancyListScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
-
 }
 
-
-//details
-
-// Helper Widget for Status Chips
-class StatusChip extends StatelessWidget {
-  final String label;
-  final Color color;
-
-  StatusChip({required this.label, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: AppColor.primaryColor,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Text(label, style: TextStyle(color: AppColor.appWhite, fontSize: 12)),
-    );
-  }
-}
-
-// Helper Widget for Detail Rows
-/*class DetailRow extends StatelessWidget {
-  final String label;
-  final String value;
-
-  DetailRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-
-        children: [
-          Container(
-
-            width: 120,
-            child: Text("$label",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor)),
-          ),
-          Text(":", style: TextStyle(fontSize: 14),),
-          Expanded(
-              child: value=="null" || value==AppText.customdash?
-              Row(
-
-
-                children: [
-                  Icon(Icons.horizontal_rule, size: 15,),
-                ],):
-              Text(" "+value, style: TextStyle(fontSize: 14), maxLines: 2)),
-        ],
-      ),
-    );
-  }
-}*/
 
 class DetailRow extends StatelessWidget {
   final String label;
@@ -427,9 +265,7 @@ class DetailRow extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           value=="null" || value==AppText.customdash?
-          Row(
-
-
+          const Row(
             children: [
               Icon(Icons.horizontal_rule, size: 15,),
             ],):
@@ -448,26 +284,3 @@ class DetailRow extends StatelessWidget {
 }
 
 
-// Helper Widget for Icon Buttons
-class IconButtonWidget extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-
-  IconButtonWidget({required this.icon, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 10),
-      child: Container(
-        height: 27,
-        width: 27,
-        // color: color.withOpacity(0.2),
-        decoration: BoxDecoration(
-
-        ),
-        child: Center(child: Icon(icon, color: color,size: 16,)),
-      ),
-    );
-  }
-}

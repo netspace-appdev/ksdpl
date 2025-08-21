@@ -21,6 +21,7 @@ class AppText{
   static const String category="Category";
   static const String all="All";
   static const String manageVacancy="Manage Vacancy";
+  static const String manageInsuranceLeads="Manage Insurance Leads";
   static const String UploadDoc="Upload Document";
   static const String UploadedDoc="Uploaded Document";
   static const String cart="Cart";
@@ -288,6 +289,8 @@ class AppText{
   static const String addFeedback = "Add Feedback";
   static const String addExpenses = "Add Expense";
   static const String vacancyList = "Vacancy List";
+  static const String insuranceLeadsList = "Insurance Leads";
+  static const String illustrationsList = "Illustrations Leads";
   static const String editExpenses = "Edit Expense";
   static const String viewExpenses = "View Expense";
   static const String callFeedback = "Call Feedback / Follow up Note";
