@@ -345,7 +345,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   title:const Text(AppText.manageInsuranceLeads, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                   leading: Image.asset(AppImage.user, height: 20,),
                   children: [
-                    ListTile(
+                   /* ListTile(
                       leading:  Icon(Icons.add_task,color: AppColor.blackColor),
                       title:  Text(AppText.insuranceLeadsList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                       onTap: () {
@@ -355,7 +355,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         addProductController.getAllProductCategoryApi();
                         Get.to(() => InsuranceLeadScreen());
                       },
-                    ),
+                    ),*/
                     ListTile(
                       leading:  Icon(Icons.add_task,color: AppColor.blackColor),
                       title:  Text(AppText.illustrationsList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),

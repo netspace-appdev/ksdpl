@@ -757,7 +757,7 @@ class LeadSearchScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           _buildDetailRow("Email", lead.email.toString()),
-                          _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
+                          _buildDetailRow("Updated at", lead.lastUpdatedDate.toString()),
                           //_buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
                           _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  "),
                           _buildDetailRow("Status", lead.stageName.toString()??""),

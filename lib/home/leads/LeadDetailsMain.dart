@@ -250,7 +250,10 @@ class LeadDetailsMain extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-
+                        (leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString()=="3" && leadDetailController.getLeadDetailModel.value!.data!.reminderDate.toString()=="null")?
+                        _buildIconButton(icon: AppImage.call_disable, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "call_disable",
+                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
+                            context: context):
                         _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "call",
                           leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
                         context: context),

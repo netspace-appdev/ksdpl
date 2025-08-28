@@ -440,7 +440,7 @@ class LeadListMain extends StatelessWidget {
                       child: Column(
                         children: [
                           _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString(), lead.leadStage??0),
-                          _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString(),lead.leadStage??0),
+                          _buildDetailRow("Updated at", lead.lastUpdatedDate.toString(),lead.leadStage??0),
                           _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  ",lead.leadStage??0),
                           _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage??0),
                           if(lead.leadStage==4)
@@ -911,6 +911,8 @@ class LeadListMain extends StatelessWidget {
   }
 
   Widget _buildDetailRow(String label, String value, int leadStage) {
+
+    print("value->${value}");
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),

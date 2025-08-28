@@ -92,6 +92,7 @@ class Data {
   int? loanDetail;
   int? disburseDetail;
   String? reminderDate;
+  String? lastUpdatedDate;
 
   Data({
     this.id,
@@ -151,7 +152,7 @@ class Data {
     this.camNoteCount,
     this.loanDetail,
     this.disburseDetail,
-    this.reminderDate
+  this.lastUpdatedDate,
   });
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -215,6 +216,7 @@ class Data {
     loanDetail = json['loanDetail'];
     disburseDetail = json['disburseDetail'];
     reminderDate = json['reminderDate'];
+    lastUpdatedDate = json['lastUpdatedDate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -279,6 +281,7 @@ class Data {
     data['loanDetail'] = loanDetail;
     data['disburseDetail'] = disburseDetail;
     data['reminderDate'] = this.reminderDate;
+    data['lastUpdatedDate'] = this.lastUpdatedDate;
     return data;
   }
 }

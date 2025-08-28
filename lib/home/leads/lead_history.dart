@@ -362,13 +362,6 @@ class LeadHistory extends StatelessWidget {
                 leadListController.leadFeedbackController.text.isEmpty) {
               ToastMessage.msg(AppText.addFeedbackFirst);
             } else {
-            /*  if(callStatus=="1"){
-                callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
-                callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
-                callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
-
-              }*/
-
 
               leadListController.callFeedbackSubmit(
                   leadId: leadId,
@@ -378,8 +371,8 @@ class LeadHistory extends StatelessWidget {
                   callStartTime: callStartTime,
                   callEndTime: callEndTime,
                   id: id,
-                fromWhere: "call",
-                  selectedStage: "" ///Static
+                  fromWhere: "history_feedback", //"call
+                  selectedStage:currentLeadStageId //""
 
               );
               Get.back();

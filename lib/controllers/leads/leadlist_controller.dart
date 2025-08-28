@@ -176,13 +176,30 @@ class LeadListController extends GetxController {
     }
   }
 
-  void openWhatsApp({required String phoneNumber, String message = ""}) async {
+/*  void openWhatsApp({required String phoneNumber, String message = ""}) async {
     String url = "https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}";
+    print("Whatsapp----${url}");
 
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {
 
+      ToastMessage.msg(AppText.couldNotWA);
+    }
+  }*/
+
+  void openWhatsApp({required String phoneNumber, String message = ""}) async {
+    // Ensure country code is included
+    String fullPhone = phoneNumber.startsWith("+")
+        ? phoneNumber.replaceAll("+", "")
+        : "91$phoneNumber"; // 👈 default to India (+91)
+
+    String url = "https://wa.me/$fullPhone?text=${Uri.encodeComponent(message)}";
+    print("Whatsapp URL: $url");
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } else {
       ToastMessage.msg(AppText.couldNotWA);
     }
   }
@@ -333,6 +350,22 @@ class LeadListController extends GetxController {
             ? currentLeadStage
             : selectedStage,
         empId: empId,
+        );
+      }else if (callStatus=="0" && isCallReminder.value==true && fromWhere=="history_feedback" ) { //Added new on 28 Aug
+        print("see here--->${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
+        await workOnLeadApi(
+          // id:callStatus=="1"?id.toString():"0",
+          id:id.toString(),
+          leadId: leadId.toString(),
+          leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
+          feedbackRelatedToCall: callFeedbackController.text.trim(),
+          feedbackRelatedToLead: leadFeedbackController.text.trim(),
+          callStatus: callStatus,
+          callDuration: callDuration,
+          callStartTime: callStartTime,
+          callEndTime: callEndTime,
+          callReminder: formattedDateTime,
+          reminderStatus:  isCallReminder.value?"1":"0",
         );
       } else if (callStatus=="0" && isCallReminder.value==true) {
         print("see here--->${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
@@ -1304,9 +1337,11 @@ print('getLeadDetailModel${getLeadDetailModel.value?.data?.loanApplicationNo}');
 
   Future<void> refreshItems() async {
 
-    getAllLeadsApi(
+
+    if(isDashboardLeads.value==false){
+      getAllLeadsApi(
         leadStage: leadCode.value,
-        employeeId:eId.toString(),
+        employeeId:eId.value.toString(),
         stateId:stateIdMain.value,
         distId: distIdMain.value,
         cityId: cityIdMain.value,
@@ -1316,8 +1351,19 @@ print('getLeadDetailModel${getLeadDetailModel.value?.data?.loanApplicationNo}');
         branch: branchMain.value,
         uniqueLeadNumber: uniqueLeadNumberMain.value,
         leadMobileNumber:leadMobileNumberMain.value,
-      leadName:leadNameMain.value,
-    );
+        leadName:leadNameMain.value,
+      );
+    }else{
+      ///new code 17 jul
+
+      DashboardController dashboardController=Get.find();
+
+      getDetailsListOfLeadsForDashboardApi(
+          applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+          stageId: leadCode.value
+      );
+
+    }
   }
 
  Future<void> updateLoanFormApiCall(String leadnumber) async {

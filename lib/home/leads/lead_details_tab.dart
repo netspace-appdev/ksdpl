@@ -62,7 +62,7 @@ class LeadDetailsTab extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  @override
+/*  @override
   Widget build(BuildContext context) {
 
     return DefaultTabController(
@@ -71,6 +71,7 @@ class LeadDetailsTab extends StatelessWidget {
         child: Scaffold(
 
           backgroundColor: AppColor.backgroundColor,
+         ///new code
 
           body: Column(
             children: [
@@ -173,7 +174,115 @@ class LeadDetailsTab extends StatelessWidget {
         ),
       ),
     );
+  }*/
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: AppColor.backgroundColor,
+          body: Builder(
+            builder: (context) {
+              final TabController tabController = DefaultTabController.of(context);
+
+              // Attach listener once
+              tabController.addListener(() {
+                if (!tabController.indexIsChanging && tabController.index == 1) {
+                  final LeadHistoryController leadHistoryController =
+                  Get.put(LeadHistoryController());
+                  final arg = Get.arguments;
+                  final leadId = arg["leadId"];
+                  leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId);
+                }
+              });
+
+              return Column(
+                children: [
+                  Stack(
+                    children: [
+                      // Gradient Background
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [AppColor.primaryLight, AppColor.primaryDark],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 20),
+                            header(context),
+                          ],
+                        ),
+                      ),
+
+                      // White Container
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 90),
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 0),
+                            decoration: const BoxDecoration(
+                              color: AppColor.backgroundColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(45),
+                                topRight: Radius.circular(45),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(height: 10),
+
+                                // Tabs
+                                const TabBar(
+                                  indicatorSize: TabBarIndicatorSize.tab,
+                                  indicatorColor: AppColor.secondaryColor,
+                                  labelColor: AppColor.secondaryColor,
+                                  unselectedLabelColor: AppColor.grey700,
+                                  tabs: [
+                                    CustomTab(
+                                        icon: Icons.list_alt, text: "Details"),
+                                    CustomTab(
+                                        icon: Icons.history, text: "History"),
+                                  ],
+                                ),
+
+                                // Tab Views
+                                Expanded(
+                                  child: TabBarView(
+                                    children: [
+                                      LeadDetailsMain(),
+                                      LeadHistory(),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
+
   Widget header(context){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
