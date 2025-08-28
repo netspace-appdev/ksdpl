@@ -339,7 +339,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ],
                 ),*/
 
-/*
+
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title:const Text(AppText.manageInsuranceLeads, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -351,6 +351,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       onTap: () {
                         InsuranceLeadController insuranceLeadController =Get.put(InsuranceLeadController());
                         insuranceLeadController.getAllVacancyApi();
+                        AddProductController addProductController =Get.put(AddProductController());
+                        addProductController.getAllProductCategoryApi();
                         Get.to(() => InsuranceLeadScreen());
                       },
                     ),
@@ -358,14 +360,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       leading:  Icon(Icons.add_task,color: AppColor.blackColor),
                       title:  Text(AppText.illustrationsList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                       onTap: () {
-                        InsuranceIllustrationController insuranceIllustrationController =Get.put(InsuranceIllustrationController());
-                        insuranceIllustrationController.getAllVacancyApi();
+                        InsuranceIllustrationController insuranceIllustrationController = Get.put(InsuranceIllustrationController());
+                        insuranceIllustrationController.getInsuranceIllustrationApi();
                         Get.to(() => InsuranceIllustrationScreen());
                       },
                     ),
                   ],
                 ),
-*/
+
 
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),

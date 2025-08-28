@@ -47,7 +47,7 @@ dependencies:
   get_storage: ^2.1.1
   lottie: ^2.7.0
   flutter_switch: ^0.3.2
-  font_awesome_flutter: ^10.5.0
+  font_awesome_flutter: 10.5.0
   file_picker: ^8.1.1
   excel: ^4.0.6
   better_player: ^0.0.84

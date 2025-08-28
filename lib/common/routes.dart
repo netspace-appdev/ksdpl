@@ -12,6 +12,7 @@ import '../enforcement_panel/upload_common_task.dart';
 
 import '../exp.dart';
 import '../home/EditProfile2.dart';
+import '../home/InsuranceIllustrations/InsuranceIllustrationDetailLeads.dart';
 import '../home/LeadListScreen.dart';
 import '../home/attandance/manage_leave_screen.dart';
 import '../home/attandance/view_attendance.dart';
@@ -80,4 +81,5 @@ final routes = [
   GetPage(name: '/camNoteSingle', page: () => CamNoteSingle()),
   GetPage(name: '/viewAttendanceScreen', page: () => ViewAttendanceScreen()),
   GetPage(name: '/manageLeaveScreen', page: () => ManageLeaveScreen()),
+  GetPage(name: '/insuranceIllustrationdetailScreen', page: () => InsuranceIllustrationdetailLeads()),
 ];
