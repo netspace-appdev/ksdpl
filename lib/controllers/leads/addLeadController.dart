@@ -252,7 +252,7 @@ class Addleadcontroller extends GetxController{
         var rawRole = StorageService.get(StorageService.ROLE).toString();
         var role = rawRole.replaceAll('[', '').replaceAll(']', '');
         print("role--->${role}");
-        if(role=="INDEPENDENT BUSINESS MANAGER"){
+        if(role=="INDEPENDENT AREA HEAD"){
           camNoteController.isUserAIC.value=true;
         }
         else{
