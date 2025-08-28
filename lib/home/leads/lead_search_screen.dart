@@ -52,6 +52,7 @@ class LeadSearchScreen extends StatelessWidget {
   final _formKey2 = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
   LeadListController leadListController =Get.put(LeadListController());
+
   SearchLeadController searchLeadController=Get.find();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());

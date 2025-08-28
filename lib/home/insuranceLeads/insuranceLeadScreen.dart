@@ -9,16 +9,26 @@ import '../../common/skelton.dart';
 import '../../controllers/insuranceLeadsController/insuranceLeadController.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
+import '../../controllers/product/product_detail_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
-import '../camnote/cam_note_single.dart';
+import '../../custom_widgets/CustomDropdown.dart';
+import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomTextLabel.dart';
 import '../custom_drawer.dart';
+import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
+import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
+
+import '../../models/product/GetAllProductCategoryModel.dart' as productSegment;
 
 class InsuranceLeadScreen extends StatelessWidget {
 
 
   InsuranceLeadController insuranceLeadController = Get.put(InsuranceLeadController());
   final LeadDDController leadDDController =Get.find();
+  //final  AddProductController addProductController = Get.find();
+ // ViewProductController viewProductController = Get.put(ViewProductController());
   final  AddProductController addProductController = Get.find();
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +104,7 @@ class InsuranceLeadScreen extends StatelessWidget {
                               InkWell(
                                 onTap: (){
 
-                                //  viewProductController.clearFilter();
+                                  insuranceLeadController.clearFilter();
 
                                 },
                                 child: Text(
@@ -106,7 +116,7 @@ class InsuranceLeadScreen extends StatelessWidget {
                           ),
 
                           const SizedBox(height: 20),
-                         // productSection(context),
+                          productSection(context),
 
                           const SizedBox(height: 20),
                         ],
@@ -148,7 +158,7 @@ class InsuranceLeadScreen extends StatelessWidget {
           ),
 
           const Text(
-            AppText.viewProducts,
+            AppText.illustrationsList,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
@@ -158,8 +168,8 @@ class InsuranceLeadScreen extends StatelessWidget {
 
           InkWell(
             onTap: (){
-            //  viewProductController.clearForm();
-             // showFilterDialogForProduct(context: context);
+              insuranceLeadController.clearForm();
+              showFilterDialogForProduct(context: context);
             },
             child: Container(
 
@@ -182,6 +192,184 @@ class InsuranceLeadScreen extends StatelessWidget {
   }
 
 
+  void showFilterDialogForProduct({
+    required BuildContext context,
+
+  }) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Product Filter",
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(Get.context!).size.height * 0.7, // Prevents overflow
+            ),
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
+                      child:  Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+
+                          CustomLabeledTextField(
+                            label: AppText.productName,
+                            isRequired: false,
+                            controller: insuranceLeadController.vpProductNameController ,
+                            inputType: TextInputType.name,
+                            hintText: AppText.enterProductName,
+
+                          ),
+
+                          CustomLabeledTextField(
+                            label: AppText.minCibil,
+                            isRequired: false,
+                            controller: insuranceLeadController.vpMinCibilController ,
+                            inputType: TextInputType.number,
+                            hintText: AppText.enterMinCibil,
+
+                          ),
+
+
+                          const SizedBox(height: 20),
+
+                          CustomTextLabel(
+                            label: AppText.bankNostar,
+
+
+                          ),
+
+                          const SizedBox(height: 10),
+
+
+                          Obx((){
+                            if (leadDDController.isBankLoading.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<bank.Data>(
+                              items: leadDDController.bankList ?? [],
+                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.bankName.toString(),
+                              selectedValue:leadDDController.bankList.firstWhereOrNull(
+                                    (item) => item.id == insuranceLeadController.selectedBank.value,
+                              ),
+                              onChanged: (value) {
+
+                                insuranceLeadController.selectedBank.value =  value?.id;
+
+
+                              },
+                              onClear: (){
+                                insuranceLeadController.selectedBank.value=  0;
+                                leadDDController.bankList.clear(); // reset dependent dropdown
+
+                              },
+                            );
+                          }),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          CustomTextLabel(
+                            label: AppText.productSegment,
+                            isRequired: true,
+
+                          ),
+
+                          const SizedBox(height: 10),
+
+
+                          Obx((){
+                            if (insuranceLeadController.isLoadingProductSegment.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<productSegment.Data>(
+                              items: addProductController.productCategoryList  ?? [],
+                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.productCategoryName.toString(),
+                              selectedValue: addProductController.productCategoryList.firstWhereOrNull(
+                                    (item) => item.id == insuranceLeadController.selectedProdSegment.value,
+                              ),
+                              onChanged: (value) {
+                                insuranceLeadController.selectedProdSegment.value =  value?.id;
+                              },
+                              onClear: (){
+                                insuranceLeadController.selectedProdSegment.value = 0;
+                                addProductController.productCategoryList.clear(); // reset dependent dropdown
+
+                              },
+                            );
+                          }),
+
+                          const SizedBox(
+                            height: 20,
+                          ),
+
+                          CustomTextLabel(
+                            label: AppText.ksdplProduct,
+                            isRequired: true,
+
+
+                          ),
+
+                          const SizedBox(height: 10),
+
+
+                          Obx((){
+                            if (leadDDController.isProductLoading.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+
+                            return CustomDropdown<product.Data>(
+                              items: leadDDController.ksdplProductList ?? [],
+                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.productName.toString(),
+                              selectedValue: leadDDController.ksdplProductList.firstWhereOrNull(
+                                    (item) => item.id == insuranceLeadController.selectedKsdplProduct.value,
+                              ),
+                              onChanged: (value) {
+                                insuranceLeadController.selectedKsdplProduct.value =  value?.id;
+                              },
+                              onClear: (){
+                                insuranceLeadController.selectedKsdplProduct.value =  null;
+                              },
+                            );
+                          }),
+
+                          const SizedBox(height: 100),
+
+                        ],
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onSubmit: () {
+            insuranceLeadController.submitFilter();
+            Get.back();
+
+          },
+        );
+      },
+    );
+  }
 
   Widget _noDataCard(BuildContext context) {
     return Center(
@@ -219,13 +407,13 @@ class InsuranceLeadScreen extends StatelessWidget {
     );
   }
 
-/*  Widget productSection(BuildContext context){
+  Widget productSection(BuildContext context){
     return Obx((){
-      if (viewProductController.isMainListMoreLoading.value) {
+      if (insuranceLeadController.isMainListMoreLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-      if (viewProductController.getAllProductListModel.value == null ||
-          viewProductController.getAllProductListModel.value!.data == null || viewProductController.getAllProductListModel.value!.data!.isEmpty) {
+      if (insuranceLeadController.getAllProductListModel.value == null ||
+          insuranceLeadController.getAllProductListModel.value!.data == null || insuranceLeadController.getAllProductListModel.value!.data!.isEmpty) {
         return  Container(
           height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -254,12 +442,12 @@ class InsuranceLeadScreen extends StatelessWidget {
 
 
           ListView.builder(
-            itemCount:viewProductController.filteredProducts.length,//viewProductController.getAllProductListModel.value!.data!.length,
+            itemCount:insuranceLeadController.filteredProducts.length,//insuranceLeadController.getAllProductListModel.value!.data!.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              // final product = viewProductController.getAllProductListModel.value!.data![index];
-              final product =  viewProductController.filteredProducts[index];
+              // final product = insuranceLeadController.getAllProductListModel.value!.data![index];
+              final product =  insuranceLeadController.filteredProducts[index];
 
               return buildCard(
                 Helper.capitalizeEachWord(product.product.toString()), // title
@@ -283,17 +471,17 @@ class InsuranceLeadScreen extends StatelessWidget {
             },
           ),
 
-          if (viewProductController.hasMore.value && viewProductController.filteredProducts.length > 1)
+          if (insuranceLeadController.hasMore.value && insuranceLeadController.filteredProducts.length > 1)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
                 onPressed: () {
-                  viewProductController.getAllProductListApi(
+                  insuranceLeadController.getAllProductListApi(
                       isLoadMore: true
                   );
                 },
                 child:
-                viewProductController.isMainListMoreLoading.value //isDashboardLeadListMoreLoading
+                insuranceLeadController.isMainListMoreLoading.value //isDashboardLeadListMoreLoading
                     ? Container(
                     width: 15,
                     height: 15,
@@ -309,15 +497,12 @@ class InsuranceLeadScreen extends StatelessWidget {
   Widget _buildDetailRow(String label, String value) {
     //   String assigned = value.toString();
 //    List<String> assignedParts = assigned.split('T');
-
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
         children: [
           Container(
             width: 85,
-
             child: Text(
               "$label",
               style: TextStyle(
@@ -442,7 +627,10 @@ class InsuranceLeadScreen extends StatelessWidget {
         ],
       ),
     );
-  }*/
+  }
 
 }
+
+
+
 
