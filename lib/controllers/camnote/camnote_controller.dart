@@ -705,6 +705,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     print("camSelectedDistrict.value===>${camSelectedDistrict.value}");
     print("camSelectedCity.value===>${camSelectedCity.value}");
 
+    /*else if(isaddedMobileNumber.value == false){
+    SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+    return;
+    }*/
+
     if(camFullNameController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
       return;
@@ -713,9 +718,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       return;
     }else if(camPhoneController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
-      return;
-    }else if(isaddedMobileNumber.value == false){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
       return;
     } else if(selectedGender.value==null || selectedGender.value==""){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
@@ -836,7 +838,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           PhotosOfProperty: propertyPhotos,
           PhotosOfResidence: residencePhotos,
           PhotosOfOffice: officePhotos,
-        );
+          fromWhere: "camnote"
+        ).then((_){
+          nextStep(currentStep.value);
+        });
       }
 
   }
@@ -1204,18 +1209,20 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
       if(data['success'] == true){
+        print("This changed should be in effect");
+        print("superiorMobile==>${getBankerDetailsByIdModel.value?.data?.superiorMobile??""}");
 
         getBankerDetailsByIdModel.value= GetBankerDetailsByIdModel.fromJson(data);
 
-        camBankerMobileNoController.text=getBankerDetailsByIdModel.value!.data!.bankersMobileNumber.toString();
-        camBankerNameController.text=getBankerDetailsByIdModel.value!.data!.bankersName.toString();
-        camBankerWhatsappController.text=getBankerDetailsByIdModel.value!.data!.bankersWhatsAppNumber.toString();
-        camBankerEmailController.text=getBankerDetailsByIdModel.value!.data!.bankersEmailId.toString();
-        camBankerSuperiorNameController.text=getBankerDetailsByIdModel.value!.data!.superiorName.toString();
-        camBankerSuperiorMobController.text=getBankerDetailsByIdModel.value!.data!.superiorMobile.toString();
-        camBankerSuperiorWhatsappController.text=getBankerDetailsByIdModel.value!.data!.superiorWhatsApp.toString();
-        camBankerSuperiorEmailController.text=getBankerDetailsByIdModel.value!.data!.superiorEmail.toString();
-
+        camBankerMobileNoController.text=getBankerDetailsByIdModel.value?.data?.bankersMobileNumber??"";
+        camBankerNameController.text=getBankerDetailsByIdModel.value?.data?.bankersName??"";
+        camBankerWhatsappController.text=getBankerDetailsByIdModel.value?.data?.bankersWhatsAppNumber??"";
+        camBankerEmailController.text=getBankerDetailsByIdModel.value?.data?.bankersEmailId??"";
+        camBankerSuperiorNameController.text=getBankerDetailsByIdModel.value?.data?.superiorName??"";
+        camBankerSuperiorMobController.text=getBankerDetailsByIdModel.value?.data?.superiorMobile??"";
+        camBankerSuperiorWhatsappController.text=getBankerDetailsByIdModel.value?.data?.superiorWhatsApp??"";
+        camBankerSuperiorEmailController.text=getBankerDetailsByIdModel.value?.data?.superiorEmail??"";
+        print("camBankerSuperiorMobController.text==>${camBankerSuperiorMobController.text}");
         isBankerSuperiorLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -2753,6 +2760,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   Future<void> getLeadDetailByCustomerNumberApi(String phone) async {
+
     try {
       isLoading(true);
 
@@ -2761,12 +2769,16 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       if(data['success'] == true){
 
         getLeadDetailByCustomerNumberModel.value= GetLeadDetailByCustomerNumberModel.fromJson(data);
-        if(getLeadDetailByCustomerNumberModel.value?.data?.mobileNumber==null){
-          isaddedMobileNumber.value = true;
-        }else {
+
+        if(getLeadDetailByCustomerNumberModel.value?.data?.mobileNumber==null || getLeadDetailByCustomerNumberModel.value?.data?.mobileNumber=="null"){
+
           isaddedMobileNumber.value = false;
+        }else {
+
+          isaddedMobileNumber.value = true;
+          SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
         }
-        SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+
         isLoading(false);
 
       }else{
@@ -2784,6 +2796,33 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       isLoading(false);
     }
   }
+
+  void calculateLoanDetails() {
+    // Parse safely with fallbacks
+    final double P = double.tryParse(camLoanAmtReqController.text) ?? 0.0; // Loan Amount
+    final int n = int.tryParse(camLoanTenorRequestedController.text) ?? 0; // Tenor
+    final double annualROI = double.tryParse(camRateOfInterestController.text) ?? 0.0; // ROI
+    final double r = annualROI / 12 / 100; // Monthly ROI
+
+    double emi = 0.0;
+    if (P > 0 && r > 0 && n > 0) {
+      emi = (P * r * (pow(1 + r, n))) / (pow(1 + r, n) - 1);
+    }
+
+    final double existingEMI = double.tryParse(camEmiWillContinueController.text) ?? 0.0;
+    final double income = double.tryParse(camIncomeCanBeConsideredController.text) ?? 0.0;
+    final double proposedEMI = emi;
+    final double foir = income > 0 ? ((existingEMI + proposedEMI) / income) * 100 : 0;
+
+    final double propertyValue = double.tryParse(camPropertyValueController.text) ?? 0.0;
+    final double ltv = propertyValue > 0 ? (P / propertyValue) * 100 : 0;
+
+    // Populate results in target controllers
+    camProposedEmiController.text = emi > 0 ? emi.toStringAsFixed(2) : "";
+    camFoirController.text = foir > 0 ? foir.toStringAsFixed(2) : "";
+    camLtvController.text = ltv > 0 ? ltv.toStringAsFixed(2) : "";
+  }
+
 }
 
 extension ParseStringExtension on String? {

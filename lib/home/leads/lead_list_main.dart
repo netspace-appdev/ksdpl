@@ -2168,6 +2168,7 @@ overflow: TextOverflow.ellipsis,
                       const SizedBox(height: 12),
 
                       CustomLabeledTextField2(
+                        isInputEnabled: true,
                         label: "Partial / Disburse Amount",
                         isRequired: true,
                         controller: leadListController.partialAmountController,
@@ -2195,6 +2196,7 @@ overflow: TextOverflow.ellipsis,
                       const SizedBox(height: 12),
 
                       CustomLabeledTextField2(
+                        isInputEnabled: true,
                         label: AppText.contactNo2,
                         isRequired: true,
                         controller: leadListController.contactNoController,

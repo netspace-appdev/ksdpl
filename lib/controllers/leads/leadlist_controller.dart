@@ -27,6 +27,8 @@ import '../../services/dashboard_api_service.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
 
+import 'lead_history_controller.dart';
+
 
 class LeadListController extends GetxController {
   var selectedPrevStage = Rxn<String>();
@@ -342,7 +344,8 @@ class LeadListController extends GetxController {
     ///new code 3 july 2025 for status change in call
     try {
       // 1. Choose and call appropriate API
-      if (callStatus=="0" && isCallReminder.value==false) {
+      if (callStatus=="0" && isCallReminder.value==false &&  fromWhere!="history_feedback") { // if something goes wrong just remove (&&  fromWhere!="history_feedback")
+        print("see here--->condition 1");
         await updateLeadStageApiForCall(
         id: leadId,
         active: leadDDController.selectedStageActive.value.toString(),
@@ -351,7 +354,8 @@ class LeadListController extends GetxController {
             : selectedStage,
         empId: empId,
         );
-      }else if (callStatus=="0" && isCallReminder.value==true && fromWhere=="history_feedback" ) { //Added new on 28 Aug
+      }else if (callStatus=="0" && (isCallReminder.value==true || isCallReminder.value==false) && fromWhere=="history_feedback" ) { //Added new on 28 Aug'
+        print("see here--->condition 2");
         print("see here--->${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
         await workOnLeadApi(
           // id:callStatus=="1"?id.toString():"0",
@@ -367,8 +371,10 @@ class LeadListController extends GetxController {
           callReminder: formattedDateTime,
           reminderStatus:  isCallReminder.value?"1":"0",
         );
+        final LeadHistoryController leadHistoryController = Get.find();
+        leadHistoryController.getLeadWorkByLeadIdApi(leadId: leadId);
       } else if (callStatus=="0" && isCallReminder.value==true) {
-        print("see here--->${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
+        print("see here--->condition 3");
         await workOnLeadApi(
           // id:callStatus=="1"?id.toString():"0",
           id:"0",
@@ -386,6 +392,7 @@ class LeadListController extends GetxController {
       }
       else if (callStatus=="1" && selectedStage=="4") {
         // Add more if needed
+        print("see here--->condition 4");
         await workOnLeadApi(
           // id:callStatus=="1"?id.toString():"0",
           id:"0",
@@ -402,6 +409,7 @@ class LeadListController extends GetxController {
         );
       }else if (callStatus=="1" && selectedStage=="5") {
         print("see here--->${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
+        print("see here--->condition 5");
         await updateLeadStageApiForCall(
           id: leadId,
           active: leadDDController.selectedStageActive.value.toString(),
@@ -411,6 +419,7 @@ class LeadListController extends GetxController {
           empId: empId,
         );
       }else if (callStatus=="1" && selectedStage=="6") {
+        print("see here--->condition 6");
         // Add more if needed
         await workOnLeadApi(
           // id:callStatus=="1"?id.toString():"0",
@@ -427,6 +436,7 @@ class LeadListController extends GetxController {
           reminderStatus:  isCallReminder.value?"1":"0",
         );
       }else if (callStatus=="1" && selectedStage=="7") {
+        print("see here--->condition 7");
         print("see here--->${(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage}");
         await updateLeadStageApiForCall(
           id: leadId,
@@ -448,6 +458,10 @@ class LeadListController extends GetxController {
 
   Future<void> callPostLeadUpdateAPIs() async {
     // You can even extract these as services if it grows further
+
+
+
+
     final SearchLeadController searchLeadController = Get.put(SearchLeadController());
 
     await getFilteredLeadsApi(

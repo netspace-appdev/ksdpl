@@ -896,7 +896,7 @@ class DrawerApiService {
       request.headers.addAll(header);
 
       // Required fields
-      request.fields['Id'] = "0";
+      request.fields['Id'] = id;
       request.fields['LeadId'] = leadId;
       request.fields['LeadStage_Status'] = leadStageStatus;
       request.fields['Lead_Percent'] = leadPercent;

@@ -406,6 +406,7 @@ class Step3CamNote extends StatelessWidget {
           if(camNoteController.selectedBankers.isNotEmpty){
             showDialog(
               context: context,
+              barrierDismissible: false,
               builder: (context) {
                 return CustomIconDialogBox(
                   title: "Are you sure?",
@@ -416,7 +417,7 @@ class Step3CamNote extends StatelessWidget {
                     camNoteController.saveForm(autoIndividual);
                   },
                   onNo: () {
-
+                    camNoteController.selectedBankers.clear();
                   },
                 );
               },
@@ -426,6 +427,7 @@ class Step3CamNote extends StatelessWidget {
         }else if(code=="add"){
           print("autoindividual.toString()--->in add =====${autoIndividual.toString()}");
           camNoteController.clearBankDetails();
+          newDDController.bankerByBranchList.clear();
 
           if(camNoteController.camZipController.text.isEmpty){
 

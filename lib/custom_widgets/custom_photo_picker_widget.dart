@@ -142,6 +142,7 @@ class CustomPhotoPickerWidget extends StatelessWidget {
   final bool isUploadActive;
   final String? toastMessage;
   final bool isRequired;
+  final bool isUploadButtonVisible;
   const CustomPhotoPickerWidget({
     super.key,
     required this.controller,
@@ -151,6 +152,7 @@ class CustomPhotoPickerWidget extends StatelessWidget {
     this.isUploadActive = true,
     this.toastMessage,
     this.isRequired = false,
+    this.isUploadButtonVisible = true,
   });
 
   void _showSourceSelector(BuildContext context) {
@@ -235,21 +237,37 @@ class CustomPhotoPickerWidget extends StatelessWidget {
           const SizedBox(height: 20),
           Row(
             children: [
-              GestureDetector(
-                onTap: () => _showSourceSelector(context),
-                child: Container(
+              if(isUploadButtonVisible==true)
+                Row(
+                  children: [
+                    GestureDetector(
+                    onTap: () => _showSourceSelector(context),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: isUploadActive==false?Colors.grey: AppColor.primaryColor),
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey[100],
+                      ),
+                      child:  Icon(Icons.add_a_photo, size: 30, color: isUploadActive==false?Colors.grey: AppColor.primaryColor),
+                    ),
+                                  ),
+
+                    const SizedBox(width: 16),
+                  ],
+                ),
+              images.isEmpty?
+              Container(
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    border: Border.all(color: isUploadActive==false?Colors.grey: AppColor.primaryColor),
+                    border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(12),
                     color: Colors.grey[100],
                   ),
-                  child:  Icon(Icons.add_a_photo, size: 30, color: isUploadActive==false?Colors.grey: AppColor.primaryColor),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
+                  child:  Center(child: Text("No data found", style: TextStyle(fontSize: 10, color: AppColor.grey2),)))
+          :Expanded(
                 child: SizedBox(
                   height: 100,
                   child: ListView.separated(
@@ -258,61 +276,7 @@ class CustomPhotoPickerWidget extends StatelessWidget {
                     separatorBuilder: (_, __) => const SizedBox(width: 8),
                       itemBuilder: (_, index) {
                         final image = images[index];
-                        /*return Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: image.isLocal
-                                  ? Image.file(
-                                image.file!,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => const Icon(Icons.error, color: Colors.red),
-                              )
-                                  : Image.network(
-                                image.url!,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Container(
-                                    width: 100,
-                                    height: 100,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: const SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: CircularProgressIndicator(strokeWidth: 2),
-                                    ),
-                                  );
-                                },
-                                errorBuilder: (_, __, ___) => const Icon(Icons.error, color: Colors.red),
-                              ),
-                            ),
-                            if (isCloseVisible)
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: GestureDetector(
-                                  onTap: () => controller.removeImage(imageKey, image),
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.red,
-                                    ),
-                                    padding: const EdgeInsets.all(2),
-                                    child: const Icon(Icons.close, color: Colors.white, size: 16),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        );*/
+
                         return Stack(
                           children: [
                             Container(

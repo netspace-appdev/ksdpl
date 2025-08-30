@@ -140,6 +140,8 @@ class Addleadcontroller extends GetxController{
         phoneController.text=getLeadDetailModel.value?.data?.mobileNumber??"";
         camNoteController.camPhoneController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
 
+
+
         selectedGender.value=getLeadDetailModel.value?.data?.gender??"";
         camNoteController.selectedGender.value = getLeadDetailModel.value?.data?.gender ?? "";
 
@@ -551,6 +553,7 @@ class Addleadcontroller extends GetxController{
     List<File>? PhotosOfProperty,
     List<File>? PhotosOfResidence,
     List<File>? PhotosOfOffice,
+    String? fromWhere,
   }) async {
    CamNoteController camNoteController=Get.find();
     try {
@@ -609,8 +612,10 @@ class Addleadcontroller extends GetxController{
         getLeadDetailModel.value= GetLeadDetailModel.fromJson(data);
         ToastMessage.msg( getLeadDetailModel.value!.message!.toString());
 
+        if(fromWhere!="camnote"){
+          clearControllers();
+        }
 
-        clearControllers();
         isLoading(false);
         camNoteController.isAllCamnoteSubmit(false);
       }else{
@@ -635,6 +640,7 @@ class Addleadcontroller extends GetxController{
 
 
   void clearControllers(){
+    print("clearControllers=====>");
     LeadDDController leadDDController=Get.find();
     fullNameController.clear();
     dobController.clear();

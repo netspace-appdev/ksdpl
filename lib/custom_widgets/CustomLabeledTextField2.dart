@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../common/helper.dart';
+
 class CustomLabeledTextField2 extends StatelessWidget {
   final String label;
   final bool isRequired;
@@ -10,7 +12,7 @@ class CustomLabeledTextField2 extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final int? maxLength;
   final FormFieldValidator<String>? validator; // <-- Added validator
-
+  final bool isInputEnabled;
   const CustomLabeledTextField2({
     Key? key,
     required this.label,
@@ -21,7 +23,8 @@ class CustomLabeledTextField2 extends StatelessWidget {
     this.isTextArea = false,
     this.onChanged,
     this.maxLength,
-    this.validator, // <-- optional validator
+    this.validator,
+    this.isInputEnabled = true,
   }) : super(key: key);
 
   @override
@@ -34,7 +37,8 @@ class CustomLabeledTextField2 extends StatelessWidget {
             text: label,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: AppColor.grey2,
+              fontSize: 16,
             ),
             children: isRequired
                 ? [
@@ -49,13 +53,16 @@ class CustomLabeledTextField2 extends StatelessWidget {
                 : [],
           ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 10),
         TextFormField(
+          style: TextStyle(color: isInputEnabled ? Colors.black : Colors.grey),
+          enabled: isInputEnabled,
           controller: controller,
           keyboardType: inputType,
           maxLines: isTextArea ? 3 : 1,
           maxLength: maxLength,
           decoration: InputDecoration(
+            fillColor: isInputEnabled ? AppColor.grey3 : Colors.grey[300],
             hintText: hintText,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
@@ -64,6 +71,7 @@ class CustomLabeledTextField2 extends StatelessWidget {
           onChanged: onChanged,
           validator: validator, // <-- hooked up validator
         ),
+        SizedBox(height: 20),
       ],
     );
   }

@@ -21,65 +21,69 @@ class CustomIconDialogBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // 🔔 Icon
-            Icon(icon, size: 50, color: iconColor),
+    return PopScope(
+      canPop: false,
+      child: Dialog(
 
-            const SizedBox(height: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 🔔 Icon
+              Icon(icon, size: 50, color: iconColor),
 
-            // 📌 Title
-            Text(
-              title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
+              const SizedBox(height: 16),
 
-            const SizedBox(height: 12),
+              // 📌 Title
+              Text(
+                title,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
 
-            // 📝 Description
-            Text(
-              description,
-              style: const TextStyle(fontSize: 14),
-              textAlign: TextAlign.center,
-            ),
+              const SizedBox(height: 12),
 
-            const SizedBox(height: 24),
+              // 📝 Description
+              Text(
+                description,
+                style: const TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
 
-            // 🟠 Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              const SizedBox(height: 24),
+
+              // 🟠 Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                    onPressed: () {
+                      Get.back();
+                      onYes();
+                    },
+                    child: const Text("Yes", style: TextStyle(color: Colors.white)),
                   ),
-                  onPressed: () {
-                    Get.back();
-                    onYes();
-                  },
-                  child: const Text("Yes", style: TextStyle(color: Colors.white)),
-                ),
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.orange),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.orange),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                    onPressed: () {
+                      Get.back();
+                      onNo();
+                    },
+                    child: const Text("No", style: TextStyle(color: Colors.black)),
                   ),
-                  onPressed: () {
-                    Get.back();
-                    onNo();
-                  },
-                  child: const Text("No", style: TextStyle(color: Colors.black)),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

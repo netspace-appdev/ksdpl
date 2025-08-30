@@ -17,6 +17,7 @@ import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomIconDilogBox.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomLoadingOverlay.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart' as customTF;
 import '../../custom_widgets/CustomTextLabel.dart';
@@ -152,12 +153,17 @@ class Step2CamNote extends StatelessWidget {
                        hintText: AppText.enterEmiStoppedBefore,
                      ),
 
-                     CustomLabeledTextField(
+                     CustomLabeledTextField2(
                        label: AppText.emiWillContinue,
                        controller: camNoteController.camEmiWillContinueController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterEmiWillContinue,
                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                       isRequired: false,
+
+                       onChanged: (value) {
+                         camNoteController.calculateLoanDetails();
+                       },
                      ),
 
                      CustomLabeledTextField(
@@ -253,33 +259,52 @@ class Step2CamNote extends StatelessWidget {
                         hintText: AppText.enterTotalFamilyIncome,
                       ),
 
-                      CustomLabeledTextField(
+                      CustomLabeledTextField2(
                         label: AppText.incomeCanBeConsidered,
                         controller: camNoteController.camIncomeCanBeConsideredController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterConsideredIncome,
+                        isInputEnabled: true,
+                        isRequired: false,
+                        onChanged: (value) {
+                          camNoteController.calculateLoanDetails();
+                        },
                       ),
 
-                      CustomLabeledTextField(
+                      CustomLabeledTextField2(
                         label: AppText.loanAmountRequested,
                         controller: camNoteController.camLoanAmtReqController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterConsideredIncome,
                         isInputEnabled: false,
+                        isRequired: false,
+                        onChanged: (value) {
+                          camNoteController.calculateLoanDetails();
+                        },
                       ),
 
-                      CustomLabeledTextField(
+                      CustomLabeledTextField2(
                         label: AppText.loanTenorRequested,
                         controller: camNoteController.camLoanTenorRequestedController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterLoanTenorRequested,
+                        isRequired: false,
+                        isInputEnabled: true,
+                        onChanged: (value) {
+                          camNoteController.calculateLoanDetails();
+                        },
                       ),
 
-                      CustomLabeledTextField(
+                      CustomLabeledTextField2(
                         label: AppText.rateOfInterest,
                         controller: camNoteController.camRateOfInterestController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterRateOfInterest,
+                        isRequired: false,
+                        isInputEnabled: true,
+                        onChanged: (value) {
+                          camNoteController.calculateLoanDetails();
+                        },
                       ),
 
                       CustomLabeledTextField(
@@ -290,11 +315,16 @@ class Step2CamNote extends StatelessWidget {
                        isInputEnabled: false,
                       ),
 
-                      CustomLabeledTextField(
+                      CustomLabeledTextField2(
                         label: AppText.propertyValue,
                         controller: camNoteController.camPropertyValueController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterPropertyValue,
+                        isInputEnabled: true,
+                        isRequired: false,
+                        onChanged: (value) {
+                          camNoteController.calculateLoanDetails();
+                        },
                       ),
 
                       CustomLabeledTextField(

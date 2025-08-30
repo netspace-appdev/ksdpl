@@ -7,8 +7,11 @@ import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
+import '../../controllers/camnote/camnote_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
+import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
@@ -38,7 +41,7 @@ class AddLeadScreen extends StatelessWidget {
   final addProductController = Get.find<AddProductController>();
 
   IncomeStepController incomeStepController = Get.put(IncomeStepController());
-
+  final CamNoteController camNoteController =Get.put(CamNoteController());
   @override
   Widget build(BuildContext context) {
 
@@ -128,7 +131,8 @@ class AddLeadScreen extends StatelessWidget {
                                 isFutureDisabled: true,
                               ),
 
-                              CustomLabeledTextField(
+                              CustomLabeledTextField2(
+                                isInputEnabled: true,
                                 label: AppText.phoneNumberNoStar,
                                 isRequired: true,
                                 controller: addleadcontroller.phoneController,
@@ -136,8 +140,13 @@ class AddLeadScreen extends StatelessWidget {
                                 hintText: AppText.enterPhNumber,
                                 validator: ValidationHelper.validatePhoneNumber,
                                 maxLength: 10,
+                                onChanged: (value) {
+                                  if (value.length == 10) {
+                                    camNoteController.getLeadDetailByCustomerNumberApi(value);
+                                  }
+                                },
                               ),
-                              const SizedBox(height: 10),
+
                               const Row(
                                 children: [
                                   Text(
@@ -881,6 +890,9 @@ class AddLeadScreen extends StatelessWidget {
       print("onpressed===>2");
       if (addleadcontroller.selectedGender.value==null) {
         ToastMessage.msg("Please select gender");
+      }else if(camNoteController.isaddedMobileNumber.value == true){
+        SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+        return;
       }else {
         if(addleadcontroller.fromWhere.value=="interested"){
 

@@ -69,6 +69,7 @@ class Data {
     branchName = json['branchName'];
     bankersName = json['bankersName'];
     bankersMobileNumber = json['bankersMobileNumber'];
+
     bankersWhatsAppNumber = json['bankersWhatsAppNumber'];
     bankersEmailId = json['bankersEmailId'];
     city = json['city'];
