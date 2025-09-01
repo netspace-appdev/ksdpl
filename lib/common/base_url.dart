@@ -4,18 +4,18 @@ class BaseUrl{
 
  ///UAT Server
 
-   static const String baseUrl = 'https://devapi.kanchaneshver.com/api/';
-   static const String imageBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
+  // static const String baseUrl = 'https://devapi.kanchaneshver.com/api/';
+  // static const String imageBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
  //  static const String baseUrl = 'https://devapi.kanchaneshver.com/api/';
 //   static const String imageBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
 
  ///Live Server
- // static const String baseUrl = 'https://api.kanchaneshver.com/api/';
+ static const String baseUrl = 'https://api.kanchaneshver.com/api/';
 
 
- //static const String imageBaseUrl = 'https://ksdpl-uploads.s3.ap-south-1.amazonaws.com/';
+ static const String imageBaseUrl = 'https://ksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
  //static const String imageBaseUrl = 'https://ksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
@@ -24,11 +24,11 @@ class BaseUrl{
   
    static const String tutorialVideoBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
- //static const String devVersion = 'Dev App Version 1.0.25';
-  static const String devVersion = 'UAT';
+ static const String devVersion = 'Live (Dev App)';
+ // static const String devVersion = 'UAT';
  // static const String devVersion = 'Local';
 
-  static const String buildDate = 'Build Date : 21 Aug 2025';
+  static const String buildDate = 'Build Date : 1 Sep 2025';
 
 
 
