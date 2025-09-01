@@ -11,6 +11,7 @@ import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/loan_appl_controller.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
 import 'Step11Form.dart';
 import 'Step1Form.dart';
 import 'Step2Form.dart';
@@ -239,22 +240,22 @@ class LoanApplicationScreen extends StatelessWidget {
                         print(loanApplicationController.currentStep.value);
 
                         final pan = loanApplicationController.panController.text.trim();
-                        // if (pan.isNotEmpty) {
-                        //   final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
-                        //   if (!panRegex.hasMatch(pan)) {
-                        //     SnackbarHelper.showSnackbar(title: "Invalid PAN", message: "Please enter a valid PAN number");
-                        //     return;
-                        //   }
-                        // }
+                        if (pan.isNotEmpty) {
+                          final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
+                          if (!panRegex.hasMatch(pan)) {
+                            SnackbarHelper.showSnackbar(title: "Invalid PAN", message: "Please enter a valid PAN number");
+                            return;
+                          }
+                        }
 
-                        // final aadhar = loanApplicationController.aadharController.text.trim();
-                        // if (aadhar.isNotEmpty) {
-                        //   final aadharRegex = RegExp(r'^\d{12}$');
-                        //   if (!aadharRegex.hasMatch(aadhar)) {
-                        //     SnackbarHelper.showSnackbar(title: "Invalid Aadhar", message: "Aadhar number must be exactly 12 digits.");
-                        //     return;
-                        //   }
-                        // }
+                        final aadhar = loanApplicationController.aadharController.text.trim();
+                        if (aadhar.isNotEmpty) {
+                          final aadharRegex = RegExp(r'^\d{12}$');
+                          if (!aadharRegex.hasMatch(aadhar)) {
+                            SnackbarHelper.showSnackbar(title: "Invalid Aadhar", message: "Aadhar number must be exactly 12 digits.");
+                            return;
+                          }
+                        }
 
                         loanApplicationController.onSaveLoanAppl(
                           status: '0',

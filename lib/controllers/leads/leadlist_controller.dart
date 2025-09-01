@@ -80,7 +80,7 @@ class LeadListController extends GetxController {
 
   var selectedIndex = (1).obs;
   var leadId = RxnString();
-  var partialAmount;
+  var partialAmount = 0.0.obs;
 
   var eId="".obs;
   final TextEditingController openPollPercentController = TextEditingController();
@@ -1625,7 +1625,9 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
  Future<void> callUpdateDisburseHistory() async {
    final disburse = double.tryParse(partialAmountController.text ?? '0') ?? 0;
-   if (disburse > partialAmount) {
+   if (disburse > partialAmount.value) {
+     print('the amount${disburse}');
+     print('the amount${partialAmount.value.toString().length}');
      return   SnackbarHelper.showSnackbar(title: "Incomplete Data", message: AppText.partialAmountCannotExceed??'');
    }
   else {
@@ -1661,13 +1663,10 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
          isLoad2(false);
          // Get.back();
        }
-       else {
-         ToastMessage.msg(
-             data['data']?.toString() ?? AppText.somethingWentWrong);
-       }
+
      } catch (e) {
        print("Error in checkOldPasswordRequestApi: ${e.toString()}");
-       ToastMessage.msg(AppText.somethingWentWrong);
+      // ToastMessage.msg(AppText.somethingWentWrong);
      } finally {
        if (isDashboardLeads.value == false) {
          getAllLeadsApi(
@@ -1725,7 +1724,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
             getDisburseHistoryByUniqueLeadNoModel.value?.data?.disburseAmount.toString() ?? '0'
         ) ?? 0;
 
-         partialAmount = sanction - disburse;
+         partialAmount.value = sanction - disburse;
 
         isLoad(false);
         // clear();

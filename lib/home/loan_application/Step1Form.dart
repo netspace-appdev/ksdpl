@@ -132,7 +132,7 @@ class Step1Form extends StatelessWidget {
 
                     CustomTextLabel(
                       label: AppText.brNostar,
-
+                      isRequired: true,
                     ),
 
                     const SizedBox(height: 10),

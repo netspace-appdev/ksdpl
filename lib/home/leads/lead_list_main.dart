@@ -2179,10 +2179,16 @@ overflow: TextOverflow.ellipsis,
                         hintText: "Enter Disburse Amount",
                         inputType: TextInputType.number,
                         validator: partialValidation,
+                        maxLength: leadListController.partialAmount.value
+                            .truncate()
+                            .toString()
+                            .length,
+
                         onChanged: (value){
                           final disburse = double.tryParse(value ?? '0') ?? 0;
-                          if (disburse > leadListController.partialAmount) {
-                            return   SnackbarHelper.showSnackbar(title: "Incomplete Data", message: AppText.partialAmountCannotExceed??'');
+                          if (disburse > leadListController.partialAmount.value) {
+                            return   SnackbarHelper.showSnackbar(title: "Incomplete Data",
+                                message: AppText.partialAmountCannotExceed??'');
                           }
                         },
                       ),
