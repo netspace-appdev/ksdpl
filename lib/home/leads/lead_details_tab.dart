@@ -198,83 +198,85 @@ class LeadDetailsTab extends StatelessWidget {
                 }
               });
 
-              return Column(
-                children: [
-                  Stack(
-                    children: [
-                      // Gradient Background
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [AppColor.primaryLight, AppColor.primaryDark],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        // Gradient Background
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [AppColor.primaryLight, AppColor.primaryDark],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              header(context),
+                            ],
                           ),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 20),
-                            header(context),
-                          ],
-                        ),
-                      ),
-
-                      // White Container
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height,
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 90),
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 0),
-                            decoration: const BoxDecoration(
-                              color: AppColor.backgroundColor,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(45),
-                                topRight: Radius.circular(45),
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(height: 10),
-
-                                // Tabs
-                                const TabBar(
-                                  indicatorSize: TabBarIndicatorSize.tab,
-                                  indicatorColor: AppColor.secondaryColor,
-                                  labelColor: AppColor.secondaryColor,
-                                  unselectedLabelColor: AppColor.grey700,
-                                  tabs: [
-                                    CustomTab(
-                                        icon: Icons.list_alt, text: "Details"),
-                                    CustomTab(
-                                        icon: Icons.history, text: "History"),
-                                  ],
+                
+                        // White Container
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height,
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 90),
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 0),
+                              decoration: const BoxDecoration(
+                                color: AppColor.backgroundColor,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(45),
+                                  topRight: Radius.circular(45),
                                 ),
-
-                                // Tab Views
-                                Expanded(
-                                  child: TabBarView(
-                                    children: [
-                                      LeadDetailsMain(),
-                                      LeadHistory(),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(height: 10),
+                
+                                  // Tabs
+                                  const TabBar(
+                                    indicatorSize: TabBarIndicatorSize.tab,
+                                    indicatorColor: AppColor.secondaryColor,
+                                    labelColor: AppColor.secondaryColor,
+                                    unselectedLabelColor: AppColor.grey700,
+                                    tabs: [
+                                      CustomTab(
+                                          icon: Icons.list_alt, text: "Details"),
+                                      CustomTab(
+                                          icon: Icons.history, text: "History"),
                                     ],
                                   ),
-                                ),
-                              ],
+                
+                                  // Tab Views
+                                  Expanded(
+                                    child: TabBarView(
+                                      children: [
+                                        LeadDetailsMain(),
+                                        LeadHistory(),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               );
             },
           ),

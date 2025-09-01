@@ -773,7 +773,34 @@ class OpenPollFilter extends StatelessWidget {
                               isPassword: false,
                               obscureText: false,
                             ),
-                          ],
+                      /*  CustomTextFieldPrefix(
+                          inputType: const TextInputType.numberWithOptions(decimal: true),
+                          controller: leadListController.openPollPercentController,
+                          hintText: "like 2.0 %",
+                          validator: validatePercentage,
+                          isPassword: false,
+                          obscureText: false,
+                          maxLength: 5, // allows up to e.g. 99.99 (you can change to 4 if you only want 99.9 max)
+                          onChanged: (value) {
+                            if (value.isEmpty) return; // allow empty
+
+                            final number = double.tryParse(value);
+                            if (number == null) {
+                              leadListController.openPollPercentController.clear();
+                              return;
+                            }
+
+                            if (number >= 100) {
+                              leadListController.openPollPercentController.text = "99.9";
+                              leadListController.openPollPercentController.selection =
+                                  TextSelection.fromPosition(
+                                    TextPosition(offset: leadListController.openPollPercentController.text.length),
+                                  );
+                            }
+                          },
+                        ),*/
+
+                        ],
                         ),
                       ),
 
