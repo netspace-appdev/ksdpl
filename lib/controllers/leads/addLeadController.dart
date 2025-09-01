@@ -356,7 +356,13 @@ class Addleadcontroller extends GetxController{
           }
         }
 
+        camNoteController.clearImages('property_photo');
+        camNoteController.clearImages('residence_photo');
+        camNoteController.clearImages('office_photo');
+
+
         final photoProp = getLeadDetailModel.value?.data?.photosOfProperty;
+
         if (photoProp != null && photoProp.isNotEmpty) {
           camNoteController.loadApiImagesForKey('property_photo', photoProp);
           camNoteController.photosPropEnabled.value=false;
@@ -402,7 +408,7 @@ class Addleadcontroller extends GetxController{
 
 
 
-          print("CIBIL Score: ${result['Cibil']}");
+         /* print("CIBIL Score: ${result['Cibil']}");
           print("TotalLoanAvailedOnCibil: ${result['TotalLoanAvailedOnCibil']}");
           print("TotalLiveLoan: ${result['TotalLiveLoan']}");
           print("TotalEMI: ${result['TotalEMI'].toStringAsFixed(2)}");
@@ -410,7 +416,7 @@ class Addleadcontroller extends GetxController{
           print("TotalOverdueCasesAsPerCibil: ${result['TotalOverdueCasesAsPerCibil']}");
           print("TotalOverdueAmountAsPerCibil: ${result['TotalOverdueAmountAsPerCibil']}");
           print("TotalEnquiriesMadeAsPerCibil: ${result['TotalEnquiriesMadeAsPerCibil']}");
-
+*/
           camNoteController.camCibilController.text=result['Cibil'].toString();
           camNoteController.camTotalLoanAvailedController.text=result['TotalLoanAvailedOnCibil'].toString();
           camNoteController.camTotalLiveLoanController.text=result['TotalLiveLoan'].toString();
@@ -420,6 +426,8 @@ class Addleadcontroller extends GetxController{
           camNoteController.camTotalOverdueAmountController.text=result['TotalOverdueAmountAsPerCibil'].toString();
           camNoteController.camTotalEnquiriesController.text=result['TotalEnquiriesMadeAsPerCibil'].toString();
           camNoteController.enableAllCibilFields.value=false;
+
+
         }
 
         isLoading(false);

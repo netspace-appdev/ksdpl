@@ -967,6 +967,7 @@ class LeadSearchScreen extends StatelessWidget {
           addLeadController.clearControllers();
 
           CamNoteController camNoteController=Get.put(CamNoteController());
+          camNoteController.clearBankDetails(); ///added on 1 sep
           camNoteController.clearStep1();
           camNoteController.clearStep2();
           camNoteController.getAllPackageMasterApi();

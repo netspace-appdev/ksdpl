@@ -32,6 +32,7 @@ class CamNoteService {
   static const String sendMailForLocationOfCustomer = BaseUrl.baseUrl + 'LeadDetail/SendMailForLocationOfCustomer';
   static const String requestForFinancialServices = BaseUrl.baseUrl + 'FileUpload/RequestForFinancialServices';
   static const String requestLeadDetailByCustomerNumber = BaseUrl.baseUrl + 'LeadDetail/GetLeadDetailByCustomerNumber';
+  static const String getCamNoteDetailsByLeadIdForUpdate = BaseUrl.baseUrl + 'CamNoteDetail/GetCamNoteDetailsByLeadIdForUpdate';
 
 
 
@@ -91,6 +92,9 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getProductDetailsByFilter, request.fields);
+      Helper.ApiRes(getProductDetailsByFilter, response.body);
 
 
 
@@ -979,4 +983,37 @@ class CamNoteService {
       }
     }
 
+
+  static   getCamNoteDetailsByLeadIdForUpdateApi({required String leadId})
+  async {
+    print("getLeadDetailByCustomerNumberApi--->");
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getCamNoteDetailsByLeadIdForUpdate),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['leadId'] = leadId.toString();
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getCamNoteDetailsByLeadIdForUpdate, request.fields);
+      Helper.ApiRes(getCamNoteDetailsByLeadIdForUpdate, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
+    }
+  }
 }

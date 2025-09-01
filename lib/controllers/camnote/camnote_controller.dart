@@ -28,6 +28,7 @@ import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
 import '../../models/camnote/GetBankerDetailModelForCheck.dart';
 import '../../models/camnote/GetBankerDetailsByIdModel.dart';
 import '../../models/camnote/GetCamNoteDetailByIdModeli.dart';
+import '../../models/camnote/GetCamNoteDetailsByLeadIdForUpdateModel.dart';
 import '../../models/camnote/GetCamNoteLeadIdModel.dart';
 import '../../models/camnote/GetPackageDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart' as otherBankBranch;
@@ -151,6 +152,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var getCamNoteDetailByIdModel = Rxn<GetCamNoteDetailByIdModel>(); //
   var requestForFinancialServicesModel = Rxn<RequestForFinancialServicesModel>(); //
   var getLeadDetailByCustomerNumberModel = Rxn<GetLeadDetailByCustomerNumberModel>(); //
+  var getCamNoteDetailsModel = Rxn<GetCamNoteDetailsByLeadIdForUpdateModel>(); //
   RxList<productCat.Data> productCategoryList = <productCat.Data>[].obs;
   var isLoadingProductCategory = false.obs;
   var isProductLoading = false.obs;
@@ -464,6 +466,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       setAgeFromDob(camDobController, camEarningCustomerAgeController);
     }
 
+    if(currentStep.value==1){
+      getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
+    }
+
   }
 
   void previousStep() {
@@ -478,7 +484,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     if(step==1 || step==2){
       setAgeFromDob(camDobController, camEarningCustomerAgeController);
     }
-
+    if(currentStep.value==1){
+      getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
+    }
     currentStep.value = step;
 
     scrollToStep(step);
@@ -1744,10 +1752,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         ToastMessage.msg(addCamNoteDetail.value!.message!);
 
         sendMailToBankerAfterGenerateCamNoteApi(id: addCamNoteDetail.value!.data!.id.toString());
-        clearStep1();
-        clearStep2();
+        toggleBankerSelection(BankId.toString());
         clearBankDetails();
         forBankDetailSubmit();
+
         ///new code
         DashboardController dashboardController = Get.find();
         LeadListController leadListController = Get.find();
@@ -2778,6 +2786,48 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           isaddedMobileNumber.value = true;
           SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
         }
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error requestForFinancialServicesApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
+  Future<void> getCamNoteDetailsByLeadIdForUpdateApi(String leadId) async {
+
+    try {
+      isLoading(true);
+
+      var data = await CamNoteService.getCamNoteDetailsByLeadIdForUpdateApi(leadId: leadId);
+
+      if(data['success'] == true){
+
+        getCamNoteDetailsModel.value= GetCamNoteDetailsByLeadIdForUpdateModel.fromJson(data);
+
+
+        camIncomeCanBeConsideredController.text=(getCamNoteDetailsModel.value?.data?.incomeCanBeConsidered??"").toString();
+        camLoanTenorRequestedController.text=(getCamNoteDetailsModel.value?.data?.loanTenorRequested??"").toString();
+        camLoanTenorRequestedController.text=(getCamNoteDetailsModel.value?.data?.loanTenorRequested??"").toString();
+        camRateOfInterestController.text=(getCamNoteDetailsModel.value?.data?.roi??"").toString();
+        camProposedEmiController.text=(getCamNoteDetailsModel.value?.data?.proposedEMI??"").toString();
+        camPropertyValueController.text=(getCamNoteDetailsModel.value?.data?.propertyValueAsPerCustomer??"").toString();
+        camFoirController.text=(getCamNoteDetailsModel.value?.data?.foir??"").toString();
+        camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
+        camOfferedSecurityTypeController.text=(getCamNoteDetailsModel.value?.data?.offeredSecurityType??"").toString();
+
+
 
         isLoading(false);
 

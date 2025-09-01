@@ -703,7 +703,7 @@ class LeadListMain extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        if(lead.leadStage.toString()=="4" )
+                        if(lead.leadStage.toString()=="4" || (lead.leadStage.toString()=="6" && lead.loanDetail==0))
                           _buildTextButton(
                             label:AppText.fillLeadForm,
                             context: context,
@@ -1104,6 +1104,8 @@ overflow: TextOverflow.ellipsis,
           CamNoteController camNoteController=Get.put(CamNoteController());
           camNoteController.clearStep1();
           camNoteController.clearStep2();
+          camNoteController.clearBankDetails(); ///added on 1 sep
+
           camNoteController.getAllPackageMasterApi();
           camNoteController.currentStep.value=0;
           camNoteController.infoFilledBankers.clear();
@@ -1977,6 +1979,8 @@ overflow: TextOverflow.ellipsis,
                       hintText: "MM/DD/YYYY",
                       isDateField: true,
                       enabled: leadListController.isCallReminder.value,
+                      isPastDateDisabled: true,
+
                     )),
                     Obx(()=>CustomLabeledTimePickerTextField(
                       label: AppText.selectTime,
