@@ -20,6 +20,7 @@ import '../../services/lead_api_service.dart';
 import '../product/add_product_controller.dart';
 import '../registration_dd_controller.dart';
 import 'add_income_model_controller.dart';
+import 'loan_appl_controller.dart';
 
 class Addleadcontroller extends GetxController{
 
@@ -125,6 +126,7 @@ class Addleadcontroller extends GetxController{
 
         LeadDDController leadDDController=Get.put(LeadDDController());
         CamNoteController camNoteController=Get.put(CamNoteController());
+       // final LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
 
         getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
         camNoteController.getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
@@ -133,6 +135,7 @@ class Addleadcontroller extends GetxController{
 
         fullNameController.text=getLeadDetailModel.value!.data!.name!.toString();
         camNoteController.camFullNameController.text = getLeadDetailModel.value!.data!.name!.toString();
+       // loanApplicationController.applFullNameController.text = getLeadDetailModel.value!.data!.name!.toString();
 
         dobController.text=getLeadDetailModel.value!.data!.dateOfBirth==""?"": Helper.convertFromIso8601(getLeadDetailModel.value!.data!.dateOfBirth) ?? '';
         camNoteController.camDobController.text =getLeadDetailModel.value!.data!.dateOfBirth==""?"": Helper.convertFromIso8601(getLeadDetailModel.value!.data!.dateOfBirth) ?? '';
@@ -154,6 +157,7 @@ class Addleadcontroller extends GetxController{
 
         aadharController.text=getLeadDetailModel.value?.data?.adharCard??"";
         camNoteController.camAadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
+        //loanApplicationController.aadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
 
         panController.text=getLeadDetailModel.value?.data?.panCard??"";
         camNoteController.camPanController.text = getLeadDetailModel.value?.data?.panCard ?? "";

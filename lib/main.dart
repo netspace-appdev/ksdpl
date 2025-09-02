@@ -80,6 +80,7 @@ void main() async{
 
   await NotificationHelper.init();
   ///rm end
+
   runApp(const MyApp());
 }
 
