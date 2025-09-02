@@ -605,7 +605,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               LoanSegment:camSelectedProdSegment.value.toString(),
               LoanProduct:camSelectedProdType.value.toString(),
               OfferedSecurityType: camOfferedSecurityTypeController.text.trim().toString(),
-              IncomeType:selectedCamIncomeTypeList.value.toString(),
+              IncomeType:(selectedCamIncomeTypeList.value==null||selectedCamIncomeTypeList.value=="null")?"":selectedCamIncomeTypeList.value,
                 EarningCustomerAge: camEarningCustomerAgeController.text.trim().toString(),
               NonEarningCustomerAge: camNonEarningCustomerAgeController.text.trim().toString(),
               TotalFamilyIncome: camTotalFamilyIncomeController.text.trim().toString(),
@@ -873,7 +873,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         customerCategory: "",
         collateralSecurityCategory: "",
         collateralSecurityExcluded: "",
-        incomeTypes:selectedCamIncomeTypeList.value.toString(),
+        incomeTypes:(selectedCamIncomeTypeList.value==null||selectedCamIncomeTypeList.value=="null")?"":selectedCamIncomeTypeList.value,
         ageEarningApplicants: camEarningCustomerAgeController.text,
         ageNonEarningCoApplicant:camEarningCustomerAgeController.text,
         applicantMonthlySalary:camTotalFamilyIncomeController.text,
@@ -1034,15 +1034,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     chipText3Controller.clear();
   }
 
-  void mergeBankerDetails() {
+/*  void mergeBankerDetails() {
     final products = getProductDetailsByFilterModel.value?.data ?? [];
     final leads = getCamNoteLeadIdModel.value?.data ?? [];
 
     for (var product in products) {
-     /* final lead = leads.firstWhere(
-            (l) => l.bankId.toString() == product.bankId.toString(),
-        orElse: () => null,
-      );*/
 
       final lead = leads.firstWhere(
             (l) => l.bankId.toString() == product.bankId.toString(),
@@ -1058,6 +1054,26 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
 
     // Force update observable
+    getProductDetailsByFilterModel.refresh();
+  }*/
+
+  void mergeBankerDetails() {
+    final products = getProductDetailsByFilterModel.value?.data ?? [];
+    final leads = getCamNoteLeadIdModel.value?.data ?? [];
+
+    for (var product in products) {
+      final lead = leads.firstWhereOrNull(
+            (l) => l.bankId.toString() == product.bankId.toString(),
+      );
+
+      if (lead != null) {
+        product.bankersName = lead.bankersName;
+        product.bankersMobileNumber = lead.bankersMobileNumber;
+        product.bankersWhatsAppNumber = lead.bankersWhatsAppNumber;
+        product.bankersEmailID = lead.bankersEmailID;
+      }
+    }
+
     getProductDetailsByFilterModel.refresh();
   }
 
@@ -1120,7 +1136,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           item.autoindividual = "1";
         });
         print("here data for auto=========>${getProductDetailsByFilterModel.value?.data?.first.autoindividual.toString()}");
-       // mergeBankerDetails(); ///on 1sep remove this
+        mergeBankerDetails(); ///on 1sep remove this
         isBankerLoading(false);
 
 
@@ -1587,7 +1603,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           TotalOverdueCasesAsPerCibil:dataNew.totalOverdueCasesAsPerCibil.toString(),
           TotalOverdueAmountAsPerCibil:dataNew.totalOverdueAmountAsPerCibil.toString(),
           TotalEnquiriesMadeAsPerCibil:dataNew.totalEnquiriesMadeAsPerCibil.toString(),
-          IncomeType: dataNew.incomeType.toString(),
+          IncomeType: (dataNew.incomeType==null||dataNew.incomeType=="null")?"":dataNew.incomeType,
           EarningCustomerAge: dataNew.earningCustomerAge.toString(),
           NonEarningCustomerAge: dataNew.nonEarningCustomerAge.toString(),
           TotalFamilyIncome: dataNew.totalFamilyIncome.toString(),

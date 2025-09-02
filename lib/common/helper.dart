@@ -845,7 +845,7 @@ class AppText{
   static const String otherDetails="Other Details";
   static const String geolocationPhotos="Geolocation & Photos";
   static const String packageDetails="Package Details";
-  static const String sendEmail="Send Email";
+  static const String sendEmail="Send Email & Whatsapp";
   static const String enterPhone="Please enter phone number";
   static const String pleaseEnterFullName="Please Enter Full Name";
   static const String pleaseEnterEmail="Please Enter Email";

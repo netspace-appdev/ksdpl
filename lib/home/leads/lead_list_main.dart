@@ -440,7 +440,7 @@ class LeadListMain extends StatelessWidget {
                       child: Column(
                         children: [
                           _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString(), lead.leadStage??0),
-                          _buildDetailRow("Updated at", lead.lastUpdatedDate.toString(),lead.leadStage??0),
+                          _buildDetailRow("Updated at",Helper.convertDateTime(lead.lastUpdatedDate.toString()) ,lead.leadStage??0),
                           _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  ",lead.leadStage??0),
                           _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage??0),
                           if(lead.leadStage==4)

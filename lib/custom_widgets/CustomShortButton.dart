@@ -22,7 +22,7 @@ class CustomShortButton extends StatelessWidget {
         backgroundColor: backgroundColor,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
       child: Text(

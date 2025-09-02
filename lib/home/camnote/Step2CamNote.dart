@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
@@ -302,7 +303,35 @@ class Step2CamNote extends StatelessWidget {
                         hintText: AppText.enterRateOfInterest,
                         isRequired: false,
                         isInputEnabled: true,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,}$')),
+                        ],
                         onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            final double? rate = double.tryParse(value);
+                            if (value.contains('.')) {
+                              final parts = value.split('.');
+                              if (parts.length > 1 && parts[1].length > 3) {
+                                final newValue = '${parts[0]}.${parts[1].substring(0, 3)}';
+                                camNoteController.camRateOfInterestController.text = newValue;
+                                camNoteController.camRateOfInterestController.selection =
+                                    TextSelection.fromPosition(
+                                      TextPosition(offset: newValue.length),
+                                    );
+                                return; // stop further processing
+                              }
+                            }
+                            if (rate != null && rate > 50) {
+                              SnackbarHelper.showSnackbar(title: "Error", message: "The rate of interest (ROI) should not be more than 50 %");
+
+                              // Reset back to 50
+                              camNoteController.camRateOfInterestController.text = "50";
+                              camNoteController.camRateOfInterestController.selection =
+                                  TextSelection.fromPosition(
+                                    TextPosition(offset: camNoteController.camRateOfInterestController.text.length),
+                                  );
+                            }
+                          }
                           camNoteController.calculateLoanDetails();
                         },
                       ),

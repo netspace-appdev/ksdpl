@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../common/helper.dart';
 
@@ -13,6 +14,7 @@ class CustomLabeledTextField2 extends StatelessWidget {
   final int? maxLength;
   final FormFieldValidator<String>? validator; // <-- Added validator
   final bool isInputEnabled;
+  final List<TextInputFormatter>? inputFormatters; // <-- added
   const CustomLabeledTextField2({
     Key? key,
     required this.label,
@@ -25,6 +27,7 @@ class CustomLabeledTextField2 extends StatelessWidget {
     this.maxLength,
     this.validator,
     this.isInputEnabled = true,
+    this.inputFormatters, // <-- added
   }) : super(key: key);
 
   @override
@@ -61,6 +64,7 @@ class CustomLabeledTextField2 extends StatelessWidget {
           keyboardType: inputType,
           maxLines: isTextArea ? 3 : 1,
           maxLength: maxLength,
+          inputFormatters: inputFormatters, // <-- hooked up
           decoration: InputDecoration(
             fillColor: isInputEnabled ? AppColor.grey3 : Colors.grey[300],
             hintText: hintText,
