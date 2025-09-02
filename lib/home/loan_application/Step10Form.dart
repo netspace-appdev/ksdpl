@@ -91,7 +91,9 @@ class Step10Form extends StatelessWidget {
                               }
                               return Align(
                                 alignment: Alignment.centerRight,
-                                child: IconButton(
+                                child: loanApplicationController.loanApplicationDocumentByLoanIdModel.value?.data==null?
+                                    SizedBox():
+                                IconButton(
                                     onPressed: (){
                                       loanApplicationController.addAdditionalSrcDocument();
                                     },
@@ -125,7 +127,8 @@ class Step10Form extends StatelessWidget {
                               }
                               return Align(
                                 alignment: Alignment.centerRight,
-                                child: IconButton(
+                                child: loanApplicationController.loanApplicationDocumentByLoanIdModel.value?.data==null?
+                                SizedBox():IconButton(
                                     onPressed: loanApplicationController.addDocumentList.length <= 1?(){}: (){
                                       loanApplicationController.removeAdditionalSrcDocument(index);
                                     },
@@ -141,6 +144,7 @@ class Step10Form extends StatelessWidget {
                                 ),
                               );
                             }),
+
                             ElevatedButton(
                               onPressed: () {
                                 if(loanApplicationController.selectedBank.value==0||loanApplicationController.selectedBank.value==null){

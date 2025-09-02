@@ -1,4 +1,17 @@
 class ValidationHelper {
+
+  static String? validatecardNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Card Number is required";
+    }
+  }
+
+  static String? validateCompanyBank(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Bank Name is required";
+    }
+  }
+
   /// Validate Name (Only alphabets allowed)
   static String? validateName(String? value) {
     if (value == null || value.isEmpty) {
