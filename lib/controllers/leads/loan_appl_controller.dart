@@ -769,7 +769,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
               "typeOfLoanId": selectedProdTypeOrTypeLoan.value ?? 0,
               "panCardNumber": cleanText(panController.text),
               "addharCardNumber": cleanText(aadharController.text),
-              "loanAmountApplied": laAppliedController.toIntOrZero(),
+              "loanAmountApplied": laAppliedController.text.toIntOrZero(),
               "uniqueLeadNumber": uln,
               "channelId": selectedChannel.value,
               "channelCode": cleanText(chCodeController.text),
@@ -929,7 +929,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
         if(status=="0"){
 
-          showDialog(
+          SnackbarHelper.showSnackbar(
+            title: "Save Data",
+            message: addLoanApplicationModel.value!.message!.toString(),
+          );
+
+     /*     showDialog(
             context: Get.context!,
             builder: (context) {
               return CustomIconDialogNewBox(
@@ -942,7 +947,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
               );
             },
-          );
+          );*/
         }
 
         //  clearForm();
@@ -1243,7 +1248,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         selectedProdTypeOrTypeLoan.value = data?.typeOfLoan ?? 0;
         panController.text = data?.panCardNumber ?? '';
         aadharController.text = data?.addharCardNumber ?? '';
-        laAppliedController.text = data?.loanAmountApplied.toString() ?? "0";
+        laAppliedController.text = data?.loanAmountApplied.toString() ?? "";
+        print('the data is here ${data?.loanAmountApplied.toString() ?? ""}');
         ulnController.text = uln;
         selectedChannel.value = data?.channelId ?? 0;
         chCodeController.text = data?.channelCode ?? '';

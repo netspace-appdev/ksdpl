@@ -16,247 +16,253 @@ class Step4Form extends StatelessWidget {
 
   LeadDDController leadDDController = Get.put(LeadDDController());
   Step4Controller step4Controller = Get.put(Step4Controller());
+  final _formKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
 
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-          Obx(() => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(loanApplicationController.familyMemberApplList.length, (index) {
-              final fam = loanApplicationController.familyMemberApplList[index];
+            Obx(() => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(loanApplicationController.familyMemberApplList.length, (index) {
+                final fam = loanApplicationController.familyMemberApplList[index];
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20,),
-                  Text( AppText.familyMember +" (${index + 1})", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                  SizedBox(height: 20,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.fullName,
-                        isRequired: false,
-                        controller: fam.famNameController,
-                        inputType: TextInputType.name,
-                        hintText: AppText.enterFullName,
-                        validator:  ValidationHelper.validateName,
-                      ),
-
-                      CustomLabeledPickerTextField(
-                        label: AppText.dateOfBirth,
-                        isRequired: false,
-                        controller: fam.famDobController,
-                        inputType: TextInputType.name,
-                        hintText: AppText.mmddyyyy,
-                        validator: ValidationHelper.validateDob,
-                        isDateField: true,
-                      ),
-                      const SizedBox(height: 10),
-                      const Row(
-                        children: [
-                          Text(
-                            AppText.gender,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.grey2,
-                            ),
-                          ),
-                         /* Text(
-                            " *",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.redColor,
-                            ),
-                          ),*/
-                        ],
-                      ),
-
-                      const SizedBox(height: 10),
-                      /// Label Row (with * if required)
-
-                      Obx(()=>  Row(
-                        children: [
-                          _buildRadioOption("Male",fam),
-                          _buildRadioOption("Female",fam),
-                          _buildRadioOption("Other", fam),
-                        ],
-                      )
-                      ),
-
-                      const SizedBox(height: 20),
-
-
-
-                      CustomLabeledTextField(
-                        label: AppText.relWithAppl,
-                        isRequired: false,
-                        controller: fam.famRelWithApplController,
-                        inputType: TextInputType.name,
-                        hintText: AppText.enterRelWithAppl,
-                        validator: ValidationHelper.validatePhoneNumber,
-                      ),
-
-                      const SizedBox(height: 10),
-                      const Row(
-                        children: [
-                          Text(
-                            AppText.dependent,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.grey2,
-                            ),
-                          ),
-                         /* Text(
-                            " *",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.redColor,
-                            ),
-                          ),*/
-                        ],
-                      ),
-
-                      const SizedBox(height: 10),
-                      Obx(()=>  Row(
-                        children: [
-                          _buildRadioOptionDep("Yes", fam),
-                          _buildRadioOptionDep("No", fam),
-                        ],
-                      )
-                      ),
-
-                      const SizedBox(height: 20),
-
-
-                      CustomLabeledTextField(
-                        label: AppText.monthlyIncome,
-                        isRequired: false,
-                        controller: fam.famMonthlyIncomeController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterMonthlyIncome,
-                        validator: ValidationHelper.validatePhoneNumber,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.enterEmployedWith,
-                        isRequired: false,
-                        controller: fam.famEmployedWithController,
-                        inputType: TextInputType.name,
-                        hintText: AppText.enterEmployedWith,
-                        validator: ValidationHelper.validatePhoneNumber,
-                      ),
-
-
-                    ],
-                  ),
-
-
-
-                  SizedBox(height: 20),
-
-
-
-                  index== loanApplicationController.familyMemberApplList.length-1?
-                  Obx((){
-                    if(loanApplicationController.isLoading.value){
-                      return const Align(
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircularProgressIndicator(
-                            color: AppColor.primaryColor,
-                          ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20,),
+                    Text( AppText.familyMember +" (${index + 1})", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                    SizedBox(height: 20,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
                         ),
-                      );
-                    }
-                    return SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+
+                        CustomLabeledTextField(
+                          label: AppText.fullName,
+                          isRequired: true,
+                          controller: fam.famNameController,
+                          inputType: TextInputType.name,
+                          hintText: AppText.enterFullName,
+                          validator:  ValidationHelper.validateName,
                         ),
-                        onPressed: (){
+
+                        CustomLabeledPickerTextField(
+                          label: AppText.dateOfBirth,
+                          isRequired: true,
+                          controller: fam.famDobController,
+                          inputType: TextInputType.name,
+                          hintText: AppText.mmddyyyy,
+                          validator: ValidationHelper.validateDob,
+                          isDateField: true,
+                        ),
+                        const SizedBox(height: 10),
+                        const Row(
+                          children: [
+                            Text(
+                              AppText.gender,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.grey2,
+                              ),
+                            ),
+                           /* Text(
+                              " *",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.redColor,
+                              ),
+                            ),*/
+                          ],
+                        ),
+
+                        const SizedBox(height: 10),
+                        /// Label Row (with * if required)
+
+                        Obx(()=>  Row(
+                          children: [
+                            _buildRadioOption("Male",fam),
+                            _buildRadioOption("Female",fam),
+                            _buildRadioOption("Other", fam),
+                          ],
+                        )
+                        ),
+
+                        const SizedBox(height: 20),
+
+
+
+                        CustomLabeledTextField(
+                          label: AppText.relWithAppl,
+                          isRequired: false,
+                          controller: fam.famRelWithApplController,
+                          inputType: TextInputType.name,
+                          hintText: AppText.enterRelWithAppl,
+                        //  validator: ValidationHelper.validatePhoneNumber,
+                        ),
+
+                        const SizedBox(height: 10),
+                        const Row(
+                          children: [
+                            Text(
+                              AppText.dependent,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.grey2,
+                              ),
+                            ),
+                           /* Text(
+                              " *",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.redColor,
+                              ),
+                            ),*/
+                          ],
+                        ),
+
+                        const SizedBox(height: 10),
+                        Obx(()=>  Row(
+                          children: [
+                            _buildRadioOptionDep("Yes", fam),
+                            _buildRadioOptionDep("No", fam),
+                          ],
+                        )
+                        ),
+
+                        const SizedBox(height: 20),
+
+
+                        CustomLabeledTextField(
+                          label: AppText.monthlyIncome,
+                          isRequired: false,
+                          controller: fam.famMonthlyIncomeController,
+                          inputType: TextInputType.number,
+                          hintText: AppText.enterMonthlyIncome,
+                       //   validator: ValidationHelper.validatePhoneNumber,
+                        ),
+
+                        CustomLabeledTextField(
+                          label: AppText.enterEmployedWith,
+                          isRequired: false,
+                          controller: fam.famEmployedWithController,
+                          inputType: TextInputType.name,
+                          hintText: AppText.enterEmployedWith,
+                       //   validator: ValidationHelper.validatePhoneNumber,
+                        ),
+
+
+                      ],
+                    ),
+
+
+
+                    SizedBox(height: 20),
+
+
+
+                    index== loanApplicationController.familyMemberApplList.length-1?
+                    Obx((){
+                      if(loanApplicationController.isLoading.value){
+                        return const Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: AppColor.primaryColor,
+                            ),
+                          ),
+                        );
+                      }
+                      return SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: (){
+                        if (_formKey.currentState!.validate()) {
                           loanApplicationController.addFamilyMember();
-                        },
-                        child: const Text(
-                          "Add Family Member",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    );
-                  }):
-                  Container(),
-
-                  SizedBox(height: 20),
-
-                  Obx((){
-                    if(loanApplicationController.isLoading.value){
-                      return const Align(
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircularProgressIndicator(
-                            color: AppColor.primaryColor,
+                        }  },
+                          child: const Text(
+                            "Add Family Member",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       );
-                    }
-                    return SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:loanApplicationController.familyMemberApplList.length <= 1?AppColor.lightRed: AppColor.redColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                    }):
+                    Container(),
+
+                    SizedBox(height: 20),
+
+                    Obx((){
+                      if(loanApplicationController.isLoading.value){
+                        return const Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: AppColor.primaryColor,
+                            ),
+                          ),
+                        );
+                      }
+                      return SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:loanApplicationController.familyMemberApplList.length <= 1?AppColor.lightRed: AppColor.redColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: loanApplicationController.familyMemberApplList.length <= 1?(){}: (){
+                            loanApplicationController.removeFamilyMember(index);
+                          },
+                          child: const Text(
+                            "Remove Family Member",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        onPressed: loanApplicationController.familyMemberApplList.length <= 1?(){}: (){
-                          loanApplicationController.removeFamilyMember(index);
-                        },
-                        child: const Text(
-                          "Remove Family Member",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    );
-                  })
-                ],
-              );
-            }),
-          )),
+                      );
+                    })
+                  ],
+                );
+              }),
+            )),
 
 
-        ],
+          ],
+        ),
       ),
     );
   }

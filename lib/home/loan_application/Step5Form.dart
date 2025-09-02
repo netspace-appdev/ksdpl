@@ -12,6 +12,9 @@ import '../../custom_widgets/CustomLabeledTextField.dart';
 
 class Step5Form extends StatelessWidget {
   final loanApplicationController = Get.find<LoanApplicationController>();
+  final _formKey = GlobalKey<FormState>();
+
+
 
   LeadDDController leadDDController = Get.put(LeadDDController());
   Step5Controller step5Controller = Get.put(Step5Controller());
@@ -20,159 +23,162 @@ class Step5Form extends StatelessWidget {
     return Container(
 
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      child: Form(
+        key:_formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-          Obx(() => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(loanApplicationController.creditCardsList.length, (index) {
-              final cc = loanApplicationController.creditCardsList[index];
+            Obx(() => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(loanApplicationController.creditCardsList.length, (index) {
+                final cc = loanApplicationController.creditCardsList[index];
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20,),
-                  Text( AppText.creditCard +" (${index + 1})", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                  SizedBox(height: 20,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20,),
+                    Text( AppText.creditCard +" (${index + 1})", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                    SizedBox(height: 20,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
 
-                      CustomLabeledTextField(
-                        label: AppText.companyBank,
-                        isRequired: false,
-                        controller: cc.ccCompBankController,
-                        inputType: TextInputType.name,
-                        hintText: AppText.enterCompanyBank,
-                        validator:  ValidationHelper.validateName,
-                      ),
-                      CustomLabeledTextField(
-                        label: AppText.cardNumber,
-                        isRequired: false,
-                        controller: cc.ccCardNumberController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterCardNumber,
-                        validator:  ValidationHelper.validateName,
-                      ),
+                        CustomLabeledTextField(
+                          label: AppText.companyBank,
+                          isRequired: true,
+                          controller: cc.ccCompBankController,
+                          inputType: TextInputType.name,
+                          hintText: AppText.enterCompanyBank,
+                          validator:  ValidationHelper.validateCompanyBank,
+                        ),
+                        CustomLabeledTextField(
+                          label: AppText.cardNumber,
+                          isRequired: true,
+                          controller: cc.ccCardNumberController,
+                          inputType: TextInputType.number,
+                          hintText: AppText.enterCardNumber,
+                          validator:  ValidationHelper.validatecardNumber,
+                        ),
 
-                      CustomLabeledPickerTextField(
-                        label: AppText.havingSince,
-                        isRequired: false,
-                        controller: cc.ccHavingSinceController,
-                        inputType: TextInputType.name,
-                        hintText: AppText.mmddyyyy,
-                        validator: ValidationHelper.validateDob,
-                        isDateField: true,
-                      ),
+                        CustomLabeledPickerTextField(
+                          label: AppText.havingSince,
+                          isRequired: false,
+                          controller: cc.ccHavingSinceController,
+                          inputType: TextInputType.name,
+                          hintText: AppText.mmddyyyy,
+                          isDateField: true,
+                        ),
 
-                      CustomLabeledTextField(
-                        label: AppText.avgMonSpencing,
-                        isRequired: false,
-                        controller: cc.ccAvgMonSpendingController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterAvgMonSpencing,
-                        validator: ValidationHelper.validatePhoneNumber,
-                      ),
+                        CustomLabeledTextField(
+                          label: AppText.avgMonSpencing,
+                          isRequired: false,
+                          controller: cc.ccAvgMonSpendingController,
+                          inputType: TextInputType.number,
+                          hintText: AppText.enterAvgMonSpencing,
+                        ),
 
-                    ],
-                  ),
-
-
-
-                  SizedBox(height: 20),
+                      ],
+                    ),
 
 
 
-                  index== loanApplicationController.creditCardsList.length-1?
-                  Obx((){
-                    if(loanApplicationController.isLoading.value){
-                      return const Align(
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircularProgressIndicator(
-                            color: AppColor.primaryColor,
+                    SizedBox(height: 20),
+
+
+
+                    index== loanApplicationController.creditCardsList.length-1?
+                    Obx((){
+                      if(loanApplicationController.isLoading.value){
+                        return const Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: AppColor.primaryColor,
+                            ),
+                          ),
+                        );
+                      }
+                      return SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: (){
+    if (_formKey.currentState!.validate()) {
+      loanApplicationController.addCreditCard();
+    }
+                          },
+                          child: const Text(
+                            "Add New Card Details",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       );
-                    }
-                    return SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: (){
-                          loanApplicationController.addCreditCard();
-                        },
-                        child: const Text(
-                          "Add New Card Details",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    );
-                  }):
-                  Container(),
+                    }):
+                    Container(),
 
-                  SizedBox(height: 20),
+                    SizedBox(height: 20),
 
-                  Obx((){
-                    if(loanApplicationController.isLoading.value){
-                      return const Align(
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircularProgressIndicator(
-                            color: AppColor.primaryColor,
+                    Obx((){
+                      if(loanApplicationController.isLoading.value){
+                        return const Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: AppColor.primaryColor,
+                            ),
+                          ),
+                        );
+                      }
+                      return SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:loanApplicationController.creditCardsList.length <= 1?AppColor.lightRed: AppColor.redColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: loanApplicationController.creditCardsList.length <= 1?(){}: (){
+                            loanApplicationController.removeCreditCard(index);
+                          },
+                          child: const Text(
+                            "Remove This Card Details",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       );
-                    }
-                    return SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:loanApplicationController.creditCardsList.length <= 1?AppColor.lightRed: AppColor.redColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: loanApplicationController.creditCardsList.length <= 1?(){}: (){
-                          loanApplicationController.removeCreditCard(index);
-                        },
-                        child: const Text(
-                          "Remove This Card Details",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    );
-                  })
-                ],
-              );
-            }),
-          )),
+                    })
+                  ],
+                );
+              }),
+            )),
 
 
-        ],
+          ],
+        ),
       ),
     );
   }

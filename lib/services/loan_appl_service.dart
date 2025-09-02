@@ -16,7 +16,7 @@ class LoanApplService {
   static const String SubmittLoanDocument = BaseUrl.baseUrl + 'LeadDetail/SubmittLoanDocument';
   static const String SendMailToBankerAfterLoanApplicationSubmit = BaseUrl.baseUrl + 'LeadDetail/SendMailToBankerAfterLoanApplicationSubmit';
   static const String GetLoanApplicationDocumentByLoanIdApi = BaseUrl.baseUrl +'LeadDetail/GetLoanApplicationDocumentByLoanId';
-  static const String RemovedLoanApplicationDocumentApi = BaseUrl.baseUrl +'LeadDetail/RemovedLoanApplicationDocument';
+  static const String RemovedLoanApplicationDocumentApi = BaseUrl.baseUrl +'LeadDetail/RemoveDocumentsRelatedToLoanApplication';
 
 
 
@@ -36,12 +36,13 @@ class LoanApplService {
       var headers = await MyHeader.getHeaders3(); // should return 'Authorization' and 'Content-Type: application/json'
 
       var response = await http.post(
-        Uri.parse(addLoanApplicationDetails),
+        Uri.parse('https://devapi.kanchaneshver.com/api/LeadDetail/AddLoanApplicationDetails'),
         headers: headers,
         body: jsonEncode(body),
       );
       const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-
+      Helper.ApiReq('addloanapplicationapi', jsonEncode(body));
+      Helper.ApiRes('addloanapplicationapi', response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
