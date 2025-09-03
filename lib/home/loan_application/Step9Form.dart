@@ -7,6 +7,8 @@ import '../../common/validation_helper.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/loan_appl_controller.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomLabeledTextField2.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
 
 
 class Step9Form extends StatelessWidget {
@@ -56,13 +58,21 @@ class Step9Form extends StatelessWidget {
                 hintText: AppText.ChargesDetailshint,
                 validator:  ValidationHelper.validatePhoneNumber,
               ),
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.StampDuty,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailStampDuty,
                 inputType: TextInputType.number,
                 hintText: AppText.ChargesDetailshint,
                 validator:  ValidationHelper.validateEmail,
+                onChanged: (value) {
+                  ValidationHelper.validatePercentageInput(
+                    controller: loanApplicationController.chargesDetailStampDuty,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The rate of interest (ROI) should not be more than 100 %",
+                  );
+                },
               ),
               CustomLabeledTextField(
                 label: AppText.LegalVettingCharges,

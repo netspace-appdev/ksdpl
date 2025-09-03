@@ -1198,8 +1198,12 @@ overflow: TextOverflow.ellipsis,
             },
           );
         }else if (label_code == "loan_appl_form") {
-         // addLeadController.getLeadDetailByIdApi(leadId: leadId);
+
+          addLeadController.getLeadDetailByIdApi(leadId: leadId);
         leadDDController.getAllKsdplProductApi();
+        LoanApplicationController loanApplicationController=Get.put(LoanApplicationController());
+        loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
+          loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {
           'leadId': leadId.toString(),
           'uln': uln.toString(),

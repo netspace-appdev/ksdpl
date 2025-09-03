@@ -303,10 +303,10 @@ class Step2CamNote extends StatelessWidget {
                         hintText: AppText.enterRateOfInterest,
                         isRequired: false,
                         isInputEnabled: true,
-                        inputFormatters: [
+                       /* inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,}$')),
-                        ],
-                        onChanged: (value) {
+                        ],*/
+                      /*  onChanged: (value) {
                           if (value.isNotEmpty) {
                             final double? rate = double.tryParse(value);
                             if (value.contains('.')) {
@@ -332,6 +332,15 @@ class Step2CamNote extends StatelessWidget {
                                   );
                             }
                           }
+                          camNoteController.calculateLoanDetails();
+                        },*/
+                        onChanged: (value){
+                          ValidationHelper.validatePercentageInput(
+                            controller:  camNoteController.camRateOfInterestController,
+                            value: value,
+                            maxValue: 100,
+                            errorMessage: "The rate of interest (ROI) should not be more than 100 %",
+                          );
                           camNoteController.calculateLoanDetails();
                         },
                       ),

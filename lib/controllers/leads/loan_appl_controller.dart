@@ -279,9 +279,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    leadId.value = Get.arguments['uln'];
+ /*   leadId.value = Get.arguments['uln'];
     ulnController.text = leadId.value;
-    getLoanApplicationDetailsByIdApi(id: leadId.value);
+    getLoanApplicationDetailsByIdApi(id: leadId.value);*/
   }
 
   void copyPresentToPermanentAddress() {
@@ -889,22 +889,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
               "bankerMobile": cleanText(bankerMobileController.text),
               "bankerWatsapp": cleanText(bankerWhatsappController.text),
               "bankerEmail": cleanText(bankerEmailController.text),
-              /*"chargesDetailsDTO:": {
-                "adminFeeCharges": chargesDetailAdminFeeChargess.text.toIntOrZero(),
-                "foreclosureChargesCharges": chargesDetailForeclosureCharges.text
-                    .toIntOrZero(),
-                "legalVettingCharges": chargesDetailLegalVettingCharges.text
-                    .toIntOrZero(),
-                "otherCharges": chargesDetailOtherCharges.text.toIntOrZero(),
-                "processingCharges": chargesDetailProcessingCharges.text
-                    .toIntOrZero(),
-                "processingFees": chargesDetailProcessingFees.text.toIntOrZero(),
-                "stampDutyPercentage": chargesDetailStampDuty.text.toIntOrZero(),
-                "technicalInspectionCharges": chargesDetailTechnicalInspectionCharges.text
-                    .toIntOrZero(),
-                "tsrLegalCharges": chargesDetailTSRLegalCharges.text.toIntOrZero(),
-                "valuationCharges": chargesDetailValuationCharges.text.toIntOrZero(),
-              },*/
+
               "chargesDetailsDTO": {
                 "adminFeeCharges": int.tryParse(chargesDetailAdminFeeChargess.text) ?? 0,
                 "foreclosureChargesCharges": int.tryParse(chargesDetailForeclosureCharges.text) ?? 0,
@@ -928,13 +913,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         print('status______${status}');
 
         if(status=="0"){
-
           SnackbarHelper.showSnackbar(
-            title: "Save Data",
+            title: "Data Saved",
             message: addLoanApplicationModel.value!.message!.toString(),
           );
-
-     /*     showDialog(
+         ///this appears
+          /*showDialog(
             context: Get.context!,
             builder: (context) {
               return CustomIconDialogNewBox(
@@ -948,22 +932,16 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
               );
             },
           );*/
-        }
+        }else if (status=="1"){
 
+            sendMailToBankerAfterLoanApplicationSubmit(id:getLoanApplIdModel.value?.data?.id.toString()??'', status:status,);
+
+        }else{
+
+        }
         //  clearForm();
         isLoading(false);
 
-        if(status=="1"){
-
-          print('status print ${getLoanApplIdModel.value?.data?.id.toString()??""}');
-          sendMailToBankerAfterLoanApplicationSubmit(id:getLoanApplIdModel.value?.data?.id.toString()??'',
-          status:status,
-             );
-        }
-
-        //Get.to(LeadListMain());
-
-        //   Get.back();
 
       } else {
       //  ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
@@ -1856,17 +1834,18 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
        sendMailAfterLoanApplicationSubmitModel.value = SendMailAfterLoanApplicationSubmitModel.fromJson(data);
 
        if(status=="1"){
+         print("status in mail send--->${status}");
       //   await Future.delayed(Duration(milliseconds: 100));
          isLoading(true);
-
          showDialog(
            context: Get.context!,
             barrierDismissible:false,
            builder: (context) {
              return CustomIconDialogNewBox(
-               title: "Save Data",
+               title: "Successful",
                icon: Icons.check_circle_outline,
                iconColor: AppColor.secondaryColor,
+
                description: sendMailAfterLoanApplicationSubmitModel.value!.message!.toString() ,
                onYes: () {
                  Get.back();
@@ -1876,6 +1855,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
              );
            },
          );
+
+      // SnackbarHelper.showSnackbar(title: "Successful", message: sendMailAfterLoanApplicationSubmitModel.value!.message!.toString(),position: SnackPosition.BOTTOM);
+      //   Get.back();
        }
      } else {
        //  ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);

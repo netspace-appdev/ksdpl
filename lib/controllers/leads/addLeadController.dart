@@ -126,38 +126,44 @@ class Addleadcontroller extends GetxController{
 
         LeadDDController leadDDController=Get.put(LeadDDController());
         CamNoteController camNoteController=Get.put(CamNoteController());
-       // final LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
+        final LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
 
         getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
         camNoteController.getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
         camNoteController.loanApplicationNumber=getLeadDetailModel.value!.data!.loanApplicationNo?.toString()??"";
         camNoteController.uniqueLeadNUmber=getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"";
+        loanApplicationController.ulnController.text=getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"";
 
         fullNameController.text=getLeadDetailModel.value!.data!.name!.toString();
         camNoteController.camFullNameController.text = getLeadDetailModel.value!.data!.name!.toString();
-       // loanApplicationController.applFullNameController.text = getLeadDetailModel.value!.data!.name!.toString();
+        loanApplicationController.applFullNameController.text = getLeadDetailModel.value!.data!.name!.toString();
 
         dobController.text=getLeadDetailModel.value!.data!.dateOfBirth==""?"": Helper.convertFromIso8601(getLeadDetailModel.value!.data!.dateOfBirth) ?? '';
         camNoteController.camDobController.text =getLeadDetailModel.value!.data!.dateOfBirth==""?"": Helper.convertFromIso8601(getLeadDetailModel.value!.data!.dateOfBirth) ?? '';
+        loanApplicationController.dobController.text =getLeadDetailModel.value!.data!.dateOfBirth==""?"": Helper.convertFromIso8601(getLeadDetailModel.value!.data!.dateOfBirth) ?? '';
 
         phoneController.text=getLeadDetailModel.value?.data?.mobileNumber??"";
         camNoteController.camPhoneController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
+        loanApplicationController.applMobController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
 
 
 
         selectedGender.value=getLeadDetailModel.value?.data?.gender??"";
         camNoteController.selectedGender.value = getLeadDetailModel.value?.data?.gender ?? "";
+        loanApplicationController.selectedGender.value = getLeadDetailModel.value?.data?.gender ?? "";
 
         loanAmtReqController.text=getLeadDetailModel.value?.data?.loanAmountRequested??"";
         camNoteController.camLoanAmtReqController.text = getLeadDetailModel.value?.data?.loanAmountRequested ?? "";
+        loanApplicationController.laAppliedController.text = getLeadDetailModel.value?.data?.loanAmountRequested ?? "";
 
 
         emailController.text=getLeadDetailModel.value?.data?.email??"";
         camNoteController.camEmailController.text = getLeadDetailModel.value?.data?.email ?? "";
+        loanApplicationController.applEmailController.text = getLeadDetailModel.value?.data?.email ?? "";
 
         aadharController.text=getLeadDetailModel.value?.data?.adharCard??"";
         camNoteController.camAadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
-        //loanApplicationController.aadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
+        loanApplicationController.aadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
 
         panController.text=getLeadDetailModel.value?.data?.panCard??"";
         camNoteController.camPanController.text = getLeadDetailModel.value?.data?.panCard ?? "";

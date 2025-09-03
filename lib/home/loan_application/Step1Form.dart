@@ -600,7 +600,7 @@ class Step1Form extends StatelessWidget {
                       label: AppText.staffStrength,
                       isRequired: false,
                       controller: loanApplicationController.staffStrengthController,
-                      inputType: TextInputType.name,
+                      inputType: TextInputType.number,
                       hintText: AppText.enterStaffStrength,
                       validator:  ValidationHelper.validateName,
                     ),

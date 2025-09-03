@@ -29,6 +29,7 @@ import '../../../custom_widgets/CustomLabeledTextField.dart';
 import '../../common/storage_service.dart';
 import '../../controllers/camnote/camnote_controller.dart';
 import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/leads/loan_appl_controller.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/leads/seachLeadController.dart';
@@ -1028,7 +1029,17 @@ class LeadSearchScreen extends StatelessWidget {
             leadStageId: currentLeadStage,
             filteredStages: filteredStages
           );
-        } else if (label_code == "cam_note_details") {
+        } else if (label_code == "loan_appl_form") {
+          // addLeadController.getLeadDetailByIdApi(leadId: leadId);
+          leadDDController.getAllKsdplProductApi();
+          LoanApplicationController loanApplicationController=Get.find();
+          loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
+          Get.toNamed("/loanApplication", arguments: {
+            'leadId': leadId.toString(),
+            'uln': uln.toString(),
+          });
+
+        }else if (label_code == "cam_note_details") {
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
           CamNoteController camNoteController=Get.put(CamNoteController());
 

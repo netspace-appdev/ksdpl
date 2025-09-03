@@ -38,7 +38,7 @@ class LoanApplicationScreen extends StatelessWidget {
 
 
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());/// Remove it
-  final LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
+  final LoanApplicationController loanApplicationController =Get.find();
   final List<Widget> stepForms = [
     Step1Form(),
     Step2Form(),

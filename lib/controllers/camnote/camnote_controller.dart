@@ -1794,11 +1794,18 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         ToastMessage.msg(addCamNoteDetail.value!.message!);
 
         sendMailToBankerAfterGenerateCamNoteApi(id: addCamNoteDetail.value!.data!.id.toString());
+
         toggleBankerSelection(BankId.toString());
         clearBankDetails();
+        //exp
+        infoFilledBankers.remove(BankId);
+
+        bankerBranchMap.clear();
+        //exp
         forBankDetailSubmit();
 
-        ///new code
+
+
         DashboardController dashboardController = Get.find();
         LeadListController leadListController = Get.find();
         leadListController.fromWhereLeads.value=="dashboard"?
@@ -1824,6 +1831,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           isLoadMore: true,
         );
         ///new code end
+        getCamNoteDetailByLeadIdApi(leadId: LeadID.toString());
         isAllCamnoteSubmit(false);
         isLoading(false);
 

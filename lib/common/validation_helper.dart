@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+import '../custom_widgets/SnackBarHelper.dart';
 class ValidationHelper {
 
   static String? validatecardNumber(String? value) {
@@ -363,6 +366,42 @@ class ValidationHelper {
       return "Amount must not be less than 118";
     }
     return null;
+  }
+
+  static void validatePercentageInput({
+    required TextEditingController controller,
+    required String value,
+    required double maxValue,
+    required String errorMessage,
+  }) {
+    if (value.isNotEmpty) {
+      final double? rate = double.tryParse(value);
+
+      // Allow only up to 3 decimal places
+      if (value.contains('.')) {
+        final parts = value.split('.');
+        if (parts.length > 1 && parts[1].length > 3) {
+          final newValue = '${parts[0]}.${parts[1].substring(0, 3)}';
+          controller.text = newValue;
+          controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: newValue.length),
+          );
+          return; // stop further processing
+        }
+      }
+
+      // Check against max value
+      if (rate != null && rate > maxValue) {
+        SnackbarHelper.showSnackbar(title: "Error", message: errorMessage);
+
+        // Reset back to maxValue
+        final newValue = maxValue.toString();
+        controller.text = newValue;
+        controller.selection = TextSelection.fromPosition(
+          TextPosition(offset: newValue.length),
+        );
+      }
+    }
   }
 
 }

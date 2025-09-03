@@ -48,24 +48,6 @@ class Step11Form extends StatelessWidget {
                     onPressed: loanApplicationController.isLoading.value
                         ? null
                         : () {
-                      // if (kDebugMode) {
-                      //   print('loanApplicationController.selectedBank.value${loanApplicationController.selectedBank.value}');
-                      // }
-                      // if (loanApplicationController.panController.text.trim().isEmpty) {
-                      //   final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
-                      //   if (!panRegex.hasMatch(loanApplicationController.panController.text.trim())) {
-                      //     SnackbarHelper.showSnackbar(title: "Invalid PAN", message: "Please enter a valid PAN number");
-                      //     return;
-                      //   }
-                      // }
-
-                      // if (loanApplicationController.aadharController.text.trim().isEmpty) {
-                      //   final aadharRegex = RegExp(r'^\d{12}$');
-                      //   if (!aadharRegex.hasMatch(loanApplicationController.aadharController.text.trim())) {
-                      //     SnackbarHelper.showSnackbar(title: "Invalid Aadhar", message: "Aadhar number must be exactly 12 digits.");
-                      //     return;
-                      //   }
-                      // }
 
                       if (loanApplicationController.selectedBank.value == 0 || loanApplicationController.selectedBank.value == null) {
                         SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Bank Name");
