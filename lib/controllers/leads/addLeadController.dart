@@ -189,7 +189,7 @@ class Addleadcontroller extends GetxController{
         camNoteController.camSelectedCity.value = getLeadDetailModel.value!.data!.city!.toString();
 
         zipController.text=getLeadDetailModel.value?.data?.pincode??"";
-        camNoteController.camZipController.text = getLeadDetailModel.value?.data?.pincode ?? "";
+        camNoteController.camZipController.text = (getLeadDetailModel.value?.data?.pincode=="undefined" ||  getLeadDetailModel.value?.data?.pincode=="Undefined") ?"": getLeadDetailModel.value?.data?.pincode?? "";
 
         nationalityController.text=getLeadDetailModel.value?.data?.nationality??"";
         camNoteController.camNationalityController.text = getLeadDetailModel.value?.data?.nationality ?? "";

@@ -519,7 +519,7 @@ class Step3CamNote extends StatelessWidget {
                               return CustomDropdown<branchByZip.Data>(
                                 items: newDDController.branchByZipList ?? [],
                                 getId: (item) => item.id.toString(),
-                                getName: (item) => item.branchName.toString(),
+                                getName: (item) => item.branchName.toString()+"-"+item.branchAddress.toString(),
                                 selectedValue: newDDController.branchByZipList.firstWhereOrNull(
                                         (item) => item.id == camNoteController.selectedBankBranch.value),
                                 onChanged: (value) {

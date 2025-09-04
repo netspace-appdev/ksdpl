@@ -484,7 +484,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     if(step==1 || step==2){
       setAgeFromDob(camDobController, camEarningCustomerAgeController);
     }
-    if(currentStep.value==1){
+    if(step==1){
       getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
     }
     currentStep.value = step;

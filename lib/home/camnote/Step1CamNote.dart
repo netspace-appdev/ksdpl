@@ -56,8 +56,9 @@ class Step1CamNote extends StatelessWidget {
               return  Center(child: CustomSkelton.productShimmerList(context));
             }
 
+            print("here 1--->${camNoteController.geoLocPropLatEnabled.value}");
+            print("here 2--->${camNoteController.geoLocPropLongEnabled.value}");
 
-            print("camNoteController.isUserAIC.value here==>${camNoteController.isUserAIC.value}");
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min, // Prevents extra spacing
@@ -586,15 +587,18 @@ class Step1CamNote extends StatelessWidget {
                           hintText: AppText.enterLongitude,
                           isInputEnabled: camNoteController.isUserAIC.value==false?false:camNoteController.geoLocPropLongEnabled.value,
                         ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: CustomShortButton(
-                            backgroundColor: Colors.green,
-                            textColor: AppColor.appWhite,
-                            text: AppText.sendEmail,
-                            onPressed: (){
-                              onSendEmail("1", context);
-                            },
+                        Visibility(
+                          visible: (camNoteController.geoLocPropLatEnabled.value && camNoteController.geoLocPropLongEnabled.value)?true:false,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: CustomShortButton(
+                              backgroundColor: Colors.green,
+                              textColor: AppColor.appWhite,
+                              text: AppText.sendEmail,
+                              onPressed: (){
+                                onSendEmail("1", context);
+                              },
+                            ),
                           ),
                         ),
 
@@ -617,15 +621,18 @@ class Step1CamNote extends StatelessWidget {
                           isInputEnabled:camNoteController.isUserAIC.value==false?false:camNoteController.geoLocResLongEnabled.value,
                         ),
 
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: CustomShortButton(
-                            backgroundColor: Colors.green,
-                            textColor: AppColor.appWhite,
-                            text: AppText.sendEmail,
-                            onPressed: (){
-                              onSendEmail("2", context);
-                            },
+                        Visibility(
+                          visible:  (camNoteController.geoLocResLatEnabled.value && camNoteController.geoLocResLongEnabled.value)?true:false,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: CustomShortButton(
+                              backgroundColor: Colors.green,
+                              textColor: AppColor.appWhite,
+                              text: AppText.sendEmail,
+                              onPressed: (){
+                                onSendEmail("2", context);
+                              },
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -648,15 +655,18 @@ class Step1CamNote extends StatelessWidget {
                           isInputEnabled:camNoteController.isUserAIC.value==false?false:camNoteController.geoLocOffLongEnabled.value,
                         ),
 
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: CustomShortButton(
-                            backgroundColor: Colors.green,
-                            textColor: AppColor.appWhite,
-                            text: AppText.sendEmail,
-                            onPressed: (){
-                              onSendEmail("3", context);
-                            },
+                        Visibility(
+                          visible: (camNoteController.geoLocOffLatEnabled.value && camNoteController.geoLocOffLongEnabled.value)?true:false,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: CustomShortButton(
+                              backgroundColor: Colors.green,
+                              textColor: AppColor.appWhite,
+                              text: AppText.sendEmail,
+                              onPressed: (){
+                                onSendEmail("3", context);
+                              },
+                            ),
                           ),
                         ),
                         SizedBox(
