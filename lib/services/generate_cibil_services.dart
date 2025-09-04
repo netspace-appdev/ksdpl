@@ -10,7 +10,7 @@ class GenerateCibilServices {
   static const String getExpenseByIDRequest = BaseUrl.baseUrl + 'Employee/GetExpenseByID';
   static const String addEmployeeExpenseRequest = BaseUrl.baseUrl + 'Employee/AddEmployeeExpenseDetails';
   static const String getCustomerCibilDetailRequest = BaseUrl.baseUrl + 'FileUpload/GetCustomerCibilDetailByUserId';
-  static const String udateExpenseDetailsRequest = BaseUrl.baseUrl + 'FileUpload/GetCustomerCibilDetailByUserId';
+  static const String udateExpenseDetailsRequest = BaseUrl.baseUrl + 'Employee/UpdateExpenseDetails';
 
 
 
@@ -190,6 +190,7 @@ class GenerateCibilServices {
 
 
   static Future<Map<String, dynamic>> addUdateExpenseDetailsRequest({
+    required String id,
     required String employeeId,
     required String entryDate,
     required String expenseDate,
@@ -207,7 +208,7 @@ class GenerateCibilServices {
       request.headers.addAll(header);
 
       // Add form fields
-      MultipartFieldHelper.addField(request.fields, 'Id', '0');
+      MultipartFieldHelper.addField(request.fields, 'Id', id);
       MultipartFieldHelper.addField(request.fields, 'EmployeeId', employeeId);
       MultipartFieldHelper.addField(request.fields, 'EntryDate', entryDate);
       MultipartFieldHelper.addField(request.fields, 'ExpenseDate', expenseDate);

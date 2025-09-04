@@ -67,15 +67,20 @@ class ViewExpenseController extends GetxController{
   Future<void> launchInBrowser(String url) async {
     try {
       final Uri uri = Uri.parse(url);
+      final String fullUrl = '${BaseUrl.imageBaseUrl}$uri'; // Combine base + path
+     final Uri finalUri = Uri.parse(fullUrl);
+     print("❌  launching URL: $finalUri");
 
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (await canLaunchUrl(finalUri)) {
+        await launchUrl(finalUri, mode: LaunchMode.externalApplication);
       } else {
-      //  ToastMessage.msg('Could not launch URL: $url');
+        ToastMessage.msg('Could not launch URL: $url');
       }
     } catch (e) {
       print("❌ Error launching URL: $e");
      // ToastMessage.msg('Something went wrong while opening the link.');
     }
   }
+
+
 }

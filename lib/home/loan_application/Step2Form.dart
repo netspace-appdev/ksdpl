@@ -722,7 +722,7 @@ class Step2Form extends StatelessWidget {
                                 label: AppText.staffStrength,
                                 isRequired: false,
                                 controller: coAp.coApStaffStrengthController,
-                                inputType: TextInputType.name,
+                                inputType: TextInputType.number,
                                 hintText: AppText.enterStaffStrength,
                                 validator:  ValidationHelper.validateName,
                               ),

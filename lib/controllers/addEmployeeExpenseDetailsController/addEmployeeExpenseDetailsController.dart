@@ -136,7 +136,7 @@ class AddEmployeeExpenseDetailsController extends GetxController with ImagePicke
     }
   }
 
-  Future <void> updateExpenseDetailsRequestApi() async {
+  Future <void> updateExpenseDetailsRequestApi({required String id}) async {
 
     try {
       isLoading(true);
@@ -150,6 +150,7 @@ class AddEmployeeExpenseDetailsController extends GetxController with ImagePicke
     }
 
     var data = await GenerateCibilServices.addUdateExpenseDetailsRequest(
+      id:id,
     employeeId: empId ?? '',
     entryDate: camExpenseDateController.text.trim(),     // Add this controller
     expenseDate: camExpenseDateController.text.trim(), // Add this controller
