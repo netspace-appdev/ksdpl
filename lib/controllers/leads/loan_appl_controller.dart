@@ -1117,10 +1117,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           loPurposeController.text = detailMap?['LoanPurpose'] ?? '';
           schemeController.text = detailMap?['Scheme'] ?? '';
           repayTpeController.text = detailMap?['RepaymentType'] ?? '';
-          loanTenureYController.text =
-              detailMap?['LoanTenureYears']?.toString() ?? '';
-          monthInstaController.text =
-              detailMap?['MonthlyInstallment']?.toString() ?? '';
+          loanTenureYController.text = detailMap?['LoanTenureYears'] ?? '';
+          monthInstaController.text = detailMap?['MonthlyInstallment']?.toString() ?? '';
           selectedPrevLoanAppl.value =
           detailMap?['PreviousLoanApplied']?.toString() == "null" ? -1 :
           detailMap?['PreviousLoanApplied']?.toString() == "true" ? 0 : 1;
@@ -1148,8 +1146,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           orgNameController.text = employer?['OrganizationName'] ?? '';
           selectedOwnershipList.value = employer?['OwnershipType'] ?? 'null';
           natureOfBizController.text = employer?['NatureOfBusiness'] ?? '';
-          staffStrengthController.text =
-              employer?['StaffStrength']?.toString() ?? '0';
+          staffStrengthController.text = employer?['StaffStrength']?.toString() ?? '0';
 
           salaryDateController.text =
               Helper.convertFromIso8601(applicant?['DateOfSalary']) ?? 'null';

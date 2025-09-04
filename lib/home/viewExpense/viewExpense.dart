@@ -382,7 +382,7 @@ class ViewExpenseScreen extends StatelessWidget {
           AddEmployeeExpenseDetailsController addEmployeeExpenseDetailsController = Get.put(AddEmployeeExpenseDetailsController());
 
           addEmployeeExpenseDetailsController.getEmployeeExpenseByIDRequest(ExpenseId: id);
-          Get.to(EditEmployeeExpenseDetail());
+          Get.to(EditEmployeeExpenseDetail(id:id));
 
         }else{
 

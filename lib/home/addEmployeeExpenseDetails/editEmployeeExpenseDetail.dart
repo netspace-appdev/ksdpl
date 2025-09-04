@@ -13,7 +13,8 @@ import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 
 class EditEmployeeExpenseDetail extends StatelessWidget {
-  // const EditEmployeeExpenseDetail({super.key});
+    final String id;
+   EditEmployeeExpenseDetail({super.key, required  this.id,});
 
   AddEmployeeExpenseDetailsController addExpenseController = Get.put(AddEmployeeExpenseDetailsController());
   final FilePickerController filePickerController = Get.find();
@@ -94,7 +95,7 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
                                       validator:ValidationHelper.validateExpenseDate ,
                                     ),
 
-                                    CustomFilePickerWidget(
+                              /*      CustomFilePickerWidget(
                                       controller: filePickerController,
                                       fileKey: "docs",
                                       label:AppText.UploadDoc,
@@ -109,7 +110,22 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
                                         }
                                         return null;
                                       },
+                                    ),*/
+                                    CustomFilePickerWidget(
+                                      controller: filePickerController,
+                                      fileKey: "docs",
+                                      label: AppText.UploadDoc,
+                                      isCloseVisible: true,
+                                      isUploadActive: true,
+                                      toastMessage: "",
+                                      validator: (val) {
+                                        if (filePickerController.getFiles("docs").isEmpty) {
+                                          return AppText.uploaddoc;
+                                        }
+                                        return null;
+                                      },
                                     ),
+
 
                                     SizedBox(height:10,),
 
@@ -131,6 +147,9 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
                                      InkWell(
                                       onTap: (){
                                          addExpenseController.launchURL();
+                                        // print('here is expense ${
+                                        //     addExpenseController.getExpenseDetailById.value?.data?.documents.toString()??''
+                                        // }');
                                       },
                                       child: Container(
                                         padding:  EdgeInsets.all(10),
@@ -144,10 +163,10 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
                                           children: [
                                             const Icon(Icons.download, size: 20, color: Colors.blue),
                                             const SizedBox(width: 6),
-                                            Container(
-                                              width: MediaQuery.of(context).size.width/1.4,
+                                            Obx(() => Container(
+                                              width: MediaQuery.of(context).size.width / 1.4,
                                               child: Text(
-                                                addExpenseController.getExpenseDetailById.value?.data?.documents.toString()??'',
+                                                addExpenseController.getExpenseDetailById.value?.data?.documents ?? '',
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                   fontSize: 14,
@@ -155,18 +174,18 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
-                                            ),
+                                            ))
+
                                           ],
                                         ),
                                       ),
                                     )
-
                                   ],
                                 ),
                               ),
                               Obx((){
                                 if(addExpenseController.isLoading.value){
-                                  return Center(
+                                  return const Center(
                                     child: SizedBox(
                                       height: 30,
                                       width: 30,
@@ -191,7 +210,7 @@ class EditEmployeeExpenseDetail extends StatelessWidget {
                                       onPressed: () {
                                         if (addExpenseController.formKey.currentState?.validate() ?? false) {
                                           //   print("Form is valid");
-                                          addExpenseController.updateExpenseDetailsRequestApi();
+                                          addExpenseController.updateExpenseDetailsRequestApi(id:id);
                                         } else {
                                           // Some validation failed
                                           print("Form is not valid");
