@@ -108,6 +108,21 @@ class ValidationHelper {
     return null; // Email is valid
   }
 
+  static String? validateEmailWithoutRequired(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    // Regular expression for a valid email format
+    String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    RegExp regex = RegExp(emailPattern);
+
+    if (!regex.hasMatch(value!)) {
+      return "Enter a valid email address";
+    }
+
+    return null; // Email is valid
+  }
   static String? validateEmailOfficial(String? value) {
     if (value == null || value.isEmpty) {
       return "Email is required";

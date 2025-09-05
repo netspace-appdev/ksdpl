@@ -1312,7 +1312,22 @@ class Helper{
   static String cleanText(String text) {
     return text.trim().isEmpty ? "" : text.trim();
   }
-
+  static void debugJsonTypes(dynamic json, [String parentKey = ""]) {
+    if (json is Map<String, dynamic>) {
+      json.forEach((key, value) {
+        final fullKey = parentKey.isEmpty ? key : "$parentKey.$key";
+        print("I am here-->1");
+        debugJsonTypes(value, fullKey);
+      });
+    } else if (json is List) {
+      for (int i = 0; i < json.length; i++) {
+        print("I am here-->2");
+        debugJsonTypes(json[i], "$parentKey[$i]");
+      }
+    } else {
+      print("$parentKey -> ${json.runtimeType} -> $json");
+    }
+  }
 
 }
 
@@ -1451,5 +1466,6 @@ class MultipartFieldHelper {
       fields[key] = fallback;
     }
   }
+
 
 }

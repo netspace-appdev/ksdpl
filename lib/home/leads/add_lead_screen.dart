@@ -198,7 +198,7 @@ class AddLeadScreen extends StatelessWidget {
                                 controller: addleadcontroller.emailController,
                                 inputType: TextInputType.emailAddress,
                                 hintText: AppText.enterEA,
-                                validator: ValidationHelper.validateEmail,
+                                validator: ValidationHelper.validateEmailWithoutRequired,
                               ),
 
                               CustomLabeledTextField(

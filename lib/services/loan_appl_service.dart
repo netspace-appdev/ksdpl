@@ -11,6 +11,8 @@ import '../common/storage_service.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+
+import '../models/loan_application/GetLoanApplIdModel.dart';
 class LoanApplService {
   static const String addLoanApplicationDetails = BaseUrl.baseUrl + 'LeadDetail/AddLoanApplicationDetails';
   static const String SubmittLoanDocument = BaseUrl.baseUrl + 'LeadDetail/SubmittLoanDocument';
@@ -82,7 +84,9 @@ class LoanApplService {
 
 
 
+
       if (response.statusCode == 200) {
+
         return jsonDecode(response.body);
       } else {
         throw Exception('Failed to submit application: ${response.statusCode}');

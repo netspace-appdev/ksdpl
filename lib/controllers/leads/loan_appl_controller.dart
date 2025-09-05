@@ -1101,8 +1101,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       var req = await LoanApplService.getLoanApplicationDetailsByIdApi(id: id);
 
       var uln = Get.arguments['uln'];
+
+
       if (req['success'] == true) {
         getLoanApplIdModel.value = GetLoanApplIdModel.fromJson(req);
+
+
 
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
           detailMap = jsonDecode(
@@ -1117,7 +1121,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           loPurposeController.text = detailMap?['LoanPurpose'] ?? '';
           schemeController.text = detailMap?['Scheme'] ?? '';
           repayTpeController.text = detailMap?['RepaymentType'] ?? '';
-          loanTenureYController.text = detailMap?['LoanTenureYears'] ?? '';
+          loanTenureYController.text = detailMap?['LoanTenureYears'].toString() ?? '';
           monthInstaController.text = detailMap?['MonthlyInstallment']?.toString() ?? '';
           selectedPrevLoanAppl.value =
           detailMap?['PreviousLoanApplied']?.toString() == "null" ? -1 :
@@ -1214,11 +1218,6 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
         selectedBankBranch.value = data?.branchId ?? 0;
 
-      /*  if (data?.bankId != 0) {
-          await leadDDController.getProductListByBankIdApi(
-              bankId: data?.branchId ?? 0);
-
-        }*/
 
         selectedProdTypeOrTypeLoan.value = data?.typeOfLoan ?? 0;
         panController.text = data?.panCardNumber ?? '';

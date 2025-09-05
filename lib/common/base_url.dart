@@ -24,11 +24,11 @@ class BaseUrl{
   
    static const String tutorialVideoBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
-//static const String devVersion = 'Live (Dev App)';
+// static const String devVersion = 'Live (Dev App)';
  static const String devVersion = 'UAT';
- // static const String devVersion = 'Local';
+ //static const String devVersion = 'Local';
 
-  static const String buildDate = 'Build Date : 3 Sep 2025';
+  static const String buildDate = 'Build Date : 4 Sep 2025';
 
 
 
