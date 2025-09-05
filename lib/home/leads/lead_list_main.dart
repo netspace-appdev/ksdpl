@@ -16,6 +16,7 @@ import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/storage_service.dart';
+import '../../common/validation_helper.dart';
 import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
@@ -1614,7 +1615,7 @@ overflow: TextOverflow.ellipsis,
                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                   child:  Column(
                     children: [
-                      const Align(
+                    /*  const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Enter percent for leads",
@@ -1625,18 +1626,28 @@ overflow: TextOverflow.ellipsis,
                           ),
 
                         ),
-                      ),
+                      ),*/
                       const SizedBox(
                         height: 20,
                       ),
-                      CustomTextFieldPrefix(
+                      CustomLabeledTextField2(
                         inputType:  TextInputType.number,
                         controller: leadListController.openPollPercentController,
                         hintText: "Enter open poll percentage",
                         validator: validatePercentage,
-                        isPassword: false,
-                        obscureText: false,
-                      ),
+                    //    isPassword: false,
+                     //   obscureText: false,
+                        label: 'Enter percent for leads',
+                        isRequired: false,
+                        onChanged: (value){
+                          ValidationHelper.validatePercentageInput(
+                            controller:  leadListController.openPollPercentController,
+                            value: value,
+                            maxValue: 100,
+                            errorMessage: "The Maximum ROI should not be more than 100 %",
+                          );
+                          // camNoteController.calculateLoanDetails();
+                        },                      ),
                     ],
                   ),
                 ),

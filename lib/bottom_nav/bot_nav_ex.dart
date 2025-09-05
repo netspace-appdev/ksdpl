@@ -115,6 +115,17 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
           Addleadcontroller addleadcontroller=Get.put(Addleadcontroller());
           addleadcontroller.clearControllers();
 
+          print('is open poll index${index}');
+
+          OpenPollFilterController openPollFilterController = Get.put(OpenPollFilterController());
+
+          openPollFilterController.getCommonLeadListByFilterApi(
+            stateId: "0",
+            distId: "0",
+            cityId:  "0",
+            KsdplBranchId: "0",
+          );
+
         }
         botNavController.onItemTapped(index);
       },

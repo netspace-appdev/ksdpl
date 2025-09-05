@@ -10,6 +10,7 @@ import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
+import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 
 class Step2FormProduct extends StatelessWidget {
@@ -94,11 +95,21 @@ class Step2FormProduct extends StatelessWidget {
 
               ),
 
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.eligibleProfitPercent, ///previous it was named Profit Percentage
                 controller: addProductController.prodProfitPercentageController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterEligibleProfitPercent,
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodProfitPercentageController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Eligible Profit Percent should not be more than 100 %",
+                  );
+                  // camNoteController.calculateLoanDetails();
+                },
 
               ),
 
@@ -118,22 +129,38 @@ class Step2FormProduct extends StatelessWidget {
 
               ),
 
-
-
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.minRoi,
                 controller: addProductController.prodMinRoiController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterMinRoi,
-
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodMinRoiController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Minimum (ROI) should not be more than 100 %",
+                  );
+                 // camNoteController.calculateLoanDetails();
+                },
               ),
 
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.maxRoi,
                 controller: addProductController.prodMaxRoiController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterMaxRoi,
-
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodMaxRoiController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Maximum ROI should not be more than 100 %",
+                  );
+                  // camNoteController.calculateLoanDetails();
+                },
               ),
 
               CustomLabeledTextField(
@@ -141,7 +168,6 @@ class Step2FormProduct extends StatelessWidget {
                 controller: addProductController.prodMaxTenorEligibilityCriteriaController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterAgeAtMaturity,
-
               ),
 
               CustomLabeledTextField(

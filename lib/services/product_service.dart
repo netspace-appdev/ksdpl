@@ -355,8 +355,11 @@ class ProductService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
-
+      Helper.ApiReq('addloanapplicationapi', jsonEncode((response.body)));
+          Helper.ApiRes('addloanapplicationapi', response.body);
       if (response.statusCode == 200) {
+
+
         return jsonDecode(response.body);
       } else {
         throw Exception('Failed to submit application: ${response.statusCode}');
