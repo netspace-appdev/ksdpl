@@ -535,7 +535,7 @@ class AppText{
   static const String enterMaxLoanAmount = "Maximum Loan Amount";
 
   static const String profitPercentage = "Profit Percentage";
-  static const String eligibleProfitPercent = "Eligible Profit Percent";
+  static const String eligibleProfitPercent = "Eligible Profit Percent (%)";
   static const String enterEligibleProfitPercent = "Enter Eligible Profit Percent";
   static const String enterProfitPercentage = "Enter Profit Percentage";
   static const String minCibil = "Minimum CIBIL";
@@ -545,9 +545,9 @@ class AppText{
   static const String maxTenor = "Maximum Tenor (Years)";
   static const String enterMaxTenor = "Enter Maximum Tenor";
 
-  static const String minRoi = "Minimum ROI";
+  static const String minRoi = "Minimum ROI (%)";
   static const String enterMinRoi = "Enter Minimum ROI";
-  static const String maxRoi = "Maximum ROI";
+  static const String maxRoi = "Maximum ROI (%)";
   static const String enterMaxRoi = "Enter Maximum ROI";
 
   static const String maxTenorEligibilityCriteria = "Maximum Tenor Eligibility Criteria";
@@ -565,7 +565,7 @@ class AppText{
 
   static const String minPropertyValue = "Minimum Property Value";
   static const String enterMinPropertyValue = "Enter Minimum Property Value";
-  static const String maxIir = "Maximum IIR";
+  static const String maxIir = "Maximum IIR (%)";
   static const String enterMaxIir = "Enter Maximum IIR";
   static const String maxFoir = "Maximum FOIR (%)";
   static const String enterMaxFoir = "Enter Maximum FOIR";

@@ -149,7 +149,7 @@ class Step1FormProduct extends StatelessWidget {
 
               CustomLabeledTextField(
                 label: AppText.bankerMobile,
-
+                maxLength: 10,
                 controller: addProductController.prodBankersMobController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterBankerMobile,
@@ -158,7 +158,7 @@ class Step1FormProduct extends StatelessWidget {
 
               CustomLabeledTextField(
                 label: AppText.bankerWhatsapp,
-
+                maxLength: 10,
                 controller: addProductController.prodBankersWhatsappController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterBankerWhatsapp,
@@ -167,7 +167,6 @@ class Step1FormProduct extends StatelessWidget {
 
               CustomLabeledTextField(
                 label: AppText.bankerEmail,
-
                 controller: addProductController.prodBankersEmailController,
                 inputType: TextInputType.emailAddress,
                 hintText: AppText.enterBankerEmail,
@@ -188,6 +187,7 @@ class Step1FormProduct extends StatelessWidget {
                 controller: addProductController.prodBankerSuperiorMobController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterSuperiorMobile,
+                maxLength: 10,
 
               ),
 
@@ -196,6 +196,8 @@ class Step1FormProduct extends StatelessWidget {
                 controller: addProductController.prodBankerSuperiorWhatsappController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterSuperiorWhatsapp,
+                maxLength: 10,
+
 
               ),
 

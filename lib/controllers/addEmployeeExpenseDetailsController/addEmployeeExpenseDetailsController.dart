@@ -73,8 +73,6 @@ class AddEmployeeExpenseDetailsController extends GetxController with ImagePicke
   async {
     try {
       isLoading(true);
-
-
       var data = await GenerateCibilServices.getEmployeeExpenseByIDRequest(
         ExpenseId: ExpenseId ?? '',
       );
@@ -101,12 +99,29 @@ class AddEmployeeExpenseDetailsController extends GetxController with ImagePicke
   String formatDate(String? dateStr) {
     if (dateStr == null || dateStr.isEmpty) return '';
     try {
-      DateTime parsedDate = DateTime.parse(dateStr);
-      return DateFormat('dd-MM-yy').format(parsedDate);
+      // Parse the user input (assuming it's in dd-MM-yy format)
+      DateTime parsedDate = DateFormat('dd-MM-yy').parseStrict(dateStr);
+
+      // Convert to API required format (yyyy-MM-dd)
+      return DateFormat('yyyy-MM-dd').format(parsedDate);
     } catch (e) {
-      return '';
+      print("Date parsing error: $e");
+      return dateStr; // fallback if parsing fails
     }
   }
+  String formatToApiDate(String inputDate) {
+    try {
+      // Parse the user input (assuming it's in dd-MM-yy format)
+      DateTime parsedDate = DateFormat('dd-MM-yy').parseStrict(inputDate);
+
+      // Convert to API required format (yyyy-MM-dd)
+      return DateFormat('yyyy-MM-dd').format(parsedDate);
+    } catch (e) {
+      print("Date parsing error: $e");
+      return inputDate; // fallback if parsing fails
+    }
+  }
+
 
 
   void clearFormFields() {

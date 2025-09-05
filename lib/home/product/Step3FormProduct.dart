@@ -12,6 +12,7 @@ import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
 import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
+import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomMultiSelectDropdown.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllNegativeProfileModel.dart' as negProfile;
@@ -112,36 +113,77 @@ class Step3FormProduct extends StatelessWidget {
 
               ),
 
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.maxIir,
                 controller: addProductController.prodMaxIirController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterMaxIir,
                 validator:  ValidationHelper.validateName,
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodMaxIirController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Maximum IIR should not be more than 100 %",
+                  );
+                  // camNoteController.calculateLoanDetails();
+                },
+
               ),
 
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.maxFoir,
                 controller: addProductController.prodMaxFoirController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterMaxFoir,
                 validator:  ValidationHelper.validateName,
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodMaxFoirController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Maximum LTV should not be more than 100 %",
+                  );
+                  // camNoteController.calculateLoanDetails();
+                },
               ),
 
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.maxLtv,
                 controller: addProductController.prodMaxLtvController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterMaxLtv,
                 validator:  ValidationHelper.validateName,
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodMaxLtvController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Maximum LTV should not be more than 100 %",
+                  );
+                  // camNoteController.calculateLoanDetails();
+                },
               ),
 
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.processingFee,
                 controller: addProductController.prodProcessingFeeController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterProcessingFee,
                 validator:  ValidationHelper.validatePercentage,
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodProcessingFeeController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Processing Fee should not be more than 100 %",
+                  );
+                  // camNoteController.calculateLoanDetails();
+                },
               ),
 
           /*    TextFormField(
@@ -170,6 +212,7 @@ class Step3FormProduct extends StatelessWidget {
                 inputType: TextInputType.number,
                 hintText: AppText.enterLegalFee,
                 validator:  ValidationHelper.validateName,
+
               ),
 
               CustomLabeledTextField(
@@ -180,20 +223,40 @@ class Step3FormProduct extends StatelessWidget {
                 validator:  ValidationHelper.validateName,
               ),
 
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.adminFee,
                 controller: addProductController.prodAdminFeeController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterAdminFee,
                 validator:  ValidationHelper.validateName,
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodAdminFeeController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Admin Fee should not be more than 100 %",
+                  );
+                  // camNoteController.calculateLoanDetails();
+                },
               ),
 
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.foreclosureCharges,
                 controller: addProductController.prodForeclosureChargesController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterForeclosureCharges,
                 validator:  ValidationHelper.validateName,
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodForeclosureChargesController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Foreclosure Charges should not be more than 100 %",
+                  );
+                  // camNoteController.calculateLoanDetails();
+                },
               ),
 
               CustomLabeledTextField(
@@ -213,12 +276,22 @@ class Step3FormProduct extends StatelessWidget {
                 validator:  ValidationHelper.validateName,
               ),
 
-              CustomLabeledTextField(
+              CustomLabeledTextField2(
                 label: AppText.stampDuty,
                 controller: addProductController.prodStampDutyController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterStampDuty,
                 validator:  ValidationHelper.validateName,
+                isRequired: false,
+                onChanged: (value){
+                  ValidationHelper.validatePercentageInput(
+                    controller:  addProductController.prodForeclosureChargesController,
+                    value: value,
+                    maxValue: 100,
+                    errorMessage: "The Stamp Duty should not be more than 100 %",
+                  );
+                  // camNoteController.calculateLoanDetails();
+                },
               ),
 
               CustomLabeledTextField(
