@@ -912,9 +912,6 @@ class LeadListMain extends StatelessWidget {
   }
 
   Widget _buildDetailRow(String label, String value, int leadStage) {
-
-    print("value->${value}");
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(

@@ -419,4 +419,45 @@ class ValidationHelper {
     }
   }
 
+
+  static void validateYearsInput({
+    required TextEditingController controller,
+    required String value,
+    required int minValue,
+    required int maxValue,
+    required String errorMessageMin,
+    required String errorMessageMax,
+  }) {
+    if (value.isNotEmpty) {
+      final int? years = int.tryParse(value);
+
+      if (years != null) {
+        // Check minimum
+        if (years < minValue) {
+          SnackbarHelper.showSnackbar(
+              title: "Error", message: errorMessageMin);
+
+          final newValue = minValue.toString();
+          controller.text = newValue;
+          controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: newValue.length),
+          );
+          return;
+        }
+
+        // Check maximum
+        if (years > maxValue) {
+          SnackbarHelper.showSnackbar(
+              title: "Error", message: errorMessageMax);
+
+          final newValue = maxValue.toString();
+          controller.text = newValue;
+          controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: newValue.length),
+          );
+        }
+      }
+    }
+  }
+
 }

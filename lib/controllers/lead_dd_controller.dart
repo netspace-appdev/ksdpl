@@ -437,10 +437,10 @@ class LeadDDController extends GetxController{
         getAllKsdplProductModel.value = ksdplProduct.GetAllKsdplProductModel.fromJson(data);
 
         // ✅ PRINT ALL PRODUCTS
-        print("🔽 All KSDPL Products:");
+        /*print("🔽 All KSDPL Products:");
         for (var item in ksdplProductList) {
           print("🆔 ID: ${item.id}, 📦 Name: ${item.productName}");
-        }
+        }*/
 
         final List<ksdplProduct.Data> tempAllPro = getAllKsdplProductModel.value?.data ?? [];
         ksdplProductList.value = List<ksdplProduct.Data>.from(tempAllPro);

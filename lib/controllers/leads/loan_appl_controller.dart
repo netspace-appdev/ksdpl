@@ -917,6 +917,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
             title: "Data Saved",
             message: addLoanApplicationModel.value!.message!.toString(),
           );
+          isLoading(false);
          ///this appears
           /*showDialog(
             context: Get.context!,
@@ -940,7 +941,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
         }
         //  clearForm();
-        isLoading(false);
+
 
 
       } else {
@@ -952,7 +953,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     //  ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
     } finally {
-      isLoading(false);
+     // isLoading(false);
     }
   }
 
@@ -1832,7 +1833,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
        if(status=="1"){
          print("status in mail send--->${status}");
       //   await Future.delayed(Duration(milliseconds: 100));
-         isLoading(true);
+
+         Get.back();
          showDialog(
            context: Get.context!,
             barrierDismissible:false,
@@ -1842,7 +1844,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
                icon: Icons.check_circle_outline,
                iconColor: AppColor.secondaryColor,
 
-               description: sendMailAfterLoanApplicationSubmitModel.value!.message!.toString() ,
+               description: "Loan application has been sent successfully." ,
                onYes: () {
                  Get.back();
                //  Get.toNamed("/addLeadScreen");
@@ -1851,9 +1853,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
              );
            },
          );
-
-      // SnackbarHelper.showSnackbar(title: "Successful", message: sendMailAfterLoanApplicationSubmitModel.value!.message!.toString(),position: SnackPosition.BOTTOM);
-      //   Get.back();
+         isLoading(false);
+      /* SnackbarHelper.showSnackbar(title: "Successful", message: sendMailAfterLoanApplicationSubmitModel.value!.message!.toString(),position: SnackPosition.BOTTOM);
+        Get.back();*/
        }
      } else {
        //  ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
