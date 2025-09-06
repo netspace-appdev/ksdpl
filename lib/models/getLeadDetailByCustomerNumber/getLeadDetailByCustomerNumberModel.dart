@@ -41,7 +41,7 @@ class Data {
   bool? active;
   String? uploadedBy;
   String? uploadedDate;
-  String? interested;
+  int? interested;
   String? doable;
   String? interestedDate;
   String? doableDate;
