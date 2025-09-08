@@ -689,7 +689,7 @@ class Addleadcontroller extends GetxController{
     isConnectorChecked.value = false;
     selectedGender.value = null;
     selectedIndexRelBank.value = -1;
-    fromWhere.value = "";
+    //fromWhere.value = "";
     getLeadId.value = null;
     createdByWhichEmployee.value = null;
     selectedProductCategory.value = null;
@@ -932,7 +932,7 @@ class Addleadcontroller extends GetxController{
     connMobController.clear();
     connShareController.clear();
     existingLoansController.clear();
-    noOfExistingLoansController.clear();
+   // noOfExistingLoansController.clear();
 
     // Dispose controllers to prevent memory leaks
     fullNameController.dispose();
@@ -956,7 +956,7 @@ class Addleadcontroller extends GetxController{
     connMobController.dispose();
     connShareController.dispose();
     existingLoansController.dispose();
-    noOfExistingLoansController.dispose();
+  //  noOfExistingLoansController.dispose();
     addIncomeList.clear();
 
   }

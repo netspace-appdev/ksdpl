@@ -28,7 +28,7 @@ class BaseUrl{
 static const String devVersion = 'UAT';
  //static const String devVersion = 'Local';
 
-  static const String buildDate = 'Build Date : 6 Sep 2025';
+  static const String buildDate = 'Build Date : 8 Sep 2025';
 
 
 

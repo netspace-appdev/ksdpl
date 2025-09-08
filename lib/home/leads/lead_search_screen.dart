@@ -1034,6 +1034,7 @@ class LeadSearchScreen extends StatelessWidget {
           leadDDController.getAllKsdplProductApi();
           LoanApplicationController loanApplicationController=Get.find();
           loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
+          loanApplicationController.clearBeforeGoingOnLoanAppl();
           Get.toNamed("/loanApplication", arguments: {
             'leadId': leadId.toString(),
             'uln': uln.toString(),

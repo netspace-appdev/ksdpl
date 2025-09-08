@@ -1200,7 +1200,9 @@ overflow: TextOverflow.ellipsis,
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
         leadDDController.getAllKsdplProductApi();
         LoanApplicationController loanApplicationController=Get.put(LoanApplicationController());
+
         loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
+        loanApplicationController.clearBeforeGoingOnLoanAppl();
           loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {
           'leadId': leadId.toString(),

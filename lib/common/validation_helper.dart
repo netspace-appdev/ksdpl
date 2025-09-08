@@ -460,4 +460,21 @@ class ValidationHelper {
     }
   }
 
+  static String? validateAadhar(String? value, {bool isRequired = false}) {
+    // Case 1: Required but empty
+    if (isRequired && (value == null || value.isEmpty)) {
+      return "Aadhar number is required";
+    }
+
+    // Case 2: Not required but user entered something
+    if (value != null && value.isNotEmpty) {
+      if (value.length != 12 || !RegExp(r'^[0-9]{12}$').hasMatch(value)) {
+        return "Aadhar number must be exactly 12 digits";
+      }
+    }
+
+    // Case 3: Empty and not required OR valid 12 digits
+    return null;
+  }
+
 }

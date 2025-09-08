@@ -1127,31 +1127,40 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         kSDPLProductId:kSDPLProductId,
       );
 
+      print("print 1");
+      if (data['success'] == true && (data['data'] as List).isEmpty) {
+        print("print 5");
+        ToastMessage.msg("No data found");
+        getProductDetailsByFilterModel.value = null;
 
-      if(data['success'] == true){
-
+      } else if(data['success'] == true){
+        print("print 2");
 
         getProductDetailsByFilterModel.value= pdFModel.GetProductDetailsByFilterModel.fromJson(data);
+
+        print("print 2.1");
 
         getProductDetailsByFilterModel.value?.data?.forEach((item) {
           item.autoindividual = "1";
         });
-        print("here data for auto=========>${getProductDetailsByFilterModel.value?.data?.first.autoindividual.toString()}");
+        print("print 2.2");
+     //   print("here data for auto=========>${getProductDetailsByFilterModel.value?.data?.first.autoindividual.toString()}");
         mergeBankerDetails(); ///on 1sep remove this
         isBankerLoading(false);
 
-
+        print("print 3");
+        print("print ${data['success']} and ${data['data']}}");
 
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
+        print("print 4");
 
         getProductDetailsByFilterModel.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 
-
+      print("print 6");
     } catch (e) {
       print("Error getProductDetailsByFilterModel: $e");
 

@@ -187,6 +187,13 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
   }
 
+  void clearBeforeGoingOnLoanAppl(){
+    coApplicantList.clear();
+    familyMemberApplList.clear();
+    creditCardsList.clear();
+    referencesList.clear();
+  }
+
   void removeAdditionalSrcDocument(int index) {
     if (addDocumentList.length <= 1) {
       ToastMessage.msg("You can not delete this");
