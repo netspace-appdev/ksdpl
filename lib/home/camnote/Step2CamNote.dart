@@ -384,7 +384,7 @@ class Step2CamNote extends StatelessWidget {
                       CustomLabeledTextField(
                         label: AppText.offeredSecurityType,
                         controller: camNoteController.camOfferedSecurityTypeController,
-                        inputType: TextInputType.number,
+                        inputType: TextInputType.name,
                         hintText: AppText.enterSecurityType,
                       ),
                     ],

@@ -734,60 +734,71 @@ class LeadListMain extends StatelessWidget {
                     ),
 
 
-                    if(lead.leadStage.toString()=="6" )
-                      Column(
-                      children: [
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-
-                            if(lead.leadStage.toString()=="6" )
-                              _buildTextButton(
-                                label:AppText.loanApplicationForm,
-                                context: context,
-                                color: Colors.purple,
-                                icon:  Icons.list_alt_rounded,
-                                leadId: lead.id.toString(),
-                                label_code: "loan_appl_form",
-                                currentLeadStage: lead.leadStage.toString(),
-                                  uln: lead.uniqueLeadNumber.toString()
-                              ),
-
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 10,),
-
-                    if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6")
-                      _buildTextButton(
-                          label:"Cam Note Details",
-                          context: context,
-                          color: Colors.purple,
-                          icon:  Icons.person_outline_outlined,
-                          leadId: lead.id.toString(),
-                          label_code: "cam_note_details",
-                          currentLeadStage: lead.leadStage.toString(),
-                          uln: lead.uniqueLeadNumber.toString()
-                      ),
-
-
-                    SizedBox(height: 10),
 
                     if(lead.leadStage.toString()=="6"&&lead.loanDetail!>0)
-                      _buildTextButton(
-                          label:"Update Loan Application",
-                          context: context,
-                          color: Colors.purple,
-                          icon:  Icons.list_alt_rounded,
-                          leadId: lead.id.toString(),
-                          label_code: "update_loan_update",
-                          currentLeadStage: lead.leadStage.toString(),
-                          uln: lead.uniqueLeadNumber.toString()
+                      Column(
+                        children: [
+                          SizedBox(height: 10),
+                          _buildTextButton(
+                              label:"Update Loan Application",
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.list_alt_rounded,
+                              leadId: lead.id.toString(),
+                              label_code: "update_loan_update",
+                              currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
+                          ),
+                        ],
                       ),
 
+
+
+
+                    if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6")
+                      Column(
+                        children: [
+                          SizedBox(height: 10,),
+                          _buildTextButton(
+                              label:"Cam Note Details",
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.person_outline_outlined,
+                              leadId: lead.id.toString(),
+                              label_code: "cam_note_details",
+                              currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
+                          ),
+                        ],
+                      ),
+
+
+
+                    if(lead.leadStage.toString()=="6" )
+                      Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                              if(lead.leadStage.toString()=="6" )
+                                _buildTextButton(
+                                    label:AppText.loanApplicationForm,
+                                    context: context,
+                                    color: Colors.purple,
+                                    icon:  Icons.list_alt_rounded,
+                                    leadId: lead.id.toString(),
+                                    label_code: "loan_appl_form",
+                                    currentLeadStage: lead.leadStage.toString(),
+                                    uln: lead.uniqueLeadNumber.toString(),
+                                   // loanDetails: lead.loanDetail
+                                ),
+
+                            ],
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               );
@@ -1078,7 +1089,8 @@ overflow: TextOverflow.ellipsis,
     required String leadId,
     required String label_code,
     required String uln,
-    String? currentLeadStage
+    String? currentLeadStage,
+    //int? loanDetails,
   }) {
 
     return InkWell(
@@ -1197,12 +1209,14 @@ overflow: TextOverflow.ellipsis,
           );
         }else if (label_code == "loan_appl_form") {
 
-          addLeadController.getLeadDetailByIdApi(leadId: leadId);
+
         leadDDController.getAllKsdplProductApi();
         LoanApplicationController loanApplicationController=Get.put(LoanApplicationController());
 
         loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
         loanApplicationController.clearBeforeGoingOnLoanAppl();
+
+        addLeadController.getLeadDetailByIdApi(leadId: leadId);
           loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {
           'leadId': leadId.toString(),
@@ -1233,10 +1247,7 @@ overflow: TextOverflow.ellipsis,
         }
         else if (label_code == "update_loan_update") {
           showUpdateLoanApplicationDialog(uln);
-        }
-
-
-        else{
+        } else{
 
         }
       },
@@ -1489,7 +1500,7 @@ overflow: TextOverflow.ellipsis,
                         inputType: TextInputType.name,
                         hintText: AppText.enterLoanApplicationNo,
                         isTextArea: false,
-                        validator: validateLoanApplicationNo,
+                        validator: ValidationHelper.validateLoanApplicationNo,
                       ),
 
                       const SizedBox(height: 6),
@@ -1519,12 +1530,7 @@ overflow: TextOverflow.ellipsis,
     return null;
   }
 
-  String? validateLoanApplicationNo(String? value) {
-    if (value == null || value.isEmpty) {
-      return AppText.loanNumberRequired;
-    }
-    return null;
-  }
+
 
 
 
@@ -2169,7 +2175,7 @@ overflow: TextOverflow.ellipsis,
                         isTextArea: false,
                         inputType: TextInputType.text,
                         isInputEnabled: false,
-                        validator: validateLoanApplicationNo,
+                        validator: ValidationHelper.validateLoanApplicationNo,
 
                       ),
                       const SizedBox(height: 12),

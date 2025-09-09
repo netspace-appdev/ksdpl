@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../custom_widgets/SnackBarHelper.dart';
+import 'helper.dart';
 class ValidationHelper {
 
   static String? validatecardNumber(String? value) {
@@ -476,5 +477,10 @@ class ValidationHelper {
     // Case 3: Empty and not required OR valid 12 digits
     return null;
   }
-
+  static String? validateLoanApplicationNo(String? value) {
+    if (value == null || value.isEmpty) {
+      return AppText.loanNumberRequired;
+    }
+    return null;
+  }
 }

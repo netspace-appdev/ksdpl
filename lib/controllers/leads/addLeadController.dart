@@ -154,16 +154,18 @@ class Addleadcontroller extends GetxController{
 
         loanAmtReqController.text=getLeadDetailModel.value?.data?.loanAmountRequested??"";
         camNoteController.camLoanAmtReqController.text = getLeadDetailModel.value?.data?.loanAmountRequested ?? "";
+
         loanApplicationController.laAppliedController.text = getLeadDetailModel.value?.data?.loanAmountRequested ?? "";
 
-
+        print("la api--->${getLeadDetailModel.value?.data?.loanAmountRequested ?? ""}");
+        print("la api--->${getLeadDetailModel.value?.data?.loanAmountRequested ?? ""}");
         emailController.text=getLeadDetailModel.value?.data?.email??"";
         camNoteController.camEmailController.text = getLeadDetailModel.value?.data?.email ?? "";
         loanApplicationController.applEmailController.text = getLeadDetailModel.value?.data?.email ?? "";
 
         aadharController.text=getLeadDetailModel.value?.data?.adharCard??"";
         camNoteController.camAadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
-        loanApplicationController.aadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
+        loanApplicationController.aadharController.text =getLeadDetailModel.value?.data?.adharCard ?? "";
 
         panController.text=getLeadDetailModel.value?.data?.panCard??"";
         camNoteController.camPanController.text = getLeadDetailModel.value?.data?.panCard ?? "";

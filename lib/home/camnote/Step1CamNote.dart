@@ -110,6 +110,9 @@ class Step1CamNote extends StatelessWidget {
                           maxLength: 10,
                           onChanged: (value) {
 
+                            if(value.isNotEmpty){
+                              camNoteController.getLeadDetailByCustomerNumberApi(value);
+                            }
                           },
                         ),
 

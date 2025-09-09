@@ -947,7 +947,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         }else{
 
         }
-        //  clearForm();
+
 
 
 

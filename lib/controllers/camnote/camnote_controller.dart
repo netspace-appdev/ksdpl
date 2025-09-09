@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
@@ -72,7 +73,7 @@ var getBankerDetailsByIdModel = Rxn<GetBankerDetailsByIdModel>(); //
 var getPackageDetailsByIdModel = Rxn<GetPackageDetailsByIdModel>(); //
 
 class CamNoteController extends GetxController with ImagePickerMixin{
-
+  final Addleadcontroller addleadcontroller = Get.find();
   var getLoanApplIdModel = Rxn<GetLoanApplIdModel>();
   var leadId="".obs;
   var firstName="".obs;
@@ -714,11 +715,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     print("camSelectedDistrict.value===>${camSelectedDistrict.value}");
     print("camSelectedCity.value===>${camSelectedCity.value}");
 
-    /*else if(isaddedMobileNumber.value == false){
+
+   /* else if(isaddedMobileNumber.value == false){
     SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
     return;
     }*/
-
     if(camFullNameController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
       return;
@@ -728,7 +729,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camPhoneController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
       return;
-    } else if(selectedGender.value==null || selectedGender.value==""){
+    }else if(selectedGender.value==null || selectedGender.value==""){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
       return;
     }else if(camLoanAmtReqController.text.isEmpty){
@@ -2842,9 +2843,19 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
           isaddedMobileNumber.value = false;
         }else {
+          print("addleadcontroller.getLeadDetailModel.value?.data?.mobileNumber==${addleadcontroller.getLeadDetailModel.value?.data?.mobileNumber}");
+          print("getLeadDetailByCustomerNumberModel.value?.data?.mobileNumberr==${getLeadDetailByCustomerNumberModel.value?.data?.mobileNumber}");
 
-          isaddedMobileNumber.value = true;
-          SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+          if( addleadcontroller.getLeadDetailModel.value?.data?.mobileNumber==getLeadDetailByCustomerNumberModel.value?.data?.mobileNumber){
+
+            isaddedMobileNumber.value = false;
+            print("if-->");
+          }else{
+            isaddedMobileNumber.value = true;
+            SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+            print("else-->");
+          }
+
         }
 
         isLoading(false);

@@ -7,6 +7,7 @@ import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/lead_dd_controller.dart';
+import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/loan_appl_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
@@ -26,6 +27,7 @@ class Step1Form extends StatelessWidget {
 //  final loanApplicationController = Get.find<LoanApplicationController>();
   LeadDDController leadDDController = Get.put(LeadDDController());
   final loanApplicationController = Get.put(LoanApplicationController(), permanent: true);
+  final Addleadcontroller addLeadController = Get.put(Addleadcontroller());
 
 
   @override
@@ -35,10 +37,12 @@ class Step1Form extends StatelessWidget {
       width: MediaQuery.of(context).size.width,*/
 
       child: Obx((){
-        if( loanApplicationController.isLoadingMainScreen.value)
+        if( loanApplicationController.isLoadingMainScreen.value || addLeadController.isLoading.value)
           return Center(
             child: CustomSkelton.productShimmerList(context),
           );
+        print("see here--0-->");
+        print("la view--->${loanApplicationController.laAppliedController.text}");
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -208,7 +212,7 @@ class Step1Form extends StatelessWidget {
                       maxLength: 10,
                       validator:  ValidationHelper.validatePanCard,
                       isCapital: true,
-                      
+
                     ),
 
                     CustomLabeledTextField(
