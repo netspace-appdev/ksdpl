@@ -212,7 +212,8 @@ class Step1Form extends StatelessWidget {
                       maxLength: 10,
                       validator:  ValidationHelper.validatePanCard,
                       isCapital: true,
-
+                      isSecret: true,
+                      secretDigit: 4,
                     ),
 
                     CustomLabeledTextField(

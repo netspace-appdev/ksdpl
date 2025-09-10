@@ -483,4 +483,17 @@ class ValidationHelper {
     }
     return null;
   }
+  static String hideWithStars(String input, {int count = 4}) {
+    if (input.isEmpty) return input;
+
+    // If the string is shorter than or equal to count → no need to mask
+    if (input.length <= count) {
+      return input;
+    }
+
+    final maskedLength = input.length - count;
+    final hiddenPart = '*' * maskedLength;
+    final visiblePart = input.substring(maskedLength);
+    return hiddenPart + visiblePart;
+  }
 }

@@ -792,7 +792,7 @@ class LeadListMain extends StatelessWidget {
                                     label_code: "loan_appl_form",
                                     currentLeadStage: lead.leadStage.toString(),
                                     uln: lead.uniqueLeadNumber.toString(),
-                                   // loanDetails: lead.loanDetail
+                                    loanDetails: lead.loanDetail
                                 ),
 
                             ],
@@ -1090,7 +1090,7 @@ overflow: TextOverflow.ellipsis,
     required String label_code,
     required String uln,
     String? currentLeadStage,
-    //int? loanDetails,
+    int? loanDetails,
   }) {
 
     return InkWell(
@@ -1213,10 +1213,12 @@ overflow: TextOverflow.ellipsis,
         leadDDController.getAllKsdplProductApi();
         LoanApplicationController loanApplicationController=Get.put(LoanApplicationController());
 
-        loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
+
         loanApplicationController.clearBeforeGoingOnLoanAppl();
 
-        addLeadController.getLeadDetailByIdApi(leadId: leadId);
+        loanDetails==0?
+        addLeadController.getLeadDetailByIdApi(leadId: leadId):
+        loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
           loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {
           'leadId': leadId.toString(),

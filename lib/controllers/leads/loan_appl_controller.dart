@@ -192,6 +192,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     familyMemberApplList.clear();
     creditCardsList.clear();
     referencesList.clear();
+    addDocumentList.clear();
+    print("length coApplicantList in controller--->${coApplicantList.length}");
   }
 
   void removeAdditionalSrcDocument(int index) {
@@ -1102,6 +1104,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   Future<void> getLoanApplicationDetailsByIdApi({
     required String id,
   }) async {
+    print("getLoanApplicationDetailsByIdApi===>");
     try {
       isLoadingMainScreen(true);
 

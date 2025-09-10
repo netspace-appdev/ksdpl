@@ -390,44 +390,7 @@ class StatusChip extends StatelessWidget {
   }
 }
 
-// Helper Widget for Detail Rows
-/*class DetailRow extends StatelessWidget {
-  final String label;
-  final String value;
 
-  DetailRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-
-        children: [
-          Container(
-
-            width: 120,
-            child: Text("$label",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor)),
-          ),
-          Text(":", style: TextStyle(fontSize: 14),),
-          Expanded(
-              child: value=="null" || value==AppText.customdash?
-              Row(
-
-
-                children: [
-                  Icon(Icons.horizontal_rule, size: 15,),
-                ],):
-              Text(" "+value, style: TextStyle(fontSize: 14), maxLines: 2)),
-        ],
-      ),
-    );
-  }
-}*/
 
 class DetailRow extends StatelessWidget {
   final String label;

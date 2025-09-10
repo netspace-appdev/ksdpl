@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ksdpl/common/validation_helper.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../controllers/greeting_controller.dart';
@@ -171,57 +172,90 @@ class LeadDetailsMain extends StatelessWidget {
           // Lead Details Card
 
 
-          CustomCard(
-            borderColor: AppColor.grey200,
-            backgroundColor: AppColor.appWhite,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Lead Details",
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
 
-                SizedBox(height: 10),
+            children: [
 
-                // Status Tags
-                Row(
-                  children: [
-                    Container(
-                      width: 120,
-                      child: Text("Status",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,color:AppColor.primaryColor)),
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      children: [
-                        StatusChip(label: leadDetailController.getLeadDetailModel.value!.data!.stageName.toString(), color: Colors.orange),
-
-                      ],
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 10),
+              SizedBox(height: 20),
+              buildCard("Basic Info", [
                 DetailRow(label: "Unique Lead Number", value:leadDetailController.getLeadDetailModel.value!.data!.uniqueLeadNumber.toString()),
+                DetailRow(label: "Name", value: data.name.toString()=="null"?AppText.customdash:data.name.toString()),
+                DetailRow(label: "Date Of Birth", value: data.dateOfBirth.toString()=="null"?AppText.customdash:data.dateOfBirth.toString()),
+                DetailRow(label: "Mobile Number", value:  data.mobileNumber.toString()=="null"?AppText.customdash:data.mobileNumber.toString()),
+                DetailRow(label: "Email", value:  data.email.toString()=="null"?AppText.customdash:data.email.toString()),
+                DetailRow(label: "Pin Code", value:  data.pincode.toString()=="null"?AppText.customdash:data.pincode.toString()),
                 DetailRow(label: "Date", value:Helper.formatDate(leadDetailController.getLeadDetailModel.value!.data!.assignedEmployeeDate.toString()) ),
-               // DetailRow(label: "Full Name", value: data.name.toString()),
                 DetailRow(label: "Gender", value:  data.gender.toString()=="null"?AppText.customdash:data.gender.toString()),
-                //DetailRow(label: "Email", value: data.email.toString()=="null"||data.email.toString()==""?AppText.customdash:data.email.toString()),
-              //  DetailRow(label: "Phone", value: data.mobileNumber.toString()),
-              //  DetailRow(label: "Aadhar Card", value: data.adharCard.toString()=="null"?AppText.customdash:data.adharCard.toString()),
-             //   DetailRow(label: "Pan No", value: data.panCard.toString()=="null"?AppText.customdash:data.panCard.toString()),
+                DetailRow(label: "Street Address", value:  data.streetAddress.toString()=="null"?AppText.customdash:data.streetAddress.toString()),
                 DetailRow(label: "State", value: data.stateName.toString()=="null" ||data.stateName.toString()==""?AppText.customdash:data.stateName.toString()),
                 DetailRow(label: "District", value: data.districtName.toString()=="null"||data.districtName.toString()==""?AppText.customdash:data.districtName.toString()),
                 DetailRow(label: "City", value: data.cityName.toString()=="null"||data.cityName.toString()==""?AppText.customdash:data.cityName.toString()),
-                DetailRow(label: "Monthly Income", value: data.monthlyIncome.toString()=="null"?AppText.customdash:data.monthlyIncome.toString()),
-                DetailRow(label: "Loan Amount", value: data.loanAmountRequested.toString()=="null"?AppText.customdash:data.loanAmountRequested.toString()),
-                DetailRow(label: "Campaign", value: data.campaign.toString()=="null"?AppText.customdash:data.campaign.toString()),
+                DetailRow(label: "Nationality", value:  data.nationality.toString()=="null"?AppText.customdash:data.nationality.toString()),
+              ],
+                  Icons.info_outline
+
+              ),
+
+
+              buildCard("Other Info", [
+                DetailRow(label: "Aadhar Card", value:  data.adharCard.toString()=="null"?AppText.customdash: ValidationHelper.hideWithStars(data.adharCard.toString()) ),
+                DetailRow(label: "Pan Card", value:  data.panCard.toString()=="null"?AppText.customdash: ValidationHelper.hideWithStars(data.panCard.toString()) ),
                 DetailRow(label: "Employee Name", value: data.employeeName.toString()=="null"?AppText.customdash:data.employeeName.toString()),
+                DetailRow(label: "Product", value: data.productName.toString()=="null"?AppText.customdash:data.productName.toString()),
+                DetailRow(label: "Product Category Name", value: data.productCategoryName.toString()=="null"?AppText.customdash:data.productCategoryName.toString()),
+                DetailRow(label: "Campaign", value: data.campaign.toString()=="null"?AppText.customdash:data.campaign.toString()),
                 DetailRow(label: "Pickup Employee Name", value: data.pickedUpEmployeeName.toString()=="null"?AppText.customdash:data.pickedUpEmployeeName.toString()),
                 DetailRow(label: "Moved to Open Poll", value: data.moveToCommon.toString()=="null"?AppText.customdash:data.moveToCommon.toString()),
-                DetailRow(label: "Open Poll %", value: data.assignedEmployeePercentage.toString()=="null"?AppText.customdash:data.assignedEmployeePercentage.toString()),
+                DetailRow(label: "Assigned Employee Percentage", value: data.assignedEmployeePercentage.toString()=="null"?AppText.customdash:data.assignedEmployeePercentage.toString()),
+                DetailRow(label: "Bank Name", value: data.bankName.toString()=="null"?AppText.customdash:data.bankName.toString()),
+                DetailRow(label: "Branch Name", value: data.branchName.toString()=="null"?AppText.customdash:data.branchName.toString()),
+                DetailRow(label: "Source", value: data.source.toString()=="null"?AppText.customdash:data.source.toString()),
+                DetailRow(label: "Product Typ", value: data.productType.toString()=="null"?AppText.customdash:data.productName.toString()),
+
+
+                DetailRow(label: "Loan Application No", value: data.loanApplicationNo.toString()=="null"?AppText.customdash:data.loanApplicationNo.toString()),
               ],
-            ),
+                  Icons.info_outline
+
+              ),
+              buildCard("Financial Info", [
+                DetailRow(label: "Sanction Amount", value: data.sanctionAmount.toString()=="null"?AppText.customdash:data.sanctionAmount.toString()),
+                DetailRow(label: "Disburse Amount", value: data.disburseAmount.toString()=="null"?AppText.customdash:data.disburseAmount.toString()),
+                DetailRow(label: "Monthly Income", value: data.monthlyIncome.toString()=="null"?AppText.customdash:data.monthlyIncome.toString()),
+                DetailRow(label: "Loan Amount", value: data.loanAmountRequested.toString()=="null"?AppText.customdash:data.loanAmountRequested.toString()),
+              ],
+                  Icons.info_outline
+
+              ),
+
+              buildCard("Geo Location", [
+                DetailRow(label: "Geo Location Of Property", value:  data.geoLocationOfProperty.toString()=="null"?AppText.customdash:data.geoLocationOfProperty.toString()),
+                DetailRow(label: "Geo Location Of Residence", value:  data.geoLocationOfResidence.toString()=="null"?AppText.customdash:data.geoLocationOfResidence.toString()),
+                DetailRow(label: "Geo Location Of Office", value:  data.geoLocationOfOffice.toString()=="null"?AppText.customdash:data.geoLocationOfOffice.toString()),
+
+              ],
+                  Icons.info_outline
+
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 120,
+                    child: Text("Stage",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,color:AppColor.primaryColor)),
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      StatusChip(label: leadDetailController.getLeadDetailModel.value!.data!.stageName.toString(), color: Colors.orange),
+
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
           SizedBox(height: 16),
 
@@ -569,6 +603,61 @@ class LeadDetailsMain extends StatelessWidget {
     );
   }
 
+
+  Widget buildCard(String title, List<Widget> children, IconData icon) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        border: Border.all(color: AppColor.grey4, width: 1),
+
+
+      ),
+      margin: EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            decoration: BoxDecoration(
+              color: AppColor.primaryColor, // Blue background
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: Colors.white,),
+                SizedBox(width: 5,),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Content section
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: children,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 
@@ -595,7 +684,7 @@ class StatusChip extends StatelessWidget {
 }
 
 // Helper Widget for Detail Rows
-class DetailRow extends StatelessWidget {
+/*class DetailRow extends StatelessWidget {
   final String label;
   final String value;
 
@@ -627,6 +716,112 @@ class DetailRow extends StatelessWidget {
                   Icon(Icons.horizontal_rule, size: 15,),
                 ],):
               Text(" "+value, style: TextStyle(fontSize: 14), maxLines: 2)),
+        ],
+      ),
+    );
+  }
+  Widget buildCard(String title, List<Widget> children, IconData icon) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        border: Border.all(color: AppColor.grey4, width: 1),
+
+
+      ),
+      margin: EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            decoration: BoxDecoration(
+              color: AppColor.primaryColor, // Blue background
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: Colors.white,),
+                SizedBox(width: 5,),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Content section
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: children,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}*/
+
+class DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const DetailRow({
+    Key? key,
+    required this.label,
+    required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor
+            ),
+          ),
+          const SizedBox(height: 4),
+          value=="null" || value==AppText.customdash?
+          Row(
+
+
+            children: [
+              Icon(Icons.horizontal_rule, size: 15,),
+            ],):
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
         ],
       ),
     );

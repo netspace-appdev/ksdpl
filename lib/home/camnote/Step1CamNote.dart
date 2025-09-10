@@ -196,6 +196,10 @@ class Step1CamNote extends StatelessWidget {
                           validator: ValidationHelper.validatePanCard,
                           maxLength: 10,
                           isCapital: true,
+
+                          isSecret: true,
+                          secretDigit: 4,
+
                         ),
 
                         CustomLabeledTextField(
