@@ -420,13 +420,15 @@ class LeadListMain extends StatelessWidget {
 
                           if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6" )
                             _buildTextButton(
-                              label:AppText.openPoll,
+                              label:AppText.leh,
                               context: context,
                               color: Colors.purple,
                               icon:  Icons.lock_open,
                               leadId: lead.id.toString(),
                               label_code: "open_poll",
-                              uln: lead.uniqueLeadNumber.toString()
+                              uln: lead.uniqueLeadNumber.toString(),
+                              moveToCommon: lead.moveToCommon??"0"
+
 
                             ),
 
@@ -1091,11 +1093,12 @@ overflow: TextOverflow.ellipsis,
     required String uln,
     String? currentLeadStage,
     int? loanDetails,
+    String? moveToCommon,
   }) {
 
     return InkWell(
       onTap: () {
-        if (label == "Open Poll") {
+        if (label_code == "open_poll") {
           leadListController.openPollPercentController.clear();
           showOpenPollDialog2(context: context,leadId: leadId);
         }else if (label_code == "add_lead_form") {
@@ -1269,16 +1272,16 @@ overflow: TextOverflow.ellipsis,
               //color: color,
                 color: label_code=="add_feedback"?AppColor.primaryColor:Colors.transparent,
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: AppColor.grey700)
+                border: Border.all(color:moveToCommon=="YES"?Colors.grey.shade300: AppColor.grey700)
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
+                Icon(icon, color:moveToCommon=="YES"?Colors.grey.shade300: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
                 SizedBox(width: 6),
                 Text(
                   label,
-                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
+                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: moveToCommon=="YES"?Colors.grey.shade300:label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
                 ),
               ],
             ),
@@ -1608,7 +1611,7 @@ overflow: TextOverflow.ellipsis,
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
 
-          title: "Open Poll",
+          title: AppText.moveLeh,
           content: Form(
             key: _formKey,
             child: Column(
@@ -1622,36 +1625,24 @@ overflow: TextOverflow.ellipsis,
                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                   child:  Column(
                     children: [
-                    /*  const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Enter percent for leads",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: AppColor.grey1, // Title text color
-                          ),
 
-                        ),
-                      ),*/
                       const SizedBox(
                         height: 20,
                       ),
                       CustomLabeledTextField2(
                         inputType:  TextInputType.number,
                         controller: leadListController.openPollPercentController,
-                        hintText: "Enter open poll percentage",
+                        hintText: AppText.enterPercentage,
                         validator: validatePercentage,
-                    //    isPassword: false,
-                     //   obscureText: false,
-                        label: 'Enter percent for leads',
+
+                        label: AppText.enterLeh,
                         isRequired: false,
                         onChanged: (value){
                           ValidationHelper.validatePercentageInput(
                             controller:  leadListController.openPollPercentController,
                             value: value,
                             maxValue: 100,
-                            errorMessage: "The Maximum ROI should not be more than 100 %",
+                            errorMessage: AppText.maxPercentMsg.toString(),
                           );
                           // camNoteController.calculateLoanDetails();
                         },                      ),

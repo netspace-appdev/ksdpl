@@ -969,6 +969,7 @@ class LeadListController extends GetxController {
       print("run hua");
 
 
+/*
 
       getAllLeadsApi(
           leadStage: leadCode.value,
@@ -984,7 +985,50 @@ class LeadListController extends GetxController {
           leadMobileNumber:leadMobileNumberMain.value,
         leadName:leadNameMain.value,
       );
+*/
 
+      if(isDashboardLeads.value==false){
+        getAllLeadsApi(
+          leadStage: leadCode.value,
+          employeeId:eId.value.toString(),
+          stateId:stateIdMain.value,
+          distId: distIdMain.value,
+          cityId: cityIdMain.value,
+          campaign: campaignMain.value,
+          fromDate: fromDateMain.value,
+          toDate: toDateMain.value,
+          branch: branchMain.value,
+          uniqueLeadNumber: uniqueLeadNumberMain.value,
+          leadMobileNumber:leadMobileNumberMain.value,
+          leadName:leadNameMain.value,
+        );
+        SearchLeadController searchLeadController=Get.put(SearchLeadController());
+        getFilteredLeadsApi(
+
+          employeeId: eId.value.toString(),
+          leadStage:leadDDController.selectedStage.value??"0",
+          stateId: leadDDController.selectedState.value??"0",
+          distId: leadDDController.selectedDistrict.value??"0",
+          cityId:leadDDController.selectedCity.value??"0",
+          campaign: leadDDController.selectedCampaign.value??"",
+          fromDate: fromDateController.value.text.isEmpty?"":Helper.convertToIso8601(fromDateController.value.text),
+          toDate: toDateController.value.text.isEmpty?"":Helper.convertToIso8601(toDateController.value.text),
+          branch: leadDDController.selectedKsdplBr.value??"0",
+          uniqueLeadNumber: searchLeadController.uniqueLeadNumberController.text,
+          leadMobileNumber: searchLeadController.leadMobileNumberController.text,
+          leadName: searchLeadController.leadNameController.text,
+        );
+      }else{
+        ///new code 17 jul
+
+        DashboardController dashboardController=Get.find();
+
+        getDetailsListOfLeadsForDashboardApi(
+            applyDateFilter: dashboardController.isLeadCountYearly.toString(), //changeit
+            stageId: leadCode.value
+        );
+
+      }
       isLoading(false);
     }
   }

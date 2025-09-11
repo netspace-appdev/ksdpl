@@ -54,7 +54,7 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
                 _buildNavItem(AppImage.homeIcon, AppImage.homeYellow,"Home", 0),
                 _buildNavItem(AppImage.lead_white, AppImage.lead_yellow, "Leads", 1),
                 const SizedBox(width: 50), // Space for FAB
-                _buildNavItem(AppImage.poll_white, AppImage.poll_yellow, "Open Poll", 2),
+                _buildNavItem(AppImage.poll_white, AppImage.poll_yellow, "LEH", 2),//Open Poll
                 _buildNavItem(AppImage.homeIcon, AppImage.homeIcon, "More", 3),
               ],
             ),

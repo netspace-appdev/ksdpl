@@ -18,6 +18,7 @@ import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../services/call_service.dart';
 
 import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
+
 class LeadDetailsMain extends StatelessWidget {
 
   GreetingController greetingController = Get.put(GreetingController());
@@ -162,7 +163,7 @@ class LeadDetailsMain extends StatelessWidget {
         );
       }
 
-     var data=leadDetailController.getLeadDetailModel.value!.data!;
+      var data=leadDetailController.getLeadDetailModel.value!.data!;
 
 
       return  Column(// height: MediaQuery.of(context).size.height*1.6, //magic
@@ -289,8 +290,8 @@ class LeadDetailsMain extends StatelessWidget {
                             leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
                             context: context):
                         _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "call",
-                          leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                        context: context),
+                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
+                            context: context),
                         _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber:leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "whatsapp",
                             leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
                             context: context),
@@ -372,7 +373,7 @@ class LeadDetailsMain extends StatelessWidget {
 
 
   void showCallFeedbackDialog({
-   /* required BuildContext context,*/
+    /* required BuildContext context,*/
     required leadId,
     required currentLeadStage,
     required callDuration,
@@ -750,7 +751,7 @@ class IconButtonWidget extends StatelessWidget {
       child: Container(
         height: 27,
         width: 27,
-       // color: color.withOpacity(0.2),
+        // color: color.withOpacity(0.2),
         decoration: BoxDecoration(
 
         ),

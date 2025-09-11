@@ -557,6 +557,9 @@ class DrawerApiService {
       var response = await http.Response.fromStream(streamedResponse);
 
 
+      Helper.ApiReq(leadMoveToCommonTask, request.fields);
+      Helper.ApiRes(leadMoveToCommonTask, response.body);
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 

@@ -272,11 +272,17 @@ class AppText{
   static const String couldNotWA = "Could not open WhatsApp";
   static const String couldNotMsg = "Could not open Messages";
   static const String openPollFilter = "Open Poll";
+  static const String loanExchangeHub = "Loan Exchange Hub";
   static const String openPollLeads = "Open Poll Leads";
+  static const String loanExchangeLeads = "Loan Exchange Leads";
   static const String followup = "Follow Up";
   static const String history = "History";
   static const String details = "Details";
   static const String openPoll = "Open Poll";
+  static const String leh = "LEH";
+  static const String moveLeh = "Move to Loan Exchange Hub";
+  static const String enterLeh = "Enter percentage for LEH";
+  static const String enterPercentage = "Enter percentage";
   static const String interested = "Interested";
   static const String notInterested = "Not Interested";
   static const String doable = "Doable";
@@ -700,10 +706,10 @@ class AppText{
   static const String nonEarningCustomerAge = "Non-Earning Customer Age";
   static const String enterNonEarningCustomerAge = "Enter Age";
 
-  static const String totalFamilyIncome = "Total Family Income";
+  static const String totalFamilyIncome = "Total Family Income (In Monthly)";
   static const String enterTotalFamilyIncome = "Enter Total Income";
 
-  static const String incomeCanBeConsidered = "Income Can Be Considered";
+  static const String incomeCanBeConsidered = "Income Can Be Considered (In Monthly)";
   static const String enterConsideredIncome = "Enter Considered Income";
 
   static const String loanAmountRequested = "Loan Amount Requested";
@@ -877,6 +883,7 @@ class AppText{
   static const String disburedbyRequired ="Please enter Name of Disbursed";
   static const String? enterValidAmount="";
   static const String? partialAmountCannotExceed = "The actual amount and disbursement amount should not exceed the sanctioned amount";
+  static const String? maxPercentMsg = "The Maximum percentage should not be more than 100 %";
 
 
 }

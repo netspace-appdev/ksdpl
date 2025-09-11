@@ -38,6 +38,7 @@ import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
+import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 import '../../services/call_service.dart';
@@ -52,6 +53,7 @@ class LeadSearchScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
+  final _formKey4 = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
   LeadListController leadListController =Get.put(LeadListController());
 
@@ -739,13 +741,14 @@ class LeadSearchScreen extends StatelessWidget {
 
                           if(leadListController.filteredleadCode.value=="4" ||leadListController.filteredleadCode.value=="6" )
                             _buildTextButton(
-                              label:AppText.openPoll,
+                              label:AppText.leh,
                               context: context,
                               color: Colors.purple,
                               icon:  Icons.lock_open,
                               leadId: lead.id.toString(),
                               label_code: "open_poll",
                               uln: lead.uniqueLeadNumber.toString(),
+                              moveToCommon: lead.moveToCommon
                             ),
                           //Icon(Icons.more_vert, color: AppColor.grey1,), // Three dots menu icon
                         ],
@@ -758,7 +761,7 @@ class LeadSearchScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
                         children: [
-                          _buildDetailRow("Email", lead.email.toString()),
+                          _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString()),
                           _buildDetailRow("Updated at",Helper.convertDateTime(lead.lastUpdatedDate.toString())),
                           //_buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
                           _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  "),
@@ -987,11 +990,12 @@ class LeadSearchScreen extends StatelessWidget {
     required String label_code,
     String? currentLeadStage,
     required String uln,
+    String? moveToCommon,
   }) {
 
     return InkWell(
       onTap: () {
-        if (label == "Open Poll") {
+        if (label_code == "open_poll") {
           leadListController.openPollPercentController.clear();
           showOpenPollDialog2(context: context,leadId: leadId);
         }else if (label_code == "add_lead_form") {
@@ -1114,30 +1118,6 @@ class LeadSearchScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
 
-          /*Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            width: label_code=="loan_appl_form" || label_code=="cam_note_details" ?MediaQuery.of(context).size.width*0.82:(label_code=="add_feedback" ) ?
-            MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
-            MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
-
-            decoration: BoxDecoration(
-              //color: color,
-                color: label_code=="add_feedback"?AppColor.primaryColor:Colors.transparent,
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: AppColor.grey700)
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
-                SizedBox(width: 6),
-                Text(
-                  label,
-                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
-                ),
-              ],
-            ),
-          ),*/
 
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -1151,16 +1131,16 @@ class LeadSearchScreen extends StatelessWidget {
               //color: color,
                 color: label_code=="add_feedback"?AppColor.primaryColor:Colors.transparent,
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: AppColor.grey700)
+                border: Border.all(color:moveToCommon=="YES"?Colors.grey.shade300: AppColor.grey700)
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
+                Icon(icon, color: moveToCommon=="YES"?Colors.grey.shade300:label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
                 SizedBox(width: 6),
                 Text(
                   label,
-                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
+                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color:moveToCommon=="YES"?Colors.grey.shade300: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
                 ),
               ],
             ),
@@ -1280,6 +1260,7 @@ class LeadSearchScreen extends StatelessWidget {
     );
   }
 
+/*
   void showOpenPollDialog2({
     required BuildContext context,
     required leadId,
@@ -1291,7 +1272,7 @@ class LeadSearchScreen extends StatelessWidget {
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
 
-          title: "Open Poll",
+          title: AppText.moveLeh,
           content: Form(
             key: _formKey,
             child: Column(
@@ -1307,44 +1288,122 @@ class LeadSearchScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                   child:  Column(
                     children: [
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Enter percent for leads",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: AppColor.grey1, // Title text color
-                          ),
 
-                        ),
-                      ),
                       const SizedBox(
                         height: 20,
                       ),
-                      CustomTextFieldPrefix(
+                      CustomLabeledTextField2(
                         inputType:  TextInputType.number,
                         controller: leadListController.openPollPercentController,
-                        hintText: "Enter open poll percentage",
+                        hintText: AppText.enterPercentage,
                         validator: validatePercentage,
-                        isPassword: false,
-                        obscureText: false,
-                      ),
+
+                        label: AppText.enterLeh,
+                        isRequired: false,
+                        onChanged: (value){
+                          ValidationHelper.validatePercentageInput(
+                            controller:  leadListController.openPollPercentController,
+                            value: value,
+                            maxValue: 100,
+                            errorMessage: AppText.maxPercentMsg.toString(),
+                          );
+                          // camNoteController.calculateLoanDetails();
+                        },                      ),
                     ],
                   ),
                 ),
 
+
               ],
             ),
           ),
+
+
+
           onSubmit: () {
             if (_formKey.currentState!.validate()) {
               leadListController.leadMoveToCommonTaskApi(
                   leadId: leadId,
                   percentage: leadListController.openPollPercentController.text.trim().toString()
               );
-              Navigator.pop(context);
+              Get.back();
             }
+          },
+        );
+      },
+    );
+  }
+*/
+
+
+  void showOpenPollDialog2({
+    required BuildContext context,
+    required leadId,
+  }) {
+
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+
+          title:  AppText.moveLeh,
+          content: Form(
+            key: _formKey4,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+
+
+                // 📝 Content (Radio Buttons)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  child:  Column(
+                    children: [
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomLabeledTextField2(
+                        inputType:  TextInputType.number,
+                        controller: leadListController.openPollPercentController,
+                        hintText: AppText.enterPercentage,
+                        validator: validatePercentage,
+
+                        label: AppText.enterLeh,
+                        isRequired: false,
+                        onChanged: (value){
+                          ValidationHelper.validatePercentageInput(
+                            controller:  leadListController.openPollPercentController,
+                            value: value,
+                            maxValue: 100,
+                            errorMessage: AppText.maxPercentMsg.toString(),
+                          );
+                          // camNoteController.calculateLoanDetails();
+                        },                      ),
+                    ],
+                  ),
+                ),
+
+
+              ],
+            ),
+          ),
+
+          onSubmit: (){
+            if (_formKey4.currentState!.validate()) {
+              leadListController.leadMoveToCommonTaskApi(
+                  leadId: leadId,
+                  percentage: leadListController.openPollPercentController.text.trim().toString()
+              );
+              Get.back();
+            }
+
           },
         );
       },
@@ -1586,274 +1645,6 @@ class LeadSearchScreen extends StatelessWidget {
       },
     );
   }
-
-  ///backup 4 jul
-/*
-  void showCallFeedbackDialog({
-    required BuildContext context,
-    required leadId,
-    required currentLeadStage,
-    required callDuration,
-    required callStartTime,
-    required callEndTime,
-    required callStatus,
-  }) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        //LeadListController leadListController =Get.find();
-        return CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-          title: AppText.addFAndF,
-          content: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(Get.context!).size.height * 0.7, // Prevents overflow
-            ),
-            child: SingleChildScrollView(
-              child: Form(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ///Call and lead FB
-
-                    const SizedBox(height: 20),
-
-                    if(callStatus=="0" && (currentLeadStage=="13" || currentLeadStage=="4" || currentLeadStage=="5" || currentLeadStage=="6" || currentLeadStage=="7"))
-                      CustomLabeledPickerTextField(
-                        label: AppText.leadStage,
-                        isRequired: false,
-                        controller: leadListController.couldNotController,
-                        inputType:TextInputType.name,
-                        hintText: "",
-                        enabled: false,
-                      ),
-
-
-                    ///Status change
-                    if(callStatus=="1")
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            AppText.leadStage,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.grey2,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Obx((){
-                            if (leadDDController.isLeadStageLoading.value) {
-                              return  Center(child:CustomSkelton.leadShimmerList(context));
-                            }
-
-                            int leadCode = int.parse(leadListController.filteredleadCode.value); // Assuming this is reactive or available
-
-                            print("currentLeadStage we need it=======>${currentLeadStage}");
-                            print("filteredleadCode we need it=======>${leadListController.filteredleadCode.value}");
-
-                            final filteredStages2 = leadDDController.getFilteredStagesByLeadStageId(
-                              currentLeadStage.toString(),
-                            );
-
-                            print("filteredStages we need it=======>${filteredStages2.toString()}");
-                            // Allowed stage IDs based on leadCode
-                            List<int> allowedStageIds = [];
-
-                            if (leadCode == 2) {
-                              allowedStageIds = [4, 5];
-                            }else if (leadCode == 3) {
-                              allowedStageIds = [4, 5,];
-                            } else if (leadCode == 4) {
-                              allowedStageIds = [6, 7,];
-                            }else if (leadCode == 5) {
-                              allowedStageIds = [4, 5,];
-                            }else if (leadCode == 6) {
-                              allowedStageIds = [6, 7];
-                            }else if (leadCode == 7) {
-                              allowedStageIds = [6, 7];
-                            }else if (leadCode == 13) {
-                              allowedStageIds = [4, 5,];
-                            } else {
-                              allowedStageIds = [4,5]; // Default to all or handle as needed
-                            }
-
-                            List<stage.Data> filteredStages = leadDDController
-                                .getAllLeadStageModel.value!.data!
-                                .where((lead) =>
-                            lead.id != 1 && allowedStageIds.contains(lead.id))
-                                .toList();
-                            filteredStages.forEach((ele){
-                              print("ele=======>${ele.stageName}");
-                            });
-                            return CustomDropdown<stage.Data>(
-                              items: filteredStages,
-                              getId: (item) =>item.id.toString(),  // Adjust based on your model structure
-                              getName: (item) => item.stageName.toString(),
-                              selectedValue: filteredStages.firstWhereOrNull(
-                                    (item) => item.id.toString() == leadDDController.selectedStage.value,
-
-                              ),
-                              onChanged: (value) {
-                                leadDDController.selectedStage.value =  value?.id?.toString();
-
-                                if( leadDDController.selectedStage.value!=null){
-                                  if (int.parse(leadDDController.selectedStage.value!) == 3) {
-                                    leadDDController.selectedStageActive.value = 1;
-
-                                  } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
-                                    leadDDController.selectedStageActive.value = 1;
-                                    leadListController.isFBDetailsShow.value=true;
-
-                                  } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
-                                    leadDDController.selectedStageActive.value = 0;
-                                    leadListController.isFBDetailsShow.value=false;
-                                  }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
-                                    leadDDController.selectedStageActive.value = 1;
-                                    leadListController.isFBDetailsShow.value=true;
-                                  } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
-                                    leadDDController.selectedStageActive.value = 0;
-                                    leadListController.isFBDetailsShow.value=false;
-                                  }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
-                                    leadDDController.selectedStageActive.value = 0;
-                                  }else {
-
-                                  }
-
-
-                                }
-
-
-                              },
-                            );
-                          }),
-                          const SizedBox(height: 20),
-                          Obx(()=> Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (leadListController.isFBDetailsShow.value==true) ...[
-                                SizedBox(height: 15),
-                                CustomLabeledTextField(
-                                  label: AppText.callFeedback,
-                                  isRequired: false,
-                                  controller: leadListController.callFeedbackController,
-                                  inputType: TextInputType.name,
-                                  hintText: AppText.enterCallFeedback,
-                                  isTextArea: true,
-                                ),
-                                SizedBox(height: 15),
-                                CustomLabeledTextField(
-                                  label: AppText.leadFeedback,
-                                  isRequired: false,
-                                  controller: leadListController.leadFeedbackController,
-                                  inputType: TextInputType.name,
-                                  hintText: AppText.enterLeadFeedback,
-                                  isTextArea: true,
-                                ),
-                                const SizedBox(height: 20),
-                              ]
-                            ],
-                          ))
-                        ],
-                      ),
-
-
-                    /// rest is cal reminder
-                    Obx(()=>Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if(leadListController.isFBDetailsShow.value==true || callStatus=="0")...[
-                          Text(
-                            "Need to set a reminder? select the checkbox",
-                            style:  GoogleFonts.poppins(
-                              fontSize: 14,
-                              color: Colors.black54,
-                              //fontWeight: FontWeight.w700
-
-
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Obx(()=>Checkbox(
-                                activeColor: AppColor.secondaryColor,
-                                value: leadListController.isCallReminder.value,
-                                onChanged: (bool? value) {
-
-                                  leadListController.isCallReminder.value = value ?? false;
-
-                                },
-                              )),
-                              Text(
-                                AppText.callReminder,
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black87,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Obx(()=> CustomLabeledPickerTextField(
-                            label: AppText.selectDate,
-                            isRequired: false,
-                            controller: leadListController.followDateController,
-                            inputType: TextInputType.name,
-                            hintText: "MM/DD/YYYY",
-                            isDateField: true,
-                            enabled: leadListController.isCallReminder.value,
-                          )),
-                          Obx(()=>CustomLabeledTimePickerTextField(
-                            label: AppText.selectTime,
-                            isRequired: false,
-                            controller: leadListController.followTimeController,
-                            inputType: TextInputType.datetime,
-                            hintText: "HH:MM AM/PM",
-                            isTimeField: true,
-                            enabled: leadListController.isCallReminder.value,
-                          )),
-                        ]
-                      ],
-                    ))
-                  ],
-                ),
-              ),
-            ),
-          ),
-          onSubmit: () {
-            var id=leadListController.workOnLeadModel!.data!.id.toString();
-            if(callStatus=="1"){
-              callDuration=leadListController.workOnLeadModel!.data!.callDuration.toString();
-              callStartTime=leadListController.workOnLeadModel!.data!.callStartTime.toString();
-              callEndTime=leadListController.workOnLeadModel!.data!.callEndTime.toString();
-
-            }
-
-
-            leadListController.callFeedbackSubmit(
-                leadId: leadId,
-                currentLeadStage: currentLeadStage,
-                callStatus: callStatus,
-                callDuration: callDuration,
-                callStartTime: callStartTime,
-                callEndTime: callEndTime,
-                id: id,
-                fromWhere: "call",
-                selectedStage: leadDDController.selectedStage.value
-
-            );
-            Get.back();
-
-          },
-        );
-      },
-    );
-  }
-*/
 
 
 
