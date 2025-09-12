@@ -209,10 +209,36 @@ class Step1FormProduct extends StatelessWidget {
 
               ),
 
-
-
-
               CustomLabeledTextField(
+                label: AppText.totalOverdueCasesAllowed,
+                controller: addProductController.prodTotalOverdueCasesAllowedController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterTotalOverdueCases,
+
+              ),
+              CustomLabeledTextField(
+                label: AppText.totalOverdueAmountAllowed,
+                controller: addProductController.prodTotalOverdueAmountAllowedController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterTotalOverdueAmount,
+
+              ),
+              CustomLabeledTextField(
+                label: AppText.totalCibilEnquiriesAllowed,
+                controller: addProductController.prodTotalCibilEnquiriesAllowedController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterTotalEnquiries,
+
+              ),
+              CustomLabeledTextField(
+                label: AppText.minCibilScoreAllowed,
+                controller: addProductController.prodMinCibilScoreAllowedController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMinCibil,
+
+              ),
+
+              /*CustomLabeledTextField(
                 label: AppText.minCibil,
 
                 controller: addProductController.prodMinCibilController,
@@ -221,7 +247,7 @@ class Step1FormProduct extends StatelessWidget {
 
               ),
 
-
+*/
               CustomTextLabel(
                 label: AppText.productSegment,
                 isRequired: true,
@@ -259,7 +285,7 @@ class Step1FormProduct extends StatelessWidget {
 
 
               CustomLabeledTextField(
-                label: AppText.productName,
+                label: AppText.productNameLPP,
                 isRequired: true,
 
                 controller: addProductController.prodProductNameController,
@@ -269,7 +295,7 @@ class Step1FormProduct extends StatelessWidget {
               ),
 
               CustomTextLabel(
-                label: AppText.selectCustomerCategory,
+                label: AppText.selectCustomerCategoryServied,
 
 
               ),
@@ -314,28 +340,12 @@ class Step1FormProduct extends StatelessWidget {
             const SizedBox(height: 20),
 
               CustomTextLabel(
-                label: AppText.selectCollateralSecurityCategory,
+                label: AppText.primeSecurityCategoriesServied,
 
 
               ),
 
               const SizedBox(height: 10),
-
-
-            /*  Obx(() {
-                final values = addProductController.selectedCollSecCat.toList();
-                return MultiSelectDropdown<String>(
-                  key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
-                  items: addProductController.collSecCatList.toList(),
-                  getId: (e) => e,
-                  getName: (e) => e,
-                  selectedValues: values,
-                  onChanged: (selectedList) {
-                    addProductController.selectedCollSecCat.assignAll(selectedList);
-                  },
-                );
-              }),
-*/
 
 
             Obx(() {
@@ -420,7 +430,7 @@ class Step1FormProduct extends StatelessWidget {
               }),
 
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 150),
 
 
 

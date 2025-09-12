@@ -21,6 +21,7 @@ import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
@@ -1132,6 +1133,9 @@ overflow: TextOverflow.ellipsis,
           leadDDController.getAllKsdplProductApi();
           camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
           camNoteController.getProductDetailsByFilterModel.value=null;
+
+          NewDDController newDDController=Get.put(NewDDController());
+          newDDController.getAllPrimeSecurityMasterApi();
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

@@ -33,6 +33,7 @@ import '../../controllers/leads/loan_appl_controller.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/leads/seachLeadController.dart';
+import '../../controllers/new_dd_controller.dart';
 import '../../controllers/open_poll_filter_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
@@ -739,7 +740,7 @@ class LeadSearchScreen extends StatelessWidget {
                             ],
                           ),
 
-                          if(leadListController.filteredleadCode.value=="4" ||leadListController.filteredleadCode.value=="6" )
+                          if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6"  )
                             _buildTextButton(
                               label:AppText.leh,
                               context: context,
@@ -1027,6 +1028,8 @@ class LeadSearchScreen extends StatelessWidget {
           leadDDController.getAllKsdplProductApi();
           camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
           camNoteController.getProductDetailsByFilterModel.value=null;
+          NewDDController newDDController=Get.put(NewDDController());
+          newDDController.getAllPrimeSecurityMasterApi();
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

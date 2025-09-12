@@ -35,7 +35,7 @@ class Step3CamNote extends StatelessWidget {
   final CamNoteController camNoteController =Get.find();
   final AddProductController addProductController =Get.find();
   final ViewProductController viewProductController = Get.put(ViewProductController());
-  NewDDController newDDController=Get.put(NewDDController());
+  final NewDDController newDDController=Get.find();
   final _formKey = GlobalKey<FormState>();
 
 

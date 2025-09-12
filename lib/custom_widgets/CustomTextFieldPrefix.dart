@@ -217,7 +217,14 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
         controller: widget.isSecret ? _displayController : widget.controller,
         keyboardType: widget.inputType,
         obscureText: widget.obscureText,
-        validator: widget.validator,
+       /* validator: widget.validator,*/
+        validator: (value) {
+          if (widget.validator != null) {
+            // always validate the actual (unmasked) value
+            return widget.validator!(widget.controller.text);
+          }
+          return null;
+        },
         onChanged: _onTextChanged,
         maxLines: widget.isTextArea ? null : 1,
         minLines: widget.isTextArea ? 3 : 1,

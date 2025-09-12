@@ -245,6 +245,13 @@ class AddProductController extends GetxController{
   final TextEditingController prodBankerSuperiorWhatsappController = TextEditingController();
   final TextEditingController prodBankerSuperiorEmailController = TextEditingController();
 
+  //12 sep
+  final TextEditingController prodTotalOverdueCasesAllowedController = TextEditingController();
+  final TextEditingController prodTotalOverdueAmountAllowedController = TextEditingController();
+  final TextEditingController prodTotalCibilEnquiriesAllowedController = TextEditingController();
+  final TextEditingController prodMinCibilScoreAllowedController = TextEditingController();
+
+
   var selectedprodSegment = Rxn<String>();
   RxList<String> customerCategoryList = [
     "Salaried",
