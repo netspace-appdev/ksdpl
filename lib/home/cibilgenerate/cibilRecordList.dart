@@ -117,7 +117,7 @@ class CibilRecordListScreen extends StatelessWidget {
           ),
 
           const Text(
-            AppText.cibilRecord,
+            AppText.onlineServiceRecords,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,

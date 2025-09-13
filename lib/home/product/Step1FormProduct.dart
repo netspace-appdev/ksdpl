@@ -5,6 +5,7 @@ import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/lead_dd_controller.dart';
+import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
@@ -14,11 +15,12 @@ import '../../custom_widgets/CustomMultiSelectDropdown.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
+import '../../models/camnote/GetAllPrimeSecurityMasterModel.dart' as primeSecurity;
 
 class Step1FormProduct extends StatelessWidget {
   final addProductController = Get.find<AddProductController>();
   LeadDDController leadDDController = Get.put(LeadDDController());
-
+  final NewDDController newDDController = Get.find();
   @override
   Widget build(BuildContext context) {
 
@@ -379,14 +381,48 @@ class Step1FormProduct extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-              CustomLabeledTextField(
+              /*CustomLabeledTextField(
                 label: AppText.collateralSecurityExcluded,
 
                 controller: addProductController.prodCollateralSecurityExcludedController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterCollateralSecurityExcluded,
 
+              ),*/
+
+              const SizedBox(
+                height: 20,
               ),
+
+              CustomTextLabel(
+                label: AppText.offeredSecurityType,
+              ),
+
+              const SizedBox(height: 10),
+
+              Obx((){
+                if (newDDController.isPrimeSecurityLoading.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+
+
+                return CustomDropdown<primeSecurity.Data>(
+                  items: newDDController.primeSecurityList.value ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.description.toString(),
+                  selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
+                        (item) => item.description == addProductController.prodCollateralSecurityExcludedController.text,
+                  ),
+                  onChanged: (value) {
+                    addProductController.prodCollateralSecurityExcludedController.text =  value?.description??"";
+
+                  },
+                  onClear: (){
+                    addProductController.prodCollateralSecurityExcludedController.clear();
+                  },
+                );
+              }),
+
 
 
               const SizedBox(

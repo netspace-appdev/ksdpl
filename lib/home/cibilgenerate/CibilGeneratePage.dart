@@ -6,9 +6,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/controllers/cibilgenerate_controller/CibilGenerateController.dart';
 
+import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
+import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomTextLabel.dart';
+import '../../models/camnote/GetAllPackageMasterModel.dart' as cibilPackagrList;
 
 class Cibilgeneratepage extends StatelessWidget {
 
@@ -91,13 +95,49 @@ class Cibilgeneratepage extends StatelessWidget {
                             maxLength: 10,
                           ),
 
-                          CustomLabeledTextField(
-                            label: AppText.totalAmountCibil,
-                            controller: cibilGenerateController.camTotalOverdueAmountController,
+                              const CustomTextLabel(
+                                label: AppText.packageName,
+                                isRequired: true,
+
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              Obx((){
+                                if (cibilGenerateController.isPackageMasterLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+
+
+                                return CustomDropdown<cibilPackagrList.Data>(
+                                  items: cibilGenerateController.packageMasterList  ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.packageName.toString(),
+                                  selectedValue: cibilGenerateController.packageMasterList.firstWhereOrNull(
+                                        (item) => item.id == cibilGenerateController.selectedCibilPackage.value,
+                                  ),
+                                  onChanged: (value) {
+                                    cibilGenerateController.selectedCibilPackage.value =  value?.id;
+                                    cibilGenerateController.camAmountRecoveredController.text=value?.amount.toString()??"0";
+                                  },
+                                  onClear: (){
+                                    cibilGenerateController.selectedCibilPackage.value = 0;
+                                    cibilGenerateController.camAmountRecoveredController.clear();
+                                  },
+                                );
+                              }),
+
+
+                              const SizedBox(height: 20),
+
+                              CustomLabeledTextField(
+                            label: AppText.amountToBeRecovered,
+                            controller: cibilGenerateController.camAmountRecoveredController,
                             inputType: TextInputType.number,
                             hintText: AppText.enterAmountCibil,
                             isRequired: true,
                             validator:ValidationHelper.validatecibilamount ,
+                            isInputEnabled: false,
                             //isInputEnabled: cibilGenerateController.enableAllCibilFields.value,
                           ),
 
@@ -123,7 +163,7 @@ class Cibilgeneratepage extends StatelessWidget {
 
                           ),
 
-                          SizedBox(
+                         /* SizedBox(
                             width: double.infinity,
                             height: 50,
                             child: ElevatedButton(
@@ -138,10 +178,8 @@ class Cibilgeneratepage extends StatelessWidget {
                                 if (cibilGenerateController.formKey.currentState?.validate() ?? false) {
 
                                   cibilGenerateController.addCustomerCibilRequestApi();
-                                  // All validations passed
-                                  print("Form is valid");
+
                                 } else {
-                                  // Some validation failed
                                   print("Form is not valid");
                                 }
                               },
@@ -154,7 +192,51 @@ class Cibilgeneratepage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
+                          ),*/
+
+                              Obx((){
+                                if(cibilGenerateController.isLoading.value){
+                                  return const Align(
+                                    alignment: Alignment.center,
+                                    child: SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: CircularProgressIndicator(
+                                        color: AppColor.primaryColor,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColor.secondaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      if (cibilGenerateController.formKey.currentState?.validate() ?? false) {
+
+                                        cibilGenerateController.addCustomerCibilRequestApi();
+
+                                      } else {
+                                        print("Form is not valid");
+                                      }
+                                    },
+                                    child: const Text(
+                                      AppText.submit,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
                               const SizedBox(height: 20),
                             ],
                           ),

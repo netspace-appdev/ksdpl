@@ -1,76 +1,129 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ksdpl/common/validation_helper.dart';
-import '../../common/helper.dart';
-import '../../common/skelton.dart';
-import '../../controllers/greeting_controller.dart';
-import '../../controllers/lead_dd_controller.dart';
-import '../../controllers/leads/infoController.dart';
+import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
+import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
+import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
+import 'package:ksdpl/models/leads/GetAllKsdplBranchModel.dart' as ksdplBranch;
+import 'package:lottie/lottie.dart';
+import '../../../common/helper.dart';
+import '../../../common/skelton.dart';
+import '../../../controllers/lead_dd_controller.dart';
+import '../../../controllers/leads/addLeadController.dart';
+import '../../../custom_widgets/CustomDropdown.dart';
+import '../../common/storage_service.dart';
+import '../../common/validation_helper.dart';
 import '../../controllers/leads/leadDetailsController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/open_poll_filter_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
+import '../../custom_widgets/CustomBigYesNDilogBox.dart';
 import '../../custom_widgets/CustomCard.dart';
-import '../../custom_widgets/CustomDropdown.dart';
+import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
+import '../../custom_widgets/CustomTextFieldPrefix.dart';
 import '../../services/call_service.dart';
-
+import '../custom_drawer.dart';
+import 'package:ksdpl/models/leads/GetCommonLeadListFModel.dart' as openPollList;
 import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
 
-class LeadDetailsMain extends StatelessWidget {
+class OpenPollDetailsScreen extends StatelessWidget {
+  //OpenPollDetailsScreen({required openPollList.Data openPollData});
 
-  GreetingController greetingController = Get.put(GreetingController());
-  InfoController infoController = Get.put(InfoController());
+  LeadDDController leadDDController = Get.put(LeadDDController());
 
-  LeadListController leadListController = Get.put(LeadListController());
-  LeadDetailController leadDetailController = Get.put(LeadDetailController());
-  LeadDDController leadDDController=Get.find();
+  final _formKey = GlobalKey<FormState>();
+  final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
+  LeadListController leadListController = Get.find();
+  OpenPollFilterController openPollFilterController = Get.find();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final LeadDetailController leadDetailController = Get.put(LeadDetailController());
+
   @override
   Widget build(BuildContext context) {
 
     return SafeArea(
       child: Scaffold(
-
+        key:_scaffoldKey,
         backgroundColor: AppColor.backgroundColor,
-
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-
-
-                // White Container
-                Align(
-                  alignment: Alignment.topCenter,  // Centers it
-                  child: Container(
-                    width: double.infinity,
-                    //height: MediaQuery.of(context).size.height*0.5,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        drawer:   CustomDrawer(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  // Gradient Background
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
                     decoration: const BoxDecoration(
-                      color: AppColor.backgroundColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(45),
-                        topRight: Radius.circular(45),
+                      gradient: LinearGradient(
+                        colors: [AppColor.primaryLight, AppColor.primaryDark],
+                        begin: Alignment.centerRight,
+                        end: Alignment.centerLeft,
                       ),
-
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child:Column(
                       children: [
-                        leadSection(context),
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+
+                        header(context),
+
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
+
+                  // White Container
+                  Align(
+                    alignment: Alignment.topCenter,  // Centers it
+                    child: Container(
+                      margin:  EdgeInsets.only(
+                          top:90 // MediaQuery.of(context).size.height * 0.22
+                      ), // <-- Moves it 30px from top
+                      width: double.infinity,
+                      //height: MediaQuery.of(context).size.height,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                      decoration: const BoxDecoration(
+                        color: AppColor.backgroundColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(45),
+                          topRight: Radius.circular(45),
+                        ),
+
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+
+
+
+                            leadSection(context)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+
+                ],
+              ),
+            ],
           ),
         ),
+
       ),
     );
   }
@@ -80,48 +133,81 @@ class LeadDetailsMain extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
           InkWell(
-              onTap: (){
-                Get.back();
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(AppImage.arrowLeft,height: 24,),
-              )),
+            borderRadius: BorderRadius.circular(8), // for ripple effect
+            onTap: () {
+              Get.back();
+            },
+            child: Container(
+              width: 48,
+              height: 48,
+              padding: const EdgeInsets.all(12), // optional internal padding
+              alignment: Alignment.center,
+              child: Image.asset(
+                AppImage.arrowLeft,
+                height: 24,
+              ),
+            ),
+          ),
+
           const Text(
             AppText.leadDetails,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
                 fontWeight: FontWeight.w700
-
-
             ),
           ),
 
           InkWell(
             onTap: (){
-              //showFilterDialog(context: context);
+
             },
             child: Container(
 
               width: 40,
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              decoration:  const BoxDecoration(
+              decoration:  BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
+
             ),
           )
+
         ],
       ),
     );
   }
 
+  Widget _buildRadioOption(String gender) {
+    return Row(
+      children: [
+        Radio<String>(
+          value: gender,
+          groupValue: addleadcontroller.selectedGender.value,
+          onChanged: (value) {
+            addleadcontroller.selectedGender.value=value;
+          },
+        ),
+        Text(gender),
+      ],
+    );
+  }
+
+  void onPressed(){
+
+
+    if (_formKey.currentState!.validate()) {
+
+
+      openPollFilterController.pollFilterSubmit();
+    }
+    Get.back();
+  }
 
 
   Widget leadSection(BuildContext context){
@@ -181,17 +267,17 @@ class LeadDetailsMain extends StatelessWidget {
               SizedBox(height: 20),
               buildCard("Basic Info", [
                 DetailRow(label: "Unique Lead Number", value:leadDetailController.getLeadDetailModel.value!.data!.uniqueLeadNumber.toString()),
-                DetailRow(label: "Name", value: data.name.toString()=="null"?AppText.customdash:data.name.toString()),
-                DetailRow(label: "Date Of Birth", value: data.dateOfBirth.toString()=="null"?AppText.customdash:data.dateOfBirth.toString()),
-                DetailRow(label: "Mobile Number", value:  data.mobileNumber.toString()=="null"?AppText.customdash:data.mobileNumber.toString()),
-                DetailRow(label: "Email", value:  data.email.toString()=="null"?AppText.customdash:data.email.toString()),
+                DetailRow(label: "Dropped by", value:data.assignedEmployeeName.toString()=="null"?AppText.customdash:data.assignedEmployeeName.toString()),
+                DetailRow(label: AppText.loanAmountRequested, value:data.loanAmountRequested.toString()=="null"?AppText.customdash:data.loanAmountRequested.toString()),
+                DetailRow(label: "Customer Name", value: data.name.toString()=="null"?AppText.customdash:data.name.toString()),
+                DetailRow(label: "Age", value: data.dateOfBirth.toString()=="null"?AppText.customdash: Helper.calculateAge(data.dateOfBirth.toString()).toString()),
+
                 DetailRow(label: "Pin Code", value:  data.pincode.toString()=="null"?AppText.customdash:data.pincode.toString()),
-                DetailRow(label: "Date", value:Helper.formatDate(leadDetailController.getLeadDetailModel.value!.data!.assignedEmployeeDate.toString()) ),
+
                 DetailRow(label: "Gender", value:  data.gender.toString()=="null"?AppText.customdash:data.gender.toString()),
-                DetailRow(label: "Street Address", value:  data.streetAddress.toString()=="null"?AppText.customdash:data.streetAddress.toString()),
-                DetailRow(label: "State", value: data.stateName.toString()=="null" ||data.stateName.toString()==""?AppText.customdash:data.stateName.toString()),
-                DetailRow(label: "District", value: data.districtName.toString()=="null"||data.districtName.toString()==""?AppText.customdash:data.districtName.toString()),
                 DetailRow(label: "City", value: data.cityName.toString()=="null"||data.cityName.toString()==""?AppText.customdash:data.cityName.toString()),
+                DetailRow(label: "District", value: data.districtName.toString()=="null"||data.districtName.toString()==""?AppText.customdash:data.districtName.toString()),
+                DetailRow(label: "State", value: data.stateName.toString()=="null" ||data.stateName.toString()==""?AppText.customdash:data.stateName.toString()),
                 DetailRow(label: "Nationality", value:  data.nationality.toString()=="null"?AppText.customdash:data.nationality.toString()),
               ],
                   Icons.info_outline
@@ -200,45 +286,25 @@ class LeadDetailsMain extends StatelessWidget {
 
 
               buildCard("Other Info", [
+                DetailRow(label: "Segment", value:  data.productCategoryName.toString()=="null"?AppText.customdash:data.productCategoryName.toString()),
                 DetailRow(label: "Aadhar Card", value:  data.adharCard.toString()=="null"?AppText.customdash: ValidationHelper.hideWithStars(data.adharCard.toString()) ),
-                DetailRow(label: "Pan Card", value:  data.panCard.toString()=="null"?AppText.customdash: ValidationHelper.hideWithStars(data.panCard.toString()) ),
-                DetailRow(label: "Employee Name", value: data.employeeName.toString()=="null"?AppText.customdash:data.employeeName.toString()),
-                DetailRow(label: "Product", value: data.productName.toString()=="null"?AppText.customdash:data.productName.toString()),
-                DetailRow(label: "Product Category Name", value: data.productCategoryName.toString()=="null"?AppText.customdash:data.productCategoryName.toString()),
-                DetailRow(label: "Campaign", value: data.campaign.toString()=="null"?AppText.customdash:data.campaign.toString()),
-                DetailRow(label: "Pickup Employee Name", value: data.pickedUpEmployeeName.toString()=="null"?AppText.customdash:data.pickedUpEmployeeName.toString()),
-                DetailRow(label: "Moved to Open Poll", value: data.moveToCommon.toString()=="null"?AppText.customdash:data.moveToCommon.toString()),
-                DetailRow(label: "Assigned Employee Percentage", value: data.assignedEmployeePercentage.toString()=="null"?AppText.customdash:data.assignedEmployeePercentage.toString()),
-                DetailRow(label: "Bank Name", value: data.bankName.toString()=="null"?AppText.customdash:data.bankName.toString()),
-                DetailRow(label: "Branch Name", value: data.branchName.toString()=="null"?AppText.customdash:data.branchName.toString()),
-                DetailRow(label: "Source", value: data.source.toString()=="null"?AppText.customdash:data.source.toString()),
-                DetailRow(label: "Product Typ", value: data.productType.toString()=="null"?AppText.customdash:data.productName.toString()),
-
-
-                DetailRow(label: "Loan Application No", value: data.loanApplicationNo.toString()=="null"?AppText.customdash:data.loanApplicationNo.toString()),
-              ],
-                  Icons.info_outline
-
-              ),
-              buildCard("Financial Info", [
-                DetailRow(label: "Sanction Amount", value: data.sanctionAmount.toString()=="null"?AppText.customdash:data.sanctionAmount.toString()),
-                DetailRow(label: "Disburse Amount", value: data.disburseAmount.toString()=="null"?AppText.customdash:data.disburseAmount.toString()),
+                DetailRow(label: AppText.currEmpSt, value:  data.currentEmploymentStatus.toString()=="null"?AppText.customdash:data.currentEmploymentStatus.toString() ),
+                DetailRow(label: AppText.employerName, value:  data.employerName.toString()=="null"?AppText.customdash:data.employerName.toString() ),
                 DetailRow(label: "Monthly Income", value: data.monthlyIncome.toString()=="null"?AppText.customdash:data.monthlyIncome.toString()),
-                DetailRow(label: "Loan Amount", value: data.loanAmountRequested.toString()=="null"?AppText.customdash:data.loanAmountRequested.toString()),
-              ],
-                  Icons.info_outline
-
-              ),
-
-              buildCard("Geo Location", [
-                DetailRow(label: "Geo Location Of Property", value:  data.geoLocationOfProperty.toString()=="null"?AppText.customdash:data.geoLocationOfProperty.toString()),
-                DetailRow(label: "Geo Location Of Residence", value:  data.geoLocationOfResidence.toString()=="null"?AppText.customdash:data.geoLocationOfResidence.toString()),
-                DetailRow(label: "Geo Location Of Office", value:  data.geoLocationOfOffice.toString()=="null"?AppText.customdash:data.geoLocationOfOffice.toString()),
+                DetailRow(label: "Additional Source of Income", value: data.additionalSourceOfIncome.toString()=="null"?AppText.customdash:data.additionalSourceOfIncome  .toString()),
+                DetailRow(label: "Preferred Bank", value: data.prefferedBank.toString()=="null"?AppText.customdash:data.prefferedBank.toString()),
+                DetailRow(label: AppText.branchName, value: data.branchName.toString()=="null"?AppText.customdash:data.branchName.toString()),
+                DetailRow(label: AppText.noOfExistingLoans, value: data.noOfExistingLoans.toString()=="null"?AppText.customdash:data.noOfExistingLoans.toString()),
+                DetailRow(label: AppText.connector, value: data.connectorName.toString()=="null"?AppText.customdash:data.connectorName.toString()),
+                DetailRow(label: "Connector % ", value: data.connectorPercentage.toString()=="null"?AppText.customdash:data.connectorPercentage.toString()),
 
               ],
                   Icons.info_outline
 
               ),
+
+
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -258,57 +324,7 @@ class LeadDetailsMain extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16),
 
-          // Phone Number Card
-
-          CustomCard(
-            borderColor: AppColor.grey200,
-            backgroundColor: AppColor.appWhite,
-            child:  Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Phone Number",
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold,color: AppColor.black54)),
-                    ),
-                    const SizedBox(height: 10),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        (leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString()=="3" && leadDetailController.getLeadDetailModel.value!.data!.reminderDate.toString()=="null")?
-                        _buildIconButton(icon: AppImage.call_disable, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "call_disable",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context):
-                        _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "call",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context),
-                        _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber:leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "whatsapp",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context),
-                        _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "message",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context),
-
-
-                      ],
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-
-          SizedBox(height: 16),
 
 
 
@@ -604,7 +620,6 @@ class LeadDetailsMain extends StatelessWidget {
     );
   }
 
-
   Widget buildCard(String title, List<Widget> children, IconData icon) {
     return Container(
       decoration: BoxDecoration(
@@ -662,9 +677,6 @@ class LeadDetailsMain extends StatelessWidget {
 }
 
 
-//details
-
-// Helper Widget for Status Chips
 class StatusChip extends StatelessWidget {
   final String label;
   final Color color;

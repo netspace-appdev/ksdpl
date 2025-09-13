@@ -201,7 +201,7 @@ class LeadDetailsMain extends StatelessWidget {
               buildCard("Other Info", [
                 DetailRow(label: "Aadhar Card", value:  data.adharCard.toString()=="null"?AppText.customdash: ValidationHelper.hideWithStars(data.adharCard.toString()) ),
                 DetailRow(label: "Pan Card", value:  data.panCard.toString()=="null"?AppText.customdash: ValidationHelper.hideWithStars(data.panCard.toString()) ),
-                DetailRow(label: "Employee Name", value: data.employeeName.toString()=="null"?AppText.customdash:data.employeeName.toString()),
+                DetailRow(label: "Assigned Employee Name", value: data.assignedEmployeeName.toString()=="null"?AppText.customdash:data.assignedEmployeeName.toString()),
                 DetailRow(label: "Product", value: data.productName.toString()=="null"?AppText.customdash:data.productName.toString()),
                 DetailRow(label: "Product Category Name", value: data.productCategoryName.toString()=="null"?AppText.customdash:data.productCategoryName.toString()),
                 DetailRow(label: "Campaign", value: data.campaign.toString()=="null"?AppText.customdash:data.campaign.toString()),

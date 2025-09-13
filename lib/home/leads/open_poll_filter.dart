@@ -335,11 +335,18 @@ class OpenPollFilter extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Column(
                     children: [
-                      _buildDetailRow("Email", lead.email.toString()),
+                     /* _buildDetailRow("Email", lead.email.toString()),
                       _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
-                      _buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
-                      // _buildDetailRow("Uploaded by", lead.uploadedBy.toString()),
-                      // _buildDetailRow("City", "Sagwada"),
+                      _buildDetailRow("Uploaded on", lead.uploadedDate.toString()),*/
+
+                      _buildDetailRow("Dropped by Name", lead.assignedEmployeeName.toString()=="null"?AppText.customdash: lead.assignedEmployeeName.toString() ),
+                      _buildDetailRow("Dropped by Phone No.", lead.assignedEmployeePhoneNumber.toString()=="null"?AppText.customdash: lead.assignedEmployeePhoneNumber.toString() ),
+                      _buildDetailRow("share %", "${lead.assignedEmployeePercentage} %" ),
+                      _buildDetailRow("City ", lead.cityName.toString()),
+
+
+
+
                     ],
                   ),
                 ),
@@ -375,7 +382,7 @@ class OpenPollFilter extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 85,
+            width: 150,
 
             child: Text(
               "$label",
@@ -387,7 +394,13 @@ class OpenPollFilter extends StatelessWidget {
           ),
           SizedBox(width: 10),
           Expanded(
-            child: Text(
+            child:  value=="null" || value==AppText.customdash?
+            Row(
+
+
+              children: [
+                Icon(Icons.horizontal_rule, size: 15,),
+              ],): Text(
               label=="Assigned" ||  label=="Uploaded on"?": ${ Helper.formatDate(value)}":  ": ${value}",
 
               style: TextStyle(color: Colors.black87),
@@ -511,7 +524,7 @@ class OpenPollFilter extends StatelessWidget {
 
         }else if (label == "Details") {
 
-          Get.toNamed("/leadDetailsTab", arguments: {"leadId":leadId.toString()});
+          Get.toNamed("/openPollDetailsScreen", arguments: {"leadId":leadId.toString()});
         }else{
 
         }

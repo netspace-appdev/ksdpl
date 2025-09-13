@@ -511,6 +511,7 @@ class AppText{
   static const String managePPT = "View PPT";
 
   static const String manageCibil = "Manage CIBIL";
+  static const String manageService = "Manage Service";
 
   static const String manageTutorial = "Tutorial";
 
@@ -669,6 +670,7 @@ class AppText{
 
   static const String totalOverdueAmountCibil = "Total Overdue Amount As Per CIBIL";
   static const String totalAmountCibil = "Amount";
+  static const String amountToBeRecovered = "Amount To Be Recovered";
   static const String enterOverdueAmountCibil = "Enter Overdue Amount";
   static const String enterAmountCibil = "Enter Amount";
 
@@ -1013,6 +1015,8 @@ class AppText{
   static const String enterMaximumTat = "Enter Maximum TAT (Days)";
 
   static const String productSpecificAdditionalDocument = "Product Specific Additional Document";
+  static const String onlineServiceRecordsList = "Online Service Records List";
+  static const String onlineServiceRecords = "Online Service Records";
 
 
 }
@@ -1464,7 +1468,20 @@ class Helper{
       print("$parentKey -> ${json.runtimeType} -> $json");
     }
   }
+  static int calculateAge(String dobString) {
+    DateTime dob = DateTime.parse(dobString); // parse from API
+    DateTime today = DateTime.now();
 
+    int age = today.year - dob.year;
+
+    // If birthday hasn’t occurred yet this year → subtract 1
+    if (today.month < dob.month ||
+        (today.month == dob.month && today.day < dob.day)) {
+      age--;
+    }
+
+    return age;
+  }
 }
 
 

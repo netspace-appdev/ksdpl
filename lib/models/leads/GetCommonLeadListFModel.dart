@@ -81,6 +81,8 @@ class Data {
   String? moveToCommon;
   String? pickedUpEmployeeName;
   String? assignedEmployeeName;
+  String? assignedEmployeeEmail;
+  String? assignedEmployeePhoneNumber;
   String? bankName;
   String? branchName;
   String? productCategoryName;
@@ -137,6 +139,8 @@ class Data {
         this.moveToCommon,
         this.pickedUpEmployeeName,
         this.assignedEmployeeName,
+        this.assignedEmployeeEmail,
+        this.assignedEmployeePhoneNumber,
         this.bankName,
         this.branchName,
         this.productCategoryName,
@@ -193,6 +197,8 @@ class Data {
     moveToCommon = json['moveToCommon'];
     pickedUpEmployeeName = json['pickedUpEmployeeName'];
     assignedEmployeeName = json['assignedEmployeeName'];
+    assignedEmployeeEmail = json['assignedEmployeeEmail'];
+    assignedEmployeePhoneNumber = json['assignedEmployeePhoneNumber'];
     bankName = json['bankName'];
     branchName = json['branchName'];
     productCategoryName = json['productCategoryName'];
@@ -251,6 +257,8 @@ class Data {
     data['moveToCommon'] = this.moveToCommon;
     data['pickedUpEmployeeName'] = this.pickedUpEmployeeName;
     data['assignedEmployeeName'] = this.assignedEmployeeName;
+    data['assignedEmployeeEmail'] = this.assignedEmployeeEmail;
+    data['assignedEmployeePhoneNumber'] = this.assignedEmployeePhoneNumber;
     data['bankName'] = this.bankName;
     data['branchName'] = this.branchName;
     data['productCategoryName'] = this.productCategoryName;

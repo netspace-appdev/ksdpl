@@ -1161,11 +1161,11 @@ overflow: TextOverflow.ellipsis,
             context: context,
             builder: (context) {
               return CustomDialogBox(
-                title: "Are you sure?",
+                title: "Are you sure ${(label_code == "interested" || label_code =="not_interested")?label:""}?",
 
                 onYes: () {
                   var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-                  if (label_code == "interested") {
+                  if (label_code == "interested" ) {
 
                     var isActive = leadListController.changeActiveStatus("4");
                     leadListController.updateLeadStageApiForCall(
