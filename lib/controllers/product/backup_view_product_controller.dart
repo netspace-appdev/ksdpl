@@ -1,3 +1,4 @@
+/*
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -5,7 +6,6 @@ import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/services/product_service.dart';
 
 import '../../common/helper.dart';
-import '../../common/storage_service.dart';
 import '../../models/IndividualLeadUploadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/product/GetAllProductListModel.dart' as prod;
@@ -89,7 +89,7 @@ class ViewProductController extends GetxController{
     String? segment,
     String? product,
     String? KsdplProductId,
-}) async {
+  }) async {
     try {
 
       if (isMainListMoreLoading.value || (!hasMore.value && isLoadMore)) return;
@@ -101,13 +101,13 @@ class ViewProductController extends GetxController{
         hasMore.value = true;
       }
       var data = await ProductService.getAllProductListApi(
-        pageNumber: currentPage.value,
-        pageSize: pageSize,
-        product: product,
-        segment: segment,
-        KsdplProductId: KsdplProductId,
-        minCibil: minCibil,
-        bankId: bankId
+          pageNumber: currentPage.value,
+          pageSize: pageSize,
+          product: product,
+          segment: segment,
+          KsdplProductId: KsdplProductId,
+          minCibil: minCibil,
+          bankId: bankId
       );
 
       if (data['success'] == true) {
@@ -135,7 +135,7 @@ class ViewProductController extends GetxController{
         }
 
         clearForm();
-       // leadListLength.value=getAllLeadsModel.value!.data!.length;
+        // leadListLength.value=getAllLeadsModel.value!.data!.length;
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
         clearForm();
         getAllProductListModel.value = null;
@@ -160,10 +160,9 @@ class ViewProductController extends GetxController{
 
   void  getProductListByCreatorIdApi() async {
     try {
-      var empId=StorageService.get(StorageService.USER_ID).toString();
       isMainListMoreLoading(true);
 
-      var data = await ProductService.getProductListByCreatorIdApi(empId: empId);
+      var data = await ProductService.getAllVacancyRequestApi();
 
       if(data['success'] == true){
 
@@ -188,4 +187,4 @@ class ViewProductController extends GetxController{
     }
   }
 
-}
+}*/

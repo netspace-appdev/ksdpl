@@ -20,7 +20,7 @@ import '../../models/camnote/GetAllPrimeSecurityMasterModel.dart' as primeSecuri
 class Step1FormProduct extends StatelessWidget {
   final addProductController = Get.find<AddProductController>();
   LeadDDController leadDDController = Get.put(LeadDDController());
-  final NewDDController newDDController = Get.find();
+  final NewDDController newDDController = Get.put(NewDDController());
   @override
   Widget build(BuildContext context) {
 

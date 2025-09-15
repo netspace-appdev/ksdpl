@@ -209,7 +209,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       title:  Text("Self Added Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
                       onTap: () {
                         ViewProductController viewProductController=Get.put(ViewProductController());
-                        viewProductController.getAllProductListApi();
+                        viewProductController.getProductListByCreatorIdApi();
                         AddProductController addProductController =Get.put(AddProductController());
                         addProductController.getAllProductCategoryApi();
                         Get.toNamed("/viewProductScreen");

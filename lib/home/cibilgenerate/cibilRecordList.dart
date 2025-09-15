@@ -243,7 +243,22 @@ class CibilRecordListScreen extends StatelessWidget {
 
             },
           ),
+          if (cibilRecordListController.hasMore.value)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: ElevatedButton(
+                onPressed: () {
+                  cibilRecordListController.getCustomerCibilDetailByUserIdApi(isLoadMore: true);
 
+                },
+                child: cibilRecordListController.isLoading.value //isDashboardLeadListMoreLoading
+                    ? Container(
+                    width: 15,
+                    height: 15,
+                    child: Center(child: CircularProgressIndicator(color: AppColor.primaryColor, strokeWidth: 2,)))
+                    : Text("Load More"),
+              ),
+            ),
 
         ],
       );

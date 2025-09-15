@@ -1,3 +1,4 @@
+/*
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -114,7 +115,7 @@ class ViewProductScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                             /* InkWell(
+                              InkWell(
                                 onTap: (){
 
                                   viewProductController.clearFilter();
@@ -124,7 +125,7 @@ class ViewProductScreen extends StatelessWidget {
                                   "Clear Filter",
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.secondaryColor),
                                 ),
-                              ),*/
+                              ),
                             ],
                           ),
 
@@ -181,8 +182,8 @@ class ViewProductScreen extends StatelessWidget {
 
           InkWell(
             onTap: (){
-             /* viewProductController.clearForm();
-              showFilterDialogForProduct(context: context);*/
+              viewProductController.clearForm();
+              showFilterDialogForProduct(context: context);
             },
             child: Container(
 
@@ -190,13 +191,12 @@ class ViewProductScreen extends StatelessWidget {
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration:  BoxDecoration(
-               // color: AppColor.appWhite.withOpacity(0.15),
-                color: Colors.transparent,
+                color: AppColor.appWhite.withOpacity(0.15),
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
-             // child: Center(child: Icon(Icons.filter_alt_outlined, color: AppColor.appWhite,),),
+              child: Center(child: Icon(Icons.filter_alt_outlined, color: AppColor.appWhite,),),
             ),
           )
 
@@ -421,7 +421,7 @@ class ViewProductScreen extends StatelessWidget {
     );
   }
 
-/*  Widget productSection(BuildContext context){
+  Widget productSection(BuildContext context){
     return Obx((){
       if (viewProductController.isMainListMoreLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
@@ -506,95 +506,10 @@ class ViewProductScreen extends StatelessWidget {
         ],
       );
     });
-  }*/
-
-
-  Widget productSection(BuildContext context){
-    return Obx((){
-      if (viewProductController.isMainListMoreLoading.value) {
-        return  Center(child: CustomSkelton.productShimmerList(context));
-      }
-      if (viewProductController.getProductListByCreatorIdModel.value == null ||
-          viewProductController.getProductListByCreatorIdModel.value!.data == null || viewProductController.getProductListByCreatorIdModel.value!.data!.isEmpty) {
-        return  Container(
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          margin: EdgeInsets.symmetric(vertical: 10),
-          decoration:  BoxDecoration(
-            border: Border.all(color: AppColor.grey200),
-            color: AppColor.appWhite,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-
-          ),
-          child:  Column(
-
-            children: [
-              /// Header with profile and menu icon
-              _noDataCard(context)
-
-            ],
-          ),
-        );
-      }
-
-      return  Column(
-        children: [
-
-
-          ListView.builder(
-            itemCount:viewProductController.getProductListByCreatorIdModel.value?.data?.length??0,//
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-
-              final product =  viewProductController.getProductListByCreatorIdModel.value?.data?[index];
-
-              return buildCard(
-                Helper.capitalizeEachWord(product?.product.toString()??""), // title
-                [
-                  _buildDetailRow("Bank Name", product?.bankName??""),
-                  _buildDetailRow("Min. CIBIL", product?.minCIBIL.toString()??""),
-                  _buildDetailRow("Product Category", product?.productCategoryName.toString()??""),
-
-                  const SizedBox(height: 10),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildTextButton("Edit", context, Colors.purple, Icons.edit, product?.id.toString()??"0"),
-                      _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file, product?.id.toString()??"0"),
-                    ],
-                  ),
-                ],
-              );
-
-            },
-          ),
-
-          if (viewProductController.hasMore.value && viewProductController.filteredProducts.length > 1)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: ElevatedButton(
-                onPressed: () {
-                  viewProductController.getAllProductListApi(
-                      isLoadMore: true
-                  );
-                },
-                child:
-                viewProductController.isMainListMoreLoading.value //isDashboardLeadListMoreLoading
-                    ? Container(
-                    width: 15,
-                    height: 15,
-                    child: Center(child: CircularProgressIndicator(color: AppColor.primaryColor, strokeWidth: 2,)))
-                    : Text("Load More"),
-              ),
-            ),
-        ],
-      );
-    });
   }
+
+
+
 
   Widget _buildDetailRow(String label, String value) {
     //   String assigned = value.toString();
@@ -690,15 +605,15 @@ class ViewProductScreen extends StatelessWidget {
           Get.toNamed("/productDetailScreen");
 
         }else  if (label == "Edit") {
-         AddProductController addProductController = Get.put(AddProductController());
+          AddProductController addProductController = Get.put(AddProductController());
 
 
-         addProductController.getProductListByIdApi(id: id);
-         addProductController.getDocumentListByProductIdApi(productId: id);
-         addProductController.getAllProductCategoryApi();
-         addProductController.clearForm();
-         addProductController.currentStep.value=0;
-         addProductController.isFirstSave.value=1;
+          addProductController.getProductListByIdApi(id: id);
+          addProductController.getDocumentListByProductIdApi(productId: id);
+          addProductController.getAllProductCategoryApi();
+          addProductController.clearForm();
+          addProductController.currentStep.value=0;
+          addProductController.isFirstSave.value=1;
           Get.toNamed("/editProductScreen");
 
         }else{
@@ -737,3 +652,4 @@ class ViewProductScreen extends StatelessWidget {
 }
 
 
+*/

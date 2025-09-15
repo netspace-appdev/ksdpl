@@ -27,10 +27,12 @@ class CibilRecordListController extends GetxController{
   var expenseList = <ExpenseData>[].obs;
   var CibilDetailList = <CibilData>[].obs;
   var getCustomerCibilDetailModel = Rxn<GetCustomerCibilDetailModel>();
-
+  RxInt recordListLength = 0.obs;
   String? empId = StorageService.get(StorageService.EMPLOYEE_ID);
 
-
+  RxBool hasMore = true.obs;
+  RxInt currentPage = 1.obs;
+  final int pageSize = 20;
   String formatDate(String? dateStr) {
     if (dateStr == null || dateStr.isEmpty) return '';
     try {
@@ -44,17 +46,23 @@ class CibilRecordListController extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    getCustomerCibilDetailByUserIdApi();
+    getCustomerCibilDetailByUserIdApi( );
   }
 
 
-  Future<void> getCustomerCibilDetailByUserIdApi() async {
+/*  Future<void> getCustomerCibilDetailByUserIdApi({
+    bool isLoadMore = false,
+}) async {
     print('cibil_list call .....');
 
     try {
       isLoading(true);
-      var data = await GenerateCibilServices. getCustomerCibilDetailByUserIdApiRequest(
+      var data = await GenerateCibilServices.getCustomerCibilDetailByUserIdApiRequest(
         userId: empId??'',
+        fromDate: "",
+        toDate: "",
+        pageNumber: currentPage.value,
+        pageSize: pageSize,
       );
 
       if (data['success'] == true) {
@@ -72,6 +80,64 @@ class CibilRecordListController extends GetxController{
       }
     } catch (e) {
       print("Error GetExpenseByEmployeeID: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }*/
+
+  void getCustomerCibilDetailByUserIdApi({
+    bool isLoadMore = false,
+  }) async {
+
+    try {
+
+      if (isLoading.value || (!hasMore.value && isLoadMore)) return;
+
+      isLoading(true);
+
+      if (!isLoadMore) {
+        currentPage.value = 1; // Reset to first page on fresh load
+        hasMore.value = true;
+      }
+
+      var data = await GenerateCibilServices.getCustomerCibilDetailByUserIdApiRequest(
+        userId: empId??'',
+        fromDate: "",
+        toDate: "",
+        pageNumber: currentPage.value,
+        pageSize: pageSize,
+      );
+
+
+      if (data['success'] == true) {
+        var newLeads =GetCustomerCibilDetailModel.fromJson(data);
+
+        if (isLoadMore) {
+          getCustomerCibilDetailModel.value!.data!.addAll(newLeads.data!);
+        } else {
+          getCustomerCibilDetailModel.value = newLeads;
+        }
+        getCustomerCibilDetailModel.value = newLeads;
+
+
+
+        // If less data returned than requested pageSize, mark as no more
+        if (newLeads.data!.length < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++; // Ready for next page
+        }
+        recordListLength.value=getCustomerCibilDetailModel.value!.data!.length;
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        //leadStageName2.value = leadStageName.value;
+        getCustomerCibilDetailModel.value = null;
+        hasMore.value = false;
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getAllLeadsApi: $e");
       ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
       isLoading(false);

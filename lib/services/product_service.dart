@@ -21,6 +21,7 @@ class ProductService {
   static const String getAllCommonDocumentNameList = BaseUrl.baseUrl + 'KsdplProductList/GetAllCommonDocumentNameList';
   static const String getAllVacancyList = BaseUrl.baseUrl + 'VacancyMaster/GetAllVacancy';
   static const String getAllInsuranceIllustrations = BaseUrl.baseUrl + 'CamNoteDetail/GetAllInsuranceIllustrations';
+  static const String getProductListByCreatorId = BaseUrl.baseUrl + 'ProductList/GetProductListByCreatorId';
 
 
 
@@ -636,7 +637,37 @@ class ProductService {
     }
   }
 
+  static Future<Map<String, dynamic>> getProductListByCreatorIdApi({
+    required empId
+}) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getProductListByCreatorId),
+      );
 
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', empId,fallback: "0");
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getProductListByCreatorId, request.fields);
+      Helper.ApiRes(getProductListByCreatorId, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
 }
 
 

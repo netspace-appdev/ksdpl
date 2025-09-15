@@ -209,9 +209,8 @@ class CamNoteSingle extends StatelessWidget {
           ),
 
           buildCard("Loan Info", [
-            DetailRow(label: AppText.loanSegment, value: data.loanSegment.toString()),
-            DetailRow(label: AppText.loanProduct, value: data.loanProduct.toString()),
-            DetailRow(label: AppText.offeredSecurityType, value: data.offeredSecurityType.toString()),
+            DetailRow(label: AppText.loanSegment, value: data.productCategoryName.toString()),
+            DetailRow(label: AppText.loanProduct, value: data.product.toString()),
             DetailRow(label: AppText.offeredSecurityType, value: data.offeredSecurityType.toString()),
             DetailRow(label: AppText.geoLocationProperty, value: data.geoLocationOfProperty.toString()),
             DetailRow(label: AppText.geoLocationResidence, value: data.geoLocationOfResidence.toString()),

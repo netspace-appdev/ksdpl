@@ -285,7 +285,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var camSelectedProdSegment = Rxn<int>();
   var camSelectedProdType = Rxn<String>();
   var camSelectedIndexRelBank = (-1).obs;
-  var selectedOfferSecurity = Rxn<int>(); // it will replace camOfferedSecurityTypeController
+
   ///end
   var uniqueLeadNUmber="";
   var loanApplicationNumber="";
@@ -607,7 +607,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               TotalEnquiriesMadeAsPerCibil:camTotalEnquiriesController.text.trim().toString(),
               LoanSegment:camSelectedProdSegment.value.toString(),
               LoanProduct:camSelectedProdType.value.toString(),
-              OfferedSecurityType: selectedOfferSecurity.value.toString(),
+              OfferedSecurityType: camOfferedSecurityTypeController.text.toString(),
               IncomeType:(selectedCamIncomeTypeList.value==null||selectedCamIncomeTypeList.value=="null")?"":selectedCamIncomeTypeList.value,
                 EarningCustomerAge: camEarningCustomerAgeController.text.trim().toString(),
               NonEarningCustomerAge: camNonEarningCustomerAgeController.text.trim().toString(),
@@ -1905,7 +1905,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camSelectedBank.value=null;
     camSelectedProdSegment.value=null;
     camSelectedProdType.value=null;
-    selectedOfferSecurity.value=null;
+
     selectedPackage.value=null;
     camSelectedIndexRelBank.value=-1;
     camSelectedIndexRelBank.value=-1;
@@ -1947,7 +1947,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camLtvController.clear();
     camOfferedSecurityTypeController.clear();
     camCibilMobController.clear();
-    selectedOfferSecurity.value=null;
     selectedCamIncomeTypeList.value=null;
   }
 
@@ -2898,7 +2897,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camPropertyValueController.text=(getCamNoteDetailsModel.value?.data?.propertyValueAsPerCustomer??"").toString();
         camFoirController.text=(getCamNoteDetailsModel.value?.data?.foir??"").toString();
         camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
-        selectedOfferSecurity.value=(int.parse(getCamNoteDetailsModel.value?.data?.offeredSecurityType??"0"));
+        camOfferedSecurityTypeController.text=getCamNoteDetailsModel.value?.data?.offeredSecurityType??"";
 
 
 

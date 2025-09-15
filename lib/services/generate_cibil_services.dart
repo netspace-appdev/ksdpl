@@ -240,26 +240,32 @@ class GenerateCibilServices {
 
 
 
-  static Future<Map<String, dynamic>>  getCustomerCibilDetailByUserIdApiRequest(
-      {required String userId}
-      )
+  static Future<Map<String, dynamic>>  getCustomerCibilDetailByUserIdApiRequest({
+    required String userId,
+    required String fromDate,
+    required String toDate,
+    required int pageNumber,
+    required int pageSize,
+  })
   async {
       try {
         var request = http.MultipartRequest(
           'POST',
-          Uri.parse(getCustomerCibilDetailRequest),
+          Uri.parse("$getCustomerCibilDetailRequest?pageNumber=${1}&pageSize=${pageNumber*20}"),
         );
 
         var header=await MyHeader.getHeaders2();
 
         request.headers.addAll(header);
         MultipartFieldHelper.addField(request.fields, 'userId', userId);
+        MultipartFieldHelper.addField(request.fields, 'FromDate', fromDate);
+        MultipartFieldHelper.addField(request.fields, 'ToDate', toDate);
 
         var streamedResponse = await request.send();
 
         var response = await http.Response.fromStream(streamedResponse);
 
-        Helper.ApiReq(getCustomerCibilDetailRequest, request.fields);
+        Helper.ApiReq("$getCustomerCibilDetailRequest?pageNumber=${1}&pageSize=${pageNumber*20}", request.fields);
         Helper.ApiRes(getCustomerCibilDetailRequest, response.body);
 
         if (response.statusCode == 200) {

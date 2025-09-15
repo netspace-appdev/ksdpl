@@ -264,8 +264,8 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: AppText.valuationCharges, value: data.valuationCharges.toString()),
             DetailRow(label: AppText.fromAmtRange, value: data.fromAmountRange.toString()),
             DetailRow(label: AppText.toAmtRange, value: data.toAmountRange.toString()),
-            DetailRow(label: AppText.totalOverdueCases2, value: data.totalOverdueCases.toString()),
-            DetailRow(label: AppText.totalOverdueAmount, value: data.totalOverdueAmount.toString()),
+            DetailRow(label: AppText.totalOverdueCasesAllowed, value: data.totalOverdueCases.toString()),
+            DetailRow(label: AppText.totalOverdueAmountAllowed, value: data.totalOverdueAmount.toString()),
             DetailRow(label: AppText.totalEnquiries2, value: data.totalEnquiries.toString()),
           ],
               Icons.attach_money
