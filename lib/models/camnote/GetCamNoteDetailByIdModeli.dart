@@ -66,7 +66,7 @@ class Data {
   num? sanctionROI;
   num? sanctionTenor;
   num? sanctionAmount;
-  num? softsanctionDate;
+  String? softsanctionDate;
   String? rejectReason;
   String? bankName;
   String? productCategoryName;
@@ -78,7 +78,17 @@ class Data {
   String? photosOfProperty;
   String? photosOfResidence;
   String? photosOfOffice;
-
+  num? autoindividual;
+  num? sanctionEstimatedEMI;
+  num? sanctionApplicableLegalFee;
+  num? sanctionApplicableTechnicalFee;
+  num? sanctionApplicableAdminFee;
+  num? sanctionApplicableForeclosureCharges;
+  num? sanctionApplicableOtherCharges;
+  num? sanctionTSRYears;
+  num? sanctionApplicableTSRCharges;
+  num? sanctionApplicableValuationCharges;
+  num? sanctionProcessingCharges;
   Data(
       {this.id,
         this.leadID,
@@ -131,7 +141,18 @@ class Data {
         this.geoLocationOfOffice,
         this.photosOfProperty,
         this.photosOfResidence,
-        this.photosOfOffice});
+        this.photosOfOffice,
+        this.autoindividual,
+        this.sanctionEstimatedEMI,
+        this.sanctionApplicableLegalFee,
+        this.sanctionApplicableTechnicalFee,
+        this.sanctionApplicableAdminFee,
+        this.sanctionApplicableForeclosureCharges,
+        this.sanctionApplicableOtherCharges,
+        this.sanctionTSRYears,
+        this.sanctionApplicableTSRCharges,
+        this.sanctionApplicableValuationCharges,
+        this.sanctionProcessingCharges});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -186,6 +207,19 @@ class Data {
     photosOfProperty = json['photosOfProperty'];
     photosOfResidence = json['photosOfResidence'];
     photosOfOffice = json['photosOfOffice'];
+    autoindividual = json['autoindividual'];
+    sanctionEstimatedEMI = json['sanctionEstimatedEMI'];
+    sanctionApplicableLegalFee = json['sanctionApplicableLegalFee'];
+    sanctionApplicableTechnicalFee = json['sanctionApplicableTechnicalFee'];
+    sanctionApplicableAdminFee = json['sanctionApplicableAdminFee'];
+    sanctionApplicableForeclosureCharges =
+    json['sanctionApplicableForeclosureCharges'];
+    sanctionApplicableOtherCharges = json['sanctionApplicableOtherCharges'];
+    sanctionTSRYears = json['sanctionTSRYears'];
+    sanctionApplicableTSRCharges = json['sanctionApplicableTSRCharges'];
+    sanctionApplicableValuationCharges =
+    json['sanctionApplicableValuationCharges'];
+    sanctionProcessingCharges = json['sanctionProcessingCharges'];
   }
 
   Map<String, dynamic> toJson() {
@@ -242,6 +276,21 @@ class Data {
     data['photosOfProperty'] = this.photosOfProperty;
     data['photosOfResidence'] = this.photosOfResidence;
     data['photosOfOffice'] = this.photosOfOffice;
+    data['autoindividual'] = this.autoindividual;
+    data['sanctionEstimatedEMI'] = this.sanctionEstimatedEMI;
+    data['sanctionApplicableLegalFee'] = this.sanctionApplicableLegalFee;
+    data['sanctionApplicableTechnicalFee'] =
+        this.sanctionApplicableTechnicalFee;
+    data['sanctionApplicableAdminFee'] = this.sanctionApplicableAdminFee;
+    data['sanctionApplicableForeclosureCharges'] =
+        this.sanctionApplicableForeclosureCharges;
+    data['sanctionApplicableOtherCharges'] =
+        this.sanctionApplicableOtherCharges;
+    data['sanctionTSRYears'] = this.sanctionTSRYears;
+    data['sanctionApplicableTSRCharges'] = this.sanctionApplicableTSRCharges;
+    data['sanctionApplicableValuationCharges'] =
+        this.sanctionApplicableValuationCharges;
+    data['sanctionProcessingCharges'] = this.sanctionProcessingCharges;
     return data;
   }
 }

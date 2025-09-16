@@ -32,7 +32,11 @@ class CibilRecordListController extends GetxController{
 
   RxBool hasMore = true.obs;
   RxInt currentPage = 1.obs;
-  final int pageSize = 20;
+  // final int pageSize = 20;
+  final int pageSize = 200;
+
+  RxBool isActive = false.obs;
+  var isItemLoading = false.obs;
   String formatDate(String? dateStr) {
     if (dateStr == null || dateStr.isEmpty) return '';
     try {
@@ -50,42 +54,7 @@ class CibilRecordListController extends GetxController{
   }
 
 
-/*  Future<void> getCustomerCibilDetailByUserIdApi({
-    bool isLoadMore = false,
-}) async {
-    print('cibil_list call .....');
-
-    try {
-      isLoading(true);
-      var data = await GenerateCibilServices.getCustomerCibilDetailByUserIdApiRequest(
-        userId: empId??'',
-        fromDate: "",
-        toDate: "",
-        pageNumber: currentPage.value,
-        pageSize: pageSize,
-      );
-
-      if (data['success'] == true) {
-        getCustomerCibilDetailModel.value = GetCustomerCibilDetailModel.fromJson(data);
-
-        // Assuming your model has: List<ExpenseData> data;
-        CibilDetailList.value = getCustomerCibilDetailModel.value?.data ?? [];
-
-        print('cibil_list${CibilDetailList.value}');
-
-      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
-        expenseList.clear();
-      } else {
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
-      }
-    } catch (e) {
-      print("Error GetExpenseByEmployeeID: $e");
-      ToastMessage.msg(AppText.somethingWentWrong);
-    } finally {
-      isLoading(false);
-    }
-  }*/
-
+/*
   void getCustomerCibilDetailByUserIdApi({
     bool isLoadMore = false,
   }) async {
@@ -142,7 +111,56 @@ class CibilRecordListController extends GetxController{
     } finally {
       isLoading(false);
     }
+  }*/
+  void getCustomerCibilDetailByUserIdApi({
+    bool isLoadMore = false,
+  }) async {
+    try {
+      if (isLoading.value || (!hasMore.value && isLoadMore)) return;
+
+      isLoading(true);
+
+      if (!isLoadMore) {
+        currentPage.value = 1;
+        hasMore.value = true;
+      }
+
+      var data = await GenerateCibilServices.getCustomerCibilDetailByUserIdApiRequest(
+        userId: empId ?? '',
+        fromDate: "",
+        toDate: "",
+        pageNumber: currentPage.value,
+        pageSize: pageSize,
+      );
+
+      if (data['success'] == true) {
+        var newLeads = GetCustomerCibilDetailModel.fromJson(data);
+
+        // 🚀 Instead of merging, just replace the list
+        getCustomerCibilDetailModel.value = newLeads;
+
+        // Update pagination flag
+        if ((newLeads.data?.length ?? 0) < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++;
+        }
+
+        recordListLength.value = getCustomerCibilDetailModel.value?.data?.length ?? 0;
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        getCustomerCibilDetailModel.value = null;
+        hasMore.value = false;
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getCustomerCibilDetailByUserIdApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
   }
+
 
   Future<void> launchInBrowser(String url) async {
     try {

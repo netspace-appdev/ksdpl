@@ -2225,13 +2225,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       if(data['success'] == true){
 
         getCamNoteLeadIdModel.value= GetCamNoteLeadIdModel.fromJson(data);
-        print("hello=======1");
+
         // Extract bankIds and update observable set
         final ids = getCamNoteLeadIdModel.value!.data?.map((e) => e.bankId.toString()).toSet() ?? {};
-        print("hello=======2");
+
         camNoteLeadBankIds.value = ids;
-        print("hello=======3");
-        print("hello=======>${camNoteLeadBankIds.value}");
+
 
         isLoadingMainScreen(false);
 

@@ -841,6 +841,14 @@ class AppText{
   static const String sanctionStampDuty = "Sanction Stamp Duty";
   static const String softSanctionDate = "Soft Sanction Date";
   static const String rejectReason = "Reject Reason";
+  static const String sanctionEstimatedEMI = "sanction Estimated EMI";
+  static const String applicableLegalFee = "Applicable Legal Fee";
+  static const String applicableTechnicalFee = "Applicable Technical Fee";
+  static const String applicableAdminFee = "Applicable Admin Fee";
+  static const String applicableForeclosureCharges = "Applicable Foreclosure Charges";
+  static const String applicableOtherCharges = "Applicable Other Charges";
+  static const String applicableTSRCharges = "Applicable TSR Charges:";
+  static const String applicableValuationCharges = "Applicable Valuation Charges:";
   static const String manageAttendance = "Manage Attendance";
   static const String manageLeaves = "Manage Leaves";
   static const String attendance = "Attendance";
@@ -1038,6 +1046,7 @@ class AppColor{
   static const Color black54=Colors.black54;
   static const Color black87=Colors.black87;
   static const Color grey200=Color(0xFFE0E0E0);
+  static const Color grey300=Color(0xFFCDCDCD);
   static const Color blackColor=Colors.black;
   static const Color redColor=Colors.red;
   static const Color lightYellow=Color(0xFFfef4ea);
@@ -1481,6 +1490,33 @@ class Helper{
     }
 
     return age;
+  }
+
+
+  static String formatStringToSerialNumbers(String input, {String separator = ','}) {
+    // Split string by separator, trim spaces, and remove empty parts
+    final parts = input.split(separator).map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+
+    // Map with serial numbers
+    final formatted = parts.asMap().entries.map((entry) {
+      final index = entry.key + 1;
+      final value = entry.value.toUpperCase(); // if you want everything in caps
+      return "($index) $value";
+    }).join('\n');
+
+    return formatted;
+  }
+
+  static String capitalizeWords(String input) {
+    if (input.isEmpty) return input;
+
+    return input
+        .split(' ') // split by spaces
+        .map((word) {
+      if (word.trim().isEmpty) return word; // keep multiple spaces intact
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    })
+        .join(' ');
   }
 }
 

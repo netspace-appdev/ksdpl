@@ -269,30 +269,61 @@ class CamNoteDetailsScreen extends StatelessWidget {
               // final product = viewProductController.getAllProductListModel.value!.data![index];
               final camNote =  camNoteController.getCamNoteLeadIdModel.value!.data![index];
 
-              return buildCard(
-                Helper.capitalizeEachWord(camNote.bankName.toString()), // title
-                [
-                  _buildDetailRow(AppText.bankName, camNote.bankName.toString()),
-                  _buildDetailRow(AppText.branchName,  camNote.branchName.toString()),
-                  _buildDetailRow(AppText.bankerName,  camNote.bankersName.toString()),
-                  _buildDetailRow(AppText.cibil,camNote.cibil.toString()),
-                  _buildDetailRow(AppText.softSanctionStatus,
+              return Column(
+                children: [
+                  /*buildCard(
+                    Helper.capitalizeEachWord(camNote.bankName.toString()), // title
+                    [
+                      _buildDetailRow(AppText.bankName, camNote.bankName.toString()),
+                      _buildDetailRow(AppText.branchName,  camNote.branchName.toString()),
+                      _buildDetailRow(AppText.bankerName,  camNote.bankersName.toString()),
+                      _buildDetailRow(AppText.cibil,camNote.cibil.toString()),
+                      _buildDetailRow(AppText.softSanctionStatus,
 
-                      camNote.softsanction==0?"Pending":
-              camNote.softsanction==1?"Approved":
-              camNote.softsanction==2?"Hold":
-              camNote.softsanction==-1?"Rejected":
-                      ""),
+                          camNote.softsanction==0?"Pending":
+                  camNote.softsanction==1?"Approved":
+                  camNote.softsanction==2?"Hold":
+                  camNote.softsanction==-1?"Rejected":
+                          ""),
 
-                  const SizedBox(height: 10),
+                      const SizedBox(height: 10),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if( camNoteController.fromDoableOrInterested.value=="4" && (camNote.softsanction==0 || camNote.softsanction==2))
-                        _buildTextButton("Update", context, Colors.purple, Icons.edit, camNote.id.toString(), "update", camNote.softsanction??-2, camNote.bankId, camNote.leadID),
-                      _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file, camNote.id.toString(), "detail", camNote.softsanction??-2,camNote.bankId,  camNote.leadID ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if( camNoteController.fromDoableOrInterested.value=="4" && (camNote.softsanction==0 || camNote.softsanction==2))
+                            _buildTextButton("Update", context, Colors.purple, Icons.edit, camNote.id.toString(), "update", camNote.softsanction??-2, camNote.bankId, camNote.leadID),
+                          _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file, camNote.id.toString(), "detail", camNote.softsanction??-2,camNote.bankId,  camNote.leadID ),
+                        ],
+                      ),
                     ],
+                  ),*/
+
+                  buildCard(Helper.capitalizeEachWord(camNote.bankName.toString()), [
+
+                    DetailRow(label:AppText.bankName, value:  camNote.bankName.toString()),
+                    DetailRow(label:AppText.branchName, value: camNote.branchName.toString()),
+                    DetailRow(label:AppText.bankerName,  value:camNote.bankersName.toString()),
+                    DetailRow(label:AppText.cibil,value:camNote.cibil.toString()),
+                    DetailRow(label:AppText.softSanctionStatus,
+                        value:
+                        camNote.softsanction==0?"Pending":
+                        camNote.softsanction==1?"Approved":
+                        camNote.softsanction==2?"Hold":
+                        camNote.softsanction==-1?"Rejected":
+                        ""),
+
+                    const SizedBox(height: 10),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if( camNoteController.fromDoableOrInterested.value=="4" && (camNote.softsanction==0 || camNote.softsanction==2))
+                          _buildTextButton("Update", context, Colors.purple, Icons.edit, camNote.id.toString(), "update", camNote.softsanction??-2, camNote.bankId, camNote.leadID),
+                        _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file, camNote.id.toString(), "detail", camNote.softsanction??-2,camNote.bankId,  camNote.leadID ),
+                      ],
+                    ),
+                  ],
                   ),
                 ],
               );
@@ -719,3 +750,54 @@ class CamNoteDetailsScreen extends StatelessWidget {
 }
 
 
+class DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const DetailRow({
+    Key? key,
+    required this.label,
+    required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor
+            ),
+          ),
+          const SizedBox(height: 4),
+          value=="null" || value==AppText.customdash?
+          Row(
+
+
+            children: [
+              Icon(Icons.horizontal_rule, size: 15,),
+            ],):
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

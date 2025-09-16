@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ksdpl/common/base_url.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
@@ -34,6 +35,7 @@ import '../../custom_widgets/CustomCard.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 import '../custom_drawer.dart';
+import 'camnot_photo_view.dart';
 
 
 
@@ -183,6 +185,8 @@ class CamNoteSingle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           buildCard("Basic Info", [
+            DetailRow(label: AppText.bankName, value: data.bankName.toString()),
+            DetailRow(label: AppText.branchName, value: data.branchName.toString()/* +" - "+data..toString()*/),
             DetailRow(label: AppText.bankerName, value: data.bankersName.toString()),
             DetailRow(label: AppText.bankerMobile, value: data.bankersMobileNumber.toString()),
             DetailRow(label: AppText.bankerWhatsapp, value: data. bankersWhatsAppNumber.toString()),
@@ -242,15 +246,30 @@ class CamNoteSingle extends StatelessWidget {
           ),
 
           buildCard("Sanction Details", [
-            DetailRow(label: AppText.softSanctionStatus, value: data.softsanction.toString()),
+
+            DetailRow(label: AppText.softSanctionStatus, value: data.softsanction==0?"Pending":
+            data.softsanction==1?"Approved":
+            data.softsanction==2?"Hold":
+            data.softsanction==-1?"Rejected":
+            ""),
             DetailRow(label: AppText.sanctionAmount, value: data.sanctionAmount.toString()),
             DetailRow(label: AppText.sanctionTenor, value: data.sanctionTenor.toString()),
             DetailRow(label: AppText.sanctionROI, value: data.sanctionROI.toString()),
             DetailRow(label: AppText.sanctionCondition, value: data.sanctionCondition.toString()),
             DetailRow(label: AppText.sanctionProcessingFees, value: data.sanctionProcessingFees.toString()),
             DetailRow(label: AppText.sanctionStampDuty, value: data.sanctionStampDuty.toString()),
-            DetailRow(label: AppText.softSanctionDate, value: data.softsanctionDate.toString()),
+            DetailRow(label: AppText.softSanctionDate, value: Helper.formatDate(data.softsanctionDate.toString())), //check it
             DetailRow(label: AppText.rejectReason, value: data.rejectReason.toString()),
+
+            DetailRow(label: AppText.sanctionEstimatedEMI, value: data.sanctionEstimatedEMI.toString()),
+            DetailRow(label: AppText.applicableLegalFee, value: data.sanctionApplicableLegalFee.toString()),
+            DetailRow(label: AppText.applicableTechnicalFee, value: data.sanctionApplicableTechnicalFee.toString()),
+            DetailRow(label: AppText.applicableAdminFee, value: data.sanctionApplicableAdminFee.toString()),
+            DetailRow(label: AppText.applicableForeclosureCharges, value: data.sanctionApplicableForeclosureCharges.toString()),
+            DetailRow(label: AppText.applicableOtherCharges, value: data.sanctionApplicableOtherCharges.toString()),
+            DetailRow(label: AppText.tsrYears, value: data.sanctionTSRYears.toString()),
+            DetailRow(label: AppText.applicableTSRCharges, value: data.sanctionApplicableTSRCharges.toString()),
+            DetailRow(label: AppText.applicableValuationCharges, value: data.sanctionApplicableValuationCharges.toString()),
 
           ],
               Icons.security
@@ -258,11 +277,56 @@ class CamNoteSingle extends StatelessWidget {
           ),
 
           buildCard("Document Details", [
-            DetailRow(label: AppText.documents, value: data.documents.toString()),
+            DetailRow(label: AppText.documents, value: data.documents==null?"No documents" : Helper.formatStringToSerialNumbers(data.documents.toString())),
 
           ],
               Icons.document_scanner
 
+          ),
+
+          ExpansionTile(
+            initiallyExpanded: true,
+            childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+            title:const Text( AppText.personInformation, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+            leading: Icon(Icons.list_alt, size: 20,),
+            children: [
+
+              Column(
+                children: [
+                  ApiPhotoViewer(
+                    controller: camNoteController,
+                    imageKey: "property_photo",
+                    imageUrls: data.photosOfProperty?.split(",")
+                        .map((path) => "${BaseUrl.imageBaseUrl}$path")
+                        .toList() ?? [],
+                    label: "Photos Of Property",
+                    isCloseVisible: false,
+                  ),
+                  SizedBox(height: 20),
+                  ApiPhotoViewer(
+                    controller: camNoteController,
+                    imageKey: "residence_photo",
+                    imageUrls: data.photosOfResidence?.split(",")
+                        .map((path) => "${BaseUrl.imageBaseUrl}$path")
+                        .toList() ?? [],
+                    label: "Photos Of Residence",
+                    isCloseVisible: false,
+                  ),
+                  SizedBox(height: 20),
+                  ApiPhotoViewer(
+                    controller: camNoteController,
+                    imageKey: "office_photo",
+                    imageUrls: data.photosOfOffice?.split(",")
+                        .map((path) => "${BaseUrl.imageBaseUrl}$path")
+                        .toList() ?? [],
+                    label: "Photos Of Office",
+                    isCloseVisible: false,
+                  ),
+                ],
+              ),
+
+
+            ],
           ),
 
 

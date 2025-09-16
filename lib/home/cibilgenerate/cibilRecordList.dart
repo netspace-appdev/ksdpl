@@ -190,7 +190,7 @@ class CibilRecordListScreen extends StatelessWidget {
       if (cibilRecordListController.isLoading.value) {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
-      if (cibilRecordListController.expenseList.value == null ||
+      if (/*cibilRecordListController.expenseList.value == null ||*/
           cibilRecordListController.getCustomerCibilDetailModel.value?.data == null || cibilRecordListController.getCustomerCibilDetailModel.value!.data!.isEmpty) {
         return  Container(
           height: MediaQuery.of(context).size.height,
@@ -218,32 +218,33 @@ class CibilRecordListScreen extends StatelessWidget {
       return  Column(
         children: [
           ListView.builder(
-            itemCount:cibilRecordListController.CibilDetailList.length,//cibilRecordListController.getAllProductListModel.value!.data!.length,
+            itemCount:cibilRecordListController.getCustomerCibilDetailModel.value?.data?.length??0,//cibilRecordListController.getAllProductListModel.value!.data!.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              // final product = cibilRecordListController.getAllProductListModel.value!.data![index];
-              final product =  cibilRecordListController.CibilDetailList[index];
+
+              // final product =  cibilRecordListController.CibilDetailList[index];
+              final product =  cibilRecordListController.getCustomerCibilDetailModel.value?.data?[index];
 
               return buildCard(
-                Helper.capitalizeEachWord('Date :- ${ cibilRecordListController.formatDate(product.receiveDate.toString())}'), // title
+                Helper.capitalizeEachWord('Date :- ${ cibilRecordListController.formatDate(product?.receiveDate.toString()??"")}'), // title
                 [
                   // _buildDetailRow("Documents", product.documents.toString(),"0"),
-                  _buildDetailRow("Name", product.name.toString(),"1"),
-                  _buildDetailRow("Mobile No", product.mobile.toString(),"1"),
-                  _buildDetailRow("Amount", product.amount.toString(),"1"),
-                  _buildDetailRow("UTR", product.utr.toString(),"1"),
+                  _buildDetailRow("Name",Helper.capitalizeWords(product?.name.toString()??"User") ,"1"),
+                  _buildDetailRow("Mobile No", product?.mobile.toString()??"","1"),
+                  _buildDetailRow("Amount", product?.amount.toString()??"","1"),
+                  _buildDetailRow("UTR", product?.utr.toString()??"","1"),
 
                   const SizedBox(height: 10),
 
                   _buildTextButton("Download Docs", context, Colors.pink, Icons.insert_drive_file,
-                      product.filePath.toString()),
+                      product?.filePath, "download_docs"),
                 ],
               );
 
             },
           ),
-          if (cibilRecordListController.hasMore.value)
+         /* if (cibilRecordListController.hasMore.value)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
@@ -259,7 +260,29 @@ class CibilRecordListScreen extends StatelessWidget {
                     : Text("Load More"),
               ),
             ),
+*/
 
+          /*if (cibilRecordListController.hasMore.value)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: ElevatedButton(
+                onPressed: cibilRecordListController.isLoading.value
+                    ? null
+                    : () {
+                  cibilRecordListController.getCustomerCibilDetailByUserIdApi(isLoadMore: true);
+                },
+                child: cibilRecordListController.isLoading.value
+                    ? SizedBox(
+                  width: 15,
+                  height: 15,
+                  child: CircularProgressIndicator(
+                    color: AppColor.primaryColor,
+                    strokeWidth: 2,
+                  ),
+                )
+                    : Text("Load More"),
+              ),
+            ),*/
         ],
       );
     });
@@ -353,11 +376,13 @@ class CibilRecordListScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextButton(String label, BuildContext context, Color color, IconData icon,  String url) {
+  Widget _buildTextButton(String label, BuildContext context, Color color, IconData icon,  String? url, String label_code) {
     return GestureDetector(
-      onTap: () {
+      onTap:
+      label_code=="download_docs" && url==null?null:
+          () {
         if (label == "Download Docs") {
-         cibilRecordListController.launchInBrowser(url);
+         cibilRecordListController.launchInBrowser(url??"");
           print('addemployeeidurl${url}');
 
         }else  if (label == "Edit") {
@@ -386,11 +411,11 @@ class CibilRecordListScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: AppColor.grey700, size: 20),
+                Icon(icon, color:label_code=="download_docs" && url==null?AppColor.grey300: AppColor.grey700, size: 20),
                 SizedBox(width: 6),
                 Text(
                   label,
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.blackColor),
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color:label_code=="download_docs" && url==null?AppColor.grey300: AppColor.blackColor),
                 ),
               ],
             ),
