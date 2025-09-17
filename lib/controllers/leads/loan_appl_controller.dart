@@ -1107,22 +1107,18 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     print("getLoanApplicationDetailsByIdApi===>");
     try {
       isLoadingMainScreen(true);
-
-
       var req = await LoanApplService.getLoanApplicationDetailsByIdApi(id: id);
 
       var uln = Get.arguments['uln'];
 
-
       if (req['success'] == true) {
         getLoanApplIdModel.value = GetLoanApplIdModel.fromJson(req);
 
-
-
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
-          detailMap = jsonDecode(
-              getLoanApplIdModel.value!.data!.detailForLoanApplication!);
+          detailMap = jsonDecode(getLoanApplIdModel.value!.data!.detailForLoanApplication!);
+
           print('here i get vloan id ${getLoanApplIdModel.value!.data!.id.toString()}');
+
           getLoanApplicationDocumentByLoanIdApi(loanId: getLoanApplIdModel.value?.data?.id.toString()??'');
 
           dsaStaffNController.text = detailMap?['DsaStaffName'] ?? '';
@@ -1637,7 +1633,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       }).toList();
 
       isLoading(true);
-      print('imageMap______${imageMap}');
+      print('imageMap______$loanId');
       try {
         await SubmittLoanDocumentApi(
           id: '0',

@@ -1222,6 +1222,7 @@ overflow: TextOverflow.ellipsis,
 
 
         loanApplicationController.clearBeforeGoingOnLoanAppl();
+        print('loanDetails${loanDetails}');
 
         loanDetails==0?
         addLeadController.getLeadDetailByIdApi(leadId: leadId):

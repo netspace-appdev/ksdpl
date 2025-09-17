@@ -886,6 +886,8 @@ class LeadListController extends GetxController {
 
         isLoading(false);
 
+
+
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
