@@ -21,6 +21,7 @@ import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
@@ -420,13 +421,15 @@ class LeadListMain extends StatelessWidget {
 
                           if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6" )
                             _buildTextButton(
-                              label:AppText.openPoll,
+                              label:AppText.leh,
                               context: context,
                               color: Colors.purple,
                               icon:  Icons.lock_open,
                               leadId: lead.id.toString(),
                               label_code: "open_poll",
-                              uln: lead.uniqueLeadNumber.toString()
+                              uln: lead.uniqueLeadNumber.toString(),
+                              moveToCommon: lead.moveToCommon??"0"
+
 
                             ),
 
@@ -734,60 +737,71 @@ class LeadListMain extends StatelessWidget {
                     ),
 
 
-                    if(lead.leadStage.toString()=="6" )
-                      Column(
-                      children: [
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-
-                            if(lead.leadStage.toString()=="6" )
-                              _buildTextButton(
-                                label:AppText.loanApplicationForm,
-                                context: context,
-                                color: Colors.purple,
-                                icon:  Icons.list_alt_rounded,
-                                leadId: lead.id.toString(),
-                                label_code: "loan_appl_form",
-                                currentLeadStage: lead.leadStage.toString(),
-                                  uln: lead.uniqueLeadNumber.toString()
-                              ),
-
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 10,),
-
-                    if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6")
-                      _buildTextButton(
-                          label:"Cam Note Details",
-                          context: context,
-                          color: Colors.purple,
-                          icon:  Icons.person_outline_outlined,
-                          leadId: lead.id.toString(),
-                          label_code: "cam_note_details",
-                          currentLeadStage: lead.leadStage.toString(),
-                          uln: lead.uniqueLeadNumber.toString()
-                      ),
-
-
-                    SizedBox(height: 10),
 
                     if(lead.leadStage.toString()=="6"&&lead.loanDetail!>0)
-                      _buildTextButton(
-                          label:"Update Loan Application",
-                          context: context,
-                          color: Colors.purple,
-                          icon:  Icons.list_alt_rounded,
-                          leadId: lead.id.toString(),
-                          label_code: "update_loan_update",
-                          currentLeadStage: lead.leadStage.toString(),
-                          uln: lead.uniqueLeadNumber.toString()
+                      Column(
+                        children: [
+                          SizedBox(height: 10),
+                          _buildTextButton(
+                              label:"Update Loan Application",
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.list_alt_rounded,
+                              leadId: lead.id.toString(),
+                              label_code: "update_loan_update",
+                              currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
+                          ),
+                        ],
                       ),
 
+
+
+
+                    if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6")
+                      Column(
+                        children: [
+                          SizedBox(height: 10,),
+                          _buildTextButton(
+                              label:"Cam Note Details",
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.person_outline_outlined,
+                              leadId: lead.id.toString(),
+                              label_code: "cam_note_details",
+                              currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
+                          ),
+                        ],
+                      ),
+
+
+
+                    if(lead.leadStage.toString()=="6" )
+                      Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                              if(lead.leadStage.toString()=="6" )
+                                _buildTextButton(
+                                    label:AppText.loanApplicationForm,
+                                    context: context,
+                                    color: Colors.purple,
+                                    icon:  Icons.list_alt_rounded,
+                                    leadId: lead.id.toString(),
+                                    label_code: "loan_appl_form",
+                                    currentLeadStage: lead.leadStage.toString(),
+                                    uln: lead.uniqueLeadNumber.toString(),
+                                    loanDetails: lead.loanDetail
+                                ),
+
+                            ],
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               );
@@ -912,9 +926,6 @@ class LeadListMain extends StatelessWidget {
   }
 
   Widget _buildDetailRow(String label, String value, int leadStage) {
-
-    print("value->${value}");
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -1081,12 +1092,14 @@ overflow: TextOverflow.ellipsis,
     required String leadId,
     required String label_code,
     required String uln,
-    String? currentLeadStage
+    String? currentLeadStage,
+    int? loanDetails,
+    String? moveToCommon,
   }) {
 
     return InkWell(
       onTap: () {
-        if (label == "Open Poll") {
+        if (label_code == "open_poll") {
           leadListController.openPollPercentController.clear();
           showOpenPollDialog2(context: context,leadId: leadId);
         }else if (label_code == "add_lead_form") {
@@ -1120,6 +1133,9 @@ overflow: TextOverflow.ellipsis,
           leadDDController.getAllKsdplProductApi();
           camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
           camNoteController.getProductDetailsByFilterModel.value=null;
+
+          NewDDController newDDController=Get.put(NewDDController());
+          newDDController.getAllPrimeSecurityMasterApi();
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {
@@ -1145,11 +1161,11 @@ overflow: TextOverflow.ellipsis,
             context: context,
             builder: (context) {
               return CustomDialogBox(
-                title: "Are you sure?",
+                title: "Are you sure ${(label_code == "interested" || label_code =="not_interested")?label:""}?",
 
                 onYes: () {
                   var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-                  if (label_code == "interested") {
+                  if (label_code == "interested" ) {
 
                     var isActive = leadListController.changeActiveStatus("4");
                     leadListController.updateLeadStageApiForCall(
@@ -1200,9 +1216,15 @@ overflow: TextOverflow.ellipsis,
           );
         }else if (label_code == "loan_appl_form") {
 
-          addLeadController.getLeadDetailByIdApi(leadId: leadId);
+
         leadDDController.getAllKsdplProductApi();
         LoanApplicationController loanApplicationController=Get.put(LoanApplicationController());
+
+
+        loanApplicationController.clearBeforeGoingOnLoanAppl();
+
+        loanDetails==0?
+        addLeadController.getLeadDetailByIdApi(leadId: leadId):
         loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
           loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {
@@ -1234,10 +1256,7 @@ overflow: TextOverflow.ellipsis,
         }
         else if (label_code == "update_loan_update") {
           showUpdateLoanApplicationDialog(uln);
-        }
-
-
-        else{
+        } else{
 
         }
       },
@@ -1257,16 +1276,16 @@ overflow: TextOverflow.ellipsis,
               //color: color,
                 color: label_code=="add_feedback"?AppColor.primaryColor:Colors.transparent,
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: AppColor.grey700)
+                border: Border.all(color:moveToCommon=="YES"?Colors.grey.shade300: AppColor.grey700)
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
+                Icon(icon, color:moveToCommon=="YES"?Colors.grey.shade300: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
                 SizedBox(width: 6),
                 Text(
                   label,
-                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
+                  style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: moveToCommon=="YES"?Colors.grey.shade300:label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
                 ),
               ],
             ),
@@ -1490,7 +1509,7 @@ overflow: TextOverflow.ellipsis,
                         inputType: TextInputType.name,
                         hintText: AppText.enterLoanApplicationNo,
                         isTextArea: false,
-                        validator: validateLoanApplicationNo,
+                        validator: ValidationHelper.validateLoanApplicationNo,
                       ),
 
                       const SizedBox(height: 6),
@@ -1520,12 +1539,7 @@ overflow: TextOverflow.ellipsis,
     return null;
   }
 
-  String? validateLoanApplicationNo(String? value) {
-    if (value == null || value.isEmpty) {
-      return AppText.loanNumberRequired;
-    }
-    return null;
-  }
+
 
 
 
@@ -1601,7 +1615,7 @@ overflow: TextOverflow.ellipsis,
         return CustomBigDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
 
-          title: "Open Poll",
+          title: AppText.moveLeh,
           content: Form(
             key: _formKey,
             child: Column(
@@ -1615,36 +1629,24 @@ overflow: TextOverflow.ellipsis,
                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                   child:  Column(
                     children: [
-                    /*  const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Enter percent for leads",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            color: AppColor.grey1, // Title text color
-                          ),
 
-                        ),
-                      ),*/
                       const SizedBox(
                         height: 20,
                       ),
                       CustomLabeledTextField2(
                         inputType:  TextInputType.number,
                         controller: leadListController.openPollPercentController,
-                        hintText: "Enter open poll percentage",
+                        hintText: AppText.enterPercentage,
                         validator: validatePercentage,
-                    //    isPassword: false,
-                     //   obscureText: false,
-                        label: 'Enter percent for leads',
+
+                        label: AppText.enterLeh,
                         isRequired: false,
                         onChanged: (value){
                           ValidationHelper.validatePercentageInput(
                             controller:  leadListController.openPollPercentController,
                             value: value,
                             maxValue: 100,
-                            errorMessage: "The Maximum ROI should not be more than 100 %",
+                            errorMessage: AppText.maxPercentMsg.toString(),
                           );
                           // camNoteController.calculateLoanDetails();
                         },                      ),
@@ -2170,7 +2172,7 @@ overflow: TextOverflow.ellipsis,
                         isTextArea: false,
                         inputType: TextInputType.text,
                         isInputEnabled: false,
-                        validator: validateLoanApplicationNo,
+                        validator: ValidationHelper.validateLoanApplicationNo,
 
                       ),
                       const SizedBox(height: 12),

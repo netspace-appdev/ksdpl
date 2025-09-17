@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ksdpl/controllers/new_dd_controller.dart';
 import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
 import 'package:ksdpl/custom_widgets/custom_photo_picker_widget.dart';
 import '../../common/helper.dart';
@@ -24,6 +25,7 @@ import '../../custom_widgets/CustomTextFieldPrefix.dart' as customTF;
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../../models/product/GetAllProductListModel.dart' as prod;
+import '../../models/camnote/GetAllPrimeSecurityMasterModel.dart' as primeSecurity;
 
 class Step2CamNote extends StatelessWidget {
 
@@ -31,6 +33,7 @@ class Step2CamNote extends StatelessWidget {
   final CamNoteController camNoteController =Get.find();
   final AddProductController addProductController =Get.find();
   final ViewProductController viewProductController = Get.put(ViewProductController());
+  final NewDDController newDDController = Get.find();
   @override
   Widget build(BuildContext context) {
 
@@ -303,37 +306,6 @@ class Step2CamNote extends StatelessWidget {
                         hintText: AppText.enterRateOfInterest,
                         isRequired: false,
                         isInputEnabled: true,
-                       /* inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,}$')),
-                        ],*/
-                      /*  onChanged: (value) {
-                          if (value.isNotEmpty) {
-                            final double? rate = double.tryParse(value);
-                            if (value.contains('.')) {
-                              final parts = value.split('.');
-                              if (parts.length > 1 && parts[1].length > 3) {
-                                final newValue = '${parts[0]}.${parts[1].substring(0, 3)}';
-                                camNoteController.camRateOfInterestController.text = newValue;
-                                camNoteController.camRateOfInterestController.selection =
-                                    TextSelection.fromPosition(
-                                      TextPosition(offset: newValue.length),
-                                    );
-                                return; // stop further processing
-                              }
-                            }
-                            if (rate != null && rate > 50) {
-                              SnackbarHelper.showSnackbar(title: "Error", message: "The rate of interest (ROI) should not be more than 50 %");
-
-                              // Reset back to 50
-                              camNoteController.camRateOfInterestController.text = "50";
-                              camNoteController.camRateOfInterestController.selection =
-                                  TextSelection.fromPosition(
-                                    TextPosition(offset: camNoteController.camRateOfInterestController.text.length),
-                                  );
-                            }
-                          }
-                          camNoteController.calculateLoanDetails();
-                        },*/
                         onChanged: (value){
                           ValidationHelper.validatePercentageInput(
                             controller:  camNoteController.camRateOfInterestController,
@@ -381,17 +353,59 @@ class Step2CamNote extends StatelessWidget {
                         isInputEnabled: false,
                       ),
 
-                      CustomLabeledTextField(
+                     /* CustomLabeledTextField(
                         label: AppText.offeredSecurityType,
                         controller: camNoteController.camOfferedSecurityTypeController,
-                        inputType: TextInputType.number,
+                        inputType: TextInputType.name,
                         hintText: AppText.enterSecurityType,
+                      ),*/
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      CustomTextLabel(
+                        label: AppText.offeredSecurityType,
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      Obx((){
+                        if (newDDController.isPrimeSecurityLoading.value) {
+                          return  Center(child:CustomSkelton.leadShimmerList(context));
+                        }
+
+
+                        return CustomDropdown<primeSecurity.Data>(
+                          items: newDDController.primeSecurityList.value ?? [],
+                          getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                          getName: (item) => item.description.toString(),
+                          selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
+                                (item) => item.description == camNoteController.camOfferedSecurityTypeController.text,
+                          ),
+                          onChanged: (value) {
+                            camNoteController.camOfferedSecurityTypeController.text =  value?.description??"";
+
+                          },
+                          onClear: (){
+                            camNoteController.camOfferedSecurityTypeController.clear();
+                          },
+                        );
+                      }),
+
+                      const SizedBox(
+                        height: 40,
                       ),
                     ],
                   )
 
 
                 ],
+              ),
+
+
+
+              const SizedBox(
+                height: 90,
               ),
 
             ],

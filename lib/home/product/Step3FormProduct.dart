@@ -41,7 +41,7 @@ class Step3FormProduct extends StatelessWidget {
                 height: 20,
               ),
               CustomTextLabel(
-                label: AppText.negativeProfiles,
+                label: AppText.negativeProfilesExcluded,
 
 
 

@@ -42,8 +42,7 @@ class Step4FormProduct extends StatelessWidget {
                 height: 20,
               ),
               CustomTextLabel(
-                label: AppText.documents,
-
+                label: AppText.commonDocumentsForAllPproductDocuments,
 
 
               ),

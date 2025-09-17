@@ -649,6 +649,9 @@ class CamNoteService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      Helper.ApiReq(getCamNoteDetailById, request.fields);
+      Helper.ApiRes(getCamNoteDetailById, response.body);
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

@@ -53,6 +53,10 @@ class Step11Form extends StatelessWidget {
                         SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Bank Name");
                         return;
                       }
+                      if (loanApplicationController.selectedBankBranch.value == 0 || loanApplicationController.selectedBankBranch.value == null) {
+                        SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select branch");
+                        return;
+                      }
 
                       if (loanApplicationController.selectedProdTypeOrTypeLoan.value == 0 || loanApplicationController.selectedProdTypeOrTypeLoan.value == null) {
                         SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Loan Type");

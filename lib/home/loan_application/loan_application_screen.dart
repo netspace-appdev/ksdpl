@@ -240,7 +240,7 @@ class LoanApplicationScreen extends StatelessWidget {
                         print(loanApplicationController.currentStep.value);
 
                         final pan = loanApplicationController.panController.text.trim().toString();
-                        if (pan.isEmpty) {
+                        if (pan.isNotEmpty) {
                           final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
                           if (!panRegex.hasMatch(pan)) {
                             SnackbarHelper.showSnackbar(title: "Invalid PAN", message: "Please enter a valid PAN number");
@@ -249,7 +249,7 @@ class LoanApplicationScreen extends StatelessWidget {
                         }
 
                         final aadhar = loanApplicationController.aadharController.text.trim();
-                        if (aadhar.isEmpty) {
+                        if (aadhar.isNotEmpty) {
                           final aadharRegex = RegExp(r'^\d{12}$');
                           if (!aadharRegex.hasMatch(aadhar)) {
                             SnackbarHelper.showSnackbar(title: "Invalid Aadhar", message: "Aadhar number must be exactly 12 digits.");

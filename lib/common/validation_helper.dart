@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../custom_widgets/SnackBarHelper.dart';
+import 'helper.dart';
 class ValidationHelper {
 
   static String? validatecardNumber(String? value) {
@@ -419,4 +420,80 @@ class ValidationHelper {
     }
   }
 
+
+  static void validateYearsInput({
+    required TextEditingController controller,
+    required String value,
+    required int minValue,
+    required int maxValue,
+    required String errorMessageMin,
+    required String errorMessageMax,
+  }) {
+    if (value.isNotEmpty) {
+      final int? years = int.tryParse(value);
+
+      if (years != null) {
+        // Check minimum
+        if (years < minValue) {
+          SnackbarHelper.showSnackbar(
+              title: "Error", message: errorMessageMin);
+
+          final newValue = minValue.toString();
+          controller.text = newValue;
+          controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: newValue.length),
+          );
+          return;
+        }
+
+        // Check maximum
+        if (years > maxValue) {
+          SnackbarHelper.showSnackbar(
+              title: "Error", message: errorMessageMax);
+
+          final newValue = maxValue.toString();
+          controller.text = newValue;
+          controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: newValue.length),
+          );
+        }
+      }
+    }
+  }
+
+  static String? validateAadhar(String? value, {bool isRequired = false}) {
+    // Case 1: Required but empty
+    if (isRequired && (value == null || value.isEmpty)) {
+      return "Aadhar number is required";
+    }
+
+    // Case 2: Not required but user entered something
+    if (value != null && value.isNotEmpty) {
+      if (value.length != 12 || !RegExp(r'^[0-9]{12}$').hasMatch(value)) {
+        return "Aadhar number must be exactly 12 digits";
+      }
+    }
+
+    // Case 3: Empty and not required OR valid 12 digits
+    return null;
+  }
+  static String? validateLoanApplicationNo(String? value) {
+    if (value == null || value.isEmpty) {
+      return AppText.loanNumberRequired;
+    }
+    return null;
+  }
+  static String hideWithStars(String input, {int count = 4}) {
+    if (input.isEmpty) return input;
+
+    // If the string is shorter than or equal to count → no need to mask
+    if (input.length <= count) {
+      return input;
+    }
+
+    final maskedLength = input.length - count;
+    final hiddenPart = '*' * maskedLength;
+    final visiblePart = input.substring(maskedLength);
+    return hiddenPart + visiblePart;
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
@@ -6,6 +7,7 @@ import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/lead_dd_controller.dart';
+import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/loan_appl_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
@@ -17,6 +19,7 @@ import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
+import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 
 class Step1Form extends StatelessWidget {
@@ -24,6 +27,7 @@ class Step1Form extends StatelessWidget {
 //  final loanApplicationController = Get.find<LoanApplicationController>();
   LeadDDController leadDDController = Get.put(LeadDDController());
   final loanApplicationController = Get.put(LoanApplicationController(), permanent: true);
+  final Addleadcontroller addLeadController = Get.put(Addleadcontroller());
 
 
   @override
@@ -33,10 +37,12 @@ class Step1Form extends StatelessWidget {
       width: MediaQuery.of(context).size.width,*/
 
       child: Obx((){
-        if( loanApplicationController.isLoadingMainScreen.value)
+        if( loanApplicationController.isLoadingMainScreen.value || addLeadController.isLoading.value)
           return Center(
             child: CustomSkelton.productShimmerList(context),
           );
+        print("see here--0-->");
+        print("la view--->${loanApplicationController.laAppliedController.text}");
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -205,6 +211,9 @@ class Step1Form extends StatelessWidget {
                       hintText: AppText.enterPanCardNo,
                       maxLength: 10,
                       validator:  ValidationHelper.validatePanCard,
+                      isCapital: true,
+                      isSecret: true,
+                      secretDigit: 4,
                     ),
 
                     CustomLabeledTextField(
@@ -212,7 +221,8 @@ class Step1Form extends StatelessWidget {
                       controller: loanApplicationController.aadharController,
                       inputType: TextInputType.number,
                       hintText: AppText.enterAadharCardNo,
-                      validator:  ValidationHelper.validateName,
+                      //validator:  (value) => ValidationHelper.validateAadhar(value, isRequired: false),
+                      validator: ValidationHelper.validateName,
                       isSecret: true,
                       secretDigit: 4,
                       maxLength: 12,
@@ -343,13 +353,25 @@ class Step1Form extends StatelessWidget {
                       validator:  ValidationHelper.validateName,
                     ),
 
-                    CustomLabeledTextField(
+                    CustomLabeledTextField2(
                       label: AppText.loanTenure,
                       isRequired: false,
                       controller: loanApplicationController.loanTenureYController,
                       inputType: TextInputType.number,
                       hintText: AppText.enterLoanTenure,
                       validator:  ValidationHelper.validateName,
+                      onChanged: (value){
+                        ValidationHelper.validateYearsInput(
+                          controller: loanApplicationController.loanTenureYController,
+                          value: value,
+                          maxValue: 50,
+                         minValue: 0,
+                          errorMessageMax: "Loan Tenure should not be more than 50 years",
+                          errorMessageMin: "Loan Tenure should not be more than 0 years",
+
+                        );
+
+                      },
                     ),
 
                     CustomLabeledTextField(
@@ -596,13 +618,17 @@ class Step1Form extends StatelessWidget {
                       validator:  ValidationHelper.validateName,
                     ),
 
-                    CustomLabeledTextField(
+                    CustomLabeledTextField2(
                       label: AppText.staffStrength,
                       isRequired: false,
                       controller: loanApplicationController.staffStrengthController,
                       inputType: TextInputType.number,
                       hintText: AppText.enterStaffStrength,
                       validator:  ValidationHelper.validateName,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly, // only numbers
+                        LengthLimitingTextInputFormatter(10),   // max 10 digits
+                      ],
                     ),
 
                     CustomLabeledPickerTextField(

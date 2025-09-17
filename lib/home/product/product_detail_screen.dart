@@ -264,8 +264,8 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: AppText.valuationCharges, value: data.valuationCharges.toString()),
             DetailRow(label: AppText.fromAmtRange, value: data.fromAmountRange.toString()),
             DetailRow(label: AppText.toAmtRange, value: data.toAmountRange.toString()),
-            DetailRow(label: AppText.totalOverdueCases2, value: data.totalOverdueCases.toString()),
-            DetailRow(label: AppText.totalOverdueAmount, value: data.totalOverdueAmount.toString()),
+            DetailRow(label: AppText.totalOverdueCasesAllowed, value: data.totalOverdueCases.toString()),
+            DetailRow(label: AppText.totalOverdueAmountAllowed, value: data.totalOverdueAmount.toString()),
             DetailRow(label: AppText.totalEnquiries2, value: data.totalEnquiries.toString()),
           ],
               Icons.attach_money
@@ -390,44 +390,7 @@ class StatusChip extends StatelessWidget {
   }
 }
 
-// Helper Widget for Detail Rows
-/*class DetailRow extends StatelessWidget {
-  final String label;
-  final String value;
 
-  DetailRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-
-        children: [
-          Container(
-
-            width: 120,
-            child: Text("$label",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor)),
-          ),
-          Text(":", style: TextStyle(fontSize: 14),),
-          Expanded(
-              child: value=="null" || value==AppText.customdash?
-              Row(
-
-
-                children: [
-                  Icon(Icons.horizontal_rule, size: 15,),
-                ],):
-              Text(" "+value, style: TextStyle(fontSize: 14), maxLines: 2)),
-        ],
-      ),
-    );
-  }
-}*/
 
 class DetailRow extends StatelessWidget {
   final String label;

@@ -5,6 +5,7 @@ import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/lead_dd_controller.dart';
+import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
@@ -14,11 +15,12 @@ import '../../custom_widgets/CustomMultiSelectDropdown.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
+import '../../models/camnote/GetAllPrimeSecurityMasterModel.dart' as primeSecurity;
 
 class Step1FormProduct extends StatelessWidget {
   final addProductController = Get.find<AddProductController>();
   LeadDDController leadDDController = Get.put(LeadDDController());
-
+  final NewDDController newDDController = Get.put(NewDDController());
   @override
   Widget build(BuildContext context) {
 
@@ -209,10 +211,36 @@ class Step1FormProduct extends StatelessWidget {
 
               ),
 
-
-
-
               CustomLabeledTextField(
+                label: AppText.totalOverdueCasesAllowed,
+                controller: addProductController.prodTotalOverdueCasesAllowedController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterTotalOverdueCases,
+
+              ),
+              CustomLabeledTextField(
+                label: AppText.totalOverdueAmountAllowed,
+                controller: addProductController.prodTotalOverdueAmountAllowedController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterTotalOverdueAmount,
+
+              ),
+              CustomLabeledTextField(
+                label: AppText.totalCibilEnquiriesAllowed,
+                controller: addProductController.prodTotalCibilEnquiriesAllowedController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterTotalEnquiries,
+
+              ),
+              CustomLabeledTextField(
+                label: AppText.minCibilScoreAllowed,
+                controller: addProductController.prodMinCibilScoreAllowedController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterMinCibil,
+
+              ),
+
+              /*CustomLabeledTextField(
                 label: AppText.minCibil,
 
                 controller: addProductController.prodMinCibilController,
@@ -221,7 +249,7 @@ class Step1FormProduct extends StatelessWidget {
 
               ),
 
-
+*/
               CustomTextLabel(
                 label: AppText.productSegment,
                 isRequired: true,
@@ -259,7 +287,7 @@ class Step1FormProduct extends StatelessWidget {
 
 
               CustomLabeledTextField(
-                label: AppText.productName,
+                label: AppText.productNameLPP,
                 isRequired: true,
 
                 controller: addProductController.prodProductNameController,
@@ -269,7 +297,7 @@ class Step1FormProduct extends StatelessWidget {
               ),
 
               CustomTextLabel(
-                label: AppText.selectCustomerCategory,
+                label: AppText.selectCustomerCategoryServied,
 
 
               ),
@@ -314,28 +342,12 @@ class Step1FormProduct extends StatelessWidget {
             const SizedBox(height: 20),
 
               CustomTextLabel(
-                label: AppText.selectCollateralSecurityCategory,
+                label: AppText.primeSecurityCategoriesServied,
 
 
               ),
 
               const SizedBox(height: 10),
-
-
-            /*  Obx(() {
-                final values = addProductController.selectedCollSecCat.toList();
-                return MultiSelectDropdown<String>(
-                  key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
-                  items: addProductController.collSecCatList.toList(),
-                  getId: (e) => e,
-                  getName: (e) => e,
-                  selectedValues: values,
-                  onChanged: (selectedList) {
-                    addProductController.selectedCollSecCat.assignAll(selectedList);
-                  },
-                );
-              }),
-*/
 
 
             Obx(() {
@@ -369,14 +381,48 @@ class Step1FormProduct extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-              CustomLabeledTextField(
+              /*CustomLabeledTextField(
                 label: AppText.collateralSecurityExcluded,
 
                 controller: addProductController.prodCollateralSecurityExcludedController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterCollateralSecurityExcluded,
 
+              ),*/
+
+              const SizedBox(
+                height: 20,
               ),
+
+              CustomTextLabel(
+                label: AppText.offeredSecurityType,
+              ),
+
+              const SizedBox(height: 10),
+
+              Obx((){
+                if (newDDController.isPrimeSecurityLoading.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+
+
+                return CustomDropdown<primeSecurity.Data>(
+                  items: newDDController.primeSecurityList.value ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.description.toString(),
+                  selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
+                        (item) => item.description == addProductController.prodCollateralSecurityExcludedController.text,
+                  ),
+                  onChanged: (value) {
+                    addProductController.prodCollateralSecurityExcludedController.text =  value?.description??"";
+
+                  },
+                  onClear: (){
+                    addProductController.prodCollateralSecurityExcludedController.clear();
+                  },
+                );
+              }),
+
 
 
               const SizedBox(
@@ -420,7 +466,7 @@ class Step1FormProduct extends StatelessWidget {
               }),
 
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 150),
 
 
 

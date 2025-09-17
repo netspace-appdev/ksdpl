@@ -221,6 +221,8 @@ class AddLeadScreen extends StatelessWidget {
                                 validator: ValidationHelper.validatePanCard,
                                 maxLength: 10,
                                 isCapital: true,
+                                isSecret: true,
+                                secretDigit: 4,
 
                               ),
 

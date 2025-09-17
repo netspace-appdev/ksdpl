@@ -131,7 +131,7 @@ class LoginScreen extends StatelessWidget {
                       // Sign In Button
                       Obx((){
                            if(controller.isLoading.value){
-                               return Align(
+                               return const Align(
                                  alignment: Alignment.center,
                                  child: SizedBox(
                                        height: 30,

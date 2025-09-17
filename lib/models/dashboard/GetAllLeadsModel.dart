@@ -81,7 +81,7 @@ class Data {
   num? connectorPercentage;
   String? existingLoans;
   int? noOfExistingLoans;
- // bool? moveToCommon;
+  String? moveToCommon;
   String? pickedUpEmployeeName;
   String? assignedEmployeeName;
   String? bankName;
@@ -142,7 +142,7 @@ class Data {
     this.connectorPercentage,
     this.existingLoans,
     this.noOfExistingLoans,
-   // this.moveToCommon,
+    this.moveToCommon,
     this.pickedUpEmployeeName,
     this.assignedEmployeeName,
     this.bankName,
@@ -205,7 +205,7 @@ class Data {
     connectorPercentage = json['connectorPercentage'];
     existingLoans = json['existingLoans'];
     noOfExistingLoans = json['noOfExistingLoans'];
-  //  moveToCommon = json['moveToCommon'];
+    moveToCommon = json['moveToCommon'];
     pickedUpEmployeeName = json['pickedUpEmployeeName'];
     assignedEmployeeName = json['assignedEmployeeName'];
     bankName = json['bankName'];
@@ -270,7 +270,7 @@ class Data {
     data['connectorPercentage'] = connectorPercentage;
     data['existingLoans'] = existingLoans;
     data['noOfExistingLoans'] = noOfExistingLoans;
-  //  data['moveToCommon'] = moveToCommon;
+    data['moveToCommon'] = this.moveToCommon;
     data['pickedUpEmployeeName'] = pickedUpEmployeeName;
     data['assignedEmployeeName'] = assignedEmployeeName;
     data['bankName'] = bankName;

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
@@ -72,7 +73,7 @@ var getBankerDetailsByIdModel = Rxn<GetBankerDetailsByIdModel>(); //
 var getPackageDetailsByIdModel = Rxn<GetPackageDetailsByIdModel>(); //
 
 class CamNoteController extends GetxController with ImagePickerMixin{
-
+  final Addleadcontroller addleadcontroller = Get.find();
   var getLoanApplIdModel = Rxn<GetLoanApplIdModel>();
   var leadId="".obs;
   var firstName="".obs;
@@ -284,6 +285,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var camSelectedProdSegment = Rxn<int>();
   var camSelectedProdType = Rxn<String>();
   var camSelectedIndexRelBank = (-1).obs;
+
   ///end
   var uniqueLeadNUmber="";
   var loanApplicationNumber="";
@@ -605,7 +607,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               TotalEnquiriesMadeAsPerCibil:camTotalEnquiriesController.text.trim().toString(),
               LoanSegment:camSelectedProdSegment.value.toString(),
               LoanProduct:camSelectedProdType.value.toString(),
-              OfferedSecurityType: camOfferedSecurityTypeController.text.trim().toString(),
+              OfferedSecurityType: camOfferedSecurityTypeController.text.toString(),
               IncomeType:(selectedCamIncomeTypeList.value==null||selectedCamIncomeTypeList.value=="null")?"":selectedCamIncomeTypeList.value,
                 EarningCustomerAge: camEarningCustomerAgeController.text.trim().toString(),
               NonEarningCustomerAge: camNonEarningCustomerAgeController.text.trim().toString(),
@@ -714,11 +716,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     print("camSelectedDistrict.value===>${camSelectedDistrict.value}");
     print("camSelectedCity.value===>${camSelectedCity.value}");
 
-    /*else if(isaddedMobileNumber.value == false){
+
+   /* else if(isaddedMobileNumber.value == false){
     SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
     return;
     }*/
-
     if(camFullNameController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
       return;
@@ -728,7 +730,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camPhoneController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
       return;
-    } else if(selectedGender.value==null || selectedGender.value==""){
+    }else if(selectedGender.value==null || selectedGender.value==""){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
       return;
     }else if(camLoanAmtReqController.text.isEmpty){
@@ -1127,31 +1129,40 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         kSDPLProductId:kSDPLProductId,
       );
 
+      print("print 1");
+      if (data['success'] == true && (data['data'] as List).isEmpty) {
+        print("print 5");
+        ToastMessage.msg("No data found");
+        getProductDetailsByFilterModel.value = null;
 
-      if(data['success'] == true){
-
+      } else if(data['success'] == true){
+        print("print 2");
 
         getProductDetailsByFilterModel.value= pdFModel.GetProductDetailsByFilterModel.fromJson(data);
+
+        print("print 2.1");
 
         getProductDetailsByFilterModel.value?.data?.forEach((item) {
           item.autoindividual = "1";
         });
-        print("here data for auto=========>${getProductDetailsByFilterModel.value?.data?.first.autoindividual.toString()}");
+        print("print 2.2");
+     //   print("here data for auto=========>${getProductDetailsByFilterModel.value?.data?.first.autoindividual.toString()}");
         mergeBankerDetails(); ///on 1sep remove this
         isBankerLoading(false);
 
-
+        print("print 3");
+        print("print ${data['success']} and ${data['data']}}");
 
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
+        print("print 4");
 
         getProductDetailsByFilterModel.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 
-
+      print("print 6");
     } catch (e) {
       print("Error getProductDetailsByFilterModel: $e");
 
@@ -1894,6 +1905,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camSelectedBank.value=null;
     camSelectedProdSegment.value=null;
     camSelectedProdType.value=null;
+
     selectedPackage.value=null;
     camSelectedIndexRelBank.value=-1;
     camSelectedIndexRelBank.value=-1;
@@ -1935,7 +1947,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camLtvController.clear();
     camOfferedSecurityTypeController.clear();
     camCibilMobController.clear();
-
     selectedCamIncomeTypeList.value=null;
   }
 
@@ -2214,13 +2225,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       if(data['success'] == true){
 
         getCamNoteLeadIdModel.value= GetCamNoteLeadIdModel.fromJson(data);
-        print("hello=======1");
+
         // Extract bankIds and update observable set
         final ids = getCamNoteLeadIdModel.value!.data?.map((e) => e.bankId.toString()).toSet() ?? {};
-        print("hello=======2");
+
         camNoteLeadBankIds.value = ids;
-        print("hello=======3");
-        print("hello=======>${camNoteLeadBankIds.value}");
+
 
         isLoadingMainScreen(false);
 
@@ -2833,9 +2843,19 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
           isaddedMobileNumber.value = false;
         }else {
+          print("addleadcontroller.getLeadDetailModel.value?.data?.mobileNumber==${addleadcontroller.getLeadDetailModel.value?.data?.mobileNumber}");
+          print("getLeadDetailByCustomerNumberModel.value?.data?.mobileNumberr==${getLeadDetailByCustomerNumberModel.value?.data?.mobileNumber}");
 
-          isaddedMobileNumber.value = true;
-          SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+          if( addleadcontroller.getLeadDetailModel.value?.data?.mobileNumber==getLeadDetailByCustomerNumberModel.value?.data?.mobileNumber){
+
+            isaddedMobileNumber.value = false;
+            print("if-->");
+          }else{
+            isaddedMobileNumber.value = true;
+            SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+            print("else-->");
+          }
+
         }
 
         isLoading(false);
@@ -2876,7 +2896,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camPropertyValueController.text=(getCamNoteDetailsModel.value?.data?.propertyValueAsPerCustomer??"").toString();
         camFoirController.text=(getCamNoteDetailsModel.value?.data?.foir??"").toString();
         camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
-        camOfferedSecurityTypeController.text=(getCamNoteDetailsModel.value?.data?.offeredSecurityType??"").toString();
+        camOfferedSecurityTypeController.text=getCamNoteDetailsModel.value?.data?.offeredSecurityType??"";
 
 
 

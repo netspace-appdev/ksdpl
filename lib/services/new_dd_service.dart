@@ -14,6 +14,7 @@ class NewDDService {
   static const String getBranchListOfDistrictByZipAndBank = BaseUrl.baseUrl + 'Branch/GetBranchListOfDistrictByZipAndBank';
   static const String getBankerDetailsByBranchId = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetailsByBranchId';
   static const String getBankerDetailsById = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetailsById';
+  static const String getAllPrimeSecurityMaster = BaseUrl.baseUrl + 'BankMaster/GetAllPrimeSecurityMaster';
 
 
 
@@ -105,6 +106,35 @@ class NewDDService {
 
       request.headers.addAll(header);
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', bankerId,fallback: "0");
+
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getAllPrimeSecurityMasterApi() async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getAllPrimeSecurityMaster),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+
 
 
       var streamedResponse = await request.send();

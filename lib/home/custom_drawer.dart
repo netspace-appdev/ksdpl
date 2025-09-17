@@ -23,6 +23,7 @@ import '../common/customListTIle.dart';
 import '../common/storage_service.dart';
 import '../controllers/cibilgenerate_controller/cibilRecordListController.dart';
 import '../controllers/insuranceLeadsController/insuranceLeadController.dart';
+import '../controllers/new_dd_controller.dart';
 import '../controllers/viewExpenseController/viewExpenseController.dart';
 import '../controllers/webController.dart';
 import '../controllers/attendance/attendance_controller.dart';
@@ -197,17 +198,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         addProductController.clearForm();
                         addProductController.currentStep.value=0;
                         addProductController.isFirstSave.value=0;
-
+                        NewDDController newDDController=Get.put(NewDDController());
+                        newDDController.getAllPrimeSecurityMasterApi();
                         Get.toNamed("/addProductScreen");
 
                       },
                     ),
                     ListTile(//color:Theme.of(context).brightness == Brightness.dark?Colors.white54: AppColor.black54
                       leading:  Icon(Icons.view_stream_outlined,color: AppColor.blackColor),
-                      title:  Text("View Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                      title:  Text("Self Added Products",style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500)),
                       onTap: () {
                         ViewProductController viewProductController=Get.put(ViewProductController());
-                        viewProductController.getAllProductListApi();
+                        viewProductController.getProductListByCreatorIdApi();
                         AddProductController addProductController =Get.put(AddProductController());
                         addProductController.getAllProductCategoryApi();
                         Get.toNamed("/viewProductScreen");
@@ -219,7 +221,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title: const Text(
-                    AppText.manageCibil,
+                    AppText.manageService,
                     style: TextStyle(
                       color: AppColor.blackColor,
                       fontSize: 16,
@@ -245,7 +247,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ListTile(
                       leading: Icon(Icons.menu, color: AppColor.blackColor),
                       title: Text(
-                        "Cibil Record List",
+                        AppText.onlineServiceRecordsList,
                         style: TextStyle(
                           color: AppColor.blackColor,
                           fontSize: 16,

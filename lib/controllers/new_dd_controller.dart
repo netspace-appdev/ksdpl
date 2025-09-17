@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:ksdpl/services/new_dd_service.dart';
 import '../../common/helper.dart';
 import '../models/GetBranchDistrictByZipBankModel.dart' as branchList;
+import '../models/camnote/GetAllPrimeSecurityMasterModel.dart' as primeSecurity;
 import '../models/camnote/GetBankerDetailsByBranchIdModel.dart' as banker;
 import '../models/camnote/GetBankerDetailsByIdModel.dart';
 
@@ -10,11 +11,14 @@ class NewDDController extends GetxController{
   var isLoading = false.obs;
   var getBranchDistrictByZipBankModel = Rxn<branchList.GetBranchDistrictByZipBankModel>(); //
   var getBankerDetailsByBranchIdModel = Rxn<banker.GetBankerDetailsByBranchIdModel>(); //
+  var getAllPrimeSecurityMasterModel = Rxn<primeSecurity.GetAllPrimeSecurityMasterModel>(); //
 
   var isBranchLoading = false.obs;
   var isBankerLoading = false.obs;
+  var isPrimeSecurityLoading = false.obs;
   RxList<branchList.Data> branchByZipList = <branchList.Data>[].obs;
   RxList<banker.Data> bankerByBranchList = <banker.Data>[].obs;
+  RxList<primeSecurity.Data> primeSecurityList = <primeSecurity.Data>[].obs;
 
   Future<void>  getBranchListOfDistrictByZipAndBankApi({
     required bankId,
@@ -115,6 +119,50 @@ class NewDDController extends GetxController{
   }
 
 
+
+  Future<void>  getAllPrimeSecurityMasterApi() async {
+    try {
+
+      isPrimeSecurityLoading(true);
+
+
+      var data = await NewDDService.getAllPrimeSecurityMasterApi();
+
+
+      if(data['success'] == true){
+
+        getAllPrimeSecurityMasterModel.value= primeSecurity.GetAllPrimeSecurityMasterModel.fromJson(data);
+
+        final List<primeSecurity.Data> allPs = getAllPrimeSecurityMasterModel.value?.data ?? [];
+
+        //final List<banker.Data> branches = allBr.toList();
+
+        primeSecurityList.value = allPs;
+
+
+        isPrimeSecurityLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAllPrimeSecurityMasterModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error GetAllPrimeSecurityMaster: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isPrimeSecurityLoading(false);
+    } finally {
+
+
+      isPrimeSecurityLoading(false);
+    }
+  }
 
 
 }

@@ -272,11 +272,17 @@ class AppText{
   static const String couldNotWA = "Could not open WhatsApp";
   static const String couldNotMsg = "Could not open Messages";
   static const String openPollFilter = "Open Poll";
+  static const String loanExchangeHub = "Loan Exchange Hub";
   static const String openPollLeads = "Open Poll Leads";
+  static const String loanExchangeLeads = "Loan Exchange Leads";
   static const String followup = "Follow Up";
   static const String history = "History";
   static const String details = "Details";
   static const String openPoll = "Open Poll";
+  static const String leh = "LEH";
+  static const String moveLeh = "Move to Loan Exchange Hub";
+  static const String enterLeh = "Enter percentage for LEH";
+  static const String enterPercentage = "Enter percentage";
   static const String interested = "Interested";
   static const String notInterested = "Not Interested";
   static const String doable = "Doable";
@@ -505,6 +511,7 @@ class AppText{
   static const String managePPT = "View PPT";
 
   static const String manageCibil = "Manage CIBIL";
+  static const String manageService = "Manage Service";
 
   static const String manageTutorial = "Tutorial";
 
@@ -559,6 +566,7 @@ class AppText{
   static const String enterGeoLimit = "Enter Geo Limit";
 
   static const String negativeProfiles = "Negative Profiles";
+  static const String negativeProfilesExcluded = "Negative Profiles (Excluded)";
   static const String enterNegativeProfiles = "Enter Negative Profiles";
   static const String negativeProfilesHint = "Type & press Enter to add";
   static const String negativeAreas = "Negative Areas";
@@ -603,22 +611,25 @@ class AppText{
   static const String maxTat = "Maximum TAT";
   static const String enterMaxTat = "Enter Maximum TAT";
 
-  static const String additionalDocuments = "Additional Documents";
+  static const String additionalDocuments = "Product Specific Additional Documents";
   static const String documentDescriptionsHint = "Type and press Enter to add";
 
   static const String productDescriptions = "Product Descriptions";
   static const String pofileDescriptions = "Descriptions";
   static const String enterProductDescriptions = "Enter Product Descriptions";
-  static const String productSegment = "Loan Segment";
+  static const String productSegment = "Product Segment";
   static const String enterProductSegment = "Enter Product Segment";
   static const String writeYourContent = "Write your content";
   static const String workLocation = "Work Location";
 
   static const String prodName = "Product Name";
   static const String selectCustomerCategory = "Customer Category";
+  static const String selectCustomerCategoryServied = "Customer Category (Servied)";
   static const String selectCollateralSecurityCategory = "Prime Security Category";
-  static const String selectIncomeType = "Select Income Type";
+  static const String primeSecurityCategoriesServied = "Prime Security Categories Servied";
+  static const String selectIncomeType = "Income Types (Allowed)";
   static const String productName = "Product Name";
+  static const String productNameLPP = "Product Name (As per the lenders product policy) ";
   static const String enterProductName = "Enter product name";
 
   static const String noOfDocuments = "No. of Documents";
@@ -659,6 +670,7 @@ class AppText{
 
   static const String totalOverdueAmountCibil = "Total Overdue Amount As Per CIBIL";
   static const String totalAmountCibil = "Amount";
+  static const String amountToBeRecovered = "Amount To Be Recovered";
   static const String enterOverdueAmountCibil = "Enter Overdue Amount";
   static const String enterAmountCibil = "Enter Amount";
 
@@ -700,10 +712,10 @@ class AppText{
   static const String nonEarningCustomerAge = "Non-Earning Customer Age";
   static const String enterNonEarningCustomerAge = "Enter Age";
 
-  static const String totalFamilyIncome = "Total Family Income";
+  static const String totalFamilyIncome = "Total Family Income (In Monthly)";
   static const String enterTotalFamilyIncome = "Enter Total Income";
 
-  static const String incomeCanBeConsidered = "Income Can Be Considered";
+  static const String incomeCanBeConsidered = "Income Can Be Considered (In Monthly)";
   static const String enterConsideredIncome = "Enter Considered Income";
 
   static const String loanAmountRequested = "Loan Amount Requested";
@@ -767,10 +779,10 @@ class AppText{
   static const String superiorEmail = "Superior Email";
   static const String enterSuperiorEmail = "Enter Superior Email";
 
-  static const String fromAmtRange = "From Amount Range";
+  static const String fromAmtRange = "From Amount Range (₹)";
   static const String enterFromAmtRange = "Enter From Amount Range";
 
-  static const String toAmtRange = "To Amount Range";
+  static const String toAmtRange = "To Amount Range (₹)";
   static const String enterToAmtRange = "Enter To Amount Range";
 
   static const String totalOverdueCases2 = "Total Overdue Cases";
@@ -787,6 +799,7 @@ class AppText{
   static const String income = "Income";
   static const String enterIncome = "Enter the Income";
   static const String documents = "Documents";
+  static const String commonDocumentsForAllPproductDocuments = "Common Documents for all product Documents *";
   static const String documentsName = "Document Name";
   static const String viewProducts = "View Products";
   static const String packageName = "Package Name";
@@ -828,6 +841,14 @@ class AppText{
   static const String sanctionStampDuty = "Sanction Stamp Duty";
   static const String softSanctionDate = "Soft Sanction Date";
   static const String rejectReason = "Reject Reason";
+  static const String sanctionEstimatedEMI = "sanction Estimated EMI";
+  static const String applicableLegalFee = "Applicable Legal Fee";
+  static const String applicableTechnicalFee = "Applicable Technical Fee";
+  static const String applicableAdminFee = "Applicable Admin Fee";
+  static const String applicableForeclosureCharges = "Applicable Foreclosure Charges";
+  static const String applicableOtherCharges = "Applicable Other Charges";
+  static const String applicableTSRCharges = "Applicable TSR Charges:";
+  static const String applicableValuationCharges = "Applicable Valuation Charges:";
   static const String manageAttendance = "Manage Attendance";
   static const String manageLeaves = "Manage Leaves";
   static const String attendance = "Attendance";
@@ -877,6 +898,133 @@ class AppText{
   static const String disburedbyRequired ="Please enter Name of Disbursed";
   static const String? enterValidAmount="";
   static const String? partialAmountCannotExceed = "The actual amount and disbursement amount should not exceed the sanctioned amount";
+  static const String? maxPercentMsg = "The Maximum percentage should not be more than 100 %";
+  ///on 12 sep
+  static const String totalOverdueCasesAllowed = "Total Overdue Cases (Allowed)";
+  //static const String enterTotalOverdueCases = "Enter Total Overdue Cases";
+
+  static const String totalOverdueAmountAllowed = "Total Overdue Amount (Allowed) (₹)";
+  //static const String enterTotalOverdueAmount = "Enter Total Overdue Amount";
+
+  static const String totalCibilEnquiriesAllowed = "Total Cibil Enquiries (Allowed)";
+  //static const String enterTotalEnquiries = "Enter Total Enquiries";
+
+  static const String minCibilScoreAllowed = "Min Cibil Score (Allowed)";
+ // static const String enterMinCibil = "Enter Min CIBIL";
+
+  static const String customerCategoriesServied = "Customer Categories (Servied)";
+
+
+  static const String commonDocumentsForAllProducts = "Common Documents for all product Documents *";
+
+  //static const String productSegment = "Product Segment*";
+  static const String selectProductSegment = "Select Product Segment";
+
+ // static const String productName = "Product Name (As per the lenders product policy) *";
+//  static const String enterProductName = "Enter Product Name";
+
+  static const String maxAgeLimitNonEarningApplicants = "Max Age Limit Non-Earning Applicants";
+ // static const String enterAgeLimitNonEarningCoApplicant = "Enter Age Limit for Non-Earning Co-Applicant";
+
+  static const String minimumAgeEarningApplicants = "Minimum Age Earning Applicants";
+  static const String enterMinimumAgeEarningApplicants = "Enter Minimum Age for Earning Applicants";
+
+  static const String minimumAgeNonEarningApplicants = "Minimum Age Non-Earning Applicants";
+  static const String enterMinimumAgeNonEarningApplicants = "Enter Minimum Age for Non-Earning Applicants";
+
+  static const String minimumIncomeCriteria = "Minimum Income Criteria (Monthly) (₹)";
+  static const String enterMinimumIncomeCriteria = "Enter Minimum Income Criteria";
+
+  static const String minimumLoanAmount = "Minimum Loan Amount (₹)";
+  static const String enterMinimumLoanAmount = "Enter Minimum Loan Amount";
+
+  static const String maximumLoanAmount = "Maximum Loan Amount (₹)";
+  static const String enterMaximumLoanAmount = "Enter Maximum Loan Amount";
+
+  static const String eligibleProfitForAppraisal = "Eligible Profit for appraisal income (%)";
+ // static const String enterEligibleProfitPercent = "Enter Eligible Profit Percent";
+
+  static const String minimumLoanTenor = "Minimum Laon Tenor (Years)";
+  static const String enterMinimumLoanTenor = "Enter Minimum Tenor (Years)";
+
+  static const String maximumLoanTenor = "Maximum Loan Tenor (Years)";
+  static const String enterMaximumLoanTenor = "Enter Maximum Tenor (Years)";
+
+  static const String minimumROI = "Minimum ROI (%)";
+  static const String enterMinimumROI = "Enter Minimum ROI";
+
+  static const String maximumROI = "Maximum ROI (%)";
+  static const String enterMaximumROI = "Enter Maximum ROI";
+
+  static const String ageAtMaturityNonEarning = "Age at Maturity (Non-earning Applicants)";
+ // static const String enterAgeAtMaturity = "Enter Age at Maturity";
+
+//  static const String geoLimit = "Geo Limit (Km)";
+ // static const String enterGeoLimit = "Enter Geo Limit";
+
+ // static const String processingCharges = "Processing Charges/IMD (₹)";
+ // static const String enterProcessingCharges = "Enter Processing Charges (₹)";
+
+  static const String ageAtMaturityEarning = "Age at the time of loan maturity (earning applicant)";
+  static const String enterAgeAtMaturityEarning = "Enter Age at the time of loan maturity (earning applicant)";
+
+  static const String negativeAreasForSecurity = "Negative Areas for security offered";
+  static const String typeAndPressEnter = "Type and press Enter to add";
+
+  static const String minimumPropertyValue = "Minimum Property Value (₹)";
+  static const String enterMinimumPropertyValue = "Enter Minimum Property Value";
+
+  static const String maximumIIR = "Maximum IIR (%)";
+  static const String enterMaximumIIR = "Enter Maximum IIR";
+
+  static const String maximumFOIR = "Maximum FOIR (%)";
+  static const String enterMaximumFOIR = "Enter Maximum FOIR";
+
+  static const String maximumLTV = "Maximum LTV (%)";
+  static const String enterMaximumLTV = "Enter Maximum LTV";
+
+  static const String processingFeeAgainstLoan = "Processing Fee Against Loan Sanction Amount(%)";
+ // static const String enterProcessingFee = "Enter Processing Fee";
+
+  static const String legalVettingCharges = "Legal Vetting Charges (₹)";
+  static const String enterLegalVettingCharges = "Enter Legal Vetting Charges";
+
+  static const String technicalInspectionFee = "Technical Inspection Fee (₹)";
+ // static const String enterTechnicalFee = "Enter Technical Fee";
+
+  static const String adminFeeAgainstLoan = "Admin Fee Against Loan Sanction Amount (%)";
+  //static const String enterAdminFee = "Enter Admin Fee";
+
+//  static const String foreclosureCharges = "Foreclosure Charges against the principal outstanding (%)";
+ // static const String enterForeclosureCharges = "Enter Foreclosure Charges";
+
+ // static const String otherCharges = "Other Charges (₹)";
+ // static const String enterOtherCharges = "Enter Other Charges";
+
+  static const String stampDutyAgainstLoan = "Stamp Duty Against Loan Sanction Amount (%)";
+ // static const String enterStampDuty = "Enter Stamp Duty";
+
+//  static const String tsrYears = "Title Search Report (TSR) Years";
+ // static const String enterTsrYears = "Enter TSR Years";
+
+  static const String tsrLegalCharges = "Title Search Report (TSR) - Legal Charges (₹)";
+  static const String enterTsrLegalCharges = "Enter TSR - Legal Charges";
+
+  //static const String valuationCharges = "Valuation Charges (₹)";
+ // static const String enterValuationCharges = "Enter Valuation Charges";
+
+ // static const String productValidateFrom = "Product Validate From (If Festival Specific)";
+  static const String productValidateFromHint = "mm/dd/yyyy";
+
+ // static const String productValidateTo = "Product Validate To (If Festival Specific)";
+  static const String productValidateToHint = "mm/dd/yyyy";
+
+  static const String maximumTat = "Maximum TAT from login to disbursement (Day)";
+  static const String enterMaximumTat = "Enter Maximum TAT (Days)";
+
+  static const String productSpecificAdditionalDocument = "Product Specific Additional Document";
+  static const String onlineServiceRecordsList = "Online Service Records List";
+  static const String onlineServiceRecords = "Online Service Records";
 
 
 }
@@ -898,6 +1046,7 @@ class AppColor{
   static const Color black54=Colors.black54;
   static const Color black87=Colors.black87;
   static const Color grey200=Color(0xFFE0E0E0);
+  static const Color grey300=Color(0xFFCDCDCD);
   static const Color blackColor=Colors.black;
   static const Color redColor=Colors.red;
   static const Color lightYellow=Color(0xFFfef4ea);
@@ -1328,7 +1477,47 @@ class Helper{
       print("$parentKey -> ${json.runtimeType} -> $json");
     }
   }
+  static int calculateAge(String dobString) {
+    DateTime dob = DateTime.parse(dobString); // parse from API
+    DateTime today = DateTime.now();
 
+    int age = today.year - dob.year;
+
+    // If birthday hasn’t occurred yet this year → subtract 1
+    if (today.month < dob.month ||
+        (today.month == dob.month && today.day < dob.day)) {
+      age--;
+    }
+
+    return age;
+  }
+
+
+  static String formatStringToSerialNumbers(String input, {String separator = ','}) {
+    // Split string by separator, trim spaces, and remove empty parts
+    final parts = input.split(separator).map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+
+    // Map with serial numbers
+    final formatted = parts.asMap().entries.map((entry) {
+      final index = entry.key + 1;
+      final value = entry.value.toUpperCase(); // if you want everything in caps
+      return "($index) $value";
+    }).join('\n');
+
+    return formatted;
+  }
+
+  static String capitalizeWords(String input) {
+    if (input.isEmpty) return input;
+
+    return input
+        .split(' ') // split by spaces
+        .map((word) {
+      if (word.trim().isEmpty) return word; // keep multiple spaces intact
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    })
+        .join(' ');
+  }
 }
 
 

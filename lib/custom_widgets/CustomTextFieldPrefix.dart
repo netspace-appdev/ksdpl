@@ -94,33 +94,7 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
   }
 
 
-
-  /*void _onTextChanged(String value) {
-    _isEditing = true;
-    String processedValue = widget.isCapital ? value.toUpperCase() : value;
-    if (widget.isSecret) {
-      // Handle secret text input
-      String newActualValue = _calculateActualValue(value);
-      _actualValue = newActualValue;
-      widget.controller.text = newActualValue;
-
-      // Update display after a short delay to show formatted version
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _updateDisplayText();
-        _isEditing = false;
-      });
-    } else {
-      _actualValue = processedValue;
-      widget.controller.text = processedValue;
-      _isEditing = false;
-    }
-
-    if (widget.onChanged != null) {
-      widget.onChanged!(_actualValue);
-    }
-  }*/
-
-  void _onTextChanged(String value) {
+/*  void _onTextChanged(String value) {
     _isEditing = true;
     final processedValue = widget.isCapital ? value.toUpperCase() : value;
 
@@ -134,6 +108,43 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
         _isEditing = false;
       });
     } else {
+      if (widget.controller.text != processedValue) {
+        final oldSelection = widget.controller.selection;
+        widget.controller.value = TextEditingValue(
+          text: processedValue,
+          selection: oldSelection,
+        );
+      }
+      _actualValue = processedValue;
+      _isEditing = false;
+    }
+
+    if (widget.onChanged != null) {
+      widget.onChanged!(_actualValue);
+    }
+  }*/
+
+  void _onTextChanged(String value) {
+    _isEditing = true;
+
+    if (widget.isSecret) {
+      String newActualValue = _calculateActualValue(value);
+
+      // Apply uppercase here
+      if (widget.isCapital) {
+        newActualValue = newActualValue.toUpperCase();
+      }
+
+      _actualValue = newActualValue;
+      widget.controller.text = newActualValue;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateDisplayText();
+        _isEditing = false;
+      });
+    } else {
+      final processedValue = widget.isCapital ? value.toUpperCase() : value;
+
       if (widget.controller.text != processedValue) {
         final oldSelection = widget.controller.selection;
         widget.controller.value = TextEditingValue(
@@ -206,7 +217,14 @@ class _CustomTextFieldPrefixState extends State<CustomTextFieldPrefix> {
         controller: widget.isSecret ? _displayController : widget.controller,
         keyboardType: widget.inputType,
         obscureText: widget.obscureText,
-        validator: widget.validator,
+       /* validator: widget.validator,*/
+        validator: (value) {
+          if (widget.validator != null) {
+            // always validate the actual (unmasked) value
+            return widget.validator!(widget.controller.text);
+          }
+          return null;
+        },
         onChanged: _onTextChanged,
         maxLines: widget.isTextArea ? null : 1,
         minLines: widget.isTextArea ? 3 : 1,

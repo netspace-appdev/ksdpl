@@ -45,6 +45,8 @@ class Step2Form extends StatelessWidget {
                 return Center(
                   child: CustomSkelton.productShimmerList(context),
                 );
+
+              print("length coApplicantList--->${loanApplicationController.coApplicantList.length}");
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(loanApplicationController.coApplicantList.length, (index) {

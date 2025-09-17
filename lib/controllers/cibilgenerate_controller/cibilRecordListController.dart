@@ -27,10 +27,16 @@ class CibilRecordListController extends GetxController{
   var expenseList = <ExpenseData>[].obs;
   var CibilDetailList = <CibilData>[].obs;
   var getCustomerCibilDetailModel = Rxn<GetCustomerCibilDetailModel>();
-
+  RxInt recordListLength = 0.obs;
   String? empId = StorageService.get(StorageService.EMPLOYEE_ID);
 
+  RxBool hasMore = true.obs;
+  RxInt currentPage = 1.obs;
+  // final int pageSize = 20;
+  final int pageSize = 200;
 
+  RxBool isActive = false.obs;
+  var isItemLoading = false.obs;
   String formatDate(String? dateStr) {
     if (dateStr == null || dateStr.isEmpty) return '';
     try {
@@ -44,39 +50,117 @@ class CibilRecordListController extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    getCustomerCibilDetailByUserIdApi();
+    getCustomerCibilDetailByUserIdApi( );
   }
 
 
-  Future<void> getCustomerCibilDetailByUserIdApi() async {
-    print('cibil_list call .....');
+/*
+  void getCustomerCibilDetailByUserIdApi({
+    bool isLoadMore = false,
+  }) async {
 
     try {
+
+      if (isLoading.value || (!hasMore.value && isLoadMore)) return;
+
       isLoading(true);
-      var data = await GenerateCibilServices. getCustomerCibilDetailByUserIdApiRequest(
+
+      if (!isLoadMore) {
+        currentPage.value = 1; // Reset to first page on fresh load
+        hasMore.value = true;
+      }
+
+      var data = await GenerateCibilServices.getCustomerCibilDetailByUserIdApiRequest(
         userId: empId??'',
+        fromDate: "",
+        toDate: "",
+        pageNumber: currentPage.value,
+        pageSize: pageSize,
       );
 
+
       if (data['success'] == true) {
-        getCustomerCibilDetailModel.value = GetCustomerCibilDetailModel.fromJson(data);
+        var newLeads =GetCustomerCibilDetailModel.fromJson(data);
 
-        // Assuming your model has: List<ExpenseData> data;
-        CibilDetailList.value = getCustomerCibilDetailModel.value?.data ?? [];
+        if (isLoadMore) {
+          getCustomerCibilDetailModel.value!.data!.addAll(newLeads.data!);
+        } else {
+          getCustomerCibilDetailModel.value = newLeads;
+        }
+        getCustomerCibilDetailModel.value = newLeads;
 
-        print('cibil_list${CibilDetailList.value}');
 
+
+        // If less data returned than requested pageSize, mark as no more
+        if (newLeads.data!.length < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++; // Ready for next page
+        }
+        recordListLength.value=getCustomerCibilDetailModel.value!.data!.length;
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
-        expenseList.clear();
+        //leadStageName2.value = leadStageName.value;
+        getCustomerCibilDetailModel.value = null;
+        hasMore.value = false;
       } else {
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
     } catch (e) {
-      print("Error GetExpenseByEmployeeID: $e");
+      print("Error getAllLeadsApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }*/
+  void getCustomerCibilDetailByUserIdApi({
+    bool isLoadMore = false,
+  }) async {
+    try {
+      if (isLoading.value || (!hasMore.value && isLoadMore)) return;
+
+      isLoading(true);
+
+      if (!isLoadMore) {
+        currentPage.value = 1;
+        hasMore.value = true;
+      }
+
+      var data = await GenerateCibilServices.getCustomerCibilDetailByUserIdApiRequest(
+        userId: empId ?? '',
+        fromDate: "",
+        toDate: "",
+        pageNumber: currentPage.value,
+        pageSize: pageSize,
+      );
+
+      if (data['success'] == true) {
+        var newLeads = GetCustomerCibilDetailModel.fromJson(data);
+
+        // 🚀 Instead of merging, just replace the list
+        getCustomerCibilDetailModel.value = newLeads;
+
+        // Update pagination flag
+        if ((newLeads.data?.length ?? 0) < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++;
+        }
+
+        recordListLength.value = getCustomerCibilDetailModel.value?.data?.length ?? 0;
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        getCustomerCibilDetailModel.value = null;
+        hasMore.value = false;
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getCustomerCibilDetailByUserIdApi: $e");
       ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
       isLoading(false);
     }
   }
+
 
   Future<void> launchInBrowser(String url) async {
     try {

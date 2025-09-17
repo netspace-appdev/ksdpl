@@ -111,6 +111,7 @@ class Addleadcontroller extends GetxController{
     required String leadId,
   }) async {
     try {
+      print("getLeadDetailByIdApi===>");
       isLoading(true);
 
 
@@ -154,16 +155,18 @@ class Addleadcontroller extends GetxController{
 
         loanAmtReqController.text=getLeadDetailModel.value?.data?.loanAmountRequested??"";
         camNoteController.camLoanAmtReqController.text = getLeadDetailModel.value?.data?.loanAmountRequested ?? "";
+
         loanApplicationController.laAppliedController.text = getLeadDetailModel.value?.data?.loanAmountRequested ?? "";
 
-
+        print("la api--->${getLeadDetailModel.value?.data?.loanAmountRequested ?? ""}");
+        print("la api--->${getLeadDetailModel.value?.data?.loanAmountRequested ?? ""}");
         emailController.text=getLeadDetailModel.value?.data?.email??"";
         camNoteController.camEmailController.text = getLeadDetailModel.value?.data?.email ?? "";
         loanApplicationController.applEmailController.text = getLeadDetailModel.value?.data?.email ?? "";
 
         aadharController.text=getLeadDetailModel.value?.data?.adharCard??"";
         camNoteController.camAadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
-        loanApplicationController.aadharController.text = getLeadDetailModel.value?.data?.adharCard ?? "";
+        loanApplicationController.aadharController.text =getLeadDetailModel.value?.data?.adharCard ?? "";
 
         panController.text=getLeadDetailModel.value?.data?.panCard??"";
         camNoteController.camPanController.text = getLeadDetailModel.value?.data?.panCard ?? "";
@@ -689,7 +692,7 @@ class Addleadcontroller extends GetxController{
     isConnectorChecked.value = false;
     selectedGender.value = null;
     selectedIndexRelBank.value = -1;
-    fromWhere.value = "";
+    //fromWhere.value = "";
     getLeadId.value = null;
     createdByWhichEmployee.value = null;
     selectedProductCategory.value = null;
@@ -932,7 +935,7 @@ class Addleadcontroller extends GetxController{
     connMobController.clear();
     connShareController.clear();
     existingLoansController.clear();
-    noOfExistingLoansController.clear();
+   // noOfExistingLoansController.clear();
 
     // Dispose controllers to prevent memory leaks
     fullNameController.dispose();
@@ -956,7 +959,7 @@ class Addleadcontroller extends GetxController{
     connMobController.dispose();
     connShareController.dispose();
     existingLoansController.dispose();
-    noOfExistingLoansController.dispose();
+  //  noOfExistingLoansController.dispose();
     addIncomeList.clear();
 
   }
