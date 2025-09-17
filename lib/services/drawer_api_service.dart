@@ -474,6 +474,9 @@ class DrawerApiService {
         final jsonResponse = jsonDecode(response.body);
 
         if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+          // Debug
+          Helper.ApiReq(updateLeadStage, request.fields);
+          Helper.ApiRes(updateLeadStage, response.body);
 
           return jsonResponse;
         } else {
