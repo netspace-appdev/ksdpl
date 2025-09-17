@@ -365,6 +365,7 @@ class Step2CamNote extends StatelessWidget {
 
                       CustomTextLabel(
                         label: AppText.offeredSecurityType,
+                        isRequired: camNoteController.isOfferedSecurityMandatory.value?true:false,
                       ),
 
                       const SizedBox(height: 10),

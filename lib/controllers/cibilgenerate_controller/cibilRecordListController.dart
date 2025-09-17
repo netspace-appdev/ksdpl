@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:ksdpl/common/base_url.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
-import 'package:ksdpl/models/GetCustomerCibilDetailModel/GetCustomerCibilDetailModel.dart';
+import 'package:ksdpl/models/GetCustomerCibilDetailModel/GetCustomerCibilDetailModel.dart' as cibilModelData;
 import 'package:ksdpl/services/generate_cibil_services.dart';
 import 'package:ksdpl/services/product_service.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,8 +25,8 @@ class CibilRecordListController extends GetxController{
   var isLoading = false.obs;
   var employee_id =  StorageService.get(StorageService.EMPLOYEE_ID).toString();
   var expenseList = <ExpenseData>[].obs;
-  var CibilDetailList = <CibilData>[].obs;
-  var getCustomerCibilDetailModel = Rxn<GetCustomerCibilDetailModel>();
+  var CibilDetailList = <cibilModelData.Data>[].obs;
+  var getCustomerCibilDetailModel = Rxn<cibilModelData.GetCustomerCibilDetailModel>();
   RxInt recordListLength = 0.obs;
   String? empId = StorageService.get(StorageService.EMPLOYEE_ID);
 
@@ -134,7 +134,7 @@ class CibilRecordListController extends GetxController{
       );
 
       if (data['success'] == true) {
-        var newLeads = GetCustomerCibilDetailModel.fromJson(data);
+        var newLeads = cibilModelData.GetCustomerCibilDetailModel.fromJson(data);
 
         // 🚀 Instead of merging, just replace the list
         getCustomerCibilDetailModel.value = newLeads;

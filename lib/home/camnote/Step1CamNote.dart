@@ -481,11 +481,13 @@ class Step1CamNote extends StatelessWidget {
 
                               camNoteController.camSelectedProdSegment.value =  value?.id;
                               print(" camNoteController.camSelectedProdSegment.value===>${ camNoteController.camSelectedProdSegment.value}");
-                              print(" mNoteController.isRequiredVisibleSecure.value===>${ camNoteController.isRequiredVisibleSecure.value}");
+
                               if(camNoteController.camSelectedProdSegment.value==1){
                                 camNoteController.isRequiredVisibleSecure.value=true;
+                                camNoteController.isOfferedSecurityMandatory.value=true;
                               }else{
                                 camNoteController.isRequiredVisibleSecure.value=false;
+                                camNoteController.isOfferedSecurityMandatory.value=false;
                               }
                               print(" mNoteController.isRequiredVisibleSecure.value===>af==>${ camNoteController.isRequiredVisibleSecure.value}");
                             },

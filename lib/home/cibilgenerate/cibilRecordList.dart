@@ -226,6 +226,8 @@ class CibilRecordListScreen extends StatelessWidget {
               // final product =  cibilRecordListController.CibilDetailList[index];
               final product =  cibilRecordListController.getCustomerCibilDetailModel.value?.data?[index];
 
+              //print("product?.filePath--->${product?.filePath.toString()}");
+
               return buildCard(
                 Helper.capitalizeEachWord('Date :- ${ cibilRecordListController.formatDate(product?.receiveDate.toString()??"")}'), // title
                 [
@@ -377,9 +379,10 @@ class CibilRecordListScreen extends StatelessWidget {
   }
 
   Widget _buildTextButton(String label, BuildContext context, Color color, IconData icon,  String? url, String label_code) {
+    print("url in section---->${url}");
     return GestureDetector(
       onTap:
-      label_code=="download_docs" && url==null?null:
+      label_code=="download_docs" && (url==null || url=="")?null:
           () {
         if (label == "Download Docs") {
          cibilRecordListController.launchInBrowser(url??"");
@@ -411,11 +414,11 @@ class CibilRecordListScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color:label_code=="download_docs" && url==null?AppColor.grey300: AppColor.grey700, size: 20),
+                Icon(icon, color:label_code=="download_docs" && (url==null || url=="")?AppColor.grey300: AppColor.grey700, size: 20),
                 SizedBox(width: 6),
                 Text(
                   label,
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color:label_code=="download_docs" && url==null?AppColor.grey300: AppColor.blackColor),
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color:label_code=="download_docs" && (url==null || url=="")?AppColor.grey300: AppColor.blackColor),
                 ),
               ],
             ),

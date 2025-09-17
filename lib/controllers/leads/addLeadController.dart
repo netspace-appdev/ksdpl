@@ -224,7 +224,7 @@ class Addleadcontroller extends GetxController{
         AddProductController addProductController = Get.put(AddProductController()); //change on 31 july
         await addProductController.getAllProductCategoryApi();
         camNoteController.camSelectedProdSegment.value=int.parse(getLeadDetailModel.value?.data?.leadsegment.toString()??"0")??0;
-
+        camNoteController.camSelectedProdSegment.value==1?camNoteController.isOfferedSecurityMandatory.value=true:camNoteController.isOfferedSecurityMandatory.value=false;
         print("prod seg--->${camNoteController.camSelectedProdSegment.value}");
 
         if(camNoteController.camSelectedProdSegment.value==1){

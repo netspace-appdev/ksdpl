@@ -118,6 +118,7 @@ class AddLeadScreen extends StatelessWidget {
                                 inputType: TextInputType.name,
                                 hintText: AppText.enterFullName,
                                 validator:  ValidationHelper.validateName,
+
                               ),
 
                               CustomLabeledPickerTextField(

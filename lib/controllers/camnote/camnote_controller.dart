@@ -116,7 +116,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var loanApplId = 0;
   var isSameAddressApl = false.obs;
   LeadDDController leadDDController = Get.find();
-
+  var isOfferedSecurityMandatory = false.obs;
 
   var selectedStateProp = Rxn<String>();
   var selectedDistrictProp = Rxn<String>();
@@ -556,6 +556,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     if (!packageFieldsIfRequired()) return;
     if (!securedFieldsIfRequired()) return;
+    if (!idOfferedScurityRequired()) return;
 
     isAllCamnoteSubmit(true);
 
@@ -704,6 +705,21 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         title: "Incomplete Step 1",
         message: "Please upload at least one property photo.",
       );
+      return false;
+    }
+    // All fields are filled
+    return true;
+  }
+
+
+  bool idOfferedScurityRequired() {
+    // If no package is selected, skip validation
+    if (!isOfferedSecurityMandatory.value) return true;
+
+    // Start validating each required field
+    if (camOfferedSecurityTypeController.text.isEmpty) {
+      SnackbarHelper.showSnackbar(
+          title: "Incomplete Step 2", message: "Please enter offered security type");
       return false;
     }
     // All fields are filled
