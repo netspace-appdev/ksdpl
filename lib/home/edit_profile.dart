@@ -79,7 +79,6 @@ class EditProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
-
                       Obx((){
                         if (editProfileController.isLoading.value) {
                           return  Center(child:CustomSkelton.productShimmerList(context));
@@ -128,7 +127,6 @@ class EditProfileScreen extends StatelessWidget {
                                 controller: editProfileController.foundingDateController,
                                 validator: validateEmployeeId
                             ),
-
 
                             const SizedBox(height: 20),
 
@@ -313,7 +311,7 @@ class EditProfileScreen extends StatelessWidget {
                                     child: Container(
                                       width: 20,
                                       height: 20,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: Colors.white,
                                         shape: BoxShape.circle,
                                         boxShadow: [
@@ -346,7 +344,7 @@ class EditProfileScreen extends StatelessWidget {
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                     color: Colors.black26,
                                     blurRadius: 5,
@@ -355,7 +353,7 @@ class EditProfileScreen extends StatelessWidget {
                                 ],
                               ),
                               child:
-                              Column(
+                              const Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(Icons.add_a_photo, size: 30, color: Colors.white),
@@ -370,12 +368,10 @@ class EditProfileScreen extends StatelessWidget {
                                   ),
                                 ],
                               )
-
                           ),
                         )
                         ),
                       ),
-
 
                       const SizedBox(height: 20),
 
@@ -393,12 +389,7 @@ class EditProfileScreen extends StatelessWidget {
                           );
                         }
                       }),
-
                       const SizedBox(height: 24.0),
-
-
-
-
                     ],
                   ),
                 ),
