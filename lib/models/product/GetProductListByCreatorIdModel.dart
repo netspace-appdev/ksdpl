@@ -79,7 +79,7 @@ class Data {
   num? tsRCharges;
   num? valuationCharges;
   num? noOfDocument;
-  Null? productValidateFromDate;
+  String? productValidateFromDate;
   String? productValidateToDate;
   num? ksdplProductId;
   String? ksdplProductName;

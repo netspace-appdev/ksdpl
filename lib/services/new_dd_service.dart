@@ -141,6 +141,10 @@ class NewDDService {
 
       var response = await http.Response.fromStream(streamedResponse);
 
+      Helper.ApiReq(getAllPrimeSecurityMaster, request.fields);
+      Helper.ApiRes(getAllPrimeSecurityMaster, response.body);
+
+
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

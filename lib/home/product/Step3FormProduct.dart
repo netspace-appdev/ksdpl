@@ -259,13 +259,13 @@ class Step3FormProduct extends StatelessWidget {
                 },
               ),
 
-              CustomLabeledTextField(
+              /*CustomLabeledTextField(
                 label: AppText.processingCharges,
                 controller: addProductController.prodProcessingChargesController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterProcessingCharges,
                 validator:  ValidationHelper.validateName,
-              ),
+              ),*/
 
 
               CustomLabeledTextField(
@@ -349,29 +349,6 @@ class Step3FormProduct extends StatelessWidget {
                 validator:  ValidationHelper.validateName,
               ),
 
-              CustomLabeledTextField(
-                label: AppText.totalOverdueCases2,
-                controller: addProductController.prodTotalOverdueCasesController,
-                inputType: TextInputType.number,
-                hintText: AppText.enterTotalOverdueCases,
-                validator:  ValidationHelper.validateName,
-              ),
-
-              CustomLabeledTextField(
-                label: AppText.totalOverdueAmount,
-                controller: addProductController.prodTotalOverdueAmtController,
-                inputType: TextInputType.number,
-                hintText: AppText.enterTotalOverdueAmount,
-                validator:  ValidationHelper.validateName,
-              ),
-
-              CustomLabeledTextField(
-                label: AppText.totalEnquiries2,
-                controller: addProductController.prodTotalEnquiriesController,
-                inputType: TextInputType.number,
-                hintText: AppText.enterTotalEnquiries2,
-                validator:  ValidationHelper.validateName,
-              ),
             ],
           ),
         );

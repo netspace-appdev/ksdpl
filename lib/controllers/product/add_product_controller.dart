@@ -35,6 +35,8 @@ import 'package:flutter/material.dart';
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
 
+
+import '../../models/camnote/GetAllPrimeSecurityMasterModel.dart' as primeSecurity;
 class AddProductController extends GetxController{
   var isFirstSave = 0.obs;
 
@@ -245,13 +247,10 @@ class AddProductController extends GetxController{
   final TextEditingController prodBankerSuperiorWhatsappController = TextEditingController();
   final TextEditingController prodBankerSuperiorEmailController = TextEditingController();
 
-  //12 sep
-  final TextEditingController prodTotalOverdueCasesAllowedController = TextEditingController();
-  final TextEditingController prodTotalOverdueAmountAllowedController = TextEditingController();
-  final TextEditingController prodTotalCibilEnquiriesAllowedController = TextEditingController();
-  final TextEditingController prodMinCibilScoreAllowedController = TextEditingController();
 
 
+//17 Sep
+  //final TextEditingController prodMaxAgeLimitNonEarningApplicants = TextEditingController();
   var selectedprodSegment = Rxn<String>();
   RxList<String> customerCategoryList = [
     "Salaried",
@@ -307,6 +306,7 @@ class AddProductController extends GetxController{
     "Other",
   ];
   var selectedCollSecCat = <String>[].obs;
+
   var selectedIncomeType = <String>[].obs;
   RxList<negProfile.Data> selectedNegProfile = <negProfile.Data>[].obs;
   RxList<commanDoc.Data> selectedCommonDoc = <commanDoc.Data>[].obs;
@@ -447,14 +447,14 @@ class AddProductController extends GetxController{
       addProductListApi(
         Id: "0",
         BankId:selectedBank.value?.toString(),
-        bankers_Name:prodBankersNameController.text,
-        Bankers_Mobile_Number:prodBankersMobController.text,
-        Bankers_WhatsApp_Number:prodBankersWhatsappController.text,
-        BankersEmailId:prodBankersEmailController.text,
-        Min_CIBIL:prodMinCibilController.text,
+        bankers_Name:prodBankersNameController.text.trim().toString(),
+        Bankers_Mobile_Number:prodBankersMobController.text.trim().toString(),
+        Bankers_WhatsApp_Number:prodBankersWhatsappController.text.trim().toString(),
+        BankersEmailId:prodBankersEmailController.text.trim().toString(),
+        Min_CIBIL:prodMinCibilController.text.trim().toString(),
         Segment_Vertical:selectedProductCategory.value.toString(),
-        Product:prodProductNameController.text,
-        ProductDescription:prodProductDescriptionsController.text,
+        Product:prodProductNameController.text.trim().toString(),
+        ProductDescription:prodProductDescriptionsController.text.trim().toString(),
         Customer_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
         Collateral_Security_Category:Helper.convertListToCsvSafe(selectedCollSecCat.value),
         Collateral_Security_Excluded:prodCollateralSecurityExcludedController.text,
@@ -555,14 +555,14 @@ class AddProductController extends GetxController{
       updateProductListApi(
           Id: productId==0?  getProductListById.value!.data!.id.toString() : productId.toString(),
           BankId:selectedBank.value?.toString(),
-          bankers_Name:prodBankersNameController.text,
-          Bankers_Mobile_Number:prodBankersMobController.text,
-          Bankers_WhatsApp_Number:prodBankersWhatsappController.text,
-          BankersEmailId:prodBankersEmailController.text,
-          Min_CIBIL:prodMinCibilController.text,
+          bankers_Name:prodBankersNameController.text.trim().toString(),
+          Bankers_Mobile_Number:prodBankersMobController.text.trim().toString(),
+          Bankers_WhatsApp_Number:prodBankersWhatsappController.text.trim().toString(),
+          BankersEmailId:prodBankersEmailController.text.trim().toString(),
+          Min_CIBIL:prodMinCibilController.text.trim().toString(),
           Segment_Vertical:selectedProductCategory.value.toString(),
-          Product:prodProductNameController.text,
-          ProductDescription:prodProductDescriptionsController.text,
+          Product:prodProductNameController.text.trim().toString(),
+          ProductDescription:prodProductDescriptionsController.text.trim().toString(),
           Customer_Category:Helper.convertListToCsvSafe(selectedCustomerCategories.value),
           Collateral_Security_Category:Helper.convertListToCsvSafe(selectedCollSecCat.value),
           Collateral_Security_Excluded:prodCollateralSecurityExcludedController.text,

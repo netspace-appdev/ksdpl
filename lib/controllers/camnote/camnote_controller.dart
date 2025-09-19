@@ -623,8 +623,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               LTV: camLtvController.text.trim().toString(),
               BranchOfBank: branchId.toString(),
               SanctionProcessingCharges:"0",
-              Autoindividual: autoIndividual //correct it
-
+              Autoindividual: autoIndividual 
             );
 
           }

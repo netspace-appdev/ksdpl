@@ -16,6 +16,7 @@ import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 import '../../models/camnote/GetAllPrimeSecurityMasterModel.dart' as primeSecurity;
+import '../../models/product/GetAllCommonDocumentModel.dart' as commanDoc;
 
 class Step1FormProduct extends StatelessWidget {
   final addProductController = Get.find<AddProductController>();
@@ -203,45 +204,33 @@ class Step1FormProduct extends StatelessWidget {
 
               ),
 
-              CustomLabeledTextField(
-                label: AppText.superiorEmail,
-                controller: addProductController.prodBankerSuperiorEmailController,
-                inputType: TextInputType.emailAddress,
-                hintText: AppText.enterSuperiorEmail,
-
-              ),
 
               CustomLabeledTextField(
                 label: AppText.totalOverdueCasesAllowed,
-                controller: addProductController.prodTotalOverdueCasesAllowedController,
+                controller: addProductController.prodTotalOverdueCasesController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterTotalOverdueCases,
-
+                validator:  ValidationHelper.validateName,
               ),
+
               CustomLabeledTextField(
                 label: AppText.totalOverdueAmountAllowed,
-                controller: addProductController.prodTotalOverdueAmountAllowedController,
+                controller: addProductController.prodTotalOverdueAmtController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterTotalOverdueAmount,
-
+                validator:  ValidationHelper.validateName,
               ),
+
               CustomLabeledTextField(
                 label: AppText.totalCibilEnquiriesAllowed,
-                controller: addProductController.prodTotalCibilEnquiriesAllowedController,
+                controller: addProductController.prodTotalEnquiriesController,
                 inputType: TextInputType.number,
-                hintText: AppText.enterTotalEnquiries,
-
+                hintText: AppText.enterTotalEnquiries2,
+                validator:  ValidationHelper.validateName,
               ),
+
               CustomLabeledTextField(
                 label: AppText.minCibilScoreAllowed,
-                controller: addProductController.prodMinCibilScoreAllowedController,
-                inputType: TextInputType.number,
-                hintText: AppText.enterMinCibil,
-
-              ),
-
-              /*CustomLabeledTextField(
-                label: AppText.minCibil,
 
                 controller: addProductController.prodMinCibilController,
                 inputType: TextInputType.number,
@@ -249,7 +238,52 @@ class Step1FormProduct extends StatelessWidget {
 
               ),
 
-*/
+              const SizedBox(height: 10),
+
+              CustomTextLabel(
+                label: AppText.commonDocumentsForAllPproductDocuments,
+                isRequired: true,
+
+
+              ),
+
+              const SizedBox(height: 10),
+
+              Obx(() {
+                final values = addProductController.selectedCommonDoc.toList(); // List<negProfile.Data>
+                final commonDocList = addProductController.commonDocList.toList();
+
+                final isAllSelected = Set.from(values.map((e) => e.id)).containsAll(commonDocList.map((e) => e.id));
+                final controlOption = commanDoc.Data(id: -1, commonDocument1: isAllSelected ? "Deselect All" : "Select All");
+
+                final allItems = [controlOption, ...commonDocList];
+
+                return MultiSelectDropdown<commanDoc.Data>(
+                  key: ValueKey(values.map((e) => e.id).join(',')), // Stable key
+                  items: allItems,
+                  getId: (e) => e.id.toString(),
+                  getName: (e) => e.commonDocument1 ?? 'Unknown',
+                  selectedValues: values.where((e) => e.id != -1).toList(), // exclude control option from selection
+                  onChanged: (selectedList) {
+                    if (selectedList.any((e) => e.id == -1 && e.commonDocument1 == "Select All")) {
+                      addProductController.selectedCommonDoc.assignAll(commonDocList);
+                    } else if (selectedList.any((e) => e.id == -1 && e.commonDocument1 == "Deselect All")) {
+                      addProductController.selectedCommonDoc.clear();
+                    } else {
+                      addProductController.selectedCommonDoc.assignAll(
+                        selectedList.where((e) => e.id != -1),
+                      );
+                    }
+                  },
+                );
+              }),
+
+
+              const SizedBox(
+                height: 20,
+              ),
+
+
               CustomTextLabel(
                 label: AppText.productSegment,
                 isRequired: true,
@@ -348,9 +382,9 @@ class Step1FormProduct extends StatelessWidget {
               ),
 
               const SizedBox(height: 10),
+           ///working
 
-
-            Obx(() {
+           /* Obx(() {
               final values = addProductController.selectedCollSecCat.toList();
               final catList = addProductController.collSecCatList;
 
@@ -376,58 +410,52 @@ class Step1FormProduct extends StatelessWidget {
                   }
                 },
               );
-            }),
+            }),*/
+
+              ///experiment
+              Obx(() {
+
+                final values = addProductController.selectedCollSecCat.toList();
+                final catList = newDDController.primeSecurityList
+                    .map((e) => e.description ?? '') // 👈 use correct field from API model
+                    .toList();
+
+                final isAllSelected = Set.from(values).containsAll(catList);
+                final controlOption = isAllSelected ? "Deselect All" : "Select All";
+                final allItems = [controlOption, ...catList];
+
+                return MultiSelectDropdown<String>(
+                  key: ValueKey(values.join(',')), // 👈 Force widget to rebuild when selection changes
+                  items: allItems,
+                  getId: (e) => e,
+                  getName: (e) => e,
+                  selectedValues: values, // Don’t include Select/Deselect All in selected list!
+                  onChanged: (selectedList) {
+                    if (selectedList.contains("Select All")) {
+                      addProductController.selectedCollSecCat.assignAll(catList);
+                    } else if (selectedList.contains("Deselect All")) {
+                      addProductController.selectedCollSecCat.clear();
+                    } else {
+                      addProductController.selectedCollSecCat.assignAll(
+                        selectedList.where((e) => e != "Select All" && e != "Deselect All"),
+                      );
+                    }
+                  },
+                );
+              }),
 
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-              /*CustomLabeledTextField(
+              CustomLabeledTextField(
                 label: AppText.collateralSecurityExcluded,
 
                 controller: addProductController.prodCollateralSecurityExcludedController,
                 inputType: TextInputType.name,
                 hintText: AppText.enterCollateralSecurityExcluded,
 
-              ),*/
-
-              const SizedBox(
-                height: 20,
               ),
 
-              CustomTextLabel(
-                label: AppText.offeredSecurityType,
-              ),
-
-              const SizedBox(height: 10),
-
-              Obx((){
-                if (newDDController.isPrimeSecurityLoading.value) {
-                  return  Center(child:CustomSkelton.leadShimmerList(context));
-                }
-
-
-                return CustomDropdown<primeSecurity.Data>(
-                  items: newDDController.primeSecurityList.value ?? [],
-                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                  getName: (item) => item.description.toString(),
-                  selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
-                        (item) => item.description == addProductController.prodCollateralSecurityExcludedController.text,
-                  ),
-                  onChanged: (value) {
-                    addProductController.prodCollateralSecurityExcludedController.text =  value?.description??"";
-
-                  },
-                  onClear: (){
-                    addProductController.prodCollateralSecurityExcludedController.clear();
-                  },
-                );
-              }),
-
-
-
-              const SizedBox(
-                height: 20,
-              ),
 
               CustomTextLabel(
                 label: AppText.selectIncomeType,

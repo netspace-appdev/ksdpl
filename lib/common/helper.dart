@@ -389,7 +389,7 @@ class AppText{
   static const String selectChannel = "Select your Channel";
   static const String channelCode = "Channel Code";
   static const String enterChannelCode = "Enter Channel Code";
-  static const String processingFee = "Processing Fee (%)";
+  static const String processingFee = "Processing Fee Against Loan Sanction Amount(%)";
   static const String enterProcessingFee = "Enter Processing Fee";
   static const String chqDdSlipNo = "CHQ/DD Slip No";
   static const String enterChqDdSlipNo = "Enter CHQ/DD Slip No";
@@ -499,9 +499,9 @@ class AppText{
   static const String bankerDetails="Banker Details";
   static const String bankerName="Banker Name";
   static const String ChargesDetails="Charges Details";
-  static const String bankerMobile="Banker Mobile";
-  static const String bankerWhatsapp="Banker Whatsapp";
-  static const String bankerEmail="Banker Email";
+  static const String bankerMobile="Banker Mobile Number";
+  static const String bankerWhatsapp="Banker Whatsapp Number";
+  static const String bankerEmail="Banker Email Address";
 
   static const String enterBankerName = "Enter Banker Name";
   static const String enterBankerMobile = "Enter Banker Mobile";
@@ -528,21 +528,23 @@ class AppText{
   static const String ageLimitEarningApplicants = "Age at the time of loan maturity (earning applicant)"; //"Age limit earning applicant" should be changed to "Age at the time of loan maturity (earning applicant)".
   static const String enterAgeLimitEarningApplicants = "Enter Age ge at the time of loan maturity";
   static const String ageLimitNonEarningCoApplicant = "Age Limit Non-Earning Co-Applicant";
+  static const String maxAgeLimitNonEarningCoApplicant = "Max Age Limit Non-Earning Co-Applicant";
   static const String enterAgeLimitNonEarningCoApplicant = "Enter Age Limit Non-Earning Co-Applicant";
   static const String minAgeEarningApplicants = "Minimum Age Earning Applicants";
   static const String enterMinAgeEarningApplicants = "Enter Minimum Age Earning Applicants";
   static const String minAgeNonEarningApplicants = "Minimum Age Non-Earning Applicants";
   static const String enterMinAgeNonEarningApplicants = "Enter Minimum Age Non-Earning Applicants";
-  static const String minIncomeCriteria = "Minimum Income Criteria (Monthly)";
+  static const String minIncomeCriteria = "Minimum Income Criteria (Monthly) (₹)";
   static const String enterMinIncomeCriteria = "Enter Minimum Income Criteria";
 
-  static const String minLoanAmount = "Minimum Loan Amount";
+  static const String minLoanAmount = "Minimum Loan Amount (₹)";
   static const String enterMinLoanAmount = "Enter Minimum Loan Amount";
-  static const String maxLoanAmount = "Maximum Loan Amount";
+  static const String maxLoanAmount = "Maximum Loan Amount (₹)";
   static const String enterMaxLoanAmount = "Maximum Loan Amount";
 
   static const String profitPercentage = "Profit Percentage";
   static const String eligibleProfitPercent = "Eligible Profit Percent (%)";
+  static const String eligibleProfitForAppraisalIncome = "Eligible Profit for appraisal income (%)";
   static const String enterEligibleProfitPercent = "Enter Eligible Profit Percent";
   static const String enterProfitPercentage = "Enter Profit Percentage";
   static const String minCibil = "Minimum CIBIL";
@@ -559,6 +561,7 @@ class AppText{
 
   static const String maxTenorEligibilityCriteria = "Maximum Tenor Eligibility Criteria";
   static const String ageAtMaturity = "Age at Maturity";
+  static const String ageAtMaturityNonEarningApplicants = "Age at Maturity (Non-earning Applicants)";
   static const String  enterMaxTenorEligibilityCriteria = "EnterMaximum Tenor Eligibility Criteria";
   static const String enterAgeAtMaturity = "EnterMaximum Age at Maturity";
 
@@ -569,9 +572,9 @@ class AppText{
   static const String negativeProfilesExcluded = "Negative Profiles (Excluded)";
   static const String enterNegativeProfiles = "Enter Negative Profiles";
   static const String negativeProfilesHint = "Type & press Enter to add";
-  static const String negativeAreas = "Negative Areas";
+  static const String negativeAreas = "Negative Areas for security offered";
 
-  static const String minPropertyValue = "Minimum Property Value";
+  static const String minPropertyValue = "Minimum Property Value (₹)";
   static const String enterMinPropertyValue = "Enter Minimum Property Value";
   static const String maxIir = "Maximum IIR (%)";
   static const String enterMaxIir = "Enter Maximum IIR";
@@ -584,20 +587,20 @@ class AppText{
   static const String enterLegalFee = "EnterLegal Vetting Charges";
   static const String technicalFee = "Technical Inspection Charges (in ₹)";
   static const String enterTechnicalFee = "EnterTechnical Inspection Charges";
-  static const String adminFee = "Admin Fee (%)";
+  static const String adminFee = "Admin Fee Against Loan Sanction Amount (%)";
   static const String enterAdminFee = "Enter Admin Fee";
-  static const String foreclosureCharges = "Foreclosure Charges (%)";
+  static const String foreclosureCharges = "Foreclosure Charges against the principal outstanding (%)";
   static const String enterForeclosureCharges = "Enter Foreclosure Charges";
   static const String otherCharges = "Other Charges (₹)";
   static const String enterOtherCharges = "Enter Other Charges";
-  static const String stampDuty = "Stamp Duty (%)";
+  static const String stampDuty = "Stamp Duty Against Loan Sanction Amount(%)";
   static const String tampDuty = "Stamp Duty";
   static const String enterStampDuty = "Enter Stamp Duty";
 
-  static const String tsrYears = "TSR Years";
+  static const String tsrYears = "Title Search Report (TSR) Years";
   static const String enterTsrYears = "Enter TSR Charges";
 
-  static const String tsrCharges = "TSR Legal Charges (in ₹)";
+  static const String tsrCharges = "Title Search Report (TSR) - Legal Charges (₹)";
   static const String enterTsrCharges = "Enter TSR Legal Charges";
   static const String valuationCharges = "Valuation Charges (₹)";
   static const String enterValuationCharges = "Enter Valuation Charges";
@@ -605,10 +608,10 @@ class AppText{
   static const String ksdplProduct = "KSDPL Product";
   static const String selectKsdplProduct = "Select KSDPL Product";
 
-  static const String productValidateFrom = "Product Validate From";
-  static const String productValidateTo = "Product Validate To";
+  static const String productValidateFrom = "Product Validate From (If Festival Specific)";
+  static const String productValidateTo = "Product Validate To (If Festival Specific)";
 
-  static const String maxTat = "Maximum TAT";
+  static const String maxTat = "Maximum TAT from login to disbursement (Day)";
   static const String enterMaxTat = "Enter Maximum TAT";
 
   static const String additionalDocuments = "Product Specific Additional Documents";
@@ -641,7 +644,7 @@ class AppText{
   static const String editProduct = "Edit Product";
   static const String leadform_camnote = "Lead Form & Cam Note";
 
-  static const String processingCharges = "Processing Charges (₹)";
+  static const String processingCharges = "Processing Charges/IMD (₹)";
   static const String enterProcessingCharges = "Enter Processing Charges";
 
 
@@ -770,14 +773,14 @@ class AppText{
   static const String superiorName = "Superior Name";
   static const String enterSuperiorName = "Enter Superior Name";
 
-  static const String superiorMobile = "Superior Mobile";
-  static const String enterSuperiorMobile = "Enter Superior Mobile";
+  static const String superiorMobile = "Superior Mobile Number";
+  static const String enterSuperiorMobile = "Enter Superior Mobile Number";
 
-  static const String superiorWhatsapp = "Superior WhatsApp";
-  static const String enterSuperiorWhatsapp = "Enter Superior WhatsApp";
+  static const String superiorWhatsapp = "Superior WhatsApp Number";
+  static const String enterSuperiorWhatsapp = "Enter Superior WhatsApp Number";
 
-  static const String superiorEmail = "Superior Email";
-  static const String enterSuperiorEmail = "Enter Superior Email";
+  static const String superiorEmail = "Superior Email Address";
+  static const String enterSuperiorEmail = "Enter Superior Email Address";
 
   static const String fromAmtRange = "From Amount Range (₹)";
   static const String enterFromAmtRange = "Enter From Amount Range";
@@ -799,7 +802,7 @@ class AppText{
   static const String income = "Income";
   static const String enterIncome = "Enter the Income";
   static const String documents = "Documents";
-  static const String commonDocumentsForAllPproductDocuments = "Common Documents for all product Documents *";
+  static const String commonDocumentsForAllPproductDocuments = "Common Documents for all product Documents";
   static const String documentsName = "Document Name";
   static const String viewProducts = "View Products";
   static const String packageName = "Package Name";

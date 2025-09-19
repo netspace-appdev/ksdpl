@@ -35,23 +35,14 @@ class Step2FormProduct extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-
               CustomLabeledTextField(
-                label: AppText.ageLimitEarningApplicants,
-                controller: addProductController.prodAgeLimitEarningApplicantsController,
-                inputType: TextInputType.number,
-                hintText: AppText.enterAgeLimitEarningApplicants,
-
-              ),
-
-              CustomLabeledTextField(
-                label: AppText.ageLimitNonEarningCoApplicant,
+                label: AppText.maxAgeLimitNonEarningCoApplicant,
 
                 controller: addProductController.prodAgeLimitNonEarningCoApplicantController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterAgeLimitNonEarningCoApplicant,
 
-              ),
+              ), //Done
 
               CustomLabeledTextField(
                 label: AppText.minAgeEarningApplicants,
@@ -60,7 +51,7 @@ class Step2FormProduct extends StatelessWidget {
                 inputType: TextInputType.number,
                 hintText: AppText.enterMinAgeEarningApplicants,
 
-              ),
+              ),//Done
 
               CustomLabeledTextField(
                 label: AppText.minAgeNonEarningApplicants,
@@ -69,7 +60,8 @@ class Step2FormProduct extends StatelessWidget {
                 inputType: TextInputType.number,
                 hintText: AppText.enterMinAgeNonEarningApplicants,
 
-              ),
+              ),//Done
+
 
               CustomLabeledTextField(
                 label: AppText.minIncomeCriteria,
@@ -77,7 +69,7 @@ class Step2FormProduct extends StatelessWidget {
                 inputType: TextInputType.number,
                 hintText: AppText.enterMinIncomeCriteria,
 
-              ),
+              ),//Done
 
               CustomLabeledTextField(
                 label: AppText.minLoanAmount,
@@ -85,7 +77,7 @@ class Step2FormProduct extends StatelessWidget {
                 inputType: TextInputType.number,
                 hintText: AppText.enterMinLoanAmount,
 
-              ),
+              ),//Done
 
               CustomLabeledTextField(
                 label: AppText.maxLoanAmount,
@@ -93,10 +85,11 @@ class Step2FormProduct extends StatelessWidget {
                 inputType: TextInputType.number,
                 hintText: AppText.enterMaxLoanAmount,
 
-              ),
+              ),//Done
+
 
               CustomLabeledTextField2(
-                label: AppText.eligibleProfitPercent, ///previous it was named Profit Percentage
+                label: AppText.eligibleProfitForAppraisal, ///previous it was named Profit Percentage
                 controller: addProductController.prodProfitPercentageController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterEligibleProfitPercent,
@@ -111,7 +104,7 @@ class Step2FormProduct extends StatelessWidget {
                   // camNoteController.calculateLoanDetails();
                 },
 
-              ),
+              ),//Done
 
               CustomLabeledTextField(
                 label: AppText.minTenor,
@@ -119,7 +112,8 @@ class Step2FormProduct extends StatelessWidget {
                 inputType: TextInputType.number,
                 hintText: AppText.enterMinTenor,
 
-              ),
+              ),//Done
+
 
               CustomLabeledTextField(
                 label: AppText.maxTenor,
@@ -127,7 +121,7 @@ class Step2FormProduct extends StatelessWidget {
                 inputType: TextInputType.number,
                 hintText: AppText.enterMaxTenor,
 
-              ),
+              ),//Done
 
               CustomLabeledTextField2(
                 label: AppText.minRoi,
@@ -142,9 +136,9 @@ class Step2FormProduct extends StatelessWidget {
                     maxValue: 100,
                     errorMessage: "The Minimum (ROI) should not be more than 100 %",
                   );
-                 // camNoteController.calculateLoanDetails();
+                  // camNoteController.calculateLoanDetails();
                 },
-              ),
+              ),//Done
 
               CustomLabeledTextField2(
                 label: AppText.maxRoi,
@@ -161,20 +155,36 @@ class Step2FormProduct extends StatelessWidget {
                   );
                   // camNoteController.calculateLoanDetails();
                 },
-              ),
+              ),//Done
+
+
 
               CustomLabeledTextField(
-                label: AppText.ageAtMaturity, ///previously it was named Max Tenor Eligibility Criteria
+                label: AppText.ageAtMaturityNonEarningApplicants, ///previously it was named Max Tenor Eligibility Criteria
                 controller: addProductController.prodMaxTenorEligibilityCriteriaController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterAgeAtMaturity,
-              ),
+              ),//Done
 
               CustomLabeledTextField(
                 label: AppText.geoLimit,
                 controller: addProductController.prodGeoLimitController,
                 inputType: TextInputType.number,
                 hintText: AppText.enterGeoLimit,
+
+              ),//Done
+              CustomLabeledTextField(
+                label: AppText.processingCharges,
+                controller: addProductController.prodProcessingChargesController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterProcessingCharges,
+                validator:  ValidationHelper.validateName,
+              ),
+              CustomLabeledTextField(
+                label: AppText.ageLimitEarningApplicants,
+                controller: addProductController.prodAgeLimitEarningApplicantsController,
+                inputType: TextInputType.number,
+                hintText: AppText.enterAgeLimitEarningApplicants,
 
               ),
             ],

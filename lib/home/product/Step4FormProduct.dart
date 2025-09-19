@@ -41,6 +41,7 @@ class Step4FormProduct extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
+/*
               CustomTextLabel(
                 label: AppText.commonDocumentsForAllPproductDocuments,
 
@@ -84,6 +85,7 @@ class Step4FormProduct extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
+*/
 
               CustomTextLabel(
                 label: AppText.additionalDocuments,
