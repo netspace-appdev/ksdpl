@@ -27,6 +27,7 @@ import '../../models/product/GetAllProductCategoryModel.dart';
 import '../../models/product/GetDocumentProductIdModel.dart' as getDoc;
 import '../../models/product/GetProductListById.dart';
 import '../../models/product/AddProductDocumentModel.dart';
+import '../../models/product/ProductActiveDeactiveModel.dart';
 import '../../services/loan_appl_service.dart';
 import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import '../../services/drawer_api_service.dart';
@@ -47,6 +48,7 @@ class AddProductController extends GetxController{
   var isLoading = false.obs;
   var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
+  var productActiveDeactiveModel = Rxn<ProductActiveDeactiveModel>(); //
   var selectedGender = Rxn<String>();
   String get selectedGenderValue => selectedGender.value ?? "";
   var selectedGenderCoAP = Rxn<String>();
@@ -1134,7 +1136,7 @@ class AddProductController extends GetxController{
 
 
         int productId = int.parse(addProductListModel.value!.data!.id.toString()); // replace with your actual productId
-
+        productActiveDeactiveApi(productId:productId.toString());
         List<Map<String, dynamic>> finalPayload = [];
 
         if (commonDocument != null && commonDocument.isNotEmpty) {
@@ -1751,6 +1753,38 @@ class AddProductController extends GetxController{
       isLoadingMainScreen(false);
     }
   }
+
+  void  productActiveDeactiveApi({
+    required productId
+}) async {
+    try {
+      isLoading(true);
+
+      var data = await ProductService.productActiveDeactiveApi(productId: productId);
+
+      if(data['success'] == true){
+
+
+        productActiveDeactiveModel.value= ProductActiveDeactiveModel.fromJson(data);
+
+        isLoading(false);
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error productActiveDeactiveApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+    } finally {
+
+      isLoading(false);
+    }
+  }
+
 
 }
 

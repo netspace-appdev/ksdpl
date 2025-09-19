@@ -22,6 +22,7 @@ class ProductService {
   static const String getAllVacancyList = BaseUrl.baseUrl + 'VacancyMaster/GetAllVacancy';
   static const String getAllInsuranceIllustrations = BaseUrl.baseUrl + 'CamNoteDetail/GetAllInsuranceIllustrations';
   static const String getProductListByCreatorId = BaseUrl.baseUrl + 'ProductList/GetProductListByCreatorId';
+  static const String productActiveDeactive = BaseUrl.baseUrl + 'ProductList/Active-Deactive';
 
 
 
@@ -660,6 +661,40 @@ class ProductService {
 
       Helper.ApiReq(getProductListByCreatorId, request.fields);
       Helper.ApiRes(getProductListByCreatorId, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>>productActiveDeactiveApi({
+    required productId
+}) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(productActiveDeactive),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', productId,fallback: "0");
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      Helper.ApiReq(productActiveDeactive, request.fields);
+      Helper.ApiRes(productActiveDeactive, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
