@@ -8,6 +8,7 @@ import '../../controllers/greeting_controller.dart';
 import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
 import '../common/storage_service.dart';
+import '../controllers/more/ProfileController.dart';
 import 'custom_drawer.dart';
 import 'more/changeContactNumer.dart';
 import 'more/changeEmail.dart';
@@ -24,11 +25,20 @@ class MoreSettingScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final Addleadcontroller addleadcontroller =Get.put(Addleadcontroller());
+  final ProfileController profileController =Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
     final menuItems = [
-      _MenuItem(AppImage.user, "My Profile", () => Get.to(ProfileScreen())),
+     // _MenuItem(AppImage.user, "My Profile", () => Get.to(ProfileScreen())),
+      _MenuItem(AppImage.user, "My Profile", () async {
+        await profileController.fetchUserDetail();
+       //  profileController.fetchUserEducationDetail();
+       //  profileController.fetchUserProfessionalDetail();
+      //  if (profileController.userDetail.value != null) {
+          Get.to(() => ProfileScreen());
+       // }
+      }),
       _MenuItem(AppImage.lock, "Change Password", () => Get.to(Changepassword())),
       _MenuItem(AppImage.telephone, "Change Phone No", () => Get.to(ChangeContactNumber())),
       _MenuItem(AppImage.email, "Change Email", () => Get.to(ChangeEmail())),

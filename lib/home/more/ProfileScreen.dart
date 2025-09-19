@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/controllers/more/profileMultiFormController/employmentFormController .dart';
 import 'package:ksdpl/custom_widgets/CustomDropdown.dart';
@@ -151,14 +152,14 @@ class ProfileScreen extends StatelessWidget {
                                         validator: ValidationHelper.validateDescription,
                                       ),
 
-                                      CustomLabeledTextField(
+                                    /*  CustomLabeledTextField(
                                         label: AppText.EducationType,
                                         isRequired: false,
                                         controller: profileController.educationTypeController,
                                         inputType: TextInputType.name,
                                         hintText: AppText.EducationType,
                                         validator: ValidationHelper.validateDescription,
-                                      ),
+                                      ),*/
 
                                       CustomLabeledTextField(
                                         label: AppText.JobRole,
@@ -181,7 +182,7 @@ class ProfileScreen extends StatelessWidget {
                                       CustomLabeledTextField(
                                         label: AppText.ManagerName,
                                         isRequired: true,
-                                        controller: profileController.mobileController,
+                                        controller: profileController.managerNameController,
                                         inputType: TextInputType.name,
                                         hintText: AppText.ManagerName,
                                         validator: ValidationHelper.validateDescription,
@@ -189,7 +190,7 @@ class ProfileScreen extends StatelessWidget {
                                       CustomLabeledTextField(
                                         label: AppText.address,
                                         isRequired: true,
-                                        controller: profileController.mobileController,
+                                        controller: profileController.addressController,
                                         inputType: TextInputType.name,
                                         hintText: AppText.address,
                                         validator: ValidationHelper.validateDescription,
@@ -333,7 +334,7 @@ class ProfileScreen extends StatelessWidget {
                                       CustomLabeledTextField(
                                         label: AppText.EmployeeadharNo,
                                         isRequired: true,
-                                        controller: profileController.mobileController,
+                                        controller: profileController.adharCardController,
                                         inputType: TextInputType.name,
                                         hintText: AppText.enterEmployeeadharNo,
                                         validator: ValidationHelper.validateDescription,
@@ -351,6 +352,7 @@ class ProfileScreen extends StatelessWidget {
                                               ),
                                             ),
                                             onPressed: () {
+                                            //  Get.dialog(AadhaarVerificationDialog());
 
                                             }, child: const Text(
                                             AppText.adharVarify,
@@ -772,6 +774,123 @@ class ProfileScreen extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+
+
+class AadhaarVerificationDialog extends StatelessWidget {
+  final TextEditingController captchaController = TextEditingController();
+  final RxString captchaImage = ''.obs; // holds captcha base64
+  final RxString captchaTxnId = ''.obs; // holds captcha txn id from API
+
+  AadhaarVerificationDialog({super.key});
+
+  // Simulated API: Generate captcha
+  Future<void> generateCaptcha() async {
+    // TODO: Replace with your Aadhaar API call
+    // Example API Response: { "captchaBase64": "...", "captchaTxnId": "12345" }
+
+    // Mock captcha response
+    const mockBase64 =
+        "iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAACoWZ8PAAAADElEQVR42mNkYGBgAAAABAABJzQnCgAAAABJRU5ErkJggg==";
+    captchaImage.value = mockBase64;
+    captchaTxnId.value = "txn123456"; // example txn id
+  }
+
+  // Simulated API: Validate Captcha + Send OTP
+  Future<void> validateCaptchaAndSendOtp(String captchaValue) async {
+    // TODO: Replace with actual Aadhaar OTP API
+    // Request: { aadhaarNo, captchaTxnId, captchaValue }
+    // Response: { success: true/false, message: "..." }
+
+    if (captchaValue == "12345") {
+      // ✅ Suppose correct captcha
+      Get.snackbar("Success", "Captcha valid. OTP sent to your Aadhaar-linked mobile!");
+    } else {
+      // ❌ Invalid captcha
+      Get.snackbar("Error", "Invalid captcha. Please try again.");
+      generateCaptcha(); // Refresh captcha after failure
+      captchaController.clear();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (captchaImage.value.isEmpty) {
+      generateCaptcha(); // Load first captcha
+    }
+
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      insetPadding: const EdgeInsets.all(20),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Aadhaar Verification Process",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+
+            // Captcha + Refresh
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Obx(() {
+                  if (captchaImage.value.isEmpty) {
+                    return const SizedBox(height: 50, width: 120);
+                  }
+                  return Image.memory(
+                    base64Decode(captchaImage.value),
+                    width: 120,
+                    height: 50,
+                    fit: BoxFit.fill,
+                  );
+                }),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: generateCaptcha,
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Captcha Input
+            TextField(
+              controller: captchaController,
+              decoration: const InputDecoration(
+                labelText: "Enter Captcha Code",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Send OTP
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+                onPressed: () {
+                  if (captchaController.text.isEmpty) {
+                    Get.snackbar("Error", "Please enter captcha");
+                    return;
+                  }
+                  validateCaptchaAndSendOtp(captchaController.text);
+                },
+                child: const Text("Send OTP"),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
