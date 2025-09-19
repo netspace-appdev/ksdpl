@@ -7,12 +7,18 @@ import 'package:ksdpl/controllers/more/profileMultiFormController/employmentForm
 import 'package:ksdpl/models/more/ChangeEmailResponseModel.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
+import '../../models/getUserByIdModel/getEducationDetailById.dart';
+import '../../models/getUserByIdModel/getUserByIdModel.dart';
+import '../../models/getUserByIdModel/getWorkExperience.dart';
+import '../../services/moreService.dart';
 import '../addDocumentControler/addDocumentModel/addDocumentModel.dart';
+import '../lead_dd_controller.dart';
 import 'profileMultiFormController/ademicsController.dart';
 
 class ProfileController extends GetxController{
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  LeadDDController leadDDController=Get.put(LeadDDController());
 
   final TextEditingController employeeNameController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
@@ -25,6 +31,29 @@ class ProfileController extends GetxController{
   final TextEditingController WorkPlaceController = TextEditingController();
   final TextEditingController atStartDateController = TextEditingController();
   final TextEditingController atEndDateController = TextEditingController();
+  final TextEditingController employeeController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController managerNameController = TextEditingController();
+  final TextEditingController adharCardController = TextEditingController();
+  final TextEditingController companyNameController = TextEditingController();
+  final TextEditingController qualificationController = TextEditingController();
+  final TextEditingController specializationController = TextEditingController();
+  final TextEditingController institutionNameController = TextEditingController();
+  final TextEditingController universityNameController = TextEditingController();
+  final TextEditingController yearOfPassingController = TextEditingController();
+  final TextEditingController gradeOrPercentageController = TextEditingController();
+  final TextEditingController educationtypeController = TextEditingController();
+  final TextEditingController nameOfCompanyController = TextEditingController();
+  final TextEditingController jobTitleController = TextEditingController();
+  final TextEditingController departmentController = TextEditingController();
+  final TextEditingController startDateController = TextEditingController();
+  final TextEditingController endDateController = TextEditingController();
+  final TextEditingController employmentTypeController = TextEditingController();
+  final TextEditingController companyAddressController = TextEditingController();
+  final TextEditingController reasonForLeavingController = TextEditingController();
+  final TextEditingController lastDrawnSalaryController = TextEditingController();
+  final TextEditingController responsibilitiesController = TextEditingController();
+
 
   var selectedGender = Rxn<String>();
 
@@ -37,6 +66,15 @@ class ProfileController extends GetxController{
 
   var obscurePassword = true.obs;
   String? phone = StorageService.get(StorageService.PHONE);
+  var getUserByIdModel = Rxn<GetUserByIdModel>();
+  var getEducationDetailModel = Rxn<GetEducationDetail>();
+  var getProfessionalDetailModel = Rxn<GetProfessionalDetailModel>();
+
+
+
+
+
+
 
 
 
@@ -145,6 +183,185 @@ class ProfileController extends GetxController{
       debugPrint("🧯 Invalid index passed to removeAcademicDetail: $index");
     }
   }
+
+
+
+  Future<void>  fetchUserDetail() async {
+    //getUserDetailRequestApi
+    try {
+      isLoading(true);
+
+      var data = await MoreServices.getUserDetailRequestApi();
+      getUserByIdModel.value = GetUserByIdModel.fromJson(data);
+
+      if (getUserByIdModel.value?.status == '200') {
+
+        print('here data is ${getUserByIdModel.value?.data?.employeeName}');
+        final userData = getUserByIdModel.value?.data;
+
+        // ✅ Map API response → form controllers
+        employeeNameController.text = userData?.employeeName ?? '';
+        dateOfBirthController.text = userData?.dateOfBirth ?? '';
+        profileEmailController.text = userData?.email ?? '';
+        phoneNumberController.text = userData?.phoneNumber ?? '';
+        whatsappNoController.text = userData?.whatsappNumber ?? '';
+        JobRoleController.text = userData?.jobRole ?? '';
+        WorkPlaceController.text = userData?.workPlace ?? '';
+        managerNameController.text = userData?.managerName ?? '';
+        addressController.text = userData?.address ?? '';
+        adharCardController.text = userData?.aadharNumber ?? '';
+        //companyNameController.text=userData.
+
+        // For dropdowns
+        leadDDController.selectedState.value = userData?.state?.toString() ?? '';
+        leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+
+        leadDDController.selectedDistrict.value = userData?.district?.toString() ?? '';
+        leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+
+        leadDDController.selectedCity.value = userData?.city?.toString() ?? '';
+
+
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        // Handle empty case
+      } else {
+        ToastMessage.msg(data['data'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error in changeEmailResponse: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+/*
+  Future<void> generateOptByAdharNo()async {
+    try {
+      isLoading(true);
+
+      var data = await MoreServices.getUserEducationDetailRequestApi();
+      getUserByIdModel.value = GetUserByIdModel.fromJson(data);
+
+      if (getUserByIdModel.value?.status == '200') {
+
+        print('here data is ${getUserByIdModel.value?.data?.employeeName}');
+        final userData = getUserByIdModel.value?.data;
+
+        // ✅ Map API response → form controllers
+        employeeNameController.text = userData?.employeeName ?? '';
+        dateOfBirthController.text = userData?.dateOfBirth ?? '';
+        profileEmailController.text = userData?.email ?? '';
+        phoneNumberController.text = userData?.phoneNumber ?? '';
+        whatsappNoController.text = userData?.whatsappNumber ?? '';
+        JobRoleController.text = userData?.jobRole ?? '';
+        WorkPlaceController.text = userData?.workPlace ?? '';
+        managerNameController.text = userData?.managerName ?? '';
+        addressController.text = userData?.address ?? '';
+        adharCardController.text = userData?.aadharNumber ?? '';
+        //companyNameController.text=userData.
+
+        // For dropdowns
+        leadDDController.selectedState.value = userData?.state?.toString() ?? '';
+        leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+
+        leadDDController.selectedDistrict.value = userData?.district?.toString() ?? '';
+        leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+
+        leadDDController.selectedCity.value = userData?.city?.toString() ?? '';
+
+
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        // Handle empty case
+      } else {
+        ToastMessage.msg(data['data'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error in changeEmailResponse: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }
+*/
+
+ Future<void>fetchUserEducationDetail() async {
+
+   try {
+     isLoading(true);
+
+     var data = await MoreServices.getUserEducationDetailRequestApi();
+     getEducationDetailModel.value = GetEducationDetail.fromJson(data);
+
+     if (getEducationDetailModel.value?.status == '200') {
+
+       print('here data is ${getEducationDetailModel.value?.data?.length}');
+       final userData = getEducationDetailModel.value?.data;
+
+        qualificationController.text = userData?[0].qualification??'';
+        specializationController.text = userData?.first.specialization??'';
+        institutionNameController.text =userData?.first.institutionName??'';
+        universityNameController.text = userData?.first.universityName??'';
+        yearOfPassingController.text = userData?.first.yearOfPassing.toString()??'';
+        gradeOrPercentageController.text = userData?.first.gradeOrPercentage??'';
+        educationtypeController.text = userData?.first.educationType??'';
+
+
+     } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+       // Handle empty case
+     } else {
+       ToastMessage.msg(data['data'] ?? AppText.somethingWentWrong);
+     }
+   } catch (e) {
+     print("Error in changeEmailResponse: $e");
+     ToastMessage.msg(AppText.somethingWentWrong);
+   } finally {
+     isLoading(false);
+   }
+
+ }
+
+  Future<void>fetchUserProfessionalDetail() async {
+    try {
+      isLoading(true);
+
+      var data = await MoreServices.getUserProfessionDetailRequestApi();
+      getProfessionalDetailModel.value = GetProfessionalDetailModel.fromJson(data);
+
+      if (getProfessionalDetailModel.value?.status == '200') {
+
+        print('here data is ${getProfessionalDetailModel.value?.data?.length}');
+        final userData = getProfessionalDetailModel.value?.data;
+
+        // ✅ Map API response → form controllers
+        nameOfCompanyController.text = userData?.first.companyName ?? '';
+        jobTitleController.text = userData?.first.jobTitle ?? '';
+        departmentController.text = userData?.first.department ?? '';
+        startDateController.text = userData?.first.startDate ?? '';
+        endDateController.text = userData?.first.endDate ?? '';
+        employmentTypeController.text = userData?.first.employmentType ?? '';
+        companyAddressController.text = userData?.first.companyAddress ?? '';
+        reasonForLeavingController.text = userData?.first.reasonForLeaving ?? '';
+        lastDrawnSalaryController.text = userData?.first.lastDrawnSalary.toString() ?? '';
+        responsibilitiesController.text = userData?.first.responsibilities.toString() ?? '';
+
+
+
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        // Handle empty case
+      } else {
+        ToastMessage.msg(data['data'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error in changeEmailResponse: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+
+
+  }
+
 
 
 }
