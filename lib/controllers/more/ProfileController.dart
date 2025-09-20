@@ -4,6 +4,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:ksdpl/controllers/more/profileMultiFormController/workExperienceController.dart';
 import 'package:ksdpl/controllers/more/profileMultiFormController/employmentFormController .dart';
+import 'package:ksdpl/models/loan_application/special_model/CoApplicantModel.dart';
 import 'package:ksdpl/models/more/ChangeEmailResponseModel.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
@@ -56,8 +57,6 @@ class ProfileController extends GetxController{
 
 
   var selectedGender = Rxn<String>();
-
-
   var isLoading=false.obs;
   var acadmicsFormApplList = <AcademicFormController>[].obs;
   var employmentFormList = <WorkExperienceController>[].obs;
@@ -222,6 +221,7 @@ class ProfileController extends GetxController{
         leadDDController.selectedCity.value = userData?.city?.toString() ?? '';
 
 
+
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
         // Handle empty case
       } else {
@@ -285,43 +285,57 @@ class ProfileController extends GetxController{
   }
 */
 
- Future<void>fetchUserEducationDetail() async {
+  Future<void> fetchUserEducationDetail() async {
+    try {
+      isLoading(true);
 
-   try {
-     isLoading(true);
+      var data = await MoreServices.getUserEducationDetailRequestApi();
+      getEducationDetailModel.value = GetEducationDetail.fromJson(data);
 
-     var data = await MoreServices.getUserEducationDetailRequestApi();
-     getEducationDetailModel.value = GetEducationDetail.fromJson(data);
+      if (getEducationDetailModel.value?.status == '200') {
+        acadmicsFormApplList.clear(); // clear old data before adding new
 
-     if (getEducationDetailModel.value?.status == '200') {
+        final userDataList = getEducationDetailModel.value?.data ?? [];
+        for (var edu in userDataList) {
+          final form = AcademicFormController();
 
-       print('here data is ${getEducationDetailModel.value?.data?.length}');
-       final userData = getEducationDetailModel.value?.data;
+          form.qualificationController.text = edu.qualification ?? '';
+          form.specializationController.text = edu.specialization ?? '';
+          form.institutionNameController.text = edu.institutionName ?? '';
+          form.universityNameController.text = edu.universityName ?? '';
+          form.yearOfPassingController.text =
+              edu.yearOfPassing?.toString() ?? '';
+          form.gradeOrPercentageController.text = edu.gradeOrPercentage ?? '';
+          form.educationtypeController.text = edu.educationType ?? '';
 
-        qualificationController.text = userData?[0].qualification??'';
-        specializationController.text = userData?.first.specialization??'';
-        institutionNameController.text =userData?.first.institutionName??'';
-        universityNameController.text = userData?.first.universityName??'';
-        yearOfPassingController.text = userData?.first.yearOfPassing.toString()??'';
-        gradeOrPercentageController.text = userData?.first.gradeOrPercentage??'';
-        educationtypeController.text = userData?.first.educationType??'';
+          // if API gives file details
+          if (edu.documents != null) {
+            form.selectedFileName.value = edu.documents!;
+          }
+          if (edu.documents != null) {
+            form.selectedFilePath.value = edu.documents!;
+          }
 
+          acadmicsFormApplList.add(form);
+        }
 
-     } else if (data['success'] == false && (data['data'] as List).isEmpty) {
-       // Handle empty case
-     } else {
-       ToastMessage.msg(data['data'] ?? AppText.somethingWentWrong);
-     }
-   } catch (e) {
-     print("Error in changeEmailResponse: $e");
-     ToastMessage.msg(AppText.somethingWentWrong);
-   } finally {
-     isLoading(false);
-   }
+        acadmicsFormApplList.refresh();
+      } else if (data['success'] == false &&
+          (data['data'] as List).isEmpty) {
+        // ✅ no education records found
+        acadmicsFormApplList.clear();
+      } else {
+        ToastMessage.msg(data['data'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("❌ Error in fetchUserEducationDetail: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }
 
- }
-
-  Future<void>fetchUserProfessionalDetail() async {
+  Future<void> fetchUserProfessionalDetail() async {
     try {
       isLoading(true);
 
@@ -329,37 +343,173 @@ class ProfileController extends GetxController{
       getProfessionalDetailModel.value = GetProfessionalDetailModel.fromJson(data);
 
       if (getProfessionalDetailModel.value?.status == '200') {
+        employmentFormList.clear(); // clear old records
 
-        print('here data is ${getProfessionalDetailModel.value?.data?.length}');
-        final userData = getProfessionalDetailModel.value?.data;
+        final userDataList = getProfessionalDetailModel.value?.data ?? [];
+        print('here data is ${userDataList.length}');
 
-        // ✅ Map API response → form controllers
-        nameOfCompanyController.text = userData?.first.companyName ?? '';
-        jobTitleController.text = userData?.first.jobTitle ?? '';
-        departmentController.text = userData?.first.department ?? '';
-        startDateController.text = userData?.first.startDate ?? '';
-        endDateController.text = userData?.first.endDate ?? '';
-        employmentTypeController.text = userData?.first.employmentType ?? '';
-        companyAddressController.text = userData?.first.companyAddress ?? '';
-        reasonForLeavingController.text = userData?.first.reasonForLeaving ?? '';
-        lastDrawnSalaryController.text = userData?.first.lastDrawnSalary.toString() ?? '';
-        responsibilitiesController.text = userData?.first.responsibilities.toString() ?? '';
+        for (var exp in userDataList) {
+          final workController = WorkExperienceController();
 
+          workController.companyNameController.text = exp.companyName ?? '';
+          workController.jobTitleController.text = exp.jobTitle ?? '';
+          workController.departmentController.text = exp.department ?? '';
+          workController.startDateController.text = exp.startDate ?? '';
+          workController.endDateController.text = exp.endDate ?? '';
+          workController.employmentTypeController.text = exp.employmentType ?? '';
+          workController.companyAddressController.text = exp.companyAddress ?? '';
+          workController.reasonForLeavingController.text = exp.reasonForLeaving ?? '';
+          workController.lastDrawnSalaryController.text = exp.lastDrawnSalary?.toString() ?? '';
+          workController.responsibilitiesController.text = exp.responsibilities ?? '';
 
+          // If file info is available
+          if (exp.documents != null) {
+            workController.selectedFileName.value = exp.documents!;
+          }
+          // if (exp.documentFilePath != null) {
+          //   workController.selectedFilePath.value = exp.documentFilePath!;
+          // }
 
-      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
-        // Handle empty case
+          employmentFormList.add(workController);
+        }
+
+        employmentFormList.refresh();
+      } else if (data['success'] == false &&
+          (data['data'] as List).isEmpty) {
+        // No records
+        employmentFormList.clear();
       } else {
         ToastMessage.msg(data['data'] ?? AppText.somethingWentWrong);
       }
     } catch (e) {
-      print("Error in changeEmailResponse: $e");
+      print("❌ Error in fetchUserProfessionalDetail: $e");
       ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
       isLoading(false);
     }
+  }
 
+  Future<void> editEmployeeDetailRequest() async {
+    try {
+      isLoading(true);
 
+      final payload = {
+        "Id": "28", // your example Id
+        "BranchId": "3", // example branch
+        "EmployeeName": employeeNameController.text.trim(),
+        "Gender": selectedGender.value ?? "",
+        "DateOfBirth": dateOfBirthController.text.trim(),
+        "Email": profileEmailController.text.trim(),
+        "PhoneNumber": phoneNumberController.text.trim(),
+        "WhatsappNumber": whatsappNoController.text.trim(),
+        "HireDate": atStartDateController.text.trim(),
+        "JobRole": JobRoleController.text.trim(),
+        "WorkPlace": WorkPlaceController.text.trim(),
+        "ManagerID": "2", // set dynamically if needed
+        "Address": addressController.text.trim(),
+        "State": leadDDController.selectedState.value ?? "",
+        "District": leadDDController.selectedDistrict.value ?? "",
+        "City": leadDDController.selectedCity.value ?? "",
+        "PostalCode": "", // add if available
+        "CreatedBy": "", // set if needed
+        "IsEmployeeHeadOfTheBranch": "0",
+        "Image": "", // pass image path if updated
+        "Aadharnumber": adharCardController.text.trim(),
+        "AddressAsPerAadhar": "" // set if needed
+      };
+
+      var data = await MoreServices.editEmployeeDetailRequestApi(payload: payload);
+
+      // If you have a model, parse it; otherwise check data map directly
+      if (data['status'] == "200") {
+        ToastMessage.msg("Employee detail updated successfully");
+      } else if (data['success'] == false) {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("❌ Error in editEmployeeDetailRequest: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+// ================== Update Education ==================
+  Future<void> updateEmployeeEducationDetailsRequest() async {
+    try {
+      isLoading(true);
+
+      final payload = {
+        "Id": "", // pass if available
+        "EmployeeId": employeeController.text.trim(),
+        "Qualification": qualificationController.text.trim(),
+        "Specialization": specializationController.text.trim(),
+        "InstitutionName": institutionNameController.text.trim(),
+        "UniversityName": universityNameController.text.trim(),
+        "YearOfPassing": yearOfPassingController.text.trim(),
+        "GradeOrPercentage": gradeOrPercentageController.text.trim(),
+        "EducationType": educationtypeController.text.trim(),
+        "Documents": "", // set file path or name if uploaded
+      };
+
+      var data = await MoreServices.updateEmployeeEducationDetailsRequestApi(payload: payload);
+      final response = getProfessionalDetailModel.value;
+
+      if (response?.status == "200") {
+        ToastMessage.msg("Education details updated successfully");
+      } else if (data['success'] == false) {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      } else {
+        ToastMessage.msg(response?.message ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("❌ Error in updateEmployeeEducationDetailsRequest: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+// ================== Update Professional ==================
+  Future<void> updateEmployeeProfessionalDetailRequest() async {
+    try {
+      isLoading(true);
+
+      final payload = {
+        "Id": "", // pass if available
+        "EmployeeId": employeeController.text.trim(),
+        "CompanyName": companyNameController.text.trim(),
+        "JobTitle": jobTitleController.text.trim(),
+        "Department": departmentController.text.trim(),
+        "StartDate": startDateController.text.trim(),
+        "EndDate": endDateController.text.trim(),
+        "EmploymentType": employmentTypeController.text.trim(),
+        "CompanyAddress": companyAddressController.text.trim(),
+        "Responsibilities": responsibilitiesController.text.trim(),
+        "LastDrawnSalary": lastDrawnSalaryController.text.trim(),
+        "ReasonForLeaving": reasonForLeavingController.text.trim(),
+        "Documents": "", // set file path/name if uploaded
+        "IsFresher": "", // true/false if available
+      };
+
+      var data = await MoreServices.updateEmployeeProfessionalDetailRequestApi(payload: payload);
+      final response = getProfessionalDetailModel.value;
+
+      if (response?.status == "200") {
+        ToastMessage.msg("Professional details updated successfully");
+      } else if (data['success'] == false) {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      } else {
+        ToastMessage.msg(response?.message ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("❌ Error in updateEmployeeProfessionalDetailRequest: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }
   }
 
 

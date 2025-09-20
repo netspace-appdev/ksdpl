@@ -112,11 +112,9 @@ class CoApplicantDetailController {
         final List<dist.Data> districts = getDistrictByStateModelCurr.value?.data ?? [];
         districtListCurr.value = List<dist.Data>.from(districts);
 
-
         isDistrictLoadingCurr(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
 
         getDistrictByStateModelCurr.value=null;
       }else{
@@ -131,7 +129,6 @@ class CoApplicantDetailController {
 
       isDistrictLoadingCurr(false);
     } finally {
-
 
       isDistrictLoadingCurr(false);
     }

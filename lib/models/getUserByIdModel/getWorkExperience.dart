@@ -76,7 +76,17 @@ class Data {
     employmentType = json['employmentType'];
     companyAddress = json['companyAddress'];
     responsibilities = json['responsibilities'];
-    lastDrawnSalary = json['lastDrawnSalary'];
+
+    // Handle int/double safely
+    final salaryValue = json['lastDrawnSalary'];
+    if (salaryValue is int) {
+      lastDrawnSalary = salaryValue;
+    } else if (salaryValue is double) {
+      lastDrawnSalary = salaryValue.toInt(); // or store as double if needed
+    } else {
+      lastDrawnSalary = null;
+    }
+
     reasonForLeaving = json['reasonForLeaving'];
     documents = json['documents'];
     approvedByHR = json['approvedByHR'];

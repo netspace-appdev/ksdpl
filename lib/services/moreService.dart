@@ -14,6 +14,9 @@ class MoreServices {
   static const String getUserEducationByIdRequest = BaseUrl.baseUrl + 'Employee/GetEducationDetailsByEmployeeId';
   static const String getUserProfessionByIdRequest = BaseUrl.baseUrl + 'Employee/GetProfessionalDetailByEmployeeId';
   static const String generateAadharOtpRequest = BaseUrl.baseUrl + 'FileUpload/GenerateAadharOTP';
+  static const String editEmployeeRequest = BaseUrl.baseUrl + 'Employee/EditEmployee';
+  static const String updateEmployeeProfessionalDetailRequest = BaseUrl.baseUrl + 'Employee/UpdateEmployeeProfessionalDetails';
+  static const String updateEmployeeEducationDetailsRequest = BaseUrl.baseUrl + 'Employee/UpdateEmployeeEducationDetails';
 
 
   //checkOldPasswordRequestApi
@@ -143,12 +146,9 @@ class MoreServices {
   //ChangeUserPhoneNumberRequestApi
 
   static Future<Map<String, dynamic>> changeUserPhoneNumberRequestApi({
-
  required String PhoneNumber,
  required String Email,
-
-  })
-  async {
+  }) async {
     try {
       var request = http.MultipartRequest(
         'POST',
@@ -181,6 +181,7 @@ class MoreServices {
     }
   }
 
+  //getUserDetailRequestApi
   static Future<Map<String, dynamic>> getUserDetailRequestApi()
   async {
     try {
@@ -214,7 +215,8 @@ class MoreServices {
     }
   }
 
-  static getUserEducationDetailRequestApi() async {
+  //getUserEducationDetailRequestApi
+  static Future<Map<String, dynamic>>getUserEducationDetailRequestApi() async {
     try {
       var userId=StorageService.get(StorageService.EMPLOYEE_ID);
 
@@ -226,7 +228,7 @@ class MoreServices {
       var header=await MyHeader.getHeaders2();
 
       request.headers.addAll(header);
-      MultipartFieldHelper.addField(request.fields, 'Id', userId,);
+      MultipartFieldHelper.addField(request.fields, 'EmployeeId', userId.toString(),);
 
       var streamedResponse = await request.send();
 
@@ -246,6 +248,7 @@ class MoreServices {
     }
   }
 
+  //getUserProfessionDetailRequestApi
   static getUserProfessionDetailRequestApi() async {
     try {
       var userId=StorageService.get(StorageService.EMPLOYEE_ID);
@@ -258,7 +261,7 @@ class MoreServices {
       var header=await MyHeader.getHeaders2();
 
       request.headers.addAll(header);
-      MultipartFieldHelper.addField(request.fields, 'Id', userId,);
+      MultipartFieldHelper.addField(request.fields, 'EmployeeId', userId,);
 
       var streamedResponse = await request.send();
 
@@ -275,6 +278,104 @@ class MoreServices {
     } catch (e) {
       print("Error: $e");
       throw Exception('Error while submitting: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> editEmployeeDetailRequestApi({required Map<String, String> payload}) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(editEmployeeRequest),
+      );
+
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Add all payload fields
+      payload.forEach((key, value) {
+        MultipartFieldHelper.addField(request.fields, key, value);
+      });
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(editEmployeeRequest, request.fields);
+      Helper.ApiRes(editEmployeeRequest, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to edit employee: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error in editEmployeeDetailRequestApi: $e");
+      throw Exception('Error while editing employee: $e');
+    }
+  }
+
+  // ================== Update Education ==================
+  static Future<Map<String, dynamic>> updateEmployeeEducationDetailsRequestApi({required Map<String, String> payload}) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(updateEmployeeEducationDetailsRequest),
+      );
+
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Add all payload fields
+      payload.forEach((key, value) {
+        MultipartFieldHelper.addField(request.fields, key, value);
+      });
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(updateEmployeeEducationDetailsRequest, request.fields);
+      Helper.ApiRes(updateEmployeeEducationDetailsRequest, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to update education: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error in updateEmployeeEducationDetailsRequestApi: $e");
+      throw Exception('Error while updating education: $e');
+    }
+  }
+
+  // ================== Update Professional ==================
+  static Future<Map<String, dynamic>> updateEmployeeProfessionalDetailRequestApi({required Map<String, String> payload}) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(updateEmployeeProfessionalDetailRequest),
+      );
+
+      var header = await MyHeader.getHeaders2();
+      request.headers.addAll(header);
+
+      // Add all payload fields
+      payload.forEach((key, value) {
+        MultipartFieldHelper.addField(request.fields, key, value);
+      });
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(updateEmployeeProfessionalDetailRequest, request.fields);
+      Helper.ApiRes(updateEmployeeProfessionalDetailRequest, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to update professional: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error in updateEmployeeProfessionalDetailRequestApi: $e");
+      throw Exception('Error while updating professional: $e');
     }
   }
 

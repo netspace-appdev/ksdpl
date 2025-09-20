@@ -9,6 +9,7 @@ import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/infoController.dart';
 import '../common/storage_service.dart';
 import '../controllers/more/ProfileController.dart';
+import '../custom_widgets/CustomElevatedButton.dart';
 import 'custom_drawer.dart';
 import 'more/changeContactNumer.dart';
 import 'more/changeEmail.dart';
@@ -33,8 +34,8 @@ class MoreSettingScreen extends StatelessWidget {
      // _MenuItem(AppImage.user, "My Profile", () => Get.to(ProfileScreen())),
       _MenuItem(AppImage.user, "My Profile", () async {
         await profileController.fetchUserDetail();
-       //  profileController.fetchUserEducationDetail();
-       //  profileController.fetchUserProfessionalDetail();
+        await profileController.fetchUserEducationDetail();
+        await profileController.fetchUserProfessionalDetail();
       //  if (profileController.userDetail.value != null) {
           Get.to(() => ProfileScreen());
        // }
@@ -102,7 +103,6 @@ class MoreSettingScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             //SizedBox(height: MediaQuery.of(context).size.height*0.05,),
-
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
@@ -121,17 +121,40 @@ class MoreSettingScreen extends StatelessWidget {
                                     ),
                                     if (index != menuItems.length - 1)
                                       const Divider(height: 1, thickness: 0.5, color: Colors.amber),
+
+
                                   ],
                                 );
                               }),
                             ),
+                            SizedBox(height: MediaQuery.of(context).size.height*0.1),
+                            Obx((){
+                              if(profileController.isLoading.value){
+                                return const CircularProgressIndicator();
+                              }else{
+                                return Align(
+                                  alignment: AlignmentDirectional.bottomCenter,
+                                  child: CustomElevatedButton(
+                                    text: AppText.submit,
+                                    color: AppColor.primaryColor,
+                                    height: 50,
+                                    onPressed:(){
+                                      profileController.editEmployeeDetailRequest();
+                                      profileController.updateEmployeeEducationDetailsRequest();
+                                      profileController.updateEmployeeProfessionalDetailRequest();
+                                    },
+                                    textStyle: const TextStyle(color: AppColor.appWhite,fontSize:AppFSize.mediumFont, fontWeight: FontWeight.w600),
+                                    width: double.infinity,
+                                  ),
+                                );
+                              }
+                            }),
+
                           ],
                         ),
                       ),
                     ),
                   ),
-
-
                 ],
               ),
             ],
