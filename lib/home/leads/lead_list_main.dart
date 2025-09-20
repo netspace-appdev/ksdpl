@@ -337,6 +337,8 @@ class LeadListMain extends StatelessWidget {
             itemBuilder: (context, index) {
 
               final lead = leadListController.getAllLeadsModel.value!.data![index];
+              print("updated at--->${lead.lastUpdatedDate.toString()}");
+              print("updated at--->${Helper.convertDateTime(lead.lastUpdatedDate.toString()) }");
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -627,7 +629,7 @@ class LeadListMain extends StatelessWidget {
                       mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        if(lead.leadStage.toString()=="4")...[
+                        if(lead.leadStage.toString()=="4" && leadListController.rolRx.value=="INDEPENDENT AREA HEAD")...[
 
                           _buildTextButton(
                             label:AppText.doable,
@@ -994,7 +996,7 @@ overflow: TextOverflow.ellipsis,
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
+            phoneNumber:phoneNumber,//phoneNumber,//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
           /*  context: context,*/

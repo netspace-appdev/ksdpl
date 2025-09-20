@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../common/helper.dart';
+import '../common/storage_service.dart';
 import '../models/AdminSupervisorModel.dart';
 import '../models/FunctionalSupervisorModel.dart';
 import '../models/GetCampaignNameModel.dart';
@@ -206,7 +207,8 @@ class LeadDDController extends GetxController{
       print("leadCode passed to filter ===> $leadCode");
 
       List<int> allowedStageIds;
-
+      var rawRole = StorageService.get(StorageService.ROLE).toString();
+      var role = rawRole.replaceAll('[', '').replaceAll(']', '');
       switch (leadCode) {
         case 2:
         case 3:
@@ -215,6 +217,7 @@ class LeadDDController extends GetxController{
           allowedStageIds = [4, 5];
           break;
         case 4:
+          role=="INDEPENDENT AREA HEAD"?allowedStageIds = [6, 7]:allowedStageIds = [4, 5]; //remove this line, added on 20 sep
         case 6:
         case 7:
           allowedStageIds = [6, 7];

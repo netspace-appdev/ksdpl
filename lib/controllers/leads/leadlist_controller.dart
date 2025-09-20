@@ -121,6 +121,7 @@ class LeadListController extends GetxController {
   var isDashboardLeads = false.obs;
 
   var isLoad2 = false.obs;
+  var rolRx = "".obs;
 
 
 
@@ -136,6 +137,8 @@ class LeadListController extends GetxController {
 
     String today = DateFormat('dd/MM/yyyy').format(DateTime.now());
     disburseDateController.text = today;
+    var rawRole = StorageService.get(StorageService.ROLE).toString();
+    rolRx.value = rawRole.replaceAll('[', '').replaceAll(']', '');
 
   }
 

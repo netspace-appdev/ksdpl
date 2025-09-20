@@ -2918,7 +2918,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         isLoading(false);
 
       }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+        //ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 
 
@@ -2957,6 +2957,24 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camProposedEmiController.text = emi > 0 ? emi.toStringAsFixed(2) : "";
     camFoirController.text = foir > 0 ? foir.toStringAsFixed(2) : "";
     camLtvController.text = ltv > 0 ? ltv.toStringAsFixed(2) : "";
+  }
+
+  void calculateEmilWillContinue() {
+    // Get values safely (default to 0 if empty or invalid)
+    final totalEmi = num.tryParse(camTotalEmiController.text) ?? 0;
+    final stoppedBefore = num.tryParse(camEmiStoppedBeforeController.text) ?? 0;
+
+
+    print("camTotalEmiController.text--->${camTotalEmiController.text}");
+    print("totalEmi--->${totalEmi}");
+    print("stoppedBefore--->${stoppedBefore}");
+
+    // Perform calculation
+    final willContinue = (totalEmi - stoppedBefore).clamp(0, totalEmi);
+    print("willContinue--->${willContinue}");
+
+    // Update controller
+    camEmiWillContinueController.text = willContinue.toString();
   }
 
 }
@@ -3059,4 +3077,7 @@ extension ProductDataMapper on gpli.Data {
       autoindividual: autoindividual, // You can map this if needed later
     );
   }
+
+
+
 }

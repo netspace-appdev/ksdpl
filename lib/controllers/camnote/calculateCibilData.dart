@@ -77,6 +77,12 @@ CibilCalculatedValues calculateCibilData(
 
   int totalEnquiries = data.creditReport.ccrResponse.cirReportDataLst.length;
 
+
+
+/*  int totalEnquiries = data.creditReport?.ccrResponse?.cirReportDataLst
+      ?.where((item) => item?.cirReportData != null)
+      .length ?? 0;*/
+
   return CibilCalculatedValues(
     totalLoanAvailedOnCibil: totalLoanAvailed,
     totalLiveLoan: totalLiveLoan,

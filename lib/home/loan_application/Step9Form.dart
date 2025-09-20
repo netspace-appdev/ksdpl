@@ -33,7 +33,7 @@ class Step9Form extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.ProcessingFees,
+                label: AppText.processingFeeAgainstLoan,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailProcessingFees,
                 inputType: TextInputType.number,
@@ -42,7 +42,7 @@ class Step9Form extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.AdminFeeCharges,
+                label: AppText.adminFeeAgainstLoan,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailAdminFeeChargess,
                 inputType: TextInputType.number,
@@ -51,7 +51,7 @@ class Step9Form extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.ForeclosureCharges,
+                label: AppText.foreclosureChargesPO,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailForeclosureCharges,
                 inputType: TextInputType.number,
@@ -59,7 +59,7 @@ class Step9Form extends StatelessWidget {
                 validator:  ValidationHelper.validatePhoneNumber,
               ),
               CustomLabeledTextField2(
-                label: AppText.StampDuty,
+                label: AppText.stampDutyAgainstLoan,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailStampDuty,
                 inputType: TextInputType.number,
@@ -75,7 +75,7 @@ class Step9Form extends StatelessWidget {
                 },
               ),
               CustomLabeledTextField(
-                label: AppText.LegalVettingCharges,
+                label: AppText.legalVettingCharges,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailLegalVettingCharges,
                 inputType: TextInputType.number,
@@ -84,7 +84,7 @@ class Step9Form extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.TechnicalInspectionCharges,
+                label: AppText.technicalInspectionFee,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailTechnicalInspectionCharges,
                 inputType: TextInputType.number,
@@ -102,7 +102,7 @@ class Step9Form extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.TSRLegalCharges,
+                label: AppText.tsrYears,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailTSRLegalCharges,
                 inputType: TextInputType.number,

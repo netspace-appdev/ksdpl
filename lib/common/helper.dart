@@ -877,13 +877,14 @@ class AppText{
   static const String robmLogin="RO/BM Login";
   static const String aicLogin="AIC Login";
   static const String submitBasicDetails="Submit Basic Details";
-  static const String sendEmailToCustomer="Send Email to Customer";
+  static const String sendEmailToCustomer="Send Email & WhatsApp to Customer";
   static const String reqCibilMsg="Do you want to send an email requesting the CIBIL report?";
 
   static const String sendCamMsg="Do you want to send a cam note for this bank? If it is sent once, you will not be able to make any changed in it.";
 
   static const String AdminFeeCharges="Admin Fee Charges";
   static const String ForeclosureCharges="Foreclosure Charges";
+  static const String foreclosureChargesPO="Foreclosure Charges against the principal outstanding (%)";
   static const String StampDuty="Stamp Duty (%)";
   static const String LegalVettingCharges="Legal Vetting Charges";
   static const String TechnicalInspectionCharges="Technical Inspection Charges";

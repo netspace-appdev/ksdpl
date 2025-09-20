@@ -72,31 +72,32 @@ class Step2CamNote extends StatelessWidget {
                          Row(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             Expanded( // This allows the label text to wrap
-                               child: Row(
+                             Expanded(
+                               child: Wrap(
+                                 spacing: 10, // gap between items
+                                 runSpacing: 5, // gap between lines if wrapped
+                                 crossAxisAlignment: WrapCrossAlignment.center,
                                  children: [
-                                   const Text.rich(
-                                     TextSpan(
-                                       text: AppText.cibil,
-                                       style: TextStyle(
-                                         fontSize: 16,
-                                         fontWeight: FontWeight.bold,
-                                         color: AppColor.grey2,
-                                       ),
+                                   const Text(
+                                     AppText.cibil,
+                                     style: TextStyle(
+                                       fontSize: 16,
+                                       fontWeight: FontWeight.bold,
+                                       color: AppColor.grey2,
                                      ),
                                    ),
-                                   SizedBox(width: 10,),
-                                   Visibility(
-                                     visible: camNoteController.isGenerateCibilVisible.value,
-                                     child: InkWell(
-                                       onTap: (){
-                                         camNoteController.selectedIndexGenCibil.value=-1;
-                                         camNoteController.camCibilMobController.text=camNoteController.camPhoneController.text;
-                                         camNoteController.selectedGenderGenCibil.value=camNoteController.selectedGender.value;
-                                         showDialogSendEmailCibil(context:context);
+                                   if (camNoteController.isGenerateCibilVisible.value)
+                                     InkWell(
+                                       onTap: () {
+                                         camNoteController.selectedIndexGenCibil.value = -1;
+                                         camNoteController.camCibilMobController.text =
+                                             camNoteController.camPhoneController.text;
+                                         camNoteController.selectedGenderGenCibil.value =
+                                             camNoteController.selectedGender.value;
+                                         showDialogSendEmailCibil(context: context);
                                        },
                                        child: const Text(
-                                        AppText.sendEmailToCustomer,
+                                         AppText.sendEmailToCustomer,
                                          style: TextStyle(
                                            fontSize: 16,
                                            fontWeight: FontWeight.bold,
@@ -104,10 +105,10 @@ class Step2CamNote extends StatelessWidget {
                                          ),
                                        ),
                                      ),
-                                   )
                                  ],
                                ),
                              ),
+
                            ],
                          ),
 
@@ -150,11 +151,16 @@ class Step2CamNote extends StatelessWidget {
                        hintText: AppText.enterTotalEmi,
                      ),
 
-                     CustomLabeledTextField(
+                     CustomLabeledTextField2(
                        label: AppText.emiStoppedBefore,
                        controller: camNoteController.camEmiStoppedBeforeController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterEmiStoppedBefore,
+                       isRequired: false,
+
+                       onChanged: (value) {
+                        camNoteController.calculateEmilWillContinue();
+                       },
                      ),
 
                      CustomLabeledTextField2(
@@ -162,7 +168,7 @@ class Step2CamNote extends StatelessWidget {
                        controller: camNoteController.camEmiWillContinueController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterEmiWillContinue,
-                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                       isInputEnabled:false, //camNoteController.enableAllCibilFields.value,
                        isRequired: false,
 
                        onChanged: (value) {
