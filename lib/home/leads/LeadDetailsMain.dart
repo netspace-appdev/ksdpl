@@ -183,6 +183,7 @@ class LeadDetailsMain extends StatelessWidget {
                 DetailRow(label: "Name", value: data.name.toString()=="null"?AppText.customdash:data.name.toString()),
                 DetailRow(label: "Date Of Birth", value: data.dateOfBirth.toString()=="null"?AppText.customdash:data.dateOfBirth.toString()),
                 DetailRow(label: "Mobile Number", value:  data.mobileNumber.toString()=="null"?AppText.customdash:data.mobileNumber.toString()),
+                DetailRow(label: "Whatsapp Number", value:  data.whatsappNumber.toString()=="null"?AppText.customdash:data.whatsappNumber.toString()),
                 DetailRow(label: "Email", value:  data.email.toString()=="null"?AppText.customdash:data.email.toString()),
                 DetailRow(label: "Pin Code", value:  data.pincode.toString()=="null"?AppText.customdash:data.pincode.toString()),
                 DetailRow(label: "Date", value:Helper.formatDate(leadDetailController.getLeadDetailModel.value!.data!.assignedEmployeeDate.toString()) ),

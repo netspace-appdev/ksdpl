@@ -275,6 +275,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camMonthlyIncomeController = TextEditingController();
   final TextEditingController camAddSourceIncomeController = TextEditingController();
   final TextEditingController camBranchLocController = TextEditingController();
+  final TextEditingController camWhatsappController = TextEditingController();
 
   final TextEditingController camCibilMobController = TextEditingController();
   var camSelectedState = Rxn<String>();
@@ -285,7 +286,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var camSelectedProdSegment = Rxn<int>();
   var camSelectedProdType = Rxn<String>();
   var camSelectedIndexRelBank = (-1).obs;
-
+  var isSameAsPhone = false.obs; // observable boolean
   ///end
   var uniqueLeadNUmber="";
   var loanApplicationNumber="";
@@ -469,7 +470,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
 
     if(currentStep.value==1){
-      getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
+      if(getCamNoteLeadIdModel.value!.data!.isNotEmpty){
+        getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
+      }
+
     }
 
   }
@@ -742,8 +746,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camDobController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter DOB");
       return;
-    }else if(camPhoneController.text.isEmpty){
+    }else if(camPhoneController.text.isEmpty){//
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
+      return;
+    }else if(camWhatsappController.text.isEmpty){//camWhatsappController
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Whatsapp Number");
       return;
     }else if(selectedGender.value==null || selectedGender.value==""){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
@@ -864,7 +871,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           PhotosOfProperty: propertyPhotos,
           PhotosOfResidence: residencePhotos,
           PhotosOfOffice: officePhotos,
-          fromWhere: "camnote"
+          fromWhere: "camnote",
+          WhatsappNumber:camWhatsappController.text.toString(),
         ).then((_){
           nextStep(currentStep.value);
         });
@@ -2769,6 +2777,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           PhotosOfProperty: propertyPhotos,
           PhotosOfResidence: residencePhotos,
           PhotosOfOffice: officePhotos,
+          WhatsappNumber: camWhatsappController.text.toString(),
         );
 
         isLoading(false);
@@ -2902,6 +2911,17 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         getCamNoteDetailsModel.value= GetCamNoteDetailsByLeadIdForUpdateModel.fromJson(data);
 
+        ///newly added on 22 sep
+        camCibilController.text=(getCamNoteDetailsModel.value?.data?.cibil??"").toString();
+        camTotalLoanAvailedController.text=(getCamNoteDetailsModel.value?.data?.totalLoanAvailedOnCibil??"").toString();
+        camTotalLiveLoanController.text=(getCamNoteDetailsModel.value?.data?.totalLiveLoan??"").toString();
+        camTotalEmiController.text=(getCamNoteDetailsModel.value?.data?.totalEMI??"").toString();
+        camEmiWillContinueController.text=(getCamNoteDetailsModel.value?.data?.emiWillContinue??"").toString();
+        camTotalOverdueCasesController.text=(getCamNoteDetailsModel.value?.data?.totalOverdueCasesAsPerCibil??"").toString();
+        camTotalOverdueAmountController.text=(getCamNoteDetailsModel.value?.data?.totalOverdueAmountAsPerCibil??"").toString();
+        camTotalEnquiriesController.text=(getCamNoteDetailsModel.value?.data?.totalEnquiriesMadeAsPerCibil??"").toString();
+        enableAllCibilFields.value=false;
+        // end
 
         camIncomeCanBeConsideredController.text=(getCamNoteDetailsModel.value?.data?.incomeCanBeConsidered??"").toString();
         camLoanTenorRequestedController.text=(getCamNoteDetailsModel.value?.data?.loanTenorRequested??"").toString();

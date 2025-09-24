@@ -48,6 +48,7 @@ class AppText{
   static const String lenderName="Lender Name*";
   static const String contactNo="Contact No. (Use for Login)*";
   static const String whatsappNo="Whatsapp No.*";
+  static const String whatsappNoStar="Whatsapp No.";
   static const String contactNo2="Contact No";
 
   static const String email="Email*";
@@ -1029,6 +1030,7 @@ class AppText{
   static const String productSpecificAdditionalDocument = "Product Specific Additional Document";
   static const String onlineServiceRecordsList = "Online Service Records List";
   static const String onlineServiceRecords = "Online Service Records";
+  static const String  sameAsPhoneNo = " Same As Phone No";
 
 
 }

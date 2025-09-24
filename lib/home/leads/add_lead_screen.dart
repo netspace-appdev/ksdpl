@@ -26,7 +26,7 @@ import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../custom_drawer.dart';
-
+import '../../custom_widgets/CustomTextFieldPrefix.dart' as customTF;
 
 class AddLeadScreen extends StatelessWidget {
 
@@ -147,7 +147,82 @@ class AddLeadScreen extends StatelessWidget {
                                   }
                                 },
                               ),
+                              Column(
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Wrap(
+                                          spacing: 10, // gap between items
+                                          runSpacing: 5, // gap between lines if wrapped
+                                          crossAxisAlignment: WrapCrossAlignment.center,
+                                          children: [
+                                            const Row(
+                                              children: [
+                                                Text(
+                                                  AppText.whatsappNoNoStar,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: AppColor.grey2,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  ' *',
+                                                  style: TextStyle(
+                                                    color: Colors.red, // red star
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            //I need a checkbox here
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Checkbox(
+                                                  value: addleadcontroller.isSameAsPhone.value,
+                                                  onChanged: (value) {
+                                                    addleadcontroller.isSameAsPhone.value = value ?? false;
+                                                    if( addleadcontroller.isSameAsPhone.value){
+                                                      addleadcontroller.addLeadwhatsappController.text=addleadcontroller.phoneController.text;
+                                                    }else{
+                                                      addleadcontroller.addLeadwhatsappController.clear();
+                                                    }
+                                                  },
+                                                  activeColor: AppColor.secondaryColor,
+                                                ),
+                                                const Text(
+                                                  AppText.sameAsPhoneNo,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: AppColor.secondaryColor,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
 
+                                    ],
+                                  ),
+
+
+                                  SizedBox(height: 10),
+                                ],
+                              ),
+
+                              customTF.CustomTextFieldPrefix(
+                                controller: addleadcontroller.addLeadwhatsappController,
+                                inputType: TextInputType.number,
+                                hintText: AppText.enterWhatsappNo,
+
+                              ),
+
+                              SizedBox(height: 15,),
                               const Row(
                                 children: [
                                   Text(
@@ -896,6 +971,9 @@ class AddLeadScreen extends StatelessWidget {
       }else if(camNoteController.isaddedMobileNumber.value == true){
         SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
         return;
+      }else if(addleadcontroller.addLeadwhatsappController.text.isEmpty){
+        SnackbarHelper.showSnackbar(title: "Incomplete Step", message: "Please enter WhatsApp No.");
+        return;
       }else {
         if(addleadcontroller.fromWhere.value=="interested"){
 
@@ -928,6 +1006,7 @@ class AddLeadScreen extends StatelessWidget {
             connMob: addleadcontroller.connMobController.text.toString(),
             connShare: addleadcontroller.connShareController.text.toString(),
             loanApplNo: "",
+            WhatsappNumber:  addleadcontroller.addLeadwhatsappController.text.toString(),
           ).then((_){
             Get.back();
           });

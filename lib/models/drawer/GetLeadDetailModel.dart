@@ -102,6 +102,8 @@ class Data {
   String? photosOfOffice;
   String? cibilJSON;
   String? reminderDate;
+  String? whatsappNumber;
+
   Data(
       {this.id,
         this.name,
@@ -178,7 +180,8 @@ class Data {
         this.photosOfResidence,
         this.photosOfOffice,
         this.cibilJSON,
-        this.reminderDate
+        this.reminderDate,
+        this.whatsappNumber
 
       });
 
@@ -258,6 +261,7 @@ class Data {
     photosOfOffice = json['photosOfOffice'];
     cibilJSON = json['cibilJSON'];
     reminderDate = json['reminderDate'];
+    whatsappNumber = json['whatsappNumber'];
   }
 
   Map<String, dynamic> toJson() {
@@ -337,6 +341,7 @@ class Data {
     data['photosOfOffice'] = this.photosOfOffice;
     data['cibilJSON'] = this.cibilJSON;
     data['reminderDate'] = this.reminderDate;
+    data['whatsappNumber'] = this.whatsappNumber;
     return data;
   }
 }

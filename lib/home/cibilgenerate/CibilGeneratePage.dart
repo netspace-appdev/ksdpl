@@ -8,6 +8,7 @@ import 'package:ksdpl/controllers/cibilgenerate_controller/CibilGenerateControll
 
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
+import '../../custom_widgets/CustomBigYesNDilogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
@@ -117,6 +118,7 @@ class Cibilgeneratepage extends StatelessWidget {
                                         (item) => item.id == cibilGenerateController.selectedCibilPackage.value,
                                   ),
                                   onChanged: (value) {
+
                                     cibilGenerateController.selectedCibilPackage.value =  value?.id;
                                     cibilGenerateController.camAmountRecoveredController.text=value?.amount.toString()??"0";
                                   },
@@ -312,4 +314,6 @@ class Cibilgeneratepage extends StatelessWidget {
       ),
     );
   }
+
+
 }

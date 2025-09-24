@@ -75,14 +75,20 @@ CibilCalculatedValues calculateCibilData(
     if (overdue > 0) totalOverdueAmount += overdue;
   }
 
-  int totalEnquiries = data.creditReport.ccrResponse.cirReportDataLst.length;
+  //int totalEnquiries = data.creditReport.ccrResponse.cirReportDataLst.length;
 
+  if (data.creditReport?.ccrResponse?.cirReportDataLst != null) {
+    for (var i = 0; i < data.creditReport!.ccrResponse!.cirReportDataLst!.length; i++) {
+      final item = data.creditReport!.ccrResponse!.cirReportDataLst![i];
 
+      print("Index $i -> cirReportData: ${item?.cirReportData}");
+    }
+  }
 
-/*  int totalEnquiries = data.creditReport?.ccrResponse?.cirReportDataLst
+  int totalEnquiries = data.creditReport?.ccrResponse?.cirReportDataLst
       ?.where((item) => item?.cirReportData != null)
-      .length ?? 0;*/
-
+      .length ?? 0;
+  print("totalEnquiries --->: ${totalEnquiries.toString()}");
   return CibilCalculatedValues(
     totalLoanAvailedOnCibil: totalLoanAvailed,
     totalLiveLoan: totalLiveLoan,
