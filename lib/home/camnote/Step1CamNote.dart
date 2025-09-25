@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ksdpl/common/DialogHelper.dart';
 import 'package:ksdpl/common/base_url.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/custom_widgets/CustomShortButton.dart';
@@ -845,7 +846,7 @@ class Step1CamNote extends StatelessWidget {
                               camNoteController.camPackageAmtController.text=value?.amount.toString() ??"0";
                               if(camNoteController.selectedPackage.value!=null){
                                 if(value?.qRImage!=null){
-                                  showPickUpConditionDialog(
+                                  DialogHelper.showPickUpConditionDialog(
                                       context: context,
                                       leadId: "0",
                                     imageURL:  BaseUrl.imageBaseUrl+value!.qRImage.toString()??""
@@ -1112,7 +1113,7 @@ class Step1CamNote extends StatelessWidget {
 
     }
   }
-
+/*
   void showPickUpConditionDialog({
     required BuildContext context,
     required String leadId,
@@ -1166,5 +1167,5 @@ class Step1CamNote extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 }

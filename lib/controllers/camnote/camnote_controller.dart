@@ -23,6 +23,7 @@ import '../../models/camnote/AddAdSrcIncomModel.dart';
 import '../../models/camnote/AddBankerDetail.dart';
 import '../../models/camnote/AddCamNoteDetail.dart';
 import '../../models/camnote/AddCibilDetailsModel.dart';
+import '../../models/camnote/AddCustomerDetailsModel.dart';
 import '../../models/camnote/GenerateCibilAadharModel.dart';
 import '../../models/camnote/GetAddIncUniqueLeadModel.dart';
 import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
@@ -95,6 +96,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var getBankerDetailModelForCheck = Rxn<GetBankerDetailModelForCheck>(); //
   var getAddIncUniqueLeadModel = Rxn<GetAddIncUniqueLeadModel>(); //
   var addCamNoteDetail = Rxn<AddCamNoteDetail>(); //
+  var addCustomerDetailsModel = Rxn<AddCustomerDetailsModel>(); //
   var generateCibilAadharModel = Rxn<GenerateCibilAadharModel>(); //
   var addCibilDetailsModel = Rxn<AddCibilDetailsModel>(); //
   var editCamNoteDetail = Rxn<AddCamNoteDetail>(); //
@@ -2995,6 +2997,73 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     // Update controller
     camEmiWillContinueController.text = willContinue.toString();
+  }
+
+  Future<void> addCustomerDetailsApi({
+    String? Id,
+    String? CustomerName,
+    String? MobileNumber,
+    String? Email,
+    String? Gender,
+    String? AdharCard,
+    String? PanCard,
+    String? StreetAddress,
+    String? State,
+    String? District,
+    String? City,
+    String? Nationality,
+  }) async {
+    try {
+      print("addCamNoteDetailApi-->1");
+      isLoading(true);
+
+      var data = await CamNoteService.addCustomerDetailsApi(
+        Id: Id,
+        CustomerName: CustomerName,
+        MobileNumber: MobileNumber,
+        Email: Email,
+        Gender: Gender,
+        AdharCard: AdharCard,
+        PanCard: PanCard,
+        StreetAddress: StreetAddress,
+        State: State,
+        District: District,
+        City: City,
+        Nationality: Nationality,
+      );
+
+
+      if(data['success'] == true){
+
+        addCustomerDetailsModel.value= AddCustomerDetailsModel.fromJson(data);
+
+
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        addCamNoteDetail.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error addCamNoteDetail: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+      isAllCamnoteSubmit(false);
+    } finally {
+
+
+      isLoading(false);
+      isAllCamnoteSubmit(false);
+    }
   }
 
 }

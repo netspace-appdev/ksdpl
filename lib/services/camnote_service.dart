@@ -33,6 +33,7 @@ class CamNoteService {
   static const String requestForFinancialServices = BaseUrl.baseUrl + 'FileUpload/RequestForFinancialServices';
   static const String requestLeadDetailByCustomerNumber = BaseUrl.baseUrl + 'LeadDetail/GetLeadDetailByCustomerNumber';
   static const String getCamNoteDetailsByLeadIdForUpdate = BaseUrl.baseUrl + 'CamNoteDetail/GetCamNoteDetailsByLeadIdForUpdate';
+  static const String addCustomerDetails = BaseUrl.baseUrl + 'Customer/AddCustomerDetails';
 
 
 
@@ -1007,6 +1008,63 @@ class CamNoteService {
 
       Helper.ApiReq(getCamNoteDetailsByLeadIdForUpdate, request.fields);
       Helper.ApiRes(getCamNoteDetailsByLeadIdForUpdate, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
+    }
+  }
+
+  static addCustomerDetailsApi({
+    String? Id,
+    String? CustomerName,
+    String? MobileNumber,
+    String? Email,
+    String? Gender,
+    String? AdharCard,
+    String? PanCard,
+    String? StreetAddress,
+    String? State,
+    String? District,
+    String? City,
+    String? Nationality,
+  })
+  async {
+    print("addCustomerDetails--->");
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(addCustomerDetails),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', Id, fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CustomerName', CustomerName);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'MobileNumber', MobileNumber);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Email', Email);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Gender', Gender);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'AdharCard', AdharCard);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PanCard', PanCard);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'StreetAddress', StreetAddress);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'State', State, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'District', District, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'City', City, fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Nationality', Nationality);
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(addCustomerDetails, request.fields);
+      Helper.ApiRes(addCustomerDetails, response.body);
 
 
       if (response.statusCode == 200) {

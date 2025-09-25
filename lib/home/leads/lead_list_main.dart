@@ -1115,6 +1115,7 @@ overflow: TextOverflow.ellipsis,
 
           ViewProductController viewProductController=Get.put(ViewProductController());
           viewProductController.getAllProductListApi();
+
           addLeadController.clearControllers();
 
           CamNoteController camNoteController=Get.put(CamNoteController());

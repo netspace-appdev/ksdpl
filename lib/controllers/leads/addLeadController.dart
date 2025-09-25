@@ -148,7 +148,7 @@ class Addleadcontroller extends GetxController{
         loanApplicationController.applMobController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
 
         phoneController.text=getLeadDetailModel.value?.data?.mobileNumber??"";
-        camNoteController.camWhatsappController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
+        camNoteController.camWhatsappController.text = getLeadDetailModel.value?.data?.whatsappNumber ?? "";
 
         if( camNoteController.camPhoneController.text== camNoteController.camWhatsappController.text){
           camNoteController.isSameAsPhone.value=true;
@@ -634,6 +634,24 @@ class Addleadcontroller extends GetxController{
         getLeadDetailModel.value= GetLeadDetailModel.fromJson(data);
         ToastMessage.msg( getLeadDetailModel.value!.message!.toString());
 
+    /*    if(fromWhere=="camnote"){
+          camNoteController.addCustomerDetailsApi(
+            Id:"0",
+            CustomerName:name,
+            MobileNumber:mobileNumber,
+            Email:email,
+            Gender:gender,
+            AdharCard:aadhar,
+            PanCard:pan,
+            StreetAddress:streetAdd,
+            State:state,
+            District:district,
+            City:city,
+            Nationality:nationality,
+
+          );
+        }*/
+
         if(fromWhere!="camnote"){
           clearControllers();
         }
@@ -824,32 +842,6 @@ class Addleadcontroller extends GetxController{
         ToastMessage.msg( individualLeadUploadModel.value!.message!.toString());
 
         var uln=individualLeadUploadModel.value!.data!.uniqueLeadNumber.toString();
-
-/*
-
-        if ((addIncomeListTemp?.any((e) =>
-        e.aiIncomeController.text.trim().isNotEmpty ||
-            e.aiSourceController.text.trim().isNotEmpty) ?? false)) {
-
-
-          final List<AddIncModel> addIncModel = [];
-
-          for (var ai in addIncomeListTemp!) {
-            if (ai.aiIncomeController.text.trim().isEmpty &&
-                ai.aiSourceController.text.trim().isEmpty) {
-              continue; // skip blank entries
-            }
-
-
-            final acModel = AddIncModel(
-              amount: int.parse(ai.aiIncomeController.text),
-              description: Helper.cleanText(ai.aiSourceController.text),
-              uniqueLeadNumber: uln,
-            );
-            addIncModel.add(acModel);
-          }
-        }
-*/
 
 
         final List<IncomeModel> addIncomeSrcModels = [];

@@ -354,6 +354,8 @@ class LeadApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      Helper.ApiReq(individualLeadUpload, request.fields);
+      Helper.ApiRes(individualLeadUpload, response.body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

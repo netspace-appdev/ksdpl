@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ksdpl/common/DialogHelper.dart';
 import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/controllers/cibilgenerate_controller/CibilGenerateController.dart';
 
+import '../../common/base_url.dart';
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../custom_widgets/CustomBigYesNDilogBox.dart';
@@ -118,7 +120,14 @@ class Cibilgeneratepage extends StatelessWidget {
                                         (item) => item.id == cibilGenerateController.selectedCibilPackage.value,
                                   ),
                                   onChanged: (value) {
+                                    if(value?.qRImage!=null){
+                                      DialogHelper.showPickUpConditionDialog(
+                                          context: context,
+                                          leadId: "0",
+                                          imageURL:  BaseUrl.imageBaseUrl+value!.qRImage.toString()??""
 
+                                      );
+                                    }
                                     cibilGenerateController.selectedCibilPackage.value =  value?.id;
                                     cibilGenerateController.camAmountRecoveredController.text=value?.amount.toString()??"0";
                                   },
