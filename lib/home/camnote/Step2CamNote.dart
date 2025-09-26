@@ -211,7 +211,212 @@ class Step2CamNote extends StatelessWidget {
 
 
                 childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
-                title:const Text(AppText.sectionB, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                title:const Text( AppText.sectionB, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                leading: const Icon(Icons.list_alt, size: 20,),
+                children: [
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      CustomLabeledTextField(
+                        label: AppText.closedCases,
+                        controller: camNoteController.camClosedCasesController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterClosedCases,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.writtenOffCases,
+                        controller: camNoteController.camWrittenOffCasesController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterWrittenOffCases,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.settlementCases,
+                        controller: camNoteController.camSettlementCasesController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterSettlementCases,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.suitFiledWillfulDefaultCases,
+                        controller: camNoteController.camSuitFiledWillfulDefaultCasesController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterSuitFiledWillfulDefaultCases,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.totalSanctionedAmount,
+                        controller: camNoteController.camTotalSanctionedAmountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterTotalSanctionedAmount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.currentBalance,
+                        controller: camNoteController.camCurrentBalanceController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterCurrentBalance,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.closedAmount,
+                        controller: camNoteController.camClosedAmountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterClosedAmount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.writtenOffAmount,
+                        controller: camNoteController.camWrittenOffAmountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterWrittenOffAmount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.settlementAmount,
+                        controller: camNoteController.camSettlementAmountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterSettlementAmount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.suitFiledWillfulDefaultAmount,
+                        controller: camNoteController.camSuitFiledWillfulDefaultAmountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterSuitFiledWillfulDefaultAmount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.standardCount,
+                        controller: camNoteController.camStandardCountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterStandardCount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.numberOfDaysPastDueCount,
+                        controller: camNoteController.camNumberOfDaysPastDueCountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterNumberOfDaysPastDueCount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.lossCount,
+                        controller: camNoteController.camLossCountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterLossCount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.substandardCount,
+                        controller: camNoteController.camSubstandardCountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterSubstandardCount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.doubtfulCount,
+                        controller: camNoteController.camDoubtfulCountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterDoubtfulCount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.specialMentionAccountCount,
+                        controller: camNoteController.camSpecialMentionAccountCountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterSpecialMentionAccountCount,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.npt,
+                        controller: camNoteController.camNptController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterNpt,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.totalCounts,
+                        controller: camNoteController.camTotalCountsController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterTotalCounts,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.currentlyCasesBeingServed,
+                        controller: camNoteController.camCurrentlyCasesBeingServedController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterCurrentlyCasesBeingServed,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.casesToBeForeclosedOnOrBeforeDisb,
+                        controller: camNoteController.camCasesToBeForeclosedOnOrBeforeDisbController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterCasesToBeForeclosedOnOrBeforeDisb,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.casesToBeContenued,
+                        controller: camNoteController.camCasesToBeContenuedController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterCasesToBeContenued,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.emisOfExistingLiabilities,
+                        controller: camNoteController.camEmisOfExistingLiabilitiesController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterEmisOfExistingLiabilities,
+                        isInputEnabled: true,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.iir,
+                        controller: camNoteController.camIirController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterIir,
+                        isInputEnabled: true,
+                      ),
+
+
+                    ],
+                  )
+
+
+                ],
+              ),
+
+              ExpansionTile(
+                initiallyExpanded: true,
+
+
+                childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
+                title:const Text(AppText.sectionC, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                 leading: const Icon(Icons.list_alt, size: 20,),
                 children: [
 

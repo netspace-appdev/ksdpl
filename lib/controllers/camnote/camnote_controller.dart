@@ -280,6 +280,31 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camWhatsappController = TextEditingController();
 
   final TextEditingController camCibilMobController = TextEditingController();
+
+  // 26 Sep
+  final TextEditingController camClosedCasesController = TextEditingController();
+  final TextEditingController camWrittenOffCasesController = TextEditingController();
+  final TextEditingController camSettlementCasesController = TextEditingController();
+  final TextEditingController camSuitFiledWillfulDefaultCasesController = TextEditingController();
+  final TextEditingController camTotalSanctionedAmountController = TextEditingController();
+  final TextEditingController camCurrentBalanceController = TextEditingController();
+  final TextEditingController camClosedAmountController = TextEditingController();
+  final TextEditingController camWrittenOffAmountController = TextEditingController();
+  final TextEditingController camSettlementAmountController = TextEditingController();
+  final TextEditingController camSuitFiledWillfulDefaultAmountController = TextEditingController();
+  final TextEditingController camStandardCountController = TextEditingController();
+  final TextEditingController camNumberOfDaysPastDueCountController = TextEditingController();
+  final TextEditingController camLossCountController = TextEditingController();
+  final TextEditingController camSubstandardCountController = TextEditingController();
+  final TextEditingController camDoubtfulCountController = TextEditingController();
+  final TextEditingController camSpecialMentionAccountCountController = TextEditingController();
+  final TextEditingController camNptController = TextEditingController();
+  final TextEditingController camTotalCountsController = TextEditingController();
+  final TextEditingController camCurrentlyCasesBeingServedController = TextEditingController();
+  final TextEditingController camCasesToBeForeclosedOnOrBeforeDisbController = TextEditingController();
+  final TextEditingController camCasesToBeContenuedController = TextEditingController();
+  final TextEditingController camEmisOfExistingLiabilitiesController = TextEditingController();
+  final TextEditingController camIirController = TextEditingController();
   var camSelectedState = Rxn<String>();
   var camSelectedDistrict = Rxn<String>();
   var camSelectedCity = Rxn<String>();
@@ -629,7 +654,33 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               LTV: camLtvController.text.trim().toString(),
               BranchOfBank: branchId.toString(),
               SanctionProcessingCharges:"0",
-              Autoindividual: autoIndividual 
+              Autoindividual: autoIndividual,
+
+              ///Newly Added on 26 Sep
+              ClosedCases: camClosedCasesController.text.trim().toString(),
+              WrittenOffCases: camWrittenOffCasesController.text.trim().toString(),
+              SettlementCases: camSettlementCasesController.text.trim().toString(),
+              Suit_Filed_Willful_Default_Cases: camSuitFiledWillfulDefaultCasesController.text.trim().toString(),
+              TotalSanctionedAmount: camTotalSanctionedAmountController.text.trim().toString(),
+              CurrentBalance: camCurrentBalanceController.text.trim().toString(),
+              ClosedAmount: camClosedAmountController.text.trim().toString(),
+              WrittenOffAmount: camWrittenOffAmountController.text.trim().toString(),
+              SettlementAmount: camSettlementAmountController.text.trim().toString(),
+              Suit_Filed_Willful_Default_Amount: camSuitFiledWillfulDefaultAmountController.text.trim().toString(),
+              Standard_Count: camStandardCountController.text.trim().toString(),
+              Number_of_days_past_due_Count: camNumberOfDaysPastDueCountController.text.trim().toString(),
+              Loss_Count: camLossCountController.text.trim().toString(),
+              Substandard_Count: camSubstandardCountController.text.trim().toString(),
+              Doubtful_Count: camDoubtfulCountController.text.trim().toString(),
+              Special_Mention_account_Count: camSpecialMentionAccountCountController.text.trim().toString(),
+              NPT: camNptController.text.trim().toString(),
+              TotalCounts: camTotalCountsController.text.trim().toString(),
+              CurrentlyCasesBeingServed: camCurrentlyCasesBeingServedController.text.trim().toString(),
+              CasesToBeForeclosedOnOrBeforeDisb: camCasesToBeForeclosedOnOrBeforeDisbController.text.trim().toString(),
+              CasesToBeContenued: camCasesToBeContenuedController.text.trim().toString(),
+              EMIsOfExistingLiabilities: camEmisOfExistingLiabilitiesController.text.trim().toString(),
+              IIR: camIirController.text.trim().toString(),
+
             );
 
           }
@@ -1779,6 +1830,31 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? BranchOfBank,
     String? SanctionProcessingCharges,
     String? Autoindividual,
+    ///Newly Added on 26 Sep
+    String? ClosedCases,
+    String? WrittenOffCases,
+    String? SettlementCases,
+    String? Suit_Filed_Willful_Default_Cases,
+    String? TotalSanctionedAmount,
+    String? CurrentBalance,
+    String? ClosedAmount,
+    String? WrittenOffAmount,
+    String? SettlementAmount,
+    String? Suit_Filed_Willful_Default_Amount,
+    String? Standard_Count,
+    String? Number_of_days_past_due_Count,
+    String? Loss_Count,
+    String? Substandard_Count,
+    String? Doubtful_Count,
+    String? Special_Mention_account_Count,
+    String? NPT,
+    String? TotalCounts,
+    String? CurrentlyCasesBeingServed,
+    String? CasesToBeForeclosedOnOrBeforeDisb,
+    String? CasesToBeContenued,
+    String? EMIsOfExistingLiabilities,
+    String? IIR,
+
 
   }) async {
     try {
@@ -1820,6 +1896,32 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         BranchOfBank: BranchOfBank,
         SanctionProcessingCharges: SanctionProcessingCharges,
         Autoindividual: Autoindividual,
+
+        ///Newly Added on 26 Sep
+        ClosedCases: ClosedCases,
+        WrittenOffCases: WrittenOffCases,
+        SettlementCases: SettlementCases,
+        Suit_Filed_Willful_Default_Cases: Suit_Filed_Willful_Default_Cases,
+        TotalSanctionedAmount: TotalSanctionedAmount,
+        CurrentBalance: CurrentBalance,
+        ClosedAmount: ClosedAmount,
+        WrittenOffAmount: WrittenOffAmount,
+        SettlementAmount: SettlementAmount,
+        Suit_Filed_Willful_Default_Amount: Suit_Filed_Willful_Default_Amount,
+        Standard_Count: Standard_Count,
+        Number_of_days_past_due_Count: Number_of_days_past_due_Count,
+        Loss_Count: Loss_Count,
+        Substandard_Count: Substandard_Count,
+        Doubtful_Count: Doubtful_Count,
+        Special_Mention_account_Count: Special_Mention_account_Count,
+        NPT: NPT,
+        TotalCounts: TotalCounts,
+        CurrentlyCasesBeingServed: CurrentlyCasesBeingServed,
+        CasesToBeForeclosedOnOrBeforeDisb: CasesToBeForeclosedOnOrBeforeDisb,
+        CasesToBeContenued: CasesToBeContenued,
+        EMIsOfExistingLiabilities: EMIsOfExistingLiabilities,
+        IIR: IIR,
+
       );
 
 
@@ -1876,7 +1978,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
 
+
+        infoFilledBankers.remove(BankId);
+        bankerBranchMap.clear();
         addCamNoteDetail.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);

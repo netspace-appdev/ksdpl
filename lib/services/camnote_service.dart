@@ -376,6 +376,30 @@ class CamNoteService {
     String? SanctionProcessingCharges,
     String? Autoindividual,
 
+    ///Newly Added on 26 Sep
+    String? ClosedCases,
+    String? WrittenOffCases,
+    String? SettlementCases,
+    String? Suit_Filed_Willful_Default_Cases,
+    String? TotalSanctionedAmount,
+    String? CurrentBalance,
+    String? ClosedAmount,
+    String? WrittenOffAmount,
+    String? SettlementAmount,
+    String? Suit_Filed_Willful_Default_Amount,
+    String? Standard_Count,
+    String? Number_of_days_past_due_Count,
+    String? Loss_Count,
+    String? Substandard_Count,
+    String? Doubtful_Count,
+    String? Special_Mention_account_Count,
+    String? NPT,
+    String? TotalCounts,
+    String? CurrentlyCasesBeingServed,
+    String? CasesToBeForeclosedOnOrBeforeDisb,
+    String? CasesToBeContenued,
+    String? EMIsOfExistingLiabilities,
+    String? IIR,
 
   }) async {
     try {
@@ -427,7 +451,30 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'SanctionProcessingCharges', SanctionProcessingCharges,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Autoindividual', Autoindividual,fallback: "0");
 
-
+      ///Newly Added on 26 Sep
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ClosedCases', ClosedCases,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'WrittenOffCases', WrittenOffCases,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'SettlementCases', SettlementCases, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Suit_Filed_Willful_Default_Cases', Suit_Filed_Willful_Default_Cases, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalSanctionedAmount', TotalSanctionedAmount, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'CurrentBalance', CurrentBalance, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ClosedAmount', ClosedAmount, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'WrittenOffAmount', WrittenOffAmount, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'SettlementAmount', SettlementAmount, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Suit_Filed_Willful_Default_Amount', Suit_Filed_Willful_Default_Amount, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Standard_Count', Standard_Count, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Number_of_days_past_due_Count', Number_of_days_past_due_Count, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Loss_Count', Loss_Count, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Substandard_Count', Substandard_Count, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Doubtful_Count', Doubtful_Count, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Special_Mention_account_Count', Special_Mention_account_Count, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'NPT', NPT, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalCounts', TotalCounts, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'CurrentlyCasesBeingServed', CurrentlyCasesBeingServed, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'CasesToBeForeclosedOnOrBeforeDisb', CasesToBeForeclosedOnOrBeforeDisb, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'CasesToBeContenued', CasesToBeContenued, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'EMIsOfExistingLiabilities', EMIsOfExistingLiabilities, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'IIR', IIR, fallback: "0");
 
       var streamedResponse = await request.send();
 

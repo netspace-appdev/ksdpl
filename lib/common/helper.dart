@@ -1032,6 +1032,76 @@ class AppText{
   static const String onlineServiceRecords = "Online Service Records";
   static const String  sameAsPhoneNo = " Same As Phone No";
 
+  ///26 Sep
+  static const String closedCases = "Closed Cases";
+  static const String enterClosedCases = "Enter Closed Cases";
+
+  static const String writtenOffCases = "Written Off Cases";
+  static const String enterWrittenOffCases = "Enter Written Off Cases";
+
+  static const String settlementCases = "Settlement Cases";
+  static const String enterSettlementCases = "Enter Settlement Cases";
+
+  static const String suitFiledWillfulDefaultCases = "Suit Filed Willful Default Cases";
+  static const String enterSuitFiledWillfulDefaultCases = "Enter Suit Filed Willful Default Cases";
+
+  static const String totalSanctionedAmount = "Total Sanctioned Amount";
+  static const String enterTotalSanctionedAmount = "Enter Total Sanctioned Amount";
+
+  static const String currentBalance = "Current Balance";
+  static const String enterCurrentBalance = "Enter Current Balance";
+
+  static const String closedAmount = "Closed Amount";
+  static const String enterClosedAmount = "Enter Closed Amount";
+
+  static const String writtenOffAmount = "Written Off Amount";
+  static const String enterWrittenOffAmount = "Enter Written Off Amount";
+
+  static const String settlementAmount = "Settlement Amount";
+  static const String enterSettlementAmount = "Enter Settlement Amount";
+
+  static const String suitFiledWillfulDefaultAmount = "Suit Filed Willful Default Amount";
+  static const String enterSuitFiledWillfulDefaultAmount = "Enter Suit Filed Willful Default Amount";
+
+  static const String standardCount = "Standard Count";
+  static const String enterStandardCount = "Enter Standard Count";
+
+  static const String numberOfDaysPastDueCount = "Number of days past due Count";
+  static const String enterNumberOfDaysPastDueCount = "Enter Number of days past due Count";
+
+  static const String lossCount = "Loss Count";
+  static const String enterLossCount = "Enter Loss Count";
+
+  static const String substandardCount = "Substandard Count";
+  static const String enterSubstandardCount = "Enter Substandard Count";
+
+  static const String doubtfulCount = "Doubtful Count";
+  static const String enterDoubtfulCount = "Enter Doubtful Count";
+
+  static const String specialMentionAccountCount = "Special Mention account Count";
+  static const String enterSpecialMentionAccountCount = "Enter Special Mention account Count";
+
+  static const String npt = "NPT";
+  static const String enterNpt = "Enter NPT";
+
+  static const String totalCounts = "Total Counts";
+  static const String enterTotalCounts = "Enter Total Counts";
+
+  static const String currentlyCasesBeingServed = "Currently Cases Being Served";
+  static const String enterCurrentlyCasesBeingServed = "Enter Currently Cases Being Served";
+
+  static const String casesToBeForeclosedOnOrBeforeDisb = "Cases To Be Foreclosed On Or Before Disb";
+  static const String enterCasesToBeForeclosedOnOrBeforeDisb = "Enter Cases To Be Foreclosed On Or Before Disb";
+
+  static const String casesToBeContenued = "Cases To Be Contenued";
+  static const String enterCasesToBeContenued = "Enter Cases To Be Contenued";
+
+  static const String emisOfExistingLiabilities = "EMIs Of Existing Liabilities";
+  static const String enterEmisOfExistingLiabilities = "Enter EMIs Of Existing Liabilities";
+
+  static const String iir = "IIR";
+  static const String enterIir = "Enter IIR";
+
 
 }
 
