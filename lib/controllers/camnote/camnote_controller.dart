@@ -333,6 +333,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var isUserAIC = false.obs;
   // final Map<String, RxList<File>> imageMap = {};
   final Map<String, RxList<CamImage>> _imageMap = {};
+
+  var maxAllowedBank = -1.obs;
+
   @override
   Map<String, RxList<CamImage>> get imageMap => _imageMap;
   void loadApiImagesForKey(String key, String imageUrlsFromApi) {
@@ -680,7 +683,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               CasesToBeContenued: camCasesToBeContenuedController.text.trim().toString(),
               EMIsOfExistingLiabilities: camEmisOfExistingLiabilitiesController.text.trim().toString(),
               IIR: camIirController.text.trim().toString(),
-
             );
 
           }
@@ -1830,6 +1832,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? BranchOfBank,
     String? SanctionProcessingCharges,
     String? Autoindividual,
+
     ///Newly Added on 26 Sep
     String? ClosedCases,
     String? WrittenOffCases,
@@ -2607,6 +2610,15 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
+
+  int? getMaxBankSelection(String packageName, String? amount) {
+    if (packageName.contains("CIBIL") && amount == "236") {
+      return 1;
+    } else if (packageName.contains("Secured Combo") && amount == "1180") {
+      return 3;
+    }
+    return null; // no limit
+  }
 
 
   Future<void>  fetchBankDetailBySegmentIdAndKSDPLProductIdApi({

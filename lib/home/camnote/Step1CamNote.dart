@@ -854,6 +854,7 @@ class Step1CamNote extends StatelessWidget {
                                   );
                                 }
                                 camNoteController.getPackageDetailsByIdApi(packageId: camNoteController.selectedPackage.toString());
+                                camNoteController.maxAllowedBank = camNoteController.getMaxBankSelection(value?.packageName.toString() ??"0", value?.amount.toString() ??"0")??-1;
                               }
 
                             },

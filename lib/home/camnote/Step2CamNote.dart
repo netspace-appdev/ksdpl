@@ -197,7 +197,7 @@ class Step2CamNote extends StatelessWidget {
                        controller: camNoteController.camTotalEnquiriesController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterTotalEnquiries,
-                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                       isInputEnabled:camNoteController.enableAllCibilFields.value,
                      ),
                    ],
                  )
@@ -224,7 +224,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camClosedCasesController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterClosedCases,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -232,7 +232,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camWrittenOffCasesController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterWrittenOffCases,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -240,7 +240,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camSettlementCasesController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterSettlementCases,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -248,7 +248,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camSuitFiledWillfulDefaultCasesController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterSuitFiledWillfulDefaultCases,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -256,7 +256,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camTotalSanctionedAmountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterTotalSanctionedAmount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -264,7 +264,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camCurrentBalanceController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterCurrentBalance,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -272,7 +272,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camClosedAmountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterClosedAmount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -280,7 +280,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camWrittenOffAmountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterWrittenOffAmount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -288,7 +288,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camSettlementAmountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterSettlementAmount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -296,7 +296,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camSuitFiledWillfulDefaultAmountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterSuitFiledWillfulDefaultAmount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -304,7 +304,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camStandardCountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterStandardCount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -312,7 +312,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camNumberOfDaysPastDueCountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterNumberOfDaysPastDueCount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -320,7 +320,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camLossCountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterLossCount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -328,7 +328,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camSubstandardCountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterSubstandardCount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -336,7 +336,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camDoubtfulCountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterDoubtfulCount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -344,7 +344,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camSpecialMentionAccountCountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterSpecialMentionAccountCount,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -352,7 +352,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camNptController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterNpt,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -360,7 +360,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camTotalCountsController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterTotalCounts,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -368,7 +368,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camCurrentlyCasesBeingServedController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterCurrentlyCasesBeingServed,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -376,7 +376,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camCasesToBeForeclosedOnOrBeforeDisbController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterCasesToBeForeclosedOnOrBeforeDisb,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -384,7 +384,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camCasesToBeContenuedController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterCasesToBeContenued,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -392,7 +392,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camEmisOfExistingLiabilitiesController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterEmisOfExistingLiabilities,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
@@ -400,7 +400,7 @@ class Step2CamNote extends StatelessWidget {
                         controller: camNoteController.camIirController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterIir,
-                        isInputEnabled: true,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
 
