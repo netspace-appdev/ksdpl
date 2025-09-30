@@ -591,11 +591,17 @@ class Step2CamNote extends StatelessWidget {
                           items: newDDController.primeSecurityList.value ?? [],
                           getId: (item) => item.id.toString(),  // Adjust based on your model structure
                           getName: (item) => item.description.toString(),
-                          selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
+                         /* selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
                                 (item) => item.description == camNoteController.camOfferedSecurityTypeController.text,
+                          ),*/
+                          selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
+                                (item) =>
+                            item.description?.trim().toLowerCase() ==
+                                camNoteController.camOfferedSecurityTypeController.text.trim().toLowerCase(),
                           ),
                           onChanged: (value) {
                             camNoteController.camOfferedSecurityTypeController.text =  value?.description??"";
+                            print("camNoteController.camOfferedSecurityTypeController.text===>${ camNoteController.camOfferedSecurityTypeController.text}");
 
                           },
                           onClear: (){

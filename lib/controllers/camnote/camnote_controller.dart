@@ -66,6 +66,7 @@ import 'package:flutter/material.dart';
 
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
+import '../new_dd_controller.dart';
 import 'calculateCibilData.dart';
 import '../../models/product/GetProductListById.dart'as gpli;
 
@@ -949,7 +950,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   void forBankDetailSubmit(){
     getProductDetailsByFilterApi(
-        cibil: camCibilController.text.trim().toString(),
+        cibil: double.tryParse(camCibilController .text.trim())
+            ?.toInt()
+            .toString()
+            ?? "0",//camCibilController.text.trim().toString(),
         segmentVertical: camSelectedProdSegment.value.toString(),
         customerCategory: "",
         collateralSecurityCategory: "",
@@ -959,14 +963,23 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         ageNonEarningCoApplicant:camEarningCustomerAgeController.text,
         applicantMonthlySalary:camTotalFamilyIncomeController.text,
         loanAmount:camLoanAmtReqController.text.trim().toString(),
-        tenor: camLoanTenorRequestedController.text.trim().toString(),
+        tenor: double.tryParse(camLoanTenorRequestedController .text.trim())
+            ?.toInt()
+            .toString()
+            ?? "0",//camLoanTenorRequestedController.text.trim().toString(),
         roi:camRateOfInterestController.text.trim().toString(),
         maximumTenorEligibilityCriteria:"",
         customerAddress:camStreetAddController.text.trim().toString(),
 
-        totalOverdueCases:camTotalOverdueCasesController.text.trim().toString(),
+        totalOverdueCases:double.tryParse(camTotalOverdueCasesController.text.trim())
+            ?.toInt()
+            .toString()
+            ?? "0",//camTotalOverdueCasesController.text.trim().toString(),
         totalOverdueAmount:camTotalOverdueAmountController.text.trim().toString(),
-        totalEnquiries:camTotalEnquiriesController.text.trim().toString(),
+        totalEnquiries:double.tryParse(camTotalEnquiriesController.text.trim())
+            ?.toInt()
+            .toString()
+            ?? "0",//camTotalEnquiriesController.text.trim().toString(),
         kSDPLProductId:camSelectedProdType.value.toString(),
 
     );
@@ -3032,7 +3045,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         getCamNoteDetailsModel.value= GetCamNoteDetailsByLeadIdForUpdateModel.fromJson(data);
 
         ///newly added on 22 sep
-        camCibilController.text=(getCamNoteDetailsModel.value?.data?.cibil??"").toString();
+        // camCibilController.text=(getCamNoteDetailsModel.value?.data?.cibil??"0").toString();
+        camCibilController.text=(getCamNoteDetailsModel.value?.data?.cibil == null ||
+            getCamNoteDetailsModel.value?.data?.cibil?.toString().toLowerCase() == "na")
+            ? "0"
+            : getCamNoteDetailsModel.value?.data?.cibil.toString()??"0";
         camTotalLoanAvailedController.text=(getCamNoteDetailsModel.value?.data?.totalLoanAvailedOnCibil??"").toString();
         camTotalLiveLoanController.text=(getCamNoteDetailsModel.value?.data?.totalLiveLoan??"").toString();
         camTotalEmiController.text=(getCamNoteDetailsModel.value?.data?.totalEMI??"").toString();
@@ -3051,7 +3068,27 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camPropertyValueController.text=(getCamNoteDetailsModel.value?.data?.propertyValueAsPerCustomer??"").toString();
         camFoirController.text=(getCamNoteDetailsModel.value?.data?.foir??"").toString();
         camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
+
+        NewDDController newDDController=Get.find();
+        newDDController.getAllPrimeSecurityMasterApi();
         camOfferedSecurityTypeController.text=getCamNoteDetailsModel.value?.data?.offeredSecurityType??"";
+
+
+        ///30 Sep
+        camNonEarningCustomerAgeController.text=(getCamNoteDetailsModel.value?.data?.nonEarningCustomerAge??"").toString();
+        camTotalFamilyIncomeController.text=(getCamNoteDetailsModel.value?.data?.totalFamilyIncome??"").toString();
+        camIncomeCanBeConsideredController.text=(getCamNoteDetailsModel.value?.data?.incomeCanBeConsidered??"").toString();
+        camIncomeCanBeConsideredController.text=(getCamNoteDetailsModel.value?.data?.incomeCanBeConsidered??"").toString();
+        camLoanTenorRequestedController.text=(getCamNoteDetailsModel.value?.data?.loanTenorRequested??"").toString();
+        camRateOfInterestController.text=(getCamNoteDetailsModel.value?.data?.roi??"").toString();
+        camProposedEmiController.text=(getCamNoteDetailsModel.value?.data?.proposedEMI??"").toString();
+        camPropertyValueController.text=(getCamNoteDetailsModel.value?.data?.propertyValueAsPerCustomer??"").toString();
+        camFoirController.text=(getCamNoteDetailsModel.value?.data?.foir??"").toString();
+        camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
+        camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
+        camEmiStoppedBeforeController.text=(getCamNoteDetailsModel.value?.data?.emiStoppedOnBeforeThisLoan??"").toString();
+        selectedCamIncomeTypeList.value=(getCamNoteDetailsModel.value?.data?.incomeType??"").toString();
+
 
 
 

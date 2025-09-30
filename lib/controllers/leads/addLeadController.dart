@@ -429,7 +429,7 @@ class Addleadcontroller extends GetxController{
           print("TotalEnquiriesMadeAsPerCibil: ${result['TotalEnquiriesMadeAsPerCibil']}");
           */
 
-          camNoteController.camCibilController.text=result['Cibil'].toString();
+          camNoteController.camCibilController.text=(result['Cibil']=="NA" || result['Cibil']=="NA")?"0": result['Cibil'].toString();
           camNoteController.camTotalLoanAvailedController.text=result['TotalLoanAvailedOnCibil'].toString();
           camNoteController.camTotalLiveLoanController.text=result['TotalLiveLoan'].toString();
           camNoteController.camTotalEmiController.text=result['TotalEMI'].toStringAsFixed(2).toString();
