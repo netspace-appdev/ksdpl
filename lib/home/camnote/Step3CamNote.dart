@@ -425,11 +425,11 @@ class Step3CamNote extends StatelessWidget {
           }
 
         }else if(code=="add"){
-
-
-
-          if (camNoteController.maxAllowedBank != -1 && camNoteController.camNoteLeadBankIds.length >= camNoteController.maxAllowedBank) {
-            Get.snackbar("Limit Reached", "You can only select up to ${camNoteController.maxAllowedBank} banks.");
+          print("camNoteController.maxAllowedBank.value===>${camNoteController.maxAllowedBank.value.toString()}");
+          if (camNoteController.maxAllowedBank.value != 0 && camNoteController.camNoteLeadBankIds.length >= camNoteController.maxAllowedBank.value) {
+            SnackbarHelper.showSnackbar(title: "Package Limit Reached", message: "You can only select up to ${camNoteController.maxAllowedBank} bank(s).",
+              backgroundColor: AppColor.redColor, textColor: AppColor.appWhite
+            );
           } else {
             print("autoindividual.toString()--->in add =====${autoIndividual.toString()}");
             camNoteController.clearBankDetails();

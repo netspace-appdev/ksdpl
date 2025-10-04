@@ -34,6 +34,8 @@ class CamNoteService {
   static const String requestLeadDetailByCustomerNumber = BaseUrl.baseUrl + 'LeadDetail/GetLeadDetailByCustomerNumber';
   static const String getCamNoteDetailsByLeadIdForUpdate = BaseUrl.baseUrl + 'CamNoteDetail/GetCamNoteDetailsByLeadIdForUpdate';
   static const String addCustomerDetails = BaseUrl.baseUrl + 'Customer/AddCustomerDetails';
+  static const String sendPaymentQRCodeOnWhatsAppToCustomer = BaseUrl.baseUrl + 'CamNoteDetail/SendPaymentQRCodeOnWhatsAppToCustomer';
+  static const String checkReceiptStatusForCamNote = BaseUrl.baseUrl + 'CamNoteDetail/CheckReceiptStatusForCamNote';
 
 
 
@@ -1112,6 +1114,88 @@ class CamNoteService {
 
       Helper.ApiReq(addCustomerDetails, request.fields);
       Helper.ApiRes(addCustomerDetails, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
+    }
+  }
+
+
+  static sendPaymentQRCodeOnWhatsAppToCustomerApi({
+    String? PackageId,
+    String? CustomerName,
+    String? CustomerWhatsAppNo,
+  })
+  async {
+    print("addCustomerDetails--->");
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(sendPaymentQRCodeOnWhatsAppToCustomer),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'PackageId', PackageId, fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CustomerName', CustomerName);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CustomerWhatsAppNo', CustomerWhatsAppNo);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(sendPaymentQRCodeOnWhatsAppToCustomer, request.fields);
+      Helper.ApiRes(sendPaymentQRCodeOnWhatsAppToCustomer, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
+    }
+  }
+
+
+
+  static checkReceiptStatusForCamNoteApi({
+    required String Mobile,
+    required String  Utr,
+  })
+  async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(checkReceiptStatusForCamNote),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Mobile', Mobile, fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Utr', Utr);
+
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(checkReceiptStatusForCamNote, request.fields);
+      Helper.ApiRes(checkReceiptStatusForCamNote, response.body);
 
 
       if (response.statusCode == 200) {

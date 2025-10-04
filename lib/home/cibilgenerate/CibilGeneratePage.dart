@@ -5,13 +5,16 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/common/DialogHelper.dart';
 import 'package:ksdpl/common/helper.dart';
+import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/controllers/cibilgenerate_controller/CibilGenerateController.dart';
 
 import '../../common/base_url.dart';
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../custom_widgets/CustomBigYesNDilogBox.dart';
+import '../../custom_widgets/CustomBigYesNoLoaderDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
+import '../../custom_widgets/CustomImageWidget.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
@@ -22,6 +25,8 @@ class Cibilgeneratepage extends StatelessWidget {
  // const Cibilgeneratepage({super.key});
 
   CibilGenerateController cibilGenerateController = Get.put(CibilGenerateController());
+  final _formKeyQr = GlobalKey<FormState>();
+  CamNoteController camNoteController=Get.put(CamNoteController());
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +125,7 @@ class Cibilgeneratepage extends StatelessWidget {
                                         (item) => item.id == cibilGenerateController.selectedCibilPackage.value,
                                   ),
                                   onChanged: (value) {
-                                    if(value?.qRImage!=null){
+                                /*    if(value?.qRImage!=null){
                                       DialogHelper.showPickUpConditionDialog(
                                           context: context,
                                           leadId: "0",
@@ -129,7 +134,24 @@ class Cibilgeneratepage extends StatelessWidget {
                                       );
                                     }
                                     cibilGenerateController.selectedCibilPackage.value =  value?.id;
+                                    cibilGenerateController.camAmountRecoveredController.text=value?.amount.toString()??"0";*/
+
+                                    cibilGenerateController.selectedCibilPackage.value =  value?.id;
                                     cibilGenerateController.camAmountRecoveredController.text=value?.amount.toString()??"0";
+
+                                    print("cibilGenerateController.selectedCibilPackage.value-====${cibilGenerateController.selectedCibilPackage.value}");
+                                    if(cibilGenerateController.selectedCibilPackage.value!=null){
+
+                                      if(value?.qRImage!=null){
+                                        showPackageQRDialog(
+                                            context: context,
+                                            imageURL:  BaseUrl.imageBaseUrl+value!.qRImage.toString()??"",
+                                            packageId: cibilGenerateController.selectedCibilPackage.value.toString()
+
+                                        );
+                                      }
+
+                                    }
                                   },
                                   onClear: (){
                                     cibilGenerateController.selectedCibilPackage.value = 0;
@@ -323,6 +345,160 @@ class Cibilgeneratepage extends StatelessWidget {
       ),
     );
   }
+  void showPackageQRDialog({
+    required BuildContext context,
+    required String imageURL,
+    required String packageId,
 
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigYesNoDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Scan the QR Code",
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                CustomImageWidget(
+                    imageUrl: imageURL,
+                    // imageUrl: "",
+                    height: 300,
+                    width: MediaQuery.of(context).size.width
+                ),
+
+                const SizedBox(height: 12),
+
+                // C. Hindi
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                          text: "Please Scan the QR Code to continue or \nSend QR on WhatsApp",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.primaryColor)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          firstButtonText: "WhatsApp",
+          onFirstButtonPressed: (){
+            Get.back();
+            cibilGenerateController.qrCBCustomerNameController.clear();
+            cibilGenerateController.qrCBWhatsappController.clear();
+            showQRCustomerNUmberDialog(
+              context: context,
+              packageId: packageId,
+            );
+
+          },
+          secondButtonText: "No, Thanks",
+          onSecondButtonPressed: (){
+            Get.back();
+          },
+          firstButtonColor: AppColor.primaryColor,
+          secondButtonColor: AppColor.redColor,
+        );
+      },
+    );
+  }
+
+
+  void showQRCustomerNUmberDialog({
+    required BuildContext context,
+    required String packageId,
+  })
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx(() => CustomBigYesNoLoaderDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Customer Details",
+          content: SingleChildScrollView(
+            child: Form(
+              key: _formKeyQr,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomLabeledTextField(
+                    label: AppText.customerName,
+                    isRequired: true,
+                    controller: cibilGenerateController.qrCBCustomerNameController,
+                    inputType: TextInputType.name,
+                    hintText: AppText.enterCustomerName,
+                    validator: ValidationHelper.validateName,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomLabeledTextField(
+                    label: AppText.whatsappNoNoStar,
+                    isRequired: true,
+                    controller: cibilGenerateController.qrCBWhatsappController,
+                    inputType: TextInputType.number,
+                    hintText: AppText.enterWhatsappNo,
+                    validator: ValidationHelper.validateWhatsapp,
+                  ),
+                  const SizedBox(height: 12),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                      children: [
+                        TextSpan(
+                          text: "Send QR on above WhatsApp Number",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // 👇 Loader logic right here
+          firstButtonChild: camNoteController.isQRApiLoading.value
+              ? const SizedBox(
+            height: 18,
+            width: 18,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Colors.white,
+            ),
+          )
+              : const Text(
+            "Send",
+            style: TextStyle(color: Colors.white),
+          ),
+
+          secondButtonText: "Cancel",
+          firstButtonColor: AppColor.primaryColor,
+          secondButtonColor: AppColor.redColor,
+
+          onFirstButtonPressed: () {
+            if (!camNoteController.isQRApiLoading.value &&
+                _formKeyQr.currentState!.validate()) {
+              camNoteController.sendPaymentQRCodeOnWhatsAppToCustomerApi(
+                CustomerName: cibilGenerateController.qrCBCustomerNameController.text.trim(),
+                CustomerWhatsAppNo: cibilGenerateController.qrCBWhatsappController.text.trim(),
+                PackageId: packageId,
+              ).then((_){
+                Get.back();
+              });
+            }
+          },
+          onSecondButtonPressed: () {
+            Get.back();
+          },
+        ));
+      },
+    );
+  }
 
 }

@@ -24,6 +24,7 @@ import '../../models/camnote/AddBankerDetail.dart';
 import '../../models/camnote/AddCamNoteDetail.dart';
 import '../../models/camnote/AddCibilDetailsModel.dart';
 import '../../models/camnote/AddCustomerDetailsModel.dart';
+import '../../models/camnote/CheckReceiptStatusForCamNoteModel.dart';
 import '../../models/camnote/GenerateCibilAadharModel.dart';
 import '../../models/camnote/GetAddIncUniqueLeadModel.dart';
 import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
@@ -38,6 +39,7 @@ import '../../models/camnote/GetProductDetailsByFilterModel.dart' as pdFModel;
 import '../../models/camnote/RequestForFinancialServicesModel.dart';
 import '../../models/camnote/SendMailForLocationOfCustomerModel.dart';
 import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
+import '../../models/camnote/SendQRCodeOnWACustModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
 import '../../models/camnote/fetchBankDetailSegKSDPLProdModel.dart' as otherBank;
 import '../../models/camnote/special_model/IncomeModel.dart';
@@ -81,6 +83,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var firstName="".obs;
   var email="".obs;
   var isLoading = false.obs;
+  var isQRApiLoading = false.obs;
+  var isCheckReceiptLoading = false.obs;
   var isaddedMobileNumber = false.obs;
   var isLoadingCibil = false.obs;
 
@@ -101,6 +105,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var generateCibilAadharModel = Rxn<GenerateCibilAadharModel>(); //
   var addCibilDetailsModel = Rxn<AddCibilDetailsModel>(); //
   var editCamNoteDetail = Rxn<AddCamNoteDetail>(); //
+  var sendQRCodeOnWACustModel = Rxn<SendQRCodeOnWACustModel>(); //
+  var checkReceiptStatusForCamNoteModel = Rxn<CheckReceiptStatusForCamNoteModel>(); //
+
   var fetchBankDetailSegKSDPLProdModel = Rxn<otherBank.FetchBankDetailSegKSDPLProdModel>(); //
   var getProductDetailBySegmentAndProductModel = Rxn<otherBankBranch.GetProductDetailBySegmentAndProductModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
@@ -306,6 +313,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camCasesToBeContenuedController = TextEditingController();
   final TextEditingController camEmisOfExistingLiabilitiesController = TextEditingController();
   final TextEditingController camIirController = TextEditingController();
+
+  final TextEditingController qrCustomerNameController = TextEditingController();
+  final TextEditingController qrWhatsappController = TextEditingController();
   var camSelectedState = Rxn<String>();
   var camSelectedDistrict = Rxn<String>();
   var camSelectedCity = Rxn<String>();
@@ -335,7 +345,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   // final Map<String, RxList<File>> imageMap = {};
   final Map<String, RxList<CamImage>> _imageMap = {};
 
-  var maxAllowedBank = -1.obs;
+  RxInt maxAllowedBank = 0.obs;
 
   @override
   Map<String, RxList<CamImage>> get imageMap => _imageMap;
@@ -398,7 +408,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var photosPropEnabled =true.obs;
   var photosResEnabled =true.obs;
   var photosOffEnabled =true.obs;
-
+  var is2and3StepActive = true.obs;
   void markBankerAsSubmitted(String boxId) {
     infoFilledBankers.add(boxId);
   }
@@ -491,21 +501,29 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var sendMailForLocationOfCustomerModel = Rxn<SendMailForLocationOfCustomerModel>(); //
 
   void nextStep(int tappedIndex) {
-    if (currentStep.value < 2) {
-      currentStep.value++;
-      scrollToStep(currentStep.value);
-    }
+    print("tappedIndex===>${tappedIndex} and ${is2and3StepActive.value}");
+    if((tappedIndex+1==1 ||tappedIndex+1==2) && is2and3StepActive.value==false ){
 
-    if(currentStep.value==1 || currentStep.value==2){
-      setAgeFromDob(camDobController, camEarningCustomerAgeController);
-    }
+      ToastMessage.msg(AppText.accessRestrictedStep2and3Msg);
 
-    if(currentStep.value==1){
-      if(getCamNoteLeadIdModel.value!.data!.isNotEmpty){
-        getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
+    }else{
+      if (currentStep.value < 2) {
+        currentStep.value++;
+        scrollToStep(currentStep.value);
       }
 
+      if(currentStep.value==1 || currentStep.value==2){
+        setAgeFromDob(camDobController, camEarningCustomerAgeController);
+      }
+
+      if(currentStep.value==1){
+        if(getCamNoteLeadIdModel.value!.data!.isNotEmpty){
+          getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
+        }
+
+      }
     }
+
 
   }
 
@@ -517,17 +535,21 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   void jumpToStep(int step) {
+   if((step==1 ||step==2) && is2and3StepActive.value==false ){
+     ToastMessage.msg(AppText.accessRestrictedStep2and3Msg);
+   }else{
+     if(step==1 || step==2){
+       setAgeFromDob(camDobController, camEarningCustomerAgeController);
+     }
+     if(step==1){
+       print("1");
+       getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
+     }
+     currentStep.value = step;
 
-    if(step==1 || step==2){
-      setAgeFromDob(camDobController, camEarningCustomerAgeController);
-    }
-    if(step==1){
-      print("1");
-      getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
-    }
-    currentStep.value = step;
+     scrollToStep(step);
+   }
 
-    scrollToStep(step);
   }
 
   void scrollToStep(int index) {
@@ -3218,6 +3240,107 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       isLoading(false);
       isAllCamnoteSubmit(false);
+    }
+  }
+
+
+  Future<void> sendPaymentQRCodeOnWhatsAppToCustomerApi({
+    String? PackageId,
+    String? CustomerName,
+    String? CustomerWhatsAppNo,
+  }) async {
+    try {
+      print("addCamNoteDetailApi-->1");
+      isQRApiLoading(true);
+
+      var data = await CamNoteService.sendPaymentQRCodeOnWhatsAppToCustomerApi(
+        PackageId: PackageId,
+        CustomerName: CustomerName,
+        CustomerWhatsAppNo: CustomerWhatsAppNo,
+      );
+
+
+      if(data['success'] == true){
+
+        sendQRCodeOnWACustModel.value= SendQRCodeOnWACustModel.fromJson(data);
+
+
+        ToastMessage.msg(sendQRCodeOnWACustModel.value?.message??AppText.somethingWentWrong);
+        isQRApiLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        sendQRCodeOnWACustModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error sendQRCodeOnWACustModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isQRApiLoading(false);
+
+    } finally {
+
+
+      isQRApiLoading(false);
+
+    }
+  }
+
+
+  Future<void> checkReceiptStatusForCamNoteApi({
+    required String Mobile,
+    required String  Utr,
+  }) async {
+    try {
+
+      isCheckReceiptLoading(true);
+
+      var data = await CamNoteService.checkReceiptStatusForCamNoteApi(
+        Mobile: Mobile,
+        Utr: Utr,
+
+      );
+
+
+      if(data['success'] == true){
+
+        checkReceiptStatusForCamNoteModel.value= CheckReceiptStatusForCamNoteModel.fromJson(data);
+        if(checkReceiptStatusForCamNoteModel.value?.data==1){
+          is2and3StepActive.value==true;
+        }else{
+          is2and3StepActive.value==false;
+        }
+        print("is2and3StepActive.value in API---${is2and3StepActive.value}");
+
+        isCheckReceiptLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        sendQRCodeOnWACustModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error checkReceiptStatusForCamNoteApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isCheckReceiptLoading(false);
+
+    } finally {
+
+
+      isCheckReceiptLoading(false);
+
     }
   }
 

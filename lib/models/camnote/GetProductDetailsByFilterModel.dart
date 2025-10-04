@@ -88,6 +88,7 @@ class Data {
   String? ksdplProduct;
   num? specialBranchId;
   String? autoindividual; // <-- Add this in your data model
+
   Data(
       {this.id,
         this.bankId,

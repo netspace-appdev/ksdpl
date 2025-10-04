@@ -1101,6 +1101,9 @@ class AppText{
 
   static const String iir = "IIR";
   static const String enterIir = "Enter IIR";
+  static const String customerName = "Customer Name";
+  static const String enterCustomerName = "Enter Customer Name";
+  static const String accessRestrictedStep2and3Msg = "Access Restricted";
 
 
 }

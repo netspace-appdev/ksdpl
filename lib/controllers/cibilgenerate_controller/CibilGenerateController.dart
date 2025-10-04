@@ -20,6 +20,9 @@ class CibilGenerateController extends GetxController{
   final TextEditingController camTotalOverdueAmountController = TextEditingController(); // it will be replace by camAmountRecoveredController
   final TextEditingController camAmountRecoveredController = TextEditingController();
   final TextEditingController camTransactionDetailsController = TextEditingController();
+
+  final TextEditingController qrCBCustomerNameController = TextEditingController();
+  final TextEditingController qrCBWhatsappController = TextEditingController();
   var isLoading=false.obs;
   var generateCibilResponseModel = Rxn<GenerateCibilResponseModel>(); //
   var getAllPackageMasterModel = Rxn<cibilPackagrList.GetAllPackageMasterModel>(); //

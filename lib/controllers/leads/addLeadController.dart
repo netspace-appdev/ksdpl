@@ -269,12 +269,19 @@ class Addleadcontroller extends GetxController{
 
         camNoteController.getAddIncUniqueLeadApi(uniqueLeadNumber:getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"0");
 
+        print("checkReceiptStatusForCamNoteApi before--->");
+
+         /*camNoteController.checkReceiptStatusForCamNoteApi(
+            Mobile: getLeadDetailModel.value?.data?.transactionDetails.toString()??"0",
+            Utr: getLeadDetailModel.value?.data?.mobileNumber ?? ""
+        );*/
+
         final geoLocationProp = getLeadDetailModel.value!.data!.geoLocationOfProperty;
-        print("geoLocationProp--->${geoLocationProp}");
+
 
         var rawRole = StorageService.get(StorageService.ROLE).toString();
         var role = rawRole.replaceAll('[', '').replaceAll(']', '');
-        print("role--->${role}");
+
         if(role=="INDEPENDENT AREA HEAD"){
           camNoteController.isUserAIC.value=true;
         }
@@ -313,7 +320,7 @@ class Addleadcontroller extends GetxController{
 
 
         final geoLocationRes = getLeadDetailModel.value!.data!.geoLocationOfResidence;
-        print("geoLocationRes--->${geoLocationRes}");
+
 
         if (geoLocationRes != null && geoLocationRes.contains('-')) {
           final parts = geoLocationRes.split('-');
@@ -347,7 +354,7 @@ class Addleadcontroller extends GetxController{
 
         final geoLocationOff = getLeadDetailModel.value!.data!.geoLocationOfOffice;
 
-        print("geoLocationOff--->${geoLocationOff}");
+
         if (geoLocationOff != null && geoLocationOff.contains('-')) {
           final parts = geoLocationOff.split('-');
           if (parts.length == 2) {
@@ -418,16 +425,6 @@ class Addleadcontroller extends GetxController{
 
 
 
-
-         /* print("CIBIL Score: ${result['Cibil']}");
-          print("TotalLoanAvailedOnCibil: ${result['TotalLoanAvailedOnCibil']}");
-          print("TotalLiveLoan: ${result['TotalLiveLoan']}");
-          print("TotalEMI: ${result['TotalEMI'].toStringAsFixed(2)}");
-          print("EMIWillContinue: ${result['EMIWillContinue']}");
-          print("TotalOverdueCasesAsPerCibil: ${result['TotalOverdueCasesAsPerCibil']}");
-          print("TotalOverdueAmountAsPerCibil: ${result['TotalOverdueAmountAsPerCibil']}");
-          print("TotalEnquiriesMadeAsPerCibil: ${result['TotalEnquiriesMadeAsPerCibil']}");
-          */
 
           camNoteController.camCibilController.text=(result['Cibil']=="NA" || result['Cibil']=="NA")?"0": result['Cibil'].toString();
           camNoteController.camTotalLoanAvailedController.text=result['TotalLoanAvailedOnCibil'].toString();

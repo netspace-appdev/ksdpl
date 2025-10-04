@@ -16,6 +16,7 @@ import '../../controllers/leads/addLeadController.dart';
 import '../../controllers/leads/income_step_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../custom_widgets/CustomBigYesNDilogBox.dart';
+import '../../custom_widgets/CustomBigYesNoLoaderDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomIconDilogBox.dart';
@@ -44,7 +45,7 @@ class Step1CamNote extends StatelessWidget {
   Addleadcontroller addleadcontroller = Get.find();
   AddProductController addProductController = Get.find();
   IncomeStepController incomeStepController = Get.put(IncomeStepController());
-
+  final _formKeyQr = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
 
@@ -843,18 +844,22 @@ class Step1CamNote extends StatelessWidget {
                             onChanged: (value) {
                              // print("value image--->${value?.qRImage.toString()}");
                               camNoteController.selectedPackage.value =  value?.id;
+                              print("packageid---->${camNoteController.selectedPackage.value}");
                               camNoteController.camPackageAmtController.text=value?.amount.toString() ??"0";
                               if(camNoteController.selectedPackage.value!=null){
                                 if(value?.qRImage!=null){
-                                  DialogHelper.showPickUpConditionDialog(
+                                  showPackageQRDialog(
                                       context: context,
-                                      leadId: "0",
-                                    imageURL:  BaseUrl.imageBaseUrl+value!.qRImage.toString()??""
+                                    imageURL:  BaseUrl.imageBaseUrl+value!.qRImage.toString()??"",
+                                    packageId: camNoteController.selectedPackage.value.toString()
 
                                   );
                                 }
                                 camNoteController.getPackageDetailsByIdApi(packageId: camNoteController.selectedPackage.toString());
-                                camNoteController.maxAllowedBank = camNoteController.getMaxBankSelection(value?.packageName.toString() ??"0", value?.amount.toString() ??"0")??-1;
+                                // camNoteController.maxAllowedBank = camNoteController.getMaxBankSelection(value?.packageName.toString() ??"0", value?.amount.toString() ??"0")??-1;
+                                camNoteController.maxAllowedBank.value = value?.noOfBank ??0;
+
+
                               }
 
                             },
@@ -1114,11 +1119,11 @@ class Step1CamNote extends StatelessWidget {
 
     }
   }
-/*
-  void showPickUpConditionDialog({
+  void showPackageQRDialog({
     required BuildContext context,
-    required String leadId,
-    required String imageURL
+    required String imageURL,
+    required String packageId,
+
 }) {
     showDialog(
       context: context,
@@ -1146,7 +1151,7 @@ class Step1CamNote extends StatelessWidget {
                     style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
                     children: [
                       TextSpan(
-                          text: "Please Scan the QR Code to continue",
+                          text: "Please Scan the QR Code to continue or \nSend QR on WhatsApp",
                           style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.primaryColor)),
                     ],
                   ),
@@ -1154,12 +1159,18 @@ class Step1CamNote extends StatelessWidget {
               ],
             ),
           ),
-          firstButtonText: "Yes",
+          firstButtonText: "WhatsApp",
           onFirstButtonPressed: (){
-
+            Get.back();
+            camNoteController.qrCustomerNameController.clear();
+            camNoteController.qrWhatsappController.clear();
+            showQRCustomerNUmberDialog(
+              context: context,
+              packageId: packageId,
+            );
 
           },
-          secondButtonText: "No",
+          secondButtonText: "No, Thanks",
           onSecondButtonPressed: (){
             Get.back();
           },
@@ -1168,5 +1179,101 @@ class Step1CamNote extends StatelessWidget {
         );
       },
     );
-  }*/
+  }
+
+
+  void showQRCustomerNUmberDialog({
+    required BuildContext context,
+    required String packageId,
+  })
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx(() => CustomBigYesNoLoaderDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Customer Details",
+          content: SingleChildScrollView(
+            child: Form(
+              key: _formKeyQr,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomLabeledTextField(
+                    label: AppText.customerName,
+                    isRequired: true,
+                    controller: camNoteController.qrCustomerNameController,
+                    inputType: TextInputType.name,
+                    hintText: AppText.enterCustomerName,
+                    validator: ValidationHelper.validateName,
+                  ),
+                  const SizedBox(height: 15),
+                  CustomLabeledTextField(
+                    label: AppText.whatsappNoNoStar,
+                    isRequired: true,
+                    controller: camNoteController.qrWhatsappController,
+                    inputType: TextInputType.number,
+                    hintText: AppText.enterWhatsappNo,
+                    validator: ValidationHelper.validateWhatsapp,
+                  ),
+                  const SizedBox(height: 12),
+                   RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                      children: [
+                        TextSpan(
+                          text: "Send QR on above WhatsApp Number",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // 👇 Loader logic right here
+          firstButtonChild: camNoteController.isQRApiLoading.value
+              ? const SizedBox(
+            height: 18,
+            width: 18,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Colors.white,
+            ),
+          )
+              : const Text(
+            "Send",
+            style: TextStyle(color: Colors.white),
+          ),
+
+          secondButtonText: "Cancel",
+          firstButtonColor: AppColor.primaryColor,
+          secondButtonColor: AppColor.redColor,
+
+          onFirstButtonPressed: () {
+            if (!camNoteController.isQRApiLoading.value &&
+                _formKeyQr.currentState!.validate()) {
+              camNoteController.sendPaymentQRCodeOnWhatsAppToCustomerApi(
+                CustomerName: camNoteController.qrCustomerNameController.text.trim(),
+                CustomerWhatsAppNo: camNoteController.qrWhatsappController.text.trim(),
+                PackageId: packageId,
+              ).then((_){
+                Get.back();
+              });
+            }
+          },
+          onSecondButtonPressed: () {
+            Get.back();
+          },
+        ));
+      },
+    );
+  }
+
+
 }
