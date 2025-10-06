@@ -2186,7 +2186,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         print("TotalLoanAvailedOnCibil: ₹${cibilValues.totalLoanAvailedOnCibil}");
         print("TotalLiveLoan: ${cibilValues.totalLiveLoan}");
         print("TotalEMI: ₹${cibilValues.totalEMI.toStringAsFixed(2)}");
-        print("EMIWillContinue: ${cibilValues.emiWillContinue}");
+       // print("EMIWillContinue: ${cibilValues.emiWillContinue}");
         print("TotalOverdueCasesAsPerCibil: ${cibilValues.totalOverdueCasesAsPerCibil}");
         print("TotalOverdueAmountAsPerCibil: ₹${cibilValues.totalOverdueAmountAsPerCibil}");
         print("TotalEnquiriesMadeAsPerCibil: ${cibilValues.totalEnquiriesMadeAsPerCibil}");
@@ -2208,12 +2208,39 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camTotalLoanAvailedController.text=cibilValues.totalLoanAvailedOnCibil.toString();
         camTotalLiveLoanController.text=cibilValues.totalLiveLoan.toString();
         camTotalEmiController.text=cibilValues.totalEMI.toStringAsFixed(2);
-        camEmiWillContinueController.text=cibilValues.emiWillContinue.toString();
+        camEmiWillContinueController.text="";//cibilValues.emiWillContinue.toString();
         camTotalOverdueCasesController.text=cibilValues.totalOverdueCasesAsPerCibil.toString();
         camTotalOverdueAmountController.text=cibilValues.totalOverdueAmountAsPerCibil.toString();
         camTotalEnquiriesController.text=cibilValues.totalEnquiriesMadeAsPerCibil.toString();
-        enableAllCibilFields.value=false;
 
+
+
+        ///6 oct 2025
+        camClosedCasesController.text=cibilValues.closedCases.toString();
+        camWrittenOffCasesController.text=cibilValues.writtenOffCases.toString();
+        camSettlementCasesController.text=cibilValues.settlementCases.toString();
+        camSuitFiledWillfulDefaultCasesController.text=cibilValues.suitFiledWillfulDefaultCases.toString();
+        camTotalSanctionedAmountController.text=cibilValues.totalSanctionedAmount.toString();
+        camCurrentBalanceController.text=cibilValues.currentBalance.toString();
+        camClosedAmountController.text=cibilValues.closedAmount.toString();
+        camWrittenOffAmountController.text=cibilValues.writtenOffAmount.toString();
+        camSettlementAmountController.text=cibilValues.settlementAmount.toString();
+        camSuitFiledWillfulDefaultAmountController.text=cibilValues.suitFiledWillfulDefaultAmount.toString();
+        camStandardCountController.text=cibilValues.standardCount.toString();
+        camNumberOfDaysPastDueCountController.text=cibilValues.numberOfDaysPastDueCount.toString();
+        camLossCountController.text=cibilValues.lossCount.toString();
+        camSubstandardCountController.text=cibilValues.substandardCount.toString();
+        camDoubtfulCountController.text=cibilValues.doubtfulCount.toString();
+        camSpecialMentionAccountCountController.text=cibilValues.specialMentionAccountCount.toString();
+        camNptController.text=cibilValues.npt.toString();
+        camTotalCountsController.text=cibilValues.totalCounts.toString();
+        camCurrentlyCasesBeingServedController.text=cibilValues.currentlyCasesBeingServed.toString();
+        camCasesToBeForeclosedOnOrBeforeDisbController.text=cibilValues.casesToBeForeclosedOnOrBeforeDisb.toString();
+        camCasesToBeContenuedController.text=cibilValues.casesToBeContinued.toString();
+        camEmisOfExistingLiabilitiesController.text=cibilValues.emisOfExistingLiabilities.toString();
+        camIirController.text=cibilValues.iir.toString();
+
+        enableAllCibilFields.value=false;
         isLoadingCibil(false);
 
         Get.back();
@@ -2264,7 +2291,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         print("TotalLoanAvailedOnCibil: ₹${cibilValues.totalLoanAvailedOnCibil}");
         print("TotalLiveLoan: ${cibilValues.totalLiveLoan}");
         print("TotalEMI: ₹${cibilValues.totalEMI.toStringAsFixed(2)}");
-        print("EMIWillContinue: ${cibilValues.emiWillContinue}");
+        //print("EMIWillContinue: ${cibilValues.emiWillContinue}");
         print("TotalOverdueCasesAsPerCibil: ${cibilValues.totalOverdueCasesAsPerCibil}");
         print("TotalOverdueAmountAsPerCibil: ₹${cibilValues.totalOverdueAmountAsPerCibil}");
         print("TotalEnquiriesMadeAsPerCibil: ${cibilValues.totalEnquiriesMadeAsPerCibil}");
@@ -2284,10 +2311,36 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camTotalLoanAvailedController.text=cibilValues.totalLoanAvailedOnCibil.toString();
         camTotalLiveLoanController.text=cibilValues.totalLiveLoan.toString();
         camTotalEmiController.text=cibilValues.totalEMI.toStringAsFixed(2);
-        camEmiWillContinueController.text=cibilValues.emiWillContinue.toString();
+        camEmiWillContinueController.text="";//cibilValues.emiWillContinue.toString();
         camTotalOverdueCasesController.text=cibilValues.totalOverdueCasesAsPerCibil.toString();
         camTotalOverdueAmountController.text=cibilValues.totalOverdueAmountAsPerCibil.toString();
         camTotalEnquiriesController.text=cibilValues.totalEnquiriesMadeAsPerCibil.toString();
+
+        ///6 oct 2025
+        camClosedCasesController.text=cibilValues.closedCases.toString();
+        camWrittenOffCasesController.text=cibilValues.writtenOffCases.toString();
+        camSettlementCasesController.text=cibilValues.settlementCases.toString();
+        camSuitFiledWillfulDefaultCasesController.text=cibilValues.suitFiledWillfulDefaultCases.toString();
+        camTotalSanctionedAmountController.text=cibilValues.totalSanctionedAmount.toString();
+        camCurrentBalanceController.text=cibilValues.currentBalance.toString();
+        camClosedAmountController.text=cibilValues.closedAmount.toString();
+        camWrittenOffAmountController.text=cibilValues.writtenOffAmount.toString();
+        camSettlementAmountController.text=cibilValues.settlementAmount.toString();
+        camSuitFiledWillfulDefaultAmountController.text=cibilValues.suitFiledWillfulDefaultAmount.toString();
+        camStandardCountController.text=cibilValues.standardCount.toString();
+        camNumberOfDaysPastDueCountController.text=cibilValues.numberOfDaysPastDueCount.toString();
+        camLossCountController.text=cibilValues.lossCount.toString();
+        camSubstandardCountController.text=cibilValues.substandardCount.toString();
+        camDoubtfulCountController.text=cibilValues.doubtfulCount.toString();
+        camSpecialMentionAccountCountController.text=cibilValues.specialMentionAccountCount.toString();
+        camNptController.text=cibilValues.npt.toString();
+        camTotalCountsController.text=cibilValues.totalCounts.toString();
+        camCurrentlyCasesBeingServedController.text=cibilValues.currentlyCasesBeingServed.toString();
+        camCasesToBeForeclosedOnOrBeforeDisbController.text=cibilValues.casesToBeForeclosedOnOrBeforeDisb.toString();
+        camCasesToBeContenuedController.text=cibilValues.casesToBeContinued.toString();
+        camEmisOfExistingLiabilitiesController.text=cibilValues.emisOfExistingLiabilities.toString();
+        camIirController.text=cibilValues.iir.toString();
+
         enableAllCibilFields.value=false;
 
         isLoadingCibil(false);
@@ -2400,7 +2453,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         camNoteLeadBankIds.value = ids;
 
-
+        //camCibilController.text= getCamNoteLeadIdModel.value?.data?[0].emiStoppedOnBeforeThisLoan??"0"
         isLoadingMainScreen(false);
 
 
@@ -3100,13 +3153,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camNonEarningCustomerAgeController.text=(getCamNoteDetailsModel.value?.data?.nonEarningCustomerAge??"").toString();
         camTotalFamilyIncomeController.text=(getCamNoteDetailsModel.value?.data?.totalFamilyIncome??"").toString();
         camIncomeCanBeConsideredController.text=(getCamNoteDetailsModel.value?.data?.incomeCanBeConsidered??"").toString();
-        camIncomeCanBeConsideredController.text=(getCamNoteDetailsModel.value?.data?.incomeCanBeConsidered??"").toString();
         camLoanTenorRequestedController.text=(getCamNoteDetailsModel.value?.data?.loanTenorRequested??"").toString();
         camRateOfInterestController.text=(getCamNoteDetailsModel.value?.data?.roi??"").toString();
         camProposedEmiController.text=(getCamNoteDetailsModel.value?.data?.proposedEMI??"").toString();
         camPropertyValueController.text=(getCamNoteDetailsModel.value?.data?.propertyValueAsPerCustomer??"").toString();
         camFoirController.text=(getCamNoteDetailsModel.value?.data?.foir??"").toString();
-        camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
         camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
         camEmiStoppedBeforeController.text=(getCamNoteDetailsModel.value?.data?.emiStoppedOnBeforeThisLoan??"").toString();
         selectedCamIncomeTypeList.value=(getCamNoteDetailsModel.value?.data?.incomeType??"").toString();

@@ -117,7 +117,18 @@ class DashboardController extends GetxController {
 
         StorageService.put(StorageService.EMPLOYEE_ID, getEmployeeModel!.data!.id.toString());
         var genToekn=StorageService.get(StorageService.TOKEN);
+       ///6 oct
+        var rawRole = StorageService.get(StorageService.ROLE).toString();
+        var role = rawRole.replaceAll('[', '').replaceAll(']', '');
+        bool isAIC=false;
 
+        if(role=="INDEPENDENT AREA HEAD"){
+          isAIC=true;
+        }
+        else{
+          isAIC=false;
+        }
+        ///end
         String fcmToken = await getFCMToken();
         String deviceId = await getDeviceId();
 
@@ -130,6 +141,8 @@ class DashboardController extends GetxController {
          todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
          getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
         getTodayAttendanceDetailOfEmployeeIdApi(employeeId: getEmployeeModel!.data!.id.toString());
+        isAIC?selectedIndex.value=2:selectedIndex.value=0;
+        isAIC?isLeadCountYearly.value="2":isLeadCountYearly.value="0";
          await getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
 
 
