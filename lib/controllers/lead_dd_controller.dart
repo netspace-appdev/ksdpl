@@ -204,7 +204,6 @@ class LeadDDController extends GetxController{
     try {
       int leadCode = int.tryParse(currentLeadStage) ?? 0;
 
-      print("leadCode passed to filter ===> $leadCode");
 
       List<int> allowedStageIds;
       var rawRole = StorageService.get(StorageService.ROLE).toString();
@@ -232,18 +231,62 @@ class LeadDDController extends GetxController{
           .where((lead) => lead.id != 1 && allowedStageIds.contains(lead.id))
           .toList();
 
-      print("Allowed IDs for leadCode $leadCode: $allowedStageIds");
+
       for (var ele in filteredStages) {
         print("Filtered stage: ${ele.stageName}");
       }
 
       return filteredStages;
     } catch (e) {
-      print("Error in getFilteredStagesByLeadStageId: $e");
+
       return [];
     }
   }
 
+
+  ///AIC stage only
+  List<stage.Data> getAICStagesByLeadStageId(String currentLeadStage) {
+    try {
+      int leadCode = int.tryParse(currentLeadStage) ?? 0;
+
+
+      List<int> allowedStageIds;
+      var rawRole = StorageService.get(StorageService.ROLE).toString();
+      var role = rawRole.replaceAll('[', '').replaceAll(']', '');
+      switch (leadCode) {
+        case 2:
+        case 3:
+        case 5:
+        case 13:
+          allowedStageIds = [4, 5];
+          break;
+        case 4:
+          allowedStageIds = [4, 5]; //remove this line, added on 20 sep
+        case 6:
+        case 7:
+          allowedStageIds = [6, 7];
+          break;
+        default:
+          allowedStageIds = [];
+      }
+
+      final allStages = getAllLeadStageModel.value?.data ?? [];
+
+      final filteredStages = allStages
+          .where((lead) => lead.id != 1 && allowedStageIds.contains(lead.id))
+          .toList();
+
+
+      for (var ele in filteredStages) {
+        print("Filtered stage: ${ele.stageName}");
+      }
+
+      return filteredStages;
+    } catch (e) {
+
+      return [];
+    }
+  }
 
   Future<void>  getAllStateApi() async {
     try {

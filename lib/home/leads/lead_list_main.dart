@@ -1,10 +1,10 @@
-import 'dart:ffi';
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
@@ -25,6 +25,7 @@ import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
+import '../../custom_widgets/CustomBigYesNoLoaderDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomIconDilogBox.dart';
@@ -32,7 +33,8 @@ import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
-import '../../custom_widgets/CustomTextFieldPrefix.dart';
+
+import '../../custom_widgets/CustomTextLabel.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
 import '../../services/call_service.dart';
 import '../custom_drawer.dart';
@@ -51,7 +53,7 @@ class LeadListMain extends StatelessWidget {
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());
   LeadDDController leadDDController=Get.find();
   BotNavController botNavController = Get.find();
-
+  final _formKeyAicFb = GlobalKey<FormState>();
 
 
   @override
@@ -62,7 +64,7 @@ class LeadListMain extends StatelessWidget {
         key:_scaffoldKey,
 
         backgroundColor: AppColor.backgroundColor,
-        drawer:   CustomDrawer(),
+        drawer:   const CustomDrawer(),
         body: RefreshIndicator(
           onRefresh: () async {
             await leadListController.refreshItems(); // Make sure this triggers API call
@@ -82,11 +84,11 @@ class LeadListMain extends StatelessWidget {
                         end: Alignment.centerLeft,
                       ),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child:Column(
                       children: [
 
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
 
@@ -101,7 +103,7 @@ class LeadListMain extends StatelessWidget {
                   Align(
                     alignment: Alignment.topCenter,  // Centers it
                     child: Container(
-                      margin:  EdgeInsets.only(
+                      margin:  const EdgeInsets.only(
                           top:90 // MediaQuery.of(context).size.height * 0.22
                       ), // <-- Moves it 30px from top
                       width: double.infinity,
@@ -129,7 +131,7 @@ class LeadListMain extends StatelessWidget {
                               Obx(()=> Row(
                                 children: [
 
-                                  Text(
+                                  const Text(
                                     "",
                                     style: TextStyle(
                                       fontSize: 20,
@@ -153,7 +155,7 @@ class LeadListMain extends StatelessWidget {
                                         leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty?"(0)":
 
                                     " (${ leadListController.leadListLength.value.toString()})",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       // fontWeight: FontWeight.bold,
                                     ),
@@ -257,7 +259,7 @@ class LeadListMain extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration:  BoxDecoration(
                 color: AppColor.appWhite.withOpacity(0.15),
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
@@ -310,7 +312,7 @@ class LeadListMain extends StatelessWidget {
           decoration:  BoxDecoration(
             border: Border.all(color: AppColor.grey200),
             color: AppColor.appWhite,
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(10),
             ),
 
@@ -410,7 +412,7 @@ class LeadListMain extends StatelessWidget {
                                       ),
                                       Text(
                                         lead.mobileNumber.toString(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: AppColor.grey700,
                                         ),
                                       ),
@@ -455,7 +457,7 @@ class LeadListMain extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
                     /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
                     Padding(
@@ -477,7 +479,7 @@ class LeadListMain extends StatelessWidget {
 
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
+                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
                               decoration: BoxDecoration(
                                 color: AppColor.orangeColor, // Button background color
                                 borderRadius: BorderRadius.circular(2), // Rounded corners
@@ -498,7 +500,7 @@ class LeadListMain extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     //mamshi add new api
                     lead.leadStage==10||lead.leadStage==11?Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 8.0),
@@ -509,7 +511,7 @@ class LeadListMain extends StatelessWidget {
                               showUpdateDisburseHistorySheet();
                              },
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 10),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
                               width:double.infinity,
                               decoration: BoxDecoration(
                                   color: AppColor.primaryColor,
@@ -768,7 +770,7 @@ class LeadListMain extends StatelessWidget {
                               label:"Cam Note Details",
                               context: context,
                               color: Colors.purple,
-                              icon:  Icons.person_outline_outlined,
+                              icon:  Icons.money_outlined,
                               leadId: lead.id.toString(),
                               label_code: "cam_note_details",
                               currentLeadStage: lead.leadStage.toString(),
@@ -792,9 +794,35 @@ class LeadListMain extends StatelessWidget {
                                     label:AppText.loanApplicationForm,
                                     context: context,
                                     color: Colors.purple,
-                                    icon:  Icons.list_alt_rounded,
+                                    icon:  Icons.currency_exchange,
                                     leadId: lead.id.toString(),
                                     label_code: "loan_appl_form",
+                                    currentLeadStage: lead.leadStage.toString(),
+                                    uln: lead.uniqueLeadNumber.toString(),
+                                    loanDetails: lead.loanDetail
+                                ),
+
+                            ],
+                          ),
+                        ],
+                      ),
+
+                   ///add feedback for AIC
+                    if (lead.leadStage != null && lead.leadStage! >= 4)
+                      Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                                _buildTextButton(
+                                    label:AppText.addFeedback,
+                                    context: context,
+                                    color: Colors.purple,
+                                    icon:  Icons.feedback_outlined,
+                                    leadId: lead.id.toString(),
+                                    label_code: "aic_add_feedback",
                                     currentLeadStage: lead.leadStage.toString(),
                                     uln: lead.uniqueLeadNumber.toString(),
                                     loanDetails: lead.loanDetail
@@ -1023,7 +1051,7 @@ overflow: TextOverflow.ellipsis,
         decoration:  BoxDecoration(
           border: Border.all(color: AppColor.grey200),
           color: AppColor.appWhite,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(2),
           ),
 
@@ -1054,7 +1082,7 @@ overflow: TextOverflow.ellipsis,
         children: [
 
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
             label_code=="loan_appl_form"?MediaQuery.of(context).size.width*0.82:
             (label_code=="add_feedback" ) ?
@@ -1071,7 +1099,7 @@ overflow: TextOverflow.ellipsis,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:Colors.red, size: 16),
-                SizedBox(width: 6),
+                const SizedBox(width: 6),
                 Text(
                   label,
                   style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
@@ -1260,6 +1288,15 @@ overflow: TextOverflow.ellipsis,
         }
         else if (label_code == "update_loan_update") {
           showUpdateLoanApplicationDialog(uln);
+        } else if (label_code == "aic_add_feedback") {
+          leadListController.selectedValAicGradeList.value="";
+          leadListController.aicFeedbackController.clear();
+          leadDDController.selectedStage.value="";
+          showAICFeebackDialog(context: context,
+              currentLeadStage: currentLeadStage,
+            leadId: leadId
+
+          );
         } else{
 
         }
@@ -1269,9 +1306,9 @@ overflow: TextOverflow.ellipsis,
         children: [
 
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
-            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" ?MediaQuery.of(context).size.width*0.82:
+            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" || label_code=="aic_add_feedback" ?MediaQuery.of(context).size.width*0.82:
             (label_code=="add_feedback" ) ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
@@ -1286,7 +1323,7 @@ overflow: TextOverflow.ellipsis,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(icon, color:moveToCommon=="YES"?Colors.grey.shade300: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
-                SizedBox(width: 6),
+                const SizedBox(width: 6),
                 Text(
                   label,
                   style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: moveToCommon=="YES"?Colors.grey.shade300:label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
@@ -1323,7 +1360,7 @@ overflow: TextOverflow.ellipsis,
                       AppImage.handshake,
                       repeat: false
                   )),
-              Text(
+              const Text(
                   "No Leads Found",
                   style: TextStyle(
                     fontSize: 16,
@@ -1372,8 +1409,8 @@ overflow: TextOverflow.ellipsis,
                     // 🔵 Title in Blue Strip
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
                         color:AppColor.primaryColor, // Title background color
                         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                         gradient: LinearGradient(
@@ -1382,7 +1419,7 @@ overflow: TextOverflow.ellipsis,
                           end: Alignment.bottomCenter,
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         "Select Status:",
                         style: TextStyle(
                           fontSize: 17,
@@ -1395,7 +1432,7 @@ overflow: TextOverflow.ellipsis,
 
                     // 📝 Content (Radio Buttons)
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: options.map((option) {
@@ -1426,9 +1463,9 @@ overflow: TextOverflow.ellipsis,
                             },
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColor.grey1,
-                              side: BorderSide(color: AppColor.grey2),
+                              side: const BorderSide(color: AppColor.grey2),
                             ),
-                            child: Text("Close", style: TextStyle(color: AppColor.grey2)),
+                            child: const Text("Close", style: TextStyle(color: AppColor.grey2)),
                           ),
                           ElevatedButton(
                             onPressed: () {
@@ -1460,7 +1497,7 @@ overflow: TextOverflow.ellipsis,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColor.orangeColor,
                             ),
-                            child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
+                            child: const Text("Submit", style: TextStyle(color: AppColor.appWhite)),
                           ),
                         ],
                       ),
@@ -1574,7 +1611,7 @@ overflow: TextOverflow.ellipsis,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
                     child:  Obx(()=>Column(
                       children: options.asMap().entries.map((entry) {
                         int index = entry.key;
@@ -1589,7 +1626,7 @@ overflow: TextOverflow.ellipsis,
                       }).toList(),
                     )),
                   ),
-              
+
                 ],
               ),
             ),
@@ -1625,12 +1662,12 @@ overflow: TextOverflow.ellipsis,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
 
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                   child:  Column(
                     children: [
 
@@ -1794,7 +1831,7 @@ overflow: TextOverflow.ellipsis,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 if (leadListController.isFBDetailsShow.value==true) ...[
-                                  SizedBox(height: 15),
+                                  const SizedBox(height: 15),
                                   CustomLabeledTextField(
                                     label: AppText.callFeedback,
                                     isRequired: false,
@@ -1803,7 +1840,7 @@ overflow: TextOverflow.ellipsis,
                                     hintText: AppText.enterCallFeedback,
                                     isTextArea: true,
                                   ),
-                                  SizedBox(height: 15),
+                                  const SizedBox(height: 15),
                                   CustomLabeledTextField(
                                     label: AppText.leadFeedback,
                                     isRequired: false,
@@ -1846,7 +1883,7 @@ overflow: TextOverflow.ellipsis,
 
                                   },
                                 )),
-                                Text(
+                                const Text(
                                   AppText.callReminder,
                                   style: TextStyle(
                                     fontSize: 17,
@@ -1857,7 +1894,7 @@ overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Obx(()=> CustomLabeledPickerTextField(
                               label: AppText.selectDate,
                               isRequired: false,
@@ -1949,7 +1986,7 @@ overflow: TextOverflow.ellipsis,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     CustomLabeledTextField(
                       label: AppText.followupNote,
                       isRequired: false,
@@ -1958,7 +1995,7 @@ overflow: TextOverflow.ellipsis,
                       hintText: AppText.enterCallFeedback,
                       isTextArea: true,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       "Need to set a reminder? select the checkbox",
                       style:  GoogleFonts.poppins(
@@ -1980,7 +2017,7 @@ overflow: TextOverflow.ellipsis,
 
                           },
                         )),
-                        Text(
+                        const Text(
                           AppText.callReminder,
                           style: TextStyle(
                             fontSize: 17,
@@ -2376,6 +2413,212 @@ overflow: TextOverflow.ellipsis,
     }
     return null;
   }
+
+
+
+  void showAICFeebackDialog({
+    required BuildContext context,
+    required currentLeadStage,
+    required String leadId,
+  })
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx(() => CustomBigYesNoLoaderDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Add Feedback",
+          content: SingleChildScrollView(
+            child: Form(
+              key: _formKeyAicFb,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CustomTextLabel(
+                    label: AppText.grade,
+                    isRequired: true,
+                  ),
+
+                  const SizedBox(height: 10),
+
+
+                  Obx((){
+                    if (leadListController.isLoading.value) {
+                      return  Center(child:CustomSkelton.productShimmerList(context));
+                    }
+
+
+                    return CustomDropdown<String>(
+                      items: leadListController.aicGradeList,
+                      getId: (item) => item,  // Adjust based on your model structure
+                      getName: (item) => item,
+                      selectedValue: leadListController.selectedValAicGradeList.value,
+                      onChanged: (value) {
+                        leadListController.selectedValAicGradeList.value =  value;
+                      },
+                    );
+                  }),
+                  const SizedBox(height: 20),
+                  CustomLabeledTextField(
+                    label: AppText.feedback,
+                    isRequired: true,
+                    controller: leadListController.aicFeedbackController,
+                    inputType: TextInputType.name,
+                    hintText: AppText.enterFeedback,
+                    validator: ValidationHelper.validateData,
+                  ),
+                if(currentLeadStage=="4" || currentLeadStage=="5"  || currentLeadStage=="6"  || currentLeadStage=="7")
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    const CustomTextLabel(
+                      label: AppText.leadStage,
+                      isRequired: true,
+                    ),
+                    const SizedBox(height: 10),
+                    Obx((){
+                      if (leadDDController.isLeadStageLoading.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+
+
+
+                      final filteredStages = leadDDController.getAICStagesByLeadStageId(
+                        currentLeadStage.toString(),
+                      );
+
+
+                      return CustomDropdown<stage.Data>(
+                        items: filteredStages,
+                        getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.stageName.toString(),
+                        selectedValue: filteredStages.firstWhereOrNull(
+                              (item) => item.id.toString() == leadDDController.selectedStage.value,
+
+                        ),
+                        onChanged: (value) {
+                          leadDDController.selectedStage.value =  value?.id?.toString();
+
+                          if( leadDDController.selectedStage.value!=null){
+                            if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                              leadDDController.selectedStageActive.value = 1;
+
+                            } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                              leadDDController.selectedStageActive.value = 1;
+                              leadListController.isFBDetailsShow.value=true;
+
+                            } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                              leadDDController.selectedStageActive.value = 0;
+                              leadListController.isFBDetailsShow.value=false;
+                            }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                              leadDDController.selectedStageActive.value = 1;
+                              leadListController.isFBDetailsShow.value=true;
+                            } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                              leadDDController.selectedStageActive.value = 0;
+                              leadListController.isFBDetailsShow.value=false;
+                            }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                              leadDDController.selectedStageActive.value = 0;
+                            }else {
+                              leadListController.isFBDetailsShow.value=true;
+                            }
+
+
+                          }
+
+
+                        },
+                      );
+                    }),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+
+
+
+                  RichText(
+                    text: const TextSpan(
+                      style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                      children: [
+                        TextSpan(
+                          text: "Note ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.blackColor,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ":If you want to check the feedback details, you can tap on the Details button",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // 👇 Loader logic right here
+          firstButtonChild: leadListController.isLoading.value
+              ? const SizedBox(
+            height: 18,
+            width: 18,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Colors.white,
+            ),
+          )
+              : const Text(
+            "Send",
+            style: TextStyle(color: Colors.white),
+          ),
+
+          secondButtonText: "Cancel",
+          firstButtonColor: AppColor.secondaryColor,
+          secondButtonColor: AppColor.redColor,
+
+          onFirstButtonPressed: () {
+            var stage=leadDDController.selectedStage.value;
+            var feedback= leadListController.aicFeedbackController.text.toString();
+            if (!leadListController.isLoading.value &&
+                _formKeyAicFb.currentState!.validate()) {
+
+              if(leadListController.selectedValAicGradeList.value!.isEmpty){
+
+                SnackbarHelper.showSnackbar(
+                    title: "Error",
+                    message: "Please Select Grade"
+                );
+
+              }else if(leadDDController.selectedStage.value!.isEmpty & (currentLeadStage!="4" && currentLeadStage!="5"  && currentLeadStage!="6"  && currentLeadStage!="7")){
+
+                SnackbarHelper.showSnackbar(
+                    title: "Error",
+                    message: "Please Select Stage"
+                );
+              }else{
+                leadListController.workOnLeadApi(
+                    leadId: leadId.toString(),
+                    leadStageStatus:stage.toString(),
+                    feedbackRelatedToLead: feedback.toString()
+                ).then((_){
+                  Get.back();
+                });
+              }
+            }
+          },
+          onSecondButtonPressed: () {
+            Get.back();
+          },
+        ));
+      },
+    );
+  }
+
 }
 
 class StatusChip extends StatelessWidget {
@@ -2392,7 +2635,7 @@ class StatusChip extends StatelessWidget {
         color: AppColor.greenColor,
         borderRadius: BorderRadius.circular(5),
       ),
-      child: Text(label, style: TextStyle(color: AppColor.appWhite, fontSize: 12)),
+      child: Text(label, style: const TextStyle(color: AppColor.appWhite, fontSize: 12)),
     );
   }
 }

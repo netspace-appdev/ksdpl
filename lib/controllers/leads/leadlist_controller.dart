@@ -107,6 +107,9 @@ class LeadListController extends GetxController {
   final TextEditingController disbursedByController = TextEditingController();
 
 
+  final TextEditingController aicFeedbackController = TextEditingController();
+
+
   GetEmployeeModel? getEmployeeModel;
   var isCallReminder=false.obs;
   var isFBDetailsShow=false.obs;
@@ -119,13 +122,20 @@ class LeadListController extends GetxController {
   LeadDDController leadDDController=Get.put(LeadDDController());
 
   var isDashboardLeads = false.obs;
+  var isAicFBLoading = false.obs;
 
   var isLoad2 = false.obs;
   var rolRx = "".obs;
 
 
+  var aicGradeList=[
+    "Grade-A",
+    "Grade-B",
+    "Grade-C",
+    "Grade-D",
 
-
+  ];
+  var selectedValAicGradeList = Rxn<String>();
   @override
   void onInit() {
     // TODO: implement onInit

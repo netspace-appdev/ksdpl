@@ -39,77 +39,91 @@ class CustomBigYesNoLoaderDialogBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () => Get.back(),
-                    child: const Icon(Icons.close, color: Colors.grey),
-                  ),
-                ],
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: titleBackgroundColor,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(5)),
               ),
-
-              const SizedBox(height: 15),
-              content,
-              const SizedBox(height: 30),
-
-              // Buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: firstButtonColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+
+
+                  // Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
                         ),
                       ),
-                      onPressed: onFirstButtonPressed,
-                      // 👇 if child is provided, show it; else show text
-                      child: firstButtonChild ??
-                          Text(
-                            firstButtonText ?? "",
+                      InkWell(
+                        onTap: () => Get.back(),
+                        child: const Icon(Icons.close, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 15),
+                  content,
+                  const SizedBox(height: 30),
+
+                  // Buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: firstButtonColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: onFirstButtonPressed,
+                          // 👇 if child is provided, show it; else show text
+                          child: firstButtonChild ??
+                              Text(
+                                firstButtonText ?? "",
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: secondButtonColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: onSecondButtonPressed,
+                          child: Text(
+                            secondButtonText,
                             style: const TextStyle(color: Colors.white),
                           ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: secondButtonColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: onSecondButtonPressed,
-                      child: Text(
-                        secondButtonText,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

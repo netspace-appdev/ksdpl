@@ -50,6 +50,7 @@ class DashboardController extends GetxController {
   var isLeadCountYearly = '0'.obs;
 
   var selectedIndex = (0).obs;
+  var appUserRoleGlobal="".obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -120,6 +121,7 @@ class DashboardController extends GetxController {
        ///6 oct
         var rawRole = StorageService.get(StorageService.ROLE).toString();
         var role = rawRole.replaceAll('[', '').replaceAll(']', '');
+        appUserRoleGlobal.value=role;
         bool isAIC=false;
 
         if(role=="INDEPENDENT AREA HEAD"){

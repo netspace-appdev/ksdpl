@@ -1104,6 +1104,10 @@ class AppText{
   static const String customerName = "Customer Name";
   static const String enterCustomerName = "Enter Customer Name";
   static const String accessRestrictedStep2and3Msg = "Access Restricted";
+  static const String grade = "Grade";
+  static const String feedback = "Feedback";
+  static const String enterFeedback = "Enter feedback here";
+
 
 
 }
