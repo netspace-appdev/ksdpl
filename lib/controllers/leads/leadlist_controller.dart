@@ -127,14 +127,7 @@ class LeadListController extends GetxController {
   var isLoad2 = false.obs;
   var rolRx = "".obs;
 
-
-  var aicGradeList=[
-    "Grade-A",
-    "Grade-B",
-    "Grade-C",
-    "Grade-D",
-
-  ];
+  var isAICStageDropdownDisabled = false.obs;
   var selectedValAicGradeList = Rxn<String>();
   @override
   void onInit() {

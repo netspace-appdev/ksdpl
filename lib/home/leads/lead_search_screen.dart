@@ -762,11 +762,13 @@ class LeadSearchScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Column(
                         children: [
-                          _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString()),
-                          _buildDetailRow("Updated at",Helper.convertDateTime(lead.lastUpdatedDate.toString())),
+                          _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString(),lead.leadStage??0),
+                          _buildDetailRow("Updated at",Helper.convertDateTime(lead.lastUpdatedDate.toString()),lead.leadStage??0),
                           //_buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
-                          _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  "),
-                          _buildDetailRow("Status", lead.stageName.toString()??""),
+                          _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  ",lead.leadStage??0),
+                          _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage??0),
+                          if(leadListController.rolRx.value=="INDEPENDENT AREA HEAD")
+                            _buildDetailRow("Assigned Employee Name", lead.assignedEmployeeName.toString()??"0",lead.leadStage??0),
                         ],
                       ),
                     ),
@@ -1153,7 +1155,7 @@ class LeadSearchScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+/*  Widget _buildDetailRow(String label, String value) {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -1197,8 +1199,74 @@ class LeadSearchScreen extends StatelessWidget {
         ],
       ),
     );
-  }
+  }*/
+  Widget _buildDetailRow(String label, String value, int leadStage) {
+    // Use default styles and consistent layout from your DetailRow design
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Label
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: AppColor.primaryColor,
+            ),
+          ),
+          const SizedBox(height: 4),
 
+          // Value
+          if (value == "null" || value == AppText.customdash || value.trim().isEmpty)
+            const Row(
+              children: [
+                Icon(Icons.horizontal_rule, size: 15, color: Colors.grey),
+              ],
+            )
+          else if (label == "Campaign")
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColor.lightPrimary2,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                value,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: AppColor.primaryColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          else if (leadStage == 3 && label == "Status")
+              StatusChip(label: value, color: Colors.orange)
+            else
+              Text(
+                (label == "Assigned" || label == "Uploaded on")
+                    ? Helper.formatDate(value)
+                    : value,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+        ],
+      ),
+    );
+  }
   /// Helper widget for icon buttons
   Widget _buildIconButton({
     required String icon,
@@ -1926,5 +1994,75 @@ class LeadSearchScreen extends StatelessWidget {
     });
   }
 }
+/*class DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final String leadStage;
+
+  const DetailRow({
+    Key? key,
+    required this.label,
+    required this.value,
+    required this.leadStage,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor
+            ),
+          ),
+          const SizedBox(height: 4),
+          value=="null" || value==AppText.customdash?
+          Row(
 
 
+            children: [
+              Icon(Icons.horizontal_rule, size: 15,),
+            ],):
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}*/
+
+class StatusChip extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  StatusChip({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColor.greenColor,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(label, style: const TextStyle(color: AppColor.appWhite, fontSize: 12)),
+    );
+  }
+}

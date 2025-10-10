@@ -1,4 +1,5 @@
 
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -453,6 +454,8 @@ class LeadListMain extends StatelessWidget {
                           _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage??0),
                           if(lead.leadStage==4)
                             _buildDetailRow("Cam Note Count", lead.camNoteCount.toString()??"0",lead.leadStage??0),
+                          if(leadListController.rolRx.value=="INDEPENDENT AREA HEAD")
+                            _buildDetailRow("Assigned Employee Name", lead.assignedEmployeeName.toString()??"0",lead.leadStage??0),
 
                         ],
                       ),
@@ -825,7 +828,8 @@ class LeadListMain extends StatelessWidget {
                                     label_code: "aic_add_feedback",
                                     currentLeadStage: lead.leadStage.toString(),
                                     uln: lead.uniqueLeadNumber.toString(),
-                                    loanDetails: lead.loanDetail
+                                    loanDetails: lead.loanDetail,
+                                  stageName: lead.stageName
                                 ),
 
                             ],
@@ -954,7 +958,7 @@ class LeadListMain extends StatelessWidget {
       },
     );
   }
-
+/*
   Widget _buildDetailRow(String label, String value, int leadStage) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -999,7 +1003,78 @@ overflow: TextOverflow.ellipsis,
         ],
       ),
     );
+  }*/
+
+
+  Widget _buildDetailRow(String label, String value, int leadStage) {
+    // Use default styles and consistent layout from your DetailRow design
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Label
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: AppColor.primaryColor,
+            ),
+          ),
+          const SizedBox(height: 4),
+
+          // Value
+          if (value == "null" || value == AppText.customdash || value.trim().isEmpty)
+            const Row(
+              children: [
+                Icon(Icons.horizontal_rule, size: 15, color: Colors.grey),
+              ],
+            )
+          else if (label == "Campaign")
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColor.lightPrimary2,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                value,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: AppColor.primaryColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          else if (leadStage == 3 && label == "Status")
+              StatusChip(label: value, color: Colors.orange)
+            else
+              Text(
+                (label == "Assigned" || label == "Uploaded on")
+                    ? Helper.formatDate(value)
+                    : value,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+        ],
+      ),
+    );
   }
+
+
 
   /// Helper widget for icon buttons
   Widget _buildIconButton({
@@ -1125,6 +1200,7 @@ overflow: TextOverflow.ellipsis,
     String? currentLeadStage,
     int? loanDetails,
     String? moveToCommon,
+    String? stageName,
   }) {
 
     return InkWell(
@@ -1294,7 +1370,8 @@ overflow: TextOverflow.ellipsis,
           leadDDController.selectedStage.value="";
           showAICFeebackDialog(context: context,
               currentLeadStage: currentLeadStage,
-            leadId: leadId
+            leadId: leadId,
+            stageName:  stageName.toString(),
 
           );
         } else{
@@ -2420,201 +2497,250 @@ overflow: TextOverflow.ellipsis,
     required BuildContext context,
     required currentLeadStage,
     required String leadId,
+    required String  stageName,
   })
   {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Obx(() => CustomBigYesNoLoaderDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-          title: "Add Feedback",
-          content: SingleChildScrollView(
-            child: Form(
-              key: _formKeyAicFb,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CustomTextLabel(
-                    label: AppText.grade,
-                    isRequired: true,
-                  ),
+        return Obx(() {
 
-                  const SizedBox(height: 10),
+          final filteredStages = leadDDController.getAICStagesByLeadStageId(
+            currentLeadStage.toString(),
+          );
+          return CustomBigYesNoLoaderDialogBox(
 
 
-                  Obx((){
-                    if (leadListController.isLoading.value) {
-                      return  Center(child:CustomSkelton.productShimmerList(context));
-                    }
-
-
-                    return CustomDropdown<String>(
-                      items: leadListController.aicGradeList,
-                      getId: (item) => item,  // Adjust based on your model structure
-                      getName: (item) => item,
-                      selectedValue: leadListController.selectedValAicGradeList.value,
-                      onChanged: (value) {
-                        leadListController.selectedValAicGradeList.value =  value;
-                      },
-                    );
-                  }),
-                  const SizedBox(height: 20),
-                  CustomLabeledTextField(
-                    label: AppText.feedback,
-                    isRequired: true,
-                    controller: leadListController.aicFeedbackController,
-                    inputType: TextInputType.name,
-                    hintText: AppText.enterFeedback,
-                    validator: ValidationHelper.validateData,
-                  ),
-                if(currentLeadStage=="4" || currentLeadStage=="5"  || currentLeadStage=="6"  || currentLeadStage=="7")
-                Column(
+            titleBackgroundColor: AppColor.secondaryColor,
+            title: "Add Feedback",
+            content: SingleChildScrollView(
+              child: Form(
+                key: _formKeyAicFb,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     const CustomTextLabel(
-                      label: AppText.leadStage,
+                      label: AppText.grade,
                       isRequired: true,
                     ),
+
                     const SizedBox(height: 10),
+
+
                     Obx((){
-                      if (leadDDController.isLeadStageLoading.value) {
-                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      if (leadListController.isLoading.value) {
+                        return  Center(child:CustomSkelton.productShimmerList(context));
+                      }
+
+                      var tempStage="";
+                      var tempStageId="";
+                      if(filteredStages.isNotEmpty){
+
+                        tempStage=filteredStages[1].stageName.toString();
+                        tempStageId=filteredStages[1].id.toString();
                       }
 
 
 
-                      final filteredStages = leadDDController.getAICStagesByLeadStageId(
-                        currentLeadStage.toString(),
-                      );
-
-
-                      return CustomDropdown<stage.Data>(
-                        items: filteredStages,
-                        getId: (item) =>item.id.toString(),  // Adjust based on your model structure
-                        getName: (item) => item.stageName.toString(),
-                        selectedValue: filteredStages.firstWhereOrNull(
-                              (item) => item.id.toString() == leadDDController.selectedStage.value,
-
-                        ),
+                      return CustomDropdown<String>(
+                        // items: leadListController.aicGradeList,
+                        items: [
+                          "Grade-A",
+                          "Grade-B",
+                          "Grade-C",
+                          "Grade-D (${tempStage})",
+                        ],
+                        getId: (item) => item,  // Adjust based on your model structure
+                        getName: (item) => item,
+                        selectedValue: leadListController.selectedValAicGradeList.value,
                         onChanged: (value) {
-                          leadDDController.selectedStage.value =  value?.id?.toString();
+                          leadListController.selectedValAicGradeList.value =  value;
+                          // 👇 Check if user picked the last option
+                        /*  if (value != null && value.contains("Grade-D")) {
+                            leadListController.isAICStageDropdownDisabled.value = true;
+                            leadDDController.selectedStage.value=tempStageId;
+                          } else {
+                            leadListController.isAICStageDropdownDisabled.value = false;
+                            leadDDController.selectedStage.value="";
+                          }*/
+                          if (value != null && value.contains("Grade-D")) {
+                            leadListController.isAICStageDropdownDisabled.value = true;
 
-                          if( leadDDController.selectedStage.value!=null){
-                            if (int.parse(leadDDController.selectedStage.value!) == 3) {
-                              leadDDController.selectedStageActive.value = 1;
-
-                            } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
-                              leadDDController.selectedStageActive.value = 1;
-                              leadListController.isFBDetailsShow.value=true;
-
-                            } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
-                              leadDDController.selectedStageActive.value = 0;
-                              leadListController.isFBDetailsShow.value=false;
-                            }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
-                              leadDDController.selectedStageActive.value = 1;
-                              leadListController.isFBDetailsShow.value=true;
-                            } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
-                              leadDDController.selectedStageActive.value = 0;
-                              leadListController.isFBDetailsShow.value=false;
-                            }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
-                              leadDDController.selectedStageActive.value = 0;
-                            }else {
-                              leadListController.isFBDetailsShow.value=true;
-                            }
-
-
+                            // Force GetX to notice the change
+                            leadDDController.selectedStage.value = "";
+                            Future.delayed(const Duration(milliseconds: 50), () {
+                              leadDDController.selectedStage.value = tempStageId;
+                            });
+                          } else {
+                            leadListController.isAICStageDropdownDisabled.value = false;
+                            leadDDController.selectedStage.value = "";
                           }
 
-
+                          print(" leadDDController.selectedStage.value in 1 dd--->${ leadDDController.selectedStage.value}");
+                          print("tempStageId--->${tempStageId}");
                         },
                       );
                     }),
                     const SizedBox(height: 20),
+                    CustomLabeledTextField(
+                      label: AppText.feedback,
+                      isRequired: true,
+                      controller: leadListController.aicFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterFeedback,
+                      validator: ValidationHelper.validateData,
+                    ),
+                    if(currentLeadStage=="4" || currentLeadStage=="5"  || currentLeadStage=="6"  || currentLeadStage=="7")
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          const CustomTextLabel(
+                            label: AppText.leadStage,
+                            isRequired: true,
+                          ),
+                          const SizedBox(height: 10),
+                          Obx((){
+                            if (leadDDController.isLeadStageLoading.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+
+
+
+
+                            print("leadListController.isAICStageDropdownDisabled.value in 2 dd--->${leadListController.isAICStageDropdownDisabled.value}");
+                            print("leadListController.isAICStageDropdownDisabled.value in 2 dd--->${leadDDController.selectedStage.value}");
+                            print("selectedStage.value: ${leadDDController.selectedStage.value}");
+                            print("filteredStages IDs: ${filteredStages.map((e) => e.id).toList()}");
+                            return CustomDropdown<stage.Data>(
+                              items: filteredStages,
+                              getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.stageName.toString(),
+                              selectedValue: filteredStages.firstWhereOrNull(
+                                    (item) => item.id.toString() == leadDDController.selectedStage.value.toString(),
+
+                              ),
+                              isEnabled: !leadListController.isAICStageDropdownDisabled.value,
+                              onChanged: (value) {
+                                leadDDController.selectedStage.value =  value?.id?.toString();
+
+                                if( leadDDController.selectedStage.value!=null){
+                                  if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                                    leadDDController.selectedStageActive.value = 1;
+
+                                  } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                                    leadDDController.selectedStageActive.value = 1;
+                                    leadListController.isFBDetailsShow.value=true;
+
+                                  } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                                    leadDDController.selectedStageActive.value = 0;
+                                    leadListController.isFBDetailsShow.value=false;
+                                  }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                                    leadDDController.selectedStageActive.value = 1;
+                                    leadListController.isFBDetailsShow.value=true;
+                                  } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                                    leadDDController.selectedStageActive.value = 0;
+                                    leadListController.isFBDetailsShow.value=false;
+                                  }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                                    leadDDController.selectedStageActive.value = 0;
+                                  }else {
+                                    leadListController.isFBDetailsShow.value=true;
+                                  }
+
+
+                                }
+
+
+                              },
+                            );
+                          }),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+
+
+
+                    RichText(
+                      text: const TextSpan(
+                        style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                        children: [
+                          TextSpan(
+                            text: "Note ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.blackColor,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ":If you want to check the feedback details, you can tap on the Details button",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-
-
-
-                  RichText(
-                    text: const TextSpan(
-                      style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
-                      children: [
-                        TextSpan(
-                          text: "Note ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.blackColor,
-                          ),
-                        ),
-                        TextSpan(
-                          text: ":If you want to check the feedback details, you can tap on the Details button",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.black54,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ),
             ),
-          ),
 
-          // 👇 Loader logic right here
-          firstButtonChild: leadListController.isLoading.value
-              ? const SizedBox(
-            height: 18,
-            width: 18,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: Colors.white,
+            // 👇 Loader logic right here
+            firstButtonChild: leadListController.isLoading.value
+                ? const SizedBox(
+              height: 18,
+              width: 18,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            )
+                : const Text(
+              "Send",
+              style: TextStyle(color: Colors.white),
             ),
-          )
-              : const Text(
-            "Send",
-            style: TextStyle(color: Colors.white),
-          ),
 
-          secondButtonText: "Cancel",
-          firstButtonColor: AppColor.secondaryColor,
-          secondButtonColor: AppColor.redColor,
+            secondButtonText: "Cancel",
+            firstButtonColor: AppColor.secondaryColor,
+            secondButtonColor: AppColor.redColor,
 
-          onFirstButtonPressed: () {
-            var stage=leadDDController.selectedStage.value;
-            var feedback= leadListController.aicFeedbackController.text.toString();
-            if (!leadListController.isLoading.value &&
-                _formKeyAicFb.currentState!.validate()) {
+            onFirstButtonPressed: () {
+              var stage=leadDDController.selectedStage.value;
+              var feedback= leadListController.aicFeedbackController.text.toString();
+              if (!leadListController.isLoading.value &&
+                  _formKeyAicFb.currentState!.validate()) {
 
-              if(leadListController.selectedValAicGradeList.value!.isEmpty){
+                if(leadListController.selectedValAicGradeList.value!.isEmpty){
 
-                SnackbarHelper.showSnackbar(
-                    title: "Error",
-                    message: "Please Select Grade"
-                );
+                  SnackbarHelper.showSnackbar(
+                      title: "Error",
+                      message: "Please Select Grade"
+                  );
 
-              }else if(leadDDController.selectedStage.value!.isEmpty & (currentLeadStage!="4" && currentLeadStage!="5"  && currentLeadStage!="6"  && currentLeadStage!="7")){
+                }else if(leadDDController.selectedStage.value!.isEmpty & (currentLeadStage!="4" && currentLeadStage!="5"  && currentLeadStage!="6"  && currentLeadStage!="7")){
 
-                SnackbarHelper.showSnackbar(
-                    title: "Error",
-                    message: "Please Select Stage"
-                );
-              }else{
-                leadListController.workOnLeadApi(
-                    leadId: leadId.toString(),
-                    leadStageStatus:stage.toString(),
-                    feedbackRelatedToLead: feedback.toString()
-                ).then((_){
-                  Get.back();
-                });
+                  SnackbarHelper.showSnackbar(
+                      title: "Error",
+                      message: "Please Select Stage"
+                  );
+                }else{
+                  leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:stage.toString(),
+                      feedbackRelatedToLead: feedback.toString()
+                  ).then((_){
+                    Get.back();
+                  });
+                }
               }
-            }
-          },
-          onSecondButtonPressed: () {
-            Get.back();
-          },
-        ));
+            },
+            onSecondButtonPressed: () {
+              Get.back();
+            },
+          );
+        });
       },
     );
   }
@@ -2636,6 +2762,60 @@ class StatusChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       child: Text(label, style: const TextStyle(color: AppColor.appWhite, fontSize: 12)),
+    );
+  }
+}
+
+class DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final String leadStage;
+
+  const DetailRow({
+    Key? key,
+    required this.label,
+    required this.value,
+    required this.leadStage,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor
+            ),
+          ),
+          const SizedBox(height: 4),
+          value=="null" || value==AppText.customdash?
+          Row(
+
+
+            children: [
+              Icon(Icons.horizontal_rule, size: 15,),
+            ],):
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
