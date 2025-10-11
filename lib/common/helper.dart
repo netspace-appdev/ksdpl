@@ -1107,6 +1107,10 @@ class AppText{
   static const String grade = "Grade";
   static const String feedback = "Feedback";
   static const String enterFeedback = "Enter feedback here";
+  static const String missingField = "Missing Field";
+  static const String plsSelectState = "Please select a State";
+  static const String plsSelectCity = "Please select a City";
+  static const String plsSelectDist = "Please select a District";
 
 
 
@@ -1249,6 +1253,8 @@ class AppImage{
   static const String changePhone="assets/images/change_number.png";
   static const String changeEmail="assets/images/change_email.png";
   static const String choosefile="assets/images/choosefile.png";
+  static const String downloadImg="assets/images/downloadImg.png";
+  static const String downloadImg_disable="assets/images/downloadImg_disable.png";
 
 }
 
