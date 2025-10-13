@@ -38,10 +38,13 @@ import '../../controllers/open_poll_filter_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
+import '../../custom_widgets/CustomBigYesNoLoaderDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
+import '../../custom_widgets/CustomTextLabel.dart';
+import '../../custom_widgets/SnackBarHelper.dart';
 import '../../services/call_service.dart';
 import '../custom_drawer.dart';
 
@@ -61,7 +64,7 @@ class LeadSearchScreen extends StatelessWidget {
   SearchLeadController searchLeadController=Get.find();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());
-
+  final _formKeyAicFb = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
 
@@ -785,7 +788,13 @@ class LeadSearchScreen extends StatelessWidget {
                           :_buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
                           _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
                           _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
-                          //_buildIconButton(icon: AppImage.chat1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "chat" ),
+                          if(lead.leadStage!=null && lead.leadStage!>=4)
+                            _buildIconButtonDownload(icon: AppImage.downloadImg, disableIcon: AppImage.downloadImg_disable, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "cibil_download", leadId: lead.id.toString(),
+                                currentLeadStage:  lead.leadStage.toString(),context: context,
+                                url: lead.filePath
+                            ),
+
+
                           InkWell(
                             onTap: () {
                               //Get.toNamed("/leadDetailsMain", arguments: {"leadId":lead.id.toString()});
@@ -800,8 +809,8 @@ class LeadSearchScreen extends StatelessWidget {
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
-                                  SizedBox(width: 5,),
+                                  /*Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
+                                  SizedBox(width: 5,),*/
                                   Text(
                                     AppText.details,
                                     style: TextStyle(color: AppColor.appWhite),
@@ -942,6 +951,32 @@ class LeadSearchScreen extends StatelessWidget {
                           ),
                         ],
                       ),
+                    ///add feedback for AIC
+                    if (lead.leadStage != null && lead.leadStage! >= 4)
+                      Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                              _buildTextButton(
+                                  label:AppText.addFeedback,
+                                  context: context,
+                                  color: Colors.purple,
+                                  icon:  Icons.feedback_outlined,
+                                  leadId: lead.id.toString(),
+                                  label_code: "aic_add_feedback",
+                                  currentLeadStage: lead.leadStage.toString(),
+                                  uln: lead.uniqueLeadNumber.toString(),
+                                  loanDetails: lead.loanDetail,
+                                  stageName: lead.stageName
+                              ),
+
+                            ],
+                          ),
+                        ],
+                      ),
 
                   ],
                 ),
@@ -994,6 +1029,9 @@ class LeadSearchScreen extends StatelessWidget {
     String? currentLeadStage,
     required String uln,
     String? moveToCommon,
+    int? loanDetails,
+    String? stageName,
+
   }) {
 
     return InkWell(
@@ -1114,6 +1152,20 @@ class LeadSearchScreen extends StatelessWidget {
 
         }else if (label_code == "update_loan_update") {
           showUpdateLoanApplicationDialog(uln);
+        }else if (label_code == "aic_add_feedback") {
+          leadListController.selectedValAicGradeList.value="";
+          leadListController.aicFeedbackController.clear();
+          leadDDController.selectedStage.value="";
+
+          leadListController.isAICStageDropdownDisabled.value = false;
+          leadDDController.selectedStage.value="";
+          leadListController.isAICStageName.value="";
+          showAICFeebackDialog(context: context,
+            currentLeadStage: currentLeadStage,
+            leadId: leadId,
+            stageName:  stageName.toString(),
+
+          );
         }
         else{
 
@@ -1127,7 +1179,7 @@ class LeadSearchScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
-            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" ?MediaQuery.of(context).size.width*0.82:
+            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" || label_code=="aic_add_feedback" || label_code=='change_lead_st'?MediaQuery.of(context).size.width*0.82:
             (label_code=="add_feedback" ) ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
@@ -1331,80 +1383,43 @@ class LeadSearchScreen extends StatelessWidget {
     );
   }
 
-/*
-  void showOpenPollDialog2({
+  Widget _buildIconButtonDownload({
+    required String icon,
+    required String disableIcon,
+    required Color color,
+    required String phoneNumber,
+    required String label,
+    required String leadId,
+    required String currentLeadStage,
     required BuildContext context,
-    required leadId,
-  }) {
+    String ? url,
+  })
+  {
+    return IconButton(
+      onPressed:url==null || url==""?null: () {
+        print("button tapped");
+        leadListController.launchInBrowser(url??"");
+      },
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
+      icon: Container(
 
-          title: AppText.moveLeh,
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-
-
-                // 📝 Content (Radio Buttons)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                  child:  Column(
-                    children: [
-
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomLabeledTextField2(
-                        inputType:  TextInputType.number,
-                        controller: leadListController.openPollPercentController,
-                        hintText: AppText.enterPercentage,
-                        validator: validatePercentage,
-
-                        label: AppText.enterLeh,
-                        isRequired: false,
-                        onChanged: (value){
-                          ValidationHelper.validatePercentageInput(
-                            controller:  leadListController.openPollPercentController,
-                            value: value,
-                            maxValue: 100,
-                            errorMessage: AppText.maxPercentMsg.toString(),
-                          );
-                          // camNoteController.calculateLoanDetails();
-                        },                      ),
-                    ],
-                  ),
-                ),
-
-
-              ],
-            ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration:  BoxDecoration(
+          border: Border.all(color: AppColor.grey200),
+          color: AppColor.appWhite,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(2),
           ),
 
-
-
-          onSubmit: () {
-            if (_formKey.currentState!.validate()) {
-              leadListController.leadMoveToCommonTaskApi(
-                  leadId: leadId,
-                  percentage: leadListController.openPollPercentController.text.trim().toString()
-              );
-              Get.back();
-            }
-          },
-        );
-      },
+        ),
+        child: Center(
+          // child: Icon(icon, color: color),
+          child: url==null || url=="" ?Image.asset(disableIcon, height: 12,) :Image.asset(icon, height: 12,),
+        ),
+      ),
     );
   }
-*/
+
 
 
   void showOpenPollDialog2({
@@ -1993,6 +2008,269 @@ class LeadSearchScreen extends StatelessWidget {
       );
     });
   }
+
+  void showAICFeebackDialog({
+    required BuildContext context,
+    required currentLeadStage,
+    required String leadId,
+    required String  stageName,
+  })
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx(() {
+
+          final filteredStages = leadDDController.getAICStagesByLeadStageId(
+            currentLeadStage.toString(),
+          );
+          var tempStage="";
+          var tempStageId="";
+          return CustomBigYesNoLoaderDialogBox(
+
+
+            titleBackgroundColor: AppColor.secondaryColor,
+            title: "Add Feedback",
+            content: SingleChildScrollView(
+              child: Form(
+                key: _formKeyAicFb,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const CustomTextLabel(
+                      label: AppText.grade,
+                      isRequired: true,
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Obx((){
+                      if (leadListController.isLoading.value) {
+                        return  Center(child:CustomSkelton.productShimmerList(context));
+                      }
+
+                      if(filteredStages.isNotEmpty){
+
+                        tempStage=filteredStages[1].stageName.toString();
+                        tempStageId=filteredStages[1].id.toString();
+                      }
+
+
+                      return CustomDropdown<String>(
+                        // items: leadListController.aicGradeList,
+                        items: [
+                          "Grade-A",
+                          "Grade-B",
+                          "Grade-C",
+                          "Grade-D (${tempStage})",
+                        ],
+                        getId: (item) => item,  // Adjust based on your model structure
+                        getName: (item) => item,
+                        selectedValue: leadListController.selectedValAicGradeList.value,
+                        onChanged: (value) {
+                          leadListController.selectedValAicGradeList.value =  value;
+                          // 👇 Check if user picked the last option
+                          if (value != null && value.contains("Grade-D")) {
+                            leadListController.isAICStageDropdownDisabled.value = true;
+                            leadDDController.selectedStage.value=tempStageId;
+                            leadListController.isAICStageName.value=tempStage;
+                          } else {
+                            leadListController.isAICStageDropdownDisabled.value = false;
+                            leadDDController.selectedStage.value="";
+                          }
+
+                        },
+                      );
+                    }),
+                    const SizedBox(height: 20),
+                    CustomLabeledTextField(
+                      label: AppText.feedback,
+                      isRequired: true,
+                      controller: leadListController.aicFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterFeedback,
+                      validator: ValidationHelper.validateData,
+                    ),
+                    if(currentLeadStage=="4" || currentLeadStage=="5"  || currentLeadStage=="6"  || currentLeadStage=="7")
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          const CustomTextLabel(
+                            label: AppText.leadStage,
+                            isRequired: true,
+                          ),
+                          const SizedBox(height: 10),
+                          if(!leadListController.isAICStageDropdownDisabled.value)
+                            Obx((){
+                              if (leadDDController.isLeadStageLoading.value) {
+                                return  Center(child:CustomSkelton.leadShimmerList(context));
+                              }
+
+                              return CustomDropdown<stage.Data>(
+                                items: filteredStages,
+                                getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                                getName: (item) => item.stageName.toString(),
+                                selectedValue: filteredStages.firstWhereOrNull(
+                                      (item) => item.id.toString() == leadDDController.selectedStage.value.toString(),
+
+                                ),
+                                isEnabled: !leadListController.isAICStageDropdownDisabled.value,
+                                onChanged: (value) {
+                                  leadDDController.selectedStage.value =  value?.id?.toString();
+
+                                  if( leadDDController.selectedStage.value!=null){
+                                    if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                                      leadDDController.selectedStageActive.value = 1;
+
+                                    } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                                      leadDDController.selectedStageActive.value = 1;
+                                      leadListController.isFBDetailsShow.value=true;
+
+                                    } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                                      leadDDController.selectedStageActive.value = 0;
+                                      leadListController.isFBDetailsShow.value=false;
+                                    }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                                      leadDDController.selectedStageActive.value = 1;
+                                      leadListController.isFBDetailsShow.value=true;
+                                    } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                                      leadDDController.selectedStageActive.value = 0;
+                                      leadListController.isFBDetailsShow.value=false;
+                                    }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                                      leadDDController.selectedStageActive.value = 0;
+                                    }else {
+                                      leadListController.isFBDetailsShow.value=true;
+                                    }
+
+
+                                  }
+
+
+                                },
+                              );
+                            })
+                          else
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade400),
+                                borderRadius: BorderRadius.circular(8.0),
+                                color: Colors.grey,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Left side (like the hint text or value)
+                                  Expanded(
+                                    child: Text(
+                                      leadListController.isAICStageName.value ?? '',
+                                      style: TextStyle(
+                                        color:  Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+
+                                  // Right side (icons similar to suffixIcon)
+                                ],
+                              ),
+                            ),
+
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+
+
+
+                    RichText(
+                      text: const TextSpan(
+                        style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                        children: [
+                          TextSpan(
+                            text: "Note ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.blackColor,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ":If you want to check the feedback details, Please go here: Leads-> Details-> History ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // 👇 Loader logic right here
+            firstButtonChild: leadListController.isLoading.value
+                ? const SizedBox(
+              height: 18,
+              width: 18,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            )
+                : const Text(
+              "Send",
+              style: TextStyle(color: Colors.white),
+            ),
+
+            secondButtonText: "Cancel",
+            firstButtonColor: AppColor.secondaryColor,
+            secondButtonColor: AppColor.redColor,
+
+            onFirstButtonPressed: () {
+              var stage=leadDDController.selectedStage.value;
+              final tempGrade=leadListController.getApiGradeValue(leadListController.selectedValAicGradeList.value);
+              var feedback= tempGrade+leadListController.aicFeedbackController.text.toString();
+              if (!leadListController.isLoading.value &&
+                  _formKeyAicFb.currentState!.validate()) {
+
+                if(leadListController.selectedValAicGradeList.value!.isEmpty){
+
+                  SnackbarHelper.showSnackbar(
+                      title: "Error",
+                      message: "Please Select Grade"
+                  );
+
+                }else if(leadDDController.selectedStage.value!.isEmpty && (currentLeadStage=="4" || currentLeadStage=="5"  || currentLeadStage=="6"  || currentLeadStage=="7")){
+
+                  SnackbarHelper.showSnackbar(
+                      title: "Error",
+                      message: "Please Select Stage"
+                  );
+                }else{
+                  leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:stage.toString(),
+                      feedbackRelatedToLead: feedback.toString()
+                  ).then((_){
+                    Get.back();
+                  });
+
+                }
+              }
+            },
+            onSecondButtonPressed: () {
+              Get.back();
+            },
+          );
+        });
+      },
+    );
+  }
+
+
 }
 /*class DetailRow extends StatelessWidget {
   final String label;

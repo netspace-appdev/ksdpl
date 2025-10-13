@@ -17,8 +17,8 @@ class BaseUrl{
   ///🚨⚠️ ALERT / WARNING
   ///Do change below devVersion also according to Live or UAT apk other wise it will give error in apk
 static const String devVersion = 'LIVE';
- //static const String devVersion = 'UAT';
+// static const String devVersion = 'UAT';
   //static const String devVersion = 'LOCAL';
-  static const String buildDate = 'Build Date : 11 Oct 2025';
+  static const String buildDate = 'Build Date : 13 Oct 2025';
 }
 
