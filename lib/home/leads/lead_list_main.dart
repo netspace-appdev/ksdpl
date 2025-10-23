@@ -1235,7 +1235,7 @@ overflow: TextOverflow.ellipsis,
   }
 
 
-
+  ///OPen poll is LEH Now
   Widget _buildTextButton({
     required String label,
     required BuildContext context,
@@ -1966,7 +1966,7 @@ overflow: TextOverflow.ellipsis,
           firstButtonColor: AppColor.primaryColor,
           secondButtonColor: AppColor.redColor,
 
-          onFirstButtonPressed: () {
+          onFirstButtonPressed: () async {
 
             if (!leadListController.isOpenPollApiLoading.value &&
                 _formKeyOpenPoll.currentState!.validate()) {
@@ -1978,7 +1978,7 @@ overflow: TextOverflow.ellipsis,
                   // ✅ All validations passed
                   leadListController.isOpenPollApiLoading(true);
                     print("first then--->");
-                    addLeadController.getLeadDetailByIdApi(leadId: leadId).then((_) async {
+                    //addLeadController.getLeadDetailByIdApi(leadId: leadId).then((_) async {
 
                     print("Second then--->");
 
@@ -2041,8 +2041,9 @@ overflow: TextOverflow.ellipsis,
                       PhotosOfOffice: officePhotos,
                       fromWhere: "camnote",
                       WhatsappNumber:camNoteController.camWhatsappController.text.toString(),
-                    );
-                  }).then((_) async {
+                    )
+                 // })
+                        .then((_) async {
                       await leadListController.leadMoveToCommonTaskApi(
                         leadId: leadId,
                         percentage: leadListController.openPollPercentController.text.trim(),
@@ -2512,7 +2513,7 @@ overflow: TextOverflow.ellipsis,
             ),
           ),
           firstButtonText: "I Agree",
-          onFirstButtonPressed: () {
+          onFirstButtonPressed: ()  {
 
             Get.back();
             leadListController.lehSelectedState.value= null ;
@@ -2520,6 +2521,7 @@ overflow: TextOverflow.ellipsis,
                 leadListController.lehSelectedCity.value = null ;
                 leadListController.lehZipController.clear();
                 leadListController.openPollPercentController.clear();
+            addLeadController.getLeadDetailByIdApi(leadId: leadId);
             showOpenPollDialog2(context: context,leadId: leadId);
           },
           secondButtonText: "Cancel",

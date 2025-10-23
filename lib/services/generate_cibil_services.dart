@@ -251,7 +251,8 @@ class GenerateCibilServices {
       try {
         var request = http.MultipartRequest(
           'POST',
-          Uri.parse("$getCustomerCibilDetailRequest?pageNumber=${1}&pageSize=${pageNumber*20}"),
+          Uri.parse("$getCustomerCibilDetailRequest?pageNumber=${1}&pageSize=${pageNumber*20}"), //20
+
         );
 
         var header=await MyHeader.getHeaders2();

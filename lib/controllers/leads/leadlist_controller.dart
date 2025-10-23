@@ -666,6 +666,8 @@ class LeadListController extends GetxController {
           print("hello hasMore.value=======>else----${hasMore.value}");
         }
         leadListLength.value=getAllLeadsModel.value!.data!.length;
+
+        print("hello hasMore.value=======>else----${hasMore.value}");
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
         leadStageName2.value = leadStageName.value;
         getAllLeadsModel.value = null;

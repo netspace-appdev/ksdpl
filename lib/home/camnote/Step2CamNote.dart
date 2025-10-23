@@ -66,8 +66,8 @@ class Step2CamNote extends StatelessWidget {
                  Column(
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
-
-                      Column(
+                      if(camNoteController.enableAllCibilFields.value)
+                        Column(
                        children: [
                          Row(
                            crossAxisAlignment: CrossAxisAlignment.start,

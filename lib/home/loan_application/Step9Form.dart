@@ -102,7 +102,7 @@ class Step9Form extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.tsrYears,
+                label: AppText.tsrCharges,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailTSRLegalCharges,
                 inputType: TextInputType.number,
@@ -119,7 +119,7 @@ class Step9Form extends StatelessWidget {
               ),
 
               CustomLabeledTextField(
-                label: AppText.processingCharges,
+                label: AppText.processingCharges2,
                 isRequired: false,
                 controller: loanApplicationController.chargesDetailProcessingCharges,
                 inputType: TextInputType.number,

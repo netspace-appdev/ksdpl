@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
+import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
 
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
@@ -127,6 +128,7 @@ class Addleadcontroller extends GetxController{
 
         LeadDDController leadDDController=Get.put(LeadDDController());
         CamNoteController camNoteController=Get.put(CamNoteController());
+        LeadListController leadListController =Get.put(LeadListController());
         final LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
 
         getLeadId.value=getLeadDetailModel.value!.data!.id!.toString();
@@ -184,21 +186,27 @@ class Addleadcontroller extends GetxController{
 
         leadDDController.selectedState.value=getLeadDetailModel.value!.data!.state!.toString();
         camNoteController.camSelectedState.value = getLeadDetailModel.value!.data!.state!.toString();
+        leadListController.lehSelectedState.value = getLeadDetailModel.value!.data!.state!.toString(); ///new
 
         leadDDController.getDistrictByStateIdApi(stateId: camNoteController.camSelectedState.value);
         leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+        leadDDController.getDistrictByStateIdApi(stateId: leadListController.lehSelectedState.value); ///new
 
         leadDDController.selectedDistrict.value=getLeadDetailModel.value!.data!.district!.toString();
         camNoteController.camSelectedDistrict.value = getLeadDetailModel.value!.data!.district!.toString();
+        leadListController.lehSelectedDistrict.value = getLeadDetailModel.value!.data!.district!.toString(); ///new
 
         leadDDController.getCityByDistrictIdApi(districtId: camNoteController.camSelectedDistrict.value);
         leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+        leadDDController.getCityByDistrictIdApi(districtId: leadListController.lehSelectedDistrict.value); ///new
 
         leadDDController.selectedCity.value=getLeadDetailModel.value!.data!.city!.toString();
         camNoteController.camSelectedCity.value = getLeadDetailModel.value!.data!.city!.toString();
+        leadListController.lehSelectedCity.value = getLeadDetailModel.value!.data!.city!.toString(); ///new
 
         zipController.text=getLeadDetailModel.value?.data?.pincode??"";
         camNoteController.camZipController.text = (getLeadDetailModel.value?.data?.pincode=="undefined" ||  getLeadDetailModel.value?.data?.pincode=="Undefined") ?"": getLeadDetailModel.value?.data?.pincode?? "";
+        leadListController.lehZipController.text = (getLeadDetailModel.value?.data?.pincode=="undefined" ||  getLeadDetailModel.value?.data?.pincode=="Undefined") ?"": getLeadDetailModel.value?.data?.pincode?? "";///new
 
         nationalityController.text=getLeadDetailModel.value?.data?.nationality??"";
         camNoteController.camNationalityController.text = getLeadDetailModel.value?.data?.nationality ?? "";

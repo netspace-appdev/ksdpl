@@ -648,7 +648,7 @@ class AppText{
   static const String processingCharges = "Processing Charges/IMD (₹)";
   static const String enterProcessingCharges = "Enter Processing Charges";
 
-
+  static const String processingCharges2 = "Processing Charges (₹)";
   /// cam note
   static const String totalLoanAvaileCibil = "Total Loan Availed On CIBIL (No)";
   static const String enterTotalLoanAvaileCibil = "Enter Total Loan Availed";
@@ -1708,6 +1708,27 @@ class ToastMessage {
         fontSize: 16.0,
         backgroundColor: AppColor.primaryColor,
         textColor: Colors.white);
+  }
+
+  static void msgRed(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        fontSize: 16.0,
+        backgroundColor: Colors.red,
+        textColor: AppColor.appWhite);
+  }
+  static void msgPrimary(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        fontSize: 16.0,
+        backgroundColor: AppColor.primaryColor,
+        textColor: AppColor.secondaryColor);
   }
 }
 

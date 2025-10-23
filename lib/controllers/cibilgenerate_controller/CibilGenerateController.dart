@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:ksdpl/common/base_url.dart';
+import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
 import 'package:ksdpl/services/generate_cibil_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -64,6 +65,8 @@ class CibilGenerateController extends GetxController{
         isLoading(false);
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
         // Handle empty case
+        ToastMessage.msgRed(data['message'] ?? AppText.somethingWentWrong);
+
       } else {
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }

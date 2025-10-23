@@ -33,7 +33,7 @@ class CibilRecordListController extends GetxController{
   RxBool hasMore = true.obs;
   RxInt currentPage = 1.obs;
   // final int pageSize = 20;
-  final int pageSize = 200;
+  final int pageSize = 20;
 
   RxBool isActive = false.obs;
   var isItemLoading = false.obs;
@@ -54,10 +54,69 @@ class CibilRecordListController extends GetxController{
   }
 
 
-/*
   void getCustomerCibilDetailByUserIdApi({
     bool isLoadMore = false,
   }) async {
+/*
+    try {
+
+      if (isLoading.value || (!hasMore.value && isLoadMore)) return;
+
+      isLoading(true);
+
+      if (!isLoadMore) {
+        currentPage.value = 1; // Reset to first page on fresh load
+        hasMore.value = true;
+      }
+
+      var data = await GenerateCibilServices.getCustomerCibilDetailByUserIdApiRequest(
+        userId: empId??'',
+        fromDate: "",
+        toDate: "",
+        pageNumber: currentPage.value,
+        pageSize: pageSize,
+      );
+
+
+      if (data['success'] == true) {
+        var newLeads =cibilModelData.GetCustomerCibilDetailModel.fromJson(data);
+
+        if (isLoadMore) {
+          getCustomerCibilDetailModel.value!.data!.addAll(newLeads.data!);
+        } else {
+          getCustomerCibilDetailModel.value = newLeads;
+        }
+       // getCustomerCibilDetailModel.value = newLeads;
+
+
+
+        // If less data returned than requested pageSize, mark as no more
+        if (newLeads.data!.length < pageSize) {
+          hasMore.value = false;
+        } else {
+          currentPage.value++; // Ready for next page
+        }
+        recordListLength.value=getCustomerCibilDetailModel.value!.data!.length;
+
+        print("Page: ${currentPage.value}");
+        print("Fetched: ${newLeads.data!.length}");
+        print("Total so far: ${getCustomerCibilDetailModel.value?.data?.length}");
+        print("Has more: ${hasMore.value}");
+      } else if (data['success'] == false && (data['data'] as List).isEmpty) {
+        //leadStageName2.value = leadStageName.value;
+        getCustomerCibilDetailModel.value = null;
+        hasMore.value = false;
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getAllLeadsApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoading(false);
+    }*/
+
+
 
     try {
 
@@ -80,26 +139,26 @@ class CibilRecordListController extends GetxController{
 
 
       if (data['success'] == true) {
-        var newLeads =GetCustomerCibilDetailModel.fromJson(data);
-
-        if (isLoadMore) {
-          getCustomerCibilDetailModel.value!.data!.addAll(newLeads.data!);
-        } else {
-          getCustomerCibilDetailModel.value = newLeads;
-        }
-        getCustomerCibilDetailModel.value = newLeads;
+        var newLeads = cibilModelData.GetCustomerCibilDetailModel.fromJson(data);
 
 
+        getCustomerCibilDetailModel.value = newLeads;///new change
 
+      //  leadStageName2.value = leadStageName.value;
+
+        print("hello hasMore.value=======>${hasMore.value}");
         // If less data returned than requested pageSize, mark as no more
         if (newLeads.data!.length < pageSize) {
           hasMore.value = false;
+          print("hello hasMore.value=======>if----${hasMore.value}");
         } else {
           currentPage.value++; // Ready for next page
+          print("hello hasMore.value=======>else----${hasMore.value}");
         }
-        recordListLength.value=getCustomerCibilDetailModel.value!.data!.length;
+       // leadListLength.value=getAllLeadsModel.value!.data!.length;
+
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
-        //leadStageName2.value = leadStageName.value;
+     //   leadStageName2.value = leadStageName.value;
         getCustomerCibilDetailModel.value = null;
         hasMore.value = false;
       } else {
@@ -111,7 +170,8 @@ class CibilRecordListController extends GetxController{
     } finally {
       isLoading(false);
     }
-  }*/
+  }
+/*
   void getCustomerCibilDetailByUserIdApi({
     bool isLoadMore = false,
   }) async {
@@ -160,6 +220,7 @@ class CibilRecordListController extends GetxController{
       isLoading(false);
     }
   }
+*/
 
 
   Future<void> launchInBrowser(String url) async {
