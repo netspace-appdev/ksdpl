@@ -43,8 +43,8 @@ class LoanApplService {
         body: jsonEncode(body),
       );
       const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-      Helper.ApiReq('addloanapplicationapi', jsonEncode(body));
-      Helper.ApiRes('addloanapplicationapi', response.body);
+      Helper.ApiReq('AddLoanApplicationDetails', jsonEncode(body));
+      Helper.ApiRes('AddLoanApplicationDetails', response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

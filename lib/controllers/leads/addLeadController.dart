@@ -213,6 +213,7 @@ class Addleadcontroller extends GetxController{
 
         leadDDController.currEmpStatus.value=getLeadDetailModel.value?.data?.currentEmploymentStatus??"";
         camNoteController.camCurrEmpStatus.value = getLeadDetailModel.value?.data?.currentEmploymentStatus ?? "";
+        loanApplicationController.emplStatusController.text = getLeadDetailModel.value?.data?.currentEmploymentStatus ?? "";
 
         employerNameController.text=getLeadDetailModel.value?.data?.employerName??"";
         camNoteController.camEmployerNameController.text = getLeadDetailModel.value?.data?.employerName ?? "";

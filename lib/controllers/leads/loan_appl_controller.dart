@@ -764,6 +764,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   {
     try {
       isLoading(true);
+
+      print("famPayload--->${famPayload}");
+
       var uln = Get.arguments['uln'];
 
 
@@ -834,7 +837,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
                     "societyName": cleanText(societyNamePermController.text),
                     "locality": cleanText(localityPermController.text),
                     "streetName": cleanText(streetNamePermController.text),
-                    "city": leadDDController.selectedStatePerm.value
+                    "city": leadDDController.selectedCityPerm.value
                         .ddToString(),
                     "taluka": cleanText(talukaPermController.text),
                     "district": leadDDController.selectedDistrictPerm.value
@@ -1171,15 +1174,26 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           leadDDController.selectedStateCurr.value =
           presentAdd?['State'] == "" ? "0" : presentAdd?['State'] ?? '0';
 
-          await leadDDController.getDistrictByStateIdCurrApi(
-              stateId: leadDDController.selectedStateCurr.value);
-          leadDDController.selectedDistrictCurr.value =
-          presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
+          print("leadDDController.selectedStateCurr.value----->${leadDDController.selectedStateCurr.value}");
+          ///New code on 24 Oct
+          if( presentAdd?['State'] != "" &&  presentAdd?['State'] != "0"){
+            final stateId = leadDDController.getStateIdByName(leadDDController.selectedStateCurr.value.toString());
 
-          await leadDDController.getCityByDistrictIdCurrApi(
-              districtId: leadDDController.selectedDistrictCurr.value);
-          leadDDController.selectedCityCurr.value =
-          presentAdd?['City'] == "" ? "0" : presentAdd?['City'] ?? '0';
+            await leadDDController.getDistrictByStateIdCurrApi(
+                stateId: stateId.toString());//leadDDController.selectedStateCurr.value
+
+            leadDDController.selectedDistrictCurr.value =
+            presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
+            print(" leadDDController.selectedDistrictCurr.value======>${ leadDDController.selectedDistrictCurr.value}");
+            ///New code on 24 Oct
+            final distId = leadDDController.getDistrictIdByNameCurr(leadDDController.selectedDistrictCurr.value.toString());
+            print("distId======>${distId}");
+            await leadDDController.getCityByDistrictIdCurrApi(
+                districtId: distId.toString());//eadDDController.selectedDistrictCurr.value
+            leadDDController.selectedCityCurr.value =
+            presentAdd?['City'] == "" ? "0" : presentAdd?['City'] ?? '0';
+          }
+
 
           talukaController.text = presentAdd?['Taluka'] ?? '';
           selectedCountry.value = presentAdd?['Country'] ?? '0';
@@ -1194,19 +1208,26 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           streetNamePermController.text = permanentAdd?['StreetName'] ?? '';
           leadDDController.selectedStatePerm.value =
           permanentAdd?['State'] == "" ? "0" : permanentAdd?['State'] ?? '0';
+          ///New code on 24 Oct
+          if( permanentAdd?['State'] != "" &&  permanentAdd?['State'] != "0"){
+            final stateId2 = leadDDController.getStateIdByName(leadDDController.selectedStatePerm.value.toString());
+            await leadDDController.getDistrictByStateIdPermApi(
+                stateId: stateId2.toString());//leadDDController.selectedStatePerm.value
+            leadDDController.selectedDistrictPerm.value =
+            permanentAdd?['District'] == "" ? "0" : permanentAdd?['District'] ??
+                '0';
+            ///New code on 24 Oct
+            print(" leadDDController.selectedDistrictPerm.value======>${ leadDDController.selectedDistrictPerm.value}");
+            final distId2 =  leadDDController.getDistrictIdByNamePerm(leadDDController.selectedDistrictPerm.value.toString());
+            print(" distId2======>${ distId2}");
+            await leadDDController.getCityByDistrictIdPermApi(
+                districtId: distId2.toString());//leadDDController.selectedDistrictPerm.value
 
-          await leadDDController.getDistrictByStateIdPermApi(
-              stateId: leadDDController.selectedStatePerm.value);
-          leadDDController.selectedDistrictPerm.value =
-          permanentAdd?['District'] == "" ? "0" : permanentAdd?['District'] ??
-              '0';
+            print("permanentAdd?['City']---->${permanentAdd?['City']}");
+            leadDDController.selectedCityPerm.value =
+            permanentAdd?['City'] == "" ? "0" : permanentAdd?['City'] ?? '0';
+          }
 
-          await leadDDController.getCityByDistrictIdPermApi(
-              districtId: leadDDController.selectedDistrictPerm.value);
-
-
-          leadDDController.selectedCityPerm.value =
-          permanentAdd?['City'] == "" ? "0" : permanentAdd?['City'] ?? '0';
 
           talukaPermController.text = permanentAdd?['Taluka'] ?? '';
           selectedCountryPerm.value = permanentAdd?['Country'] ?? '0';
@@ -1323,14 +1344,24 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
               presentAdd?["PinCode"] ?? '';
           coApController.selectedStateCurr.value =
           presentAdd?['State'] == "" ? "0" : presentAdd?['State'] ?? '0';
-          await coApController.getDistrictByStateIdCurrApi(
-              stateId: coApController.selectedStateCurr.value);
-          coApController.selectedDistrictCurr.value =
-          presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
-          await coApController.getCityByDistrictIdCurrApi(
-              districtId: coApController.selectedDistrictCurr.value);
-          coApController.selectedCityCurr.value =
-          presentAdd?['City'] == "" ? "0" : presentAdd?['City'] ?? '0';
+
+          if(presentAdd?['State'] != "" && presentAdd?['State'] != "0"){
+            print("here coApController.selectedStateCurr.value---->${coApController.selectedStateCurr.value}");
+            print("here presentAdd?['State']---->${presentAdd?['State']}");
+            final stateId = leadDDController.getStateIdByName(coApController.selectedStateCurr.value.toString());
+            await coApController.getDistrictByStateIdCurrApi(
+                stateId:stateId.toString());//coApController.selectedStateCurr.value
+            coApController.selectedDistrictCurr.value =
+            presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
+            final distId = leadDDController.getDistrictIdByNameCurr( coApController.selectedDistrictCurr.value.toString());
+            await coApController.getCityByDistrictIdCurrApi(
+                districtId: distId.toString());//coApController.selectedDistrictCurr.value
+            coApController.selectedCityCurr.value =
+            presentAdd?['City'] == "" ? "0" : presentAdd?['City'] ?? '0';
+          }
+          ///New code on 24 Oct
+
+
           coApController.coApCurrTalukaController.text =
               presentAdd?["Taluka"] ?? '';
 
@@ -1353,15 +1384,21 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
               permanentAdd?["PinCode"] ?? '';
           coApController.selectedStatePerm.value =
           permanentAdd?['State'] == "" ? "0" : permanentAdd?['State'] ?? '0';
-          await coApController.getDistrictByStateIdPermApi(
-              stateId: coApController.selectedStatePerm.value);
-          coApController.selectedDistrictPerm.value =
-          permanentAdd?['District'] == "" ? "0" : permanentAdd?['District'] ??
-              '0';
-          await coApController.getCityByDistrictIdPermApi(
-              districtId: coApController.selectedDistrictPerm.value);
-          coApController.selectedCityPerm.value =
-          permanentAdd?['City'] == "" ? "0" : permanentAdd?['City'] ?? '0';
+          if(permanentAdd?['State'] != "" && permanentAdd?['State'] != "0"){
+            await coApController.getDistrictByStateIdPermApi(
+                stateId: coApController.selectedStatePerm.value);
+            coApController.selectedDistrictPerm.value =
+            permanentAdd?['District'] == "" ? "0" : permanentAdd?['District'] ??
+                '0';
+            /// ///New code on 24 Oct
+            final distId2 =  leadDDController.getDistrictIdByNamePerm(leadDDController.selectedDistrictPerm.value.toString());
+            await coApController.getCityByDistrictIdPermApi(
+                districtId: distId2.toString());//coApController.selectedDistrictPerm.value
+            coApController.selectedCityPerm.value =
+            permanentAdd?['City'] == "" ? "0" : permanentAdd?['City'] ?? '0';
+          }
+
+
           coApController.coApPermTalukaController.text =
               permanentAdd?["Taluka"] ?? '';
 
@@ -1396,14 +1433,22 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       propPinCodeController.text = propDetails?['Pincode'] ?? '';
       selectedStateProp.value =
       propDetails?['State'] == "" ? "0" : propDetails?['State'] ?? '0';
-      await leadDDController.getDistrictByStateIdCurrApi(
-          stateId: selectedStateProp.value);
-      selectedDistrictProp.value =
-      propDetails?['District'] == "" ? "0" : propDetails?['District'] ?? '0';
-      await leadDDController.getCityByDistrictIdCurrApi(
-          districtId: selectedDistrictProp.value);
-      selectedCityProp.value =
-      propDetails?['City'] == "" ? "0" : propDetails?['City'] ?? '0';
+      ///New code on 24 Oct
+      if(propDetails?['State'] != "" && propDetails?['State']  != "0"){
+        final stateId = leadDDController.getStateIdByName(selectedStateProp.value.toString());
+
+        await leadDDController.getDistrictByStateIdCurrApi(
+            stateId: stateId.toString());//selectedStateProp.value
+        selectedDistrictProp.value =
+        propDetails?['District'] == "" ? "0" : propDetails?['District'] ?? '0';
+        final distId = leadDDController.getDistrictIdByNameCurr( selectedDistrictProp.value.toString());
+        await leadDDController.getCityByDistrictIdCurrApi(
+            districtId: distId.toString());//selectedDistrictProp.value
+        selectedCityProp.value =
+        propDetails?['City'] == "" ? "0" : propDetails?['City'] ?? '0';
+      }
+
+
     }
   }
 
@@ -1518,18 +1563,22 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         refController.refPhoneController.text = item.phone ?? '';
         refController.refRelWithApplController.text = item.relationWithApplicant ?? '';
         refController.selectedStatePerm.value = item.state == "" ? "0" : item.state ?? '0';
+        if(refController.selectedStatePerm.value != "" && refController.selectedStatePerm.value != "0"){
+          await refController.getDistrictByStateIdPermApi(
+            stateId: refController.selectedStatePerm.value,
+          );
 
-        await refController.getDistrictByStateIdPermApi(
-          stateId: refController.selectedStatePerm.value,
-        );
+          refController.selectedDistrictPerm.value = item.district == "" ? "0" : item.district ?? '0';
+          /// ///New code on 24 Oct
+          final distId2 =  leadDDController.getDistrictIdByNamePerm(refController.selectedDistrictPerm.value.toString());
+          await refController.getCityByDistrictIdPermApi(
+            districtId: distId2,//refController.selectedDistrictPerm.value
+          );
 
-        refController.selectedDistrictPerm.value = item.district == "" ? "0" : item.district ?? '0';
+          refController.selectedCityPerm.value = item.city == "" ? "0" : item.city ?? '0';
+        }
 
-        await refController.getCityByDistrictIdPermApi(
-          districtId: refController.selectedDistrictPerm.value,
-        );
 
-        refController.selectedCityPerm.value = item.city == "" ? "0" : item.city ?? '0';
         refController.refPincodeController.text = item.pinCode ?? '';
         refController.selectedCountry.value = item.country == "" ? "" : item.country ?? '0';
 

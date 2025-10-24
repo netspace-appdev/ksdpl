@@ -8,7 +8,9 @@ class Step2Controller extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    print("onInit---");
     loanApplicationController.coApplicantList.add(CoApplicantDetailController());
+    print("legth---coApplicantList-->${loanApplicationController.coApplicantList.length}");
 
   }
 

@@ -13,7 +13,7 @@ import '../models/GetLevelOfBankerRoleModel.dart';
 import '../models/dashboard/GetAllBranchBIModel.dart';
 import '../models/dashboard/GetAllChannelModel.dart';
 import '../models/dashboard/GetAllKsdplProductModel.dart' as ksdplProduct;
-import '../models/dashboard/GetAllStateModel.dart';
+import '../models/dashboard/GetAllStateModel.dart' as stateModel;
 import '../models/dashboard/GetCityByDistrictIdModel.dart';
 import '../models/dashboard/GetDistrictByStateModel.dart';
 import '../models/dashboard/GetProductListByBank.dart';
@@ -28,7 +28,7 @@ import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
 class LeadDDController extends GetxController{
   var isLoading=false.obs;
   var banks = <Map<String, String>>[].obs; // List of banks [{id: "1", name: "Bank A"}]
-  var getAllStateModel = Rxn<GetAllStateModel>(); //
+  var getAllStateModel = Rxn<stateModel.GetAllStateModel>(); //
   var getDistrictByStateModel = Rxn<GetDistrictByStateModel>(); //
   var getCityByDistrictIdModel = Rxn<GetCityByDistrictIdModel>(); //
   var getAllBankModel = Rxn<allBank.GetAllBankModel>(); //
@@ -74,6 +74,17 @@ class LeadDDController extends GetxController{
   var selectedStatePerm = Rxn<String>();
   var selectedDistrictPerm = Rxn<String>();
   var selectedCityPerm = Rxn<String>();
+
+  /// new ids
+  var selectedStateCurrId = Rxn<String>();
+  var selectedDistrictCurrId = Rxn<String>();
+  var selectedCityCurrv = Rxn<String>();
+
+  var selectedStatePermId = Rxn<String>();
+  var selectedDistrictPermId = Rxn<String>();
+  var selectedCityPermId = Rxn<String>();
+
+  /// mew ids end
 
   RxList<dist.Data> districtListPerm = <dist.Data>[].obs;
   RxList<dist.Data> districtListCurr = <dist.Data>[].obs;
@@ -287,7 +298,17 @@ class LeadDDController extends GetxController{
       return [];
     }
   }
+  int? getStateIdByName(String sName) {
+    final states = getAllStateModel.value?.data;
+    if (states == null || states.isEmpty) return null;
 
+    final matchedState = states.firstWhere(
+          (state) => state.stateName?.toLowerCase() == sName.toLowerCase(),
+      orElse: () => stateModel.Data(id: -1),
+    );
+
+    return matchedState.id != -1 ? matchedState.id : 0;
+  }
   Future<void>  getAllStateApi() async {
     try {
       isLoading(true);
@@ -299,7 +320,7 @@ class LeadDDController extends GetxController{
 
       if(data['success'] == true){
 
-        getAllStateModel.value= GetAllStateModel.fromJson(data);
+        getAllStateModel.value= stateModel.GetAllStateModel.fromJson(data);
 
 
 
@@ -777,7 +798,20 @@ class LeadDDController extends GetxController{
     }
   }
 
+  int? getDistrictIdByNameCurr(String dName) {
 
+    final dists = getDistrictByStateModelCurr.value?.data;
+
+    if (dists == null || dists.isEmpty) return null;
+
+    final matchedDist = dists.firstWhere(
+          (dist) => dist.districtName?.toLowerCase() == dName.toLowerCase(),
+      orElse: () => dist.Data(id: -1),
+    );
+
+
+    return matchedDist.id != -1 ? matchedDist.id : null;
+  }
   ///I am doing it for current and permanent address
   Future<void> getDistrictByStateIdCurrApi({
     required stateId
@@ -824,7 +858,20 @@ class LeadDDController extends GetxController{
       isDistrictLoadingCurr(false);
     }
   }
+  int? getDistrictIdByNamePerm(String dName) {
 
+    final dists = getDistrictByStateModelPerm.value?.data;
+
+    if (dists == null || dists.isEmpty) return null;
+
+    final matchedDist = dists.firstWhere(
+          (dist) => dist.districtName?.toLowerCase() == dName.toLowerCase(),
+      orElse: () => dist.Data(id: -1),
+    );
+
+
+    return matchedDist.id != -1 ? matchedDist.id : null;
+  }
  Future<void>  getDistrictByStateIdPermApi({
     required stateId
   }) async {
@@ -873,6 +920,7 @@ class LeadDDController extends GetxController{
  Future<void>   getCityByDistrictIdCurrApi({
     required districtId
   }) async {
+    print("getCityByDistrictIdCurrApi----->");
     try {
 
       isCityLoadingCurr(true);

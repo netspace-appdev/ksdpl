@@ -1379,8 +1379,9 @@ overflow: TextOverflow.ellipsis,
         loanApplicationController.clearBeforeGoingOnLoanAppl();
         print('loanDetails${loanDetails}');
 
-        loanDetails==0?
-        addLeadController.getLeadDetailByIdApi(leadId: leadId):
+     /*   loanDetails==0?
+        addLeadController.getLeadDetailByIdApi(leadId: leadId):*/
+        addLeadController.getLeadDetailByIdApi(leadId: leadId);
         loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
           loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {

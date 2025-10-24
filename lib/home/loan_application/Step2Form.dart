@@ -25,7 +25,7 @@ class Step2Form extends StatelessWidget {
   final loanApplicationController = Get.find<LoanApplicationController>();
 
   LeadDDController leadDDController = Get.put(LeadDDController());
-  Step2Controller step2Controller = Get.put(Step2Controller());
+  //Step2Controller step2Controller = Get.put(Step2Controller());
   final _formKey = GlobalKey<FormState>();
 
 
@@ -76,7 +76,7 @@ class Step2Form extends StatelessWidget {
 
                               CustomLabeledTextField(
                                 label: AppText.fullName,
-                                isRequired: true,
+                                isRequired: false,
                                 controller: coAp.coApFullNameController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.enterFullName,
@@ -130,7 +130,7 @@ class Step2Form extends StatelessWidget {
 
                               CustomLabeledPickerTextField(
                                 label: AppText.dateOfBirth,
-                                isRequired: true,
+                                isRequired: false,
                                 controller: coAp.coApDobController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.mmddyyyy,
@@ -156,14 +156,44 @@ class Step2Form extends StatelessWidget {
                                //
                               ),
 
-                              CustomLabeledTextField(
+                             /* CustomLabeledTextField(
                                 label: AppText.employmentStatus,
                                 isRequired: false,
                                 controller: coAp.coApEmplStatusController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.enterEmploymentStatus,
                               //
+                              ),*/
+                              const Text(
+                                AppText.employmentStatus,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.grey2,
+                                ),
                               ),
+
+                              const SizedBox(height: 10),
+
+
+                              Obx((){
+                                if (leadDDController.isLoading.value) {
+                                  return  Center(child:CustomSkelton.productShimmerList(context));
+                                }
+
+
+                                return CustomDropdown<String>(
+                                  items: leadDDController.currEmpStList,
+                                  getId: (item) => item,  // Adjust based on your model structure
+                                  getName: (item) => item,
+
+                                  selectedValue: coAp.coApEmplStatusController.text,
+                                  onChanged: (value) {
+                                    coAp.coApEmplStatusController.text =  value.toString();
+                                  },
+                                );
+                              }),
+                              SizedBox(height: 20,),
 
                               CustomLabeledTextField(
                                 label: AppText.nationality,
@@ -196,7 +226,7 @@ class Step2Form extends StatelessWidget {
 
                               CustomLabeledTextField(
                                 label: AppText.eml,
-                                isRequired: true,
+                                isRequired: false,
                                 controller: coAp.coApEmailController,
                                 inputType: TextInputType.emailAddress,
                                 hintText: AppText.enterEA,
@@ -205,7 +235,7 @@ class Step2Form extends StatelessWidget {
 
                               CustomLabeledTextField(
                                 label: AppText.mobileNumber,
-                                isRequired: true,
+                                isRequired: false,
                                 controller: coAp.coApMobController,
                                 inputType: TextInputType.phone,
                                 maxLength: 10,
