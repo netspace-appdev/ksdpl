@@ -23,6 +23,7 @@ import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/loan_appl_controller/step2_controller.dart';
 import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
@@ -1382,6 +1383,7 @@ overflow: TextOverflow.ellipsis,
      /*   loanDetails==0?
         addLeadController.getLeadDetailByIdApi(leadId: leadId):*/
         addLeadController.getLeadDetailByIdApi(leadId: leadId);
+       // Step2Controller step2Controller = Get.put(Step2Controller());
         loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
           loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {

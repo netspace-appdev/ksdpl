@@ -19,6 +19,7 @@ class LoanApplService {
   static const String SendMailToBankerAfterLoanApplicationSubmit = BaseUrl.baseUrl + 'LeadDetail/SendMailToBankerAfterLoanApplicationSubmit';
   static const String GetLoanApplicationDocumentByLoanIdApi = BaseUrl.baseUrl +'LeadDetail/GetLoanApplicationDocumentByLoanId';
   static const String RemovedLoanApplicationDocumentApi = BaseUrl.baseUrl +'LeadDetail/RemoveDocumentsRelatedToLoanApplication';
+  static const String getDsaMappingByBankAndProduct = BaseUrl.baseUrl +'DsaMaster/GetDsaMappingByBankAndProduct';
 
 
 
@@ -271,6 +272,43 @@ class LoanApplService {
   }
 
 
+  static Future<Map<String, dynamic>> getDsaMappingByBankAndProductApi({
+    required String BankId,
+    required String ProductId,
 
+  })async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getDsaMappingByBankAndProduct),
+      );
+
+      // Add headers
+      var headers = await MyHeader.getHeaders2();
+      request.headers.addAll(headers);
+
+      // Add fields
+      request.fields['BankId'] = BankId;
+      request.fields['ProductId'] = ProductId;
+
+      // Send request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      // Debug
+      Helper.ApiReq(getDsaMappingByBankAndProduct, request.fields);
+      Helper.ApiRes(getDsaMappingByBankAndProduct, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to getDsaMappingByBankAndProduct: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("❌ Error getDsaMappingByBankAndProduct: $e");
+      throw Exception('Error: $e');
+    }
+  }
 }
 

@@ -21,7 +21,7 @@ import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
-
+import 'package:ksdpl/models/loan_application/GetProductListByBankIdModel.dart' as prodList;
 class Step1Form extends StatelessWidget {
 
 //  final loanApplicationController = Get.find<LoanApplicationController>();
@@ -61,13 +61,6 @@ class Step1Form extends StatelessWidget {
                       height: 20,
                     ),
 
-                    CustomLabeledTextField(
-                      label: AppText.dsaCode,
-                      controller: loanApplicationController.dsaCodeController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterDsaCode,
-                      validator:  ValidationHelper.validateName,
-                    ),
 
                     CustomLabeledTextField(
                       label: AppText.loanApplicationNo,
@@ -77,14 +70,7 @@ class Step1Form extends StatelessWidget {
                       hintText: AppText.enterLoanApplicationNo,
                       validator:  ValidationHelper.validateName,
                     ),
-                    /*CustomLabeledTextField(
-                      label: AppText.loanApplicationNo,
 
-                      controller: loanApplicationController.lanController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterLoanApplicationNo,
-                      validator:  ValidationHelper.validateName,
-                    ),*/
 
 
                     CustomTextLabel(
@@ -117,7 +103,7 @@ class Step1Form extends StatelessWidget {
                             print('bankID${loanApplicationController.selectedBank.value.toString()}');
 
                             leadDDController.getAllBranchByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
-                           // leadDDController.getProductListByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
+                            leadDDController.getProductListByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
                           }
                        },
                         onClear: (){
@@ -177,8 +163,8 @@ class Step1Form extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 10),
-                    ///exp
-                    Obx((){
+                    ///Working
+                    /*Obx((){
                       final productList = leadDDController.getAllKsdplProductModel.value?.data ?? [];
                       for (var item in productList) {
                       }
@@ -199,10 +185,39 @@ class Step1Form extends StatelessWidget {
                           loanApplicationController.selectedProdTypeOrTypeLoan.value =  value?.id;
                         },
                       );
+                    }),*/
+
+
+                    Obx((){
+
+                      if (leadDDController.isProductLoading.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+
+                      return CustomDropdown<prodList.Data>(
+                        items: leadDDController.prodListByBank ?? [],
+                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.product.toString(),
+                        selectedValue: leadDDController.prodListByBank.firstWhereOrNull(
+                              (item) => item.id == loanApplicationController.selectedProdTypeOrTypeLoan.value,
+                        ),
+                        onChanged: (value) {
+                          loanApplicationController.selectedProdTypeOrTypeLoan.value =  value?.id;
+                          loanApplicationController.getDsaMappingByBankAndProductApi(
+                              BankId: loanApplicationController.selectedBank.value.toString(),
+                              ProductId:loanApplicationController.selectedProdTypeOrTypeLoan.value.toString());
+                        },
+                      );
                     }),
 
                     const SizedBox(height: 20),
-
+                    CustomLabeledTextField(
+                      label: AppText.dsaCode,
+                      controller: loanApplicationController.dsaCodeController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterDsaCode,
+                      validator:  ValidationHelper.validateName,
+                    ),
                     CustomLabeledTextField(
                       label: AppText.panCardNo,
 
@@ -272,7 +287,7 @@ class Step1Form extends StatelessWidget {
                       return CustomDropdown<channel.Data>(
                         items: leadDDController.getAllChannelModel.value?.data ?? [],
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                        getName: (item) => item.channelName.toString(),
+                        getName: (item) => item.channelName.toString()+" (${item.channelCode.toString()})",
                         selectedValue: leadDDController.getAllChannelModel.value?.data?.firstWhereOrNull(
                               (item) => item.id == loanApplicationController.selectedChannel.value,
                         ),
@@ -373,7 +388,14 @@ class Step1Form extends StatelessWidget {
 
                       },
                     ),
+                    CustomLabeledTextField(
+                      label: AppText.loanRoi,
+                      isRequired: false,
+                      controller: loanApplicationController.loanRoiController,
+                      inputType: TextInputType.number,
+                      hintText: AppText.enterLoanRoi,
 
+                    ),
                     CustomLabeledTextField(
                       label: AppText.monthlyInstallment,
                       isRequired: false,

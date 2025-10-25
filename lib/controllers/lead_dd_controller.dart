@@ -19,6 +19,7 @@ import '../models/dashboard/GetDistrictByStateModel.dart';
 import '../models/dashboard/GetProductListByBank.dart';
 import '../models/leads/GetAllKsdplBranchModel.dart';
 import '../models/leads/GetAllLeadStageModel.dart';
+import '../models/loan_application/GetProductListByBankIdModel.dart' as prodList;
 import '../services/drawer_api_service.dart';
 import '../services/home_service.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
@@ -33,6 +34,7 @@ class LeadDDController extends GetxController{
   var getCityByDistrictIdModel = Rxn<GetCityByDistrictIdModel>(); //
   var getAllBankModel = Rxn<allBank.GetAllBankModel>(); //
   var getAllKsdplProductModel = Rxn<ksdplProduct.GetAllKsdplProductModel>(); //
+  var getProductListByBankIdModel = Rxn<prodList.GetProductListByBankIdModel>(); //
   var getProductListByBankModel = Rxn<GetProductListByBankModel>(); //
   var getAllKsdplBranchModel = Rxn<GetAllKsdplBranchModel>(); //
   var getAllLeadStageModel = Rxn<GetAllLeadStageModel>(); //
@@ -92,7 +94,7 @@ class LeadDDController extends GetxController{
   RxList<city.Data> cityListPerm = <city.Data>[].obs;
   RxList<city.Data> cityListCurr = <city.Data>[].obs;
 
-
+  RxList<prodList.Data> prodListByBank = <prodList.Data>[].obs;
   var getDistrictByStateModelCurr = Rxn<GetDistrictByStateModel>(); //
   var getDistrictByStateModelPerm = Rxn<GetDistrictByStateModel>(); //
 
@@ -135,6 +137,7 @@ class LeadDDController extends GetxController{
     getCityByDistrictIdModel.value = null;
     getAllBankModel.value = null;
     getAllKsdplProductModel.value = null;
+    getProductListByBankIdModel.value = null;
     getProductListByBankModel.value = null;
     getAllKsdplBranchModel.value = null;
     getAllLeadStageModel.value = null;
@@ -177,6 +180,7 @@ class LeadDDController extends GetxController{
 
     districtListPerm.clear();
     districtListCurr.clear();
+    prodListByBank.clear();
 
     cityListPerm.clear();
     cityListCurr.clear();
@@ -300,13 +304,16 @@ class LeadDDController extends GetxController{
   }
   int? getStateIdByName(String sName) {
     final states = getAllStateModel.value?.data;
+
+    print("states----->dd--->${states}");
+    print("sName----->dd--->${sName}");
     if (states == null || states.isEmpty) return null;
 
     final matchedState = states.firstWhere(
           (state) => state.stateName?.toLowerCase() == sName.toLowerCase(),
       orElse: () => stateModel.Data(id: -1),
     );
-
+    print("matchedState.id----->dd--->${matchedState.id}");
     return matchedState.id != -1 ? matchedState.id : 0;
   }
   Future<void>  getAllStateApi() async {
@@ -503,11 +510,6 @@ class LeadDDController extends GetxController{
 
         getAllKsdplProductModel.value = ksdplProduct.GetAllKsdplProductModel.fromJson(data);
 
-        // ✅ PRINT ALL PRODUCTS
-        /*print("🔽 All KSDPL Products:");
-        for (var item in ksdplProductList) {
-          print("🆔 ID: ${item.id}, 📦 Name: ${item.productName}");
-        }*/
 
         final List<ksdplProduct.Data> tempAllPro = getAllKsdplProductModel.value?.data ?? [];
         ksdplProductList.value = List<ksdplProduct.Data>.from(tempAllPro);
@@ -535,7 +537,7 @@ class LeadDDController extends GetxController{
     }
   }
 
-  Future<void>  getProductListByBankIdApi({required bankId}) async {
+ /* Future<void>  getProductListByBankIdApi({required bankId}) async {
     try {
 
       isProductLoading(true);
@@ -560,6 +562,53 @@ class LeadDDController extends GetxController{
 
 
         getAllKsdplProductModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getProductListByBankModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isProductLoading(false);
+    } finally {
+
+
+      isProductLoading(false);
+    }
+  }*/
+
+
+  Future<void>  getProductListByBankIdApi({required bankId}) async {
+    try {
+
+      isProductLoading(true);
+
+      var data = await DrawerApiService.getProductListByBankIdApi(
+          bankId: bankId.toString()
+      );
+
+
+
+
+      if(data['success'] == true){
+
+        getAllKsdplProductModel.value= ksdplProduct.GetAllKsdplProductModel.fromJson(data);
+        getProductListByBankIdModel.value= prodList.GetProductListByBankIdModel.fromJson(data);
+        final List<prodList.Data> prods = getProductListByBankIdModel.value?.data ?? [];
+        prodListByBank.value = List<prodList.Data>.from(prods);
+
+
+
+
+        isProductLoading(false);
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getAllKsdplProductModel.value=null;
+        getProductListByBankIdModel.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
@@ -799,17 +848,22 @@ class LeadDDController extends GetxController{
   }
 
   int? getDistrictIdByNameCurr(String dName) {
-
+  print("dName--dd------>${dName}");
     final dists = getDistrictByStateModelCurr.value?.data;
 
+  dists!.forEach((ele){
+    print("ele--dd------>${ele.districtName}");
+    print("ele--dd------>${ele.id}");
+  });
     if (dists == null || dists.isEmpty) return null;
 
     final matchedDist = dists.firstWhere(
           (dist) => dist.districtName?.toLowerCase() == dName.toLowerCase(),
       orElse: () => dist.Data(id: -1),
+
     );
 
-
+  print("matchedDist.id--dd------>${matchedDist.id}");
     return matchedDist.id != -1 ? matchedDist.id : null;
   }
   ///I am doing it for current and permanent address

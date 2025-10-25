@@ -408,6 +408,9 @@ class AppText{
   static const String enterMonthlyInstallment = "Enter Monthly Installment";
   static const String previousLoanApplied = "Previous Loan Applied";
 
+  static const String loanRoi = "Loan ROI";
+  static const String enterLoanRoi = "Enter Loan ROI";
+
   static const String applicantEmployerDetails = "Applicant's Employer Details";
   static const String organizationName = "Organization Name";
   static const String enterOrganizationName = "Enter Organization Name";
