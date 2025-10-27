@@ -118,6 +118,7 @@ class CallService {
       print("Good===>6");
       var formattedDateTime=td.toString();
       print("Good===>7");
+
       if (lastCall.duration! > 0) {
         print("Good===>8");
         leadListController.workOnLeadApi(

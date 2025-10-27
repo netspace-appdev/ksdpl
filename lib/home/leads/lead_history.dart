@@ -93,7 +93,10 @@ class LeadHistory extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text(Helper.formatTimeAgo(lead.workDate.toString()),
+                   /*   child: Text(Helper.formatTimeAgo(lead.workDate.toString()),
+                          style: TextStyle(
+                              fontSize: 14,color: AppColor.grey700)),*/
+                      child: Text(Helper.convertDateTime(lead.workDate.toString()),
                           style: TextStyle(
                               fontSize: 14,color: AppColor.grey700)),
                     ),

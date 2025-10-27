@@ -33,6 +33,7 @@ import 'lead_history_controller.dart';
 class LeadListController extends GetxController {
   var selectedPrevStage = Rxn<String>();
   var isLoading = false.obs;
+  var isOpenPollApiLoading = false.obs;
   var isLoad = false.obs;
   // GetAllLeadsModel? getAllLeadsModel;
 
@@ -107,6 +108,9 @@ class LeadListController extends GetxController {
   final TextEditingController disbursedByController = TextEditingController();
 
 
+  final TextEditingController aicFeedbackController = TextEditingController();
+
+
   GetEmployeeModel? getEmployeeModel;
   var isCallReminder=false.obs;
   var isFBDetailsShow=false.obs;
@@ -119,12 +123,29 @@ class LeadListController extends GetxController {
   LeadDDController leadDDController=Get.put(LeadDDController());
 
   var isDashboardLeads = false.obs;
+  var isAicFBLoading = false.obs;
 
   var isLoad2 = false.obs;
+  var rolRx = "".obs;
 
+  var isAICStageDropdownDisabled = false.obs;
+  var isAICStageName = "".obs;
+  var selectedValAicGradeList = Rxn<String>();
+  String getApiGradeValue(String? selectedValue) {
+    if (selectedValue == null || selectedValue.isEmpty) return '';
 
+    if (selectedValue.contains('Grade-A')) return 'A-';
+    if (selectedValue.contains('Grade-B')) return 'B-';
+    if (selectedValue.contains('Grade-C')) return 'C-';
+    if (selectedValue.contains('Grade-D')) return 'D-';
 
+    return ''; // default fallback
+  }
 
+  var lehSelectedState = Rxn<String>();
+  var lehSelectedDistrict = Rxn<String>();
+  var lehSelectedCity = Rxn<String>();
+  final TextEditingController lehZipController = TextEditingController();
   @override
   void onInit() {
     // TODO: implement onInit
@@ -136,6 +157,8 @@ class LeadListController extends GetxController {
 
     String today = DateFormat('dd/MM/yyyy').format(DateTime.now());
     disburseDateController.text = today;
+    var rawRole = StorageService.get(StorageService.ROLE).toString();
+    rolRx.value = rawRole.replaceAll('[', '').replaceAll(']', '');
 
   }
 
@@ -643,6 +666,8 @@ class LeadListController extends GetxController {
           print("hello hasMore.value=======>else----${hasMore.value}");
         }
         leadListLength.value=getAllLeadsModel.value!.data!.length;
+
+        print("hello hasMore.value=======>else----${hasMore.value}");
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
         leadStageName2.value = leadStageName.value;
         getAllLeadsModel.value = null;
@@ -931,13 +956,13 @@ class LeadListController extends GetxController {
   }
 
 
-  void  leadMoveToCommonTaskApi({
+  Future <void>  leadMoveToCommonTaskApi({
     required leadId,
     required percentage,
 
   }) async {
     try {
-      isLoading(true);
+      isOpenPollApiLoading(true);
 
 
       var data = await DrawerApiService.leadMoveToCommonTaskApi(
@@ -955,7 +980,7 @@ class LeadListController extends GetxController {
 
 
 
-        isLoading(false);
+        isOpenPollApiLoading(false);
 
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
@@ -966,7 +991,7 @@ class LeadListController extends GetxController {
       print("Error leadMoveToCommonTaskModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
+      isOpenPollApiLoading(false);
     } finally {
       print("run hua");
 
@@ -1031,7 +1056,7 @@ class LeadListController extends GetxController {
         );
 
       }
-      isLoading(false);
+      isOpenPollApiLoading(false);
     }
   }
 
@@ -1830,5 +1855,18 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
 
   }
+  Future<void> launchInBrowser(String url) async {
+    try {
+      final Uri uri = Uri.parse(url);
 
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        //  ToastMessage.msg('Could not launch URL: $url');
+      }
+    } catch (e) {
+      print("❌ Error launching URL: $e");
+      // ToastMessage.msg('Something went wrong while opening the link.');
+    }
+  }
 }

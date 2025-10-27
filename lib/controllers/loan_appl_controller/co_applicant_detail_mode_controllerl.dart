@@ -93,7 +93,25 @@ class CoApplicantDetailController {
   RxList<city.Data> cityListPerm = <city.Data>[].obs;
   RxList<city.Data> cityListCurr = <city.Data>[].obs;
 
+  int? getDistrictIdByNameCurr(String dName) {
+    print("dName--dd------>${dName}");
+    final dists = getDistrictByStateModelCurr.value?.data;
 
+    dists!.forEach((ele){
+      print("ele--dd------>${ele.districtName}");
+      print("ele--dd------>${ele.id}");
+    });
+    if (dists == null || dists.isEmpty) return null;
+
+    final matchedDist = dists.firstWhere(
+          (dist) => dist.districtName?.toLowerCase() == dName.toLowerCase(),
+      orElse: () => dist.Data(id: -1),
+
+    );
+
+    print("matchedDist.id--dd------>${matchedDist.id}");
+    return matchedDist.id != -1 ? matchedDist.id : null;
+  }
   Future<void>   getDistrictByStateIdCurrApi({
     required stateId
   }) async {
@@ -133,7 +151,20 @@ class CoApplicantDetailController {
       isDistrictLoadingCurr(false);
     }
   }
+  int? getDistrictIdByNamePerm(String dName) {
 
+    final dists = getDistrictByStateModelPerm.value?.data;
+
+    if (dists == null || dists.isEmpty) return null;
+
+    final matchedDist = dists.firstWhere(
+          (dist) => dist.districtName?.toLowerCase() == dName.toLowerCase(),
+      orElse: () => dist.Data(id: -1),
+    );
+
+
+    return matchedDist.id != -1 ? matchedDist.id : null;
+  }
  Future<void>  getDistrictByStateIdPermApi({
     required stateId
   }) async {
@@ -234,7 +265,8 @@ class CoApplicantDetailController {
 
         getCityByDistrictIdModelPerm.value= city.GetCityByDistrictIdModel.fromJson(data);
 
-
+        final List<city.Data> cities = getCityByDistrictIdModelPerm.value?.data ?? [];
+        cityListPerm.value = List<city.Data>.from(cities);
 
         isCityLoadingPerm(false);
 

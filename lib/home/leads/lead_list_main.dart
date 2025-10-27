@@ -1,10 +1,12 @@
+
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
@@ -21,10 +23,13 @@ import '../../controllers/greeting_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
+import '../../controllers/loan_appl_controller/step2_controller.dart';
 import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
+import '../../custom_widgets/CustomBigYesNDilogBox.dart';
+import '../../custom_widgets/CustomBigYesNoLoaderDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomIconDilogBox.dart';
@@ -32,13 +37,18 @@ import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomLabeledTimePicker.dart';
-import '../../custom_widgets/CustomTextFieldPrefix.dart';
+
+import '../../custom_widgets/CustomTextLabel.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
 import '../../services/call_service.dart';
 import '../custom_drawer.dart';
 import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
 
-class LeadListMain extends StatelessWidget {
+import 'package:ksdpl/models/dashboard/GetAllStateModel.dart' as state;
+import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
+import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
+
+class LeadListMain extends StatelessWidget  {
   GreetingController greetingController = Get.put(GreetingController());
   InfoController infoController = Get.put(InfoController());
   LeadListController leadListController = Get.put(LeadListController(),);
@@ -51,9 +61,9 @@ class LeadListMain extends StatelessWidget {
   Addleadcontroller addLeadController = Get.put(Addleadcontroller());
   LeadDDController leadDDController=Get.find();
   BotNavController botNavController = Get.find();
-
-
-
+  final _formKeyAicFb = GlobalKey<FormState>();
+  final _formKeyOpenPoll = GlobalKey<FormState>();
+  CamNoteController camNoteController =Get.put(CamNoteController());
   @override
   Widget build(BuildContext context) {
 
@@ -62,7 +72,7 @@ class LeadListMain extends StatelessWidget {
         key:_scaffoldKey,
 
         backgroundColor: AppColor.backgroundColor,
-        drawer:   CustomDrawer(),
+        drawer:   const CustomDrawer(),
         body: RefreshIndicator(
           onRefresh: () async {
             await leadListController.refreshItems(); // Make sure this triggers API call
@@ -82,11 +92,11 @@ class LeadListMain extends StatelessWidget {
                         end: Alignment.centerLeft,
                       ),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child:Column(
                       children: [
 
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
 
@@ -101,7 +111,7 @@ class LeadListMain extends StatelessWidget {
                   Align(
                     alignment: Alignment.topCenter,  // Centers it
                     child: Container(
-                      margin:  EdgeInsets.only(
+                      margin:  const EdgeInsets.only(
                           top:90 // MediaQuery.of(context).size.height * 0.22
                       ), // <-- Moves it 30px from top
                       width: double.infinity,
@@ -129,7 +139,7 @@ class LeadListMain extends StatelessWidget {
                               Obx(()=> Row(
                                 children: [
 
-                                  Text(
+                                  const Text(
                                     "",
                                     style: TextStyle(
                                       fontSize: 20,
@@ -153,7 +163,7 @@ class LeadListMain extends StatelessWidget {
                                         leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty?"(0)":
 
                                     " (${ leadListController.leadListLength.value.toString()})",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       // fontWeight: FontWeight.bold,
                                     ),
@@ -257,7 +267,7 @@ class LeadListMain extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
               decoration:  BoxDecoration(
                 color: AppColor.appWhite.withOpacity(0.15),
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
@@ -310,7 +320,7 @@ class LeadListMain extends StatelessWidget {
           decoration:  BoxDecoration(
             border: Border.all(color: AppColor.grey200),
             color: AppColor.appWhite,
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(10),
             ),
 
@@ -337,6 +347,8 @@ class LeadListMain extends StatelessWidget {
             itemBuilder: (context, index) {
 
               final lead = leadListController.getAllLeadsModel.value!.data![index];
+              print("updated at--->${lead.lastUpdatedDate.toString()}");
+              print("updated at--->${Helper.convertDateTime(lead.lastUpdatedDate.toString()) }");
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -408,7 +420,7 @@ class LeadListMain extends StatelessWidget {
                                       ),
                                       Text(
                                         lead.mobileNumber.toString(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: AppColor.grey700,
                                         ),
                                       ),
@@ -449,11 +461,13 @@ class LeadListMain extends StatelessWidget {
                           _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage??0),
                           if(lead.leadStage==4)
                             _buildDetailRow("Cam Note Count", lead.camNoteCount.toString()??"0",lead.leadStage??0),
+                          if(leadListController.rolRx.value=="INDEPENDENT AREA HEAD")
+                            _buildDetailRow("Assigned Employee Name", lead.assignedEmployeeName.toString()??"0",lead.leadStage??0),
 
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
 
                     /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
                     Padding(
@@ -467,6 +481,11 @@ class LeadListMain extends StatelessWidget {
                           :_buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "call", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
                           _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "whatsapp", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(), context: context),
                           _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "message", leadId: lead.id.toString(), currentLeadStage:  lead.leadStage.toString(),context: context),
+                          if(lead.leadStage!=null && lead.leadStage!>=4)
+                            _buildIconButtonDownload(icon: AppImage.downloadImg, disableIcon: AppImage.downloadImg_disable, color: AppColor.orangeColor, phoneNumber: lead.mobileNumber.toString(), label: "cibil_download", leadId: lead.id.toString(),
+                                currentLeadStage:  lead.leadStage.toString(),context: context,
+                              url: lead.filePath
+                            ),
 
                           InkWell(
                             onTap: () {
@@ -475,15 +494,15 @@ class LeadListMain extends StatelessWidget {
 
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
+                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16), // Adjust padding as needed
                               decoration: BoxDecoration(
                                 color: AppColor.orangeColor, // Button background color
                                 borderRadius: BorderRadius.circular(2), // Rounded corners
                               ),
                               child: const Row(
                                 children: [
-                                  Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
-                                  SizedBox(width: 5,),
+                                 /* Icon(Icons.file_copy,size: 10,color: AppColor.appWhite,),
+                                  SizedBox(width: 5,),*/
                                   Text(
                                     AppText.details,
                                     style: TextStyle(color: AppColor.appWhite),
@@ -496,7 +515,7 @@ class LeadListMain extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     //mamshi add new api
                     lead.leadStage==10||lead.leadStage==11?Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 8.0),
@@ -507,7 +526,7 @@ class LeadListMain extends StatelessWidget {
                               showUpdateDisburseHistorySheet();
                              },
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 10),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
                               width:double.infinity,
                               decoration: BoxDecoration(
                                   color: AppColor.primaryColor,
@@ -627,7 +646,7 @@ class LeadListMain extends StatelessWidget {
                       mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        if(lead.leadStage.toString()=="4")...[
+                        if(lead.leadStage.toString()=="4" && leadListController.rolRx.value=="INDEPENDENT AREA HEAD")...[
 
                           _buildTextButton(
                             label:AppText.doable,
@@ -766,7 +785,7 @@ class LeadListMain extends StatelessWidget {
                               label:"Cam Note Details",
                               context: context,
                               color: Colors.purple,
-                              icon:  Icons.person_outline_outlined,
+                              icon:  Icons.money_outlined,
                               leadId: lead.id.toString(),
                               label_code: "cam_note_details",
                               currentLeadStage: lead.leadStage.toString(),
@@ -790,12 +809,39 @@ class LeadListMain extends StatelessWidget {
                                     label:AppText.loanApplicationForm,
                                     context: context,
                                     color: Colors.purple,
-                                    icon:  Icons.list_alt_rounded,
+                                    icon:  Icons.currency_exchange,
                                     leadId: lead.id.toString(),
                                     label_code: "loan_appl_form",
                                     currentLeadStage: lead.leadStage.toString(),
                                     uln: lead.uniqueLeadNumber.toString(),
                                     loanDetails: lead.loanDetail
+                                ),
+
+                            ],
+                          ),
+                        ],
+                      ),
+
+                   ///add feedback for AIC
+                    if (lead.leadStage != null && lead.leadStage! >= 4 && leadListController.rolRx.value=="INDEPENDENT AREA HEAD")
+                      Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                                _buildTextButton(
+                                    label:AppText.addFeedback,
+                                    context: context,
+                                    color: Colors.purple,
+                                    icon:  Icons.feedback_outlined,
+                                    leadId: lead.id.toString(),
+                                    label_code: "aic_add_feedback",
+                                    currentLeadStage: lead.leadStage.toString(),
+                                    uln: lead.uniqueLeadNumber.toString(),
+                                    loanDetails: lead.loanDetail,
+                                  stageName: lead.stageName
                                 ),
 
                             ],
@@ -924,7 +970,7 @@ class LeadListMain extends StatelessWidget {
       },
     );
   }
-
+/*
   Widget _buildDetailRow(String label, String value, int leadStage) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -969,7 +1015,78 @@ overflow: TextOverflow.ellipsis,
         ],
       ),
     );
+  }*/
+
+
+  Widget _buildDetailRow(String label, String value, int leadStage) {
+    // Use default styles and consistent layout from your DetailRow design
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Label
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: AppColor.primaryColor,
+            ),
+          ),
+          const SizedBox(height: 4),
+
+          // Value
+          if (value == "null" || value == AppText.customdash || value.trim().isEmpty)
+            const Row(
+              children: [
+                Icon(Icons.horizontal_rule, size: 15, color: Colors.grey),
+              ],
+            )
+          else if (label == "Campaign")
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColor.lightPrimary2,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                value,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: AppColor.primaryColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          else if (leadStage == 3 && label == "Status")
+              StatusChip(label: value, color: Colors.orange)
+            else
+              Text(
+                (label == "Assigned" || label == "Uploaded on")
+                    ? Helper.formatDate(value)
+                    : value,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+        ],
+      ),
+    );
   }
+
+
 
   /// Helper widget for icon buttons
   Widget _buildIconButton({
@@ -994,7 +1111,7 @@ overflow: TextOverflow.ellipsis,
           leadDDController.selectedStage.value=currentLeadStage;
           CallService callService = CallService();
           callService.makePhoneCall(
-            phoneNumber:phoneNumber,//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
+            phoneNumber:phoneNumber,//phoneNumber,//phoneNumber,// phoneNumber,//"+919630749382",,//"+919238513910",//"+919201963012",,//"+919399299880", //
             leadId: leadId,
             currentLeadStage: currentLeadStage,//newLeadStage,
           /*  context: context,*/
@@ -1012,7 +1129,6 @@ overflow: TextOverflow.ellipsis,
         if(label=="call_disable"){
 
         }
-
       },
 
       icon: Container(
@@ -1021,7 +1137,7 @@ overflow: TextOverflow.ellipsis,
         decoration:  BoxDecoration(
           border: Border.all(color: AppColor.grey200),
           color: AppColor.appWhite,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(2),
           ),
 
@@ -1029,6 +1145,43 @@ overflow: TextOverflow.ellipsis,
         child: Center(
           // child: Icon(icon, color: color),
           child: Image.asset(icon, height: 12,),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIconButtonDownload({
+    required String icon,
+    required String disableIcon,
+    required Color color,
+    required String phoneNumber,
+    required String label,
+    required String leadId,
+    required String currentLeadStage,
+    required BuildContext context,
+    String ? url,
+  })
+  {
+    return IconButton(
+      onPressed:url==null || url==""?null: () {
+        print("button tapped");
+        leadListController.launchInBrowser(url??"");
+      },
+
+      icon: Container(
+
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration:  BoxDecoration(
+          border: Border.all(color: AppColor.grey200),
+          color: AppColor.appWhite,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+
+        ),
+        child: Center(
+          // child: Icon(icon, color: color),
+          child: url==null || url=="" ?Image.asset(disableIcon, height: 12,) :Image.asset(icon, height: 12,),
         ),
       ),
     );
@@ -1052,7 +1205,7 @@ overflow: TextOverflow.ellipsis,
         children: [
 
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
             label_code=="loan_appl_form"?MediaQuery.of(context).size.width*0.82:
             (label_code=="add_feedback" ) ?
@@ -1069,7 +1222,7 @@ overflow: TextOverflow.ellipsis,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(icon, color: label_code=="add_feedback"?AppColor.appWhite:Colors.red, size: 16),
-                SizedBox(width: 6),
+                const SizedBox(width: 6),
                 Text(
                   label,
                   style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
@@ -1083,7 +1236,7 @@ overflow: TextOverflow.ellipsis,
   }
 
 
-
+  ///OPen poll is LEH Now
   Widget _buildTextButton({
     required String label,
     required BuildContext context,
@@ -1095,13 +1248,15 @@ overflow: TextOverflow.ellipsis,
     String? currentLeadStage,
     int? loanDetails,
     String? moveToCommon,
+    String? stageName,
   }) {
 
     return InkWell(
       onTap: () {
         if (label_code == "open_poll") {
           leadListController.openPollPercentController.clear();
-          showOpenPollDialog2(context: context,leadId: leadId);
+
+          showSendToLEHConditionDialog(context: context,leadId: leadId);
         }else if (label_code == "add_lead_form") {
 
           addLeadController.fromWhere.value="interested";
@@ -1113,6 +1268,7 @@ overflow: TextOverflow.ellipsis,
 
           ViewProductController viewProductController=Get.put(ViewProductController());
           viewProductController.getAllProductListApi();
+
           addLeadController.clearControllers();
 
           CamNoteController camNoteController=Get.put(CamNoteController());
@@ -1224,8 +1380,10 @@ overflow: TextOverflow.ellipsis,
         loanApplicationController.clearBeforeGoingOnLoanAppl();
         print('loanDetails${loanDetails}');
 
-        loanDetails==0?
-        addLeadController.getLeadDetailByIdApi(leadId: leadId):
+     /*   loanDetails==0?
+        addLeadController.getLeadDetailByIdApi(leadId: leadId):*/
+        addLeadController.getLeadDetailByIdApi(leadId: leadId);
+       // Step2Controller step2Controller = Get.put(Step2Controller());
         loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
           loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {
@@ -1257,6 +1415,20 @@ overflow: TextOverflow.ellipsis,
         }
         else if (label_code == "update_loan_update") {
           showUpdateLoanApplicationDialog(uln);
+        } else if (label_code == "aic_add_feedback") {
+          leadListController.selectedValAicGradeList.value="";
+          leadListController.aicFeedbackController.clear();
+          leadDDController.selectedStage.value="";
+
+          leadListController.isAICStageDropdownDisabled.value = false;
+          leadDDController.selectedStage.value="";
+          leadListController.isAICStageName.value="";
+          showAICFeebackDialog(context: context,
+              currentLeadStage: currentLeadStage,
+            leadId: leadId,
+            stageName:  stageName.toString(),
+
+          );
         } else{
 
         }
@@ -1266,9 +1438,9 @@ overflow: TextOverflow.ellipsis,
         children: [
 
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
-            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" ?MediaQuery.of(context).size.width*0.82:
+            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" || label_code=="aic_add_feedback" ?MediaQuery.of(context).size.width*0.82:
             (label_code=="add_feedback" ) ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
@@ -1283,7 +1455,7 @@ overflow: TextOverflow.ellipsis,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(icon, color:moveToCommon=="YES"?Colors.grey.shade300: label_code=="add_feedback"?AppColor.appWhite:AppColor.grey700, size: 16),
-                SizedBox(width: 6),
+                const SizedBox(width: 6),
                 Text(
                   label,
                   style: TextStyle(fontSize: label_code=="open_poll"? 10:11, fontWeight: FontWeight.w600, color: moveToCommon=="YES"?Colors.grey.shade300:label_code=="add_feedback"?AppColor.appWhite: AppColor.grey700),
@@ -1320,7 +1492,7 @@ overflow: TextOverflow.ellipsis,
                       AppImage.handshake,
                       repeat: false
                   )),
-              Text(
+              const Text(
                   "No Leads Found",
                   style: TextStyle(
                     fontSize: 16,
@@ -1369,8 +1541,8 @@ overflow: TextOverflow.ellipsis,
                     // 🔵 Title in Blue Strip
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
                         color:AppColor.primaryColor, // Title background color
                         borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                         gradient: LinearGradient(
@@ -1379,7 +1551,7 @@ overflow: TextOverflow.ellipsis,
                           end: Alignment.bottomCenter,
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         "Select Status:",
                         style: TextStyle(
                           fontSize: 17,
@@ -1392,7 +1564,7 @@ overflow: TextOverflow.ellipsis,
 
                     // 📝 Content (Radio Buttons)
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: options.map((option) {
@@ -1423,9 +1595,9 @@ overflow: TextOverflow.ellipsis,
                             },
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColor.grey1,
-                              side: BorderSide(color: AppColor.grey2),
+                              side: const BorderSide(color: AppColor.grey2),
                             ),
-                            child: Text("Close", style: TextStyle(color: AppColor.grey2)),
+                            child: const Text("Close", style: TextStyle(color: AppColor.grey2)),
                           ),
                           ElevatedButton(
                             onPressed: () {
@@ -1457,7 +1629,7 @@ overflow: TextOverflow.ellipsis,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColor.orangeColor,
                             ),
-                            child: Text("Submit", style: TextStyle(color: AppColor.appWhite)),
+                            child: const Text("Submit", style: TextStyle(color: AppColor.appWhite)),
                           ),
                         ],
                       ),
@@ -1571,7 +1743,7 @@ overflow: TextOverflow.ellipsis,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical:0 ),
                     child:  Obx(()=>Column(
                       children: options.asMap().entries.map((entry) {
                         int index = entry.key;
@@ -1586,7 +1758,7 @@ overflow: TextOverflow.ellipsis,
                       }).toList(),
                     )),
                   ),
-              
+
                 ],
               ),
             ),
@@ -1604,69 +1776,763 @@ overflow: TextOverflow.ellipsis,
   }
 
 
-
   void showOpenPollDialog2({
     required BuildContext context,
-    required leadId,
-  }) {
-
+    required String leadId,
+  })
+  {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CustomBigDialogBox(
+        return Obx(() => CustomBigYesNoLoaderDialogBox(
           titleBackgroundColor: AppColor.secondaryColor,
+          title:  AppText.moveLeh,
+          content: SingleChildScrollView(
+            child: Form(
+              key: _formKeyOpenPoll,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
 
-          title: AppText.moveLeh,
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    child:  Column(
+                      children: [
+                        CustomTextLabel(
+                          label: AppText.state,
+                          isRequired: true,
+                        ),
 
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                  child:  Column(
-                    children: [
+                        SizedBox(height: 10),
 
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomLabeledTextField2(
-                        inputType:  TextInputType.number,
-                        controller: leadListController.openPollPercentController,
-                        hintText: AppText.enterPercentage,
-                        validator: validatePercentage,
+                        Obx((){
+                          if (leadDDController.isStateLoading.value) {
+                            return  Center(child:CustomSkelton.leadShimmerList(context));
+                          }
 
-                        label: AppText.enterLeh,
-                        isRequired: false,
-                        onChanged: (value){
-                          ValidationHelper.validatePercentageInput(
-                            controller:  leadListController.openPollPercentController,
-                            value: value,
-                            maxValue: 100,
-                            errorMessage: AppText.maxPercentMsg.toString(),
+                          return CustomDropdown<state.Data>(
+                            items: leadDDController.getAllStateModel.value?.data ?? [],
+                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                            getName: (item) => item.stateName.toString(),
+                            selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                                  (item) => item.id.toString() == leadListController.lehSelectedState.value,
+                            ),
+                            onChanged: (value) {
+                              leadListController.lehSelectedState.value =  value?.id?.toString();
+                              leadDDController.getDistrictByStateIdApi(stateId: leadListController.lehSelectedState.value);
+
+                              print("camNoteController.camSelectedState.value in dd--->${leadListController.lehSelectedState.value}");
+                            },
+                            onClear: (){
+                              leadListController.lehSelectedState.value=null;
+                              camNoteController.camSelectedDistrict.value = null;
+                              leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
+
+                              camNoteController.camSelectedCity.value = null;
+                              leadDDController.cityListCurr.value.clear(); // reset dependent dropdown
+                            },
                           );
-                          // camNoteController.calculateLoanDetails();
-                        },                      ),
+                        }),
+
+
+                        const SizedBox(height: 20),
+
+
+                        CustomTextLabel(
+                          label: AppText.district,
+                          isRequired: true,
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        Obx((){
+                          if (leadDDController.isDistrictLoading.value) {
+                            return  Center(child:CustomSkelton.leadShimmerList(context));
+                          }
+
+
+                          return CustomDropdown<dist.Data>(
+                            items: leadDDController.districtListCurr.value ?? [],
+                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                            getName: (item) => item.districtName.toString(),
+                            selectedValue: leadDDController.districtListCurr.value.firstWhereOrNull(
+                                  (item) => item.id.toString() == leadListController.lehSelectedDistrict.value,
+                            ),
+                            onChanged: (value) {
+                              leadListController.lehSelectedDistrict.value =  value?.id?.toString();
+                              leadDDController.getCityByDistrictIdApi(districtId: leadListController.lehSelectedDistrict.value);
+                            },
+                            onClear: (){
+                              leadListController.lehSelectedDistrict.value = null;
+                              leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
+
+                            },
+                          );
+                        }),
+
+
+                        const SizedBox(height: 20),
+
+
+
+                        CustomTextLabel(
+                          label: AppText.city,
+                          isRequired: true,
+                        ),
+
+                        const SizedBox(height: 10),
+
+
+
+                        Obx((){
+                          if (leadDDController.isCityLoading.value) {
+                            return  Center(child:CustomSkelton.leadShimmerList(context));
+                          }
+
+
+                          return CustomDropdown<city.Data>(
+                            items: leadDDController.cityListCurr.value  ?? [],
+                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                            getName: (item) => item.cityName.toString(),
+                            selectedValue: leadDDController.cityListCurr.value.firstWhereOrNull(
+                                  (item) => item.id.toString() == leadListController.lehSelectedCity.value,
+                            ),
+                            onChanged: (value) {
+                              leadListController.lehSelectedCity.value=  value?.id?.toString();
+                            },
+                            onClear: (){
+                              leadListController.lehSelectedCity.value = null;
+                              leadDDController.cityListCurr.value.clear(); // reset dependent dropdown
+
+                            },
+                          );
+                        }),
+
+                        const SizedBox(height: 20),
+
+                        CustomLabeledTextField(
+                          label: AppText.zipCode,
+                          isRequired: true,
+
+                          controller:  leadListController.lehZipController ,
+                          inputType: TextInputType.number,
+                          hintText: AppText.enterZipCode,
+                          maxLength: 6,
+                          validator: ValidationHelper.validateData,
+                        ),
+
+                        CustomLabeledTextField2(
+                          inputType:  TextInputType.number,
+                          controller: leadListController.openPollPercentController,
+                          hintText: AppText.enterPercentage,
+                          validator: validatePercentage,
+
+                          label: AppText.enterLeh,
+                          isRequired: true,
+                          onChanged: (value){
+                            ValidationHelper.validatePercentageInput(
+                              controller:  leadListController.openPollPercentController,
+                              value: value,
+                              maxValue: 100,
+                              errorMessage: AppText.maxPercentMsg.toString(),
+                            );
+                            // camNoteController.calculateLoanDetails();
+                          },                      ),
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+
+          // 👇 Loader logic right here
+          firstButtonChild: leadListController.isOpenPollApiLoading.value
+              ? const SizedBox(
+            height: 18,
+            width: 18,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Colors.white,
+            ),
+          )
+              : const Text(
+            "Send",
+            style: TextStyle(color: Colors.white),
+          ),
+
+          secondButtonText: "Cancel",
+          firstButtonColor: AppColor.primaryColor,
+          secondButtonColor: AppColor.redColor,
+
+          onFirstButtonPressed: () async {
+
+            if (!leadListController.isOpenPollApiLoading.value &&
+                _formKeyOpenPoll.currentState!.validate()) {
+                if (leadListController.lehSelectedState.value != null &&
+                    leadListController.lehSelectedDistrict.value != null &&
+                    leadListController.lehSelectedCity.value != null &&
+                    leadListController.lehZipController.text.trim().isNotEmpty) {
+
+                  // ✅ All validations passed
+                  leadListController.isOpenPollApiLoading(true);
+                    print("first then--->");
+                    //addLeadController.getLeadDetailByIdApi(leadId: leadId).then((_) async {
+
+                    print("Second then--->");
+
+                    List<File> propertyPhotos = camNoteController.getImages("property_photo")
+                        .where((img) => img.isLocal)
+                        .map((img) => img.file!)
+                        .toList();
+
+                    List<File> residencePhotos = camNoteController.getImages("residence_photo")
+                        .where((img) => img.isLocal)
+                        .map((img) => img.file!)
+                        .toList();
+
+                    List<File> officePhotos = camNoteController.getImages("office_photo")
+                        .where((img) => img.isLocal)
+                        .map((img) => img.file!)
+                        .toList();
+
+                      await addLeadController.fillLeadFormApi(
+                      id: leadId.toString(),
+                      dob: camNoteController.camDobController.text.toString(),
+                      gender: camNoteController.selectedGender.toString(),
+                      loanAmtReq:camNoteController.camLoanAmtReqController.text.toString(),
+                      email: camNoteController.camEmailController.text.toString(),
+                      aadhar: camNoteController.camAadharController.text.toString(),
+                      pan: camNoteController.camPanController.text.toString(),
+                      streetAdd: camNoteController.camStreetAddController.text.toString(),
+                      state: leadListController.lehSelectedState.value.toString(),
+                      district: leadListController.lehSelectedDistrict.value.toString(),
+                      city: leadListController.lehSelectedCity.value.toString(),
+                      zip: leadListController.lehZipController.text.toString(),
+                      nationality: camNoteController.camNationalityController.text.toString(),
+                      currEmpSt: camNoteController.camCurrEmpStatus.value,
+                      employerName: camNoteController.camEmployerNameController.text.toString(),
+                      monthlyIncome:camNoteController.camMonthlyIncomeController.text.toString(),
+                      ///Now this is not working, Have different API for Additional source of income
+                      addSrcIncome: "",
+                      prefBank: camNoteController.camSelectedBank.value.toString(),
+                      exRelBank:camNoteController.camSelectedIndexRelBank.value==-1?"":camNoteController.camSelectedIndexRelBank.value==0?"Yes":"No",
+                      branchLoc:camNoteController.camBranchLocController.text.toString(),
+                      prodTypeInt: camNoteController.camSelectedProdType.value.toString(),
+                      /// connection name mob and percent are not sent
+                      loanApplNo: camNoteController.loanApplicationNumber.toString(),
+
+                      name: camNoteController.camFullNameController.text.toString(),
+                      mobileNumber: camNoteController.camPhoneController.text.toString(),
+                      packageId: camNoteController.selectedPackage.value.toString(),
+                      packageAmount: camNoteController.camPackageAmtController.text.toString(),
+                      receivableAmount:camNoteController.camReceivableAmtController.text.toString(),
+                      receivableDate:camNoteController.camReceivableDateController.text.toString(),
+                      transactionDetails:camNoteController.camTransactionDetailsController.text.toString(),
+                      remark:camNoteController.camRemarkController.text.toString(),
+                      leadSegment:camNoteController.camSelectedProdSegment.value.toString(),
+
+                      GeoLocationOfProperty:camNoteController.camGeoLocationPropertyLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationPropertyLongController.text.trim().toString(),
+                      GeoLocationOfResidence:camNoteController.camGeoLocationResidenceLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationResidenceLongController.text.trim().toString(),
+                      GeoLocationOfOffice:camNoteController.camGeoLocationOfficeLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationOfficeLongController.text.trim().toString(),
+                      PhotosOfProperty: propertyPhotos,
+                      PhotosOfResidence: residencePhotos,
+                      PhotosOfOffice: officePhotos,
+                      fromWhere: "camnote",
+                      WhatsappNumber:camNoteController.camWhatsappController.text.toString(),
+                    )
+                 // })
+                        .then((_) async {
+                      await leadListController.leadMoveToCommonTaskApi(
+                        leadId: leadId,
+                        percentage: leadListController.openPollPercentController.text.trim(),
+                      );
+                    }).then((_){
+                    Get.back();
+                  });
+
+                } else {
+                  // ❌ Show proper messages
+                  if (leadListController.lehSelectedState.value == null) {
+                    SnackbarHelper.showSnackbar(title: AppText.missingField, message: AppText.plsSelectState);
+                  } else if (leadListController.lehSelectedDistrict.value == null) {
+                    SnackbarHelper.showSnackbar(title: AppText.missingField, message:  AppText.plsSelectDist);
+                  } else if (leadListController.lehSelectedCity.value == null) {
+                    SnackbarHelper.showSnackbar(title: AppText.missingField,  message: AppText.plsSelectCity);
+                  } else{}
+                }
+
+              // Validate form fields first
+
+            }
+          },
+          onSecondButtonPressed: () {
+            Get.back();
+          },
+        ));
+      },
+    );
+  }
+
+
+/*  void showOpenPollDialog2({
+    required BuildContext context,
+    required String leadId,
+  })
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx(() => CustomBigYesNoLoaderDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title:  AppText.moveLeh,
+          content: SingleChildScrollView(
+            child: Form(
+              key: _formKeyOpenPoll,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    child:  Column(
+                      children: [
+                        CustomTextLabel(
+                          label: AppText.state,
+                          isRequired: true,
+                        ),
+
+                        SizedBox(height: 10),
+
+                        Obx((){
+                          if (leadDDController.isStateLoading.value) {
+                            return  Center(child:CustomSkelton.leadShimmerList(context));
+                          }
+
+                          return CustomDropdown<state.Data>(
+                            items: leadDDController.getAllStateModel.value?.data ?? [],
+                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                            getName: (item) => item.stateName.toString(),
+                            selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                                  (item) => item.id.toString() == leadListController.lehSelectedState.value,
+                            ),
+                            onChanged: (value) {
+                              leadListController.lehSelectedState.value =  value?.id?.toString();
+                              leadDDController.getDistrictByStateIdApi(stateId: leadListController.lehSelectedState.value);
+                            },
+                            onClear: (){
+                              leadListController.lehSelectedState.value=null;
+                              leadListController.lehSelectedDistrict.value = null;
+                              leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
+
+                              leadListController.lehSelectedCity.value = null;
+                              leadDDController.cityListCurr.value.clear(); // reset dependent dropdown
+                            },
+                          );
+                        }),
+
+
+                        const SizedBox(height: 20),
+
+
+                        CustomTextLabel(
+                          label: AppText.district,
+                          isRequired: true,
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        Obx((){
+                          if (leadDDController.isDistrictLoading.value) {
+                            return  Center(child:CustomSkelton.leadShimmerList(context));
+                          }
+
+
+                          return CustomDropdown<dist.Data>(
+                            items: leadDDController.districtListCurr.value ?? [],
+                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                            getName: (item) => item.districtName.toString(),
+                            selectedValue: leadDDController.districtListCurr.value.firstWhereOrNull(
+                                  (item) => item.id.toString() == leadListController.lehSelectedDistrict.value,
+                            ),
+                            onChanged: (value) {
+                              leadListController.lehSelectedDistrict.value =  value?.id?.toString();
+                              leadDDController.getCityByDistrictIdApi(districtId: leadListController.lehSelectedDistrict.value);
+                            },
+                            onClear: (){
+                              leadListController.lehSelectedDistrict.value = null;
+                              leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
+
+                            },
+                          );
+                        }),
+
+
+                        const SizedBox(height: 20),
+
+
+
+                        CustomTextLabel(
+                          label: AppText.city,
+                          isRequired: true,
+                        ),
+
+                        const SizedBox(height: 10),
+
+
+
+                        Obx((){
+                          if (leadDDController.isCityLoading.value) {
+                            return  Center(child:CustomSkelton.leadShimmerList(context));
+                          }
+
+
+                          return CustomDropdown<city.Data>(
+                            items: leadDDController.cityListCurr.value  ?? [],
+                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                            getName: (item) => item.cityName.toString(),
+                            selectedValue: leadDDController.cityListCurr.value.firstWhereOrNull(
+                                  (item) => item.id.toString() == leadListController.lehSelectedCity.value,
+                            ),
+                            onChanged: (value) {
+                              leadListController.lehSelectedCity.value=  value?.id?.toString();
+                            },
+                            onClear: (){
+                              leadListController.lehSelectedCity.value = null;
+                              leadDDController.cityListCurr.value.clear(); // reset dependent dropdown
+
+                            },
+                          );
+                        }),
+
+                        const SizedBox(height: 20),
+
+                        CustomLabeledTextField(
+                          label: AppText.zipCode,
+                          isRequired: true,
+
+                          controller: leadListController.lehZipController ,
+                          inputType: TextInputType.number,
+                          hintText: AppText.enterZipCode,
+                          maxLength: 6,
+                          validator: ValidationHelper.validateData,
+                        ),
+
+                        CustomLabeledTextField2(
+                          inputType:  TextInputType.number,
+                          controller: leadListController.openPollPercentController,
+                          hintText: AppText.enterPercentage,
+                          validator: validatePercentage,
+
+                          label: AppText.enterLeh,
+                          isRequired: true,
+                          onChanged: (value){
+                            ValidationHelper.validatePercentageInput(
+                              controller:  leadListController.openPollPercentController,
+                              value: value,
+                              maxValue: 100,
+                              errorMessage: AppText.maxPercentMsg.toString(),
+                            );
+                            // camNoteController.calculateLoanDetails();
+                          },                      ),
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+
+          // 👇 Loader logic right here
+          firstButtonChild: leadListController.isOpenPollApiLoading.value
+              ? const SizedBox(
+            height: 18,
+            width: 18,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Colors.white,
+            ),
+          )
+              : const Text(
+            "Send",
+            style: TextStyle(color: Colors.white),
+          ),
+
+          secondButtonText: "Cancel",
+          firstButtonColor: AppColor.primaryColor,
+          secondButtonColor: AppColor.redColor,
+
+          onFirstButtonPressed: () {
+
+            if (!leadListController.isOpenPollApiLoading.value &&
+                _formKeyOpenPoll.currentState!.validate()) {
+              if (camNoteController.camSelectedState.value != null &&
+                  camNoteController.camSelectedDistrict.value != null &&
+                  camNoteController.camSelectedCity.value != null &&
+                  camNoteController.camZipController.text.trim().isNotEmpty) {
+
+                // ✅ All validations passed
+                leadListController.leadMoveToCommonTaskApi(
+                  leadId: leadId,
+                  percentage: leadListController.openPollPercentController.text.trim(),
+                ).then((_){
+                  addLeadController.getLeadDetailByIdApi(leadId: leadId);
+                }).then((_){
+
+
+                  List<File> propertyPhotos = camNoteController.getImages("property_photo")
+                      .where((img) => img.isLocal)
+                      .map((img) => img.file!)
+                      .toList();
+
+                  List<File> residencePhotos = camNoteController.getImages("residence_photo")
+                      .where((img) => img.isLocal)
+                      .map((img) => img.file!)
+                      .toList();
+
+                  List<File> officePhotos = camNoteController.getImages("office_photo")
+                      .where((img) => img.isLocal)
+                      .map((img) => img.file!)
+                      .toList();
+
+                  addLeadController.fillLeadFormApi(
+                    id: camNoteController.getLeadId.value.toString(),
+                    dob: camNoteController.camDobController.text.toString(),
+                    gender: camNoteController.selectedGender.toString(),
+                    loanAmtReq:camNoteController.camLoanAmtReqController.text.toString(),
+                    email: camNoteController.camEmailController.text.toString(),
+                    aadhar: camNoteController.camAadharController.text.toString(),
+                    pan: camNoteController.camPanController.text.toString(),
+                    streetAdd: camNoteController.camStreetAddController.text.toString(),
+                    state:  camNoteController.camSelectedState.value.toString(),
+                    district: camNoteController.camSelectedDistrict.value.toString(),
+                    city: camNoteController.camSelectedCity.value.toString(),
+                    zip: camNoteController.camZipController.text.toString(),
+                    nationality: camNoteController.camNationalityController.text.toString(),
+                    currEmpSt: camNoteController.camCurrEmpStatus.value,
+                    employerName: camNoteController.camEmployerNameController.text.toString(),
+                    monthlyIncome:camNoteController.camMonthlyIncomeController.text.toString(),
+                    ///Now this is not working, Have different API for Additional source of income
+                    addSrcIncome: "",
+                    prefBank: camNoteController.camSelectedBank.value.toString(),
+                    exRelBank:camNoteController.camSelectedIndexRelBank.value==-1?"":camNoteController.camSelectedIndexRelBank.value==0?"Yes":"No",
+                    branchLoc:camNoteController.camBranchLocController.text.toString(),
+                    prodTypeInt: camNoteController.camSelectedProdType.value.toString(),
+                    /// connection name mob and percent are not sent
+                    loanApplNo: camNoteController.loanApplicationNumber.toString(),
+
+                    name: camNoteController.camFullNameController.text.toString(),
+                    mobileNumber: camNoteController.camPhoneController.text.toString(),
+                    packageId: camNoteController.selectedPackage.value.toString(),
+                    packageAmount: camNoteController.camPackageAmtController.text.toString(),
+                    receivableAmount:camNoteController.camReceivableAmtController.text.toString(),
+                    receivableDate:camNoteController.camReceivableDateController.text.toString(),
+                    transactionDetails:camNoteController.camTransactionDetailsController.text.toString(),
+                    remark:camNoteController.camRemarkController.text.toString(),
+                    leadSegment:camNoteController.camSelectedProdSegment.value.toString(),
+
+                    GeoLocationOfProperty:camNoteController.camGeoLocationPropertyLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationPropertyLongController.text.trim().toString(),
+                    GeoLocationOfResidence:camNoteController.camGeoLocationResidenceLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationResidenceLongController.text.trim().toString(),
+                    GeoLocationOfOffice:camNoteController.camGeoLocationOfficeLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationOfficeLongController.text.trim().toString(),
+                    PhotosOfProperty: propertyPhotos,
+                    PhotosOfResidence: residencePhotos,
+                    PhotosOfOffice: officePhotos,
+                    fromWhere: "camnote",
+                    WhatsappNumber:camNoteController.camWhatsappController.text.toString(),
+                  );
+                }).then((_){
+                  Get.back();
+                });
+
+              } else {
+                // ❌ Show proper messages
+                if (leadListController.lehSelectedState.value == null) {
+                  SnackbarHelper.showSnackbar(title: AppText.missingField, message: AppText.plsSelectState);
+                } else if (leadListController.lehSelectedDistrict.value == null) {
+                  SnackbarHelper.showSnackbar(title: AppText.missingField, message:  AppText.plsSelectDist);
+                } else if (leadListController.lehSelectedCity.value == null) {
+                  SnackbarHelper.showSnackbar(title: AppText.missingField,  message: AppText.plsSelectCity);
+                } else{}
+              }
+
+              // Validate form fields first
+
+            }
+          },
+          onSecondButtonPressed: () {
+            Get.back();
+          },
+        ));
+      },
+    );
+  }*/
+
+
+  void showSendToLEHConditionDialog({
+    required BuildContext context,
+    required String leadId
+}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigYesNoDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Rules for Uploading Cases to Loan Exchange Hub / केस अपलोडिंग नियम",
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                // English Section
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: "1. Unlimited Submissions:\n",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primaryColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text:
+                        "No limit if member is active and compliant.",
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: "2. Genuine Leads Only:\n",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primaryColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text:
+                        "Invalid or poor-quality leads may trigger suspension.",
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: "3. Payment Share Flexibility:\n",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primaryColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text:
+                        "Sourcing member may adjust their share before disbursement.",
+                      ),
                     ],
                   ),
                 ),
 
+                const Divider(height: 24, thickness: 1),
+
+                // Hindi Section
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: "1. असीमित सबमिशन:\n",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primaryColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text:
+                        "यदि सदस्य सक्रिय और नियमों का पालन करने वाला है, तो अपलोड की कोई सीमा नहीं होगी।",
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: "2. केवल वास्तविक लीड्स:\n",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primaryColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text:
+                        "गलत या खराब गुणवत्ता वाली लीड्स देने पर निलंबन लगाया जा सकता है।",
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: "3. पेमेंट शेयर में लचीलापन:\n",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primaryColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text:
+                        "डिस्बर्समेंट से पहले सोर्सिंग सदस्य अपना शेयर समायोजित कर सकता है।",
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-          onSubmit: () {
-            if (_formKey.currentState!.validate()) {
-              leadListController.leadMoveToCommonTaskApi(
-                  leadId: leadId,
-                  percentage: leadListController.openPollPercentController.text.trim().toString()
-              );
-              Navigator.pop(context);
-            }
+          firstButtonText: "I Agree",
+          onFirstButtonPressed: ()  {
+
+            Get.back();
+            leadListController.lehSelectedState.value= null ;
+                leadListController.lehSelectedDistrict.value = null ;
+                leadListController.lehSelectedCity.value = null ;
+                leadListController.lehZipController.clear();
+                leadListController.openPollPercentController.clear();
+            addLeadController.getLeadDetailByIdApi(leadId: leadId);
+            showOpenPollDialog2(context: context,leadId: leadId);
           },
+          secondButtonText: "Cancel",
+          onSecondButtonPressed: () {
+            Get.back();
+          },
+          firstButtonColor: AppColor.primaryColor,
+          secondButtonColor: AppColor.redColor,
         );
       },
     );
@@ -1791,7 +2657,7 @@ overflow: TextOverflow.ellipsis,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 if (leadListController.isFBDetailsShow.value==true) ...[
-                                  SizedBox(height: 15),
+                                  const SizedBox(height: 15),
                                   CustomLabeledTextField(
                                     label: AppText.callFeedback,
                                     isRequired: false,
@@ -1800,7 +2666,7 @@ overflow: TextOverflow.ellipsis,
                                     hintText: AppText.enterCallFeedback,
                                     isTextArea: true,
                                   ),
-                                  SizedBox(height: 15),
+                                  const SizedBox(height: 15),
                                   CustomLabeledTextField(
                                     label: AppText.leadFeedback,
                                     isRequired: false,
@@ -1843,7 +2709,7 @@ overflow: TextOverflow.ellipsis,
 
                                   },
                                 )),
-                                Text(
+                                const Text(
                                   AppText.callReminder,
                                   style: TextStyle(
                                     fontSize: 17,
@@ -1854,7 +2720,7 @@ overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Obx(()=> CustomLabeledPickerTextField(
                               label: AppText.selectDate,
                               isRequired: false,
@@ -1946,7 +2812,7 @@ overflow: TextOverflow.ellipsis,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     CustomLabeledTextField(
                       label: AppText.followupNote,
                       isRequired: false,
@@ -1955,7 +2821,7 @@ overflow: TextOverflow.ellipsis,
                       hintText: AppText.enterCallFeedback,
                       isTextArea: true,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       "Need to set a reminder? select the checkbox",
                       style:  GoogleFonts.poppins(
@@ -1977,7 +2843,7 @@ overflow: TextOverflow.ellipsis,
 
                           },
                         )),
-                        Text(
+                        const Text(
                           AppText.callReminder,
                           style: TextStyle(
                             fontSize: 17,
@@ -2373,6 +3239,270 @@ overflow: TextOverflow.ellipsis,
     }
     return null;
   }
+
+
+
+  void showAICFeebackDialog({
+    required BuildContext context,
+    required currentLeadStage,
+    required String leadId,
+    required String  stageName,
+  })
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx(() {
+
+          final filteredStages = leadDDController.getAICStagesByLeadStageId(
+            currentLeadStage.toString(),
+          );
+          var tempStage="";
+          var tempStageId="";
+          return CustomBigYesNoLoaderDialogBox(
+
+
+            titleBackgroundColor: AppColor.secondaryColor,
+            title: "Add Feedback",
+            content: SingleChildScrollView(
+              child: Form(
+                key: _formKeyAicFb,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const CustomTextLabel(
+                      label: AppText.grade,
+                      isRequired: true,
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Obx((){
+                      if (leadListController.isLoading.value) {
+                        return  Center(child:CustomSkelton.productShimmerList(context));
+                      }
+
+                      if(filteredStages.isNotEmpty){
+
+                        tempStage=filteredStages[1].stageName.toString();
+                        tempStageId=filteredStages[1].id.toString();
+                      }
+
+
+                      return CustomDropdown<String>(
+                        // items: leadListController.aicGradeList,
+                        items: [
+                          "Grade-A",
+                          "Grade-B",
+                          "Grade-C",
+                          "Grade-D (${tempStage})",
+                        ],
+                        getId: (item) => item,  // Adjust based on your model structure
+                        getName: (item) => item,
+                        selectedValue: leadListController.selectedValAicGradeList.value,
+                        onChanged: (value) {
+                          leadListController.selectedValAicGradeList.value =  value;
+                          // 👇 Check if user picked the last option
+                          if (value != null && value.contains("Grade-D")) {
+                            leadListController.isAICStageDropdownDisabled.value = true;
+                            leadDDController.selectedStage.value=tempStageId;
+                            leadListController.isAICStageName.value=tempStage;
+                          } else {
+                            leadListController.isAICStageDropdownDisabled.value = false;
+                            leadDDController.selectedStage.value="";
+                          }
+
+                        },
+                      );
+                    }),
+                    const SizedBox(height: 20),
+                    CustomLabeledTextField(
+                      label: AppText.feedback,
+                      isRequired: true,
+                      controller: leadListController.aicFeedbackController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterFeedback,
+                      validator: ValidationHelper.validateData,
+                    ),
+                    if(currentLeadStage=="4" || currentLeadStage=="5"  || currentLeadStage=="6"  || currentLeadStage=="7")
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          const CustomTextLabel(
+                            label: AppText.leadStage,
+                            isRequired: true,
+                          ),
+                          const SizedBox(height: 10),
+                          if(!leadListController.isAICStageDropdownDisabled.value)
+                            Obx((){
+                            if (leadDDController.isLeadStageLoading.value) {
+                              return  Center(child:CustomSkelton.leadShimmerList(context));
+                            }
+
+                            return CustomDropdown<stage.Data>(
+                              items: filteredStages,
+                              getId: (item) =>item.id.toString(),  // Adjust based on your model structure
+                              getName: (item) => item.stageName.toString(),
+                              selectedValue: filteredStages.firstWhereOrNull(
+                                    (item) => item.id.toString() == leadDDController.selectedStage.value.toString(),
+
+                              ),
+                              isEnabled: !leadListController.isAICStageDropdownDisabled.value,
+                              onChanged: (value) {
+                                leadDDController.selectedStage.value =  value?.id?.toString();
+
+                                if( leadDDController.selectedStage.value!=null){
+                                  if (int.parse(leadDDController.selectedStage.value!) == 3) {
+                                    leadDDController.selectedStageActive.value = 1;
+
+                                  } else if (int.parse(leadDDController.selectedStage.value!) == 4) {
+                                    leadDDController.selectedStageActive.value = 1;
+                                    leadListController.isFBDetailsShow.value=true;
+
+                                  } else if (int.parse(leadDDController.selectedStage.value!) == 5) {
+                                    leadDDController.selectedStageActive.value = 0;
+                                    leadListController.isFBDetailsShow.value=false;
+                                  }  else if (int.parse(leadDDController.selectedStage.value!) == 6) {
+                                    leadDDController.selectedStageActive.value = 1;
+                                    leadListController.isFBDetailsShow.value=true;
+                                  } else if (int.parse(leadDDController.selectedStage.value!) == 7) {
+                                    leadDDController.selectedStageActive.value = 0;
+                                    leadListController.isFBDetailsShow.value=false;
+                                  }else if (int.parse(leadDDController.selectedStage.value!) == 13) {
+                                    leadDDController.selectedStageActive.value = 0;
+                                  }else {
+                                    leadListController.isFBDetailsShow.value=true;
+                                  }
+
+
+                                }
+
+
+                              },
+                            );
+                          })
+                          else
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade400),
+                                borderRadius: BorderRadius.circular(8.0),
+                                color: Colors.grey,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Left side (like the hint text or value)
+                                  Expanded(
+                                    child: Text(
+                                      leadListController.isAICStageName.value ?? '',
+                                      style: TextStyle(
+                                        color:  Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+
+                                  // Right side (icons similar to suffixIcon)
+                                ],
+                              ),
+                            ),
+
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+
+
+
+                    RichText(
+                      text: const TextSpan(
+                        style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                        children: [
+                          TextSpan(
+                            text: "Note ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.blackColor,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ":If you want to check the feedback details, Please go here: Leads-> Details-> History ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // 👇 Loader logic right here
+            firstButtonChild: leadListController.isLoading.value
+                ? const SizedBox(
+              height: 18,
+              width: 18,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            )
+                : const Text(
+              "Send",
+              style: TextStyle(color: Colors.white),
+            ),
+
+            secondButtonText: "Cancel",
+            firstButtonColor: AppColor.secondaryColor,
+            secondButtonColor: AppColor.redColor,
+
+            onFirstButtonPressed: () {
+              var stage=leadDDController.selectedStage.value;
+              final tempGrade=leadListController.getApiGradeValue(leadListController.selectedValAicGradeList.value);
+              var feedback= tempGrade+leadListController.aicFeedbackController.text.toString();
+              if (!leadListController.isLoading.value &&
+                  _formKeyAicFb.currentState!.validate()) {
+
+                if(leadListController.selectedValAicGradeList.value!.isEmpty){
+
+                  SnackbarHelper.showSnackbar(
+                      title: "Error",
+                      message: "Please Select Grade"
+                  );
+
+                }else if(leadDDController.selectedStage.value!.isEmpty && (currentLeadStage=="4" || currentLeadStage=="5"  || currentLeadStage=="6"  || currentLeadStage=="7")){
+
+                  SnackbarHelper.showSnackbar(
+                      title: "Error",
+                      message: "Please Select Stage"
+                  );
+                }else{
+                  leadListController.workOnLeadApi(
+                      leadId: leadId.toString(),
+                      leadStageStatus:stage.toString(),
+                      feedbackRelatedToLead: feedback.toString()
+                  ).then((_){
+                    Get.back();
+                  });
+
+                }
+              }
+            },
+            onSecondButtonPressed: () {
+              Get.back();
+            },
+          );
+        });
+      },
+    );
+  }
+
 }
 
 class StatusChip extends StatelessWidget {
@@ -2389,7 +3519,61 @@ class StatusChip extends StatelessWidget {
         color: AppColor.greenColor,
         borderRadius: BorderRadius.circular(5),
       ),
-      child: Text(label, style: TextStyle(color: AppColor.appWhite, fontSize: 12)),
+      child: Text(label, style: const TextStyle(color: AppColor.appWhite, fontSize: 12)),
+    );
+  }
+}
+
+class DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final String leadStage;
+
+  const DetailRow({
+    Key? key,
+    required this.label,
+    required this.value,
+    required this.leadStage,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor
+            ),
+          ),
+          const SizedBox(height: 4),
+          value=="null" || value==AppText.customdash?
+          Row(
+
+
+            children: [
+              Icon(Icons.horizontal_rule, size: 15,),
+            ],):
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

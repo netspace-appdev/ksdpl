@@ -112,6 +112,10 @@ class CamNoteGroupScreen extends StatelessWidget {
                                             circleColor = Colors.grey;
                                           }
 
+                                          print("camNoteController.currentStep.value===>${camNoteController.currentStep.value}");
+                                          print("index===>${index}");
+
+
                                           return InkWell(
                                             onTap: () => camNoteController.jumpToStep(index),
                                             child: Row(
@@ -125,7 +129,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                                                       width: 30,
                                                       child: Divider(
                                                         thickness: 2,
-                                                        color: camNoteController.stepCompleted[index - 1]
+                                                        color:  camNoteController.stepCompleted[index - 1]
                                                             ? Colors.green
                                                             : Colors.grey[300],
                                                         height: 2,
@@ -153,7 +157,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                                                             bottom: 0,
                                                             child: Container(
                                                               decoration:BoxDecoration(
-                                                                  color:camNoteController.currentStep.value == index
+                                                                  color: camNoteController.currentStep.value == index
                                                                       ? Colors.green // current step completed
                                                                       : Colors.blue,
                                                                   shape: BoxShape.circle,

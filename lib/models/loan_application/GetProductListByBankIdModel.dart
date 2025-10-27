@@ -1,14 +1,13 @@
-
-class GetProductDetailsByFilterModel {
+class GetProductListByBankIdModel {
   String? status;
   bool? success;
   List<Data>? data;
   String? message;
 
-  GetProductDetailsByFilterModel(
+  GetProductListByBankIdModel(
       {this.status, this.success, this.data, this.message});
 
-  GetProductDetailsByFilterModel.fromJson(Map<String, dynamic> json) {
+  GetProductListByBankIdModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     success = json['success'];
     if (json['data'] != null) {
@@ -33,8 +32,9 @@ class GetProductDetailsByFilterModel {
 }
 
 class Data {
-  num? id;
+  int? id;
   num? bankId;
+  String? bankName;
   String? bankersName;
   String? bankersMobileNumber;
   String? bankersWhatsAppNumber;
@@ -70,11 +70,11 @@ class Data {
   num? maximumLTV;
   num? processingFee;
   num? legalFee;
-  num? technicalFee;
+  num? technicalInspectionFee;
   num? adminFee;
   num? foreclosureCharges;
   num? otherCharges;
-  num? stampDuty;
+  double? stampDuty;
   num? tsRYears;
   num? tsRCharges;
   num? valuationCharges;
@@ -82,16 +82,31 @@ class Data {
   String? productValidateFromDate;
   String? productValidateToDate;
   num? ksdplProductId;
+  String? ksdplProductName;
   num? profitPercentage;
-  String? bankName;
-  String? productSegment;
-  String? ksdplProduct;
-  num? specialBranchId;
-  String? autoindividual; // <-- Add this in your data model
+  bool? active;
+  String? createdDate;
+  String? createdBy;
+  String? updatedDate;
+  String? updatedBy;
+  String? deletedDate;
+  String? deletedBy;
+  String? productCategoryName;
+  num? processingCharges;
+  num? fromAmountRange;
+  num? toAmountRange;
+  num? totalOverdueCases;
+  num? totalOverdueAmount;
+  num? totalEnquiries;
+  String? superiorName;
+  String? superiorMobileNo;
+  String? superiorWhatsappNo;
+  String? superiorEmail;
 
   Data(
       {this.id,
         this.bankId,
+        this.bankName,
         this.bankersName,
         this.bankersMobileNumber,
         this.bankersWhatsAppNumber,
@@ -127,7 +142,7 @@ class Data {
         this.maximumLTV,
         this.processingFee,
         this.legalFee,
-        this.technicalFee,
+        this.technicalInspectionFee,
         this.adminFee,
         this.foreclosureCharges,
         this.otherCharges,
@@ -139,17 +154,31 @@ class Data {
         this.productValidateFromDate,
         this.productValidateToDate,
         this.ksdplProductId,
+        this.ksdplProductName,
         this.profitPercentage,
-        this.bankName,
-        this.productSegment,
-        this.ksdplProduct,
-        this.specialBranchId, // 👈 include in constructor
-        this.autoindividual, // 👈 include in constructor
-      });
+        this.active,
+        this.createdDate,
+        this.createdBy,
+        this.updatedDate,
+        this.updatedBy,
+        this.deletedDate,
+        this.deletedBy,
+        this.productCategoryName,
+        this.processingCharges,
+        this.fromAmountRange,
+        this.toAmountRange,
+        this.totalOverdueCases,
+        this.totalOverdueAmount,
+        this.totalEnquiries,
+        this.superiorName,
+        this.superiorMobileNo,
+        this.superiorWhatsappNo,
+        this.superiorEmail});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     bankId = json['bankId'];
+    bankName = json['bankName'];
     bankersName = json['bankers_Name'];
     bankersMobileNumber = json['bankers_Mobile_Number'];
     bankersWhatsAppNumber = json['bankers_WhatsApp_Number'];
@@ -186,7 +215,7 @@ class Data {
     maximumLTV = json['maximum_LTV'];
     processingFee = json['processing_Fee'];
     legalFee = json['legal_Fee'];
-    technicalFee = json['technical_Fee'];
+    technicalInspectionFee = json['technicalInspectionFee'];
     adminFee = json['admin_Fee'];
     foreclosureCharges = json['foreclosure_Charges'];
     otherCharges = json['other_Charges'];
@@ -198,16 +227,33 @@ class Data {
     productValidateFromDate = json['product_Validate_From_date'];
     productValidateToDate = json['product_Validate_To_date'];
     ksdplProductId = json['ksdplProductId'];
+    ksdplProductName = json['ksdplProductName'];
     profitPercentage = json['profit_Percentage'];
-    bankName = json['bankName'];
-    productSegment = json['productSegment'];
-    ksdplProduct = json['ksdplProduct'];
+    active = json['active'];
+    createdDate = json['createdDate'];
+    createdBy = json['createdBy'];
+    updatedDate = json['updatedDate'];
+    updatedBy = json['updatedBy'];
+    deletedDate = json['deletedDate'];
+    deletedBy = json['deletedBy'];
+    productCategoryName = json['productCategoryName'];
+    processingCharges = json['processingCharges'];
+    fromAmountRange = json['fromAmountRange'];
+    toAmountRange = json['toAmountRange'];
+    totalOverdueCases = json['totalOverdueCases'];
+    totalOverdueAmount = json['totalOverdueAmount'];
+    totalEnquiries = json['totalEnquiries'];
+    superiorName = json['superiorName'];
+    superiorMobileNo = json['superiorMobileNo'];
+    superiorWhatsappNo = json['superiorWhatsappNo'];
+    superiorEmail = json['superiorEmail'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['bankId'] = this.bankId;
+    data['bankName'] = this.bankName;
     data['bankers_Name'] = this.bankersName;
     data['bankers_Mobile_Number'] = this.bankersMobileNumber;
     data['bankers_WhatsApp_Number'] = this.bankersWhatsAppNumber;
@@ -246,7 +292,7 @@ class Data {
     data['maximum_LTV'] = this.maximumLTV;
     data['processing_Fee'] = this.processingFee;
     data['legal_Fee'] = this.legalFee;
-    data['technical_Fee'] = this.technicalFee;
+    data['technicalInspectionFee'] = this.technicalInspectionFee;
     data['admin_Fee'] = this.adminFee;
     data['foreclosure_Charges'] = this.foreclosureCharges;
     data['other_Charges'] = this.otherCharges;
@@ -258,80 +304,26 @@ class Data {
     data['product_Validate_From_date'] = this.productValidateFromDate;
     data['product_Validate_To_date'] = this.productValidateToDate;
     data['ksdplProductId'] = this.ksdplProductId;
+    data['ksdplProductName'] = this.ksdplProductName;
     data['profit_Percentage'] = this.profitPercentage;
-    data['bankName'] = this.bankName;
-    data['productSegment'] = this.productSegment;
-    data['ksdplProduct'] = this.ksdplProduct;
+    data['active'] = this.active;
+    data['createdDate'] = this.createdDate;
+    data['createdBy'] = this.createdBy;
+    data['updatedDate'] = this.updatedDate;
+    data['updatedBy'] = this.updatedBy;
+    data['deletedDate'] = this.deletedDate;
+    data['deletedBy'] = this.deletedBy;
+    data['productCategoryName'] = this.productCategoryName;
+    data['processingCharges'] = this.processingCharges;
+    data['fromAmountRange'] = this.fromAmountRange;
+    data['toAmountRange'] = this.toAmountRange;
+    data['totalOverdueCases'] = this.totalOverdueCases;
+    data['totalOverdueAmount'] = this.totalOverdueAmount;
+    data['totalEnquiries'] = this.totalEnquiries;
+    data['superiorName'] = this.superiorName;
+    data['superiorMobileNo'] = this.superiorMobileNo;
+    data['superiorWhatsappNo'] = this.superiorWhatsappNo;
+    data['superiorEmail'] = this.superiorEmail;
     return data;
   }
-
-  Data copyWith({
-    String? bankersName,
-    String? bankersMobileNumber,
-    String? bankersWhatsAppNumber,
-    String? bankersEmailID,
-    String? customerCategory,
-    String? ksdplProduct,
-    String? incomeTypes,
-  }) {
-    return Data(
-      id: id,
-      bankId: bankId,
-      bankersName: bankersName ?? this.bankersName,
-      bankersMobileNumber: bankersMobileNumber ?? this.bankersMobileNumber,
-      bankersWhatsAppNumber: bankersWhatsAppNumber ?? this.bankersWhatsAppNumber,
-      bankersEmailID: bankersEmailID ?? this.bankersEmailID,
-      customerCategory: customerCategory ?? this.customerCategory,
-      ksdplProduct: ksdplProduct ?? this.ksdplProduct,
-      incomeTypes: incomeTypes ?? this.incomeTypes,
-      // keep the rest same
-      minCIBIL: minCIBIL,
-      segmentVertical: segmentVertical,
-      product: product,
-      productDescription: productDescription,
-      collateralSecurityCategory: collateralSecurityCategory,
-      collateralSecurityExcluded: collateralSecurityExcluded,
-      profileExcluded: profileExcluded,
-      ageLimitEarningApplicants: ageLimitEarningApplicants,
-      ageLimitNonEarningCoApplicant: ageLimitNonEarningCoApplicant,
-      minimumAgeEarningApplicants: minimumAgeEarningApplicants,
-      minimumAgeNonEarningApplicants: minimumAgeNonEarningApplicants,
-      minimumIncomeCriteria: minimumIncomeCriteria,
-      minimumLoanAmount: minimumLoanAmount,
-      maximumLoanAmount: maximumLoanAmount,
-      minTenor: minTenor,
-      maximumTenor: maximumTenor,
-      minimumROI: minimumROI,
-      maximumROI: maximumROI,
-      maximumTenorEligibilityCriteria: maximumTenorEligibilityCriteria,
-      geoLimit: geoLimit,
-      negativeProfiles: negativeProfiles,
-      negativeAreas: negativeAreas,
-      maximumTAT: maximumTAT,
-      minimumPropertyValue: minimumPropertyValue,
-      maximumIIR: maximumIIR,
-      maximumFOIR: maximumFOIR,
-      maximumLTV: maximumLTV,
-      processingFee: processingFee,
-      legalFee: legalFee,
-      technicalFee: technicalFee,
-      adminFee: adminFee,
-      foreclosureCharges: foreclosureCharges,
-      otherCharges: otherCharges,
-      stampDuty: stampDuty,
-      tsRYears: tsRYears,
-      tsRCharges: tsRCharges,
-      valuationCharges: valuationCharges,
-      noOfDocument: noOfDocument,
-      productValidateFromDate: productValidateFromDate,
-      productValidateToDate: productValidateToDate,
-      ksdplProductId: ksdplProductId,
-      profitPercentage: profitPercentage,
-      bankName: bankName,
-      productSegment: productSegment,
-      autoindividual: autoindividual,
-    );
-  }
-
 }
-

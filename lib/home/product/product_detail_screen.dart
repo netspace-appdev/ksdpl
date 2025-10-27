@@ -189,10 +189,10 @@ class ProductDetailScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           buildCard("Basic Product Info", [
-            DetailRow(label: AppText.productName, value: data.product.toString()),
+            DetailRow(label: AppText.productNameLPP, value: data.product.toString()),
             DetailRow(label: AppText.productSegment, value: data.productCategoryName.toString()),
-            DetailRow(label: AppText.selectCustomerCategory, value: data.customerCategory.toString()),
-            DetailRow(label: AppText.minCibil, value: data.minCIBIL.toString()),
+            DetailRow(label: AppText.customerCategoriesServied, value: data.customerCategory.toString()),
+            DetailRow(label: AppText.minCibilScoreAllowed, value: data.minCIBIL.toString()),
           ],
             Icons.info_outline
 
@@ -213,10 +213,10 @@ class ProductDetailScreen extends StatelessWidget {
           ),
 
           buildCard("Collateral & Profile Restrictions", [
-            DetailRow(label: AppText.selectCollateralSecurityCategory, value: data.collateralSecurityCategory.toString()), //Collateral is Prime now
+            DetailRow(label: AppText.primeSecurityCategoriesServied, value: data.collateralSecurityCategory.toString()), //Collateral is Prime now
             DetailRow(label: AppText.collateralSecurityExcluded, value: data.collateralSecurityExcluded.toString()),
            // DetailRow(label: AppText.profileExcluded, value: data.profileExcluded.toString()),
-            DetailRow(label: AppText.negativeProfiles, value: data.negativeProfiles.toString()),
+            DetailRow(label: AppText.negativeProfilesExcluded, value: data.negativeProfiles.toString()),
             DetailRow(label: AppText.negativeAreas, value: data.negativeAreas.toString()),
             DetailRow(label: AppText.geoLimit, value: data.geoLimit.toString()),
           ],
@@ -226,7 +226,7 @@ class ProductDetailScreen extends StatelessWidget {
           buildCard("Eligibility Criteria", [
             DetailRow(label: AppText.selectIncomeType, value: data.incomeTypes.toString()),
             DetailRow(label:  AppText.ageLimitEarningApplicants, value: data.ageLimitEarningApplicants.toString()),
-            DetailRow(label: AppText.ageLimitNonEarningCoApplicant, value: data.ageLimitNonEarningCoApplicant.toString()),
+            DetailRow(label: AppText.maxAgeLimitNonEarningCoApplicant, value: data.ageLimitNonEarningCoApplicant.toString()),
             DetailRow(label: AppText.minAgeEarningApplicants, value: data.ageLimitNonEarningCoApplicant.toString()),
             DetailRow(label: AppText.minAgeNonEarningApplicants, value: data.minimumAgeNonEarningApplicants.toString()),
             DetailRow(label: AppText.minIncomeCriteria, value: data.minimumIncomeCriteria.toString()),
@@ -234,9 +234,9 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: AppText.maxLoanAmount, value: data.maximumLoanAmount.toString()),
             DetailRow(label: AppText.minRoi, value: data.minimumROI.toString()),
             DetailRow(label:  AppText.maxRoi, value: data.maximumROI.toString()),
-            DetailRow(label: AppText.minTenor, value: data.minTenor.toString()),
-            DetailRow(label:  AppText.maxTenor, value: data.maximumTenor.toString()),
-            DetailRow(label: AppText.ageAtMaturity, value: data.maximumTenorEligibilityCriteria.toString()),
+            DetailRow(label: AppText.minimumLoanTenor, value: data.minTenor.toString()),
+            DetailRow(label:  AppText.maximumLoanTenor, value: data.maximumTenor.toString()),
+            DetailRow(label: AppText.ageAtMaturityNonEarningApplicants, value: data.maximumTenorEligibilityCriteria.toString()),
           ],
               Icons.rule
           ),
@@ -266,7 +266,9 @@ class ProductDetailScreen extends StatelessWidget {
             DetailRow(label: AppText.toAmtRange, value: data.toAmountRange.toString()),
             DetailRow(label: AppText.totalOverdueCasesAllowed, value: data.totalOverdueCases.toString()),
             DetailRow(label: AppText.totalOverdueAmountAllowed, value: data.totalOverdueAmount.toString()),
-            DetailRow(label: AppText.totalEnquiries2, value: data.totalEnquiries.toString()),
+            DetailRow(label: AppText.totalCibilEnquiriesAllowed, value: data.totalEnquiries.toString()),
+            DetailRow(label: AppText.productValidateFrom, value: data.productValidateFromDate==null?AppText.customdash: Helper.attendanceDateFormat(data.productValidateFromDate.toString())),
+            DetailRow(label: AppText.productValidateTo, value: data.productValidateToDate==null?AppText.customdash:Helper.attendanceDateFormat(data.productValidateToDate.toString())),
           ],
               Icons.attach_money
           ),
@@ -274,7 +276,7 @@ class ProductDetailScreen extends StatelessWidget {
           buildCard("Administrative Info", [
             DetailRow(label: AppText.noOfDocuments, value: data.noOfDocument.toString()),
             DetailRow(label: AppText.ksdplProduct, value: data.ksdplProductName.toString()),
-            DetailRow(label: AppText.eligibleProfitPercent, value: data.profitPercentage.toString()),
+            DetailRow(label: AppText.eligibleProfitForAppraisal, value: data.profitPercentage.toString()),
             DetailRow(label: AppText.maxTat, value: data.maximumTAT.toString()),
           ],
               Icons.admin_panel_settings_sharp

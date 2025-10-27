@@ -638,6 +638,9 @@ class DrawerApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      Helper.ApiReq(getDistrictByStateId, request.fields);
+      Helper.ApiReq(getDistrictByStateId, response.body);
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -915,11 +918,11 @@ class DrawerApiService {
       // Optional fields (Set null for "string" values)
       if (callEndTime != "string") request.fields['CallEndTime'] = callEndTime ?? "null";
       if (callStartTime != "string") request.fields['CallStartTime'] = callStartTime ?? "null";
-      if (feedbackRelatedToLead != "string") request.fields['FeedBack_Related_To_Lead'] = feedbackRelatedToLead ?? "null";
+      if (feedbackRelatedToLead != "string") request.fields['FeedBack_Related_To_Lead'] = feedbackRelatedToLead ?? ""; //null
       if (callDuration != "string") request.fields['CallDuration'] = callDuration ?? "null";
       if (callReminder != "string") request.fields['Call_Reminder'] = callReminder ?? "null";
 
-      if (feedbackRelatedToCall != "string") request.fields['FeedBack_Related_To_Call'] = feedbackRelatedToCall ?? "null";
+      if (feedbackRelatedToCall != "string") request.fields['FeedBack_Related_To_Call'] = feedbackRelatedToCall ?? "";//null
 
       // Sending request
       var streamedResponse = await request.send();

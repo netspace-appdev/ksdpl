@@ -93,7 +93,7 @@ class Data {
   int? disburseDetail;
   String? reminderDate;
   String? lastUpdatedDate;
-
+  String? filePath;
   Data({
     this.id,
     this.name,
@@ -153,6 +153,7 @@ class Data {
     this.loanDetail,
     this.disburseDetail,
   this.lastUpdatedDate,
+  this.filePath,
   });
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -217,6 +218,7 @@ class Data {
     disburseDetail = json['disburseDetail'];
     reminderDate = json['reminderDate'];
     lastUpdatedDate = json['lastUpdatedDate'];
+    filePath = json['file_Path'];
   }
 
   Map<String, dynamic> toJson() {
@@ -282,6 +284,7 @@ class Data {
     data['disburseDetail'] = disburseDetail;
     data['reminderDate'] = this.reminderDate;
     data['lastUpdatedDate'] = this.lastUpdatedDate;
+    data['file_Path'] = this.filePath;
     return data;
   }
 }

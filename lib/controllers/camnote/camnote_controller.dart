@@ -23,6 +23,8 @@ import '../../models/camnote/AddAdSrcIncomModel.dart';
 import '../../models/camnote/AddBankerDetail.dart';
 import '../../models/camnote/AddCamNoteDetail.dart';
 import '../../models/camnote/AddCibilDetailsModel.dart';
+import '../../models/camnote/AddCustomerDetailsModel.dart';
+import '../../models/camnote/CheckReceiptStatusForCamNoteModel.dart';
 import '../../models/camnote/GenerateCibilAadharModel.dart';
 import '../../models/camnote/GetAddIncUniqueLeadModel.dart';
 import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
@@ -37,6 +39,7 @@ import '../../models/camnote/GetProductDetailsByFilterModel.dart' as pdFModel;
 import '../../models/camnote/RequestForFinancialServicesModel.dart';
 import '../../models/camnote/SendMailForLocationOfCustomerModel.dart';
 import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
+import '../../models/camnote/SendQRCodeOnWACustModel.dart';
 import '../../models/camnote/UpdateBankerDetailModel.dart';
 import '../../models/camnote/fetchBankDetailSegKSDPLProdModel.dart' as otherBank;
 import '../../models/camnote/special_model/IncomeModel.dart';
@@ -65,6 +68,7 @@ import 'package:flutter/material.dart';
 
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
+import '../new_dd_controller.dart';
 import 'calculateCibilData.dart';
 import '../../models/product/GetProductListById.dart'as gpli;
 
@@ -79,6 +83,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var firstName="".obs;
   var email="".obs;
   var isLoading = false.obs;
+  var isQRApiLoading = false.obs;
+  var isCheckReceiptLoading = false.obs;
   var isaddedMobileNumber = false.obs;
   var isLoadingCibil = false.obs;
 
@@ -95,9 +101,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var getBankerDetailModelForCheck = Rxn<GetBankerDetailModelForCheck>(); //
   var getAddIncUniqueLeadModel = Rxn<GetAddIncUniqueLeadModel>(); //
   var addCamNoteDetail = Rxn<AddCamNoteDetail>(); //
+  var addCustomerDetailsModel = Rxn<AddCustomerDetailsModel>(); //
   var generateCibilAadharModel = Rxn<GenerateCibilAadharModel>(); //
   var addCibilDetailsModel = Rxn<AddCibilDetailsModel>(); //
   var editCamNoteDetail = Rxn<AddCamNoteDetail>(); //
+  var sendQRCodeOnWACustModel = Rxn<SendQRCodeOnWACustModel>(); //
+  var checkReceiptStatusForCamNoteModel = Rxn<CheckReceiptStatusForCamNoteModel>(); //
+
   var fetchBankDetailSegKSDPLProdModel = Rxn<otherBank.FetchBankDetailSegKSDPLProdModel>(); //
   var getProductDetailBySegmentAndProductModel = Rxn<otherBankBranch.GetProductDetailBySegmentAndProductModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
@@ -275,8 +285,37 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final TextEditingController camMonthlyIncomeController = TextEditingController();
   final TextEditingController camAddSourceIncomeController = TextEditingController();
   final TextEditingController camBranchLocController = TextEditingController();
+  final TextEditingController camWhatsappController = TextEditingController();
 
   final TextEditingController camCibilMobController = TextEditingController();
+
+  // 26 Sep
+  final TextEditingController camClosedCasesController = TextEditingController();
+  final TextEditingController camWrittenOffCasesController = TextEditingController();
+  final TextEditingController camSettlementCasesController = TextEditingController();
+  final TextEditingController camSuitFiledWillfulDefaultCasesController = TextEditingController();
+  final TextEditingController camTotalSanctionedAmountController = TextEditingController();
+  final TextEditingController camCurrentBalanceController = TextEditingController();
+  final TextEditingController camClosedAmountController = TextEditingController();
+  final TextEditingController camWrittenOffAmountController = TextEditingController();
+  final TextEditingController camSettlementAmountController = TextEditingController();
+  final TextEditingController camSuitFiledWillfulDefaultAmountController = TextEditingController();
+  final TextEditingController camStandardCountController = TextEditingController();
+  final TextEditingController camNumberOfDaysPastDueCountController = TextEditingController();
+  final TextEditingController camLossCountController = TextEditingController();
+  final TextEditingController camSubstandardCountController = TextEditingController();
+  final TextEditingController camDoubtfulCountController = TextEditingController();
+  final TextEditingController camSpecialMentionAccountCountController = TextEditingController();
+  final TextEditingController camNptController = TextEditingController();
+  final TextEditingController camTotalCountsController = TextEditingController();
+  final TextEditingController camCurrentlyCasesBeingServedController = TextEditingController();
+  final TextEditingController camCasesToBeForeclosedOnOrBeforeDisbController = TextEditingController();
+  final TextEditingController camCasesToBeContenuedController = TextEditingController();
+  final TextEditingController camEmisOfExistingLiabilitiesController = TextEditingController();
+  final TextEditingController camIirController = TextEditingController();
+
+  final TextEditingController qrCustomerNameController = TextEditingController();
+  final TextEditingController qrWhatsappController = TextEditingController();
   var camSelectedState = Rxn<String>();
   var camSelectedDistrict = Rxn<String>();
   var camSelectedCity = Rxn<String>();
@@ -285,7 +324,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var camSelectedProdSegment = Rxn<int>();
   var camSelectedProdType = Rxn<String>();
   var camSelectedIndexRelBank = (-1).obs;
-
+  var isSameAsPhone = false.obs; // observable boolean
   ///end
   var uniqueLeadNUmber="";
   var loanApplicationNumber="";
@@ -305,6 +344,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var isUserAIC = false.obs;
   // final Map<String, RxList<File>> imageMap = {};
   final Map<String, RxList<CamImage>> _imageMap = {};
+
+  RxInt maxAllowedBank = 0.obs;
+
   @override
   Map<String, RxList<CamImage>> get imageMap => _imageMap;
   void loadApiImagesForKey(String key, String imageUrlsFromApi) {
@@ -366,7 +408,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var photosPropEnabled =true.obs;
   var photosResEnabled =true.obs;
   var photosOffEnabled =true.obs;
-
+  var is2and3StepActive = true.obs;
   void markBankerAsSubmitted(String boxId) {
     infoFilledBankers.add(boxId);
   }
@@ -459,18 +501,29 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var sendMailForLocationOfCustomerModel = Rxn<SendMailForLocationOfCustomerModel>(); //
 
   void nextStep(int tappedIndex) {
-    if (currentStep.value < 2) {
-      currentStep.value++;
-      scrollToStep(currentStep.value);
+    print("tappedIndex===>${tappedIndex} and ${is2and3StepActive.value}");
+    if((tappedIndex+1==1 ||tappedIndex+1==2) && is2and3StepActive.value==false ){
+
+      ToastMessage.msg(AppText.accessRestrictedStep2and3Msg);
+
+    }else{
+      if (currentStep.value < 2) {
+        currentStep.value++;
+        scrollToStep(currentStep.value);
+      }
+
+      if(currentStep.value==1 || currentStep.value==2){
+        setAgeFromDob(camDobController, camEarningCustomerAgeController);
+      }
+
+      if(currentStep.value==1){
+        if(getCamNoteLeadIdModel.value!.data!.isNotEmpty){
+          getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
+        }
+
+      }
     }
 
-    if(currentStep.value==1 || currentStep.value==2){
-      setAgeFromDob(camDobController, camEarningCustomerAgeController);
-    }
-
-    if(currentStep.value==1){
-      getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
-    }
 
   }
 
@@ -482,17 +535,21 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   void jumpToStep(int step) {
+   if((step==1 ||step==2) && is2and3StepActive.value==false ){
+     ToastMessage.msg(AppText.accessRestrictedStep2and3Msg);
+   }else{
+     if(step==1 || step==2){
+       setAgeFromDob(camDobController, camEarningCustomerAgeController);
+     }
+     if(step==1){
+       print("1");
+       getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
+     }
+     currentStep.value = step;
 
-    if(step==1 || step==2){
-      setAgeFromDob(camDobController, camEarningCustomerAgeController);
-    }
-    if(step==1){
-      print("1");
-      getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
-    }
-    currentStep.value = step;
+     scrollToStep(step);
+   }
 
-    scrollToStep(step);
   }
 
   void scrollToStep(int index) {
@@ -623,7 +680,32 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               LTV: camLtvController.text.trim().toString(),
               BranchOfBank: branchId.toString(),
               SanctionProcessingCharges:"0",
-              Autoindividual: autoIndividual 
+              Autoindividual: autoIndividual,
+
+              ///Newly Added on 26 Sep
+              ClosedCases: camClosedCasesController.text.trim().toString(),
+              WrittenOffCases: camWrittenOffCasesController.text.trim().toString(),
+              SettlementCases: camSettlementCasesController.text.trim().toString(),
+              Suit_Filed_Willful_Default_Cases: camSuitFiledWillfulDefaultCasesController.text.trim().toString(),
+              TotalSanctionedAmount: camTotalSanctionedAmountController.text.trim().toString(),
+              CurrentBalance: camCurrentBalanceController.text.trim().toString(),
+              ClosedAmount: camClosedAmountController.text.trim().toString(),
+              WrittenOffAmount: camWrittenOffAmountController.text.trim().toString(),
+              SettlementAmount: camSettlementAmountController.text.trim().toString(),
+              Suit_Filed_Willful_Default_Amount: camSuitFiledWillfulDefaultAmountController.text.trim().toString(),
+              Standard_Count: camStandardCountController.text.trim().toString(),
+              Number_of_days_past_due_Count: camNumberOfDaysPastDueCountController.text.trim().toString(),
+              Loss_Count: camLossCountController.text.trim().toString(),
+              Substandard_Count: camSubstandardCountController.text.trim().toString(),
+              Doubtful_Count: camDoubtfulCountController.text.trim().toString(),
+              Special_Mention_account_Count: camSpecialMentionAccountCountController.text.trim().toString(),
+              NPT: camNptController.text.trim().toString(),
+              TotalCounts: camTotalCountsController.text.trim().toString(),
+              CurrentlyCasesBeingServed: camCurrentlyCasesBeingServedController.text.trim().toString(),
+              CasesToBeForeclosedOnOrBeforeDisb: camCasesToBeForeclosedOnOrBeforeDisbController.text.trim().toString(),
+              CasesToBeContenued: camCasesToBeContenuedController.text.trim().toString(),
+              EMIsOfExistingLiabilities: camEmisOfExistingLiabilitiesController.text.trim().toString(),
+              IIR: camIirController.text.trim().toString(),
             );
 
           }
@@ -742,8 +824,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camDobController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter DOB");
       return;
-    }else if(camPhoneController.text.isEmpty){
+    }else if(camPhoneController.text.isEmpty){//
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
+      return;
+    }else if(camWhatsappController.text.isEmpty){//camWhatsappController
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Whatsapp Number");
       return;
     }else if(selectedGender.value==null || selectedGender.value==""){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
@@ -864,7 +949,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           PhotosOfProperty: propertyPhotos,
           PhotosOfResidence: residencePhotos,
           PhotosOfOffice: officePhotos,
-          fromWhere: "camnote"
+          fromWhere: "camnote",
+          WhatsappNumber:camWhatsappController.text.toString(),
         ).then((_){
           nextStep(currentStep.value);
         });
@@ -886,7 +972,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   void forBankDetailSubmit(){
     getProductDetailsByFilterApi(
-        cibil: camCibilController.text.trim().toString(),
+        cibil: double.tryParse(camCibilController .text.trim())
+            ?.toInt()
+            .toString()
+            ?? "0",//camCibilController.text.trim().toString(),
         segmentVertical: camSelectedProdSegment.value.toString(),
         customerCategory: "",
         collateralSecurityCategory: "",
@@ -896,14 +985,23 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         ageNonEarningCoApplicant:camEarningCustomerAgeController.text,
         applicantMonthlySalary:camTotalFamilyIncomeController.text,
         loanAmount:camLoanAmtReqController.text.trim().toString(),
-        tenor: camLoanTenorRequestedController.text.trim().toString(),
+        tenor: double.tryParse(camLoanTenorRequestedController .text.trim())
+            ?.toInt()
+            .toString()
+            ?? "0",//camLoanTenorRequestedController.text.trim().toString(),
         roi:camRateOfInterestController.text.trim().toString(),
         maximumTenorEligibilityCriteria:"",
         customerAddress:camStreetAddController.text.trim().toString(),
 
-        totalOverdueCases:camTotalOverdueCasesController.text.trim().toString(),
+        totalOverdueCases:double.tryParse(camTotalOverdueCasesController.text.trim())
+            ?.toInt()
+            .toString()
+            ?? "0",//camTotalOverdueCasesController.text.trim().toString(),
         totalOverdueAmount:camTotalOverdueAmountController.text.trim().toString(),
-        totalEnquiries:camTotalEnquiriesController.text.trim().toString(),
+        totalEnquiries:double.tryParse(camTotalEnquiriesController.text.trim())
+            ?.toInt()
+            .toString()
+            ?? "0",//camTotalEnquiriesController.text.trim().toString(),
         kSDPLProductId:camSelectedProdType.value.toString(),
 
     );
@@ -1770,6 +1868,32 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? SanctionProcessingCharges,
     String? Autoindividual,
 
+    ///Newly Added on 26 Sep
+    String? ClosedCases,
+    String? WrittenOffCases,
+    String? SettlementCases,
+    String? Suit_Filed_Willful_Default_Cases,
+    String? TotalSanctionedAmount,
+    String? CurrentBalance,
+    String? ClosedAmount,
+    String? WrittenOffAmount,
+    String? SettlementAmount,
+    String? Suit_Filed_Willful_Default_Amount,
+    String? Standard_Count,
+    String? Number_of_days_past_due_Count,
+    String? Loss_Count,
+    String? Substandard_Count,
+    String? Doubtful_Count,
+    String? Special_Mention_account_Count,
+    String? NPT,
+    String? TotalCounts,
+    String? CurrentlyCasesBeingServed,
+    String? CasesToBeForeclosedOnOrBeforeDisb,
+    String? CasesToBeContenued,
+    String? EMIsOfExistingLiabilities,
+    String? IIR,
+
+
   }) async {
     try {
       print("addCamNoteDetailApi-->1");
@@ -1810,6 +1934,32 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         BranchOfBank: BranchOfBank,
         SanctionProcessingCharges: SanctionProcessingCharges,
         Autoindividual: Autoindividual,
+
+        ///Newly Added on 26 Sep
+        ClosedCases: ClosedCases,
+        WrittenOffCases: WrittenOffCases,
+        SettlementCases: SettlementCases,
+        Suit_Filed_Willful_Default_Cases: Suit_Filed_Willful_Default_Cases,
+        TotalSanctionedAmount: TotalSanctionedAmount,
+        CurrentBalance: CurrentBalance,
+        ClosedAmount: ClosedAmount,
+        WrittenOffAmount: WrittenOffAmount,
+        SettlementAmount: SettlementAmount,
+        Suit_Filed_Willful_Default_Amount: Suit_Filed_Willful_Default_Amount,
+        Standard_Count: Standard_Count,
+        Number_of_days_past_due_Count: Number_of_days_past_due_Count,
+        Loss_Count: Loss_Count,
+        Substandard_Count: Substandard_Count,
+        Doubtful_Count: Doubtful_Count,
+        Special_Mention_account_Count: Special_Mention_account_Count,
+        NPT: NPT,
+        TotalCounts: TotalCounts,
+        CurrentlyCasesBeingServed: CurrentlyCasesBeingServed,
+        CasesToBeForeclosedOnOrBeforeDisb: CasesToBeForeclosedOnOrBeforeDisb,
+        CasesToBeContenued: CasesToBeContenued,
+        EMIsOfExistingLiabilities: EMIsOfExistingLiabilities,
+        IIR: IIR,
+
       );
 
 
@@ -1866,7 +2016,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
 
+
+        infoFilledBankers.remove(BankId);
+        bankerBranchMap.clear();
         addCamNoteDetail.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
@@ -2032,7 +2186,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         print("TotalLoanAvailedOnCibil: ₹${cibilValues.totalLoanAvailedOnCibil}");
         print("TotalLiveLoan: ${cibilValues.totalLiveLoan}");
         print("TotalEMI: ₹${cibilValues.totalEMI.toStringAsFixed(2)}");
-        print("EMIWillContinue: ${cibilValues.emiWillContinue}");
+       // print("EMIWillContinue: ${cibilValues.emiWillContinue}");
         print("TotalOverdueCasesAsPerCibil: ${cibilValues.totalOverdueCasesAsPerCibil}");
         print("TotalOverdueAmountAsPerCibil: ₹${cibilValues.totalOverdueAmountAsPerCibil}");
         print("TotalEnquiriesMadeAsPerCibil: ${cibilValues.totalEnquiriesMadeAsPerCibil}");
@@ -2054,12 +2208,39 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camTotalLoanAvailedController.text=cibilValues.totalLoanAvailedOnCibil.toString();
         camTotalLiveLoanController.text=cibilValues.totalLiveLoan.toString();
         camTotalEmiController.text=cibilValues.totalEMI.toStringAsFixed(2);
-        camEmiWillContinueController.text=cibilValues.emiWillContinue.toString();
+        camEmiWillContinueController.text="";//cibilValues.emiWillContinue.toString();
         camTotalOverdueCasesController.text=cibilValues.totalOverdueCasesAsPerCibil.toString();
         camTotalOverdueAmountController.text=cibilValues.totalOverdueAmountAsPerCibil.toString();
         camTotalEnquiriesController.text=cibilValues.totalEnquiriesMadeAsPerCibil.toString();
-        enableAllCibilFields.value=false;
 
+
+
+        ///6 oct 2025
+        camClosedCasesController.text=cibilValues.closedCases.toString();
+        camWrittenOffCasesController.text=cibilValues.writtenOffCases.toString();
+        camSettlementCasesController.text=cibilValues.settlementCases.toString();
+        camSuitFiledWillfulDefaultCasesController.text=cibilValues.suitFiledWillfulDefaultCases.toString();
+        camTotalSanctionedAmountController.text=cibilValues.totalSanctionedAmount.toString();
+        camCurrentBalanceController.text=cibilValues.currentBalance.toString();
+        camClosedAmountController.text=cibilValues.closedAmount.toString();
+        camWrittenOffAmountController.text=cibilValues.writtenOffAmount.toString();
+        camSettlementAmountController.text=cibilValues.settlementAmount.toString();
+        camSuitFiledWillfulDefaultAmountController.text=cibilValues.suitFiledWillfulDefaultAmount.toString();
+        camStandardCountController.text=cibilValues.standardCount.toString();
+        camNumberOfDaysPastDueCountController.text=cibilValues.numberOfDaysPastDueCount.toString();
+        camLossCountController.text=cibilValues.lossCount.toString();
+        camSubstandardCountController.text=cibilValues.substandardCount.toString();
+        camDoubtfulCountController.text=cibilValues.doubtfulCount.toString();
+        camSpecialMentionAccountCountController.text=cibilValues.specialMentionAccountCount.toString();
+        camNptController.text=cibilValues.npt.toString();
+        camTotalCountsController.text=cibilValues.totalCounts.toString();
+        camCurrentlyCasesBeingServedController.text=cibilValues.currentlyCasesBeingServed.toString();
+        camCasesToBeForeclosedOnOrBeforeDisbController.text=cibilValues.casesToBeForeclosedOnOrBeforeDisb.toString();
+        camCasesToBeContenuedController.text=cibilValues.casesToBeContinued.toString();
+        camEmisOfExistingLiabilitiesController.text=cibilValues.emisOfExistingLiabilities.toString();
+        camIirController.text=cibilValues.iir.toString();
+
+        enableAllCibilFields.value=false;
         isLoadingCibil(false);
 
         Get.back();
@@ -2110,7 +2291,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         print("TotalLoanAvailedOnCibil: ₹${cibilValues.totalLoanAvailedOnCibil}");
         print("TotalLiveLoan: ${cibilValues.totalLiveLoan}");
         print("TotalEMI: ₹${cibilValues.totalEMI.toStringAsFixed(2)}");
-        print("EMIWillContinue: ${cibilValues.emiWillContinue}");
+        //print("EMIWillContinue: ${cibilValues.emiWillContinue}");
         print("TotalOverdueCasesAsPerCibil: ${cibilValues.totalOverdueCasesAsPerCibil}");
         print("TotalOverdueAmountAsPerCibil: ₹${cibilValues.totalOverdueAmountAsPerCibil}");
         print("TotalEnquiriesMadeAsPerCibil: ${cibilValues.totalEnquiriesMadeAsPerCibil}");
@@ -2130,10 +2311,36 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camTotalLoanAvailedController.text=cibilValues.totalLoanAvailedOnCibil.toString();
         camTotalLiveLoanController.text=cibilValues.totalLiveLoan.toString();
         camTotalEmiController.text=cibilValues.totalEMI.toStringAsFixed(2);
-        camEmiWillContinueController.text=cibilValues.emiWillContinue.toString();
+        camEmiWillContinueController.text="";//cibilValues.emiWillContinue.toString();
         camTotalOverdueCasesController.text=cibilValues.totalOverdueCasesAsPerCibil.toString();
         camTotalOverdueAmountController.text=cibilValues.totalOverdueAmountAsPerCibil.toString();
         camTotalEnquiriesController.text=cibilValues.totalEnquiriesMadeAsPerCibil.toString();
+
+        ///6 oct 2025
+        camClosedCasesController.text=cibilValues.closedCases.toString();
+        camWrittenOffCasesController.text=cibilValues.writtenOffCases.toString();
+        camSettlementCasesController.text=cibilValues.settlementCases.toString();
+        camSuitFiledWillfulDefaultCasesController.text=cibilValues.suitFiledWillfulDefaultCases.toString();
+        camTotalSanctionedAmountController.text=cibilValues.totalSanctionedAmount.toString();
+        camCurrentBalanceController.text=cibilValues.currentBalance.toString();
+        camClosedAmountController.text=cibilValues.closedAmount.toString();
+        camWrittenOffAmountController.text=cibilValues.writtenOffAmount.toString();
+        camSettlementAmountController.text=cibilValues.settlementAmount.toString();
+        camSuitFiledWillfulDefaultAmountController.text=cibilValues.suitFiledWillfulDefaultAmount.toString();
+        camStandardCountController.text=cibilValues.standardCount.toString();
+        camNumberOfDaysPastDueCountController.text=cibilValues.numberOfDaysPastDueCount.toString();
+        camLossCountController.text=cibilValues.lossCount.toString();
+        camSubstandardCountController.text=cibilValues.substandardCount.toString();
+        camDoubtfulCountController.text=cibilValues.doubtfulCount.toString();
+        camSpecialMentionAccountCountController.text=cibilValues.specialMentionAccountCount.toString();
+        camNptController.text=cibilValues.npt.toString();
+        camTotalCountsController.text=cibilValues.totalCounts.toString();
+        camCurrentlyCasesBeingServedController.text=cibilValues.currentlyCasesBeingServed.toString();
+        camCasesToBeForeclosedOnOrBeforeDisbController.text=cibilValues.casesToBeForeclosedOnOrBeforeDisb.toString();
+        camCasesToBeContenuedController.text=cibilValues.casesToBeContinued.toString();
+        camEmisOfExistingLiabilitiesController.text=cibilValues.emisOfExistingLiabilities.toString();
+        camIirController.text=cibilValues.iir.toString();
+
         enableAllCibilFields.value=false;
 
         isLoadingCibil(false);
@@ -2246,7 +2453,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         camNoteLeadBankIds.value = ids;
 
-
+        //camCibilController.text= getCamNoteLeadIdModel.value?.data?[0].emiStoppedOnBeforeThisLoan??"0"
         isLoadingMainScreen(false);
 
 
@@ -2491,6 +2698,15 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
+
+  int? getMaxBankSelection(String packageName, String? amount) {
+    if (packageName.contains("CIBIL") && amount == "236") {
+      return 1;
+    } else if (packageName.contains("Secured Combo") && amount == "1180") {
+      return 3;
+    }
+    return null; // no limit
+  }
 
 
   Future<void>  fetchBankDetailBySegmentIdAndKSDPLProductIdApi({
@@ -2769,6 +2985,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
           PhotosOfProperty: propertyPhotos,
           PhotosOfResidence: residencePhotos,
           PhotosOfOffice: officePhotos,
+          WhatsappNumber: camWhatsappController.text.toString(),
         );
 
         isLoading(false);
@@ -2902,6 +3119,21 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         getCamNoteDetailsModel.value= GetCamNoteDetailsByLeadIdForUpdateModel.fromJson(data);
 
+        ///newly added on 22 sep
+        // camCibilController.text=(getCamNoteDetailsModel.value?.data?.cibil??"0").toString();
+        camCibilController.text=(getCamNoteDetailsModel.value?.data?.cibil == null ||
+            getCamNoteDetailsModel.value?.data?.cibil?.toString().toLowerCase() == "na")
+            ? "0"
+            : getCamNoteDetailsModel.value?.data?.cibil.toString()??"0";
+        camTotalLoanAvailedController.text=(getCamNoteDetailsModel.value?.data?.totalLoanAvailedOnCibil??"").toString();
+        camTotalLiveLoanController.text=(getCamNoteDetailsModel.value?.data?.totalLiveLoan??"").toString();
+        camTotalEmiController.text=(getCamNoteDetailsModel.value?.data?.totalEMI??"").toString();
+        camEmiWillContinueController.text=(getCamNoteDetailsModel.value?.data?.emiWillContinue??"").toString();
+        camTotalOverdueCasesController.text=(getCamNoteDetailsModel.value?.data?.totalOverdueCasesAsPerCibil??"").toString();
+        camTotalOverdueAmountController.text=(getCamNoteDetailsModel.value?.data?.totalOverdueAmountAsPerCibil??"").toString();
+        camTotalEnquiriesController.text=(getCamNoteDetailsModel.value?.data?.totalEnquiriesMadeAsPerCibil??"").toString();
+        enableAllCibilFields.value=false;
+        // end
 
         camIncomeCanBeConsideredController.text=(getCamNoteDetailsModel.value?.data?.incomeCanBeConsidered??"").toString();
         camLoanTenorRequestedController.text=(getCamNoteDetailsModel.value?.data?.loanTenorRequested??"").toString();
@@ -2911,14 +3143,32 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camPropertyValueController.text=(getCamNoteDetailsModel.value?.data?.propertyValueAsPerCustomer??"").toString();
         camFoirController.text=(getCamNoteDetailsModel.value?.data?.foir??"").toString();
         camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
+
+        NewDDController newDDController=Get.find();
+        newDDController.getAllPrimeSecurityMasterApi();
         camOfferedSecurityTypeController.text=getCamNoteDetailsModel.value?.data?.offeredSecurityType??"";
+
+
+        ///30 Sep
+        camNonEarningCustomerAgeController.text=(getCamNoteDetailsModel.value?.data?.nonEarningCustomerAge??"").toString();
+        camTotalFamilyIncomeController.text=(getCamNoteDetailsModel.value?.data?.totalFamilyIncome??"").toString();
+        camIncomeCanBeConsideredController.text=(getCamNoteDetailsModel.value?.data?.incomeCanBeConsidered??"").toString();
+        camLoanTenorRequestedController.text=(getCamNoteDetailsModel.value?.data?.loanTenorRequested??"").toString();
+        camRateOfInterestController.text=(getCamNoteDetailsModel.value?.data?.roi??"").toString();
+        camProposedEmiController.text=(getCamNoteDetailsModel.value?.data?.proposedEMI??"").toString();
+        camPropertyValueController.text=(getCamNoteDetailsModel.value?.data?.propertyValueAsPerCustomer??"").toString();
+        camFoirController.text=(getCamNoteDetailsModel.value?.data?.foir??"").toString();
+        camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
+        camEmiStoppedBeforeController.text=(getCamNoteDetailsModel.value?.data?.emiStoppedOnBeforeThisLoan??"").toString();
+        selectedCamIncomeTypeList.value=(getCamNoteDetailsModel.value?.data?.incomeType??"").toString();
+
 
 
 
         isLoading(false);
 
       }else{
-        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+        //ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 
 
@@ -2957,6 +3207,192 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camProposedEmiController.text = emi > 0 ? emi.toStringAsFixed(2) : "";
     camFoirController.text = foir > 0 ? foir.toStringAsFixed(2) : "";
     camLtvController.text = ltv > 0 ? ltv.toStringAsFixed(2) : "";
+  }
+
+  void calculateEmilWillContinue() {
+    // Get values safely (default to 0 if empty or invalid)
+    final totalEmi = num.tryParse(camTotalEmiController.text) ?? 0;
+    final stoppedBefore = num.tryParse(camEmiStoppedBeforeController.text) ?? 0;
+
+
+    print("camTotalEmiController.text--->${camTotalEmiController.text}");
+    print("totalEmi--->${totalEmi}");
+    print("stoppedBefore--->${stoppedBefore}");
+
+    // Perform calculation
+    final willContinue = (totalEmi - stoppedBefore).clamp(0, totalEmi);
+    print("willContinue--->${willContinue}");
+
+    // Update controller
+    camEmiWillContinueController.text = willContinue.toString();
+  }
+
+  Future<void> addCustomerDetailsApi({
+    String? Id,
+    String? CustomerName,
+    String? MobileNumber,
+    String? Email,
+    String? Gender,
+    String? AdharCard,
+    String? PanCard,
+    String? StreetAddress,
+    String? State,
+    String? District,
+    String? City,
+    String? Nationality,
+  }) async {
+    try {
+      print("addCamNoteDetailApi-->1");
+      isLoading(true);
+
+      var data = await CamNoteService.addCustomerDetailsApi(
+        Id: Id,
+        CustomerName: CustomerName,
+        MobileNumber: MobileNumber,
+        Email: Email,
+        Gender: Gender,
+        AdharCard: AdharCard,
+        PanCard: PanCard,
+        StreetAddress: StreetAddress,
+        State: State,
+        District: District,
+        City: City,
+        Nationality: Nationality,
+      );
+
+
+      if(data['success'] == true){
+
+        addCustomerDetailsModel.value= AddCustomerDetailsModel.fromJson(data);
+
+
+
+
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        addCamNoteDetail.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error addCamNoteDetail: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+      isAllCamnoteSubmit(false);
+    } finally {
+
+
+      isLoading(false);
+      isAllCamnoteSubmit(false);
+    }
+  }
+
+
+  Future<void> sendPaymentQRCodeOnWhatsAppToCustomerApi({
+    String? PackageId,
+    String? CustomerName,
+    String? CustomerWhatsAppNo,
+  }) async {
+    try {
+      print("addCamNoteDetailApi-->1");
+      isQRApiLoading(true);
+
+      var data = await CamNoteService.sendPaymentQRCodeOnWhatsAppToCustomerApi(
+        PackageId: PackageId,
+        CustomerName: CustomerName,
+        CustomerWhatsAppNo: CustomerWhatsAppNo,
+      );
+
+
+      if(data['success'] == true){
+
+        sendQRCodeOnWACustModel.value= SendQRCodeOnWACustModel.fromJson(data);
+
+
+        ToastMessage.msg(sendQRCodeOnWACustModel.value?.message??AppText.somethingWentWrong);
+        isQRApiLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        sendQRCodeOnWACustModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error sendQRCodeOnWACustModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isQRApiLoading(false);
+
+    } finally {
+
+
+      isQRApiLoading(false);
+
+    }
+  }
+
+
+  Future<void> checkReceiptStatusForCamNoteApi({
+    required String Mobile,
+    required String  Utr,
+  }) async {
+    try {
+
+      isCheckReceiptLoading(true);
+
+      var data = await CamNoteService.checkReceiptStatusForCamNoteApi(
+        Mobile: Mobile,
+        Utr: Utr,
+
+      );
+
+
+      if(data['success'] == true){
+
+        checkReceiptStatusForCamNoteModel.value= CheckReceiptStatusForCamNoteModel.fromJson(data);
+        if(checkReceiptStatusForCamNoteModel.value?.data==1){
+          is2and3StepActive.value==true;
+        }else{
+          is2and3StepActive.value==false;
+        }
+        print("is2and3StepActive.value in API---${is2and3StepActive.value}");
+
+        isCheckReceiptLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        sendQRCodeOnWACustModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error checkReceiptStatusForCamNoteApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isCheckReceiptLoading(false);
+
+    } finally {
+
+
+      isCheckReceiptLoading(false);
+
+    }
   }
 
 }
@@ -3059,4 +3495,7 @@ extension ProductDataMapper on gpli.Data {
       autoindividual: autoindividual, // You can map this if needed later
     );
   }
+
+
+
 }

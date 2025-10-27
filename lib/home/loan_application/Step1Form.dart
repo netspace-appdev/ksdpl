@@ -21,7 +21,7 @@ import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
-
+import 'package:ksdpl/models/loan_application/GetProductListByBankIdModel.dart' as prodList;
 class Step1Form extends StatelessWidget {
 
 //  final loanApplicationController = Get.find<LoanApplicationController>();
@@ -61,30 +61,16 @@ class Step1Form extends StatelessWidget {
                       height: 20,
                     ),
 
-                    CustomLabeledTextField(
-                      label: AppText.dsaCode,
-                      controller: loanApplicationController.dsaCodeController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterDsaCode,
-                      validator:  ValidationHelper.validateName,
-                    ),
 
                     CustomLabeledTextField(
                       label: AppText.loanApplicationNo,
                       controller: loanApplicationController.loanApplicationNoController,
                       inputType: TextInputType.name,
-                      isInputEnabled: false,
+                      isInputEnabled: true,
                       hintText: AppText.enterLoanApplicationNo,
                       validator:  ValidationHelper.validateName,
                     ),
-                    /*CustomLabeledTextField(
-                      label: AppText.loanApplicationNo,
 
-                      controller: loanApplicationController.lanController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterLoanApplicationNo,
-                      validator:  ValidationHelper.validateName,
-                    ),*/
 
 
                     CustomTextLabel(
@@ -117,7 +103,7 @@ class Step1Form extends StatelessWidget {
                             print('bankID${loanApplicationController.selectedBank.value.toString()}');
 
                             leadDDController.getAllBranchByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
-                           // leadDDController.getProductListByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
+                            leadDDController.getProductListByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
                           }
                        },
                         onClear: (){
@@ -177,8 +163,8 @@ class Step1Form extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 10),
-                    ///exp
-                    Obx((){
+                    ///Working
+                    /*Obx((){
                       final productList = leadDDController.getAllKsdplProductModel.value?.data ?? [];
                       for (var item in productList) {
                       }
@@ -199,10 +185,39 @@ class Step1Form extends StatelessWidget {
                           loanApplicationController.selectedProdTypeOrTypeLoan.value =  value?.id;
                         },
                       );
+                    }),*/
+
+
+                    Obx((){
+
+                      if (leadDDController.isProductLoading.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+
+                      return CustomDropdown<prodList.Data>(
+                        items: leadDDController.prodListByBank ?? [],
+                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.product.toString(),
+                        selectedValue: leadDDController.prodListByBank.firstWhereOrNull(
+                              (item) => item.id == loanApplicationController.selectedProdTypeOrTypeLoan.value,
+                        ),
+                        onChanged: (value) {
+                          loanApplicationController.selectedProdTypeOrTypeLoan.value =  value?.id;
+                          loanApplicationController.getDsaMappingByBankAndProductApi(
+                              BankId: loanApplicationController.selectedBank.value.toString(),
+                              ProductId:loanApplicationController.selectedProdTypeOrTypeLoan.value.toString());
+                        },
+                      );
                     }),
 
                     const SizedBox(height: 20),
-
+                    CustomLabeledTextField(
+                      label: AppText.dsaCode,
+                      controller: loanApplicationController.dsaCodeController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterDsaCode,
+                      validator:  ValidationHelper.validateName,
+                    ),
                     CustomLabeledTextField(
                       label: AppText.panCardNo,
 
@@ -272,7 +287,7 @@ class Step1Form extends StatelessWidget {
                       return CustomDropdown<channel.Data>(
                         items: leadDDController.getAllChannelModel.value?.data ?? [],
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                        getName: (item) => item.channelName.toString(),
+                        getName: (item) => item.channelName.toString()+" (${item.channelCode.toString()})",
                         selectedValue: leadDDController.getAllChannelModel.value?.data?.firstWhereOrNull(
                               (item) => item.id == loanApplicationController.selectedChannel.value,
                         ),
@@ -373,7 +388,14 @@ class Step1Form extends StatelessWidget {
 
                       },
                     ),
+                    CustomLabeledTextField(
+                      label: AppText.loanRoi,
+                      isRequired: false,
+                      controller: loanApplicationController.loanRoiController,
+                      inputType: TextInputType.number,
+                      hintText: AppText.enterLoanRoi,
 
+                    ),
                     CustomLabeledTextField(
                       label: AppText.monthlyInstallment,
                       isRequired: false,
@@ -547,14 +569,45 @@ class Step1Form extends StatelessWidget {
 
                     ),
 
-                    CustomLabeledTextField(
+                    /*CustomLabeledTextField(
                       label: AppText.employmentStatus,
                       isRequired: false,
                       controller: loanApplicationController.emplStatusController,
                       inputType: TextInputType.name,
                       hintText: AppText.enterEmploymentStatus,
                       validator: ValidationHelper.validatePhoneNumber,
+                    ),*/
+
+                    const Text(
+                      AppText.employmentStatus,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.grey2,
+                      ),
                     ),
+
+                    const SizedBox(height: 10),
+
+
+                    Obx((){
+                      if (leadDDController.isLoading.value) {
+                        return  Center(child:CustomSkelton.productShimmerList(context));
+                      }
+
+
+                      return CustomDropdown<String>(
+                        items: leadDDController.currEmpStList,
+                        getId: (item) => item,  // Adjust based on your model structure
+                        getName: (item) => item,
+
+                        selectedValue: loanApplicationController.emplStatusController.text,
+                        onChanged: (value) {
+                          loanApplicationController.emplStatusController.text =  value.toString();
+                        },
+                      );
+                    }),
+                    SizedBox(height: 20,)
                   ],
                 ),
 
@@ -728,12 +781,12 @@ class Step1Form extends StatelessWidget {
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
                         getName: (item) => item.stateName.toString(),
                         selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                              (item) => item.id.toString() == leadDDController.selectedStateCurr.value,
+                              (item) => item.stateName.toString() == leadDDController.selectedStateCurr.value, //id
                         ),
                         onChanged: (value) {
-                          leadDDController.selectedStateCurr.value =  value?.id?.toString();
+                          leadDDController.selectedStateCurr.value =  value?.stateName?.toString(); //id
                           if(leadDDController.selectedStateCurr.value!=null){
-                            leadDDController.getDistrictByStateIdCurrApi(stateId: leadDDController.selectedStateCurr.value);
+                            leadDDController.getDistrictByStateIdCurrApi(stateId:  value?.id?.toString());
                           }
                         },
                         onClear: (){
@@ -770,12 +823,12 @@ class Step1Form extends StatelessWidget {
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
                         getName: (item) => item.districtName.toString(),
                         selectedValue: leadDDController.districtListCurr.value.firstWhereOrNull(
-                              (item) => item.id.toString() == leadDDController.selectedDistrictCurr.value,
+                              (item) => item.districtName.toString() == leadDDController.selectedDistrictCurr.value,
                         ),
                         onChanged: (value) {
-                          leadDDController.selectedDistrictCurr.value =  value?.id?.toString();
+                          leadDDController.selectedDistrictCurr.value =  value?.districtName?.toString();
                           if( leadDDController.selectedDistrictCurr.value!=null){
-                            leadDDController.getCityByDistrictIdCurrApi(districtId: leadDDController.selectedDistrictCurr.value);
+                            leadDDController.getCityByDistrictIdCurrApi(districtId: value?.id?.toString());
                           }
 
                         },
@@ -809,10 +862,10 @@ class Step1Form extends StatelessWidget {
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
                         getName: (item) => item.cityName.toString(),
                         selectedValue: leadDDController. cityListCurr.value.firstWhereOrNull(
-                              (item) => item.id.toString() == leadDDController.selectedCityCurr.value,
+                              (item) => item.cityName.toString() == leadDDController.selectedCityCurr.value,
                         ),
                         onChanged: (value) {
-                          leadDDController.selectedCityCurr.value =  value?.id?.toString();
+                          leadDDController.selectedCityCurr.value =  value?.cityName?.toString();
                         },
                         onClear: (){
                           leadDDController.selectedCityCurr.value = "0";
@@ -974,15 +1027,15 @@ class Step1Form extends StatelessWidget {
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
                         getName: (item) => item.stateName.toString(),
                         selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                              (item) => item.id.toString() == leadDDController.selectedStatePerm.value,
+                              (item) => item.stateName.toString() == leadDDController.selectedStatePerm.value,
                         ),
                         onChanged: (value) {
 
-                          leadDDController.selectedStatePerm.value =  value?.id?.toString();
+                          leadDDController.selectedStatePerm.value =  value?.stateName?.toString();
 
                           print('stateid is herev ${leadDDController.selectedStatePerm.value}');
                           if( leadDDController.selectedStatePerm.value!=null){
-                            leadDDController.getDistrictByStateIdPermApi(stateId: leadDDController.selectedStatePerm.value);
+                            leadDDController.getDistrictByStateIdPermApi(stateId:  value?.id?.toString());
                           }
 
                         },
@@ -1019,12 +1072,12 @@ class Step1Form extends StatelessWidget {
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
                         getName: (item) => item.districtName.toString(),
                         selectedValue: leadDDController. districtListPerm.value.firstWhereOrNull(
-                              (item) => item.id.toString() == leadDDController.selectedDistrictPerm.value,
+                              (item) => item.districtName.toString() == leadDDController.selectedDistrictPerm.value,
                         ),
                         onChanged: (value) {
-                          leadDDController.selectedDistrictPerm.value =  value?.id?.toString();
+                          leadDDController.selectedDistrictPerm.value =  value?.districtName?.toString();
                           if( leadDDController.selectedDistrictPerm.value!=null){
-                            leadDDController.getCityByDistrictIdPermApi(districtId: leadDDController.selectedDistrictPerm.value);
+                            leadDDController.getCityByDistrictIdPermApi(districtId:  value?.id?.toString());
                           }
 
                         },
@@ -1058,10 +1111,10 @@ class Step1Form extends StatelessWidget {
                         getId: (item) => item.id.toString(),  // Adjust based on your model structure
                         getName: (item) => item.cityName.toString(),
                         selectedValue: leadDDController. cityListPerm.value .firstWhereOrNull(
-                              (item) => item.id.toString() == leadDDController.selectedCityPerm.value,
+                              (item) => item.cityName.toString() == leadDDController.selectedCityPerm.value,
                         ),
                         onChanged: (value) {
-                          leadDDController.selectedCityPerm.value =  value?.id?.toString();
+                          leadDDController.selectedCityPerm.value =  value?.cityName?.toString();
                         },
                         onClear: (){
                           leadDDController.selectedCityPerm.value = "0";

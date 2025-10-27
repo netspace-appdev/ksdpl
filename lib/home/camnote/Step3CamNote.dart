@@ -425,18 +425,25 @@ class Step3CamNote extends StatelessWidget {
           }
 
         }else if(code=="add"){
-          print("autoindividual.toString()--->in add =====${autoIndividual.toString()}");
-          camNoteController.clearBankDetails();
-          newDDController.bankerByBranchList.clear();
+          print("camNoteController.maxAllowedBank.value===>${camNoteController.maxAllowedBank.value.toString()}");
+          if (camNoteController.maxAllowedBank.value != 0 && camNoteController.camNoteLeadBankIds.length >= camNoteController.maxAllowedBank.value) {
+            SnackbarHelper.showSnackbar(title: "Package Limit Reached", message: "You can only select up to ${camNoteController.maxAllowedBank} bank(s).",
+              backgroundColor: AppColor.redColor, textColor: AppColor.appWhite
+            );
+          } else {
+            print("autoindividual.toString()--->in add =====${autoIndividual.toString()}");
+            camNoteController.clearBankDetails();
+            newDDController.bankerByBranchList.clear();
 
-          if(camNoteController.camZipController.text.isEmpty){
+            if(camNoteController.camZipController.text.isEmpty){
 
-            SnackbarHelper.showSnackbar(title: "Incomplete Detail", message: AppText.enterZipcode);
+              SnackbarHelper.showSnackbar(title: "Incomplete Detail", message: AppText.enterZipcode);
 
-          }else{
+            }else{
 
-            newDDController.getBranchListOfDistrictByZipAndBankApi(bankId: bankId, zipcode:  camNoteController.camZipController.text);
-            showCustomBottomSheet(context, bankId, boxId);
+              newDDController.getBranchListOfDistrictByZipAndBankApi(bankId: bankId, zipcode:  camNoteController.camZipController.text);
+              showCustomBottomSheet(context, bankId, boxId);
+            }
           }
         }else if(code=="add_disable"){
           ToastMessage.msg(AppText.camNoteSentMessage);

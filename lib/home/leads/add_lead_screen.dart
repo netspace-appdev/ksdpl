@@ -26,7 +26,7 @@ import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../custom_drawer.dart';
-
+import '../../custom_widgets/CustomTextFieldPrefix.dart' as customTF;
 
 class AddLeadScreen extends StatelessWidget {
 
@@ -892,12 +892,13 @@ class AddLeadScreen extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       print("onpressed===>2");
       if (addleadcontroller.selectedGender.value==null) {
-        ToastMessage.msg("Please select gender");
+
+        SnackbarHelper.showSnackbar(title: "Incomplete", message: "Please select gender");
       }else if(camNoteController.isaddedMobileNumber.value == true){
-        SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "This Number already added ");
+        SnackbarHelper.showSnackbar(title: "Incomplete", message: "This Number already added ");
         return;
       }else {
-        if(addleadcontroller.fromWhere.value=="interested"){
+    /*    if(addleadcontroller.fromWhere.value=="interested"){
 
           addleadcontroller.fillLeadFormApi(
             id: addleadcontroller.getLeadId.value.toString(),
@@ -928,11 +929,12 @@ class AddLeadScreen extends StatelessWidget {
             connMob: addleadcontroller.connMobController.text.toString(),
             connShare: addleadcontroller.connShareController.text.toString(),
             loanApplNo: "",
+            WhatsappNumber:  addleadcontroller.addLeadwhatsappController.text.toString(),
           ).then((_){
             Get.back();
           });
-        }else{
-          print("inside else==.");
+        }else{*/
+
           var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
           addleadcontroller.individualLeadUploadApi(
 
@@ -970,26 +972,12 @@ class AddLeadScreen extends StatelessWidget {
             uniqueLeadNumber: "",
 
           ).then((_){
-            print("hello====1");
-            /*print("addleadcontroller.fromWhere.value===>${addleadcontroller.fromWhere.value}");
-            if(addleadcontroller.fromWhere.value=="drawer"){
 
-              print("hello====2");
-              BotNavController botNavController=Get.put(BotNavController());
-              print("hello====3");
-              botNavController.selectedIndex.value = 1;
-              print("hello====4");
-              Get.offAllNamed("/bottomNavbar");
-
-            }*/
-            print("hello====2");
             BotNavController botNavController=Get.put(BotNavController());
-            print("hello====3");
             botNavController.selectedIndex.value = 1;
-            print("hello====4");
             Get.offAllNamed("/bottomNavbar");
           });
-        }
+        //}
 
       }
     }

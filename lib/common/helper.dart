@@ -48,6 +48,7 @@ class AppText{
   static const String lenderName="Lender Name*";
   static const String contactNo="Contact No. (Use for Login)*";
   static const String whatsappNo="Whatsapp No.*";
+  static const String whatsappNoStar="Whatsapp No.";
   static const String contactNo2="Contact No";
 
   static const String email="Email*";
@@ -407,6 +408,9 @@ class AppText{
   static const String enterMonthlyInstallment = "Enter Monthly Installment";
   static const String previousLoanApplied = "Previous Loan Applied";
 
+  static const String loanRoi = "Loan ROI";
+  static const String enterLoanRoi = "Enter Loan ROI";
+
   static const String applicantEmployerDetails = "Applicant's Employer Details";
   static const String organizationName = "Organization Name";
   static const String enterOrganizationName = "Enter Organization Name";
@@ -647,7 +651,7 @@ class AppText{
   static const String processingCharges = "Processing Charges/IMD (₹)";
   static const String enterProcessingCharges = "Enter Processing Charges";
 
-
+  static const String processingCharges2 = "Processing Charges (₹)";
   /// cam note
   static const String totalLoanAvaileCibil = "Total Loan Availed On CIBIL (No)";
   static const String enterTotalLoanAvaileCibil = "Enter Total Loan Availed";
@@ -877,13 +881,14 @@ class AppText{
   static const String robmLogin="RO/BM Login";
   static const String aicLogin="AIC Login";
   static const String submitBasicDetails="Submit Basic Details";
-  static const String sendEmailToCustomer="Send Email to Customer";
+  static const String sendEmailToCustomer="Send Email & WhatsApp to Customer";
   static const String reqCibilMsg="Do you want to send an email requesting the CIBIL report?";
 
   static const String sendCamMsg="Do you want to send a cam note for this bank? If it is sent once, you will not be able to make any changed in it.";
 
   static const String AdminFeeCharges="Admin Fee Charges";
   static const String ForeclosureCharges="Foreclosure Charges";
+  static const String foreclosureChargesPO="Foreclosure Charges against the principal outstanding (%)";
   static const String StampDuty="Stamp Duty (%)";
   static const String LegalVettingCharges="Legal Vetting Charges";
   static const String TechnicalInspectionCharges="Technical Inspection Charges";
@@ -1028,6 +1033,88 @@ class AppText{
   static const String productSpecificAdditionalDocument = "Product Specific Additional Document";
   static const String onlineServiceRecordsList = "Online Service Records List";
   static const String onlineServiceRecords = "Online Service Records";
+  static const String  sameAsPhoneNo = " Same As Phone No";
+
+  ///26 Sep
+  static const String closedCases = "Closed Cases";
+  static const String enterClosedCases = "Enter Closed Cases";
+
+  static const String writtenOffCases = "Written Off Cases";
+  static const String enterWrittenOffCases = "Enter Written Off Cases";
+
+  static const String settlementCases = "Settlement Cases";
+  static const String enterSettlementCases = "Enter Settlement Cases";
+
+  static const String suitFiledWillfulDefaultCases = "Suit Filed Willful Default Cases";
+  static const String enterSuitFiledWillfulDefaultCases = "Enter Suit Filed Willful Default Cases";
+
+  static const String totalSanctionedAmount = "Total Sanctioned Amount";
+  static const String enterTotalSanctionedAmount = "Enter Total Sanctioned Amount";
+
+  static const String currentBalance = "Current Balance";
+  static const String enterCurrentBalance = "Enter Current Balance";
+
+  static const String closedAmount = "Closed Amount";
+  static const String enterClosedAmount = "Enter Closed Amount";
+
+  static const String writtenOffAmount = "Written Off Amount";
+  static const String enterWrittenOffAmount = "Enter Written Off Amount";
+
+  static const String settlementAmount = "Settlement Amount";
+  static const String enterSettlementAmount = "Enter Settlement Amount";
+
+  static const String suitFiledWillfulDefaultAmount = "Suit Filed Willful Default Amount";
+  static const String enterSuitFiledWillfulDefaultAmount = "Enter Suit Filed Willful Default Amount";
+
+  static const String standardCount = "Standard Count";
+  static const String enterStandardCount = "Enter Standard Count";
+
+  static const String numberOfDaysPastDueCount = "Number of days past due Count";
+  static const String enterNumberOfDaysPastDueCount = "Enter Number of days past due Count";
+
+  static const String lossCount = "Loss Count";
+  static const String enterLossCount = "Enter Loss Count";
+
+  static const String substandardCount = "Substandard Count";
+  static const String enterSubstandardCount = "Enter Substandard Count";
+
+  static const String doubtfulCount = "Doubtful Count";
+  static const String enterDoubtfulCount = "Enter Doubtful Count";
+
+  static const String specialMentionAccountCount = "Special Mention account Count";
+  static const String enterSpecialMentionAccountCount = "Enter Special Mention account Count";
+
+  static const String npt = "NPT";
+  static const String enterNpt = "Enter NPT";
+
+  static const String totalCounts = "Total Counts";
+  static const String enterTotalCounts = "Enter Total Counts";
+
+  static const String currentlyCasesBeingServed = "Currently Cases Being Served";
+  static const String enterCurrentlyCasesBeingServed = "Enter Currently Cases Being Served";
+
+  static const String casesToBeForeclosedOnOrBeforeDisb = "Cases To Be Foreclosed On Or Before Disb";
+  static const String enterCasesToBeForeclosedOnOrBeforeDisb = "Enter Cases To Be Foreclosed On Or Before Disb";
+
+  static const String casesToBeContenued = "Cases To Be Contenued";
+  static const String enterCasesToBeContenued = "Enter Cases To Be Contenued";
+
+  static const String emisOfExistingLiabilities = "EMIs Of Existing Liabilities";
+  static const String enterEmisOfExistingLiabilities = "Enter EMIs Of Existing Liabilities";
+
+  static const String iir = "IIR";
+  static const String enterIir = "Enter IIR";
+  static const String customerName = "Customer Name";
+  static const String enterCustomerName = "Enter Customer Name";
+  static const String accessRestrictedStep2and3Msg = "Access Restricted";
+  static const String grade = "Grade";
+  static const String feedback = "Feedback";
+  static const String enterFeedback = "Enter feedback here";
+  static const String missingField = "Missing Field";
+  static const String plsSelectState = "Please select a State";
+  static const String plsSelectCity = "Please select a City";
+  static const String plsSelectDist = "Please select a District";
+
 
 
 }
@@ -1169,6 +1256,8 @@ class AppImage{
   static const String changePhone="assets/images/change_number.png";
   static const String changeEmail="assets/images/change_email.png";
   static const String choosefile="assets/images/choosefile.png";
+  static const String downloadImg="assets/images/downloadImg.png";
+  static const String downloadImg_disable="assets/images/downloadImg_disable.png";
 
 }
 
@@ -1622,6 +1711,27 @@ class ToastMessage {
         fontSize: 16.0,
         backgroundColor: AppColor.primaryColor,
         textColor: Colors.white);
+  }
+
+  static void msgRed(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        fontSize: 16.0,
+        backgroundColor: Colors.red,
+        textColor: AppColor.appWhite);
+  }
+  static void msgPrimary(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        fontSize: 16.0,
+        backgroundColor: AppColor.primaryColor,
+        textColor: AppColor.secondaryColor);
   }
 }
 

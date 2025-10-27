@@ -31,6 +31,7 @@ import '../../controllers/open_poll_filter_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
+import '../../custom_widgets/CustomShortButton.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../custom_drawer.dart';
@@ -557,7 +558,35 @@ class ViewProductScreen extends StatelessWidget {
                   _buildDetailRow("Bank Name", product?.bankName??""),
                   _buildDetailRow("Min. CIBIL", product?.minCIBIL.toString()??""),
                   _buildDetailRow("Product Category", product?.productCategoryName.toString()??""),
-
+                  product?.active==false?
+                  Container(
+                    width: 100,
+                    padding: const EdgeInsets.all(5),
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50, // light red background
+                      border: Border.all(color: Colors.red, width: 2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.flag, color: Colors.red, size: 12), // 🚩
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            "Deactive",
+                            style: TextStyle(
+                              color: Colors.red.shade900,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ):Container(),
                   const SizedBox(height: 10),
 
                   Row(

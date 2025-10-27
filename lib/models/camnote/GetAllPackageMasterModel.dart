@@ -1,3 +1,5 @@
+
+
 class GetAllPackageMasterModel {
   String? status;
   bool? success;
@@ -36,11 +38,13 @@ class Data {
   String? packageName;
   num? amount;
   bool? active;
-  int? createdBy;
+  num? createdBy;
   String? createdDate;
-  int? updatedBy;
+  num? updatedBy;
   String? updatedDate;
-  List<Services>? services;
+  String? qRImage;
+  int? noOfBank;
+  List<PackageDetails>? packageDetails;
 
   Data(
       {this.id,
@@ -51,7 +55,9 @@ class Data {
         this.createdDate,
         this.updatedBy,
         this.updatedDate,
-        this.services});
+        this.qRImage,
+        this.noOfBank,
+        this.packageDetails});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -62,10 +68,12 @@ class Data {
     createdDate = json['createdDate'];
     updatedBy = json['updatedBy'];
     updatedDate = json['updatedDate'];
-    if (json['services'] != null) {
-      services = <Services>[];
-      json['services'].forEach((v) {
-        services!.add(new Services.fromJson(v));
+    qRImage = json['qR_Image'];
+    noOfBank = json['noOfBank'];
+    if (json['packageDetails'] != null) {
+      packageDetails = <PackageDetails>[];
+      json['packageDetails'].forEach((v) {
+        packageDetails!.add(new PackageDetails.fromJson(v));
       });
     }
   }
@@ -80,24 +88,30 @@ class Data {
     data['createdDate'] = this.createdDate;
     data['updatedBy'] = this.updatedBy;
     data['updatedDate'] = this.updatedDate;
-    if (this.services != null) {
-      data['services'] = this.services!.map((v) => v.toJson()).toList();
+    data['qR_Image'] = this.qRImage;
+    data['noOfBank'] = this.noOfBank;
+    if (this.packageDetails != null) {
+      data['packageDetails'] =
+          this.packageDetails!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Services {
+class PackageDetails {
   int? id;
   int? packageId;
+  num? service;
   String? serviceName;
   num? amount;
 
-  Services({this.id, this.packageId, this.serviceName, this.amount});
+  PackageDetails(
+      {this.id, this.packageId, this.service, this.serviceName, this.amount});
 
-  Services.fromJson(Map<String, dynamic> json) {
+  PackageDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     packageId = json['packageId'];
+    service = json['service'];
     serviceName = json['serviceName'];
     amount = json['amount'];
   }
@@ -106,6 +120,7 @@ class Services {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['packageId'] = this.packageId;
+    data['service'] = this.service;
     data['serviceName'] = this.serviceName;
     data['amount'] = this.amount;
     return data;

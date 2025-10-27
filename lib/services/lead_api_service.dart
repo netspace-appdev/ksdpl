@@ -119,6 +119,7 @@ class LeadApiService {
     required String dob,
     required String gender,
     required String loanAmtReq,
+    required String WhatsappNumber,
     String? email,
     String? aadhar,
     String? pan,
@@ -211,6 +212,7 @@ class LeadApiService {
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfResidence', GeoLocationOfResidence);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfOffice', GeoLocationOfOffice);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'GeoLocationOfProperty', GeoLocationOfProperty);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'WhatsappNumber', WhatsappNumber);
 
 
       if(PhotosOfProperty!=null ||PhotosOfProperty!.isNotEmpty ){
@@ -352,6 +354,8 @@ class LeadApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
+      Helper.ApiReq(individualLeadUpload, request.fields);
+      Helper.ApiRes(individualLeadUpload, response.body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

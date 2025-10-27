@@ -25,7 +25,7 @@ class Step2Form extends StatelessWidget {
   final loanApplicationController = Get.find<LoanApplicationController>();
 
   LeadDDController leadDDController = Get.put(LeadDDController());
-  Step2Controller step2Controller = Get.put(Step2Controller());
+  //Step2Controller step2Controller = Get.put(Step2Controller());
   final _formKey = GlobalKey<FormState>();
 
 
@@ -76,7 +76,7 @@ class Step2Form extends StatelessWidget {
 
                               CustomLabeledTextField(
                                 label: AppText.fullName,
-                                isRequired: true,
+                                isRequired: false,
                                 controller: coAp.coApFullNameController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.enterFullName,
@@ -130,7 +130,7 @@ class Step2Form extends StatelessWidget {
 
                               CustomLabeledPickerTextField(
                                 label: AppText.dateOfBirth,
-                                isRequired: true,
+                                isRequired: false,
                                 controller: coAp.coApDobController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.mmddyyyy,
@@ -156,14 +156,44 @@ class Step2Form extends StatelessWidget {
                                //
                               ),
 
-                              CustomLabeledTextField(
+                             /* CustomLabeledTextField(
                                 label: AppText.employmentStatus,
                                 isRequired: false,
                                 controller: coAp.coApEmplStatusController,
                                 inputType: TextInputType.name,
                                 hintText: AppText.enterEmploymentStatus,
                               //
+                              ),*/
+                              const Text(
+                                AppText.employmentStatus,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.grey2,
+                                ),
                               ),
+
+                              const SizedBox(height: 10),
+
+
+                              Obx((){
+                                if (leadDDController.isLoading.value) {
+                                  return  Center(child:CustomSkelton.productShimmerList(context));
+                                }
+
+
+                                return CustomDropdown<String>(
+                                  items: leadDDController.currEmpStList,
+                                  getId: (item) => item,  // Adjust based on your model structure
+                                  getName: (item) => item,
+
+                                  selectedValue: coAp.coApEmplStatusController.text,
+                                  onChanged: (value) {
+                                    coAp.coApEmplStatusController.text =  value.toString();
+                                  },
+                                );
+                              }),
+                              SizedBox(height: 20,),
 
                               CustomLabeledTextField(
                                 label: AppText.nationality,
@@ -196,7 +226,7 @@ class Step2Form extends StatelessWidget {
 
                               CustomLabeledTextField(
                                 label: AppText.eml,
-                                isRequired: true,
+                                isRequired: false,
                                 controller: coAp.coApEmailController,
                                 inputType: TextInputType.emailAddress,
                                 hintText: AppText.enterEA,
@@ -205,7 +235,7 @@ class Step2Form extends StatelessWidget {
 
                               CustomLabeledTextField(
                                 label: AppText.mobileNumber,
-                                isRequired: true,
+                                isRequired: false,
                                 controller: coAp.coApMobController,
                                 inputType: TextInputType.phone,
                                 maxLength: 10,
@@ -307,11 +337,11 @@ class Step2Form extends StatelessWidget {
                                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                   getName: (item) => item.stateName.toString(),
                                   selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                                        (item) => item.id.toString() == coAp.selectedStateCurr.value,
+                                        (item) => item.stateName.toString() == coAp.selectedStateCurr.value,
                                   ),
                                   onChanged: (value) {
-                                    coAp.selectedStateCurr.value =  value?.id?.toString();
-                                    coAp.getDistrictByStateIdCurrApi(stateId: coAp.selectedStateCurr.value);
+                                    coAp.selectedStateCurr.value =  value?.stateName?.toString();
+                                    coAp.getDistrictByStateIdCurrApi(stateId: value?.id.toString());
                                   },
                                   onClear: (){
                                     coAp.selectedDistrictCurr.value = null;
@@ -344,11 +374,11 @@ class Step2Form extends StatelessWidget {
                                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                   getName: (item) => item.districtName.toString(),
                                   selectedValue: coAp.districtListCurr.value.firstWhereOrNull(
-                                        (item) => item.id.toString() == coAp.selectedDistrictCurr.value,
+                                        (item) => item.districtName.toString() == coAp.selectedDistrictCurr.value,
                                   ),
                                   onChanged: (value) {
-                                    coAp.selectedDistrictCurr.value =  value?.id?.toString();
-                                    coAp.getCityByDistrictIdCurrApi(districtId: coAp.selectedDistrictCurr.value);
+                                    coAp.selectedDistrictCurr.value =  value?.districtName?.toString();
+                                    coAp.getCityByDistrictIdCurrApi(districtId:  value?.id.toString());
                                   },
                                   onClear: (){
                                     coAp.selectedDistrictCurr.value = null;
@@ -380,10 +410,10 @@ class Step2Form extends StatelessWidget {
                                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                   getName: (item) => item.cityName.toString(),
                                   selectedValue: coAp. cityListCurr.value.firstWhereOrNull(
-                                        (item) => item.id.toString() == coAp.selectedCityCurr.value,
+                                        (item) => item.cityName.toString() == coAp.selectedCityCurr.value,
                                   ),
                                   onChanged: (value) {
-                                    coAp.selectedCityCurr.value =  value?.id?.toString();
+                                    coAp.selectedCityCurr.value =  value?.cityName?.toString();
                                   },
                                 );
                               }),
@@ -541,11 +571,11 @@ class Step2Form extends StatelessWidget {
                                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                   getName: (item) => item.stateName.toString(),
                                   selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                                        (item) => item.id.toString() == coAp.selectedStatePerm.value,
+                                        (item) => item.stateName.toString() == coAp.selectedStatePerm.value,
                                   ),
                                   onChanged: (value) {
-                                    coAp.selectedStatePerm.value =  value?.id?.toString();
-                                    coAp.getDistrictByStateIdPermApi(stateId: coAp.selectedStatePerm.value);
+                                    coAp.selectedStatePerm.value =  value?.stateName?.toString();
+                                    coAp.getDistrictByStateIdPermApi(stateId:  value?.id?.toString());
                                   },
                                   onClear: (){
                                     coAp.selectedDistrictPerm.value = null;
@@ -578,15 +608,15 @@ class Step2Form extends StatelessWidget {
                                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                   getName: (item) => item.districtName.toString(),
                                   selectedValue: coAp.districtListPerm.value.firstWhereOrNull(
-                                        (item) => item.id.toString() == coAp.selectedDistrictPerm.value,
+                                        (item) => item.districtName.toString() == coAp.selectedDistrictPerm.value,
                                   ),
                                   onChanged: (value) {
-                                    coAp.selectedDistrictPerm.value =  value?.id?.toString();
-                                    coAp.getCityByDistrictIdPermApi(districtId: coAp.selectedDistrictPerm.value);
+                                    coAp.selectedDistrictPerm.value =  value?.districtName?.toString();
+                                    coAp.getCityByDistrictIdPermApi(districtId:  value?.id?.toString());
                                   },
                                   onClear: (){
                                     coAp.selectedDistrictPerm.value = null;
-                                    coAp.districtListPerm.value.clear(); // reset dependent dropdown
+
 
                                   },
                                 );
@@ -614,10 +644,10 @@ class Step2Form extends StatelessWidget {
                                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                   getName: (item) => item.cityName.toString(),
                                   selectedValue: coAp. cityListPerm.value.firstWhereOrNull(
-                                        (item) => item.id.toString() == coAp.selectedCityPerm.value,
+                                        (item) => item.cityName.toString() == coAp.selectedCityPerm.value,
                                   ),
                                   onChanged: (value) {
-                                    coAp.selectedCityPerm.value =  value?.id?.toString();
+                                    coAp.selectedCityPerm.value =  value?.cityName?.toString();
                                   },
                                 );
                               }),
