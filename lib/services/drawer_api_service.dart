@@ -1336,6 +1336,46 @@ class DrawerApiService {
     }
   }
 
+  static getSoftSanctionByLeadIdAndBankIdApiMethod({
+    required String leadID,
+    required String  BankId,
+  })
+  async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getSoftSanctionByLeadIdAndBankIdApi),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LeadID', leadID, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'BankId', BankId, fallback: "0");
+
+
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getSoftSanctionByLeadIdAndBankIdApi, request.fields);
+      Helper.ApiRes(getSoftSanctionByLeadIdAndBankIdApi, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
+    }
+  }
+
   static Future<dynamic> callGetBankerDetailSanctionApi({required String PhoneNo}) async {
     try {
 

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
+import 'package:ksdpl/controllers/leads/loan_appl_controller.dart';
 import 'package:ksdpl/controllers/leads/seachLeadController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
@@ -21,6 +22,7 @@ import '../../models/dashboard/WorkOnLeadModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/drawer/UpdateLeadStageModel.dart';
 import '../../models/getDisburseHistoryByUniqueLeadNo/GetDisburseHistoryByUniqueLeadNoModel.dart';
+import '../../models/leads/GetSoftSanctionByLeadIdAndBankIdModel.dart';
 import '../../models/softSanctionByLeadId/SoftSanctionByLeadIdModel.dart';
 import '../../models/update_loan_formModel/UpdateLoanFormModel.dart';
 import '../../services/dashboard_api_service.dart';
@@ -50,6 +52,8 @@ class LeadListController extends GetxController {
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
   var updateLoanFormModel = Rxn<UpdateLoanFormModel>(); //
   var addSanctionDetailsModel = Rxn<AddSanctionDetailsModel>(); //
+  var getSoftSanctionByLeadIdAndBankIdModel = Rxn<GetSoftSanctionByLeadIdAndBankIdModel>(); //
+
   var filteredGetAllLeadsModel = Rxn<GetAllLeadsModel>();
   var softSanctionByLeadIdModel = Rxn<SoftSanctionByLeadIdModel>();
   var getBankerDetailSanctionModel = Rxn<GetBankerDetailSanctionModel>();
@@ -1579,7 +1583,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
   }
 }
 
-  Future<void>callGetSoftSanctionByLeadIdAndBankIdApi(String leadID) async {
+  Future<void>callGetSoftSanctionByLeadIdAndBankIdApi(String leadID,) async {
     try {
       isLoad(true);
 
@@ -1634,6 +1638,72 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
       }
       isLoad(false);
+    }
+  }
+
+
+
+
+  Future<void> getSoftSanctionByLeadIdAndBankIdApiMethod({
+    required String leadID,
+    required String  bankId,
+  }) async {
+    try {
+
+      isLoad(true);
+
+      var data = await DrawerApiService.getSoftSanctionByLeadIdAndBankIdApiMethod(
+        leadID: leadID,
+        BankId: bankId,
+
+      );
+
+      if(data['success'] == true){
+
+        getSoftSanctionByLeadIdAndBankIdModel.value= GetSoftSanctionByLeadIdAndBankIdModel.fromJson(data);
+        final LoanApplicationController loanApplicationController=Get.find();
+        loanApplicationController.bankerNameController.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.bankersName??"";
+        loanApplicationController.bankerMobileController.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.bankersMobileNumber??"";
+        loanApplicationController.bankerWhatsappController.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.bankersWhatsAppNumber??"";
+        loanApplicationController.bankerEmailController.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.bankersEmailId??"";
+
+        loanApplicationController.chargesDetailProcessingFees.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionProcessingFees.toString()??"0";
+        loanApplicationController.chargesDetailAdminFeeChargess.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableAdminFee.toString()??"0";
+        loanApplicationController.chargesDetailForeclosureCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableForeclosureCharges.toString()??"0";
+        loanApplicationController.chargesDetailStampDuty.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionStampDuty.toString()??"0";
+        loanApplicationController.chargesDetailLegalVettingCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableLegalFee.toString()??"0";
+        loanApplicationController.chargesDetailTechnicalInspectionCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableTechnicalFee.toString()??"0";
+        loanApplicationController.chargesDetailOtherCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableOtherCharges.toString()??"0";
+        loanApplicationController.chargesDetailTSRLegalCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableTsrcharges.toString()??"0";
+        loanApplicationController.chargesDetailValuationCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableValuationCharges.toString()??"0";
+        loanApplicationController.chargesDetailProcessingCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionProcessingCharges.toString()??"0";
+
+
+
+
+        isLoad(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getSoftSanctionByLeadIdAndBankIdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getSoftSanctionByLeadIdAndBankIdModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoad(false);
+
+    } finally {
+
+
+      isLoad(false);
+
     }
   }
 

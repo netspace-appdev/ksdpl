@@ -20,13 +20,8 @@ class LoanApplService {
   static const String GetLoanApplicationDocumentByLoanIdApi = BaseUrl.baseUrl +'LeadDetail/GetLoanApplicationDocumentByLoanId';
   static const String RemovedLoanApplicationDocumentApi = BaseUrl.baseUrl +'LeadDetail/RemoveDocumentsRelatedToLoanApplication';
   static const String getDsaMappingByBankAndProduct = BaseUrl.baseUrl +'DsaMaster/GetDsaMappingByBankAndProduct';
+  static const String getLoanApplicationDetailsByUniqueLeadNumber = BaseUrl.baseUrl + 'LeadDetail/GetLoanApplicationDetailsByUniqueLeadNumber';
 
-
-
-  // static const String getLoanApplicationDetailsById = BaseUrl.baseUrl +
-  // 'LeadDetail/GetLoanApplicationDetailsById';
-  static const String getLoanApplicationDetailsByUniqueLeadNumber =
-      BaseUrl.baseUrl + 'LeadDetail/GetLoanApplicationDetailsByUniqueLeadNumber';
 
 
 

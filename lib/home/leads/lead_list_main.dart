@@ -602,7 +602,7 @@ class LeadListMain extends StatelessWidget  {
                             onTap:() async {
                               if (lead.leadStage.toString() == "9") {
                                 // Await the API call first
-                                await leadListController.callGetSoftSanctionByLeadIdAndBankIdApi(lead.id.toString());
+                                await leadListController.callGetSoftSanctionByLeadIdAndBankIdApi(lead.id.toString(),);
 
                                 // After API completes, open bottom sheet
                                 showSanctionDialog(
@@ -1382,9 +1382,11 @@ overflow: TextOverflow.ellipsis,
 
      /*   loanDetails==0?
         addLeadController.getLeadDetailByIdApi(leadId: leadId):*/
-        addLeadController.getLeadDetailByIdApi(leadId: leadId);
+        addLeadController.getLeadDetailByIdApi(leadId: leadId).then((_){
+          loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
+        });
        // Step2Controller step2Controller = Get.put(Step2Controller());
-        loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
+
           loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {
           'leadId': leadId.toString(),

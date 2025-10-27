@@ -149,6 +149,9 @@ class Addleadcontroller extends GetxController{
         camNoteController.camPhoneController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
         loanApplicationController.applMobController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
 
+        print("here addlead applMobController==${getLeadDetailModel.value?.data?.mobileNumber ?? ""}");
+        print("here addlead applMobController==${loanApplicationController.applMobController.text}");
+
         phoneController.text=getLeadDetailModel.value?.data?.mobileNumber??"";
         camNoteController.camWhatsappController.text = getLeadDetailModel.value?.data?.whatsappNumber ?? "";
 

@@ -93,7 +93,7 @@ class Step7Form extends StatelessWidget {
                               validator:  ValidationHelper.validatePhoneNumber,
                             ),
                             CustomLabeledTextField(
-                              label: AppText.phoneNo,
+                              label: AppText.alternatePhoneNo,
                               isRequired: true,
                               controller: ref.refPhoneController,
                               inputType: TextInputType.number,

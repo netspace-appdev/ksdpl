@@ -121,11 +121,12 @@ class AppText{
   static const String changeTheme="Change Theme";
   static const String pleaseSelectproduct ="Please select a product";
 
-  static const String sNo="S No";
+  static const String sNo="S No.";
   static const String branchName="Branch Name";
   static const String IFSC="IFSC";
-  static const String phoneNo="Phone No";
-  static const String mobNo="Mobile No";
+  static const String phoneNo="Phone No.";
+  static const String alternatePhoneNo="Alternate Contact No.";
+  static const String mobNo="Mobile No.";
   static const String eml="Email Address";
   static const String state="State";
   static const String district="District";
@@ -1609,6 +1610,14 @@ class Helper{
       return word[0].toUpperCase() + word.substring(1).toLowerCase();
     })
         .join(' ');
+  }
+
+  static int? parseInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 }
 

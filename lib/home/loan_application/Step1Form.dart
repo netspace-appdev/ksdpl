@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
 
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
@@ -28,6 +29,7 @@ class Step1Form extends StatelessWidget {
   LeadDDController leadDDController = Get.put(LeadDDController());
   final loanApplicationController = Get.put(LoanApplicationController(), permanent: true);
   final Addleadcontroller addLeadController = Get.put(Addleadcontroller());
+  final LeadListController leadListController = Get.put(LeadListController());
 
 
   @override
@@ -41,8 +43,8 @@ class Step1Form extends StatelessWidget {
           return Center(
             child: CustomSkelton.productShimmerList(context),
           );
-        print("see here--0-->");
-        print("la view--->${loanApplicationController.laAppliedController.text}");
+
+        print('here applMobController.text=========. ${loanApplicationController.applMobController.text}');
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -104,6 +106,7 @@ class Step1Form extends StatelessWidget {
 
                             leadDDController.getAllBranchByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
                             leadDDController.getProductListByBankIdApi(bankId: loanApplicationController.selectedBank.value.toString());
+                            leadListController.getSoftSanctionByLeadIdAndBankIdApiMethod(bankId: loanApplicationController.selectedBank.value.toString() ,leadID: addLeadController.getLeadDetailModel.value!.data!.id!.toString());
                           }
                        },
                         onClear: (){
@@ -569,14 +572,7 @@ class Step1Form extends StatelessWidget {
 
                     ),
 
-                    /*CustomLabeledTextField(
-                      label: AppText.employmentStatus,
-                      isRequired: false,
-                      controller: loanApplicationController.emplStatusController,
-                      inputType: TextInputType.name,
-                      hintText: AppText.enterEmploymentStatus,
-                      validator: ValidationHelper.validatePhoneNumber,
-                    ),*/
+
 
                     const Text(
                       AppText.employmentStatus,

@@ -616,8 +616,6 @@ class Step2Form extends StatelessWidget {
                                   },
                                   onClear: (){
                                     coAp.selectedDistrictPerm.value = null;
-
-
                                   },
                                 );
                               }),

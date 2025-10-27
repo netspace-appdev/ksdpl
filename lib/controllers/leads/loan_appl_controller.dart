@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:ksdpl/common/CustomIconNewDialogBox.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
+import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
 import 'package:ksdpl/controllers/loan_appl_controller/family_member_model_controller.dart';
 import 'package:ksdpl/custom_widgets/CamImage.dart';
 import '../../common/base_url.dart';
@@ -29,10 +30,12 @@ import '../loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 import 'package:flutter/material.dart';
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
+import 'addLeadController.dart';
 
 
 class LoanApplicationController extends GetxController with ImagePickerMixin {
-
+  final LeadListController leadListController =Get.find();
+  final Addleadcontroller addLeadController =Get.find();
   var getLoanApplIdModel = Rxn<GetLoanApplIdModel>();
   var leadId = "".obs;
   var firstName = "".obs;
@@ -197,6 +200,21 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     referencesList.clear();
     addDocumentList.clear();
     print("length coApplicantList in controller--->${coApplicantList.length}");
+
+    bankerNameController.clear();
+    bankerMobileController.clear();
+    bankerWhatsappController.clear();
+    bankerEmailController.clear();
+    chargesDetailProcessingFees.clear();
+    chargesDetailAdminFeeChargess.clear();
+    chargesDetailForeclosureCharges.clear();
+    chargesDetailStampDuty.clear();
+    chargesDetailLegalVettingCharges.clear();
+    chargesDetailTechnicalInspectionCharges.clear();
+    chargesDetailOtherCharges.clear();
+    chargesDetailTSRLegalCharges.clear();
+    chargesDetailValuationCharges.clear();
+    chargesDetailProcessingCharges.clear();
   }
 
   void removeAdditionalSrcDocument(int index) {
@@ -614,6 +632,21 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     creditCardsList.clear();
     referencesList.clear();
     referencesList.clear();
+
+    bankerNameController.dispose();
+    bankerMobileController.dispose();
+    bankerWhatsappController.dispose();
+    bankerEmailController.dispose();
+    chargesDetailProcessingFees.dispose();
+    chargesDetailAdminFeeChargess.dispose();
+    chargesDetailForeclosureCharges.dispose();
+    chargesDetailStampDuty.dispose();
+    chargesDetailLegalVettingCharges.dispose();
+    chargesDetailTechnicalInspectionCharges.dispose();
+    chargesDetailOtherCharges.dispose();
+    chargesDetailTSRLegalCharges.dispose();
+    chargesDetailValuationCharges.dispose();
+    chargesDetailProcessingCharges.dispose();
   }
 
   void onSaveLoanAppl({required String status}) {
@@ -775,7 +808,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     try {
       isLoading(true);
 
-      print("coApPayload--->${coApPayload}");
+      print("cleanText(applMobController.text)--->${cleanText(applMobController.text)}");
 
       var uln = Get.arguments['uln'];
 
@@ -1079,6 +1112,23 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     creditCardsList.clear();
     referencesList.clear();
     referencesList.clear();
+
+
+
+    bankerNameController.dispose();
+    bankerMobileController.dispose();
+    bankerWhatsappController.dispose();
+    bankerEmailController.dispose();
+    chargesDetailProcessingFees.dispose();
+    chargesDetailAdminFeeChargess.dispose();
+    chargesDetailForeclosureCharges.dispose();
+    chargesDetailStampDuty.dispose();
+    chargesDetailLegalVettingCharges.dispose();
+    chargesDetailTechnicalInspectionCharges.dispose();
+    chargesDetailOtherCharges.dispose();
+    chargesDetailTSRLegalCharges.dispose();
+    chargesDetailValuationCharges.dispose();
+    chargesDetailProcessingCharges.dispose();
   }
 
 
@@ -1130,7 +1180,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
           detailMap = jsonDecode(getLoanApplIdModel.value!.data!.detailForLoanApplication!);
 
-          print('here i get vloan id ${getLoanApplIdModel.value!.data!.id.toString()}');
+
+
 
           getLoanApplicationDocumentByLoanIdApi(loanId: getLoanApplIdModel.value?.data?.id.toString()??'');
 
@@ -1150,6 +1201,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
               Helper.convertFromIso8601(detailMap?['ProcessingFeeDate']) ?? '';
 // For applicant
           final applicant = detailMap?['Applicant'];
+
           applFullNameController.text = applicant?['Name'] ?? '';
           fatherNameController.text = applicant?['FatherName'] ?? '';
           selectedGender.value = applicant?['Gender'] ?? '-1';
@@ -1165,6 +1217,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           applEmailController.text = applicant?['EmailID'] ?? '';
           applMobController.text = applicant?['Mobile'] ?? '';
 
+          print('applicant? Mobile=========. ${applicant?['Mobile'] ?? ''}');
+          print('applMobController.text=========. ${applMobController.text}');
 // Employer
           final employer = applicant?['EmployerDetails'];
           orgNameController.text = employer?['OrganizationName'] ?? '';
@@ -1255,6 +1309,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
             bankId: data?.bankId.toString() ?? "0");
 
         await leadDDController.getProductListByBankIdApi(bankId: selectedBank.value.toString());
+
+        await leadListController.getSoftSanctionByLeadIdAndBankIdApiMethod(bankId: selectedBank.value.toString() ,leadID: addLeadController.getLeadDetailModel.value!.data!.id!.toString());
 
         selectedBankBranch.value = data?.branchId ?? 0;
 
