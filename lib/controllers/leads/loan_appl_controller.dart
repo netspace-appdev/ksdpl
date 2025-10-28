@@ -41,6 +41,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var firstName = "".obs;
   var email = "".obs;
   var isLoading = false.obs;
+  var isLoadingRemoveDoc = false.obs;
   var isloadData = false.obs;
   var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
@@ -187,6 +188,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var addDocumentList = <AdddocumentModel>[].obs;
 
   var isDSADisabled = false.obs;
+
+  var docCustomerStList=[AppText.available, AppText.notAvailable, AppText.willProvideLetterOn, AppText.substituteWillProvide,];
   void addAdditionalSrcDocument() {
     addDocumentList.add(AdddocumentModel());
     documentFormKeys.add(GlobalKey<FormState>());
@@ -246,7 +249,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var stepCompleted = List<bool>.filled(11, false).obs;
   LeadDDController leadDController = Get.find();
   final List<String> titles = [
-    'Personal Information', 'Co-Applicant Details', 'Property Details',
+    'Applicant’s Details', 'Co-Applicant Details', 'Property Details',
     'Family Members', 'Credit Cards', 'Financial Details', 'References\n',
     "Banker Details", "Charges Detail", "Submit Document", 'Final Submission'
   ];
@@ -256,7 +259,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var selectedChannel = Rxn<int>();
 
   final scrollController = ScrollController();
-
+  var documentListByBank = <String>[].obs;
   void nextStep() {
     if (currentStep.value < 11) {
       currentStep.value++;
@@ -1928,7 +1931,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   async {
 
     try {
-      isLoading(true);
+      isLoadingRemoveDoc(true);
 
       var data = await LoanApplService.getLoanApplicationRemoveDocumentApi(
         DocumentId: DocumentId,
@@ -1945,7 +1948,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       print("Error SubmittLoanDocumentApi: $e");
      // ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
-      isLoading(false);
+      isLoadingRemoveDoc(false);
     }
   }
 

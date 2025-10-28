@@ -5,10 +5,14 @@ import 'package:ksdpl/common/base_url.dart';
 import 'package:ksdpl/common/validation_helper.dart';
 import 'package:lottie/lottie.dart';
 import '../../common/helper.dart';
+import '../../common/skelton.dart';
 import '../../controllers/addDocumentControler/documentSubmit_step_controller.dart';
 import '../../controllers/leads/loan_appl_controller.dart';
+import '../../custom_widgets/CustomBigYesNoLoaderDialogBox.dart';
 import '../../custom_widgets/CustomDocumentPhotoPickerWidget.dart';
+import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomTextLabel.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
 
 class Step10Form extends StatelessWidget {
@@ -29,8 +33,6 @@ class Step10Form extends StatelessWidget {
             SizedBox(height: 10,),
             ExpansionTile(
               initiallyExpanded: true,
-
-
               childrenPadding: EdgeInsets.symmetric(horizontal: 20),
               title:const Text( AppText.UploadDoc, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
               leading: Icon(Icons.list_alt, size: 20,),
@@ -58,6 +60,38 @@ class Step10Form extends StatelessWidget {
                               inputType: TextInputType.name,
                               hintText: AppText.documentsName,
                               validator: ValidationHelper.validateDocName,
+                              isInputEnabled: !ai.isDocNameDisabled.value,
+                            ),
+
+                            if(ai.isThisGenerated.value)
+                            Column(
+                              children: [
+                                const CustomTextLabel(
+                                  label:  AppText.documentStatusByCustomer,
+                                  isRequired: true,
+                                ),
+
+                                const SizedBox(height: 10),
+
+                                Obx((){
+                                  if (loanApplicationController.isLoading.value) {
+                                    return  Center(child:CustomSkelton.productShimmerList(context));
+                                  }
+
+
+                                  return CustomDropdown<String>(
+                                    items: loanApplicationController.docCustomerStList,
+                                    getId: (item) => item,  // Adjust based on your model structure
+                                    getName: (item) => item,
+
+                                    selectedValue: ai.selectedDocStatusCus.value,
+                                    onChanged: (value) {
+                                      ai.selectedDocStatusCus.value =  value.toString();
+                                    },
+                                  );
+                                }),
+                                SizedBox(height: 20,),
+                              ],
                             ),
 
                             CustomDocumentPhotoPickerWidget(
@@ -75,79 +109,85 @@ class Step10Form extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
 
                           children: [
-                            index== loanApplicationController.addDocumentList.length-1?
-                            Obx((){
-                              if(loanApplicationController.isLoading.value){
-                                return const Align(
-                                  alignment: Alignment.centerRight,
-                                  child: SizedBox(
-                                    height: 30,
-                                    width: 30,
-                                    // child: CircularProgressIndicator(
-                                    //   color: AppColor.primaryColor,
-                                    // ),
-                                  ),
-                                );
-                              }
-                              return Align(
-                                alignment: Alignment.centerRight,
-                                child: loanApplicationController.loanApplicationDocumentByLoanIdModel.value?.data==null?
+                            if(ai.isThisGenerated.value==false)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                index== loanApplicationController.addDocumentList.length-1?
+                                Obx((){
+                                  if(loanApplicationController.isLoading.value){
+                                    return const Align(
+                                      alignment: Alignment.centerRight,
+                                      child: SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        // child: CircularProgressIndicator(
+                                        //   color: AppColor.primaryColor,
+                                        // ),
+                                      ),
+                                    );
+                                  }
+                                  return Align(
+                                    alignment: Alignment.centerRight,
+                                    child: loanApplicationController.loanApplicationDocumentByLoanIdModel.value?.data==null?
                                     SizedBox():
-                                IconButton(
-                                    onPressed: (){
-                                      loanApplicationController.addAdditionalSrcDocument();
-                                    },
-                                    icon: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                          color: AppColor.primaryColor,
-                                        ),
-                                        padding: EdgeInsets.all(10),
-                                        child: Icon(Icons.add, color: AppColor.appWhite,)
-                                    )
-                                ),
-                              );
-                            }):
-                            Container(),
+                                    IconButton(
+                                        onPressed: (){
+                                          loanApplicationController.addAdditionalSrcDocument();
+                                        },
+                                        icon: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              color: AppColor.primaryColor,
+                                            ),
+                                            padding: EdgeInsets.all(10),
+                                            child: Icon(Icons.add, color: AppColor.appWhite,)
+                                        )
+                                    ),
+                                  );
+                                }):
+                                Container(),
 
-                            SizedBox(height: 20),
+                                SizedBox(height: 20),
 
-                            Obx((){
-                              if(loanApplicationController.isLoading.value){
-                                return const Align(
-                                  alignment: Alignment.center,
-                                  child: SizedBox(
-                                    height: 30,
-                                    width: 30,
-                                    // child: CircularProgressIndicator(
-                                    //   color: AppColor.primaryColor,
-                                    // ),
-                                  ),
-                                );
-                              }
-                              return Align(
-                                alignment: Alignment.centerRight,
-                                child: loanApplicationController.loanApplicationDocumentByLoanIdModel.value?.data==null?
-                                SizedBox():IconButton(
-                                    onPressed: loanApplicationController.addDocumentList.length <= 1?(){}: (){
-                                      loanApplicationController.removeAdditionalSrcDocument(index);
-                                    },
-                                    icon: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                          color: loanApplicationController.addDocumentList.length <= 1?AppColor.lightRed: AppColor.redColor,
-                                        ),
-                                        padding: EdgeInsets.all(10),
+                                Obx((){
+                                  if(loanApplicationController.isLoading.value){
+                                    return const Align(
+                                      alignment: Alignment.center,
+                                      child: SizedBox(
+                                        height: 30,
+                                        width: 30,
+                                        // child: CircularProgressIndicator(
+                                        //   color: AppColor.primaryColor,
+                                        // ),
+                                      ),
+                                    );
+                                  }
+                                  return Align(
+                                    alignment: Alignment.centerRight,
+                                    child: loanApplicationController.loanApplicationDocumentByLoanIdModel.value?.data==null?
+                                    SizedBox():IconButton(
+                                        onPressed: loanApplicationController.addDocumentList.length <= 1?(){}: (){
+                                          loanApplicationController.removeAdditionalSrcDocument(index);
+                                        },
+                                        icon: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              color: loanApplicationController.addDocumentList.length <= 1?AppColor.lightRed: AppColor.redColor,
+                                            ),
+                                            padding: EdgeInsets.all(10),
 
-                                        child: Icon(Icons.remove, color: AppColor.appWhite,)
-                                    )
-                                ),
-                              );
-                            }),
+                                            child: Icon(Icons.remove, color: AppColor.appWhite,)
+                                        )
+                                    ),
+                                  );
+                                }),
+                              ],),
+
 
                             ElevatedButton(
                               onPressed: () {
-                                if(loanApplicationController.selectedBank.value==0||loanApplicationController.selectedBank.value==null){
+                                /*if(loanApplicationController.selectedBank.value==0||loanApplicationController.selectedBank.value==null){
                                   SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Bank Name");
                                   return;
                                 } if(loanApplicationController.selectedProdTypeOrTypeLoan.value==0||loanApplicationController.selectedProdTypeOrTypeLoan.value==null){
@@ -170,7 +210,13 @@ class Step10Form extends StatelessWidget {
                                   final doc = loanApplicationController
                                       .addDocumentList[index];
                                   loanApplicationController.submitDoc(doc: doc);
-                                }},
+                                }*/
+                                if(loanApplicationController.addDocumentList.isNotEmpty) {
+                                  final doc = loanApplicationController
+                                      .addDocumentList[index];
+                                  loanApplicationController.submitDoc(doc: doc);
+                                }
+                                },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColor.secondaryColor,
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -232,6 +278,7 @@ class Step10Form extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 15),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15.0),
                     child: Row(
@@ -249,7 +296,7 @@ class Step10Form extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -259,6 +306,7 @@ class Step10Form extends StatelessWidget {
                       final imageName = item.imageName ?? '';
                       final imagePathRaw = item.imagePath ?? '';
                       final List<String> images = imagePathRaw.split(',').where((e) => e.trim().isNotEmpty).toList();
+                      print("imagePathRaw--->${imagePathRaw}");
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
@@ -290,9 +338,10 @@ class Step10Form extends StatelessWidget {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        loanApplicationController.submitRemoveDocumentApi(
+                                       /* loanApplicationController.submitRemoveDocumentApi(
                                           DocumentId: item.id.toString(),
-                                        );
+                                        );*/
+                                        showDocDeleteDialog(context: context, docId: item.id.toString(),imageName: imageName);
                                       },
                                       child: SvgPicture.asset(
                                         AppImage.deleteIcon,
@@ -312,16 +361,18 @@ class Step10Form extends StatelessWidget {
                                   itemCount: images.length,
                                   separatorBuilder: (_, __) => const SizedBox(width: 10),
                                   itemBuilder: (context, imgIndex) {
+
                                     final imageUrl = '${BaseUrl.imageBaseUrl}${images[imgIndex]}';
+
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: Image.network(
                                           imageUrl,
-                                          width: MediaQuery.of(context).size.width * 0.25,
-                                          height: MediaQuery.of(context).size.height * 0.12,
-                                          fit: BoxFit.cover,
+                                         // width: MediaQuery.of(context).size.width * 0.25,
+                                          //height: MediaQuery.of(context).size.height * 0.12,
+                                          fit: BoxFit.fill,
                                           loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                                             if (loadingProgress == null) return child;
                                             return Center(
@@ -371,4 +422,73 @@ class Step10Form extends StatelessWidget {
       ),
     );
   }
+
+  void showDocDeleteDialog({
+    required BuildContext context,
+    required String docId,
+    required String imageName,
+  })
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx(() => CustomBigYesNoLoaderDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Remove Document",
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: "Are you sure you want to delete ${imageName}",
+                        style: const TextStyle(
+                          color: AppColor.grey700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 👇 Loader logic right here
+          firstButtonChild: loanApplicationController.isLoadingRemoveDoc.value
+              ? const SizedBox(
+            height: 18,
+            width: 18,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Colors.white,
+            ),
+          )
+              : const Text(
+            "Yes, Delete it",
+            style: TextStyle(color: Colors.white),
+          ),
+
+          secondButtonText: "Cancel",
+          firstButtonColor: AppColor.primaryColor,
+          secondButtonColor: AppColor.redColor,
+
+          onFirstButtonPressed: () {
+            if (!loanApplicationController.isLoadingRemoveDoc.value ) {
+               loanApplicationController.submitRemoveDocumentApi(DocumentId: docId.toString(),).then((_){
+                Get.back();
+              });
+            }
+          },
+          onSecondButtonPressed: () {
+            Get.back();
+          },
+        ));
+      },
+    );
+  }
+
 }

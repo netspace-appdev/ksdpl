@@ -9,7 +9,10 @@ class AdddocumentModel {
   final TextEditingController aiIncomeController = TextEditingController(); // If needed
   // List<DocumentCamImage> selectedImages = [];
   RxList<DocumentCamImage> selectedImages = <DocumentCamImage>[].obs;
+  var isThisGenerated = false.obs;
 
+  var isDocNameDisabled = false.obs;
+  var selectedDocStatusCus = Rxn<String>();
 
 
   get universityController => null;

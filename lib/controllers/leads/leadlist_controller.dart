@@ -29,6 +29,7 @@ import '../../services/dashboard_api_service.dart';
 import '../../services/drawer_api_service.dart';
 import 'package:flutter/material.dart';
 
+import '../addDocumentControler/addDocumentModel/addDocumentModel.dart';
 import 'lead_history_controller.dart';
 
 
@@ -1648,6 +1649,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
     required String leadID,
     required String  bankId,
   }) async {
+    print("getSoftSanctionByLeadIdAndBankIdApiMethod===>");
     try {
 
       isLoad(true);
@@ -1677,10 +1679,27 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
         loanApplicationController.chargesDetailTSRLegalCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableTsrcharges.toString()??"0";
         loanApplicationController.chargesDetailValuationCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableValuationCharges.toString()??"0";
         loanApplicationController.chargesDetailProcessingCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionProcessingCharges.toString()??"0";
+        final docs = getSoftSanctionByLeadIdAndBankIdModel.value?.data?.documents;
+        print("docs=========>${docs}");
+        loanApplicationController.documentListByBank.value =
+        (docs?.isNotEmpty ?? false)
+            ? docs!.split(',').map((e) => e.trim()).toList()
+            : [];
+        print("loanApplicationController.documentListByBank.value=========>${loanApplicationController.documentListByBank}");
+        if(loanApplicationController.documentListByBank.isNotEmpty){
+          for (int i = 0; i < loanApplicationController.documentListByBank.length; i++) {
 
+            loanApplicationController.addDocumentList.add(
+              AdddocumentModel(),
+            );
+            final ai = loanApplicationController.addDocumentList[i];
+            ai.aiSourceController.text=loanApplicationController.documentListByBank[i];
+            ai.isThisGenerated.value=true;
+            ai.isDocNameDisabled.value=true;
+          }
 
-
-
+        }
+        print(" loanApplicationController.addDocumentList=========>${ loanApplicationController.addDocumentList}");
         isLoad(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){

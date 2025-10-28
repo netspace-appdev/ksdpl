@@ -123,6 +123,7 @@ class LoanApplService {
       request.fields['Id'] = id;
       request.fields['LoanId'] = LoanId;
       request.fields['ImageName'] = ImageName;
+      request.fields['CustomerStatus'] = "Available";
 
       // Attach files properly under ImagePath (as array)
       for (var item in imageMap) {
@@ -211,7 +212,7 @@ class LoanApplService {
       request.headers.addAll(headers);
 
       // Add fields
-      request.fields['DocumentId'] = DocumentId;
+      request.fields['Id'] = DocumentId;
 
       // Send request
       var streamedResponse = await request.send();

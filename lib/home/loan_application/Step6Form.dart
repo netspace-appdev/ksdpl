@@ -36,11 +36,11 @@ class Step6Form extends StatelessWidget {
                 height: 20,
               ),
               CustomLabeledTextField(
-                label: AppText.grossMonthlySalary,
+                label: AppText.grossMonthlyIncome,
                 isRequired: false,
                 controller: loanApplicationController.fdGrossMonthlySalaryController,
                 inputType: TextInputType.number,
-                hintText: AppText.enterGrossMonthlySalary,
+                hintText: AppText.enterGrossMonthlyIncome,
                 validator:  ValidationHelper.validateName,
               ),
               CustomLabeledTextField(

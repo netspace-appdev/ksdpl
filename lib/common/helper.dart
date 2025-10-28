@@ -477,7 +477,9 @@ class AppText{
 
   static const String financialDetails = "Financial Details";
   static const String grossMonthlySalary = "Gross Monthly Salary";
+  static const String grossMonthlyIncome = "Gross Monthly Income";
   static const String enterGrossMonthlySalary = "Enter Gross Monthly Salary";
+  static const String enterGrossMonthlyIncome = "Enter Gross Monthly Income";
   static const String netMonthlySalary = "Net Monthly Salary";
   static const String enterNetMonthlySalary = "Enter Net Monthly Salary";
   static const String annualBonus = "Annual Bonus";
@@ -809,6 +811,7 @@ class AppText{
   static const String documents = "Documents";
   static const String commonDocumentsForAllPproductDocuments = "Common Documents for all product Documents";
   static const String documentsName = "Document Name";
+  static const String documentStatusByCustomer = "Document Status by Customer";
   static const String viewProducts = "View Products";
   static const String packageName = "Package Name";
   static const String enterPackageName = "Enter Package Name";
@@ -1115,6 +1118,11 @@ class AppText{
   static const String plsSelectState = "Please select a State";
   static const String plsSelectCity = "Please select a City";
   static const String plsSelectDist = "Please select a District";
+
+  static const String available  = "Available";
+  static const String notAvailable  = "Not Available";
+  static const String willProvideLetterOn  = "Will Provide Letter On";
+  static const String substituteWillProvide  = "Substitute Will Provide";
 
 
 
