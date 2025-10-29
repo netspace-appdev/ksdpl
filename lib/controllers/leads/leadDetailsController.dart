@@ -11,6 +11,7 @@ class LeadDetailController extends GetxController{
   var email="".obs;
   var isLoading = false.obs;
   var getLeadDetailModel = Rxn<GetLeadDetailModel>(); //
+
   @override
   void onInit() {
     // TODO: implement onInit

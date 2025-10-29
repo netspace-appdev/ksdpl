@@ -8,6 +8,7 @@ import '../common/base_url.dart';
 import '../common/storage_service.dart';
 
 class DashboardApiService{
+
   static const String baseUrl =BaseUrl.baseUrl; //'http://192.168.29.2:8085/api/';
   static const String base2 = '';
   static const String getEmployeeByPhoneNumber = baseUrl + 'Employee/GetEmployeeByPhoneNumber';
@@ -22,6 +23,9 @@ class DashboardApiService{
   static const String getTodayAttendanceDetailOfEmployeeId = baseUrl + 'Employee/GetTodayAttendanceDetailOfEmployeeId';
   static const String startDayOrEndDayOfEmployee = baseUrl + 'Employee/StartDayOrEndDayOfEmployee';
   static const String getAttendanceListOfEmployeesByEmployeeId = baseUrl + 'Employee/GetAttendanceListOfEmployeesByEmployeeId';
+  static const String getDisburseHistoryByUniqueLeadNo = baseUrl + 'CamNoteDetail/GetDisburseHistoryByUniqueLeadNo';
+  static const String getDetailForDisuburseDocumentDownload = BaseUrl.baseUrl + 'CamNoteDetail/GetDetailForDisuburseDocumentDownload';
+  static const String changeStatusOfDisburseHistory = BaseUrl.baseUrl + 'CamNoteDetail/ChangeStatusOfDisburseHistory';
 
 
 /*
@@ -515,6 +519,124 @@ class DashboardApiService{
       }
     } catch (e) {
       throw Exception('Error: $e');
+    }
+  }
+
+  static  getHistoryOfDisbursedRequest({
+    required  Utr
+  }) async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getDisburseHistoryByUniqueLeadNo),
+      );
+
+
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['UniqueLeadNo'] = Utr;
+
+
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+
+  }
+
+  static getDetailForDisuburseDocumentDownloadApi({
+    required String id,
+  })
+  async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getDetailForDisuburseDocumentDownload),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', '32', fallback: "0");
+      //MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Utr', Utr);
+
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getDetailForDisuburseDocumentDownload, request.fields);
+      Helper.ApiRes(getDetailForDisuburseDocumentDownload, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
+    }
+  }
+
+  static changeStatusOfDisburseHistoryApi({
+    required String id,
+  })
+  async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(changeStatusOfDisburseHistory),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', '32', fallback: "0");
+      //  MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Utr', Utr);
+
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(changeStatusOfDisburseHistory, request.fields);
+      Helper.ApiRes(changeStatusOfDisburseHistory, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
     }
   }
 

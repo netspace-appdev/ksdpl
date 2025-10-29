@@ -4,13 +4,19 @@ import 'dart:io';
 import 'package:call_log/call_log.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/widgets.dart' as pw;
+
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/seachLeadController.dart';
+import 'package:pdf/pdf.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/helper.dart';
 import '../../common/storage_service.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
+import '../../models/DisuburseDocDownloadModel.dart';
 import '../../models/GetBankerDetailSanctionModel/GetBankerDetailSanctionModel.dart';
 import '../../models/addDisburseHistory/AddDisburseHistoryModel.dart';
 import '../../models/addSanctionDetails/AddSanctionDetailsModel.dart';
@@ -18,6 +24,7 @@ import '../../models/dashboard/GetAllLeadsModel.dart';
 import '../../models/dashboard/GetEmployeeModel.dart';
 import '../../models/dashboard/LeadMoveToCommonTaskModel.dart';
 import '../../models/dashboard/WorkOnLeadModel.dart';
+import '../../models/disbursedModel/DisbursedHistoryModel.dart';
 import '../../models/drawer/GetLeadDetailModel.dart';
 import '../../models/drawer/UpdateLeadStageModel.dart';
 import '../../models/getDisburseHistoryByUniqueLeadNo/GetDisburseHistoryByUniqueLeadNoModel.dart';
@@ -55,6 +62,8 @@ class LeadListController extends GetxController {
   var getBankerDetailSanctionModel = Rxn<GetBankerDetailSanctionModel>();
   var getDisburseHistoryByUniqueLeadNoModel = Rxn<GetDisburseHistoryByUniqueLeadNoModel>();
   var addDisburseHistoryModel = Rxn<AddDisburseHistoryModel>();
+  var disbursedHistoryModel = Rxn<DisbursedHistoryModel>();
+  var disuburseDocDownloadModel = Rxn<DisuburseDocDownloadModel>();
 
   UpdateLeadStageModel? updateLeadStageModel;
   LeadMoveToCommonTaskModel? leadMoveToCommonTaskModel;
@@ -106,9 +115,12 @@ class LeadListController extends GetxController {
   final TextEditingController transactionDetailsController = TextEditingController();
   final TextEditingController contactNoController = TextEditingController();
   final TextEditingController disbursedByController = TextEditingController();
-
+  final TextEditingController SuperiorName = TextEditingController();
+  final TextEditingController SuperiorEmail = TextEditingController();
+  final TextEditingController superiorContact = TextEditingController();
 
   final TextEditingController aicFeedbackController = TextEditingController();
+  final TextEditingController bankerEmail = TextEditingController();
 
 
   GetEmployeeModel? getEmployeeModel;
@@ -146,6 +158,9 @@ class LeadListController extends GetxController {
   var lehSelectedDistrict = Rxn<String>();
   var lehSelectedCity = Rxn<String>();
   final TextEditingController lehZipController = TextEditingController();
+
+
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -154,8 +169,14 @@ class LeadListController extends GetxController {
 
     var phone=StorageService.get(StorageService.PHONE);
     getEmployeeByPhoneNumberApi(phone: phone.toString());
+    //DateTime now = DateTime.now();
 
-    String today = DateFormat('dd/MM/yyyy').format(DateTime.now());
+   // String today = DateFormat('dd-MM-yyyy hh:mm:ss a').format(now);
+    String today = DateTime.now().toUtc().toIso8601String() + 'Z';
+
+   // DateTime dateTime = DateTime.parse(today_);
+   // String today = DateFormat('dd/MM/yyyy hh:mm:ss a').format(dateTime.toLocal());
+
     disburseDateController.text = today;
     var rawRole = StorageService.get(StorageService.ROLE).toString();
     rolRx.value = rawRole.replaceAll('[', '').replaceAll(']', '');
@@ -1694,7 +1715,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
     }
   }
 
- Future<void> callUpdateDisburseHistory() async {
+ Future<void> callUpdateDisburseHistory(String loanAccountNo) async {
    final disburse = double.tryParse(partialAmountController.text ?? '0') ?? 0;
    if (disburse > partialAmount.value) {
      print('the amount${disburse}');
@@ -1716,6 +1737,11 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
          transactionDetails: transactionDetailsController.text,
          contactNo: contactNoController.text,
          disbursedBy: disbursedByController.text,
+         LoanAccountNo: loanAccountNo,
+         bankerEmail: bankerEmail.text,
+         SuperiorName: SuperiorName.text,
+         SuperiorEmail: SuperiorEmail.text,
+         SuperiorContact: superiorContact.text,
 
        );
 
@@ -1770,7 +1796,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
    }
  }
 
-  Future<void> callGetdisburseHistoryByUniqueLeadNoApi(String? loanApplicationNo) async {
+  Future<void> callGetDisburseHistoryByUniqueLeadNoApi(String? loanApplicationNo) async {
     try {
       isLoad(true);
 
@@ -1780,12 +1806,11 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
       if (data['success'] == true) {
         getDisburseHistoryByUniqueLeadNoModel.value = GetDisburseHistoryByUniqueLeadNoModel.fromJson(data);
-      //  ToastMessage.msg(getDisburseHistoryByUniqueLeadNoModel.value?.message??'');
+       //ToastMessage.msg(getDisburseHistoryByUniqueLeadNoModel.value?.message??'');
 
-
-        sanctionAmount2Controller.text=getDisburseHistoryByUniqueLeadNoModel.value?.data!.sanctionAmount.toString()??'';
-        totalDisburseAmountController.text=getDisburseHistoryByUniqueLeadNoModel.value?.data!.disburseAmount.toString()??'';
-        uniqueLeadNoController.text=getDisburseHistoryByUniqueLeadNoModel.value?.data!.uniqueLeadNumber.toString()??'';
+        sanctionAmount2Controller.text= getDisburseHistoryByUniqueLeadNoModel.value?.data!.sanctionAmount.toString()??'';
+        totalDisburseAmountController.text= getDisburseHistoryByUniqueLeadNoModel.value?.data!.disburseAmount.toString()??'';
+        uniqueLeadNoController.text= getDisburseHistoryByUniqueLeadNoModel.value?.data!.uniqueLeadNumber.toString()??'';
 
         final sanction = double.tryParse(
             getDisburseHistoryByUniqueLeadNoModel.value?.data?.sanctionAmount.toString() ?? '0'
@@ -1807,10 +1832,10 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
         // Get.back();
       }
       else {
-     //   ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
+       // ToastMessage.msg(data['data']?.toString() ?? AppText.somethingWentWrong);
       }
     } catch (e) {
-  //    print("Error in checkOldPasswordRequestApi: ${e.toString()}");
+     // print("Error in checkOldPasswordRequestApi: ${e.toString()}");
     //  ToastMessage.msg(AppText.somethingWentWrong);
     } finally {
       if(isDashboardLeads.value==false){
@@ -1869,4 +1894,207 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
       // ToastMessage.msg('Something went wrong while opening the link.');
     }
   }
-}
+
+ Future <void> getHistoryOfDisbursedList(String? uniqueLeadNumber) async {
+   try {
+     isLoading(true);
+     var data = await DashboardApiService.getHistoryOfDisbursedRequest(
+       Utr: uniqueLeadNumber,
+
+     );
+     if(data['success'] == true){
+       print("Error checkReceiptStatusForCamNoteApi: ${data['']}");
+
+      disbursedHistoryModel.value= DisbursedHistoryModel.fromJson(data);
+       if(disbursedHistoryModel.value?.data==1){
+         isLoading.value==true;
+       }else{
+         isLoading.value==false;
+       }
+       isLoading(false);
+
+     }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+     }else{
+       ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+     }
+   } catch (e) {
+     print("Error checkReceiptStatusForCamNoteApi: $e");
+
+     ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+
+   } finally {
+     isLoading(false);
+   }
+ }
+
+  Future<void> getDetailForDisuburseDocumentDownload(int? id) async {
+    try {
+      isLoading(true);
+      var data = await DashboardApiService.getDetailForDisuburseDocumentDownloadApi(
+        id: id.toString(),
+
+      );
+      if(data['success'] == true){
+        disuburseDocDownloadModel.value= DisuburseDocDownloadModel.fromJson(data);
+
+      /*  if(disuburseDocDownloadModel.value?.data==1){
+          isLoading.value==true;
+        }else{
+          isLoading.value==false;
+        }*/
+        await generateDisburseDocFormPDF(disuburseDocDownloadModel.value);
+
+        isLoading(false);
+
+        changeStatusOfDisburseHistory(id);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error checkReceiptStatusForCamNoteApi: $e");
+
+     // ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> changeStatusOfDisburseHistory(int? id) async {
+    try {
+      isLoading(true);
+      var data = await DashboardApiService.changeStatusOfDisburseHistoryApi(
+        id: id.toString(),
+      );
+
+      if(data['success'] == true){
+        //disuburseDocDownloadModel.value= DisuburseDocDownloadModel.fromJson(data);
+        /*  if(disuburseDocDownloadModel.value?.data==1){
+          isLoading.value==true;
+        }else{
+          isLoading.value==false;
+        }*/
+        isLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error checkReceiptStatusForCamNoteApi: $e");
+
+      // ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+
+    } finally {
+      isLoading(false);
+    }
+  }
+
+
+
+  Future<void> generateDisburseDocFormPDF(DisuburseDocDownloadModel? model) async {
+    final pdf = pw.Document();
+
+    final headerStyle = pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold);
+    final cellStyle = const pw.TextStyle(fontSize: 10);
+    final labelStyle = pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold);
+
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(20),
+        build: (pw.Context context) {
+          return [
+            pw.Center(
+              child: pw.Text(
+                "Secured Cases",
+                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+              ),
+            ),
+            pw.SizedBox(height: 20),
+
+            if (model?.data != null && model!.data!.isNotEmpty)
+              ...List.generate(model.data!.length, (index) {
+                final d = model.data![index];
+                return pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Table(
+                      border: pw.TableBorder.all(width: 0.5),
+                      columnWidths: {
+                        0: const pw.FixedColumnWidth(30),
+                        1: const pw.FlexColumnWidth(3),
+                        2: const pw.FlexColumnWidth(3),
+                      },
+                      children: [
+                        _buildRow("S. No", "${index + 1}", labelStyle, cellStyle),
+                        _buildRow("Customer Name", d.name ?? '', labelStyle, cellStyle),
+                        _buildRow("Firm/Company/Entity Name", d.firmName ?? '', labelStyle, cellStyle),
+                        _buildRow("NBFC / Bank Name", d.bankName ?? '', labelStyle, cellStyle),
+                        _buildRow("Loan Type", d.loanType ?? '', labelStyle, cellStyle),
+                        _buildRow("Sanction Amount", d.sanctionAmount?.toStringAsFixed(2) ?? '', labelStyle, cellStyle),
+                        _buildRow("Disbursed Amount", d.disburseAmount?.toStringAsFixed(2) ?? '', labelStyle, cellStyle),
+                        _buildRow("Disbursed Type (Part / Full)", "Fully Disbursed", labelStyle, cellStyle),
+                        _buildRow("Insurance Amount (If Any)", "0", labelStyle, cellStyle),
+                        _buildRow("Application Number", d.loanApplicationNo ?? '', labelStyle, cellStyle),
+                        _buildRow("LAN Number", d.uniqueLeadNo ?? '', labelStyle, cellStyle),
+                        _buildRow("ROI%", d.sanctionROI?.toStringAsFixed(2) ?? '0.00%', labelStyle, cellStyle),
+                        _buildRow("PF%", "0.00%", labelStyle, cellStyle),
+                        _buildRow("OTC/CPD Clearance (N/A or Cleared)", "", labelStyle, cellStyle),
+                        _buildRow("Cheque Handover Status (Yes/No)", "", labelStyle, cellStyle),
+                        _buildRow("DSA Name/Code (In Which Case Booked)", d.dsaCode ?? '', labelStyle, cellStyle),
+                        _buildRow("Subvention (If Any)", "0", labelStyle, cellStyle),
+                        _buildRow("Reporting Manager Name", d.reportingManagerName ?? '', labelStyle, cellStyle),
+                        _buildRow("Reporting Manager Number", d.reportingManagerNumber ?? '', labelStyle, cellStyle),
+                        _buildRow("Disbursement Branch", d.branchName ?? '', labelStyle, cellStyle),
+                        _buildRow("Disbursement Branch Address", d.branchAddress ?? '', labelStyle, cellStyle),
+                      ],
+                    ),
+                    pw.SizedBox(height: 20),
+                  ],
+                );
+              })
+            else
+              pw.Center(child: pw.Text("No data available")),
+          ];
+        },
+      ),
+    );
+
+    // Save the PDF file
+    final outputDir = await getApplicationDocumentsDirectory();
+    final file = File("${outputDir.path}/Secured_Cases_Report.pdf");
+    await file.writeAsBytes(await pdf.save());
+
+    // Open the PDF automatically
+    await OpenFile.open(file.path);
+  }
+
+  pw.TableRow _buildRow(String label, String value, pw.TextStyle labelStyle, pw.TextStyle cellStyle) {
+    return pw.TableRow(
+      children: [
+        pw.Padding(
+          padding: const pw.EdgeInsets.all(4),
+          child: pw.Text('', style: cellStyle), // empty first cell for S.No column
+        ),
+        pw.Padding(
+          padding: const pw.EdgeInsets.all(4),
+          child: pw.Text(label, style: labelStyle),
+        ),
+        pw.Padding(
+          padding: const pw.EdgeInsets.all(4),
+          child: pw.Text(value, style: cellStyle),
+        ),
+      ],
+    );
+  }
+
+
+ }
+
+

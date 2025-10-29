@@ -1378,7 +1378,13 @@ class DrawerApiService {
     required String disburseAmount,
     required String transactionDetails,
     required String contactNo,
-    required String disbursedBy}) async {
+    required String disbursedBy,
+    required String LoanAccountNo,
+    required String bankerEmail,
+    required String SuperiorName,
+    required String SuperiorEmail,
+    required String SuperiorContact,
+  }) async {
 
     var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
 
@@ -1409,6 +1415,11 @@ class DrawerApiService {
       request.fields['DisbursedBy'] = disbursedBy;
       request.fields['ContactNo'] = contactNo;
       request.fields['EmployeeId'] = empId.toString();
+      request.fields['BankerEmail'] = bankerEmail.toString();
+      request.fields['LoanAccountNo'] = LoanAccountNo.toString();
+      request.fields['SuperiorName'] = SuperiorName.toString();
+      request.fields['SuperiorEmail'] = SuperiorEmail.toString();
+      request.fields['superiorContact'] = SuperiorContact.toString();
 
       var streamedResponse = await request.send();
 

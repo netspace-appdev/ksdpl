@@ -53,7 +53,6 @@ class LeadListMain extends StatelessWidget  {
   InfoController infoController = Get.put(InfoController());
   LeadListController leadListController = Get.put(LeadListController(),);
   final TextEditingController _searchController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
@@ -64,13 +63,13 @@ class LeadListMain extends StatelessWidget  {
   final _formKeyAicFb = GlobalKey<FormState>();
   final _formKeyOpenPoll = GlobalKey<FormState>();
   CamNoteController camNoteController =Get.put(CamNoteController());
+
   @override
   Widget build(BuildContext context) {
 
     return SafeArea(
       child: Scaffold(
         key:_scaffoldKey,
-
         backgroundColor: AppColor.backgroundColor,
         drawer:   const CustomDrawer(),
         body: RefreshIndicator(
@@ -312,7 +311,8 @@ class LeadListMain extends StatelessWidget  {
         return  Center(child: CustomSkelton.productShimmerList(context));
       }
       if (leadListController.getAllLeadsModel.value == null ||
-          leadListController.getAllLeadsModel.value!.data == null || leadListController.getAllLeadsModel.value!.data!.isEmpty) {
+          leadListController.getAllLeadsModel.value!.data == null ||
+          leadListController.getAllLeadsModel.value!.data!.isEmpty) {
         return  Container(
           height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -336,8 +336,6 @@ class LeadListMain extends StatelessWidget  {
         );
       }
 
-
-
       return  Column(
         children: [
           ListView.builder(
@@ -359,11 +357,8 @@ class LeadListMain extends StatelessWidget  {
                   borderRadius: const BorderRadius.all(
                     Radius.circular(10),
                   ),
-
                 ),
                 child: Column(
-
-
                   children: [
                     /// Header with profile and menu icon
                     Padding(
@@ -448,8 +443,8 @@ class LeadListMain extends StatelessWidget  {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
 
+                    SizedBox(height: 10),
                     /// Lead details
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -467,8 +462,8 @@ class LeadListMain extends StatelessWidget  {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 10),
 
+                    const SizedBox(height: 10),
                     /// Action Buttons (Call, Chat, Mail, WhatsApp, Status)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 3.0),
@@ -515,6 +510,7 @@ class LeadListMain extends StatelessWidget  {
                         ],
                       ),
                     ),
+
                     const SizedBox(height: 10),
                     //mamshi add new api
                     lead.leadStage==10||lead.leadStage==11?Padding(
@@ -522,8 +518,8 @@ class LeadListMain extends StatelessWidget  {
                           child: InkWell(
                             onTap:(){
                               print('dvashgvdvad${lead.uniqueLeadNumber}');
-                              leadListController.callGetdisburseHistoryByUniqueLeadNoApi(lead.uniqueLeadNumber);
-                              showUpdateDisburseHistorySheet();
+                              leadListController.callGetDisburseHistoryByUniqueLeadNoApi(lead.uniqueLeadNumber.toString());
+                              showUpdateDisburseHistorySheet(lead.uniqueLeadNumber.toString());
                              },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -542,6 +538,64 @@ class LeadListMain extends StatelessWidget  {
                             ),
                           ),
                     ):SizedBox(),
+
+                    const SizedBox(height: 10),
+
+                    lead.leadStage==11||lead.leadStage==12?Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 8.0),
+                      child: InkWell(
+                        onTap:(){
+                          print('dvashgvdvad${lead.uniqueLeadNumber}');
+                          leadListController.getHistoryOfDisbursedList(lead.uniqueLeadNumber);
+                          Get.toNamed("/disbursedHistory", arguments: {"leadId":lead.id.toString()});
+
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          width:double.infinity,
+                          decoration: BoxDecoration(
+                              color: AppColor.orangeColor,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: AppColor.orangeColor)
+                          ),
+                          child: const Center(
+                            child: Text(
+                              AppText.history,
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ):SizedBox(),
+
+                    const SizedBox(height: 10),
+
+                    lead.leadStage==11||lead.leadStage==12?Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 8.0),
+                      child: InkWell(
+                        onTap:(){
+                          print('dvashgvdvad${lead.uniqueLeadNumber}');
+                          leadListController.getDetailForDisuburseDocumentDownload(lead.id);
+                          //Get.toNamed("/disbursedHistory", arguments: {"leadId":lead.id.toString()});
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          width:double.infinity,
+                          decoration: BoxDecoration(
+                              color: AppColor.orangeColor,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: AppColor.orangeColor)
+                          ),
+                          child: const Center(
+                            child: Text(
+                              AppText.download,
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ):SizedBox(),
+
                     Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
@@ -588,7 +642,7 @@ class LeadListMain extends StatelessWidget  {
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(color: AppColor.grey700)
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   AppText.underReview,
                                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
@@ -691,6 +745,7 @@ class LeadListMain extends StatelessWidget  {
                         ]
                       ],
                     ),
+
                     SizedBox(height: 10),
 
                     Row(
@@ -755,8 +810,6 @@ class LeadListMain extends StatelessWidget  {
                       ],
                     ),
 
-
-
                     if(lead.leadStage.toString()=="6"&&lead.loanDetail!>0)
                       Column(
                         children: [
@@ -774,9 +827,6 @@ class LeadListMain extends StatelessWidget  {
                         ],
                       ),
 
-
-
-
                     if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6")
                       Column(
                         children: [
@@ -793,8 +843,6 @@ class LeadListMain extends StatelessWidget  {
                           ),
                         ],
                       ),
-
-
 
                     if(lead.leadStage.toString()=="6" )
                       Column(
@@ -830,7 +878,6 @@ class LeadListMain extends StatelessWidget  {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-
                                 _buildTextButton(
                                     label:AppText.addFeedback,
                                     context: context,
@@ -1837,9 +1884,7 @@ overflow: TextOverflow.ellipsis,
                           );
                         }),
 
-
                         const SizedBox(height: 20),
-
 
                         CustomTextLabel(
                           label: AppText.district,
@@ -1852,7 +1897,6 @@ overflow: TextOverflow.ellipsis,
                           if (leadDDController.isDistrictLoading.value) {
                             return  Center(child:CustomSkelton.leadShimmerList(context));
                           }
-
 
                           return CustomDropdown<dist.Data>(
                             items: leadDDController.districtListCurr.value ?? [],
@@ -1940,7 +1984,8 @@ overflow: TextOverflow.ellipsis,
                               errorMessage: AppText.maxPercentMsg.toString(),
                             );
                             // camNoteController.calculateLoanDetails();
-                          },                      ),
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -2077,7 +2122,6 @@ overflow: TextOverflow.ellipsis,
       },
     );
   }
-
 
 /*  void showOpenPollDialog2({
     required BuildContext context,
@@ -2375,7 +2419,6 @@ overflow: TextOverflow.ellipsis,
     );
   }*/
 
-
   void showSendToLEHConditionDialog({
     required BuildContext context,
     required String leadId
@@ -2537,7 +2580,6 @@ overflow: TextOverflow.ellipsis,
       },
     );
   }
-
 
   void showCallFeedbackDialog({
     /*required BuildContext context,*/
@@ -2968,7 +3010,7 @@ overflow: TextOverflow.ellipsis,
       return null;
     }
 
-  void showUpdateDisburseHistorySheet() {
+  void showUpdateDisburseHistorySheet(String LoanAccountNo) {
     showModalBottomSheet(
       context: Get.context!,
       isScrollControlled: true,
@@ -3115,6 +3157,56 @@ overflow: TextOverflow.ellipsis,
                       const SizedBox(height: 12),
 
                       CustomLabeledTextField(
+                        label: "Banker Email",
+                        isRequired: true,
+                        controller: leadListController.disbursedByController,
+                        hintText: "Enter Disbursed By",
+                        inputType: TextInputType.text,
+                        validator: validateDisbursedBy,
+                      ),
+                      const SizedBox(height: 12),
+                      CustomLabeledTextField(
+                        label: "Superior’s Name",
+                        isRequired: true,
+                        controller: leadListController.SuperiorName,
+                        hintText: "Enter Superior’s Name",
+                        inputType: TextInputType.text,
+                        validator: validateDisbursedBySuperiorName,
+                      ),
+                      const SizedBox(height: 12),
+
+                      CustomLabeledTextField(
+                        label: "Superior’s Email",
+                        isRequired: true,
+                        controller: leadListController.SuperiorEmail,
+                        hintText: "Enter Superior’s Email",
+                        inputType: TextInputType.text,
+                        validator: validateDisbursedBySuperiorEmail,
+                      ),
+                      const SizedBox(height: 12),
+
+                      CustomLabeledTextField(
+                        label: "Banker Email",
+                        isRequired: true,
+                        controller: leadListController.bankerEmail,
+                        hintText: "Enter Banker Email",
+                        inputType: TextInputType.text,
+                        validator: validateEmail,
+                      ),
+                      const SizedBox(height: 12),
+
+                      CustomLabeledTextField(
+                        label: "Superior’s Contact Number",
+                        isRequired: true,
+                        controller: leadListController.superiorContact,
+                        hintText: "Enter Superior’s Contact Number",
+                        inputType: TextInputType.number,
+                        maxLength: 10,
+                        validator: validateDisbursedBysuperiorContact,
+                      ),
+                      const SizedBox(height: 12),
+
+                      CustomLabeledTextField(
                         label: "Disbursed By",
                         isRequired: true,
                         controller: leadListController.disbursedByController,
@@ -3122,6 +3214,7 @@ overflow: TextOverflow.ellipsis,
                         inputType: TextInputType.text,
                         validator: validateDisbursedBy,
                       ),
+
                       const SizedBox(height: 20),
 
                       SizedBox(
@@ -3138,7 +3231,7 @@ overflow: TextOverflow.ellipsis,
                               ? null // disable button while loading
                               : () {
                             if (_formKey3.currentState!.validate()) {
-                              leadListController.callUpdateDisburseHistory();
+                              leadListController.callUpdateDisburseHistory(LoanAccountNo);
                             }
                           },
                           child: leadListController.isLoad2.value
@@ -3240,6 +3333,34 @@ overflow: TextOverflow.ellipsis,
     return null;
   }
 
+  String? validateDisbursedBySuperiorName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppText.validateDisbursedBySuperiorName;
+    }
+    return null;
+  }
+
+  String? validateDisbursedBySuperiorEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppText.validateDisbursedBySuperiorEmail;
+    }
+    return null;
+  }
+
+  String? validateDisbursedBysuperiorContact(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppText.validateDisbursedBysuperiorContact;
+    }
+    return null;
+  }
+
+
+  String? validateEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppText.enterBankerEmail;
+    }
+    return null;
+  }
 
 
   void showAICFeebackDialog({
@@ -3503,6 +3624,8 @@ overflow: TextOverflow.ellipsis,
     );
   }
 
+
+
 }
 
 class StatusChip extends StatelessWidget {
@@ -3558,9 +3681,7 @@ class DetailRow extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           value=="null" || value==AppText.customdash?
-          Row(
-
-
+          const Row(
             children: [
               Icon(Icons.horizontal_rule, size: 15,),
             ],):
