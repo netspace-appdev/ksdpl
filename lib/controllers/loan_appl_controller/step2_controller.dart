@@ -10,7 +10,7 @@ class Step2Controller extends GetxController{
     super.onInit();
     print("onInit---");
     loanApplicationController.coApplicantList.add(CoApplicantDetailController());
-    print("legth---coApplicantList-->${loanApplicationController.coApplicantList.length}");
+
 
   }
 

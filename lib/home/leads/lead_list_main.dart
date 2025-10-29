@@ -24,6 +24,7 @@ import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/infoController.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 import '../../controllers/loan_appl_controller/step2_controller.dart';
+import '../../controllers/loan_appl_controller/step7_controller.dart';
 import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
@@ -347,8 +348,7 @@ class LeadListMain extends StatelessWidget  {
             itemBuilder: (context, index) {
 
               final lead = leadListController.getAllLeadsModel.value!.data![index];
-              print("updated at--->${lead.lastUpdatedDate.toString()}");
-              print("updated at--->${Helper.convertDateTime(lead.lastUpdatedDate.toString()) }");
+
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -1385,7 +1385,6 @@ overflow: TextOverflow.ellipsis,
         addLeadController.getLeadDetailByIdApi(leadId: leadId).then((_){
           loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
         });
-       // Step2Controller step2Controller = Get.put(Step2Controller());
 
           loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {

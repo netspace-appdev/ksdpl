@@ -27,7 +27,7 @@ class Step7Form extends StatelessWidget {
 
   LeadDDController leadDDController = Get.put(LeadDDController());
 
-  Step7Controller step7Controller = Get.put(Step7Controller());
+
   final _formKey = GlobalKey<FormState>();
 
   @override

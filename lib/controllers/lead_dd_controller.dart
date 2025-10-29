@@ -848,12 +848,12 @@ class LeadDDController extends GetxController{
   }
 
   int? getDistrictIdByNameCurr(String dName) {
-  print("dName--dd------>${dName}");
+  //print("dName--dd------>${dName}");
     final dists = getDistrictByStateModelCurr.value?.data;
 
   dists!.forEach((ele){
-    print("ele--dd------>${ele.districtName}");
-    print("ele--dd------>${ele.id}");
+   // print("ele--dd------>${ele.districtName}");
+   // print("ele--dd------>${ele.id}");
   });
     if (dists == null || dists.isEmpty) return null;
 
@@ -863,7 +863,7 @@ class LeadDDController extends GetxController{
 
     );
 
-  print("matchedDist.id--dd------>${matchedDist.id}");
+ // print("matchedDist.id--dd------>${matchedDist.id}");
     return matchedDist.id != -1 ? matchedDist.id : null;
   }
   ///I am doing it for current and permanent address

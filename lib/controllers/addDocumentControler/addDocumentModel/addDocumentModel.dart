@@ -12,6 +12,7 @@ class AdddocumentModel {
   var isThisGenerated = false.obs;
 
   var isDocNameDisabled = false.obs;
+  var isDocSubmitted = false.obs;
   var selectedDocStatusCus = Rxn<String>();
 
 

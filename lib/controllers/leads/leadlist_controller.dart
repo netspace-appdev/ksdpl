@@ -1687,6 +1687,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
             : [];
         print("loanApplicationController.documentListByBank.value=========>${loanApplicationController.documentListByBank}");
         if(loanApplicationController.documentListByBank.isNotEmpty){
+          loanApplicationController.addDocumentList.clear();
           for (int i = 0; i < loanApplicationController.documentListByBank.length; i++) {
 
             loanApplicationController.addDocumentList.add(
@@ -1696,7 +1697,23 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
             ai.aiSourceController.text=loanApplicationController.documentListByBank[i];
             ai.isThisGenerated.value=true;
             ai.isDocNameDisabled.value=true;
-          }
+
+            var responseModel = loanApplicationController.loanApplicationDocumentByLoanIdModel.value?.data;
+            if (responseModel != null ) {
+              bool documentExists = responseModel
+                  .any((doc) => doc.imageName?.toLowerCase() == loanApplicationController.documentListByBank[i].toLowerCase());
+
+              if (documentExists) {
+                ai.isDocSubmitted.value = true;
+                print("✅ isDocSubmitted ===>'${loanApplicationController.documentListByBank[i]}' found and marked as submitted!");
+              } else {
+                ai.isDocSubmitted.value = false;
+                print("❌ isDocSubmitted ===> ${loanApplicationController.documentListByBank[i]}' not found in API response.");
+              }
+            }
+            }
+
+          loanApplicationController.addDocumentList.add(AdddocumentModel());
 
         }
         print(" loanApplicationController.addDocumentList=========>${ loanApplicationController.addDocumentList}");
@@ -1704,8 +1721,10 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
-
+        final LoanApplicationController loanApplicationController=Get.find();
         getSoftSanctionByLeadIdAndBankIdModel.value=null;
+        loanApplicationController.addDocumentList.clear();
+        loanApplicationController.addDocumentList.add(AdddocumentModel());
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }

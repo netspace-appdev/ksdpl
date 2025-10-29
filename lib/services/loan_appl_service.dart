@@ -107,6 +107,7 @@ class LoanApplService {
     required String LoanId,
     required String ImageName,
     required List<Map<String, dynamic>> imageMap,
+    required String customerStatus,
   })
   async {
     try {
@@ -123,7 +124,7 @@ class LoanApplService {
       request.fields['Id'] = id;
       request.fields['LoanId'] = LoanId;
       request.fields['ImageName'] = ImageName;
-      request.fields['CustomerStatus'] = "Available";
+      request.fields['CustomerStatus'] = customerStatus;
 
       // Attach files properly under ImagePath (as array)
       for (var item in imageMap) {

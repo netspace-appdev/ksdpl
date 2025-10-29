@@ -63,49 +63,55 @@ class Step10Form extends StatelessWidget {
                               isInputEnabled: !ai.isDocNameDisabled.value,
                             ),
 
-                            if(ai.isThisGenerated.value)
-                            Column(
-                              children: [
-                                const CustomTextLabel(
-                                  label:  AppText.documentStatusByCustomer,
-                                  isRequired: true,
-                                ),
+                            if(!ai.isDocSubmitted.value)
+                              Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                               if(ai.isThisGenerated.value)
+                                 Column(
+                                   children: [
+                                     const CustomTextLabel(
+                                       label:  AppText.documentStatusByCustomer,
+                                       isRequired: true,
+                                     ),
 
-                                const SizedBox(height: 10),
+                                     const SizedBox(height: 10),
 
-                                Obx((){
-                                  if (loanApplicationController.isLoading.value) {
-                                    return  Center(child:CustomSkelton.productShimmerList(context));
-                                  }
+                                     Obx((){
+                                       if (loanApplicationController.isLoading.value) {
+                                         return  Center(child:CustomSkelton.productShimmerList(context));
+                                       }
 
 
-                                  return CustomDropdown<String>(
-                                    items: loanApplicationController.docCustomerStList,
-                                    getId: (item) => item,  // Adjust based on your model structure
-                                    getName: (item) => item,
+                                       return CustomDropdown<String>(
+                                         items: loanApplicationController.docCustomerStList,
+                                         getId: (item) => item,  // Adjust based on your model structure
+                                         getName: (item) => item,
 
-                                    selectedValue: ai.selectedDocStatusCus.value,
-                                    onChanged: (value) {
-                                      ai.selectedDocStatusCus.value =  value.toString();
-                                    },
-                                  );
-                                }),
-                                SizedBox(height: 20,),
-                              ],
-                            ),
+                                         selectedValue: ai.selectedDocStatusCus.value,
+                                         onChanged: (value) {
+                                           ai.selectedDocStatusCus.value =  value.toString();
+                                         },
+                                       );
+                                     }),
+                                     SizedBox(height: 20,),
+                                   ],
+                                 ),
 
-                            CustomDocumentPhotoPickerWidget(
-                              imageList: ai.selectedImages,
-                              label: AppText.UploadDoc,
-                              isCloseVisible: loanApplicationController.photosPropEnabled.value,
-                              isUploadActive: loanApplicationController.photosPropEnabled.value,
-                              toastMessage: AppText.cannotupload,
-                            )
+                               CustomDocumentPhotoPickerWidget(
+                                 imageList: ai.selectedImages,
+                                 label: AppText.UploadDoc,
+                                 isCloseVisible: loanApplicationController.photosPropEnabled.value,
+                                 isUploadActive: loanApplicationController.photosPropEnabled.value,
+                                 toastMessage: AppText.cannotupload,
+                               )
+                             ],
+                           )
 
                           ],
                         ),
-
-                        Row(
+                        if(!ai.isDocSubmitted.value)
+                          Row(
                           mainAxisAlignment: MainAxisAlignment.end,
 
                           children: [
@@ -248,6 +254,35 @@ class Step10Form extends StatelessWidget {
 
                           ],
                         )
+                        else
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+
+                                decoration: BoxDecoration(
+
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(color: AppColor.grey700),
+                                    color: Colors.green
+
+                                ),
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+
+                                  children: [
+                                    Icon(Icons.check_box , color: AppColor.appWhite, size: 20),
+                                    SizedBox(width: 6),
+                                    Text(
+                                      "Submitted",
+                                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
                       ],
                     );
                   }),
@@ -338,9 +373,7 @@ class Step10Form extends StatelessWidget {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                       /* loanApplicationController.submitRemoveDocumentApi(
-                                          DocumentId: item.id.toString(),
-                                        );*/
+
                                         showDocDeleteDialog(context: context, docId: item.id.toString(),imageName: imageName);
                                       },
                                       child: SvgPicture.asset(

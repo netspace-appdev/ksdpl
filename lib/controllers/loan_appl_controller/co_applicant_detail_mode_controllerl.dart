@@ -10,6 +10,7 @@ import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 
 import '../../common/helper.dart';
 import '../../services/drawer_api_service.dart';
+import 'package:ksdpl/models/dashboard/GetAllStateModel.dart' as stateModel;
 
 class CoApplicantDetailController {
   LeadDDController leadDDController=Get.find();
@@ -93,13 +94,29 @@ class CoApplicantDetailController {
   RxList<city.Data> cityListPerm = <city.Data>[].obs;
   RxList<city.Data> cityListCurr = <city.Data>[].obs;
 
+
+  int? getStateIdByName(String sName) {
+    final states = leadDDController.getAllStateModel.value?.data;
+
+    print("states----->dd--->${states}");
+    print("sName----->dd--->${sName}");
+    if (states == null || states.isEmpty) return null;
+
+    final matchedState = states.firstWhere(
+          (state) => state.stateName?.toLowerCase() == sName.toLowerCase(),
+      orElse: () => stateModel.Data(id: -1),
+    );
+    print("matchedState.id----->dd--->${matchedState.id}");
+    return matchedState.id != -1 ? matchedState.id : 0;
+  }
+
   int? getDistrictIdByNameCurr(String dName) {
-    print("dName--dd------>${dName}");
+    //print("dName--dd------>${dName}");
     final dists = getDistrictByStateModelCurr.value?.data;
 
     dists!.forEach((ele){
-      print("ele--dd------>${ele.districtName}");
-      print("ele--dd------>${ele.id}");
+      //print("ele--dd------>${ele.districtName}");
+      //print("ele--dd------>${ele.id}");
     });
     if (dists == null || dists.isEmpty) return null;
 
@@ -109,7 +126,7 @@ class CoApplicantDetailController {
 
     );
 
-    print("matchedDist.id--dd------>${matchedDist.id}");
+   // print("matchedDist.id--dd------>${matchedDist.id}");
     return matchedDist.id != -1 ? matchedDist.id : null;
   }
   Future<void>   getDistrictByStateIdCurrApi({

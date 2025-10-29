@@ -1355,6 +1355,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         isLoadingMainScreen(false);
       } else {
      //   ToastMessage.msg(req['message'] ?? AppText.somethingWentWrong);
+        initializeImpFields();
       }
     } catch (e) {
       print("Error getLeadDetailByIdApi: $e");
@@ -1364,6 +1365,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     } finally {
       isLoadingMainScreen(false);
     }
+  }
+  initializeImpFields(){
+    referencesList.add(ReferenceController());
+    coApplicantList.add(CoApplicantDetailController());
+    familyMemberApplList.add(FamilyMemberController());
+    creditCardsList.add(CreditCardsController());
   }
 
   void populateCoApplicantControllers() async {
@@ -1462,7 +1469,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           print(" coApController.selectedStatePerm.value--->${ coApController.selectedStatePerm.value}");
           print(" cpermanentAdd?['State']--->${ permanentAdd?['State']}");
           if(permanentAdd?['State'] != "" && permanentAdd?['State'] != "0"){
-            final stateId2 = leadDDController.getStateIdByName(leadDDController.selectedStatePerm.value.toString());
+            final stateId2 = coApController.getStateIdByName(coApController.selectedStatePerm.value.toString());
             print("stateId2--->${stateId2}");
             await coApController.getDistrictByStateIdPermApi(
                 stateId: stateId2.toString());
@@ -1730,7 +1737,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
 
   Future<void> submitDoc({required AdddocumentModel doc}) async {
-    print('imageMap${doc.selectedImages}');
+
+    print('selectedDocStatusCus===>${doc.selectedDocStatusCus}');
+    print('aiSourceController===>${doc.aiSourceController.text}');
 
       final loanId = getLoanApplIdModel.value?.data?.id.toString() ?? '';
       final docName = doc.aiSourceController.text.trim();
@@ -1742,6 +1751,13 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         );
         return;
       }
+    if (doc.isThisGenerated.value && (doc.selectedDocStatusCus.value==null || doc.selectedDocStatusCus.value!.isEmpty)  ) {
+      SnackbarHelper.showSnackbar(
+        title: "Submit Document Status",
+        message: "Please enter the document status",
+      );
+      return;
+    }
 
       final images = doc.selectedImages
           .where((img) => img.file != null)
@@ -1771,13 +1787,11 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           LoanId: loanId,
           ImageName: docName,
           imageMap: imageMap,
-          doc:doc
+          doc:doc,
+          customerStatus:doc.selectedDocStatusCus.value.toString()
         );
 
-        // SnackbarHelper.showSnackbar(
-        //   title: "Success",
-        //   message: "Document submitted successfully!",
-        // );
+        print('Submit doc API successs');
 
       } catch (e) {
         SnackbarHelper.showSnackbar(
@@ -1789,57 +1803,6 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       }
     }
 
-    /*   for (int i = 0; i < addDocumentList.length; i++) {
-      final doc = addDocumentList[i];
-
-      final docName = doc.aiSourceController.text
-          .trim(); // or another text field for document name
-
-      if (docName.isEmpty) {
-        SnackbarHelper.showSnackbar(
-          title: "Submit Document Page",
-          message: "Document name is missing for entry ${i + 1}",
-        );
-        return;
-      }
-
-      final images = doc.selectedImages
-          .where((img) => img.file != null)
-          .map((img) => img.file!)
-          .toList();
-
-      if (images.isEmpty) {
-        SnackbarHelper.showSnackbar(
-          title: "Submit Document Page",
-          message: "Please upload at least one image for document ${i + 1}",
-        );
-        return;
-      }
-
-      List<Map<String, dynamic>> imageMap = images.map((file) {
-        return {
-          'fileName': file.path
-              .split('/')
-              .last,
-          'filePath': file.path,
-        };
-      }).toList();
-
-      // 🔁 Call the API per document
-      await SubmittLoanDocumentApi(
-        id: '0',
-        LoanId: loanId,
-        ImageName: docName,
-        imageMap: imageMap,
-      );
-
-      print('✅ Document ${i + 1} submitted with ${images.length} image(s)');
-    }
-
-    SnackbarHelper.showSnackbar(
-      title: "Success",
-      message: "All documents submitted successfully!",
-    );*/
 
 
 
@@ -1849,6 +1812,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     required String ImageName,
     required List<Map<String, dynamic>> imageMap,
     required AdddocumentModel doc,
+    required String customerStatus,
   })
   async {
     try {
@@ -1859,6 +1823,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         LoanId: LoanId,
         ImageName: ImageName,
         imageMap: imageMap,
+        customerStatus: customerStatus
       );
 
       // Handle response
@@ -1912,6 +1877,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         // Handle response
         if (data['success'] == true) {
           loanApplicationDocumentByLoanIdModel.value = LoanApplicationDocumentByLoanIdModel.fromJson(data);
+          await leadListController.getSoftSanctionByLeadIdAndBankIdApiMethod(bankId: selectedBank.value.toString() ,leadID: addLeadController.getLeadDetailModel.value!.data!.id!.toString());
           //ToastMessage.msg(uploadDocumentModel.value!.message.toString());
         } else {
         //  ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
