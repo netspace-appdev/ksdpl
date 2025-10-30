@@ -169,10 +169,10 @@ class LeadListController extends GetxController {
 
     var phone=StorageService.get(StorageService.PHONE);
     getEmployeeByPhoneNumberApi(phone: phone.toString());
-    //DateTime now = DateTime.now();
+    DateTime now = DateTime.now();
 
-   // String today = DateFormat('dd-MM-yyyy hh:mm:ss a').format(now);
-    String today = DateTime.now().toUtc().toIso8601String() + 'Z';
+    String today = DateFormat('dd-MM-yyyy').format(now);
+   // String today = DateTime.now().toUtc().toIso8601String() + 'Z';
 
    // DateTime dateTime = DateTime.parse(today_);
    // String today = DateFormat('dd/MM/yyyy hh:mm:ss a').format(dateTime.toLocal());
@@ -1811,6 +1811,11 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
         sanctionAmount2Controller.text= getDisburseHistoryByUniqueLeadNoModel.value?.data!.sanctionAmount.toString()??'';
         totalDisburseAmountController.text= getDisburseHistoryByUniqueLeadNoModel.value?.data!.disburseAmount.toString()??'';
         uniqueLeadNoController.text= getDisburseHistoryByUniqueLeadNoModel.value?.data!.uniqueLeadNumber.toString()??'';
+        SuperiorName.text= disbursedHistoryModel.value?.data?[0].superiorName.toString()??'';
+        SuperiorEmail.text= disbursedHistoryModel.value?.data?[0].superiorEmail.toString()??'';
+        superiorContact.text= disbursedHistoryModel.value?.data?[0].superiorContact.toString()??'';
+        bankerEmail.text= disbursedHistoryModel.value?.data?[0].bankerEmail.toString()??'';
+
 
         final sanction = double.tryParse(
             getDisburseHistoryByUniqueLeadNoModel.value?.data?.sanctionAmount.toString() ?? '0'
@@ -1903,10 +1908,11 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
      );
      if(data['success'] == true){
-       print("Error checkReceiptStatusForCamNoteApi: ${data['']}");
 
       disbursedHistoryModel.value= DisbursedHistoryModel.fromJson(data);
-       if(disbursedHistoryModel.value?.data==1){
+      print("data disbursedHistoryModel: ${disbursedHistoryModel.value?.data?.length}");
+
+      if(disbursedHistoryModel.value?.data==1){
          isLoading.value==true;
        }else{
          isLoading.value==false;

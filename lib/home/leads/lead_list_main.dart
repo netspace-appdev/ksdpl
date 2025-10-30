@@ -519,6 +519,8 @@ class LeadListMain extends StatelessWidget  {
                             onTap:(){
                               print('dvashgvdvad${lead.uniqueLeadNumber}');
                               leadListController.callGetDisburseHistoryByUniqueLeadNoApi(lead.uniqueLeadNumber.toString());
+                              leadListController.getHistoryOfDisbursedList(lead.uniqueLeadNumber);
+
                               showUpdateDisburseHistorySheet(lead.uniqueLeadNumber.toString());
                              },
                             child: Container(
@@ -3159,8 +3161,8 @@ overflow: TextOverflow.ellipsis,
                       CustomLabeledTextField(
                         label: "Banker Email",
                         isRequired: true,
-                        controller: leadListController.disbursedByController,
-                        hintText: "Enter Disbursed By",
+                        controller: leadListController.bankerEmail,
+                        hintText: "Enter Banker Email",
                         inputType: TextInputType.text,
                         validator: validateDisbursedBy,
                       ),
@@ -3185,7 +3187,7 @@ overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 12),
 
-                      CustomLabeledTextField(
+                /*      CustomLabeledTextField(
                         label: "Banker Email",
                         isRequired: true,
                         controller: leadListController.bankerEmail,
@@ -3193,7 +3195,7 @@ overflow: TextOverflow.ellipsis,
                         inputType: TextInputType.text,
                         validator: validateEmail,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 12),*/
 
                       CustomLabeledTextField(
                         label: "Superior’s Contact Number",
