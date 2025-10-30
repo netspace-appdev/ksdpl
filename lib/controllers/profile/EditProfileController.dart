@@ -1,26 +1,15 @@
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/controllers/registration_dd_controller.dart';
-
-import '../../common/storage_service.dart';
-import '../../custom_widgets/CustomDialog.dart';
-import '../../models/AddUserModel.dart';
-import '../../models/BankersRegistrationModel.dart';
-import '../../models/SendMailForVerificationModel.dart';
-import '../../models/SendMailToBankerAfterRegModel.dart';
-import '../../models/ValidateBankerRegRoleModel.dart';
 import '../../models/drawer/AddCompanyProfileModel.dart';
 import '../../models/drawer/EditBankerRegistrationModel.dart';
 import '../../models/drawer/GetBankerByIdModel.dart';
 import '../../models/drawer/GetCompanyProfileModel.dart';
 import '../../services/drawer_api_service.dart';
-import '../../services/home_service.dart';
 
 
 class EditProfileController extends GetxController {
@@ -107,19 +96,11 @@ class EditProfileController extends GetxController {
 
     try {
       isLoading(true);
-
-
       var data = await DrawerApiService.getBankerByIdApi(bankerId: bankerId,);
-
-
       if(data['success'] == true){
 
         getBankerByIdModel= GetBankerByIdModel.fromJson(data);
-
-
         lenderCodeController.text=getBankerByIdModel!.data![0].bankerCode.toString();
-
-
         isLoading(false);
 
       }else{

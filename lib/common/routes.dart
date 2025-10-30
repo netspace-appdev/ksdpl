@@ -21,6 +21,7 @@ import '../home/camnote/cam_note_single.dart';
 import '../home/camnote/camnote_group_screen.dart';
 import '../home/change_password.dart';
 import '../home/dashboard_screen.dart';
+import '../home/disbursedHistoryList/DisbursedHistoryList.dart';
 import '../home/edit_profile.dart';
 import '../home/leads/GetAllReminderScreen.dart';
 import '../home/leads/lead_details.dart';
@@ -84,4 +85,5 @@ final routes = [
   GetPage(name: '/manageLeaveScreen', page: () => ManageLeaveScreen()),
   GetPage(name: '/insuranceIllustrationdetailScreen', page: () => InsuranceIllustrationdetailLeads()),
   GetPage(name: '/openPollDetailsScreen', page: () => OpenPollDetailsScreen()),
+  GetPage(name: '/disbursedHistory', page: () => DisbursedHistoryListScreen()),
 ];

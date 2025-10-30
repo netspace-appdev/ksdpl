@@ -809,6 +809,7 @@ class AppText{
   static const String income = "Income";
   static const String enterIncome = "Enter the Income";
   static const String documents = "Documents";
+  static const String download = "Download";
   static const String commonDocumentsForAllPproductDocuments = "Common Documents for all product Documents";
   static const String documentsName = "Document Name";
   static const String documentStatusByCustomer = "Document Status by Customer";
@@ -908,6 +909,7 @@ class AppText{
   static const String partialAmountRequired ="Please enter Partial Amount";
   static const String transuctionDetailRequired ="Please enter Transuction Detail";
   static const String disburedbyRequired ="Please enter Name of Disbursed";
+  static const String validateDisbursedBySuperiorName ="Please enter SuperiorName";
   static const String? enterValidAmount="";
   static const String? partialAmountCannotExceed = "The actual amount and disbursement amount should not exceed the sanctioned amount";
   static const String? maxPercentMsg = "The Maximum percentage should not be more than 100 %";
@@ -1119,10 +1121,14 @@ class AppText{
   static const String plsSelectCity = "Please select a City";
   static const String plsSelectDist = "Please select a District";
 
+
   static const String available  = "Available";
   static const String notAvailable  = "Not Available";
   static const String willProvideLetterOn  = "Will Provide Letter On";
   static const String substituteWillProvide  = "Substitute Will Provide";
+  static const String validateDisbursedBySuperiorEmail ="Please enter Superior Email";
+  static const String validateDisbursedBysuperiorContact ="Please enter Superior Contact";
+
 
 
 

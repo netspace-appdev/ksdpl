@@ -18,58 +18,91 @@ import '../../custom_widgets/CustomLabeledTimePicker.dart';
 import '../../services/call_service.dart';
 
 import 'package:ksdpl/models/leads/GetAllLeadStageModel.dart' as stage;
-class LeadDetailsMain extends StatelessWidget {
 
+
+class DisbursedHistoryListScreen extends StatelessWidget {
+ // const DisbursedHistoryListScreen({super.key});
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
   GreetingController greetingController = Get.put(GreetingController());
   InfoController infoController = Get.put(InfoController());
 
   LeadListController leadListController = Get.put(LeadListController());
   LeadDetailController leadDetailController = Get.put(LeadDetailController());
   LeadDDController leadDDController=Get.find();
+
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
-
+        key:_scaffoldKey,
         backgroundColor: AppColor.backgroundColor,
-
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                header(context),
-
-                // White Container
-                Align(
-                  alignment: Alignment.topCenter,  // Centers it
-                  child: Container(
-                    width: double.infinity,
-                    //height: MediaQuery.of(context).size.height*0.5,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+   //     drawer:   CustomDrawer(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  // Gradient Background
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
                     decoration: const BoxDecoration(
-                      color: AppColor.backgroundColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(45),
-                        topRight: Radius.circular(45),
+                      gradient: LinearGradient(
+                        colors: [AppColor.primaryLight, AppColor.primaryDark],
+                        begin: Alignment.centerRight,
+                        end: Alignment.centerLeft,
                       ),
-
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child:Column(
                       children: [
-                        leadSection(context),
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        header(context),
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
+
+                  // White Container
+                  Align(
+                    alignment: Alignment.topCenter,  // Centers it
+                    child: Container(
+                      margin:  EdgeInsets.only(
+                          top:90 // MediaQuery.of(context).size.height * 0.22
+                      ), // <-- Moves it 30px from top
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height*0.80,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                      decoration: const BoxDecoration(
+                        color: AppColor.backgroundColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(45),
+                          topRight: Radius.circular(45),
+                        ),
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              //SizedBox(height: MediaQuery.of(context).size.height*0.1),
+                              leadSection(context)
+                          
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
+
       ),
     );
   }
@@ -80,16 +113,15 @@ class LeadDetailsMain extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
 
+
           InkWell(
               onTap: (){
                 Get.back();
               },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(AppImage.arrowLeft,height: 24,),
-              )),
+              child: Image.asset(AppImage.arrowLeft,height: 40,width: 40,)),
+
           const Text(
-            AppText.leadDetails,
+            AppText.history,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
@@ -101,7 +133,7 @@ class LeadDetailsMain extends StatelessWidget {
 
           InkWell(
             onTap: (){
-              //showFilterDialog(context: context);
+
             },
             child: Container(
 
@@ -114,210 +146,89 @@ class LeadDetailsMain extends StatelessWidget {
                   Radius.circular(10),
                 ),
               ),
+
             ),
           )
+
+
+
         ],
       ),
     );
   }
 
-
-
-  Widget leadSection(BuildContext context){
-    return Obx((){
-      if (leadDetailController.isLoading.value) {
-        return  Center(child: CustomSkelton.productShimmerList(context));
+  Widget leadSection(BuildContext context) {
+    return Obx(() {
+      if (leadListController.isLoading.value) {
+        return Center(child: CustomSkelton.productShimmerList(context));
       }
-      if (leadDetailController.getLeadDetailModel.value == null ||
-          leadDetailController.getLeadDetailModel.value!.data == null || leadDetailController.getLeadDetailModel.value!.data=="") {
-        return  Container(
-          height: MediaQuery.of(context).size.height*0.50,
+
+      final model = leadListController.disbursedHistoryModel.value;
+
+      if (model == null || model.data == null || model.data!.isEmpty) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.50,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          margin: EdgeInsets.symmetric(vertical: 10),
-          decoration:  BoxDecoration(
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
             border: Border.all(color: AppColor.grey200),
             color: AppColor.appWhite,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
-          child: const Column(
-            children: [
-              /// Header with profile and menu icon
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "No data found",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.grey700
-                  ),
-                ),
+          child: const Center(
+            child: Text(
+              "No data found",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColor.grey700,
               ),
-
-            ],
+            ),
           ),
         );
       }
 
-     var data=leadDetailController.getLeadDetailModel.value!.data!;
+      final dataList = model.data!;
 
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        itemCount: dataList.length,
+        itemBuilder: (context, index) {
+          final data = dataList[index];
 
-      return  Column(// height: MediaQuery.of(context).size.height*1.6, //magic
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Lead Details Card
-
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-
-            children: [
-
-              SizedBox(height: 20),
-              buildCard("Basic Info", [
-                DetailRow(label: "Unique Lead Number", value:leadDetailController.getLeadDetailModel.value!.data!.uniqueLeadNumber.toString()),
-                DetailRow(label: "Name", value: data.name.toString()=="null"?AppText.customdash:data.name.toString()),
-                DetailRow(label: "Date Of Birth", value: data.dateOfBirth.toString()=="null"?AppText.customdash:data.dateOfBirth.toString()),
-                DetailRow(label: "Mobile Number", value:  data.mobileNumber.toString()=="null"?AppText.customdash:data.mobileNumber.toString()),
-                DetailRow(label: "Whatsapp Number", value:  data.whatsappNumber.toString()=="null"?AppText.customdash:data.whatsappNumber.toString()),
-                DetailRow(label: "Email", value:  data.email.toString()=="null"?AppText.customdash:data.email.toString()),
-                DetailRow(label: "Pin Code", value:  data.pincode.toString()=="null"?AppText.customdash:data.pincode.toString()),
-                DetailRow(label: "Date", value:Helper.formatDate(leadDetailController.getLeadDetailModel.value!.data!.assignedEmployeeDate.toString()) ),
-                DetailRow(label: "Gender", value:  data.gender.toString()=="null"?AppText.customdash:data.gender.toString()),
-                DetailRow(label: "Street Address", value:  data.streetAddress.toString()=="null"?AppText.customdash:data.streetAddress.toString()),
-                DetailRow(label: "State", value: data.stateName.toString()=="null" ||data.stateName.toString()==""?AppText.customdash:data.stateName.toString()),
-                DetailRow(label: "District", value: data.districtName.toString()=="null"||data.districtName.toString()==""?AppText.customdash:data.districtName.toString()),
-                DetailRow(label: "City", value: data.cityName.toString()=="null"||data.cityName.toString()==""?AppText.customdash:data.cityName.toString()),
-                DetailRow(label: "Nationality", value:  data.nationality.toString()=="null"?AppText.customdash:data.nationality.toString()),
-              ],
-                  Icons.info_outline
-
-              ),
-
-
-              buildCard("Other Info", [
-                DetailRow(label: "Aadhar Card", value:  data.adharCard.toString()=="null"?AppText.customdash: ValidationHelper.hideWithStars(data.adharCard.toString()) ),
-                DetailRow(label: "Pan Card", value:  data.panCard.toString()=="null"?AppText.customdash: ValidationHelper.hideWithStars(data.panCard.toString()) ),
-                DetailRow(label: "Assigned Employee Name", value: data.assignedEmployeeName.toString()=="null"?AppText.customdash:data.assignedEmployeeName.toString()),
-                DetailRow(label: "Product", value: data.productName.toString()=="null"?AppText.customdash:data.productName.toString()),
-                DetailRow(label: "Product Category Name", value: data.productCategoryName.toString()=="null"?AppText.customdash:data.productCategoryName.toString()),
-                DetailRow(label: "Campaign", value: data.campaign.toString()=="null"?AppText.customdash:data.campaign.toString()),
-                DetailRow(label: "Pickup Employee Name", value: data.pickedUpEmployeeName.toString()=="null"?AppText.customdash:data.pickedUpEmployeeName.toString()),
-                DetailRow(label: "Moved to Open Poll", value: data.moveToCommon.toString()=="null"?AppText.customdash:data.moveToCommon.toString()),
-                DetailRow(label: "Assigned Employee Percentage", value: data.assignedEmployeePercentage.toString()=="null"?AppText.customdash:data.assignedEmployeePercentage.toString()),
-                DetailRow(label: "Bank Name", value: data.bankName.toString()=="null"?AppText.customdash:data.bankName.toString()),
-                DetailRow(label: "Branch Name", value: data.branchName.toString()=="null"?AppText.customdash:data.branchName.toString()),
-                DetailRow(label: "Source", value: data.source.toString()=="null"?AppText.customdash:data.source.toString()),
-                DetailRow(label: "Product Typ", value: data.productType.toString()=="null"?AppText.customdash:data.productName.toString()),
-
-
-                DetailRow(label: "Loan Application No", value: data.loanApplicationNo.toString()=="null"?AppText.customdash:data.loanApplicationNo.toString()),
-              ],
-                  Icons.info_outline
-
-              ),
-              buildCard("Financial Info", [
-                DetailRow(label: "Sanction Amount", value: data.sanctionAmount.toString()=="null"?AppText.customdash:data.sanctionAmount.toString()),
-                DetailRow(label: "Disburse Amount", value: data.disburseAmount.toString()=="null"?AppText.customdash:data.disburseAmount.toString()),
-                DetailRow(label: "Monthly Income", value: data.monthlyIncome.toString()=="null"?AppText.customdash:data.monthlyIncome.toString()),
-                DetailRow(label: "Loan Amount", value: data.loanAmountRequested.toString()=="null"?AppText.customdash:data.loanAmountRequested.toString()),
-              ],
-                  Icons.info_outline
-
-              ),
-
-              buildCard("Geo Location", [
-                DetailRow(label: "Geo Location Of Property", value:  data.geoLocationOfProperty.toString()=="null"?AppText.customdash:data.geoLocationOfProperty.toString()),
-                DetailRow(label: "Geo Location Of Residence", value:  data.geoLocationOfResidence.toString()=="null"?AppText.customdash:data.geoLocationOfResidence.toString()),
-                DetailRow(label: "Geo Location Of Office", value:  data.geoLocationOfOffice.toString()=="null"?AppText.customdash:data.geoLocationOfOffice.toString()),
-
-              ],
-                  Icons.info_outline
-
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 120,
-                    child: Text("Stage",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,color:AppColor.primaryColor)),
-                  ),
-                  Wrap(
-                    spacing: 8,
-                    children: [
-                      StatusChip(label: leadDetailController.getLeadDetailModel.value!.data!.stageName.toString(), color: Colors.orange),
-
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-
-          // Phone Number Card
-
-          CustomCard(
-            borderColor: AppColor.grey200,
-            backgroundColor: AppColor.appWhite,
-            child:  Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Phone Number",
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold,color: AppColor.black54)),
-                    ),
-                    const SizedBox(height: 10),
+                /// Basic Info
+                /// Basic Info
+            buildCard("${index + 1}", [
+              DetailRow(label: "ID", value: data.id?.toString() ?? AppText.customdash),
+              DetailRow(label: "Unique Lead Number", value: data.uniqueLeadNo?.toString() ?? AppText.customdash),
+              DetailRow(label: "Date", value: data.date?.toString() ?? AppText.customdash),
+              DetailRow(label: "Amount", value: data.amount?.toString() ?? AppText.customdash),
+              DetailRow(label: "Actual Date", value: data.actualDate?.toString() ?? AppText.customdash),
+              DetailRow(label: "Actual Amount", value: data.actualAmount?.toString() ?? AppText.customdash),
+              DetailRow(label: "Transaction Details", value: data.transactionDetails?.toString() ?? AppText.customdash),
+              DetailRow(label: "Disbursed By", value: data.disbursedBy?.toString() ?? AppText.customdash),
+              DetailRow(label: "Contact No", value: data.contactNo?.toString() ?? AppText.customdash),
+              DetailRow(label: "Loan Account No", value: data.loanAccountNo?.toString() ?? AppText.customdash),
+              DetailRow(label: "Invoice Date", value: data.invoiceDate?.toString() ?? AppText.customdash),
+              DetailRow(label: "Receipt Date", value: data.receiptDate?.toString() ?? AppText.customdash),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                  /*      (leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString()=="3" && leadDetailController.getLeadDetailModel.value!.data!.reminderDate.toString()=="null")?
-
-                        _buildIconButton(icon: AppImage.call_disable, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "call_disable",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context):*/
-                        _buildIconButton(icon: AppImage.call1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "call",
-                          leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                        context: context),
-                        _buildIconButton(icon: AppImage.whatsapp, color: AppColor.orangeColor, phoneNumber:leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "whatsapp",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context),
-                        _buildIconButton(icon: AppImage.message1, color: AppColor.orangeColor, phoneNumber: leadDetailController.getLeadDetailModel.value!.data!.mobileNumber.toString(), label: "message",
-                            leadId:leadDetailController.getLeadDetailModel.value!.data!.id.toString(), leadStage: leadDetailController.getLeadDetailModel.value!.data!.leadStage.toString(),
-                            context: context),
+            ], Icons.numbers),
 
 
-                      ],
-                    )
-                  ],
-                )
+              const SizedBox(height: 16),
+
               ],
             ),
-          ),
-
-          SizedBox(height: 16),
-
-
-
-          SizedBox(height: 20),
-        ],
+          );
+        },
       );
     });
-
   }
 
   Widget _buildIconButton({
@@ -374,7 +285,7 @@ class LeadDetailsMain extends StatelessWidget {
 
 
   void showCallFeedbackDialog({
-   /* required BuildContext context,*/
+    /* required BuildContext context,*/
     required leadId,
     required currentLeadStage,
     required callDuration,
@@ -537,7 +448,7 @@ class LeadDetailsMain extends StatelessWidget {
 
                                 },
                               )),
-                              Text(
+                              const Text(
                                 AppText.callReminder,
                                 style: TextStyle(
                                   fontSize: 17,
@@ -752,7 +663,7 @@ class IconButtonWidget extends StatelessWidget {
       child: Container(
         height: 27,
         width: 27,
-       // color: color.withOpacity(0.2),
+        // color: color.withOpacity(0.2),
         decoration: BoxDecoration(
 
         ),
@@ -761,3 +672,5 @@ class IconButtonWidget extends StatelessWidget {
     );
   }
 }
+
+
