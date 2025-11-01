@@ -134,11 +134,11 @@ class Step3Form extends StatelessWidget {
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.stateName.toString(),
                   selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == loanApplicationController.selectedStateProp.value,
+                        (item) => item.stateName.toString() == loanApplicationController.selectedStateProp.value,
                   ),
                   onChanged: (value) {
-                    loanApplicationController.selectedStateProp.value =  value?.id?.toString();
-                    leadDDController.getDistrictByStateIdCurrApi(stateId: loanApplicationController.selectedStateProp.value);
+                    loanApplicationController.selectedStateProp.value =  value?.stateName?.toString();
+                    leadDDController.getDistrictByStateIdCurrApi(stateId:  value?.id.toString());
                   },
                   onClear: (){
                     loanApplicationController.selectedDistrictProp.value = null;
@@ -171,11 +171,11 @@ class Step3Form extends StatelessWidget {
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.districtName.toString(),
                   selectedValue: leadDDController.districtListCurr.value.firstWhereOrNull(
-                        (item) => item.id.toString() == loanApplicationController.selectedDistrictProp.value,
+                        (item) => item.districtName.toString() == loanApplicationController.selectedDistrictProp.value,
                   ),
                   onChanged: (value) {
-                    loanApplicationController.selectedDistrictProp.value =  value?.id?.toString();
-                    leadDDController.getCityByDistrictIdCurrApi(districtId: loanApplicationController.selectedDistrictProp.value);
+                    loanApplicationController.selectedDistrictProp.value =  value?.districtName?.toString();
+                    leadDDController.getCityByDistrictIdCurrApi(districtId: value?.id?.toString());
                   },
                   onClear: (){
                     loanApplicationController.selectedCityProp.value = null;
@@ -207,10 +207,10 @@ class Step3Form extends StatelessWidget {
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.cityName.toString(),
                   selectedValue: leadDDController. cityListCurr.value.firstWhereOrNull(
-                        (item) => item.id.toString() == loanApplicationController.selectedCityProp.value,
+                        (item) => item.cityName.toString() == loanApplicationController.selectedCityProp.value,
                   ),
                   onChanged: (value) {
-                    loanApplicationController.selectedCityProp.value =  value?.id?.toString();
+                    loanApplicationController.selectedCityProp.value =  value?.cityName?.toString();
                   },
                 );
               }),

@@ -449,7 +449,7 @@ class LeadListController extends GetxController {
           leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
           feedbackRelatedToCall: callFeedbackController.text.trim(),
           feedbackRelatedToLead: leadFeedbackController.text.trim(),
-          callStatus: callStatus,
+          callStatus: "0", //callStatus - changed on 31 Aug
           callDuration: callDuration,
           callStartTime: callStartTime,
           callEndTime: callEndTime,
@@ -477,7 +477,7 @@ class LeadListController extends GetxController {
           leadStageStatus:(callStatus=="0" && currentLeadStage=="13")?currentLeadStage:selectedStage,
           feedbackRelatedToCall: callFeedbackController.text.trim(),
           feedbackRelatedToLead: leadFeedbackController.text.trim(),
-          callStatus: callStatus,
+          callStatus: "0", //callStatus - changed on 31 Aug,
           callDuration: callDuration,
           callStartTime: callStartTime,
           callEndTime: callEndTime,

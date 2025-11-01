@@ -427,6 +427,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   bool isBankerSelected(String bankId) => selectedBankers.contains(bankId);
   final RxSet<String> camNoteLeadBankIds = <String>{}.obs;
+  var camNoteLeadMap = <String, String>{}.obs;
 
   void clearBankerDetails(){
 
@@ -2451,8 +2452,19 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         // Extract bankIds and update observable set
         final ids = getCamNoteLeadIdModel.value!.data?.map((e) => e.bankId.toString()).toSet() ?? {};
 
+
         camNoteLeadBankIds.value = ids;
 
+        ///new code on 1 nove 2025
+        final camNoteMap = <String, String>{};
+        for (var e in getCamNoteLeadIdModel.value!.data ?? []) {
+          if (e.bankId != null && e.softsanction != null) {
+            camNoteMap[e.bankId.toString()] = e.softsanction.toString();
+          }
+        }
+        camNoteLeadMap.value = camNoteMap;
+        print("camNoteLeadMap--->${camNoteLeadMap.value}");
+        ///end
         //camCibilController.text= getCamNoteLeadIdModel.value?.data?[0].emiStoppedOnBeforeThisLoan??"0"
         isLoadingMainScreen(false);
 

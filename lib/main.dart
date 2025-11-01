@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -80,8 +82,17 @@ void main() async{
 
   await NotificationHelper.init();
   ///rm end
-
+  ///renove below code
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
+}
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatelessWidget {

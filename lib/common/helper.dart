@@ -1180,6 +1180,7 @@ class AppColor{
   static const Color lightPrimary2=Color(0xFFDEE5FD);
   static const Color lightRed=Color(0xFFf79999);
   static const Color greenColor= Colors.green;
+  static const Color pendigColor=  Color(0xFF919109);
 
 
 

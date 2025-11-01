@@ -277,10 +277,33 @@ class Step3CamNote extends StatelessWidget {
                     if (camNoteController.camNoteLeadBankIds.contains(banker.bankId.toString()))
                       Column(
                       children: [
-                        StatusChip(label: "Cam Note Alert : Sent", color: Colors.orange)
+                        StatusChip(label: "Cam Note Alert : Sent", color: AppColor.greenColor)
                       ],
                     ),
-
+                    SizedBox(height: 10,),
+                    if (camNoteController.camNoteLeadMap[banker.bankId.toString()] != null)
+                      Column(
+                        children: [
+                          StatusChip(
+                            label: "Status : ${
+                                camNoteController.camNoteLeadMap[banker.bankId.toString()] == '1'
+                                    ? 'Approved'
+                                    : camNoteController.camNoteLeadMap[banker.bankId.toString()] == '-1'
+                                    ? 'Rejected'
+                                    : camNoteController.camNoteLeadMap[banker.bankId.toString()] == '2'
+                                    ? 'Hold'
+                                    : 'Pending'
+                            }",
+                            color:     camNoteController.camNoteLeadMap[banker.bankId.toString()] == '1'
+                                ? AppColor.greenColor
+                                : camNoteController.camNoteLeadMap[banker.bankId.toString()] == '-1'
+                                ?AppColor.redColor
+                                : camNoteController.camNoteLeadMap[banker.bankId.toString()] == '2'
+                                ? Colors.blue
+                                : AppColor.pendigColor, // greyish yellow for pending
+                          ),
+                        ],
+                      ),
                   ],
                     isSelected
                 );
@@ -889,8 +912,9 @@ class StatusChip extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColor.greenColor,
+        color: color,
         borderRadius: BorderRadius.circular(5),
+
       ),
       child: Center(child: Text(label, style: TextStyle(color: AppColor.appWhite, fontSize: 12))),
     );

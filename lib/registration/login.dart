@@ -158,6 +158,8 @@ class LoginScreen extends StatelessWidget {
                               /*  controller.loginApi(controller.mobileController.text,
                                     controller.passwordController.text);*/
 
+                                print("login--->");
+
                                 Helper.checkInternet(() => controller.loginApi(
                                     controller.mobileController.text.trim(),
                                     controller.passwordController.text.trim()));
