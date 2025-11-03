@@ -36,6 +36,7 @@ class ProfileController extends GetxController{
   final TextEditingController addressController = TextEditingController();
   final TextEditingController managerNameController = TextEditingController();
   final TextEditingController adharCardController = TextEditingController();
+  final TextEditingController addressAdharCardController = TextEditingController();
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController qualificationController = TextEditingController();
   final TextEditingController specializationController = TextEditingController();
@@ -44,6 +45,7 @@ class ProfileController extends GetxController{
   final TextEditingController yearOfPassingController = TextEditingController();
   final TextEditingController gradeOrPercentageController = TextEditingController();
   final TextEditingController educationtypeController = TextEditingController();
+  final TextEditingController hireDate = TextEditingController();
   final TextEditingController nameOfCompanyController = TextEditingController();
   final TextEditingController jobTitleController = TextEditingController();
   final TextEditingController departmentController = TextEditingController();
@@ -54,6 +56,7 @@ class ProfileController extends GetxController{
   final TextEditingController reasonForLeavingController = TextEditingController();
   final TextEditingController lastDrawnSalaryController = TextEditingController();
   final TextEditingController responsibilitiesController = TextEditingController();
+  final TextEditingController postalCodeController = TextEditingController();
 
 
   var selectedGender = Rxn<String>();
@@ -62,18 +65,13 @@ class ProfileController extends GetxController{
   var employmentFormList = <WorkExperienceController>[].obs;
 
 
+  DateTime now = DateTime.now();
 
   var obscurePassword = true.obs;
   String? phone = StorageService.get(StorageService.PHONE);
   var getUserByIdModel = Rxn<GetUserByIdModel>();
   var getEducationDetailModel = Rxn<GetEducationDetail>();
   var getProfessionalDetailModel = Rxn<GetProfessionalDetailModel>();
-
-
-
-
-
-
 
 
 
@@ -209,7 +207,11 @@ class ProfileController extends GetxController{
         managerNameController.text = userData?.managerName ?? '';
         addressController.text = userData?.address ?? '';
         adharCardController.text = userData?.aadharNumber ?? '';
-        //companyNameController.text=userData.
+        addressAdharCardController.text = userData?.addressAsPerAddhar.toString() ?? '';
+        selectedGender.value = userData?.gender ?? '';
+        print('gender data   ${userData?.gender}');
+        hireDate.text = userData?.hireDate ?? '';
+        postalCodeController.text = userData?.postalCode.toString() ?? '';
 
         // For dropdowns
         leadDDController.selectedState.value = userData?.state?.toString() ?? '';
@@ -219,8 +221,6 @@ class ProfileController extends GetxController{
         leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
 
         leadDDController.selectedCity.value = userData?.city?.toString() ?? '';
-
-
 
       } else if (data['success'] == false && (data['data'] as List).isEmpty) {
         // Handle empty case
@@ -303,8 +303,7 @@ class ProfileController extends GetxController{
           form.specializationController.text = edu.specialization ?? '';
           form.institutionNameController.text = edu.institutionName ?? '';
           form.universityNameController.text = edu.universityName ?? '';
-          form.yearOfPassingController.text =
-              edu.yearOfPassing?.toString() ?? '';
+          form.yearOfPassingController.text = edu.yearOfPassing?.toString() ?? '';
           form.gradeOrPercentageController.text = edu.gradeOrPercentage ?? '';
           form.educationtypeController.text = edu.educationType ?? '';
 
@@ -394,8 +393,8 @@ class ProfileController extends GetxController{
       isLoading(true);
 
       final payload = {
-        "Id": "28", // your example Id
-        "BranchId": "3", // example branch
+        "Id": getUserByIdModel.value?.data?.id.toString(), // your example Id
+        "BranchId": getUserByIdModel.value?.data?.branchId.toString(), // example branch
         "EmployeeName": employeeNameController.text.trim(),
         "Gender": selectedGender.value ?? "",
         "DateOfBirth": dateOfBirthController.text.trim(),
@@ -405,17 +404,17 @@ class ProfileController extends GetxController{
         "HireDate": atStartDateController.text.trim(),
         "JobRole": JobRoleController.text.trim(),
         "WorkPlace": WorkPlaceController.text.trim(),
-        "ManagerID": "2", // set dynamically if needed
+        "ManagerID": getUserByIdModel.value?.data?.managerID.toString(),// set dynamically if needed
         "Address": addressController.text.trim(),
         "State": leadDDController.selectedState.value ?? "",
         "District": leadDDController.selectedDistrict.value ?? "",
         "City": leadDDController.selectedCity.value ?? "",
-        "PostalCode": "", // add if available
+        "PostalCode": postalCodeController.text.trim(), // add if available
         "CreatedBy": "", // set if needed
         "IsEmployeeHeadOfTheBranch": "0",
         "Image": "", // pass image path if updated
         "Aadharnumber": adharCardController.text.trim(),
-        "AddressAsPerAadhar": "" // set if needed
+        "AddressAsPerAadhar": addressAdharCardController.text.trim() // set if needed
       };
 
       var data = await MoreServices.editEmployeeDetailRequestApi(payload: payload);

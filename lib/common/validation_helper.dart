@@ -4,6 +4,7 @@ import '../custom_widgets/SnackBarHelper.dart';
 import 'helper.dart';
 class ValidationHelper {
 
+
   static String? validatecardNumber(String? value) {
     if (value == null || value.isEmpty) {
       return "Card Number is required";
@@ -22,6 +23,9 @@ class ValidationHelper {
       return "Name is required";
     }
 
+
+
+
    /* String pattern = r'^[a-zA-Z\s]+$';
     RegExp regex = RegExp(pattern);
 
@@ -30,6 +34,12 @@ class ValidationHelper {
     }*/
 
     return null; // Name is valid
+  }
+
+  static String? validatePostalCode(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Postal Code is required";
+    }
   }
   static String? validateData(String? value) {
     if (value == null || value.isEmpty) {

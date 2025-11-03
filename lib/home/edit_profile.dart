@@ -274,7 +274,6 @@ class EditProfileScreen extends StatelessWidget {
                               validator: (value) => value!.isEmpty ? "Please enter some text" : null,
 
                             ),
-
                           ],
                         );
                       }),

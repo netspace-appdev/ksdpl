@@ -281,7 +281,7 @@ class MoreServices {
     }
   }
 
-  static Future<Map<String, dynamic>> editEmployeeDetailRequestApi({required Map<String, String> payload}) async {
+  static Future<Map<String, dynamic>> editEmployeeDetailRequestApi({required Map<String, String?> payload}) async {
     try {
       var request = http.MultipartRequest(
         'POST',

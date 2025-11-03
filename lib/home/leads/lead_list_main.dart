@@ -101,8 +101,6 @@ class LeadListMain extends StatelessWidget  {
                         ),
 
                         header(context),
-
-
                       ],
                     ),
                   ),
@@ -436,10 +434,7 @@ class LeadListMain extends StatelessWidget  {
                               label_code: "open_poll",
                               uln: lead.uniqueLeadNumber.toString(),
                               moveToCommon: lead.moveToCommon??"0"
-
-
                             ),
-
                         ],
                       ),
                     ),
@@ -556,14 +551,14 @@ class LeadListMain extends StatelessWidget  {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           width:double.infinity,
                           decoration: BoxDecoration(
-                              color: AppColor.orangeColor,
+                              color: AppColor.appWhite,
                               borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: AppColor.orangeColor)
+                              border: Border.all(color:Colors.grey.shade700)
                           ),
                           child: const Center(
                             child: Text(
                               AppText.history,
-                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.blackColor),
                             ),
                           ),
                         ),
@@ -572,31 +567,48 @@ class LeadListMain extends StatelessWidget  {
 
                     const SizedBox(height: 10),
 
-                    lead.leadStage==11||lead.leadStage==12?Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: 8.0),
-                      child: InkWell(
-                        onTap:(){
-                          print('dvashgvdvad${lead.uniqueLeadNumber}');
-                          leadListController.getDetailForDisuburseDocumentDownload(lead.id);
-                          //Get.toNamed("/disbursedHistory", arguments: {"leadId":lead.id.toString()});
+                    lead.leadStage == 11 || lead.leadStage == 12
+                        ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Obx(() => InkWell(
+                        onTap: leadListController.isLoading2.value
+                            ? null
+                            : () {
+                          print('Downloading for ${lead.uniqueLeadNumber}');
+                          leadListController
+                              .getDetailForDisuburseDocumentDownload(lead.id);
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          width:double.infinity,
+                          padding:  EdgeInsets.symmetric(vertical: 10),
+                          width: double.infinity,
                           decoration: BoxDecoration(
-                              color: AppColor.orangeColor,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: AppColor.orangeColor)
+                            color: AppColor.appWhite,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.grey.shade700),
                           ),
-                          child: const Center(
-                            child: Text(
+                          child: Center(
+                            child: leadListController.isLoading2.value
+                                ? const SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColor.appWhite,
+                              ),
+                            )
+                                : const Text(
                               AppText.download,
-                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                color: AppColor.blackColor,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ):SizedBox(),
+                      )),
+                    ) : const SizedBox(),
+
 
                     Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 8.0),
@@ -640,7 +652,7 @@ class LeadListMain extends StatelessWidget  {
                               width:MediaQuery.of(context).size.width/3,
 
                               decoration: BoxDecoration(
-                                  color: AppColor.primaryColor,
+                                  color: AppColor.appWhite,
                                   borderRadius: BorderRadius.circular(5),
                                   border: Border.all(color: AppColor.grey700)
                               ),

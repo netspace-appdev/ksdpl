@@ -121,35 +121,10 @@ class MoreSettingScreen extends StatelessWidget {
                                     ),
                                     if (index != menuItems.length - 1)
                                       const Divider(height: 1, thickness: 0.5, color: Colors.amber),
-
-
                                   ],
                                 );
                               }),
                             ),
-                            SizedBox(height: MediaQuery.of(context).size.height*0.1),
-                            Obx((){
-                              if(profileController.isLoading.value){
-                                return const CircularProgressIndicator();
-                              }else{
-                                return Align(
-                                  alignment: AlignmentDirectional.bottomCenter,
-                                  child: CustomElevatedButton(
-                                    text: AppText.submit,
-                                    color: AppColor.primaryColor,
-                                    height: 50,
-                                    onPressed:(){
-                                      profileController.editEmployeeDetailRequest();
-                                      profileController.updateEmployeeEducationDetailsRequest();
-                                      profileController.updateEmployeeProfessionalDetailRequest();
-                                    },
-                                    textStyle: const TextStyle(color: AppColor.appWhite,fontSize:AppFSize.mediumFont, fontWeight: FontWeight.w600),
-                                    width: double.infinity,
-                                  ),
-                                );
-                              }
-                            }),
-
                           ],
                         ),
                       ),

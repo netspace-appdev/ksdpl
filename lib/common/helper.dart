@@ -165,6 +165,9 @@ class AppText{
   static const String EmployeeadharNo="Employee Aadhar No";
   static const String enterEmployeeadharNo="Enter Employee Aadhar No";
 
+  static const String addressEmployeeadharNo="Address As Per Aadhar";
+  static const String enterAddressEmployeeadharNo="Enter Address As Per Aadhar";
+
   static const String enterAccDetails="Enter your account details below";
   static const String createNewAccount="Create new account";
   static const String forgotYourPassword="Forgot your password?";
@@ -768,6 +771,7 @@ class AppText{
   static const String WorkPlace = "Work Place";
   static const String ManagerName = "Manager Name";
   static const String EducationType = "Education Type";
+  static const String TypeHireDate = "Enter Hire Date";
 
   static const String bankerMobileNo = "Banker Mobile No";
   static const String enterBankerMobileNo = "Enter Banker Mobile No";
@@ -830,6 +834,7 @@ class AppText{
   static const String noOfVacancies = "No Of Vacancies";
   static const String jobLevel = "Job Level";
   static const String hiringManager = "Hiring Manager";
+  static const String HireDate = "Hire Date";
   static const String qualificationRequired = "Qualification Required";
   static const String jobDescription  = "Job Desicription";
 
@@ -1128,6 +1133,8 @@ class AppText{
   static const String substituteWillProvide  = "Substitute Will Provide";
   static const String validateDisbursedBySuperiorEmail ="Please enter Superior Email";
   static const String validateDisbursedBysuperiorContact ="Please enter Superior Contact";
+
+  static const String uploadEmployeeImage="Employee Profile Pic ";
 
 
 
