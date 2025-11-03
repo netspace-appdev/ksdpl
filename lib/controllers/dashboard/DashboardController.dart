@@ -630,7 +630,6 @@ class DashboardController extends GetxController {
       double lat = position.latitude;
       double lon = position.longitude;
 
-      print("lat-->${lat} and lon--->${lon}");
 
       await getTodayAttendanceDetailOfEmployeeIdApi(employeeId: eId);
 

@@ -29,6 +29,7 @@ import '../../controllers/new_dd_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
+import '../../custom_widgets/CustomBigLoaderThreeButtonDialogBox.dart';
 import '../../custom_widgets/CustomBigYesNDilogBox.dart';
 import '../../custom_widgets/CustomBigYesNoLoaderDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
@@ -1429,18 +1430,20 @@ overflow: TextOverflow.ellipsis,
         loanApplicationController.clearBeforeGoingOnLoanAppl();
         print('loanDetails${loanDetails}');
 
-     /*   loanDetails==0?
-        addLeadController.getLeadDetailByIdApi(leadId: leadId):*/
-        addLeadController.getLeadDetailByIdApi(leadId: leadId).then((_){
-          loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
-        });
+        addLeadController.getLeadDetailByIdApi(leadId: leadId);
+        loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
 
           loanApplicationController.currentStep.value=0;
-          Get.toNamed("/loanApplication", arguments: {
+        /*  Get.toNamed("/loanApplication", arguments: {
           'leadId': leadId.toString(),
           'uln': uln.toString(),
-          });
-
+          });*/
+        loanApplicationController.isShortTrackActive.value=false;
+        loanApplTypeDialog(
+          context: context,
+          leadId: leadId.toString(),
+          uln: uln.toString(),
+        );
         }
 
        //here we are call cam not update form
@@ -3628,6 +3631,78 @@ overflow: TextOverflow.ellipsis,
   }
 
 
+
+  void loanApplTypeDialog({
+    required BuildContext context,
+    required String leadId,
+    required String uln,
+  })
+  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        LoanApplicationController loanApplicationController=Get.find();
+        return CustomBigLoaderThreeButtonDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.loanAppl,
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: "Which loan application process would you like to follow?",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 👇 Loader logic right here
+          firstButtonChild: const Text("Short Track", style: TextStyle(color: Colors.white),),
+          secondButtonText: "Long Track",
+          thirdButtonText: "Cancel",
+
+          firstButtonColor: AppColor.primaryColor,
+          secondButtonColor: AppColor.secondaryColor,
+          thirdButtonColor: AppColor.redColor,
+
+          onFirstButtonPressed: () {
+
+            loanApplicationController.isShortTrackActive.value=true;
+            Get.back();
+
+            Get.toNamed("/loanApplication", arguments: {
+              'leadId': leadId.toString(),
+              'uln': uln.toString(),
+            });
+          },
+          onSecondButtonPressed: () {
+            loanApplicationController.isShortTrackActive.value=false;
+            Get.back();
+            Get.toNamed("/loanApplication", arguments: {
+              'leadId': leadId.toString(),
+              'uln': uln.toString(),
+            });
+          },
+          onThirdButtonPressed: (){
+            Get.back();
+
+          },
+        );
+      },
+    );
+  }
 
 }
 

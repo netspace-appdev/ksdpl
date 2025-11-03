@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ksdpl/home/loan_application/Step9Form.dart';
 import 'package:ksdpl/home/loan_application/Step10Form.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -52,6 +53,15 @@ class LoanApplicationScreen extends StatelessWidget {
     Step10Form(),
     Step11Form(),
 
+  ];
+
+  final List<Widget> stepFormsShortTrack = [
+    Step1Form(),
+    Step3Form(),
+    Step8Form(),
+    Step9Form(),
+    Step10Form(),
+    Step11Form(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -109,14 +119,14 @@ class LoanApplicationScreen extends StatelessWidget {
                             child: ListView.builder(
                               controller: loanApplicationController.scrollController,
                               scrollDirection: Axis.horizontal,
-                              itemCount: loanApplicationController.titles.length,
+                              itemCount: loanApplicationController.isShortTrackActive.value? loanApplicationController.shortTrackTitles.length : loanApplicationController.titles.length ,
                               itemBuilder: (context, index) {
                                 return Obx(() {
                                   Color circleColor;
 
                                   if (loanApplicationController.currentStep.value == index) {
                                     circleColor = AppColor.primaryColor;
-                                  } else if (loanApplicationController.stepCompleted[index]) {
+                                  } else if (loanApplicationController.isShortTrackActive.value?loanApplicationController.stepCompletedShortTrack[index]:loanApplicationController.stepCompleted[index]) {
                                     circleColor = Colors.green;
                                   } else {
                                     circleColor = Colors.grey;
@@ -135,7 +145,7 @@ class LoanApplicationScreen extends StatelessWidget {
                                               width: 30,
                                               child: Divider(
                                                 thickness: 2,
-                                                color: loanApplicationController.stepCompleted[index - 1]
+                                                color: (loanApplicationController.isShortTrackActive.value?loanApplicationController.stepCompletedShortTrack[index - 1]:loanApplicationController.stepCompleted[index - 1])
                                                     ? Colors.green
                                                     : Colors.grey[300],
                                                 height: 2,
@@ -157,7 +167,7 @@ class LoanApplicationScreen extends StatelessWidget {
                                                     style: const TextStyle(color: Colors.white),
                                                   ),
                                                 ),
-                                                if (loanApplicationController.stepCompleted[index])
+                                                if (loanApplicationController.isShortTrackActive.value?loanApplicationController.stepCompleted[index]:loanApplicationController.stepCompleted[index])
                                                    Positioned(
                                                     right: 0,
                                                     bottom: 0,
@@ -181,7 +191,7 @@ class LoanApplicationScreen extends StatelessWidget {
                                               child: Container(
                                                 width: 100,
                                                 child: Text(
-                                                  _breakTwoWords(loanApplicationController.titles[index]),
+                                                  _breakTwoWords(loanApplicationController.isShortTrackActive.value?loanApplicationController.shortTrackTitles[index]: loanApplicationController.titles[index]  ),
                                                   style: const TextStyle(fontSize: 12, ),
                                                   textAlign: TextAlign.center,
                                                   maxLines: 2,
@@ -291,7 +301,7 @@ class LoanApplicationScreen extends StatelessWidget {
 
                     // Next button
                     ElevatedButton(
-                      onPressed: loanApplicationController.currentStep.value < 10
+                      onPressed: loanApplicationController.currentStep.value < ( loanApplicationController.isShortTrackActive.value?5:10)
                           ? loanApplicationController.nextStep
                           : null,
                       child: const Text(

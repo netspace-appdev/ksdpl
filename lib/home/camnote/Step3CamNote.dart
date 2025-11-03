@@ -280,7 +280,7 @@ class Step3CamNote extends StatelessWidget {
                         StatusChip(label: "Cam Note Alert : Sent", color: AppColor.greenColor)
                       ],
                     ),
-                    SizedBox(height: 10,),
+                /*    SizedBox(height: 10,),
                     if (camNoteController.camNoteLeadMap[banker.bankId.toString()] != null)
                       Column(
                         children: [
@@ -303,7 +303,7 @@ class Step3CamNote extends StatelessWidget {
                                 : AppColor.pendigColor, // greyish yellow for pending
                           ),
                         ],
-                      ),
+                      ),*/
                   ],
                     isSelected
                 );

@@ -189,6 +189,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
   var isDSADisabled = false.obs;
 
+  var isShortTrackActive = false.obs;
+
   var docCustomerStList=[AppText.available, AppText.notAvailable, AppText.willProvideLetterOn, AppText.substituteWillProvide,];
   void addAdditionalSrcDocument() {
     addDocumentList.add(AdddocumentModel());
@@ -247,12 +249,19 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
   var currentStep = 0.obs;
   var stepCompleted = List<bool>.filled(11, false).obs;
+  var stepCompletedShortTrack = List<bool>.filled(6, false).obs;
   LeadDDController leadDController = Get.find();
   final List<String> titles = [
     'Applicant’s Details', 'Co-Applicant Details', 'Property Details',
     'Family Members', 'Credit Cards', 'Financial Details', 'References\n',
     "Banker Details", "Charges Detail", "Submit Document", 'Final Submission'
   ];
+
+  final List<String> shortTrackTitles = [
+    'Applicant’s Details', 'Property Details',
+    "Banker Details", "Charges Detail", "Submit Document", 'Final Submission'
+  ];
+
 
   var selectedBank = Rxn<int>();
   var selectedBankBranch = Rxn<int>();
@@ -261,8 +270,10 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   final scrollController = ScrollController();
   var documentListByBank = <String>[].obs;
   void nextStep() {
-    if (currentStep.value < 11) {
+
+    if (currentStep.value < (isShortTrackActive.value?6: 11)) {
       currentStep.value++;
+      print("currentStep--->${currentStep.value.toString()}");
       scrollToStep(currentStep.value);
     }
   }
@@ -1175,9 +1186,10 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       isLoadingMainScreen(true);
       var req = await LoanApplService.getLoanApplicationDetailsByIdApi(id: id);
 
-      var uln = Get.arguments['uln'];
+     // var uln = Get.arguments['uln'];
 
       if (req['success'] == true) {
+        var uln = Get.arguments['uln'];
         getLoanApplIdModel.value = GetLoanApplIdModel.fromJson(req);
 
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
@@ -1353,12 +1365,16 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         populateCreditCardControllers();
         populateReferenceControllers();
         isLoadingMainScreen(false);
-      } else {
-     //   ToastMessage.msg(req['message'] ?? AppText.somethingWentWrong);
+      } else if(req['success'] == false && (req['data'] as List).isEmpty ){
+
         initializeImpFields();
+
+      }else {
+        ToastMessage.msg(req['message'] ?? AppText.somethingWentWrong);
+
       }
     } catch (e) {
-      print("Error getLeadDetailByIdApi: $e");
+      print("Error getloanaappl: $e");
 
      // ToastMessage.msg(AppText.somethingWentWrong);
       isLoadingMainScreen(false);
@@ -1367,10 +1383,16 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     }
   }
   initializeImpFields(){
+
     referencesList.add(ReferenceController());
     coApplicantList.add(CoApplicantDetailController());
     familyMemberApplList.add(FamilyMemberController());
     creditCardsList.add(CreditCardsController());
+
+    print("initializeImpFields--->referencesList==>${referencesList.length}");
+    print("initializeImpFields--->coApplicantList===>${coApplicantList.length}");
+    print("initializeImpFields--->familyMemberApplList===>${familyMemberApplList.length}");
+    print("initializeImpFields--->creditCardsList===>${creditCardsList.length}");
   }
 
   void populateCoApplicantControllers() async {

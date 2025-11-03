@@ -2456,16 +2456,16 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camNoteLeadBankIds.value = ids;
 
         ///new code on 1 nove 2025
-        final camNoteMap = <String, String>{};
+        /*final camNoteMap = <String, String>{};
         for (var e in getCamNoteLeadIdModel.value!.data ?? []) {
           if (e.bankId != null && e.softsanction != null) {
             camNoteMap[e.bankId.toString()] = e.softsanction.toString();
           }
         }
         camNoteLeadMap.value = camNoteMap;
-        print("camNoteLeadMap--->${camNoteLeadMap.value}");
+        print("camNoteLeadMap--->${camNoteLeadMap.value}");*/
         ///end
-        //camCibilController.text= getCamNoteLeadIdModel.value?.data?[0].emiStoppedOnBeforeThisLoan??"0"
+
         isLoadingMainScreen(false);
 
 

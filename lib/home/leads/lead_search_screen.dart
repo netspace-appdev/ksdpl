@@ -38,6 +38,7 @@ import '../../controllers/open_poll_filter_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
+import '../../custom_widgets/CustomBigLoaderThreeButtonDialogBox.dart';
 import '../../custom_widgets/CustomBigYesNoLoaderDialogBox.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
 import '../../custom_widgets/CustomLabeledTextField2.dart';
@@ -1123,18 +1124,19 @@ class LeadSearchScreen extends StatelessWidget {
           loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
           loanApplicationController.clearBeforeGoingOnLoanAppl();
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
+          loanApplicationController.currentStep.value=0;
           Get.toNamed("/loanApplication", arguments: {
             'leadId': leadId.toString(),
             'uln': uln.toString(),
           });
+          /*loanApplicationController.isShortTrackDisabled.value=false;
+          loanApplTypeDialog(
+            context: context,
+            leadId: leadId.toString(),
+            uln: uln.toString(),
+          );*/
 
         }else if (label_code == "cam_note_details") {
-          /*addLeadController.getLeadDetailByIdApi(leadId: leadId);
-          CamNoteController camNoteController=Get.put(CamNoteController());
-
-          camNoteController.getCamNoteDetailByLeadIdApi(leadId: leadId);
-          Get.toNamed("/camNoteDetailsScreen");*/
-          print("leadId on tap-->${leadId}");
 
 
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
@@ -2271,7 +2273,76 @@ class LeadSearchScreen extends StatelessWidget {
     );
   }
 
+  void loanApplTypeDialog({
+    required BuildContext context,
+    required String leadId,
+    required String uln,
+  })  {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        LoanApplicationController loanApplicationController=Get.find();
+        return CustomBigLoaderThreeButtonDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.loanAppl,
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: "Which loan application process would you like to follow?",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 👇 Loader logic right here
+          firstButtonChild: const Text("Short Track", style: TextStyle(color: Colors.white),),
+          secondButtonText: "Long Track",
+          thirdButtonText: "Cancel",
+
+          firstButtonColor: AppColor.primaryColor,
+          secondButtonColor: AppColor.secondaryColor,
+          thirdButtonColor: AppColor.redColor,
+
+          onFirstButtonPressed: () {
+
+            loanApplicationController.isShortTrackActive.value=true;
+            Get.back();
+
+            Get.toNamed("/loanApplication", arguments: {
+              'leadId': leadId.toString(),
+              'uln': uln.toString(),
+            });
+          },
+          onSecondButtonPressed: () {
+            loanApplicationController.isShortTrackActive.value=false;
+            Get.back();
+            Get.toNamed("/loanApplication", arguments: {
+              'leadId': leadId.toString(),
+              'uln': uln.toString(),
+            });
+          },
+          onThirdButtonPressed: (){
+            Get.back();
+
+          },
+        );
+      },
+    );
+  }
 }
 /*class DetailRow extends StatelessWidget {
   final String label;

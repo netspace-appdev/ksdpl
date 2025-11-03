@@ -88,7 +88,7 @@ class LoanApplService {
         throw Exception('Failed to submit application: ${response.statusCode}');
       }
     } catch (e) {
-      print("Error: $e");
+      print("Error loanApplication get: $e");
       throw Exception('Error while submitting: $e');
     }
   }
