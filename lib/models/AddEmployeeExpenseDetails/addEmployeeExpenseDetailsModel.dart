@@ -4,37 +4,30 @@ class AddEmployeeExpenseDetailsModel {
   List<ExpenseData>? data;
   String? message;
 
-  AddEmployeeExpenseDetailsModel({
-    this.status,
-    this.success,
-    this.data,
-    this.message,
-  });
+  AddEmployeeExpenseDetailsModel(
+      {this.status, this.success, this.data, this.message});
 
-  factory AddEmployeeExpenseDetailsModel.fromJson(Map<String, dynamic> json) {
-    return AddEmployeeExpenseDetailsModel(
-      status: json['status'],
-      success: json['success'],
-      data: (json['data'] != null && json['data'] is List)
-          ? (json['data'] as List)
-          .map((item) => ExpenseData.fromJson(item))
-          .toList()
-          : [],
-      message: json['message'],
-    );
+  AddEmployeeExpenseDetailsModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    success = json['success'];
+    if (json['data'] != null) {
+      data = <ExpenseData>[];
+      json['data'].forEach((v) {
+        data!.add(new ExpenseData.fromJson(v));
+      });
+    }
+    message = json['message'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> result = {};
-    result['status'] = status;
-    result['success'] = success;
-    result['message'] = message;
-
-    if (data != null) {
-      result['data'] = data!.map((e) => e.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['success'] = this.success;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-
-    return result;
+    data['message'] = this.message;
+    return data;
   }
 }
 
@@ -46,46 +39,47 @@ class ExpenseData {
   String? description;
   String? documents;
   int? status;
-  dynamic statusDate;
+  String? statusDate;
   String? employeeName;
+  String? reason;
 
-  ExpenseData({
-    this.id,
-    this.employeeId,
-    this.entryDate,
-    this.expenseDate,
-    this.description,
-    this.documents,
-    this.status,
-    this.statusDate,
-    this.employeeName,
-  });
+  ExpenseData(
+      {this.id,
+        this.employeeId,
+        this.entryDate,
+        this.expenseDate,
+        this.description,
+        this.documents,
+        this.status,
+        this.statusDate,
+        this.employeeName,
+        this.reason});
 
-  factory ExpenseData.fromJson(Map<String, dynamic> json) {
-    return ExpenseData(
-      id: json['id'],
-      employeeId: json['employeeId'],
-      entryDate: json['entryDate'],
-      expenseDate: json['expenseDate'],
-      description: json['description'],
-      documents: json['documents'],
-      status: json['status'],
-      statusDate: json['statusDate'],
-      employeeName: json['employeeName'],
-    );
+  ExpenseData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    employeeId = json['employeeId'];
+    entryDate = json['entryDate'];
+    expenseDate = json['expenseDate'];
+    description = json['description'];
+    documents = json['documents'];
+    status = json['status'];
+    statusDate = json['statusDate'];
+    employeeName = json['employeeName'];
+    reason = json['reason'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-    data['id'] = id;
-    data['employeeId'] = employeeId;
-    data['entryDate'] = entryDate;
-    data['expenseDate'] = expenseDate;
-    data['description'] = description;
-    data['documents'] = documents;
-    data['status'] = status;
-    data['statusDate'] = statusDate;
-    data['employeeName'] = employeeName;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['employeeId'] = this.employeeId;
+    data['entryDate'] = this.entryDate;
+    data['expenseDate'] = this.expenseDate;
+    data['description'] = this.description;
+    data['documents'] = this.documents;
+    data['status'] = this.status;
+    data['statusDate'] = this.statusDate;
+    data['employeeName'] = this.employeeName;
+    data['reason'] = this.reason;
     return data;
   }
 }

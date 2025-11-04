@@ -43,6 +43,8 @@ import 'lead_history_controller.dart';
 class LeadListController extends GetxController {
   var selectedPrevStage = Rxn<String>();
   var isLoading = false.obs;
+  var isLoading2 = false.obs;
+  var isLoading3 = false.obs;
   var isOpenPollApiLoading = false.obs;
   var isLoad = false.obs;
   // GetAllLeadsModel? getAllLeadsModel;
@@ -2044,7 +2046,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
   Future<void> getDetailForDisuburseDocumentDownload(int? id) async {
     try {
-      isLoading(true);
+      isLoading2(true);
       var data = await DashboardApiService.getDetailForDisuburseDocumentDownloadApi(
         id: id.toString(),
 
@@ -2052,14 +2054,9 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
       if(data['success'] == true){
         disuburseDocDownloadModel.value= DisuburseDocDownloadModel.fromJson(data);
 
-      /*  if(disuburseDocDownloadModel.value?.data==1){
-          isLoading.value==true;
-        }else{
-          isLoading.value==false;
-        }*/
         await generateDisburseDocFormPDF(disuburseDocDownloadModel.value);
 
-        isLoading(false);
+        isLoading2(false);
 
         changeStatusOfDisburseHistory(id);
 
@@ -2071,16 +2068,16 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
       print("Error checkReceiptStatusForCamNoteApi: $e");
 
      // ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
+      isLoading2(false);
 
     } finally {
-      isLoading(false);
+      isLoading2(false);
     }
   }
 
   Future<void> changeStatusOfDisburseHistory(int? id) async {
     try {
-      isLoading(true);
+      isLoading3(true);
       var data = await DashboardApiService.changeStatusOfDisburseHistoryApi(
         id: id.toString(),
       );
@@ -2092,7 +2089,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
         }else{
           isLoading.value==false;
         }*/
-        isLoading(false);
+        isLoading3(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
       }else{
@@ -2102,10 +2099,10 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
       print("Error checkReceiptStatusForCamNoteApi: $e");
 
       // ToastMessage.msg(AppText.somethingWentWrong);
-      isLoading(false);
+      isLoading3(false);
 
     } finally {
-      isLoading(false);
+      isLoading3(false);
     }
   }
 

@@ -45,7 +45,7 @@ class Data {
   int? lastDrawnSalary;
   String? reasonForLeaving;
   String? documents;
-  Null? approvedByHR;
+  int? approvedByHR;
   int? isFresher;
 
   Data(

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ksdpl/services/root_binding.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'common/notification_helper.dart';
@@ -82,12 +81,13 @@ void main() async{
 
   await NotificationHelper.init();
   ///rm end
-
   runApp(const MyApp());
+
 }
 
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
 
   // This widget is the root of your application.

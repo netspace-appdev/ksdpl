@@ -159,7 +159,6 @@ class ViewExpenseScreen extends StatelessWidget {
 
             },
             child: Container(
-
               width: 40,
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -258,7 +257,28 @@ class ViewExpenseScreen extends StatelessWidget {
                 Helper.capitalizeEachWord('Date :- ${ viewProductController.formatDate(product.expenseDate.toString())}'), // title
                 [
                  // _buildDetailRow("Documents", product.documents.toString(),"0"),
-                  _buildDetailRow("Description", product.description.toString(),"1"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width/4,
+                        child: Text(
+                          "Status",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.primaryLight,
+                          ),
+                        ),
+                      ),
+                        buildStatusButton(product.status.toString(), context, product.id.toString())
+                        ],
+                  ),
+                  const SizedBox(height: 10),
+
+                  _buildDetailRow("Description", product.description.toString(),"1",context),
+                  const SizedBox(height: 10),
+
+                  _buildDetailRow("Reason", product.reason.toString(),"1",context),
 
                   const SizedBox(height: 10),
 
@@ -283,10 +303,9 @@ class ViewExpenseScreen extends StatelessWidget {
     });
   }
 
-  Widget _buildDetailRow(String label, String value, String check) {
-    //   String assigned = value.toString();
+  Widget _buildDetailRow(String label, String value, String check, BuildContext context) {
+//   String assigned = value.toString();
 //    List<String> assignedParts = assigned.split('T');
-
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -295,7 +314,7 @@ class ViewExpenseScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 85,
+            width: MediaQuery.of(context).size.width/4,
             child: Text(
               "$label",
               style: TextStyle(
@@ -413,6 +432,48 @@ class ViewExpenseScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget buildStatusButton(String status, BuildContext context, String id) {
+    String statusText;
+    Color buttonColor;
+
+    switch (status) {
+      case "1":
+        statusText = "Approved";
+        buttonColor = Colors.green;
+        break;
+      case "0":
+        statusText = "Pending";
+        buttonColor = Colors.orange;
+        break;
+      case "-1":
+        statusText = "Rejected";
+        buttonColor = Colors.red;
+        break;
+      default:
+        statusText = "Unknown";
+        buttonColor = Colors.grey;
+    }
+
+    return Container(
+      height: 30,
+      child: ElevatedButton.icon(
+        onPressed: () {
+
+        },
+       // icon: const Icon(Icons.cached, color: Colors.white),
+        label: Text(
+          statusText,
+          style: const TextStyle(color: Colors.white,fontSize: 12, fontWeight: FontWeight.w600),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: buttonColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        ),
       ),
     );
   }

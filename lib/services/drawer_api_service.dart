@@ -1133,6 +1133,7 @@ class DrawerApiService {
         } else {
           //throw Exception('Invalid API response');
           return jsonResponse;
+
         }
       } else {
         throw Exception('Failed to load data: ${response.statusCode}');

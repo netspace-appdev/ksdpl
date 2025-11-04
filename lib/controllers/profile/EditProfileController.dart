@@ -290,8 +290,6 @@ class EditProfileController extends GetxController {
 
     try {
       isLoading(true);
-
-
       var data = await DrawerApiService.addCompanyProfileApi(
           id : id,
           companyName : companyName,

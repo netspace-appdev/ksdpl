@@ -258,7 +258,7 @@ class LeadDetailsMain extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16),
+        //  SizedBox(height: 16),
 
           // Phone Number Card
 
@@ -625,9 +625,9 @@ class LeadDetailsMain extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColor.primaryColor, // Blue background
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
