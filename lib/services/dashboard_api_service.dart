@@ -523,7 +523,7 @@ class DashboardApiService{
   }
 
   static  getHistoryOfDisbursedRequest({
-    required  Utr
+    required  UniqueLeadNo
   }) async {
 
     try {

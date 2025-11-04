@@ -3664,7 +3664,7 @@ overflow: TextOverflow.ellipsis,
               children: [
 
                 RichText(
-                  text: TextSpan(
+                  text: const TextSpan(
                     style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
                     children: [
                       TextSpan(

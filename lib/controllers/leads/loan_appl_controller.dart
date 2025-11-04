@@ -1362,6 +1362,41 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           talukaPermController.text = permanentAdd?['Taluka'] ?? '';
           selectedCountryPerm.value = permanentAdd?['Country'] ?? '0';
           pinCodePermController.text = permanentAdd?['PinCode'] ?? '';
+
+          ///office address
+
+          final officeAdd = applicant?['OfficeAddress'];
+          houseFlatOfficeAdController.text = officeAdd?['HouseFlatNo'] ?? '';
+          buildingNoOfficeAdController.text = officeAdd?['BuildingNo'] ?? '';
+          societyNameOfficeAdController.text = officeAdd?['SocietyName'] ?? '';
+          localityOfficeAdController.text = officeAdd?['Locality'] ?? '';
+          streetNameOfficeAdController.text = officeAdd?['StreetName'] ?? '';
+          leadDDController.selectedStateOfficeAd.value =
+          officeAdd?['State'] == "" ? "0" : officeAdd?['State'] ?? '0';
+          ///New code on 24 Oct
+          if( officeAdd?['State'] != "" &&  officeAdd?['State'] != "0"){
+            final stateId2 = leadDDController.getStateIdByName(leadDDController.selectedStateOfficeAd.value.toString());
+            await leadDDController.getDistrictByStateIdOfficeAdApi(
+                stateId: stateId2.toString());//leadDDController.selectedStatePerm.value
+            leadDDController.selectedDistrictOfficeAd.value =
+            officeAdd?['District'] == "" ? "0" : officeAdd?['District'] ??
+                '0';
+            ///New code on 24 Oct
+            print(" leadDDController.selectedDistrictOfficeAd.value======>${ leadDDController.selectedDistrictOfficeAd.value}");
+            final distId2 =  leadDDController.getDistrictIdByNameOfficeAd(leadDDController.selectedDistrictOfficeAd.value.toString());
+            print(" distId2======>${ distId2}");
+            await leadDDController.getCityByDistrictIdOfficeAdApi(
+                districtId: distId2.toString());//leadDDController.selectedDistrictPerm.value
+
+            print("permanentAdd?['City']---->${officeAdd?['City']}");
+            leadDDController.selectedCityOfficeAd.value =
+            officeAdd?['City'] == "" ? "0" : officeAdd?['City'] ?? '0';
+          }
+
+
+          talukaOfficeAdController.text = officeAdd?['Taluka'] ?? '';
+          selectedCountryOfficeAd.value = officeAdd?['Country'] ?? '0';
+          pinCodeOfficeAdController.text = officeAdd?['PinCode'] ?? '';
         }
         final data = getLoanApplIdModel.value!.data;
 

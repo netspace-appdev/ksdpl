@@ -989,7 +989,20 @@ class LeadDDController extends GetxController{
     }
   }
 
+  int? getDistrictIdByNameOfficeAd(String dName) {
 
+    final dists = getDistrictByStateModelOfficeAd.value?.data;
+
+    if (dists == null || dists.isEmpty) return null;
+
+    final matchedDist = dists.firstWhere(
+          (dist) => dist.districtName?.toLowerCase() == dName.toLowerCase(),
+      orElse: () => dist.Data(id: -1),
+    );
+
+
+    return matchedDist.id != -1 ? matchedDist.id : null;
+  }
   Future<void>  getDistrictByStateIdOfficeAdApi({
     required stateId
   }) async {

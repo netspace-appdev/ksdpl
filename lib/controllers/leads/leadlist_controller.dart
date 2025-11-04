@@ -2014,7 +2014,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
    try {
      isLoading(true);
      var data = await DashboardApiService.getHistoryOfDisbursedRequest(
-       Utr: uniqueLeadNumber,
+       UniqueLeadNo: uniqueLeadNumber,
 
      );
      if(data['success'] == true){
