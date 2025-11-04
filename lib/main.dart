@@ -82,18 +82,9 @@ void main() async{
   await NotificationHelper.init();
   ///rm end
   runApp(const MyApp());
-  HttpOverrides.global = MyHttpOverrides();
 
 }
 
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-  }
-}
 
 class MyApp extends StatelessWidget {
 

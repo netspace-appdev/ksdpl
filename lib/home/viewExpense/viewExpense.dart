@@ -159,7 +159,6 @@ class ViewExpenseScreen extends StatelessWidget {
 
             },
             child: Container(
-
               width: 40,
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -305,9 +304,8 @@ class ViewExpenseScreen extends StatelessWidget {
   }
 
   Widget _buildDetailRow(String label, String value, String check, BuildContext context) {
-    //   String assigned = value.toString();
+//   String assigned = value.toString();
 //    List<String> assignedParts = assigned.split('T');
-
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
@@ -464,7 +462,7 @@ class ViewExpenseScreen extends StatelessWidget {
       height: 30,
       child: ElevatedButton.icon(
         onPressed: () {
-          // handle your onTap or navigation here
+
         },
        // icon: const Icon(Icons.cached, color: Colors.white),
         label: Text(
