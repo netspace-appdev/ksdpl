@@ -51,9 +51,22 @@ class CoApplicantDetailController {
   final TextEditingController coApNatureOfBizController = TextEditingController();
   final TextEditingController coApStaffStrengthController = TextEditingController();
   final TextEditingController coApSalaryDateController = TextEditingController();
+
+  /// 4 Nov
+  final TextEditingController coApOfficeAdHouseFlatController = TextEditingController();
+  final TextEditingController coApOfficeAdBuildingNoController = TextEditingController();
+  final TextEditingController coApOfficeAdSocietyNameController = TextEditingController();
+  final TextEditingController coApOfficeAdLocalityController = TextEditingController();
+  final TextEditingController coApOfficeAdStreetNameController = TextEditingController();
+  final TextEditingController coApOfficeAdPinCodeController = TextEditingController();
+  final TextEditingController coApOfficeAdTalukaController = TextEditingController();
+
+
+
   var isSameAddressApl = false.obs;
   var selectedCountrCurr = Rxn<String>();
   var selectedCountryPerm = Rxn<String>();
+  var selectedCountryOfficeAd = Rxn<String>();
 
 
   var ownershipList=["Owned", "Rented","Leased", "Jointly Owned", "Other"];
@@ -63,9 +76,11 @@ class CoApplicantDetailController {
 
   var getDistrictByStateModelCurr = Rxn<dist.GetDistrictByStateModel>(); //
   var getDistrictByStateModelPerm = Rxn<dist.GetDistrictByStateModel>(); //
+  var getDistrictByStateModelOfficeAd = Rxn<dist.GetDistrictByStateModel>(); //
 
   var getCityByDistrictIdModelCurr = Rxn<city.GetCityByDistrictIdModel>(); //
   var getCityByDistrictIdModelPerm = Rxn<city.GetCityByDistrictIdModel>(); //
+  var getCityByDistrictIdModelOfficeAd = Rxn<city.GetCityByDistrictIdModel>(); //
 
   var isStateLoadingCurr = false.obs;
   var isDistrictLoadingCurr = false.obs;
@@ -74,6 +89,9 @@ class CoApplicantDetailController {
   var isStateLoadingPerm = false.obs;
   var isDistrictLoadingPerm = false.obs;
   var isCityLoadingPerm = false.obs;
+
+  var isDistrictLoadingOfficeAd = false.obs;
+  var isCityLoadingOfficeAd = false.obs;
 
   // Dropdown selections
   var selectedStateCurr = Rxn<String>();
@@ -84,15 +102,22 @@ class CoApplicantDetailController {
   var selectedDistrictPerm = Rxn<String>();
   var selectedCityPerm = Rxn<String>();
 
+  var selectedCityOfficeAd = Rxn<String>();
+  var selectedDistrictOfficeAd = Rxn<String>();
+  var selectedStateOfficeAd= Rxn<String>();
+
   RxList<city.Data> stateListPerm = <city.Data>[].obs;
   RxList<city.Data> stateListCurr = <city.Data>[].obs;
+  RxList<city.Data> stateListOfficeAd = <city.Data>[].obs;
 
 
   RxList<dist.Data> districtListPerm = <dist.Data>[].obs;
   RxList<dist.Data> districtListCurr = <dist.Data>[].obs;
+  RxList<dist.Data> districtListOfficeAd = <dist.Data>[].obs;
 
   RxList<city.Data> cityListPerm = <city.Data>[].obs;
   RxList<city.Data> cityListCurr = <city.Data>[].obs;
+  RxList<city.Data> cityListOfficeAd = <city.Data>[].obs;
 
 
   int? getStateIdByName(String sName) {
@@ -225,6 +250,94 @@ class CoApplicantDetailController {
     }
   }
 
+
+  Future<void>  getDistrictByStateIdOfficeAdApi({
+    required stateId
+  }) async {
+    try {
+
+      isDistrictLoadingOfficeAd(true);
+
+
+      var data = await DrawerApiService.getDistrictByStateIdApi(stateId: stateId);
+
+
+      if(data['success'] == true){
+
+        getDistrictByStateModelOfficeAd.value= dist.GetDistrictByStateModel.fromJson(data);
+
+        final List<dist.Data> districts = getDistrictByStateModelOfficeAd.value?.data ?? [];
+        districtListOfficeAd.value = List<dist.Data>.from(districts);
+
+
+        isDistrictLoadingOfficeAd(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getDistrictByStateModelOfficeAd.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error OfficeAd:coapplicant model $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isDistrictLoadingOfficeAd(false);
+    } finally {
+
+
+      isDistrictLoadingOfficeAd(false);
+    }
+  }
+
+
+/*  Future<void>  getDistrictByStateIdOfficeAdApi({
+    required stateId
+  }) async {
+    try {
+
+      isDistrictLoadingPerm(true);
+
+
+      var data = await DrawerApiService.getDistrictByStateIdApi(stateId: stateId);
+
+
+      if(data['success'] == true){
+
+        getDistrictByStateModelPerm.value= dist.GetDistrictByStateModel.fromJson(data);
+
+        final List<dist.Data> districts = getDistrictByStateModelPerm.value?.data ?? [];
+        districtListPerm.value = List<dist.Data>.from(districts);
+
+
+        isDistrictLoadingPerm(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getDistrictByStateModelPerm.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllStateApi:coapplicant model $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isDistrictLoadingPerm(false);
+    } finally {
+
+
+      isDistrictLoadingPerm(false);
+    }
+  }*/
+
   Future<void>   getCityByDistrictIdCurrApi({
     required districtId
   }) async {
@@ -308,6 +421,50 @@ class CoApplicantDetailController {
       isCityLoadingPerm(false);
     }
   }
+
+
+  Future<void>   getCityByDistrictIdOfficeAdApi({
+    required districtId
+  }) async {
+    try {
+
+      isCityLoadingOfficeAd(true);
+
+
+      var data = await DrawerApiService.getCityByDistrictIdApi(districtId: districtId);
+
+
+      if(data['success'] == true){
+
+        getCityByDistrictIdModelOfficeAd.value= city.GetCityByDistrictIdModel.fromJson(data);
+
+        final List<city.Data> cities = getCityByDistrictIdModelOfficeAd.value?.data ?? [];
+        cityListOfficeAd.value = List<city.Data>.from(cities);
+
+        isCityLoadingOfficeAd(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getCityByDistrictIdModelOfficeAd.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getCityByDistrictId: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isCityLoadingOfficeAd(false);
+    } finally {
+
+
+      isCityLoadingOfficeAd(false);
+    }
+  }
+
 
   void copyPresentToPermanentAddress() {
     // Text field values

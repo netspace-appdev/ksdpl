@@ -1439,6 +1439,7 @@ overflow: TextOverflow.ellipsis,
           'uln': uln.toString(),
           });*/
         loanApplicationController.isShortTrackActive.value=false;
+        print('uln.toString() on tap-========>${uln.toString()}');
         loanApplTypeDialog(
           context: context,
           leadId: leadId.toString(),
@@ -3689,6 +3690,7 @@ overflow: TextOverflow.ellipsis,
           },
           onSecondButtonPressed: () {
             loanApplicationController.isShortTrackActive.value=false;
+            print('uln.toString() on Long-========>${uln.toString()}');
             Get.back();
             Get.toNamed("/loanApplication", arguments: {
               'leadId': leadId.toString(),

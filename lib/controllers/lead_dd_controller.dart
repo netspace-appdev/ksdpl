@@ -97,9 +97,11 @@ class LeadDDController extends GetxController{
   RxList<prodList.Data> prodListByBank = <prodList.Data>[].obs;
   var getDistrictByStateModelCurr = Rxn<GetDistrictByStateModel>(); //
   var getDistrictByStateModelPerm = Rxn<GetDistrictByStateModel>(); //
+  var getDistrictByStateModelOfficeAd = Rxn<GetDistrictByStateModel>(); //
 
   var getCityByDistrictIdModelCurr = Rxn<GetCityByDistrictIdModel>(); //
   var getCityByDistrictIdModelPerm = Rxn<GetCityByDistrictIdModel>(); //
+  var getCityByDistrictIdModelOfficeAd = Rxn<GetCityByDistrictIdModel>(); //
 
   RxList<allBank.Data> bankList = <allBank.Data>[].obs;
 
@@ -111,6 +113,19 @@ class LeadDDController extends GetxController{
   var isStateLoadingPerm = false.obs;
   var isDistrictLoadingPerm = false.obs;
   var isCityLoadingPerm = false.obs;
+
+
+  ///04 Nov
+  var selectedStateOfficeAd = Rxn<String>();
+  var selectedDistrictOfficeAd = Rxn<String>();
+  var selectedCityOfficeAd = Rxn<String>();
+
+  var isStateLoadingOfficeAd = false.obs;
+  var isDistrictLoadingOfficeAd = false.obs;
+  var isCityLoadingOfficeAd= false.obs;
+
+  RxList<dist.Data> districtListOfficeAd = <dist.Data>[].obs;
+  RxList<city.Data> cityListOfficeAd = <city.Data>[].obs;
 
   @override
   void onInit() {
@@ -197,6 +212,9 @@ class LeadDDController extends GetxController{
     isDistrictLoadingPerm.value = false;
     isCityLoadingPerm.value = false;
 
+    isStateLoadingOfficeAd = false.obs;
+    isDistrictLoadingOfficeAd = false.obs;
+    isCityLoadingOfficeAd= false.obs;
 
   }
 
@@ -971,7 +989,54 @@ class LeadDDController extends GetxController{
     }
   }
 
- Future<void>   getCityByDistrictIdCurrApi({
+
+  Future<void>  getDistrictByStateIdOfficeAdApi({
+    required stateId
+  }) async {
+
+    print('state id is :'+stateId);
+    try {
+
+      isDistrictLoadingOfficeAd(true);
+
+
+      var data = await DrawerApiService.getDistrictByStateIdApi(stateId: stateId);
+
+
+      if(data['success'] == true){
+
+        getDistrictByStateModelOfficeAd.value= GetDistrictByStateModel.fromJson(data);
+
+        final List<dist.Data> districts = getDistrictByStateModelOfficeAd.value?.data ?? [];
+        districtListOfficeAd.value = List<dist.Data>.from(districts);
+
+
+        isDistrictLoadingOfficeAd(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getDistrictByStateModelOfficeAd.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getDistrictByStateIdOfficeAdApi:lead controller ______ $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isDistrictLoadingOfficeAd(false);
+    } finally {
+
+
+      isDistrictLoadingOfficeAd(false);
+    }
+  }
+
+
+  Future<void>   getCityByDistrictIdCurrApi({
     required districtId
   }) async {
     print("getCityByDistrictIdCurrApi----->");
@@ -1056,5 +1121,49 @@ class LeadDDController extends GetxController{
       isCityLoadingPerm(false);
     }
   }
+
+
+  Future<void>  getCityByDistrictIdOfficeAdApi({
+    required districtId
+  }) async {
+    try {
+
+      isCityLoadingOfficeAd(true);
+
+
+      var data = await DrawerApiService.getCityByDistrictIdApi(districtId: districtId);
+
+
+      if(data['success'] == true){
+
+        getCityByDistrictIdModelOfficeAd.value= GetCityByDistrictIdModel.fromJson(data);
+
+        final List<city.Data> cities = getCityByDistrictIdModelOfficeAd.value?.data ?? [];
+        cityListOfficeAd.value = List<city.Data>.from(cities);
+
+        isCityLoadingOfficeAd(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getCityByDistrictIdModelOfficeAd.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getCityByDistrictIdOfficeAdApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isCityLoadingOfficeAd(false);
+    } finally {
+
+
+      isCityLoadingOfficeAd(false);
+    }
+  }
+
 
 }

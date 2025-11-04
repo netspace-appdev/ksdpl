@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
 import '../../common/validation_helper.dart';
 import '../../controllers/lead_dd_controller.dart';
 import '../../controllers/leads/loan_appl_controller.dart';
-import '../../controllers/loan_appl_controller/step2_controller.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
-import 'package:ksdpl/models/dashboard/GetAllBankModel.dart' as bank;
-import 'package:ksdpl/models/dashboard/GetAllBranchBIModel.dart' as bankBrach;
-import 'package:ksdpl/models/dashboard/GetAllChannelModel.dart' as channel;
-
 import 'package:ksdpl/models/dashboard/GetAllStateModel.dart';
 import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
 import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
-
 import '../../controllers/loan_appl_controller/co_applicant_detail_mode_controllerl.dart';
 class Step2Form extends StatelessWidget {
   final loanApplicationController = Get.find<LoanApplicationController>();
 
-  LeadDDController leadDDController = Get.put(LeadDDController());
+  final LeadDDController leadDDController = Get.put(LeadDDController());
   //Step2Controller step2Controller = Get.put(Step2Controller());
   final _formKey = GlobalKey<FormState>();
+
+  Step2Form({super.key});
 
 
   @override
@@ -41,12 +35,13 @@ class Step2Form extends StatelessWidget {
           children: [
 
             Obx(() {
-              if( loanApplicationController.isLoadingMainScreen.value)
+              if( loanApplicationController.isLoadingMainScreen.value) {
                 return Center(
                   child: CustomSkelton.productShimmerList(context),
                 );
+              }
 
-              print("length coApplicantList--->${loanApplicationController.coApplicantList.length}");
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(loanApplicationController.coApplicantList.length, (index) {
@@ -55,16 +50,16 @@ class Step2Form extends StatelessWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20,),
-                      Text( AppText.coApplicantDetails +" (${index + 1})", style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
+                      Text( "${AppText.coApplicantDetails} (${index + 1})", style: const TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      const SizedBox(height: 20,),
                       ExpansionTile(
                         initiallyExpanded: true,
 
 
-                        childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                        title: Text( AppText.coApplicantDetails, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                        leading: Icon(Icons.list_alt, size: 20,),
+                        childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
+                        title: const Text( AppText.coApplicantDetails, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                        leading:const  Icon(Icons.list_alt, size: 20,),
                         children: [
 
                           Column(
@@ -193,7 +188,7 @@ class Step2Form extends StatelessWidget {
                                   },
                                 );
                               }),
-                              SizedBox(height: 20,),
+                              const SizedBox(height: 20,),
 
                               CustomLabeledTextField(
                                 label: AppText.nationality,
@@ -255,9 +250,9 @@ class Step2Form extends StatelessWidget {
                       ///co AP Current AKA Present Address
 
                       ExpansionTile(
-                        childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                        title: Text( AppText.presentAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                        leading: Icon(Icons.list_alt, size: 20,),
+                        childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
+                        title: const Text( AppText.presentAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                        leading: const Icon(Icons.list_alt, size: 20,),
                         children: [
 
                           Column(
@@ -319,12 +314,12 @@ class Step2Form extends StatelessWidget {
                                 validator: ValidationHelper.validateName,
                               ),
 
-                              CustomTextLabel(
+                              const CustomTextLabel(
                                 label: AppText.state,
                                 isRequired: false,
                               ),
 
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
 
 
                               Obx((){
@@ -355,7 +350,7 @@ class Step2Form extends StatelessWidget {
 
                               const SizedBox(height: 20),
 
-                              CustomTextLabel(
+                              const CustomTextLabel(
                                 label: AppText.district,
                                 isRequired: false,
                               ),
@@ -391,7 +386,7 @@ class Step2Form extends StatelessWidget {
                               const SizedBox(height: 20),
 
 
-                              CustomTextLabel(
+                              const CustomTextLabel(
                                 label: AppText.city,
                                 isRequired: false,
                               ),
@@ -429,7 +424,7 @@ class Step2Form extends StatelessWidget {
                                 validator: ValidationHelper.validateName,
                               ),
 
-                              CustomTextLabel(
+                              const CustomTextLabel(
                                 label: AppText.country,
                                 isRequired: false,
                               ),
@@ -468,10 +463,10 @@ class Step2Form extends StatelessWidget {
                                       }
                                     },
                                   ),
-                                  Expanded(
+                                  const Expanded(
                                     child: Text(
                                       "Use Present Address as Permanent Address",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: AppColor.secondaryColor,
@@ -489,9 +484,9 @@ class Step2Form extends StatelessWidget {
                       ///co AP Permanent Address
 
                       ExpansionTile(
-                        childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                        title: Text( AppText.permanentAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                        leading: Icon(Icons.list_alt, size: 20,),
+                        childrenPadding:const EdgeInsets.symmetric(horizontal: 20),
+                        title: const Text( AppText.permanentAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                        leading: const Icon(Icons.list_alt, size: 20,),
                         children: [
 
                           Column(
@@ -553,12 +548,12 @@ class Step2Form extends StatelessWidget {
                                 validator: ValidationHelper.validateName,
                               ),
 
-                              CustomTextLabel(
+                              const CustomTextLabel(
                                 label: AppText.state,
                                 isRequired: false,
                               ),
 
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
 
 
                               Obx((){
@@ -589,7 +584,7 @@ class Step2Form extends StatelessWidget {
 
                               const SizedBox(height: 20),
 
-                              CustomTextLabel(
+                              const CustomTextLabel(
                                 label: AppText.district,
                                 isRequired: false,
                               ),
@@ -623,7 +618,7 @@ class Step2Form extends StatelessWidget {
                               const SizedBox(height: 20),
 
 
-                              CustomTextLabel(
+                              const CustomTextLabel(
                                 label: AppText.city,
                                 isRequired: false,
                               ),
@@ -661,7 +656,7 @@ class Step2Form extends StatelessWidget {
                                 validator: ValidationHelper.validateName,
                               ),
 
-                              CustomTextLabel(
+                              const CustomTextLabel(
                                 label: AppText.country,
                                 isRequired: false,
                               ),
@@ -691,11 +686,216 @@ class Step2Form extends StatelessWidget {
                         ],
                       ),
 
+                      ///co AP Office Address
+
+                      ExpansionTile(
+                        childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
+                        title: const Text( AppText.officeAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                        leading: const Icon(Icons.list_alt, size: 20,),
+                        children: [
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.houseFlatNo,
+                                isRequired: false,
+                                controller: coAp.coApOfficeAdHouseFlatController,
+                                inputType: TextInputType.number,
+                                hintText: AppText.enterHouseFlatNo,
+                                validator:  ValidationHelper.validateName,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.buildingNo,
+                                isRequired: false,
+                                controller: coAp.coApOfficeAdBuildingNoController,
+                                inputType: TextInputType.number,
+                                hintText: AppText.enterBuildingNo,
+                                validator:  ValidationHelper.validateName,
+                              ),
+                              CustomLabeledTextField(
+                                label: AppText.societyName,
+                                isRequired: false,
+                                controller: coAp.coApOfficeAdSocietyNameController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.enterSocietyName,
+                                validator:  ValidationHelper.validateName,
+                              ),
+
+                              CustomLabeledTextField(
+                                label: AppText.locality,
+                                isRequired: false,
+                                controller: coAp.coApOfficeAdLocalityController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.enterLocality,
+                                validator: ValidationHelper.validateName,
+                              ),
+
+                              CustomLabeledTextField(
+                                label: AppText.streetName,
+                                isRequired: false,
+                                controller: coAp.coApOfficeAdStreetNameController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.enterStreetName,
+                                validator: ValidationHelper.validateName,
+                              ),
+
+                              CustomLabeledTextField(
+                                label: AppText.pinCode,
+                                isRequired: false,
+                                maxLength: 6,
+                                controller: coAp.coApOfficeAdPinCodeController,
+                                inputType: TextInputType.number,
+                                hintText: AppText.enterPinCode,
+                                validator: ValidationHelper.validateName,
+                              ),
+
+                              const CustomTextLabel(
+                                label: AppText.state,
+                                isRequired: false,
+                              ),
+
+                              const SizedBox(height: 10),
+
+
+                              Obx((){
+                                if (leadDDController.isStateLoading.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+
+                                return CustomDropdown<Data>(
+                                  items: leadDDController.getAllStateModel.value?.data ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.stateName.toString(),
+                                  selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                                        (item) => item.stateName.toString() == coAp.selectedStateOfficeAd.value,
+                                  ),
+                                  onChanged: (value) {
+                                    coAp.selectedStateOfficeAd.value =  value?.stateName?.toString();
+                                    coAp.getDistrictByStateIdOfficeAdApi(stateId:  value?.id?.toString());
+                                  },
+                                  onClear: (){
+                                    coAp.selectedDistrictOfficeAd.value = null;
+                                    coAp.districtListOfficeAd.value.clear(); // reset dependent dropdown
+
+                                    coAp.selectedCityOfficeAd.value = null;
+                                    coAp. cityListOfficeAd.value.clear(); // reset dependent dropdown
+                                  },
+                                );
+                              }),
+
+                              const SizedBox(height: 20),
+
+                              const CustomTextLabel(
+                                label: AppText.district,
+                                isRequired: false,
+                              ),
+
+                              const SizedBox(height: 10),
+
+
+                              Obx((){
+                                if (coAp.isDistrictLoadingOfficeAd.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+
+
+                                return CustomDropdown<dist.Data>(
+                                  items: coAp.districtListOfficeAd.value ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.districtName.toString(),
+                                  selectedValue: coAp.districtListOfficeAd.value.firstWhereOrNull(
+                                        (item) => item.districtName.toString() == coAp.selectedDistrictOfficeAd.value,
+                                  ),
+                                  onChanged: (value) {
+                                    coAp.selectedDistrictOfficeAd.value =  value?.districtName?.toString();
+                                    coAp.getCityByDistrictIdOfficeAdApi(districtId:  value?.id?.toString());
+                                  },
+                                  onClear: (){
+                                    coAp.selectedDistrictOfficeAd.value = null;
+                                  },
+                                );
+                              }),
+
+                              const SizedBox(height: 20),
+
+
+                              const CustomTextLabel(
+                                label: AppText.city,
+                                isRequired: false,
+                              ),
+
+                              const SizedBox(height: 10),
+
+
+                              Obx((){
+                                if (coAp.isCityLoadingOfficeAd.value) {
+                                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                                }
+
+
+                                return CustomDropdown<city.Data>(
+                                  items: coAp.cityListOfficeAd.value  ?? [],
+                                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                  getName: (item) => item.cityName.toString(),
+                                  selectedValue: coAp. cityListOfficeAd.value.firstWhereOrNull(
+                                        (item) => item.cityName.toString() == coAp.selectedCityOfficeAd.value,
+                                  ),
+                                  onChanged: (value) {
+                                    coAp.selectedCityOfficeAd.value =  value?.cityName?.toString();
+                                  },
+                                );
+                              }),
+
+                              const SizedBox(height: 20),
+
+                              CustomLabeledTextField(
+                                label: AppText.taluka,
+                                isRequired: false,
+                                controller: coAp.coApOfficeAdTalukaController,
+                                inputType: TextInputType.name,
+                                hintText: AppText.enterTaluka,
+                                validator: ValidationHelper.validateName,
+                              ),
+
+                              const CustomTextLabel(
+                                label: AppText.country,
+                                isRequired: false,
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              Obx((){
+                                if (leadDDController.isLoading.value) {
+                                  return  Center(child:CustomSkelton.productShimmerList(context));
+                                }
+
+
+                                return CustomDropdown<String>(
+                                  items: loanApplicationController.countryList,
+                                  getId: (item) => item,  // Adjust based on your model structure
+                                  getName: (item) => item,
+                                  selectedValue: coAp.selectedCountryOfficeAd.value,
+                                  onChanged: (value) {
+                                    coAp.selectedCountryOfficeAd.value =  value;
+                                  },
+                                );
+                              }),
+
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        ],
+                      ),
+
                       ///co Ap Employer details
                       ExpansionTile(
-                        childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                        childrenPadding:const EdgeInsets.symmetric(horizontal: 20),
                         title:const Text( AppText.applicantEmployerDetails, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                        leading: Icon(Icons.list_alt, size: 20,),
+                        leading:const Icon(Icons.list_alt, size: 20,),
                         children: [
 
                           Column(
@@ -713,7 +913,7 @@ class Step2Form extends StatelessWidget {
                                 validator:  ValidationHelper.validateName,
                               ),
 
-                              CustomTextLabel(
+                              const CustomTextLabel(
                                 label: AppText.ownershipType,
                                 isRequired: false,
                               ),
@@ -771,7 +971,7 @@ class Step2Form extends StatelessWidget {
                         ],
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
 
 
@@ -817,7 +1017,7 @@ class Step2Form extends StatelessWidget {
                       }):
                       Container(),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
                       Obx((){
                         if(loanApplicationController.isLoading.value){

@@ -64,6 +64,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var selectedOwnershipList = Rxn<String>();
   var selectedCountry = Rxn<String>();
   var selectedCountryPerm = Rxn<String>();
+  var selectedCountryOfficeAd = Rxn<String>();
   var selectedProdTypeOrTypeLoan = Rxn<int>();
   var loanApplId = 0;
   var isSameAddressApl = false.obs;
@@ -173,6 +174,14 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
 
 
+  ///04 Nov
+  final TextEditingController houseFlatOfficeAdController = TextEditingController();
+  final TextEditingController buildingNoOfficeAdController = TextEditingController();
+  final TextEditingController societyNameOfficeAdController = TextEditingController();
+  final TextEditingController localityOfficeAdController = TextEditingController();
+  final TextEditingController streetNameOfficeAdController = TextEditingController();
+  final TextEditingController pinCodeOfficeAdController = TextEditingController();
+  final TextEditingController talukaOfficeAdController = TextEditingController();
 
   var selectedStateProp = Rxn<String>();
   var selectedDistrictProp = Rxn<String>();
@@ -705,6 +714,23 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           pinCode: cleanText(coAp.coApPermPinCodeController.text)
       );
 
+      final AddressModel officeAddress = AddressModel(
+          houseFlatNo: cleanText(coAp.coApOfficeAdHouseFlatController.text),
+          buildingNo: cleanText(coAp.coApOfficeAdBuildingNoController.text),
+          societyName: cleanText(coAp.coApOfficeAdSocietyNameController.text),
+          locality: cleanText(coAp.coApOfficeAdLocalityController.text),
+          streetName: cleanText(coAp.coApOfficeAdStreetNameController.text),
+          city: cleanText(coAp.selectedCityOfficeAd.value.toString()),//toIntOrZero()
+          taluka: cleanText(coAp.coApOfficeAdTalukaController.text),
+          district: cleanText(
+              coAp.selectedDistrictOfficeAd.value.toString()),//toIntOrZero()
+          state: cleanText(
+              coAp.selectedStateOfficeAd.value.toString()),//toIntOrZero()
+          country: cleanText(
+              coAp.selectedCountryOfficeAd.value.toString()),//toIntOrZero()
+          pinCode: cleanText(coAp.coApOfficeAdPinCodeController.text)
+      );
+
       final EmployerDetailsModel employerDetails = EmployerDetailsModel(
         organizationName: cleanText(coAp.coApOrgNameController.text),
         ownershipType: coAp.selectedCityPerm.value.toIntOrZero().toString(),
@@ -739,6 +765,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         mobile: cleanText(coAp.coApMobController.text),
         presentAddress: presentAddress,
         permanentAddress: permanentAddress,
+        officeAddress: officeAddress,
         employerDetails: employerDetails,
       );
       coApplicantModels.add(coApModel);
@@ -822,7 +849,15 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     try {
       isLoading(true);
 
-      print("cleanText(applMobController.text)--->${cleanText(applMobController.text)}");
+    //  print("coApPayload--->${coApPayload}");
+
+      for (var item in coApPayload) {
+        print("item['permanentAddress']=====>${item['permanentAddress']}");
+      }
+
+      for (var item in coApPayload) {
+        print("item['officeAddress']=====>${item['officeAddress']}");
+      }
 
       var uln = Get.arguments['uln'];
 
@@ -903,6 +938,22 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
                         .ddToString(),
                     "country": selectedCountryPerm.value.ddToString(),
                     "pinCode": cleanText(pinCodePermController.text)
+                  },
+                  "officeAddress": {
+                    "houseFlatNo": cleanText(houseFlatOfficeAdController.text),
+                    "buildingNo": cleanText(buildingNoOfficeAdController.text),
+                    "societyName": cleanText(societyNameOfficeAdController.text),
+                    "locality": cleanText(localityOfficeAdController.text),
+                    "streetName": cleanText(streetNameOfficeAdController.text),
+                    "city": leadDDController.selectedCityOfficeAd.value
+                        .ddToString(),
+                    "taluka": cleanText(talukaOfficeAdController.text),
+                    "district": leadDDController.selectedDistrictOfficeAd.value
+                        .ddToString(),
+                    "state": leadDDController.selectedStateOfficeAd.value
+                        .ddToString(),
+                    "country": selectedCountryOfficeAd.value.ddToString(),
+                    "pinCode": cleanText(pinCodeOfficeAdController.text)
                   },
                   "emailID": cleanText(applEmailController.text),
                   "mobile": cleanText(applMobController.text),
@@ -1181,15 +1232,15 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   Future<void> getLoanApplicationDetailsByIdApi({ //getLoanApplicationDetailsByUniqueLeadNumber
     required String id,
   }) async {
-    print("getLoanApplicationDetailsByIdApi===>");
+    print("getLoanApplicationDetailsByIdApi===>${id}");
     try {
       isLoadingMainScreen(true);
       var req = await LoanApplService.getLoanApplicationDetailsByIdApi(id: id);
-
+     // print('Get.arguments in api getloanaappl-========>${Get.arguments}');
      // var uln = Get.arguments['uln'];
 
       if (req['success'] == true) {
-        var uln = Get.arguments['uln'];
+
         getLoanApplIdModel.value = GetLoanApplIdModel.fromJson(req);
 
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
@@ -1335,7 +1386,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         aadharController.text = data?.addharCardNumber ?? '';
         laAppliedController.text = data?.loanAmountApplied.toString() ?? "";
         print('the data is here ${data?.loanAmountApplied.toString() ?? ""}');
-        ulnController.text = uln;
+        ulnController.text = id;//uln;
         selectedChannel.value = data?.channelId ?? 0;
         chCodeController.text = data?.channelCode ?? '';
         bankerNameController.text = data?.bankerName ?? '';

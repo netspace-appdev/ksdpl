@@ -444,6 +444,7 @@ class AppText{
   static const String country = "Country";
   static const String presentAdd = "Present Address";
   static const String permanentAdd = "Permanent Address";
+  static const String officeAdd = "Office Address";
   static const String coApplicantDetails = "Co-Applicant Details";
   static const String propertyDetails = "Property Details";
   static const String propertyId = "Property ID";

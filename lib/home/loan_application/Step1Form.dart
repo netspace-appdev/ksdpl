@@ -1161,6 +1161,229 @@ class Step1Form extends StatelessWidget {
                   ],
                 ),
               ],
+            ),
+
+            //Office Address
+            ExpansionTile(
+              childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+              title:const Text( AppText.officeAdd, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+              leading: Icon(Icons.list_alt, size: 20,),
+              children: [
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    CustomLabeledTextField(
+                      label: AppText.houseFlatNo,
+                      isRequired: false,
+                      controller: loanApplicationController.houseFlatOfficeAdController,
+                      inputType: TextInputType.number,
+                      hintText: AppText.enterHouseFlatNo,
+                      validator:  ValidationHelper.validateName,
+                    ),
+                    CustomLabeledTextField(
+                      label: AppText.buildingNo,
+                      isRequired: false,
+                      controller: loanApplicationController.buildingNoOfficeAdController,
+                      inputType: TextInputType.number,
+                      hintText: AppText.enterBuildingNo,
+                      validator:  ValidationHelper.validateName,
+                    ),
+                    CustomLabeledTextField(
+                      label: AppText.societyName,
+                      isRequired: false,
+                      controller: loanApplicationController.societyNameOfficeAdController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterSocietyName,
+                      validator:  ValidationHelper.validateName,
+                    ),
+
+                    CustomLabeledTextField(
+                      label: AppText.locality,
+                      isRequired: false,
+                      controller: loanApplicationController.localityOfficeAdController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterLocality,
+                      validator: ValidationHelper.validateName,
+                    ),
+
+                    CustomLabeledTextField(
+                      label: AppText.streetName,
+                      isRequired: false,
+                      controller: loanApplicationController.streetNameOfficeAdController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterStreetName,
+                      validator: ValidationHelper.validateName,
+                    ),
+
+                    CustomLabeledTextField(
+                      label: AppText.pinCode,
+                      isRequired: false,
+                      controller: loanApplicationController.pinCodeOfficeAdController,
+                      inputType: TextInputType.number,
+                      maxLength: 6,
+                      hintText: AppText.enterPinCode,
+                      validator: ValidationHelper.validateName,
+                    ),
+
+                    CustomTextLabel(
+                      label: AppText.state,
+                      isRequired: false,
+                    ),
+
+                    SizedBox(height: 10),
+
+
+                    Obx((){
+                      if (leadDDController.isStateLoadingOfficeAd.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+
+                      return CustomDropdown<Data>(
+                        items: leadDDController.getAllStateModel.value?.data ?? [],
+                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.stateName.toString(),
+                        selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                              (item) => item.stateName.toString() == leadDDController.selectedStateOfficeAd.value,
+                        ),
+                        onChanged: (value) {
+
+                          leadDDController.selectedStateOfficeAd.value =  value?.stateName?.toString();
+
+                          print('stateid is herev ${leadDDController.selectedStateOfficeAd.value}');
+                          if( leadDDController.selectedStateOfficeAd.value!=null){
+                            leadDDController.getDistrictByStateIdOfficeAdApi(stateId:  value?.id?.toString());
+                          }
+
+                        },
+                        onClear: (){
+
+                          leadDDController. cityListOfficeAd.value.clear(); // reset dependent dropdown
+                          leadDDController. districtListOfficeAd.value.clear(); // reset dependent dropdown
+                          leadDDController.selectedDistrictOfficeAd.value = "0";
+                          leadDDController.selectedCityOfficeAd.value = "0";
+                          leadDDController.selectedStateOfficeAd.value = "0";
+
+                        },
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+
+                    CustomTextLabel(
+                      label: AppText.district,
+                      isRequired: false,
+                    ),
+
+                    const SizedBox(height: 10),
+
+
+                    Obx((){
+                      if (leadDDController.isDistrictLoadingOfficeAd.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+
+
+                      return CustomDropdown<dist.Data>(
+                        items: leadDDController. districtListOfficeAd.value ?? [],
+                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.districtName.toString(),
+                        selectedValue: leadDDController. districtListOfficeAd.value.firstWhereOrNull(
+                              (item) => item.districtName.toString() == leadDDController.selectedDistrictOfficeAd.value,
+                        ),
+                        onChanged: (value) {
+                          leadDDController.selectedDistrictOfficeAd.value =  value?.districtName?.toString();
+                          if( leadDDController.selectedDistrictOfficeAd.value!=null){
+                            leadDDController.getCityByDistrictIdOfficeAdApi(districtId:  value?.id?.toString());
+                          }
+
+                        },
+                        onClear: (){
+                          leadDDController.selectedCityOfficeAd.value = "0";
+                          leadDDController.districtListOfficeAd.value.clear(); // reset dependent dropdown
+
+                        },
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+
+
+                    const CustomTextLabel(
+                      label: AppText.city,
+                      isRequired: false,
+                    ),
+
+                    const SizedBox(height: 10),
+
+
+                    Obx((){
+                      if (leadDDController.isCityLoadingOfficeAd.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+
+
+                      return CustomDropdown<city.Data>(
+                        items:  leadDDController. cityListOfficeAd.value  ?? [],
+                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.cityName.toString(),
+                        selectedValue: leadDDController. cityListOfficeAd.value .firstWhereOrNull(
+                              (item) => item.cityName.toString() == leadDDController.selectedCityOfficeAd.value,
+                        ),
+                        onChanged: (value) {
+                          leadDDController.selectedCityOfficeAd.value =  value?.cityName?.toString();
+                        },
+                        onClear: (){
+                          leadDDController.selectedCityOfficeAd.value = "0";
+                          leadDDController.cityListOfficeAd.value.clear(); // reset dependent dropdown
+
+                        },
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+
+                    CustomLabeledTextField(
+                      label: AppText.taluka,
+                      isRequired: false,
+                      controller: loanApplicationController.talukaOfficeAdController,
+                      inputType: TextInputType.name,
+                      hintText: AppText.enterTaluka,
+                      validator: ValidationHelper.validateName,
+                    ),
+
+                    CustomTextLabel(
+                      label: AppText.country,
+                      isRequired: false,
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Obx((){
+                      if (leadDDController.isLoading.value) {
+                        return  Center(child:CustomSkelton.productShimmerList(context));
+                      }
+
+
+                      return CustomDropdown<String>(
+                        items: loanApplicationController.countryList,
+                        getId: (item) => item,  // Adjust based on your model structure
+                        getName: (item) => item,
+                        selectedValue: loanApplicationController.selectedCountryOfficeAd.value,
+                        onChanged: (value) {
+                          loanApplicationController.selectedCountryOfficeAd.value =  value;
+                        },
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+
+                  ],
+                ),
+              ],
             )
 
           ],

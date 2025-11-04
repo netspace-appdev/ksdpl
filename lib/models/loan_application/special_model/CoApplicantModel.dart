@@ -11,6 +11,7 @@ class CoApplicantModel {
   final String occupationSector;
   final AddressModel presentAddress;
   final AddressModel permanentAddress;
+  final AddressModel officeAddress;
   final String emailID;
   final String mobile;
   final EmployerDetailsModel employerDetails;
@@ -28,6 +29,7 @@ class CoApplicantModel {
     required this.occupationSector,
     required this.presentAddress,
     required this.permanentAddress,
+    required this.officeAddress,
     required this.emailID,
     required this.mobile,
     required this.employerDetails,
@@ -47,6 +49,7 @@ class CoApplicantModel {
       "occupationSector": occupationSector,
       "presentAddress": presentAddress.toMap(),
       "permanentAddress": permanentAddress.toMap(),
+      "officeAddress": officeAddress.toMap(),
       "emailID": emailID,
       "mobile": mobile,
       "employerDetails": employerDetails.toMap(),
