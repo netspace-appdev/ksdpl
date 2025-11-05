@@ -849,15 +849,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     try {
       isLoading(true);
 
-    //  print("coApPayload--->${coApPayload}");
 
-      for (var item in coApPayload) {
-        print("item['permanentAddress']=====>${item['permanentAddress']}");
-      }
-
-      for (var item in coApPayload) {
-        print("item['officeAddress']=====>${item['officeAddress']}");
-      }
 
       var uln = Get.arguments['uln'];
 
@@ -1232,7 +1224,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   Future<void> getLoanApplicationDetailsByIdApi({ //getLoanApplicationDetailsByUniqueLeadNumber
     required String id,
   }) async {
-    print("getLoanApplicationDetailsByIdApi===>${id}");
+
     try {
       isLoadingMainScreen(true);
       var req = await LoanApplService.getLoanApplicationDetailsByIdApi(id: id);
@@ -1283,8 +1275,6 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           applEmailController.text = applicant?['EmailID'] ?? '';
           applMobController.text = applicant?['Mobile'] ?? '';
 
-          print('applicant? Mobile=========. ${applicant?['Mobile'] ?? ''}');
-          print('applMobController.text=========. ${applMobController.text}');
 // Employer
           final employer = applicant?['EmployerDetails'];
           orgNameController.text = employer?['OrganizationName'] ?? '';
@@ -1304,7 +1294,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           leadDDController.selectedStateCurr.value =
           presentAdd?['State'] == "" ? "0" : presentAdd?['State'] ?? '0';
 
-          print("leadDDController.selectedStateCurr.value----->${leadDDController.selectedStateCurr.value}");
+
           ///New code on 24 Oct
           if( presentAdd?['State'] != "" &&  presentAdd?['State'] != "0"){
             final stateId = leadDDController.getStateIdByName(leadDDController.selectedStateCurr.value.toString());
@@ -1314,10 +1304,10 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
             leadDDController.selectedDistrictCurr.value =
             presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
-            print(" leadDDController.selectedDistrictCurr.value======>${ leadDDController.selectedDistrictCurr.value}");
+
             ///New code on 24 Oct
             final distId = leadDDController.getDistrictIdByNameCurr(leadDDController.selectedDistrictCurr.value.toString());
-            print("distId======>${distId}");
+
             await leadDDController.getCityByDistrictIdCurrApi(
                 districtId: distId.toString());//eadDDController.selectedDistrictCurr.value
             leadDDController.selectedCityCurr.value =
@@ -1347,13 +1337,13 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
             permanentAdd?['District'] == "" ? "0" : permanentAdd?['District'] ??
                 '0';
             ///New code on 24 Oct
-            print(" leadDDController.selectedDistrictPerm.value======>${ leadDDController.selectedDistrictPerm.value}");
+
             final distId2 =  leadDDController.getDistrictIdByNamePerm(leadDDController.selectedDistrictPerm.value.toString());
-            print(" distId2======>${ distId2}");
+
             await leadDDController.getCityByDistrictIdPermApi(
                 districtId: distId2.toString());//leadDDController.selectedDistrictPerm.value
 
-            print("permanentAdd?['City']---->${permanentAdd?['City']}");
+
             leadDDController.selectedCityPerm.value =
             permanentAdd?['City'] == "" ? "0" : permanentAdd?['City'] ?? '0';
           }
@@ -1382,13 +1372,13 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
             officeAdd?['District'] == "" ? "0" : officeAdd?['District'] ??
                 '0';
             ///New code on 24 Oct
-            print(" leadDDController.selectedDistrictOfficeAd.value======>${ leadDDController.selectedDistrictOfficeAd.value}");
+
             final distId2 =  leadDDController.getDistrictIdByNameOfficeAd(leadDDController.selectedDistrictOfficeAd.value.toString());
-            print(" distId2======>${ distId2}");
+
             await leadDDController.getCityByDistrictIdOfficeAdApi(
                 districtId: distId2.toString());//leadDDController.selectedDistrictPerm.value
 
-            print("permanentAdd?['City']---->${officeAdd?['City']}");
+
             leadDDController.selectedCityOfficeAd.value =
             officeAdd?['City'] == "" ? "0" : officeAdd?['City'] ?? '0';
           }
@@ -1420,7 +1410,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         panController.text = data?.panCardNumber ?? '';
         aadharController.text = data?.addharCardNumber ?? '';
         laAppliedController.text = data?.loanAmountApplied.toString() ?? "";
-        print('the data is here ${data?.loanAmountApplied.toString() ?? ""}');
+
         ulnController.text = id;//uln;
         selectedChannel.value = data?.channelId ?? 0;
         chCodeController.text = data?.channelCode ?? '';
@@ -1430,7 +1420,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         bankerEmailController.text = data?.bankerEmail ?? '';
         chargesDetailProcessingFees.text = data?.chargesDetails?.processingFees?.toString() ?? '0';
 
-        print('hfiufhsfhwowrffhoweowhje ${ data?.chargesDetails?.adminFeeCharges?.toString()}');
+
 
         chargesDetailAdminFeeChargess.text = data?.chargesDetails?.adminFeeCharges?.toString() ?? '0';
         chargesDetailForeclosureCharges.text = data?.chargesDetails?.foreclosureChargesCharges?.toString() ?? '0';
@@ -1475,14 +1465,10 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     familyMemberApplList.add(FamilyMemberController());
     creditCardsList.add(CreditCardsController());
 
-    print("initializeImpFields--->referencesList==>${referencesList.length}");
-    print("initializeImpFields--->coApplicantList===>${coApplicantList.length}");
-    print("initializeImpFields--->familyMemberApplList===>${familyMemberApplList.length}");
-    print("initializeImpFields--->creditCardsList===>${creditCardsList.length}");
   }
 
   void populateCoApplicantControllers() async {
-    print('here call co applicant');
+
 
   //  coApplicantList.clear();
     final jsonStr = getLoanApplIdModel.value!.data!.coApplicantDetail;
@@ -1532,18 +1518,16 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           presentAdd?['State'] == "" ? "0" : presentAdd?['State'] ?? '0';
 
           if(presentAdd?['State'] != "" && presentAdd?['State'] != "0"){
-            print("here coApController.selectedStateCurr.value---->${coApController.selectedStateCurr.value}");
-            print("here presentAdd?['State']---->${presentAdd?['State']}");
+
             final stateId = leadDDController.getStateIdByName(coApController.selectedStateCurr.value.toString());
-            print("stateId----->coappl--->${stateId}");
+
             await coApController.getDistrictByStateIdCurrApi(
                 stateId:stateId.toString());//coApController.selectedStateCurr.value
             coApController.selectedDistrictCurr.value =
             presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
-            print("coApController.selectedDistrictCurr.value----->coappl--->${coApController.selectedDistrictCurr.value}");
-            print(" presentAdd?['District']----->coappl--->${ presentAdd?['District']}");
+
             final distId = coApController.getDistrictIdByNameCurr( coApController.selectedDistrictCurr.value.toString());
-            print("distId----->coappl--->${distId}");
+
             await coApController.getCityByDistrictIdCurrApi(
                 districtId: distId.toString());//coApController.selectedDistrictCurr.value
             coApController.selectedCityCurr.value =
@@ -1574,21 +1558,21 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
               permanentAdd?["PinCode"] ?? '';
           coApController.selectedStatePerm.value =
           permanentAdd?['State'] == "" ? "0" : permanentAdd?['State'] ?? '0';
-          print(" coApController.selectedStatePerm.value--->${ coApController.selectedStatePerm.value}");
-          print(" cpermanentAdd?['State']--->${ permanentAdd?['State']}");
+
           if(permanentAdd?['State'] != "" && permanentAdd?['State'] != "0"){
             final stateId2 = coApController.getStateIdByName(coApController.selectedStatePerm.value.toString());
-            print("stateId2--->${stateId2}");
+
             await coApController.getDistrictByStateIdPermApi(
                 stateId: stateId2.toString());
             coApController.selectedDistrictPerm.value =
             permanentAdd?['District'] == "" ? "0" : permanentAdd?['District'] ??
                 '0';
+            var temp= permanentAdd?['District'] == "" ? "0" : permanentAdd?['District'] ??
+                '0';
             /// ///New code on 24 Oct
-            print(" coApController.selectedDistrictPerm.value--->${ coApController.selectedDistrictPerm.value}");
-            print(" permanentAdd?['District']--->${ permanentAdd?['District']}");
-            final distId2 =  coApController.getDistrictIdByNamePerm(leadDDController.selectedDistrictPerm.value.toString());
-            print("distId2--->${ distId2}");
+
+            final distId2 =  coApController.getDistrictIdByNamePerm(temp.toString());
+
             await coApController.getCityByDistrictIdPermApi(
                 districtId: distId2.toString());//coApController.selectedDistrictPerm.value
             coApController.selectedCityPerm.value =
@@ -1601,6 +1585,50 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
           coApController.selectedCountryPerm.value =
           permanentAdd?['Country'] == "" ? "" : permanentAdd?['Country'];
+
+          ///office address
+          final offAdd = item?['OfficeAddress'];
+          coApController.coApOfficeAdHouseFlatController.text =
+              offAdd?["HouseFlatNo"] ?? '';
+          coApController.coApOfficeAdBuildingNoController.text =
+              offAdd?["BuildingNo"] ?? '';
+          coApController.coApOfficeAdSocietyNameController.text =
+              offAdd?["SocietyName"] ?? '';
+          coApController.coApOfficeAdLocalityController.text =
+              offAdd?["Locality"] ?? '';
+          coApController.coApOfficeAdStreetNameController.text =
+              offAdd?["StreetName"] ?? '';
+          coApController.coApOfficeAdPinCodeController.text =
+              offAdd?["PinCode"] ?? '';
+          coApController.selectedStateOfficeAd.value =
+          offAdd?['State'] == "" ? "0" : offAdd?['State'] ?? '0';
+          print(" coApController.selectedStatePerm.value--->${ coApController.selectedStateOfficeAd.value}");
+          print(" cpermanentAdd?['State']--->${ offAdd?['State']}");
+          if(offAdd?['State'] != "" && offAdd?['State'] != "0"){
+            final stateId2 = coApController.getStateIdByName(coApController.selectedStateOfficeAd.value.toString());
+            print("stateId2--->${stateId2}");
+            await coApController.getDistrictByStateIdOfficeAdApi(
+                stateId: stateId2.toString());
+            coApController.selectedDistrictOfficeAd.value =
+            offAdd?['District'] == "" ? "0" : offAdd?['District'] ??
+                '0';
+            /// ///New code on 24 Oct
+            print(" coApController.selectedDistrictOfficeAd.value--->${ coApController.selectedDistrictOfficeAd.value}");
+            print(" offAdd?['District']--->${ offAdd?['District']}");
+            final distId2 =  coApController.getDistrictIdByNameOffAdd(coApController.selectedDistrictOfficeAd.value.toString());
+            print("distId2--->${ distId2}");
+            await coApController.getCityByDistrictIdOfficeAdApi(
+                districtId: distId2.toString());//coApController.selectedDistrictPerm.value
+            coApController.selectedCityOfficeAd.value =
+            offAdd?['City'] == "" ? "0" : offAdd?['City'] ?? '0';
+          }
+
+
+          coApController.coApOfficeAdTalukaController.text =
+              offAdd?["Taluka"] ?? '';
+
+          coApController.selectedCountryOfficeAd.value =
+          offAdd?['Country'] == "" ? "" : offAdd?['Country'];
 
           coApplicantList.add(coApController);//25 Oct  uncomment it
         }
@@ -1631,6 +1659,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       selectedStateProp.value =
       propDetails?['State'] == "" ? "0" : propDetails?['State'] ?? '0';
       ///New code on 24 Oct
+      print("selectedStateProp.value=>${ selectedStateProp.value}");
+      print("propDetails?['State']=>${propDetails?['State']}");
       if(propDetails?['State'] != "" && propDetails?['State']  != "0"){
         final stateId = leadDDController.getStateIdByName(selectedStateProp.value.toString());
 
@@ -1761,15 +1791,21 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         refController.refRelWithApplController.text = item.relationWithApplicant ?? '';
         refController.selectedStatePerm.value = item.state == "" ? "0" : item.state ?? '0';
         if(refController.selectedStatePerm.value != "" && refController.selectedStatePerm.value != "0"){
+          final stateId = leadDDController.getStateIdByName(refController.selectedStatePerm.value.toString());
+          print("stateId in ref--->${ stateId}");
           await refController.getDistrictByStateIdPermApi(
-            stateId: refController.selectedStatePerm.value,
+            stateId: stateId.toString(),
           );
 
           refController.selectedDistrictPerm.value = item.district == "" ? "0" : item.district ?? '0';
+
+          print("refController.selectedDistrictPerm.value ref--->${ refController.selectedDistrictPerm.value}");
+          print("tem.district ref--->${ item.district}");
           /// ///New code on 24 Oct
-          final distId2 =  leadDDController.getDistrictIdByNamePerm(refController.selectedDistrictPerm.value.toString());
+          final distId2 =  refController.getDistrictIdByNamePerm(refController.selectedDistrictPerm.value.toString());
+          print("distId2 in ref--->${ distId2}");
           await refController.getCityByDistrictIdPermApi(
-            districtId: distId2,//refController.selectedDistrictPerm.value
+            districtId: distId2.toString(),//refController.selectedDistrictPerm.value
           );
 
           refController.selectedCityPerm.value = item.city == "" ? "0" : item.city ?? '0';

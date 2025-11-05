@@ -203,11 +203,11 @@ class DisbursedHistoryListScreen extends StatelessWidget {
               /// Basic Info
               /// Basic Info
           buildCard("${index + 1}", [
-            DetailRow(label: "ID", value: data.id?.toString() ?? AppText.customdash),
-            DetailRow(label: "Unique Lead Number", value: data.uniqueLeadNo?.toString() ?? AppText.customdash),
-            DetailRow(label: "Date", value: data.date?.toString() ?? AppText.customdash),
+           /* DetailRow(label: "ID", value: data.id?.toString() ?? AppText.customdash),
+            DetailRow(label: "Unique Lead Number", value: data.uniqueLeadNo?.toString() ?? AppText.customdash),*/
+            DetailRow(label: "Date", value: /*data.date?.toString() ?? AppText.customdash*/Helper.birthdayFormat(data.date.toString())?? '-'),
             DetailRow(label: "Amount", value: data.amount?.toString() ?? AppText.customdash),
-            DetailRow(label: "Actual Date", value: data.actualDate?.toString() ?? AppText.customdash),
+            DetailRow(label: "Actual Date", value: /*data.actualDate?.toString() ?? AppText.customdash*/Helper.birthdayFormat(data.actualDate.toString())?? '-'),
             DetailRow(label: "Actual Amount", value: data.actualAmount?.toString() ?? AppText.customdash),
             DetailRow(label: "Transaction Details", value: data.transactionDetails?.toString() ?? AppText.customdash),
             DetailRow(label: "Disbursed By", value: data.disbursedBy?.toString() ?? AppText.customdash),

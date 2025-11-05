@@ -598,8 +598,8 @@ class ProductService {
       var response = await http.Response.fromStream(streamedResponse);
 
 
-      print("response.statusCode===>getAllVacancyList==>${response.statusCode}");
-      print("response==>getAllVacancyList==>${response.body.toString()}");
+      Helper.ApiReq(getAllVacancyList, request.fields);
+      Helper.ApiReq(getAllVacancyList, response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

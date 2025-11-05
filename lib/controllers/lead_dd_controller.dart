@@ -931,9 +931,9 @@ class LeadDDController extends GetxController{
     }
   }
   int? getDistrictIdByNamePerm(String dName) {
-
+    print("dName in ref--->${ dName}");
     final dists = getDistrictByStateModelPerm.value?.data;
-
+    print("dists in ref--->${ dists}");
     if (dists == null || dists.isEmpty) return null;
 
     final matchedDist = dists.firstWhere(

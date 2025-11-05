@@ -62,6 +62,7 @@ class Step5Form extends StatelessWidget {
                           inputType: TextInputType.number,
                           hintText: AppText.enterCardNumber,
                           validator:  ValidationHelper.validatecardNumber,
+                          maxLength: 16,
                         ),
 
                         CustomLabeledPickerTextField(

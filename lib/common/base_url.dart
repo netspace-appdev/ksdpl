@@ -8,7 +8,7 @@ class BaseUrl{
  static const String imageBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
   ///Live Server
-  //static const String baseUrl = 'https://api.kanchaneshver.com/api/';
+ // static const String baseUrl = 'https://api.kanchaneshver.com/api/';
   //static const String imageBaseUrl = 'https://ksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 
   static const String tutorialVideoBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
@@ -17,8 +17,8 @@ class BaseUrl{
   ///🚨⚠️ ALERT / WARNING
   ///Do change below devVersion also according to Live or UAT apk other wise it will give error in apk
  //static const String devVersion = 'LIVE';
-static const String devVersion = 'UAT';
+ static const String devVersion = 'UAT';
   //static const String devVersion = 'LOCAL';
-  static const String buildDate = 'Build Date : 3 Nov 2025';
+  static const String buildDate = 'Build Date : 5 Nov 2025';
 }
 

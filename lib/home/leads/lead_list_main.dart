@@ -543,7 +543,7 @@ class LeadListMain extends StatelessWidget  {
                       padding:  EdgeInsets.symmetric(horizontal: 8.0),
                       child: InkWell(
                         onTap:(){
-                          print('dvashgvdvad${lead.uniqueLeadNumber}');
+
                           leadListController.getHistoryOfDisbursedList(lead.uniqueLeadNumber);
                           Get.toNamed("/disbursedHistory", arguments: {"leadId":lead.id.toString()});
 
@@ -558,7 +558,7 @@ class LeadListMain extends StatelessWidget  {
                           ),
                           child: const Center(
                             child: Text(
-                              AppText.history,
+                              AppText.disburseHistory,
                               style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.blackColor),
                             ),
                           ),
@@ -594,7 +594,7 @@ class LeadListMain extends StatelessWidget  {
                               width: 16,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                color: AppColor.appWhite,
+                                color: AppColor.primaryColor,
                               ),
                             )
                                 : const Text(

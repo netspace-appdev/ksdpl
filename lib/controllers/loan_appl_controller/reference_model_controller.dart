@@ -83,7 +83,20 @@ class ReferenceController {
       isDistrictLoadingPerm(false);
     }
   }
+  int? getDistrictIdByNamePerm(String dName) {
+    print("dName in ref--->${ dName}");
+    final dists = getDistrictByStateModelPerm.value?.data;
+    print("dists in ref--->${ dists}");
+    if (dists == null || dists.isEmpty) return null;
 
+    final matchedDist = dists.firstWhere(
+          (dist) => dist.districtName?.toLowerCase() == dName.toLowerCase(),
+      orElse: () => dist.Data(id: -1),
+    );
+
+
+    return matchedDist.id != -1 ? matchedDist.id : null;
+  }
   Future<void>   getCityByDistrictIdPermApi({
     required districtId
   }) async {

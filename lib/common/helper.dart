@@ -282,6 +282,7 @@ class AppText{
   static const String loanExchangeLeads = "Loan Exchange Leads";
   static const String followup = "Follow Up";
   static const String history = "History";
+  static const String disburseHistory = "Disburse History";
   static const String details = "Details";
   static const String openPoll = "Open Poll";
   static const String leh = "LEH";

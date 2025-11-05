@@ -129,7 +129,7 @@ class VacancyListScreen extends StatelessWidget {
 
   Widget productSection(BuildContext context) {
     return Obx(() {
-      if (productDetailsController.isLoadingMainScreen.value || productDetailsController.isLoadingMainScreen.value) {
+    /*  if (productDetailsController.isLoadingMainScreen.value || productDetailsController.isLoadingMainScreen.value) {
         return Center(child: CustomSkelton.productShimmerList(context));
       }
 
@@ -170,6 +170,73 @@ class VacancyListScreen extends StatelessWidget {
           ),
           SizedBox(height: 20),
         ],
+      );
+      */
+
+      ///
+      /// New code
+      if (productDetailsController.isLoadingMainScreen.value) {
+        return Center(child: CustomSkelton.productShimmerList(context));
+      }
+
+      final data =  productDetailsController.getDocumentProductIdModel.value;
+
+      if (data == null || data.data == null || data.data!.isEmpty) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.50,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColor.grey200),
+            color: AppColor.appWhite,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          child: const Center(
+            child: Text(
+              "No data found",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColor.grey700,
+              ),
+            ),
+          ),
+        );
+      }
+
+      final dataList = data.data!;
+
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: dataList.length,
+        itemBuilder: (context, index) {
+          final data = dataList[index];
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildCard("${index + 1}", [
+                DetailRow(label: AppText.jobTitle, value: data.jobTitle?.toString()??''),
+                DetailRow(label: AppText.employeeRole, value: data.employeeRole?.toString()??''),
+                DetailRow(label: AppText.workLocation, value: data.workLocation?.toString()??''),
+                DetailRow(label: AppText.salaryRange, value: '${data.salaryRangeMax?.toString()??''} - ${data?.salaryRangeMin?.toString()??''}'),
+                DetailRow(label: AppText.workExperience, value: '${data.experienceRequired?.toString()??''}'),
+                DetailRow(label: AppText.skillRequired, value: '${data.skillsRequired?.toString()??''}'),
+                DetailRow(label: AppText.dateposted, value: '${Helper.birthdayFormat(data.datePosted?.toString()??'')?? '-'}'),
+                DetailRow(label: AppText.noOfVacancies, value: '${data.numberOfVacancies?.toString()??''}'),
+                DetailRow(label: AppText.jobLevel, value: '${data.jobLevel?.toString()??''}'),
+                DetailRow(label: AppText.hiringManager, value: '${data.hiringManager?.toString()??''}'),
+                DetailRow(label: AppText.qualificationRequired, value: '${data.qualificationsRequired?.toString()??''}'),
+                DetailRow(label: AppText.jobDescription, value: '${data.jobDescription?.toString()??''}'),
+              ],
+                  Icons.info_outline
+
+              ),
+              SizedBox(height: 20),
+            ],
+          );
+        },
       );
 
     });

@@ -130,11 +130,11 @@ class Step7Form extends StatelessWidget {
                                 getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                 getName: (item) => item.stateName.toString(),
                                 selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                                      (item) => item.id.toString() == ref.selectedStatePerm.value,
+                                      (item) => item.stateName.toString() == ref.selectedStatePerm.value,
                                 ),
                                 onChanged: (value) {
-                                  ref.selectedStatePerm.value =  value?.id?.toString();
-                                  ref.getDistrictByStateIdPermApi(stateId: ref.selectedStatePerm.value);
+                                  ref.selectedStatePerm.value =  value?.stateName?.toString();
+                                  ref.getDistrictByStateIdPermApi(stateId: value?.id?.toString());
                                 },
                                 onClear: (){
                                   ref.selectedDistrictPerm.value = null;
@@ -167,11 +167,11 @@ class Step7Form extends StatelessWidget {
                                 getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                 getName: (item) => item.districtName.toString(),
                                 selectedValue: ref.districtListPerm.value.firstWhereOrNull(
-                                      (item) => item.id.toString() == ref.selectedDistrictPerm.value,
+                                      (item) => item.districtName.toString() == ref.selectedDistrictPerm.value,
                                 ),
                                 onChanged: (value) {
-                                  ref.selectedDistrictPerm.value =  value?.id?.toString();
-                                  ref.getCityByDistrictIdPermApi(districtId: ref.selectedDistrictPerm.value);
+                                  ref.selectedDistrictPerm.value =  value?.districtName?.toString();
+                                  ref.getCityByDistrictIdPermApi(districtId: value?.id?.toString());//ref.selectedDistrictPerm.value
                                 },
                                 onClear: (){
                                   ref.selectedDistrictPerm.value = null;
@@ -203,10 +203,10 @@ class Step7Form extends StatelessWidget {
                                 getId: (item) => item.id.toString(),  // Adjust based on your model structure
                                 getName: (item) => item.cityName.toString(),
                                 selectedValue: ref. cityListPerm.value.firstWhereOrNull(
-                                      (item) => item.id.toString() == ref.selectedCityPerm.value,
+                                      (item) => item.cityName.toString() == ref.selectedCityPerm.value,
                                 ),
                                 onChanged: (value) {
-                                  ref.selectedCityPerm.value =  value?.id?.toString();
+                                  ref.selectedCityPerm.value =  value?.cityName?.toString();
                                 },
                               );
                             }),

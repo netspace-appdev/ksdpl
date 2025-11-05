@@ -194,7 +194,7 @@ class CoApplicantDetailController {
     }
   }
   int? getDistrictIdByNamePerm(String dName) {
-
+    print("dName coAp co--->${ dName}");
     final dists = getDistrictByStateModelPerm.value?.data;
 
     if (dists == null || dists.isEmpty) return null;
@@ -294,7 +294,21 @@ class CoApplicantDetailController {
     }
   }
 
+  int? getDistrictIdByNameOffAdd(String dName) {
+    print("dName->${dName}");
 
+    final dists = getDistrictByStateModelOfficeAd.value?.data;
+    print("dists->${dists}");
+    if (dists == null || dists.isEmpty) return null;
+
+    final matchedDist = dists.firstWhere(
+          (dist) => dist.districtName?.toLowerCase() == dName.toLowerCase(),
+      orElse: () => dist.Data(id: -1),
+    );
+
+
+    return matchedDist.id != -1 ? matchedDist.id : null;
+  }
 /*  Future<void>  getDistrictByStateIdOfficeAdApi({
     required stateId
   }) async {
