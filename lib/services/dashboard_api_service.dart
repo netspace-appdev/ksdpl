@@ -86,6 +86,10 @@ class DashboardApiService{
 
       final jsonResponse = jsonDecode(response.body);
 
+      Helper.ApiReq(getEmployeeByPhoneNumber, request.fields);
+      Helper.ApiRes(getEmployeeByPhoneNumber, response.body);
+
+
 
       if (response.statusCode == 200) {
         if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
@@ -327,6 +331,10 @@ class DashboardApiService{
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(todayWorkStatusOfRoBm, request.fields);
+      Helper.ApiRes(todayWorkStatusOfRoBm, response.body);
+
 
 
       if (response.statusCode == 200) {
