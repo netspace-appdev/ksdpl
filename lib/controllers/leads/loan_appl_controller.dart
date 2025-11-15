@@ -18,6 +18,7 @@ import '../../models/loanRemoveApplicationDocumentModel/RemovedLoanApplicationDo
 import '../../models/loan_application/AddLoanApplicationModel.dart';
 import '../../models/loan_application/GetDsaMappingByBankAndProductModel.dart';
 import '../../models/loan_application/GetLoanApplIdModel.dart';
+import '../../models/loan_application/only_loan_details/loan_application_only_details_model.dart';
 import '../../models/loan_application/special_model/CoApplicantModel.dart';
 import '../../models/loan_application/special_model/CreditCardModel.dart';
 import '../../models/loan_application/special_model/FamilyMemberModel.dart';
@@ -42,6 +43,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var email = "".obs;
   var isLoading = false.obs;
   var isLoadingRemoveDoc = false.obs;
+  var isLoadingOnlyDetails = false.obs;
   var isloadData = false.obs;
   var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
@@ -50,6 +52,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var removedLoanApplicationDocumentModel = Rxn<RemovedLoanApplicationDocumentModel>(); //
   var sendMailAfterLoanApplicationSubmitModel = Rxn<SendMailAfterLoanApplicationSubmitModel>(); //
   var getDsaMappingByBankAndProductModel = Rxn<GetDsaMappingByBankAndProductModel>(); //
+  var loanApplicationDetailsOnlyModel = Rxn<LoanApplicationDetailsOnlyModel>(); //
   var selectedGender = Rxn<String>();
   final RxList<GlobalKey<FormState>> documentFormKeys = <GlobalKey<FormState>>[].obs;
 
@@ -2145,7 +2148,32 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     }
   }
 
+  Future<void> getLoanApplicationDetailsByIdRealApi({
+    required String id
+  })
+  async {
 
+    try {
+      isLoadingOnlyDetails(true);
+
+      var data = await LoanApplService.getLoanApplicationDetailsByIdRealApi(
+        id: id,
+      );
+      // Handle response
+      if (data['success'] == true) {
+        loanApplicationDetailsOnlyModel.value = LoanApplicationDetailsOnlyModel.fromJson(data);
+
+
+      } else {
+          ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getLoanApplicationDetailsByIdRealApi: $e");
+      // ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoadingOnlyDetails(false);
+    }
+  }
 }
 
 extension ParseStringExtension on String? {

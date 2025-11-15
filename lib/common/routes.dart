@@ -32,6 +32,7 @@ import '../home/leads/lead_follow_up_screen.dart';
 import '../home/leads/lead_history.dart';
 import '../home/leads/lead_list_main.dart';
 import '../home/leads/open_poll_details_screen.dart';
+import '../home/loan_application/loan_appl_only_details.dart';
 import '../home/loan_application/loan_application_screen.dart';
 import '../home/manage_branch.dart';
 import '../home/news/NewsDetailsScreen.dart';
@@ -86,4 +87,5 @@ final routes = [
   GetPage(name: '/insuranceIllustrationdetailScreen', page: () => InsuranceIllustrationdetailLeads()),
   GetPage(name: '/openPollDetailsScreen', page: () => OpenPollDetailsScreen()),
   GetPage(name: '/disbursedHistory', page: () => DisbursedHistoryListScreen()),
+  GetPage(name: '/LoanApplicationOnlyDetails', page: () => LoanApplicationOnlyDetailsScreen()),
 ];

@@ -227,6 +227,7 @@ class AppText{
   static const String nationality="Nationality";
   static const String enterNationality="Nationality";
   static const String employerName="Employer Name";
+  static const String employerType="Employer Type";
   static const String enterEmployerName="Enter Employer Name";
   static const String monIncome="Monthly Income(Gross Income)";
   static const String enterMonIncome="Enter Monthly Income";
@@ -265,6 +266,7 @@ class AppText{
   static const String qualification = "Qualification";
   static const String enterQualification = "Enter Qualification";
   static const String maritalStatus = "Marital Status";
+  static const String status = "Status";
   static const String enterMaritalStatus = "Enter Marital Status";
   static const String employmentStatus = "Employment Status";
   static const String enterEmploymentStatus = "Enter Employment Status";
@@ -372,6 +374,7 @@ class AppText{
   static const String dsaCode = "DSA Code";
   static const String enterDsaCode = "Enter DSA Code";
   static const String loanApplicationNo = "Loan Application No";
+  static const String loanApplicationDetails = "Loan Application Details";
   static const String enterLoanApplicationNo = "Enter Loan Application No";
   static const String bankNostar ="Bank";
   static const String brNostar ="Branch";
@@ -426,6 +429,7 @@ class AppText{
   static const String staffStrength = "Staff Strength";
   static const String enterStaffStrength = "Enter Staff Strength";
   static const String salaryDate = "Salary Date";
+  static const String dateOfSal = "Date of Salary";
   static const String enterSalaryDate = "mm/dd/yyyy";
   static const String presentAddress = "Present Address";
   static const String houseFlatNo = "House/Flat No";
@@ -450,6 +454,7 @@ class AppText{
   static const String permanentAdd = "Permanent Address";
   static const String officeAdd = "Office Address";
   static const String coApplicantDetails = "Co-Applicant Details";
+  static const String applicantDetails = "Applicant Details";
   static const String propertyDetails = "Property Details";
   static const String propertyId = "Property ID";
   static const String enterPropertyId = "Enter Property ID";
@@ -1563,9 +1568,51 @@ class Helper{
         .map((e) => e!.trim())
         .join(',');
   }
+  static String safeValueForField(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return AppText.customdash;
+    }
+    return value;
+  }
+  static String safeValueForInt(int? value) {
+    if (value == null || value == 0) {
+      return AppText.customdash; // "-"
+    }
+    return value.toString();
+  }
+  static String formatDateForLoanString(String? date) {
+    if (date == null || date.trim().isEmpty) {
+      return AppText.customdash; // "-"
+    }
 
+    try {
+      DateTime dt = DateTime.parse(date);
+      return "${dt.day.toString().padLeft(2, '0')}-"
+          "${dt.month.toString().padLeft(2, '0')}-"
+          "${dt.year}";
+    } catch (e) {
+      return AppText.customdash; // if parsing fails
+    }
+  }
+  static String formatDateTimeLoan(DateTime? date) {
+    if (date == null) {
+      return AppText.customdash; // "-"
+    }
 
-
+    try {
+      return "${date.day.toString().padLeft(2, '0')}-"
+          "${date.month.toString().padLeft(2, '0')}-"
+          "${date.year}";
+    } catch (e) {
+      return AppText.customdash;
+    }
+  }
+  static String safeValueForNum(num? value) {
+    if (value == null || value == 0) {
+      return AppText.customdash;
+    }
+    return value.toString();
+  }
   static void ApiReq(String url, dynamic data) {
     print("🛰️ [API Request] ➡️ $url\n📝 Payload: $data\n-----------------------------");
   }

@@ -660,7 +660,7 @@ class LeadListMain extends StatelessWidget  {
                               child: const Center(
                                 child: Text(
                                   AppText.underReview,
-                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.appWhite),
+                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColor.grey700),
                                 ),
                               ),
                             ),
@@ -842,7 +842,8 @@ class LeadListMain extends StatelessWidget  {
                         ],
                       ),
 
-                    if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6")
+                    if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6" || lead.leadStage.toString()=="8"|| lead.leadStage.toString()=="9"
+                    ||lead.leadStage.toString()=="10" ||  lead.leadStage.toString()=="11" ||lead.leadStage.toString()=="12")
                       Column(
                         children: [
                           SizedBox(height: 10,),
@@ -858,7 +859,23 @@ class LeadListMain extends StatelessWidget  {
                           ),
                         ],
                       ),
-
+                    if(lead.leadStage.toString()=="6" || lead.leadStage.toString()=="8"|| lead.leadStage.toString()=="9"
+                        ||lead.leadStage.toString()=="10" ||  lead.leadStage.toString()=="11" ||lead.leadStage.toString()=="12")
+                      Column(
+                        children: [
+                          SizedBox(height: 10,),
+                          _buildTextButton(
+                              label:"Loan Application Details",
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.money_outlined,
+                              leadId: lead.id.toString(),
+                              label_code: "loan_appl_single_details",
+                              currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
+                          ),
+                        ],
+                      ),
                     if(lead.leadStage.toString()=="6" )
                       Column(
                         children: [
@@ -1495,7 +1512,17 @@ overflow: TextOverflow.ellipsis,
             stageName:  stageName.toString(),
 
           );
-        } else{
+        } else if(label_code=="loan_appl_single_details"){
+          LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
+          var id=0;
+          loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString()).then((_){
+             id=loanApplicationController.getLoanApplIdModel.value!.data!.id??0;
+             loanApplicationController.getLoanApplicationDetailsByIdRealApi(id: id.toString());
+          });
+
+
+          Get.toNamed("/LoanApplicationOnlyDetails");
+        }else{
 
         }
       },
@@ -1506,7 +1533,7 @@ overflow: TextOverflow.ellipsis,
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
-            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" || label_code=="aic_add_feedback" ?MediaQuery.of(context).size.width*0.82:
+            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" || label_code=="aic_add_feedback"  || label_code=="loan_appl_single_details"?MediaQuery.of(context).size.width*0.82:
             (label_code=="add_feedback" ) ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,

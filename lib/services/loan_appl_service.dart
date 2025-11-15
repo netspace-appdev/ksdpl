@@ -21,6 +21,7 @@ class LoanApplService {
   static const String RemovedLoanApplicationDocumentApi = BaseUrl.baseUrl +'LeadDetail/RemoveDocumentsRelatedToLoanApplication';
   static const String getDsaMappingByBankAndProduct = BaseUrl.baseUrl +'DsaMaster/GetDsaMappingByBankAndProduct';
   static const String getLoanApplicationDetailsByUniqueLeadNumber = BaseUrl.baseUrl + 'LeadDetail/GetLoanApplicationDetailsByUniqueLeadNumber';
+  static const String GetLoanApplicationDetailsByIdReal = BaseUrl.baseUrl + 'LeadDetail/GetLoanApplicationDetailsById';
 
 
 
@@ -90,6 +91,47 @@ class LoanApplService {
     } catch (e) {
       print("Error loanApplication get: $e");
       throw Exception('Error while submitting: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> getLoanApplicationDetailsByIdRealApi({
+    required String id,
+  })
+  async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(GetLoanApplicationDetailsByIdReal),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['Id'] = id.toString();
+
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      // Debug
+      Helper.ApiReq(GetLoanApplicationDetailsByIdReal, request.fields);
+      Helper.ApiRes(GetLoanApplicationDetailsByIdReal, response.body);
+
+
+
+
+      if (response.statusCode == 200) {
+
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed GetLoanApplicationDetailsByIdReal: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error GetLoanApplicationDetailsByIdReal : $e");
+      throw Exception('Error while GetLoanApplicationDetailsByIdReal: $e');
     }
   }
 

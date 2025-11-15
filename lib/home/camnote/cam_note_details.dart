@@ -271,33 +271,7 @@ class CamNoteDetailsScreen extends StatelessWidget {
 
               return Column(
                 children: [
-                  /*buildCard(
-                    Helper.capitalizeEachWord(camNote.bankName.toString()), // title
-                    [
-                      _buildDetailRow(AppText.bankName, camNote.bankName.toString()),
-                      _buildDetailRow(AppText.branchName,  camNote.branchName.toString()),
-                      _buildDetailRow(AppText.bankerName,  camNote.bankersName.toString()),
-                      _buildDetailRow(AppText.cibil,camNote.cibil.toString()),
-                      _buildDetailRow(AppText.softSanctionStatus,
 
-                          camNote.softsanction==0?"Pending":
-                  camNote.softsanction==1?"Approved":
-                  camNote.softsanction==2?"Hold":
-                  camNote.softsanction==-1?"Rejected":
-                          ""),
-
-                      const SizedBox(height: 10),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if( camNoteController.fromDoableOrInterested.value=="4" && (camNote.softsanction==0 || camNote.softsanction==2))
-                            _buildTextButton("Update", context, Colors.purple, Icons.edit, camNote.id.toString(), "update", camNote.softsanction??-2, camNote.bankId, camNote.leadID),
-                          _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file, camNote.id.toString(), "detail", camNote.softsanction??-2,camNote.bankId,  camNote.leadID ),
-                        ],
-                      ),
-                    ],
-                  ),*/
 
                   buildCard(Helper.capitalizeEachWord(camNote.bankName.toString()), [
 
