@@ -1518,6 +1518,7 @@ overflow: TextOverflow.ellipsis,
           loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString()).then((_){
              id=loanApplicationController.getLoanApplIdModel.value!.data!.id??0;
              loanApplicationController.getLoanApplicationDetailsByIdRealApi(id: id.toString());
+             loanApplicationController.getLoanApplicationDocumentByLoanIdApi(loanId: id.toString());
           });
 
 
@@ -3151,14 +3152,14 @@ overflow: TextOverflow.ellipsis,
                         hintText: "Enter Disburse Amount",
                         inputType: TextInputType.number,
                         validator: partialValidation,
-                        maxLength: leadListController.partialAmount.value
+                      /*  maxLength: leadListController.partialAmount.value
                             .truncate()
                             .toString()
-                            .length,
+                            .length,*/
 
                         onChanged: (value){
                           final disburse = double.tryParse(value ?? '0') ?? 0;
-                          if (disburse > leadListController.partialAmount.value) {
+                          if (disburse > leadListController.partialAmount.value &&  leadListController.partialAmount.value>0) {
                             return   SnackbarHelper.showSnackbar(title: "Incomplete Data",
                                 message: AppText.partialAmountCannotExceed??'');
                           }
@@ -3213,42 +3214,33 @@ overflow: TextOverflow.ellipsis,
                       const SizedBox(height: 12),
                       CustomLabeledTextField(
                         label: "Superior’s Name",
-                        isRequired: true,
+                        isRequired: false,
                         controller: leadListController.SuperiorName,
                         hintText: "Enter Superior’s Name",
                         inputType: TextInputType.text,
-                        validator: validateDisbursedBySuperiorName,
+                        //validator: validateDisbursedBySuperiorName,
                       ),
                       const SizedBox(height: 12),
 
                       CustomLabeledTextField(
                         label: "Superior’s Email",
-                        isRequired: true,
+                        isRequired: false,
                         controller: leadListController.SuperiorEmail,
                         hintText: "Enter Superior’s Email",
                         inputType: TextInputType.text,
-                        validator: validateDisbursedBySuperiorEmail,
+                        //validator: validateDisbursedBySuperiorEmail,
                       ),
                       const SizedBox(height: 12),
 
-                /*      CustomLabeledTextField(
-                        label: "Banker Email",
-                        isRequired: true,
-                        controller: leadListController.bankerEmail,
-                        hintText: "Enter Banker Email",
-                        inputType: TextInputType.text,
-                        validator: validateEmail,
-                      ),
-                      const SizedBox(height: 12),*/
 
                       CustomLabeledTextField(
                         label: "Superior’s Contact Number",
-                        isRequired: true,
+                        isRequired: false,
                         controller: leadListController.superiorContact,
                         hintText: "Enter Superior’s Contact Number",
                         inputType: TextInputType.number,
                         maxLength: 10,
-                        validator: validateDisbursedBysuperiorContact,
+                       // validator: validateDisbursedBysuperiorContact,
                       ),
                       const SizedBox(height: 12),
 
@@ -3278,6 +3270,7 @@ overflow: TextOverflow.ellipsis,
                               : () {
                             if (_formKey3.currentState!.validate()) {
                               leadListController.callUpdateDisburseHistory(LoanAccountNo);
+
                             }
                           },
                           child: leadListController.isLoad2.value

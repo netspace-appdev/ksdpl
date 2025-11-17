@@ -1827,7 +1827,7 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
  Future<void> callUpdateDisburseHistory(String loanAccountNo) async {
    final disburse = double.tryParse(partialAmountController.text ?? '0') ?? 0;
-   if (disburse > partialAmount.value) {
+   if (disburse > partialAmount.value &&  partialAmount.value>0) {
      print('the amount${disburse}');
      print('the amount${partialAmount.value.toString().length}');
      return   SnackbarHelper.showSnackbar(title: "Incomplete Data", message: AppText.partialAmountCannotExceed??'');

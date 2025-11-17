@@ -399,6 +399,7 @@ class AppText{
   static const String channelCode = "Channel Code";
   static const String enterChannelCode = "Enter Channel Code";
   static const String processingFee = "Processing Fee Against Loan Sanction Amount(%)";
+  static const String processingFee2= "Processing Fee";
   static const String enterProcessingFee = "Enter Processing Fee";
   static const String chqDdSlipNo = "CHQ/DD Slip No";
   static const String enterChqDdSlipNo = "Enter CHQ/DD Slip No";
@@ -456,6 +457,7 @@ class AppText{
   static const String coApplicantDetails = "Co-Applicant Details";
   static const String applicantDetails = "Applicant Details";
   static const String propertyDetails = "Property Details";
+  static const String chargeDetails = "Charge Details";
   static const String propertyId = "Property ID";
   static const String enterPropertyId = "Enter Property ID";
   static const String surveyNo = "Survey No";
@@ -1574,6 +1576,12 @@ class Helper{
     }
     return value;
   }
+  static String safeValueForBoolYesNo(bool? value) {
+    if (value == null) {
+      return AppText.customdash; // Your "-"
+    }
+    return value ? "Yes" : "No";
+  }
   static String safeValueForInt(int? value) {
     if (value == null || value == 0) {
       return AppText.customdash; // "-"
@@ -1656,6 +1664,46 @@ class Helper{
     return age;
   }
 
+  static String formatAddressLoan({
+    String? houseFlatNo,
+    String? buildingNo,
+    String? societyName,
+    String? locality,
+    String? streetName,
+    String? city,
+    String? taluka,
+    String? district,
+    String? state,
+    String? country,
+    String? pinCode,
+  }) {
+    // Create a list of all fields
+    final parts = [
+      houseFlatNo,
+      buildingNo,
+      societyName,
+      locality,
+      streetName,
+      city,
+      taluka,
+      district,
+      state,
+      country,
+    ]
+        .where((value) => value != null && value.trim().isNotEmpty)
+        .toList();
+
+    // Join with commas
+    String address = parts.join(', ');
+
+    // Add pincode with a dash only if it's available
+    if (pinCode != null && pinCode.trim().isNotEmpty) {
+      address = "$address - $pinCode";
+    }
+
+    // If everything is empty, return your dash
+    return address.isEmpty ? AppText.customdash : address;
+  }
 
   static String formatStringToSerialNumbers(String input, {String separator = ','}) {
     // Split string by separator, trim spaces, and remove empty parts

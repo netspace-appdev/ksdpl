@@ -1450,7 +1450,8 @@ class DrawerApiService {
       // EmployeeId
 
       request.fields['UniqueLeadNo'] = uniqueLeadNo;
-      request.fields['ActualDate'] = disburseDate;
+      request.fields['ActualDate'] = disburseDate.isNotEmpty ? Helper
+          .convertToIso8601(disburseDate) : "";
       request.fields['ActualAmount'] = disburseAmount;
       request.fields['TransactionDetails'] = transactionDetails;
       request.fields['DisbursedBy'] = disbursedBy;

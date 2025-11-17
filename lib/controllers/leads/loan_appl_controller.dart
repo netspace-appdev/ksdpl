@@ -69,6 +69,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   var selectedCountryPerm = Rxn<String>();
   var selectedCountryOfficeAd = Rxn<String>();
   var selectedProdTypeOrTypeLoan = Rxn<int>();
+  var selectedProdTypeOrTypeLoanString = Rxn<String>();
   var loanApplId = 0;
   var isSameAddressApl = false.obs;
   LeadDDController leadDDController = Get.find();
@@ -651,6 +652,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     selectedStateProp.value = null;
     selectedDistrictProp.value = null;
     selectedCityProp.value = null;
+    selectedProdTypeOrTypeLoanString.value=null;
 
 // Clear Lists (and dispose their controllers if needed)
     coApplicantList.clear();
@@ -885,7 +887,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
                 "loanPurpose": cleanText(loPurposeController.text),
                 "scheme": cleanText(schemeController.text),
                 "repaymentType": cleanText(repayTpeController.text),
-                "typeOfLoan": cleanText(loanTenureYController.text),
+                "typeOfLoan": selectedProdTypeOrTypeLoanString.value.ddToString(),
                 "loanAmountApplied": laAppliedController.text.toIntOrZero(),
                 "loanTenureYears": loanTenureYController.toIntOrZero(),
                 "monthlyInstallment": monthInstaController.toIntOrZero(),

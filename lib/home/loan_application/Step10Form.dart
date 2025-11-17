@@ -193,30 +193,7 @@ class Step10Form extends StatelessWidget {
 
                             ElevatedButton(
                               onPressed: () {
-                                /*if(loanApplicationController.selectedBank.value==0||loanApplicationController.selectedBank.value==null){
-                                  SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Bank Name");
-                                  return;
-                                } if(loanApplicationController.selectedProdTypeOrTypeLoan.value==0||loanApplicationController.selectedProdTypeOrTypeLoan.value==null){
-                                  SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please Select Loan Type");
-                                  return;
-                                } if(loanApplicationController.bankerNameController.text.trim().toString().isEmpty){
-                                  SnackbarHelper.showSnackbar(title: "Incomplete Step 8", message: "Please Enter Banker Name");
-                                  return;
-                                } if(loanApplicationController.bankerMobileController.text.trim().toString().isEmpty){
-                                  SnackbarHelper.showSnackbar(title: "Incomplete Step 8", message: "Please Enter Banker Mobile ");
-                                  return;
-                                } if(loanApplicationController.bankerWhatsappController.text.trim().toString().isEmpty){
-                                  SnackbarHelper.showSnackbar(title: "Incomplete Step 8", message: "Please Enter Banker WhatsUp ");
-                                  return;
-                                } if(loanApplicationController.bankerEmailController.text.trim().toString().isEmpty){
-                                  SnackbarHelper.showSnackbar(title: "Incomplete Step 8", message: "Please Enter Email ");
-                                  return;
-                                }else
-                                if(loanApplicationController.addDocumentList.isNotEmpty) {
-                                  final doc = loanApplicationController
-                                      .addDocumentList[index];
-                                  loanApplicationController.submitDoc(doc: doc);
-                                }*/
+
                                 if(loanApplicationController.addDocumentList.isNotEmpty) {
                                   final doc = loanApplicationController
                                       .addDocumentList[index];

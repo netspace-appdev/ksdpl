@@ -168,28 +168,6 @@ class Step1Form extends StatelessWidget {
 
                     const SizedBox(height: 10),
                     ///Working
-                    /*Obx((){
-                      final productList = leadDDController.getAllKsdplProductModel.value?.data ?? [];
-                      for (var item in productList) {
-                      }
-
-
-                      if (leadDDController.isProductLoading.value) {
-                        return  Center(child:CustomSkelton.leadShimmerList(context));
-                      }
-
-                      return CustomDropdown<product.Data>(
-                        items: leadDDController.getAllKsdplProductModel.value?.data ?? [],
-                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                        getName: (item) => item.productName.toString(),
-                        selectedValue: leadDDController.getAllKsdplProductModel.value?.data?.firstWhereOrNull(
-                              (item) => item.id == loanApplicationController.selectedProdTypeOrTypeLoan.value,
-                        ),
-                        onChanged: (value) {
-                          loanApplicationController.selectedProdTypeOrTypeLoan.value =  value?.id;
-                        },
-                      );
-                    }),*/
 
 
                     Obx((){
@@ -207,12 +185,38 @@ class Step1Form extends StatelessWidget {
                         ),
                         onChanged: (value) {
                           loanApplicationController.selectedProdTypeOrTypeLoan.value =  value?.id;
+                          loanApplicationController.selectedProdTypeOrTypeLoanString.value =  value?.product;
                           loanApplicationController.getDsaMappingByBankAndProductApi(
                               BankId: loanApplicationController.selectedBank.value.toString(),
                               ProductId:loanApplicationController.selectedProdTypeOrTypeLoan.value.toString());
                         },
                       );
                     }),
+
+                    /*Obx((){
+
+                      if (leadDDController.isProductLoading.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+
+                      return CustomDropdown<prodList.Data>(
+                        items: leadDDController.prodListByBank ?? [],
+                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.product.toString(),
+                        selectedValue: leadDDController.prodListByBank.firstWhereOrNull(
+                              (item) => item.product == loanApplicationController.selectedProdTypeOrTypeLoanString.value,
+                        ),
+                        onChanged: (value) {
+                          loanApplicationController.selectedProdTypeOrTypeLoanString.value =  value?.product;
+                          if(value!=null){
+                            loanApplicationController.getDsaMappingByBankAndProductApi(
+                                BankId: loanApplicationController.selectedBank.value.toString(),
+                                ProductId:value.id.toString());
+                          }
+
+                        },
+                      );
+                    }),*/
 
                     const SizedBox(height: 20),
                     CustomLabeledTextField(

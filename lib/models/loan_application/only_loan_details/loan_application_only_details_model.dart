@@ -1,215 +1,4 @@
-/*
-import 'dart:convert';
 
-class LoanApplicationDetailsOnlyModel {
-  int? id;
-  String? loanApplicationNo;
-  String? addharCardNumber;
-  String? panCardNumber;
-
-  DetailForLoanApplication? detailForLoanApplication;
-  List<CoApplicant> coApplicants = [];
-  LoanPropertyDetails? loanDetails;
-  List<FamilyMember> familyMembers = [];
-  List<CreditCard> creditCards = [];
-  FinancialDetails? financialDetails;
-  List<ReferenceDetail> referenceDetails = [];
-  ChargesDetails? chargesDetails;
-
-  LoanApplicationDetailsOnlyModel.fromJson(Map<String, dynamic> json) {
-    final data = json["data"];
-
-    id = data["id"];
-    loanApplicationNo = data["loanApplicationNo"];
-    addharCardNumber = data["addharCardNumber"];
-    panCardNumber = data["panCardNumber"];
-
-    // Decode stringified JSON
-    detailForLoanApplication = DetailForLoanApplication.fromJson(
-      jsonDecode(data["detailForLoanApplication"]),
-    );
-
-    coApplicants = (jsonDecode(data["coApplicantDetail"]) as List)
-        .map((e) => CoApplicant.fromJson(e))
-        .toList();
-
-    loanDetails = LoanPropertyDetails.fromJson(
-      jsonDecode(data["loanDetails"]),
-    );
-
-    familyMembers = (jsonDecode(data["familyMembers"]) as List)
-        .map((e) => FamilyMember.fromJson(e))
-        .toList();
-
-    creditCards = (jsonDecode(data["creditCards"]) as List)
-        .map((e) => CreditCard.fromJson(e))
-        .toList();
-
-    financialDetails =
-        FinancialDetails.fromJson(jsonDecode(data["financialDetails"]));
-
-    referenceDetails = (jsonDecode(data["referenceDetails"]) as List)
-        .map((e) => ReferenceDetail.fromJson(e))
-        .toList();
-
-    chargesDetails =
-        ChargesDetails.fromJson(jsonDecode(data["chargesDetails"]));
-  }
-}
-class DetailForLoanApplication {
-  int? branch;
-  String? loanApplicationNo;
-  String? loanPurpose;
-  String? scheme;
-  String? repaymentType;
-  String? typeOfLoan;
-
-  Applicant? applicant;
-
-  DetailForLoanApplication.fromJson(Map<String, dynamic> json) {
-    branch = json["Branch"];
-    loanApplicationNo = json["LoanApplicationNo"];
-    loanPurpose = json["LoanPurpose"];
-    scheme = json["Scheme"];
-    repaymentType = json["RepaymentType"];
-    typeOfLoan = json["TypeOfLoan"];
-
-    applicant = Applicant.fromJson(json["Applicant"]);
-  }
-}
-class Applicant {
-  String? name;
-  String? fatherName;
-  String? gender;
-  String? qualification;
-  String? maritalStatus;
-  String? occupationSector;
-  String? email;
-  String? mobile;
-
-  Address? presentAddress;
-  Address? permanentAddress;
-
-  Applicant.fromJson(Map<String, dynamic> json) {
-    name = json["Name"];
-    fatherName = json["FatherName"];
-    gender = json["Gender"];
-    qualification = json["Qualification"];
-    maritalStatus = json["MaritalStatus"];
-    occupationSector = json["OccupationSector"];
-    email = json["EmailID"];
-    mobile = json["Mobile"];
-    presentAddress = Address.fromJson(json["PresentAddress"]);
-    permanentAddress = Address.fromJson(json["PermanentAddress"]);
-  }
-}
-class Address {
-  String? houseFlatNo;
-  String? societyName;
-  String? city;
-  String? state;
-  String? pinCode;
-
-  Address.fromJson(Map<String, dynamic> json) {
-    houseFlatNo = json["HouseFlatNo"];
-    societyName = json["SocietyName"];
-    city = json["City"];
-    state = json["State"];
-    pinCode = json["PinCode"].toString();
-  }
-}
-class CoApplicant {
-  String? name;
-  String? fatherName;
-  String? gender;
-  String? maritalStatus;
-  String? qualification;
-  String? mobile;
-
-  Address? presentAddress;
-
-  CoApplicant.fromJson(Map<String, dynamic> json) {
-    name = json["Name"];
-    fatherName = json["FatherName"];
-    gender = json["Gender"];
-    maritalStatus = json["MaritalStatus"];
-    qualification = json["Qualification"];
-    mobile = json["Mobile"];
-    presentAddress = Address.fromJson(json["PresentAddress"]);
-  }
-}
-class LoanPropertyDetails {
-  String? propertyId;
-  String? finalPlotNo;
-  String? flatHouseNo;
-  String? city;
-
-  LoanPropertyDetails.fromJson(Map<String, dynamic> json) {
-    propertyId = json["PropertyId"];
-    finalPlotNo = json["FinalPlotNo"];
-    flatHouseNo = json["FlatHouseNo"];
-    city = json["City"];
-  }
-}
-class FamilyMember {
-  String? name;
-  String? gender;
-  String? relation;
-  bool? dependent;
-  int? monthlyIncome;
-
-  FamilyMember.fromJson(Map<String, dynamic> json) {
-    name = json["Name"];
-    gender = json["Gender"];
-    relation = json["RelationWithApplicant"];
-    dependent = json["Dependent"];
-    monthlyIncome = json["MonthlyIncome"];
-  }
-}
-class CreditCard {
-  String? companyBank;
-  String? cardNumber;
-  int? avgMonthlySpending;
-
-  CreditCard.fromJson(Map<String, dynamic> json) {
-    companyBank = json["CompanyBank"];
-    cardNumber = json["CardNumber"];
-    avgMonthlySpending = json["AvgMonthlySpending"];
-  }
-}
-class FinancialDetails {
-  int? grossMonthlySalary;
-  int? netMonthlySalary;
-
-  FinancialDetails.fromJson(Map<String, dynamic> json) {
-    grossMonthlySalary = json["GrossMonthlySalary"];
-    netMonthlySalary = json["NetMonthlySalary"];
-  }
-}
-class ReferenceDetail {
-  String? name;
-  String? address;
-  String? phone;
-
-  ReferenceDetail.fromJson(Map<String, dynamic> json) {
-    name = json["Name"];
-    address = json["Address"];
-    phone = json["Phone"];
-  }
-}
-class ChargesDetails {
-  int? processingFees;
-  int? adminFeeCharges;
-
-  ChargesDetails.fromJson(Map<String, dynamic> json) {
-    processingFees = json["ProcessingFees"];
-    adminFeeCharges = json["AdminFeeCharges"];
-  }
-}
-*/
-
-
-// loan_application_models.dart
 import 'dart:convert';
 
 /// Helper to safely decode a JSON string or return the original object if already decoded.
@@ -394,6 +183,7 @@ class DetailForLoanApplication {
   String? dsaStaffName;
   String? loanApplicationNo;
   num? processingFee;
+  DateTime? processingFeeDate;
   String? chqDdSlipNo;
   String? loanPurpose;
   String? scheme;
@@ -401,6 +191,8 @@ class DetailForLoanApplication {
   String? typeOfLoan;
   num? loanAmountApplied;
   num? loanTenureYears;
+  num? monthlyInstallment;
+  bool? previousLoanApplied;
   Applicant? applicant;
 
   DetailForLoanApplication();
@@ -411,6 +203,12 @@ class DetailForLoanApplication {
     obj.dsaStaffName = json['DsaStaffName']?.toString();
     obj.loanApplicationNo = json['LoanApplicationNo']?.toString();
     obj.processingFee = json['ProcessingFee'] is num ? json['ProcessingFee'] as num : (json['ProcessingFee'] != null ? num.tryParse(json['ProcessingFee'].toString()) : null);
+    if (json['ProcessingFeeDate'] != null) {
+      try {
+        obj.processingFeeDate = DateTime.parse(json['ProcessingFeeDate'].toString());
+      } catch (_) {}
+    }
+
     obj.chqDdSlipNo = json['ChqDdSlipNo']?.toString();
     obj.loanPurpose = json['LoanPurpose']?.toString();
     obj.scheme = json['Scheme']?.toString();
@@ -418,6 +216,15 @@ class DetailForLoanApplication {
     obj.typeOfLoan = json['TypeOfLoan']?.toString();
     obj.loanAmountApplied = json['LoanAmountApplied'] is num ? json['LoanAmountApplied'] as num : (json['LoanAmountApplied'] != null ? num.tryParse(json['LoanAmountApplied'].toString()) : null);
     obj.loanTenureYears = json['LoanTenureYears'] is num ? json['LoanTenureYears'] as num : (json['LoanTenureYears'] != null ? num.tryParse(json['LoanTenureYears'].toString()) : null);
+    obj.monthlyInstallment = json['MonthlyInstallment'] is num ? json['MonthlyInstallment'] as num : (json['MonthlyInstallment'] != null ? num.tryParse(json['MonthlyInstallment'].toString()) : null);
+    final prev = json['PreviousLoanApplied'];
+    if (prev is bool) {
+      obj.previousLoanApplied = prev;
+    } else if (prev is String) {
+      obj.previousLoanApplied = prev.toLowerCase() == 'true';
+    } else if (prev is num) {
+      obj.previousLoanApplied = prev == 1;
+    }
 
     if (json['Applicant'] != null && json['Applicant'] is Map<String, dynamic>) {
       obj.applicant = Applicant.fromJson(json['Applicant'] as Map<String, dynamic>);
@@ -439,6 +246,7 @@ class Applicant {
   String? occupationSector;
   Address? presentAddress;
   Address? permanentAddress;
+  Address? officeAddress;
   String? email;
   String? mobile;
   EmployerDetails? employerDetails;
@@ -466,6 +274,9 @@ class Applicant {
     }
     if (json['PermanentAddress'] != null && json['PermanentAddress'] is Map<String, dynamic>) {
       obj.permanentAddress = Address.fromJson(json['PermanentAddress'] as Map<String, dynamic>);
+    }
+    if (json['OfficeAddress'] != null && json['OfficeAddress'] is Map<String, dynamic>) {
+      obj.officeAddress = Address.fromJson(json['OfficeAddress'] as Map<String, dynamic>);
     }
     obj.email = json['EmailID']?.toString();
     obj.mobile = json['Mobile']?.toString();
