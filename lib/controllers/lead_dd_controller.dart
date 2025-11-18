@@ -424,7 +424,7 @@ class LeadDDController extends GetxController{
     } catch (e) {
       print("Error getAllStateApi:leadcontroller $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+     // ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
       isDistrictLoading(false);
     } finally {
@@ -468,7 +468,7 @@ class LeadDDController extends GetxController{
     } catch (e) {
       print("Error getCityByDistrictId: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+      //ToastMessage.msg(AppText.somethingWentWrong);
       isLoading(false);
       isCityLoading(false);
     } finally {
@@ -866,13 +866,10 @@ class LeadDDController extends GetxController{
   }
 
   int? getDistrictIdByNameCurr(String dName) {
-  //print("dName--dd------>${dName}");
+  print("dName--dd------>${dName}");
     final dists = getDistrictByStateModelCurr.value?.data;
+  print("dists--dd------>${dists}");
 
-  dists!.forEach((ele){
-   // print("ele--dd------>${ele.districtName}");
-   // print("ele--dd------>${ele.id}");
-  });
     if (dists == null || dists.isEmpty) return null;
 
     final matchedDist = dists.firstWhere(
@@ -891,7 +888,7 @@ class LeadDDController extends GetxController{
     try {
 
       print("stateId___>${stateId}");
-      print("stateId___>here am facing big problem");
+
 
       isDistrictLoadingCurr(true);
 
@@ -1083,7 +1080,7 @@ class LeadDDController extends GetxController{
     } catch (e) {
       print("Error getCityByDistrictId: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+     // ToastMessage.msg(AppText.somethingWentWrong);
 
       isCityLoadingCurr(false);
     } finally {
@@ -1125,7 +1122,7 @@ class LeadDDController extends GetxController{
     } catch (e) {
       print("Error getCityByDistrictId: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+     // ToastMessage.msg(AppText.somethingWentWrong);
 
       isCityLoadingPerm(false);
     } finally {
@@ -1168,7 +1165,7 @@ class LeadDDController extends GetxController{
     } catch (e) {
       print("Error getCityByDistrictIdOfficeAdApi: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+     // ToastMessage.msg(AppText.somethingWentWrong);
 
       isCityLoadingOfficeAd(false);
     } finally {

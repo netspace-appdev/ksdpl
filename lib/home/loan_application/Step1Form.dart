@@ -193,30 +193,7 @@ class Step1Form extends StatelessWidget {
                       );
                     }),
 
-                    /*Obx((){
 
-                      if (leadDDController.isProductLoading.value) {
-                        return  Center(child:CustomSkelton.leadShimmerList(context));
-                      }
-
-                      return CustomDropdown<prodList.Data>(
-                        items: leadDDController.prodListByBank ?? [],
-                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                        getName: (item) => item.product.toString(),
-                        selectedValue: leadDDController.prodListByBank.firstWhereOrNull(
-                              (item) => item.product == loanApplicationController.selectedProdTypeOrTypeLoanString.value,
-                        ),
-                        onChanged: (value) {
-                          loanApplicationController.selectedProdTypeOrTypeLoanString.value =  value?.product;
-                          if(value!=null){
-                            loanApplicationController.getDsaMappingByBankAndProductApi(
-                                BankId: loanApplicationController.selectedBank.value.toString(),
-                                ProductId:value.id.toString());
-                          }
-
-                        },
-                      );
-                    }),*/
 
                     const SizedBox(height: 20),
                     CustomLabeledTextField(
@@ -476,14 +453,7 @@ class Step1Form extends StatelessWidget {
                             color: AppColor.grey2,
                           ),
                         ),
-                        /*  Text(
-                        " *",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.redColor,
-                        ),
-                      ),*/
+
                       ],
                     ),
 

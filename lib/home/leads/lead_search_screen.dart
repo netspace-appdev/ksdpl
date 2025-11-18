@@ -927,7 +927,23 @@ class LeadSearchScreen extends StatelessWidget {
                       ),
 
 
-
+                    if(lead.leadStage.toString()=="6" || lead.leadStage.toString()=="8"|| lead.leadStage.toString()=="9"
+                        ||lead.leadStage.toString()=="10" ||  lead.leadStage.toString()=="11" ||lead.leadStage.toString()=="12")
+                      Column(
+                        children: [
+                          SizedBox(height: 10,),
+                          _buildTextButton(
+                              label:"Loan Application Details",
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.details,
+                              leadId: lead.id.toString(),
+                              label_code: "loan_appl_single_details",
+                              currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
+                          ),
+                        ],
+                      ),
                     if(lead.leadStage.toString()=="6" )
                       Column(
                         children: [
@@ -1169,6 +1185,17 @@ class LeadSearchScreen extends StatelessWidget {
             stageName:  stageName.toString(),
 
           );
+        }else if(label_code=="loan_appl_single_details"){
+          LoanApplicationController loanApplicationController =Get.put(LoanApplicationController());
+          var id=0;
+          loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString()).then((_){
+            id=loanApplicationController.getLoanApplIdModel.value!.data!.id??0;
+            loanApplicationController.getLoanApplicationDetailsByIdRealApi(id: id.toString());
+            loanApplicationController.getLoanApplicationDocumentByLoanIdApi(loanId: id.toString());
+          });
+
+
+          Get.toNamed("/LoanApplicationOnlyDetails");
         }
         else{
 

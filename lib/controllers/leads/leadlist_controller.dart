@@ -1483,14 +1483,21 @@ print('getLeadDetailModel${getLeadDetailModel.value?.data?.loanApplicationNo}');
 
    try {
      isLoad(true);
-
-     var data = await DrawerApiService.updateLoanForm(
+    ///manshi's work
+    /* var data = await DrawerApiService.updateLoanForm(
        uniqueLeadNumber: updateLoanFormController.text.trim(),
        LoanApplicationNumber:leadnumber??'',
+     );*/
+
+     //Pankaj's work
+     var data = await DrawerApiService.updateLoanForm(
+       uniqueLeadNumber: leadnumber??'',
+       LoanApplicationNumber:updateLoanFormController.text.trim(),
      );
 
      if (data['success'] == true) {
        updateLoanFormModel.value = UpdateLoanFormModel.fromJson(data);
+       ToastMessage.msg(updateLoanFormModel.value?.message??"Operation done successfully");
        isLoad(false);
        clear();
        Get.back();
@@ -1692,18 +1699,19 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
         loanApplicationController.bankerWhatsappController.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.bankersWhatsAppNumber??"";
         loanApplicationController.bankerEmailController.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.bankersEmailId??"";
 
-        loanApplicationController.chargesDetailProcessingFees.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionProcessingFees.toString()??"0";
-        loanApplicationController.chargesDetailAdminFeeChargess.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableAdminFee.toString()??"0";
-        loanApplicationController.chargesDetailForeclosureCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableForeclosureCharges.toString()??"0";
-        loanApplicationController.chargesDetailStampDuty.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionStampDuty.toString()??"0";
-        loanApplicationController.chargesDetailLegalVettingCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableLegalFee.toString()??"0";
-        loanApplicationController.chargesDetailTechnicalInspectionCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableTechnicalFee.toString()??"0";
-        loanApplicationController.chargesDetailOtherCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableOtherCharges.toString()??"0";
-        loanApplicationController.chargesDetailTSRLegalCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableTsrcharges.toString()??"0";
-        loanApplicationController.chargesDetailValuationCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableValuationCharges.toString()??"0";
-        loanApplicationController.chargesDetailProcessingCharges.text=getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionProcessingCharges.toString()??"0";
+        loanApplicationController.chargesDetailProcessingFees.text=(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionProcessingFees??0).toString();
+        loanApplicationController.chargesDetailAdminFeeChargess.text=(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableAdminFee??0).toString();
+        loanApplicationController.chargesDetailForeclosureCharges.text=(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableForeclosureCharges??0).toString();
+        loanApplicationController.chargesDetailStampDuty.text=(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionStampDuty??0).toString();
+        loanApplicationController.chargesDetailLegalVettingCharges.text=(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableLegalFee??0).toString();
+        loanApplicationController.chargesDetailTechnicalInspectionCharges.text=(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableTechnicalFee??0).toString();
+        loanApplicationController.chargesDetailOtherCharges.text=(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableOtherCharges??0).toString();
+        loanApplicationController.chargesDetailTSRLegalCharges.text=(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableTsrcharges??0).toString();
+        loanApplicationController.chargesDetailValuationCharges.text=(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableValuationCharges ?? 0).toString();
+        loanApplicationController.chargesDetailProcessingCharges.text= (getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionProcessingCharges ?? 0).toString();
+
         final docs = getSoftSanctionByLeadIdAndBankIdModel.value?.data?.documents;
-        print("docs=========>${docs}");
+
         loanApplicationController.documentListByBank.value =
         (docs?.isNotEmpty ?? false)
             ? docs!.split(',').map((e) => e.trim()).toList()
@@ -1746,6 +1754,8 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
 
         final LoanApplicationController loanApplicationController=Get.find();
         getSoftSanctionByLeadIdAndBankIdModel.value=null;
+        clearBankerAndCharges();
+
         loanApplicationController.addDocumentList.clear();
         loanApplicationController.addDocumentList.add(AdddocumentModel());
       }else{
@@ -1766,6 +1776,29 @@ Future<void> addSanctionDetailsApi({required String uln}) async {
       isLoad(false);
 
     }
+  }
+  clearBankerAndCharges(){
+    final LoanApplicationController loanApplicationController=Get.find();
+    loanApplicationController.bankerNameController.clear();
+    loanApplicationController.bankerMobileController.clear();
+    loanApplicationController.bankerWhatsappController.clear();
+    loanApplicationController.bankerEmailController.clear();
+
+    loanApplicationController.chargesDetailProcessingFees.clear();
+    loanApplicationController.chargesDetailAdminFeeChargess.clear();
+    loanApplicationController.chargesDetailForeclosureCharges.clear();
+    loanApplicationController.chargesDetailStampDuty.clear();
+    loanApplicationController.chargesDetailLegalVettingCharges.clear();
+    loanApplicationController.chargesDetailTechnicalInspectionCharges.clear();
+    loanApplicationController.chargesDetailOtherCharges.clear();
+    loanApplicationController.chargesDetailTSRLegalCharges.clear();
+    loanApplicationController.chargesDetailValuationCharges.clear();
+    print("here1=========>${getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableValuationCharges}");
+    print("here1=========>${(getSoftSanctionByLeadIdAndBankIdModel.value?.data?.sanctionApplicableValuationCharges ?? 0).toString()}");
+    print("here1=========>${loanApplicationController.chargesDetailValuationCharges.text}");
+    loanApplicationController.chargesDetailProcessingCharges.clear();
+    loanApplicationController.documentListByBank.clear();
+
   }
 
   Future<void> callGetBankerDetailSanction(String phoneNo) async {

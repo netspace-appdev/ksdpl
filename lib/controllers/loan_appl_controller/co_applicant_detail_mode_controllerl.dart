@@ -384,7 +384,7 @@ class CoApplicantDetailController {
     } catch (e) {
       print("Error getCityByDistrictId: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+      //ToastMessage.msg(AppText.somethingWentWrong);
 
       isCityLoadingCurr(false);
     } finally {
@@ -426,7 +426,7 @@ class CoApplicantDetailController {
     } catch (e) {
       print("Error getCityByDistrictId: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+     // ToastMessage.msg(AppText.somethingWentWrong);
 
       isCityLoadingPerm(false);
     } finally {
@@ -469,7 +469,7 @@ class CoApplicantDetailController {
     } catch (e) {
       print("Error getCityByDistrictId: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+    //  ToastMessage.msg(AppText.somethingWentWrong);
 
       isCityLoadingOfficeAd(false);
     } finally {

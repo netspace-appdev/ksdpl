@@ -620,6 +620,7 @@ class DrawerApiService {
   static Future<Map<String, dynamic>> getDistrictByStateIdApi({
     required stateId
   }) async {
+    print("stateid--->${stateId}");
 
     try {
       var request = http.MultipartRequest(

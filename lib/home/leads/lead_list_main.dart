@@ -868,7 +868,7 @@ class LeadListMain extends StatelessWidget  {
                               label:"Loan Application Details",
                               context: context,
                               color: Colors.purple,
-                              icon:  Icons.money_outlined,
+                              icon:  Icons.details,
                               leadId: lead.id.toString(),
                               label_code: "loan_appl_single_details",
                               currentLeadStage: lead.leadStage.toString(),
@@ -1457,18 +1457,15 @@ overflow: TextOverflow.ellipsis,
 
 
         loanApplicationController.clearBeforeGoingOnLoanAppl();
-        print('loanDetails${loanDetails}');
+
 
         addLeadController.getLeadDetailByIdApi(leadId: leadId);
-        loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString());
+        loanApplicationController.getLoanApplicationDetailsByIdApi(id: uln.toString()); ///getLoanApplicationDetailsByUniqueLeadNumbr
 
           loanApplicationController.currentStep.value=0;
-        /*  Get.toNamed("/loanApplication", arguments: {
-          'leadId': leadId.toString(),
-          'uln': uln.toString(),
-          });*/
+
         loanApplicationController.isShortTrackActive.value=false;
-        print('uln.toString() on tap-========>${uln.toString()}');
+
         loanApplTypeDialog(
           context: context,
           leadId: leadId.toString(),

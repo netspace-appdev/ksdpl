@@ -217,12 +217,125 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     creditCardsList.clear();
     referencesList.clear();
     addDocumentList.clear();
-    print("length coApplicantList in controller--->${coApplicantList.length}");
 
+    step1Clear();
+    step3Clear();
+    step6Clear();
+    step8Clear();
+    step9Clear();
+  }
+
+  void step1Clear(){
+    ///18 Nov
+    loanApplicationNoController.clear();
+    dsaCodeController.clear();
+    panController.clear();
+    aadharController.clear();
+    laAppliedController.clear();
+    dsaStaffNController.clear();
+    ulnController.clear();
+    chCodeController.clear();
+    proFeeController.clear();
+    chqDDSNController.clear();
+    proFeeDateController.clear();
+    loPurposeController.clear();
+    schemeController.clear();
+    repayTpeController.clear();
+    loanTenureYController.clear();
+    loanRoiController.clear();
+    monthInstaController.clear();
+    applFullNameController.clear();
+    fatherNameController.clear();
+    dobController.clear();
+    qualiController.clear();
+    maritalController.clear();
+    chargesDetailProcessingCharges.clear();
+    nationalityController.clear();
+    occupationController.clear();
+    occSectorController.clear();
+    applEmailController.clear();
+    applMobController.clear();
+    emplStatusController.clear();
+    orgNameController.clear();
+    natureOfBizController.clear();
+    staffStrengthController.clear();
+    salaryDateController.clear();
+    houseFlatController.clear();
+    buildingNoController.clear();
+    societyNameController.clear();
+    localityController.clear();
+    streetNameController.clear();
+    pinCodeController.clear();
+    talukaController.clear();
+    houseFlatPermController.clear();
+    buildingNoPermController.clear();
+    societyNamePermController.clear();
+    localityPermController.clear();
+    streetNamePermController.clear();
+    pinCodePermController.clear();
+    talukaPermController.clear();
+    houseFlatOfficeAdController.clear();
+    buildingNoOfficeAdController.clear();
+    societyNameOfficeAdController.clear();
+    localityOfficeAdController.clear();
+    streetNameOfficeAdController.clear();
+    pinCodeOfficeAdController.clear();
+    talukaOfficeAdController.clear();
+
+    selectedBank.value = null;
+    selectedBankBranch.value=null;
+    selectedProdTypeOrTypeLoan.value=null;
+    selectedChannel.value= null;
+    selectedPrevLoanAppl.value= 0;
+    selectedOwnershipList.value= null;
+    leadDDController.selectedStateCurr.value= null;
+    leadDDController.selectedDistrictCurr.value= null;
+    leadDDController.selectedCityCurr.value= null;
+    selectedCountry.value= null;
+    leadDDController.selectedStatePerm.value= null;
+    leadDDController.selectedDistrictPerm.value= null;
+    leadDDController.selectedCityPerm.value= null;
+    selectedCountryPerm.value= null;
+    leadDDController.selectedStateOfficeAd.value= null;
+    leadDDController.selectedDistrictOfficeAd.value= null;
+    leadDDController.selectedCityOfficeAd.value= null;
+    selectedCountryOfficeAd.value= null;
+  }
+  void step3Clear(){
+    propPropIdController.clear();
+    propSurveyNoController.clear();
+    propFinalPlotNoNoController.clear();
+    propBlockNoController.clear();
+    propHouseFlatController.clear();
+    propBuildingNameController.clear();
+    propStreetNameController.clear();
+    propLocalityController.clear();
+    propPinCodeController.clear();
+    propTalukaController.clear();
+
+    selectedStateProp.value= null;
+    selectedDistrictProp.value= null;
+    selectedCityProp.value= null;
+
+  }
+  void step6Clear(){
+    fdGrossMonthlySalaryController.clear();
+    fdnNtMonthlySalaryController.clear();
+    fdAnnualBonusController.clear();
+    fdAvgMonOvertimeController.clear();
+    fdAvgMonCommissionController.clear();
+    fdAMonthlyPfDeductionController.clear();
+    fdOtherMonthlyIncomeController.clear();
+  }
+
+  void step8Clear(){
     bankerNameController.clear();
     bankerMobileController.clear();
     bankerWhatsappController.clear();
     bankerEmailController.clear();
+  }
+
+  void step9Clear(){
     chargesDetailProcessingFees.clear();
     chargesDetailAdminFeeChargess.clear();
     chargesDetailForeclosureCharges.clear();
@@ -232,9 +345,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     chargesDetailOtherCharges.clear();
     chargesDetailTSRLegalCharges.clear();
     chargesDetailValuationCharges.clear();
-    chargesDetailProcessingCharges.clear();
   }
-
   void removeAdditionalSrcDocument(int index) {
     if (addDocumentList.length <= 1) {
       ToastMessage.msg("You can not delete this");
@@ -1226,7 +1337,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
   }
 
 
-  Future<void> getLoanApplicationDetailsByIdApi({ //getLoanApplicationDetailsByUniqueLeadNumber
+  Future<void> getLoanApplicationDetailsByIdApi({ ///getLoanApplicationDetailsByUniqueLeadNumber
     required String id,
   }) async {
 
@@ -1239,7 +1350,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       if (req['success'] == true) {
 
         getLoanApplIdModel.value = GetLoanApplIdModel.fromJson(req);
-
+        print("at first populateCoApplicantControllers=========>: ${coApplicantList.length}");
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
           detailMap = jsonDecode(getLoanApplIdModel.value!.data!.detailForLoanApplication!);
 
@@ -1303,16 +1414,17 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           ///New code on 24 Oct
           if( presentAdd?['State'] != "" &&  presentAdd?['State'] != "0"){
             final stateId = leadDDController.getStateIdByName(leadDDController.selectedStateCurr.value.toString());
-
+            print("stateId=========>1: ${stateId}");
             await leadDDController.getDistrictByStateIdCurrApi(
                 stateId: stateId.toString());//leadDDController.selectedStateCurr.value
 
+            print("stateId=========>2: ${stateId}");
             leadDDController.selectedDistrictCurr.value =
             presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
-
+            print("stateId=========>3: ${stateId}");
             ///New code on 24 Oct
             final distId = leadDDController.getDistrictIdByNameCurr(leadDDController.selectedDistrictCurr.value.toString());
-
+            print("stateId=========>4: ${stateId}");
             await leadDDController.getCityByDistrictIdCurrApi(
                 districtId: distId.toString());//eadDDController.selectedDistrictCurr.value
             leadDDController.selectedCityCurr.value =
@@ -1336,6 +1448,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           ///New code on 24 Oct
           if( permanentAdd?['State'] != "" &&  permanentAdd?['State'] != "0"){
             final stateId2 = leadDDController.getStateIdByName(leadDDController.selectedStatePerm.value.toString());
+            print("stateId2=========>: ${stateId2}");
             await leadDDController.getDistrictByStateIdPermApi(
                 stateId: stateId2.toString());//leadDDController.selectedStatePerm.value
             leadDDController.selectedDistrictPerm.value =
@@ -1393,6 +1506,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           selectedCountryOfficeAd.value = officeAdd?['Country'] ?? '0';
           pinCodeOfficeAdController.text = officeAdd?['PinCode'] ?? '';
         }
+        print("at first populateCoApplicantControllers 2=========>: ${coApplicantList.length}");
+
         final data = getLoanApplIdModel.value!.data;
 
         dsaCodeController.text = data?.dsaCode ?? '';
@@ -1419,11 +1534,11 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         ulnController.text = id;//uln;
         selectedChannel.value = data?.channelId ?? 0;
         chCodeController.text = data?.channelCode ?? '';
-        bankerNameController.text = data?.bankerName ?? '';
+       /* bankerNameController.text = data?.bankerName ?? '';
         bankerMobileController.text = data?.bankerMobile ?? '';
         bankerWhatsappController.text = data?.bankerWatsapp ?? '';
-        bankerEmailController.text = data?.bankerEmail ?? '';
-        chargesDetailProcessingFees.text = data?.chargesDetails?.processingFees?.toString() ?? '0';
+        bankerEmailController.text = data?.bankerEmail ?? '';*/
+        /*chargesDetailProcessingFees.text = data?.chargesDetails?.processingFees?.toString() ?? '0';
 
 
 
@@ -1435,10 +1550,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         chargesDetailOtherCharges.text = data?.chargesDetails?.otherCharges?.toString() ?? '0';
         chargesDetailTSRLegalCharges.text = data?.chargesDetails?.tsrLegalCharges?.toString() ?? '0';
         chargesDetailValuationCharges.text = data?.chargesDetails?.valuationCharges?.toString() ?? '0';
-        chargesDetailProcessingCharges.text = data?.chargesDetails?.processingCharges?.toString() ?? '0';
+        chargesDetailProcessingCharges.text = data?.chargesDetails?.processingCharges?.toString() ?? '0';*/
 
         loanApplId = data?.id ?? 0;
 
+
+        print("before populateCoApplicantControllers=========>: ${coApplicantList.length}");
         populateCoApplicantControllers();
         populatePropertyDetails();
         populateFinancialDetails();
@@ -1455,9 +1572,9 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
       }
     } catch (e) {
-      print("Error getloanaappl: $e");
+      print("Error getLoanApplicationDetailsByUniqueLeadNumber: $e");
 
-     // ToastMessage.msg(AppText.somethingWentWrong);
+     ToastMessage.msg(AppText.somethingWentWrong);
       isLoadingMainScreen(false);
     } finally {
       isLoadingMainScreen(false);
@@ -1474,7 +1591,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
   void populateCoApplicantControllers() async {
 
-
+    print("populateCoApplicantControllers=========>: ${coApplicantList.length}");
   //  coApplicantList.clear();
     final jsonStr = getLoanApplIdModel.value!.data!.coApplicantDetail;
 
@@ -1622,8 +1739,11 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
             print(" offAdd?['District']--->${ offAdd?['District']}");
             final distId2 =  coApController.getDistrictIdByNameOffAdd(coApController.selectedDistrictOfficeAd.value.toString());
             print("distId2--->${ distId2}");
-            await coApController.getCityByDistrictIdOfficeAdApi(
-                districtId: distId2.toString());//coApController.selectedDistrictPerm.value
+
+              await coApController.getCityByDistrictIdOfficeAdApi(
+                  districtId: distId2.toString());
+
+
             coApController.selectedCityOfficeAd.value =
             offAdd?['City'] == "" ? "0" : offAdd?['City'] ?? '0';
           }
@@ -1636,6 +1756,8 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           offAdd?['Country'] == "" ? "" : offAdd?['Country'];
 
           coApplicantList.add(coApController);//25 Oct  uncomment it
+
+          print("coApplicantList length for checking=========>: ${coApplicantList.length}");
         }
       } else {
         print("Expected a List but got: ${decoded.runtimeType}");

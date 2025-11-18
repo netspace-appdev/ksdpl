@@ -130,7 +130,7 @@ class ReferenceController {
     } catch (e) {
       print("Error getCityByDistrictId: $e");
 
-      ToastMessage.msg(AppText.somethingWentWrong);
+      //ToastMessage.msg(AppText.somethingWentWrong);
 
       isCityLoadingPerm(false);
     } finally {

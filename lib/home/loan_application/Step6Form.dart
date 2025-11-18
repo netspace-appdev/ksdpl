@@ -75,14 +75,7 @@ class Step6Form extends StatelessWidget {
                 hintText: AppText.enterAvgMonCommission,
                 validator:  ValidationHelper.validateName,
               ),
-              /*CustomLabeledTextField(
-                label: AppText.socBuildName,
-                isRequired: false,
-                controller: loanApplicationController.propBuildingNameController,
-                inputType: TextInputType.name,
-                hintText: AppText.enterBuildingNo,
-                validator:  ValidationHelper.validateName,
-              ),*/
+
               CustomLabeledTextField(
                 label: AppText.monthlyPfDeduction,
                 isRequired: false,
