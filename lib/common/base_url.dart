@@ -19,6 +19,6 @@ class BaseUrl{
  static const String devVersion = 'LIVE';
  //static const String devVersion = 'UAT';
   //static const String devVersion = 'LOCAL';
-  static const String buildDate = 'Build Date : 18 Nov 2025';
+  static const String buildDate = 'Build Date : 20 Nov 2025';
 }
 

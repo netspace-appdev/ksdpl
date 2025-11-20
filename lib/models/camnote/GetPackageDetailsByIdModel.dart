@@ -58,5 +58,8 @@ class Data {
   }
 
   /// 👇 Checks if the serviceName is "cibil" (case-insensitive)
-  bool get isCibilService => serviceName?.toLowerCase().trim() == 'cibil' || serviceName?.toLowerCase().trim() == 'CIBIL ';
+  //bool get isCibilService => serviceName?.toLowerCase().trim() == 'cibil' || serviceName?.toLowerCase().trim() == 'CIBIL ';
+
+  bool get isCibilService =>
+      (serviceName ?? '').toLowerCase().contains('cibil');
 }
