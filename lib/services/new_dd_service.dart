@@ -15,6 +15,7 @@ class NewDDService {
   static const String getBankerDetailsByBranchId = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetailsByBranchId';
   static const String getBankerDetailsById = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetailsById';
   static const String getAllPrimeSecurityMaster = BaseUrl.baseUrl + 'BankMaster/GetAllPrimeSecurityMaster';
+  static const String insertCustomerPackageRequestOnCamnote = BaseUrl.baseUrl + 'FileUpload/InsertCustomerPackageRequestOnCamnote';
 
 
 
@@ -156,6 +157,55 @@ class NewDDService {
       throw Exception('Error while submitting: $e');
     }
   }
+
+  static Future<Map<String, dynamic>> insertCustomerPackageRequestOnCamnoteApi({
+    String? Id,
+    String? Name,
+    String? Mobile,
+    String? Amount,
+    String? ReceiveDate,
+    String? Utr,
+    String? User_ID,
+    String? PackageId,
+    String? LeadId,
+
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(insertCustomerPackageRequestOnCamnote),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', Id,fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Name', Name);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Mobile', Mobile);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Amount', Amount);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'ReceiveDate', ReceiveDate);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Utr', Utr);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'User_ID', User_ID);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PackageId', PackageId);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'LeadId', PackageId);
+
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
 
 
   static void printInChunks(String text, {int chunkSize = 2048}) {

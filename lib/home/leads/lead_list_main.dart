@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ksdpl/controllers/bot_nav_controller.dart';
+import 'package:ksdpl/controllers/camnote/MultiPackageModelController.dart';
 import 'package:ksdpl/controllers/camnote/camnote_controller.dart';
 import 'package:ksdpl/controllers/dashboard/DashboardController.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
@@ -1371,6 +1372,8 @@ overflow: TextOverflow.ellipsis,
 
           NewDDController newDDController=Get.put(NewDDController());
           newDDController.getAllPrimeSecurityMasterApi();
+         // camNoteController.multiPackageList.clear();
+          //camNoteController.multiPackageList.add(MultiPackageModelController());
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

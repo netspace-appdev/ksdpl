@@ -69,6 +69,7 @@ import 'package:flutter/material.dart';
 import '../loan_appl_controller/credit_cards_model_controller.dart';
 import '../loan_appl_controller/reference_model_controller.dart';
 import '../new_dd_controller.dart';
+import 'MultiPackageModelController.dart';
 import 'calculateCibilData.dart';
 import '../../models/product/GetProductListById.dart'as gpli;
 
@@ -455,6 +456,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   var addIncomeList = <AddIncomeModelController>[].obs;
+  var multiPackageList = <MultiPackageModelController>[].obs;
 
   void addAdditionalSrcIncome() {
     addIncomeList.add(AddIncomeModelController());
@@ -481,6 +483,39 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     } else {
     }
   }
+
+  ///multi package
+  void addMultiPackage() {
+    multiPackageList.add(MultiPackageModelController());
+  }
+
+  void removeMultiPackage(int index) {
+    if (multiPackageList.length <= 1) {
+      ToastMessage.msg("You can not delete this");
+      return;
+    }
+    if (index >= 0 && index < multiPackageList.length) {
+      // Hold reference to the item to be disposed
+      final removed = multiPackageList[index];
+
+      // Remove it first so GetBuilder/Obx UI doesn't rebuild with disposed controller
+      multiPackageList.removeAt(index);
+      multiPackageList.refresh(); // If you're using an RxList
+
+      // Dispose AFTER rebuild
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        removed.selectedPackageMulti .close();
+        removed.camPackageAmtMultiController .dispose();
+        removed.camReceivableAmtMultiController .dispose();
+        removed.camReceivableDateMultiController .dispose();
+        removed.camTransactionDetailsUtrMultiController .dispose();
+        removed.camRemarkMultiController .dispose();
+      });
+    } else {
+    }
+  }
+
+
   void s(String key) {
     imageMap[key]?.clear();
   }
@@ -2080,6 +2115,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camSelectedIndexRelBank.value=-1;
     camSelectedIndexRelBank.value=-1;
     addIncomeList.clear();
+    multiPackageList.clear();
     Addleadcontroller addLeadController =Get.find();
     addLeadController.addIncomeList.clear();
     isGenerateCibilVisible.value=false;
@@ -3404,6 +3440,66 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       isCheckReceiptLoading(false);
 
+    }
+  }
+
+
+  Future<void>  insertCustomerPackageRequestOnCamnoteApi({
+    String? Id,
+    String? Name,
+    String? Mobile,
+    String? Amount,
+    String? ReceiveDate,
+    String? Utr,
+    String? User_ID,
+    String? PackageId,
+    String? LeadId,
+  }) async {
+    try {
+
+      isBankerSuperiorLoading(true);
+
+
+      var data = await NewDDService.insertCustomerPackageRequestOnCamnoteApi(
+          Id: Id,
+        Name: Name,
+        Mobile: Mobile,
+        Amount: Amount,
+        ReceiveDate: ReceiveDate,
+        Utr: Utr,
+        User_ID: User_ID,
+        PackageId: PackageId,
+        LeadId: LeadId,
+      );
+
+
+      if(data['success'] == true){
+
+        print("superiorMobile==>${getBankerDetailsByIdModel.value?.data?.superiorMobile??""}");
+
+        getBankerDetailsByIdModel.value= GetBankerDetailsByIdModel.fromJson(data);
+
+        isBankerSuperiorLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getBankerDetailsByIdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getBankerDetailsByIdModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isBankerSuperiorLoading(false);
+    } finally {
+
+
+      isBankerSuperiorLoading(false);
     }
   }
 
