@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:geolocator/geolocator.dart';
+// import 'package:geolocator/geolocator.dart';
 
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
@@ -617,7 +617,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  void markAttendance() async {
+ /* void markAttendance() async {
     isAttendanceLoading(true);
     Position? position = await getCurrentLocation();
     var eId=StorageService.get(StorageService.EMPLOYEE_ID);
@@ -717,5 +717,5 @@ class DashboardController extends GetxController {
   final LocationSettings locationSettings = LocationSettings(
     accuracy: LocationAccuracy.high,
     distanceFilter: 100,
-  );
+  );*/
 }

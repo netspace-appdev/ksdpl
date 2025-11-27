@@ -689,7 +689,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   }*/
 
-  Widget attendanceContainer() {
+ /* Widget attendanceContainer() {
     final dashboardController = Get.find<DashboardController>();
 
     return Obx(() {
@@ -805,7 +805,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       );
     });
-  }
+  }*/
 
 
   Widget barChart(){

@@ -75,7 +75,7 @@ void main() async{
   await Permission.microphone.request();
   await Permission.phone.request();
   await Permission.storage.request();
-  await Permission.location.request();
+ // await Permission.location.request();
   await Permission.notification.request(); // 👈 ADD THIS LINE
   Get.put(ThemeController());
 
