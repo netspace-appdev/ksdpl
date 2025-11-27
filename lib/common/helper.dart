@@ -1290,6 +1290,7 @@ class AppImage{
   static const String choosefile="assets/images/choosefile.png";
   static const String downloadImg="assets/images/downloadImg.png";
   static const String downloadImg_disable="assets/images/downloadImg_disable.png";
+  static const String noDataFound="assets/images/noDataFound.png";
 
 }
 

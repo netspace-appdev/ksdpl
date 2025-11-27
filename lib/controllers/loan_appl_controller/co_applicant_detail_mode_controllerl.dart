@@ -139,10 +139,7 @@ class CoApplicantDetailController {
     //print("dName--dd------>${dName}");
     final dists = getDistrictByStateModelCurr.value?.data;
 
-    dists!.forEach((ele){
-      //print("ele--dd------>${ele.districtName}");
-      //print("ele--dd------>${ele.id}");
-    });
+
     if (dists == null || dists.isEmpty) return null;
 
     final matchedDist = dists.firstWhere(

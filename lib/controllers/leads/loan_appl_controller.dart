@@ -1650,8 +1650,10 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
             final distId = coApController.getDistrictIdByNameCurr( coApController.selectedDistrictCurr.value.toString());
 
-            await coApController.getCityByDistrictIdCurrApi(
-                districtId: distId.toString());//coApController.selectedDistrictCurr.value
+           if(distId!=0){
+             await coApController.getCityByDistrictIdCurrApi(
+                 districtId: distId.toString());
+           }
             coApController.selectedCityCurr.value =
             presentAdd?['City'] == "" ? "0" : presentAdd?['City'] ?? '0';
           }

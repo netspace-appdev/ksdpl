@@ -177,13 +177,25 @@ class LoanApplicationOnlyDetailsScreen extends StatelessWidget {
         return /// Header with profile and menu icon
           Align(
               alignment: Alignment.center,
-              child: Text(
-                  "No data found",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.grey700
-                  )));
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+              
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    Image.asset(AppImage.noDataFound,),
+                    const Text(
+                        "No data found",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.grey700
+                        ))
+                  ],
+                ),
+              ));
       }
       final coApplicants = loanApplicationController.loanApplicationDetailsOnlyModel.value?.data?.coApplicants ?? [];
       final propertyDetails = loanApplicationController.loanApplicationDetailsOnlyModel.value?.data?.loanDetails;
