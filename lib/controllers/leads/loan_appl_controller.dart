@@ -1410,7 +1410,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           leadDDController.selectedStateCurr.value =
           presentAdd?['State'] == "" ? "0" : presentAdd?['State'] ?? '0';
 
-
+          print("presentAdd State =========>1: ${presentAdd?['State']}");
           ///New code on 24 Oct
           if( presentAdd?['State'] != "" &&  presentAdd?['State'] != "0"){
             final stateId = leadDDController.getStateIdByName(leadDDController.selectedStateCurr.value.toString());
@@ -1425,6 +1425,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
             ///New code on 24 Oct
             final distId = leadDDController.getDistrictIdByNameCurr(leadDDController.selectedDistrictCurr.value.toString());
             print("stateId=========>4: ${stateId}");
+            print("distId=========>4: ${distId}");
             await leadDDController.getCityByDistrictIdCurrApi(
                 districtId: distId.toString());//eadDDController.selectedDistrictCurr.value
             leadDDController.selectedCityCurr.value =

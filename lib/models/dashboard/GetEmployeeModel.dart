@@ -39,9 +39,9 @@ class Data {
   String? workPlace;
   int? managerId;
   String? address;
-  String? state;
-  String? district;
-  String? city;
+  int? state;
+  int? district;
+  int? city;
   String? postalCode;
   bool? active;
   String? createdBy;
