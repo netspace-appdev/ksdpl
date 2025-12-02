@@ -90,9 +90,11 @@ class LeadDDController extends GetxController{
 
   RxList<dist.Data> districtListPerm = <dist.Data>[].obs;
   RxList<dist.Data> districtListCurr = <dist.Data>[].obs;
+  RxList<dist.Data> districtListCurrNew = <dist.Data>[].obs;
 
   RxList<city.Data> cityListPerm = <city.Data>[].obs;
   RxList<city.Data> cityListCurr = <city.Data>[].obs;
+  RxList<city.Data> cityListCurrNew = <city.Data>[].obs;
 
   RxList<prodList.Data> prodListByBank = <prodList.Data>[].obs;
   var getDistrictByStateModelCurr = Rxn<GetDistrictByStateModel>(); //
@@ -109,6 +111,8 @@ class LeadDDController extends GetxController{
   var isStateLoadingCurr = false.obs;
   var isDistrictLoadingCurr = false.obs;
   var isCityLoadingCurr = false.obs;
+  var isDistrictLoadingCurrNew = false.obs;
+  var isCityLoadingCurrNew = false.obs;
 
   var isStateLoadingPerm = false.obs;
   var isDistrictLoadingPerm = false.obs;
@@ -323,7 +327,7 @@ class LeadDDController extends GetxController{
   int? getStateIdByName(String sName) {
     final states = getAllStateModel.value?.data;
 
-    print("states----->dd--->${states}");
+
     print("sName----->dd--->${sName}");
     if (states == null || states.isEmpty) return null;
 
@@ -868,7 +872,7 @@ class LeadDDController extends GetxController{
   int? getDistrictIdByNameCurr(String dName) {
   print("dName--dd------>${dName}");
     final dists = getDistrictByStateModelCurr.value?.data;
-  print("dists--dd------>${dists}");
+
 
     if (dists == null || dists.isEmpty) return null;
 
@@ -887,7 +891,7 @@ class LeadDDController extends GetxController{
   }) async {
     try {
 
-      print("stateId___>${stateId}");
+
 
 
       isDistrictLoadingCurr(true);
@@ -902,6 +906,8 @@ class LeadDDController extends GetxController{
 
         final List<dist.Data> districts = getDistrictByStateModelCurr.value?.data ?? [];
         districtListCurr.value = List<dist.Data>.from(districts);
+
+
 
 
         isDistrictLoadingCurr(false);
@@ -927,6 +933,56 @@ class LeadDDController extends GetxController{
       isDistrictLoadingCurr(false);
     }
   }
+
+  ///experiment on 02 12 2025
+  Future<void> getDistrictByStateIdCurrApiNew({
+    required stateId
+  }) async {
+    try {
+
+
+
+
+      isDistrictLoadingCurrNew(true);
+
+
+      var data = await DrawerApiService.getDistrictByStateIdApi(stateId: stateId);
+
+
+      if(data['success'] == true){
+
+        getDistrictByStateModelCurr.value= GetDistrictByStateModel.fromJson(data);
+
+        final List<dist.Data> districts = getDistrictByStateModelCurr.value?.data ?? [];
+        districtListCurrNew.value = List<dist.Data>.from(districts);
+
+
+
+
+        isDistrictLoadingCurrNew(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getDistrictByStateModelCurr.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getDistrictByStateIdCurrApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isDistrictLoadingCurrNew(false);
+    } finally {
+
+
+      isDistrictLoadingCurrNew(false);
+    }
+  }
+
   int? getDistrictIdByNamePerm(String dName) {
     print("dName in ref--->${ dName}");
     final dists = getDistrictByStateModelPerm.value?.data;
@@ -1089,6 +1145,53 @@ class LeadDDController extends GetxController{
       isCityLoadingCurr(false);
     }
   }
+
+
+  ///experiemtn on 02 12 2025
+  Future<void>   getCityByDistrictIdCurrApiNew({
+    required districtId
+  }) async {
+    print("getCityByDistrictIdCurrApi----->");
+    try {
+
+      isCityLoadingCurrNew(true);
+
+
+      var data = await DrawerApiService.getCityByDistrictIdApi(districtId: districtId);
+
+
+      if(data['success'] == true){
+
+        getCityByDistrictIdModelCurr.value= GetCityByDistrictIdModel.fromJson(data);
+
+        final List<city.Data> cities = getCityByDistrictIdModelCurr.value?.data ?? [];
+        cityListCurrNew.value = List<city.Data>.from(cities);
+
+
+        isCityLoadingCurrNew(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getCityByDistrictIdModelCurr.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getCityByDistrictId: $e");
+
+      // ToastMessage.msg(AppText.somethingWentWrong);
+
+      isCityLoadingCurrNew(false);
+    } finally {
+
+
+      isCityLoadingCurrNew(false);
+    }
+  }
+
 
   Future<void>  getCityByDistrictIdPermApi({
     required districtId

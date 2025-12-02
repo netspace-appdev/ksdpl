@@ -1415,18 +1415,20 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           if( presentAdd?['State'] != "" &&  presentAdd?['State'] != "0"){
             final stateId = leadDDController.getStateIdByName(leadDDController.selectedStateCurr.value.toString());
             print("stateId=========>1: ${stateId}");
-            await leadDDController.getDistrictByStateIdCurrApi(
+            await leadDDController.getDistrictByStateIdCurrApiNew(
                 stateId: stateId.toString());//leadDDController.selectedStateCurr.value
 
             print("stateId=========>2: ${stateId}");
             leadDDController.selectedDistrictCurr.value =
             presentAdd?['District'] == "" ? "0" : presentAdd?['District'] ?? '0';
-            print("stateId=========>3: ${stateId}");
+            print("leadDDController.selectedDistrictCurr.value=========>3: ${leadDDController.selectedDistrictCurr.value}");
+            print("resentAdd?['District']=========>3: ${presentAdd?['District']}");
+            ///New code on 24 Oct
             ///New code on 24 Oct
             final distId = leadDDController.getDistrictIdByNameCurr(leadDDController.selectedDistrictCurr.value.toString());
             print("stateId=========>4: ${stateId}");
             print("distId=========>4: ${distId}");
-            await leadDDController.getCityByDistrictIdCurrApi(
+            await leadDDController.getCityByDistrictIdCurrApiNew(
                 districtId: distId.toString());//eadDDController.selectedDistrictCurr.value
             leadDDController.selectedCityCurr.value =
             presentAdd?['City'] == "" ? "0" : presentAdd?['City'] ?? '0';

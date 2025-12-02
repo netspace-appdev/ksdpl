@@ -123,7 +123,7 @@ class CoApplicantDetailController {
   int? getStateIdByName(String sName) {
     final states = leadDDController.getAllStateModel.value?.data;
 
-    print("states----->dd--->${states}");
+
     print("sName----->dd--->${sName}");
     if (states == null || states.isEmpty) return null;
 

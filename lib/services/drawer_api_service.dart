@@ -620,7 +620,7 @@ class DrawerApiService {
   static Future<Map<String, dynamic>> getDistrictByStateIdApi({
     required stateId
   }) async {
-    print("stateid--->${stateId}");
+    print("stateid--->here2--->${stateId}");
 
     try {
       var request = http.MultipartRequest(
@@ -682,7 +682,8 @@ class DrawerApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-
+      Helper.ApiReq(getCityByDistrictId, request.fields);
+      Helper.ApiRes(getCityByDistrictId, response.body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

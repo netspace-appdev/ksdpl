@@ -757,13 +757,13 @@ class Step1Form extends StatelessWidget {
                         onChanged: (value) {
                           leadDDController.selectedStateCurr.value =  value?.stateName?.toString(); //id
                           if(leadDDController.selectedStateCurr.value!=null){
-                            leadDDController.getDistrictByStateIdCurrApi(stateId:  value?.id?.toString());
+                            leadDDController.getDistrictByStateIdCurrApiNew(stateId:  value?.id?.toString());
                           }
                         },
                         onClear: (){
 
-                          leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
-                          leadDDController. cityListCurr.value.clear(); // reset dependent dropdown
+                          leadDDController.districtListCurrNew.value.clear(); // reset dependent dropdown
+                          leadDDController. cityListCurrNew.value.clear(); // reset dependent dropdown
                           leadDDController.selectedDistrictCurr.value = "0";
                           leadDDController.selectedCityCurr.value = "0";
                           leadDDController.selectedStateCurr.value = "0";
@@ -783,7 +783,7 @@ class Step1Form extends StatelessWidget {
                     const SizedBox(height: 10),
 
 
-                    Obx((){
+                   /* Obx((){
                       if (leadDDController.isDistrictLoadingCurr.value) {
                         return  Center(child:CustomSkelton.leadShimmerList(context));
                       }
@@ -810,6 +810,35 @@ class Step1Form extends StatelessWidget {
                         },
                       );
                     }),
+*/
+
+                    Obx((){
+                      if (leadDDController.isDistrictLoadingCurrNew.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+
+
+                      return CustomDropdown<dist.Data>(
+                        items: leadDDController.districtListCurrNew.value ?? [],
+                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.districtName.toString(),
+                        selectedValue: leadDDController.districtListCurrNew.value.firstWhereOrNull(
+                              (item) => item.districtName.toString() == leadDDController.selectedDistrictCurr.value,
+                        ),
+                        onChanged: (value) {
+                          leadDDController.selectedDistrictCurr.value =  value?.districtName?.toString();
+                          if( leadDDController.selectedDistrictCurr.value!=null){
+                            leadDDController.getCityByDistrictIdCurrApiNew(districtId: value?.id?.toString());
+                          }
+
+                        },
+                        onClear: (){
+                          leadDDController.selectedDistrictCurr.value = "0";
+                          leadDDController.districtListCurrNew.value.clear(); // reset dependent dropdown
+
+                        },
+                      );
+                    }),
 
                     const SizedBox(height: 20),
 
@@ -822,7 +851,7 @@ class Step1Form extends StatelessWidget {
                     const SizedBox(height: 10),
 
 
-                    Obx((){
+                    /*Obx((){
                       if (leadDDController.isCityLoadingCurr.value) {
                         return  Center(child:CustomSkelton.leadShimmerList(context));
                       }
@@ -841,6 +870,31 @@ class Step1Form extends StatelessWidget {
                         onClear: (){
                           leadDDController.selectedCityCurr.value = "0";
                           leadDDController.cityListCurr.value.clear(); // reset dependent dropdown
+
+                        },
+                      );
+                    }),
+*/
+
+                    Obx((){
+                      if (leadDDController.isCityLoadingCurrNew.value) {
+                        return  Center(child:CustomSkelton.leadShimmerList(context));
+                      }
+
+
+                      return CustomDropdown<city.Data>(
+                        items: leadDDController. cityListCurrNew.value  ?? [],
+                        getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                        getName: (item) => item.cityName.toString(),
+                        selectedValue: leadDDController. cityListCurrNew.value.firstWhereOrNull(
+                              (item) => item.cityName.toString() == leadDDController.selectedCityCurr.value,
+                        ),
+                        onChanged: (value) {
+                          leadDDController.selectedCityCurr.value =  value?.cityName?.toString();
+                        },
+                        onClear: (){
+                          leadDDController.selectedCityCurr.value = "0";
+                          leadDDController.cityListCurrNew.value.clear(); // reset dependent dropdown
 
                         },
                       );
