@@ -766,6 +766,10 @@ class AppText{
   static const String sectionC = "Section C";
   static const String sectionD = "Section D";
 
+  static const String section3 = "SECTION 3 ";
+  static const String obligation = "OBLIGATION FOR THE PROPOSED LOAN";
+  static const String loanAccountSummary = "Loan Account Summary";
+
   static const String todaycall = "Today's Calls";
   static const String convertedToInterested = "Converted to Interested";
   static const String connectedCalls = "Connected Calls";
@@ -1144,6 +1148,16 @@ class AppText{
   static const String validateDisbursedBysuperiorContact ="Please enter Superior Contact";
 
   static const String uploadEmployeeImage="Employee Profile Pic ";
+  static const String institution="Institution";
+  static const String prodType="Product Type";
+  static const String markForForeclosure="Mark for Foreclosure";
+  static const String loanAccountNumber="Loan Account Number";
+  static const String principalOutstanding="Principal Outstanding";
+  static const String installmentAmount="Installment Amount";
+  static const String DPD="DPD";
+  static const String postDueAmount="Post Due Amount";
+
+
 
 
 

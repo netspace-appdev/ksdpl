@@ -341,7 +341,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   void selectCheckboxCibil(int index) {
     selectedIndexGenCibil.value = index;
   }
-
+  List<CibilAccount> retailAccountList=<CibilAccount>[].obs;
+  RxBool isSelectedRetailAccount = false.obs;
   var isUserAIC = false.obs;
   // final Map<String, RxList<File>> imageMap = {};
   final Map<String, RxList<CamImage>> _imageMap = {};

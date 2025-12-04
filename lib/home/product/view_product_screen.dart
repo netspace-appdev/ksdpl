@@ -422,92 +422,7 @@ class ViewProductScreen extends StatelessWidget {
     );
   }
 
-/*  Widget productSection(BuildContext context){
-    return Obx((){
-      if (viewProductController.isMainListMoreLoading.value) {
-        return  Center(child: CustomSkelton.productShimmerList(context));
-      }
-      if (viewProductController.getAllProductListModel.value == null ||
-          viewProductController.getAllProductListModel.value!.data == null || viewProductController.getAllProductListModel.value!.data!.isEmpty) {
-        return  Container(
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          margin: EdgeInsets.symmetric(vertical: 10),
-          decoration:  BoxDecoration(
-            border: Border.all(color: AppColor.grey200),
-            color: AppColor.appWhite,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
 
-          ),
-          child:  Column(
-
-            children: [
-              /// Header with profile and menu icon
-              _noDataCard(context)
-
-            ],
-          ),
-        );
-      }
-
-      return  Column(
-        children: [
-
-
-          ListView.builder(
-            itemCount:viewProductController.filteredProducts.length,//viewProductController.getAllProductListModel.value!.data!.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              // final product = viewProductController.getAllProductListModel.value!.data![index];
-              final product =  viewProductController.filteredProducts[index];
-
-              return buildCard(
-                Helper.capitalizeEachWord(product.product.toString()), // title
-                [
-                  _buildDetailRow("Bank Name", product.bankName.toString()),
-                  _buildDetailRow("Min. CIBIL", product.minCIBIL.toString()),
-                  _buildDetailRow("Product Category", product.productCategoryName.toString()),
-
-                  const SizedBox(height: 10),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildTextButton("Edit", context, Colors.purple, Icons.edit, product.id.toString()),
-                      _buildTextButton("Details", context, Colors.pink, Icons.insert_drive_file, product.id.toString()),
-                    ],
-                  ),
-                ],
-              );
-
-            },
-          ),
-
-          if (viewProductController.hasMore.value && viewProductController.filteredProducts.length > 1)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: ElevatedButton(
-                onPressed: () {
-                  viewProductController.getAllProductListApi(
-                      isLoadMore: true
-                  );
-                },
-                child:
-                viewProductController.isMainListMoreLoading.value //isDashboardLeadListMoreLoading
-                    ? Container(
-                    width: 15,
-                    height: 15,
-                    child: Center(child: CircularProgressIndicator(color: AppColor.primaryColor, strokeWidth: 2,)))
-                    : Text("Load More"),
-              ),
-            ),
-        ],
-      );
-    });
-  }*/
 
 
   Widget productSection(BuildContext context){
@@ -626,9 +541,6 @@ class ViewProductScreen extends StatelessWidget {
   }
 
   Widget _buildDetailRow(String label, String value) {
-    //   String assigned = value.toString();
-//    List<String> assignedParts = assigned.split('T');
-
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),

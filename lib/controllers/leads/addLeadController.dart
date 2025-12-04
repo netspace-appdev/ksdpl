@@ -69,6 +69,9 @@ class Addleadcontroller extends GetxController{
   var addIncomeList = <AddIncomeModelController>[].obs;
   var isLoadingProductSegment = false.obs;
   var selectedProdSegment = Rxn<int>();
+
+
+
   void addAdditionalSrcIncome() {
     addIncomeList.add(AddIncomeModelController());
   }
@@ -425,7 +428,7 @@ class Addleadcontroller extends GetxController{
           camNoteController.photosOffEnabled.value=true;
         }
 
-
+       print("now cibil parse--->");
         if (getLeadDetailModel.value?.data?.cibilJSON!=null) {
           final result = await parseCibilData(
             cibilJson: getLeadDetailModel.value?.data?.cibilJSON,
@@ -502,86 +505,25 @@ class Addleadcontroller extends GetxController{
         (pow(1 + monthlyInterest, months) - 1);
   }
 
+  ///working
 /*
   Future<Map<String, dynamic>> parseCibilData({
     required String? cibilJson,
     required double annualInterestRate,
     required int tenureMonths,
   }) async {
+    print("here---->parseCibilData");
     if (cibilJson == null) return {};
-
+    print("here---->11");
     final parsedData = json.decode(cibilJson);
     final cibilData = parsedData['data'];
     final addressList = cibilData?['credit_report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountDetails'];
-
+    print("here---->22");
     if (addressList == null || addressList is! List) return {};
 
+    print("here---->33");
     final accounts = addressList.map<CibilAccount>((e) => CibilAccount.fromJson(e)).toList();
-
-    double totalLoanAvailed = 0;
-    int totalLiveLoan = 0;
-    double totalEMI = 0;
-    int emiWillContinue = 0;
-    int overdueCases = 0;
-    double totalOverdueAmount = 0;
-
-    for (var account in accounts) {
-      final amount = double.tryParse(account.sanctionAmount ?? '0') ?? 0;
-      totalLoanAvailed += amount;
-
-      if (account.open == "Yes") {
-        totalLiveLoan += 1;
-
-        if (account.sanctionAmount != null) {
-          totalEMI += calculateEMI(amount, annualInterestRate, tenureMonths);
-        }
-
-        if (account.dateClosed == null) {
-          emiWillContinue += 1;
-        }
-      }
-
-      final overdueAmount = double.tryParse(account.pastDueAmount ?? '0') ?? 0;
-      if (overdueAmount > 0) {
-        totalOverdueAmount += overdueAmount;
-        overdueCases += 1;
-      } else if (account.history48Months != null) {
-        bool hasOverdueHistory = account.history48Months!.any((entry) =>
-            ['30+', '60+', '90+', '120+', 'SUB', 'SPM']
-                .contains(entry.paymentStatus));
-        if (hasOverdueHistory) overdueCases += 1;
-      }
-    }
-
-    return {
-      'Cibil': cibilData?['credit_score'] ?? '0',
-      'TotalLoanAvailedOnCibil': totalLoanAvailed,
-      'TotalLiveLoan': totalLiveLoan,
-      'TotalEMI': totalEMI,
-      'EMIWillContinue': emiWillContinue,
-      'TotalOverdueCasesAsPerCibil': overdueCases,
-      'TotalOverdueAmountAsPerCibil': totalOverdueAmount,
-      'TotalEnquiriesMadeAsPerCibil':
-      cibilData?['credit_report']?['CCRResponse']?['CIRReportDataLst']?.length ?? 0,
-    };
-  }
-*/
-
-  Future<Map<String, dynamic>> parseCibilData({
-    required String? cibilJson,
-    required double annualInterestRate,
-    required int tenureMonths,
-  }) async {
-    if (cibilJson == null) return {};
-
-    final parsedData = json.decode(cibilJson);
-    final cibilData = parsedData['data'];
-    final addressList = cibilData?['credit_report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountDetails'];
-
-    if (addressList == null || addressList is! List) return {};
-
-    final accounts = addressList.map<CibilAccount>((e) => CibilAccount.fromJson(e)).toList();
-
+    print("here---->${accounts.first.institution.toString()}");
     double totalLoanAvailed = 0;
     int totalLiveLoan = 0;
     double totalEMI = 0;
@@ -677,6 +619,171 @@ class Addleadcontroller extends GetxController{
 
     return {
       'Cibil': cibilData?['credit_score'] ?? '0',
+      'TotalLoanAvailedOnCibil': totalLoanAvailed,
+      'TotalLiveLoan': totalLiveLoan,
+      'TotalEMI': totalEMI,
+      'EMIWillContinue': emiWillContinue,
+      'TotalOverdueCasesAsPerCibil': overdueCases,
+      'TotalOverdueAmountAsPerCibil': totalOverdueAmount,
+      'TotalEnquiriesMadeAsPerCibil':
+      cibilData?['credit_report']?['CCRResponse']?['CIRReportDataLst']?.length ?? 0,
+
+      // 🆕 Newly added stats
+      'ClosedCases': closedCases,
+      'WrittenOffCases': writtenOffCases,
+      'SettlementCases': settlementCases,
+      'SuitFiledWillfulDefaultCases': suitFiledWillfulDefaultCases,
+      'TotalSanctionedAmount': totalSanctionedAmount,
+      'CurrentBalance': currentBalance,
+      'ClosedAmount': closedAmount,
+      'WrittenOffAmount': writtenOffAmount,
+      'SettlementAmount': settlementAmount,
+      'SuitFiledWillfulDefaultAmount': suitFiledWillfulDefaultAmount,
+      'StandardCount': standardCount,
+      'SubstandardCount': substandardCount,
+      'DoubtfulCount': doubtfulCount,
+      'LossCount': lossCount,
+      'SpecialMentionAccountCount': specialMentionAccountCount,
+
+      'Npt': "0",
+      'TotalCounts': "0",
+      'CurrentlyCasesBeingServed': "0",
+      'CasesToBeForeclosedOnOrBeforeDisb': "0",
+      'CasesToBeContenued': "0",
+      'EmisOfExistingLiabilities': "0",
+      'Iir': "0",
+    };
+  }
+*/
+
+///experimenmt
+  Future<Map<String, dynamic>> parseCibilData({
+    required String? cibilJson,
+    required double annualInterestRate,
+    required int tenureMonths,
+  }) async {
+    print("here---->parseCibilData");
+    if (cibilJson == null) return {};
+    print("here---->11");
+    final parsedData = json.decode(cibilJson);
+    final cibilData = parsedData['Data'];
+    print("cibilData---->${cibilData}");
+    final addressList = cibilData?['Credit_Report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountDetails'];
+
+    final retailList =
+    cibilData?['Credit_Report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountDetails'];
+
+    print("here---->22");
+    print("here---->${addressList.toString()}");
+    if (addressList == null || addressList is! List) return {};
+
+    print("here---->33");
+    // final accounts = addressList.map<CibilAccount>((e) => CibilAccount.fromJson(e)).toList();
+    List<CibilAccount> accounts=[];
+    CamNoteController camNoteController=Get.put(CamNoteController());
+    if (retailList != null && retailList is List) {
+      accounts = retailList
+          .map<CibilAccount>((e) => CibilAccount.fromJson(e))
+          .toList();
+
+      camNoteController.retailAccountList=accounts;
+    }
+    print("here retailAccountList---->${camNoteController.retailAccountList[0].institution.toString()}");
+    double totalLoanAvailed = 0;
+    int totalLiveLoan = 0;
+    double totalEMI = 0;
+    int emiWillContinue = 0;
+    int overdueCases = 0;
+    double totalOverdueAmount = 0;
+
+    // New fields added 👇
+    int closedCases = 0;
+    int writtenOffCases = 0;
+    int settlementCases = 0;
+    int suitFiledWillfulDefaultCases = 0;
+    double totalSanctionedAmount = 0;
+    double currentBalance = 0;
+    double closedAmount = 0;
+    double writtenOffAmount = 0;
+    double settlementAmount = 0;
+    double suitFiledWillfulDefaultAmount = 0;
+    int standardCount = 0;
+    int substandardCount = 0;
+    int doubtfulCount = 0;
+    int lossCount = 0;
+    int specialMentionAccountCount = 0;
+
+    for (var account in accounts) {
+      final sanctionAmount = double.tryParse(account.sanctionAmount ?? '0') ?? 0;
+      final balance = double.tryParse(account.balance ?? '0') ?? 0;
+      final overdueAmount = double.tryParse(account.pastDueAmount ?? '0') ?? 0;
+
+      totalLoanAvailed += sanctionAmount;
+      totalSanctionedAmount += sanctionAmount;
+      currentBalance += balance;
+
+      if (account.open == "Yes") {
+        totalLiveLoan += 1;
+        if (account.sanctionAmount != null) {
+          totalEMI += calculateEMI(sanctionAmount, annualInterestRate, tenureMonths);
+        }
+        if (account.dateClosed == null) {
+          emiWillContinue += 1;
+        }
+      }
+
+      // Overdue calculation
+      if (overdueAmount > 0) {
+        totalOverdueAmount += overdueAmount;
+        overdueCases += 1;
+      } else if (account.history48Months != null) {
+        bool hasOverdueHistory = account.history48Months!.any((entry) =>
+            ['30+', '60+', '90+', '120+', 'SUB', 'SPM'].contains(entry.paymentStatus));
+        if (hasOverdueHistory) overdueCases += 1;
+      }
+
+      // Account status checks
+      final status = account.accountStatus?.toLowerCase() ?? '';
+
+      if (status.contains("closed")) {
+        closedCases++;
+        closedAmount += sanctionAmount;
+      }
+      if (status.contains("write-off")) {
+        writtenOffCases++;
+        writtenOffAmount += sanctionAmount;
+      }
+      if (status.contains("settlement")) {
+        settlementCases++;
+        settlementAmount += sanctionAmount;
+      }
+      if (status.contains("suit filed") || status.contains("willful default")) {
+        suitFiledWillfulDefaultCases++;
+        suitFiledWillfulDefaultAmount += sanctionAmount;
+      }
+
+      // Asset classification
+      switch (account.assetClassification) {
+        case "STD":
+          standardCount++;
+          break;
+        case "SUB":
+          substandardCount++;
+          break;
+        case "DBT":
+          doubtfulCount++;
+          break;
+        case "LOSS":
+          lossCount++;
+          break;
+        case "SMA":
+          specialMentionAccountCount++;
+          break;
+      }
+    }
+
+    return {
+      'Cibil': cibilData?['Credit_Score'] ?? '0',
       'TotalLoanAvailedOnCibil': totalLoanAvailed,
       'TotalLiveLoan': totalLiveLoan,
       'TotalEMI': totalEMI,
@@ -1145,46 +1252,7 @@ class Addleadcontroller extends GetxController{
 
 
 }
-/*
 
-class CibilAccount {
-  final String? open;
-  final String? sanctionAmount;
-  final String? dateClosed;
-  final String? pastDueAmount;
-  final List<HistoryEntry>? history48Months;
-
-  CibilAccount({
-    this.open,
-    this.sanctionAmount,
-    this.dateClosed,
-    this.pastDueAmount,
-    this.history48Months,
-  });
-
-  factory CibilAccount.fromJson(Map<String, dynamic> json) {
-    return CibilAccount(
-      open: json['Open'],
-      sanctionAmount: json['SanctionAmount'],
-      dateClosed: json['DateClosed'],
-      pastDueAmount: json['PastDueAmount'],
-      history48Months: (json['History48Months'] as List?)
-          ?.map((e) => HistoryEntry.fromJson(e))
-          .toList(),
-    );
-  }
-}
-
-class HistoryEntry {
-  final String? paymentStatus;
-
-  HistoryEntry({this.paymentStatus});
-
-  factory HistoryEntry.fromJson(Map<String, dynamic> json) {
-    return HistoryEntry(paymentStatus: json['PaymentStatus']);
-  }
-}
-*/
 
 class CibilAccount {
   final String? seq;
@@ -1206,7 +1274,8 @@ class CibilAccount {
   final String? assetClassification;
   final String? source;
   final List<HistoryEntry>? history48Months;
-
+  final String? installmentAmount;
+  RxBool isSelected = false.obs;
   CibilAccount({
     this.seq,
     this.accountNumber,
@@ -1227,6 +1296,7 @@ class CibilAccount {
     this.assetClassification,
     this.source,
     this.history48Months,
+    this.installmentAmount,
   });
 
   factory CibilAccount.fromJson(Map<String, dynamic> json) {
@@ -1249,6 +1319,7 @@ class CibilAccount {
       accountStatus: json['AccountStatus'],
       assetClassification: json['AssetClassification'],
       source: json['source'],
+      installmentAmount: json['InstallmentAmount'],
       history48Months: (json['History48Months'] as List?)
           ?.map((e) => HistoryEntry.fromJson(e))
           .toList(),
@@ -1276,6 +1347,7 @@ class CibilAccount {
       'AssetClassification': assetClassification,
       'source': source,
       'History48Months': history48Months?.map((e) => e.toJson()).toList(),
+      'InstallmentAmount': installmentAmount,
     };
   }
 }
