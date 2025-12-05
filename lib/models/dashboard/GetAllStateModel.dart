@@ -38,8 +38,8 @@ class Data {
   String? createdDate;
   String? updatedBy;
   String? updatedDate;
-  Null? deletedBy;
-  Null? deletedDate;
+  String? deletedBy;
+  String? deletedDate;
   String? language;
 
   Data(

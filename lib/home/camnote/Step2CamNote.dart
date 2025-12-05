@@ -49,19 +49,21 @@ class Step2CamNote extends StatelessWidget {
                 height: 20,
               ),
 
+              ///Section A
               ExpansionTile(
                 initiallyExpanded: true,
 
 
                 childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
-                title:const Text( AppText.sectionA, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                title:const Text( AppText.section1, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                 leading: const Icon(Icons.list_alt, size: 20,),
                 children: [
 
                  Column(
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
-                     // if(camNoteController.enableAllCibilFields.value)
+                     const Text(AppText.CIBIL_REPORT_OVERVIEW, style: TextStyle(color: AppColor.secondaryColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                     SizedBox(height: 20,),
                         Column(
                        children: [
                          Row(
@@ -131,6 +133,33 @@ class Step2CamNote extends StatelessWidget {
                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                      ),
 
+
+                     //New
+                     CustomLabeledTextField(
+                       label: AppText.totalLiveLoanAvailedOnCibil,
+                       controller: camNoteController.camTotalLiveLoanAvailedOnCibilController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterTotalLiveLoanAvailedOnCibil,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                     ),
+
+
+                     CustomLabeledTextField(
+                       label: AppText.closedCases,
+                       controller: camNoteController.camClosedCasesController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterClosedCases,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                     ),
+
+                     CustomLabeledTextField(
+                       label: AppText.closedAmount,
+                       controller: camNoteController.camClosedAmountController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterClosedAmount,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                     ),
+
                      CustomLabeledTextField(
                        label: AppText.totalLiveLoan,
                        controller: camNoteController.camTotalLiveLoanController,
@@ -140,36 +169,11 @@ class Step2CamNote extends StatelessWidget {
                      ),
 
                      CustomLabeledTextField(
-                       label: AppText.totalEmi,
-                       controller: camNoteController.camTotalEmiController,
+                       label: AppText.currentBalance,
+                       controller: camNoteController.camCurrentBalanceController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterCurrentBalance,
                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                       inputType: TextInputType.number,
-                       hintText: AppText.enterTotalEmi,
-                     ),
-
-                     CustomLabeledTextField2(
-                       label: AppText.emiStoppedBefore,
-                       controller: camNoteController.camEmiStoppedBeforeController,
-                       inputType: TextInputType.number,
-                       hintText: AppText.enterEmiStoppedBefore,
-                       isRequired: false,
-
-                       onChanged: (value) {
-                        camNoteController.calculateEmilWillContinue();
-                       },
-                     ),
-
-                     CustomLabeledTextField2(
-                       label: AppText.emiWillContinue,
-                       controller: camNoteController.camEmiWillContinueController,
-                       inputType: TextInputType.number,
-                       hintText: AppText.enterEmiWillContinue,
-                       isInputEnabled:false, //camNoteController.enableAllCibilFields.value,
-                       isRequired: false,
-
-                       onChanged: (value) {
-                         camNoteController.calculateLoanDetails();
-                       },
                      ),
 
                      CustomLabeledTextField(
@@ -189,12 +193,58 @@ class Step2CamNote extends StatelessWidget {
                      ),
 
                      CustomLabeledTextField(
+                       label: AppText.writtenOffCases,
+                       controller: camNoteController.camWrittenOffCasesController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterWrittenOffCases,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                     ),
+                     CustomLabeledTextField(
+                       label: AppText.writtenOffAmount,
+                       controller: camNoteController.camWrittenOffAmountController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterWrittenOffAmount,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                     ),
+                     CustomLabeledTextField(
+                       label: AppText.settlementCases,
+                       controller: camNoteController.camSettlementCasesController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterSettlementCases,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                     ),
+
+                     CustomLabeledTextField(
+                       label: AppText.settlementAmount,
+                       controller: camNoteController.camSettlementAmountController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterSettlementAmount,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                     ),
+
+                     CustomLabeledTextField(
+                       label: AppText.suitFiledWillfulDefaultCases,
+                       controller: camNoteController.camSuitFiledWillfulDefaultCasesController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterSuitFiledWillfulDefaultCases,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                     ),
+
+                     CustomLabeledTextField(
+                       label: AppText.suitFiledWillfulDefaultAmount,
+                       controller: camNoteController.camSuitFiledWillfulDefaultAmountController,
+                       inputType: TextInputType.number,
+                       hintText: AppText.enterSuitFiledWillfulDefaultAmount,
+                       isInputEnabled: camNoteController.enableAllCibilFields.value,
+                     ),
+
+                    /* CustomLabeledTextField(
                        label: AppText.totalEnquiries,
                        controller: camNoteController.camTotalEnquiriesController,
                        inputType: TextInputType.number,
                        hintText: AppText.enterTotalEnquiries,
                        isInputEnabled:camNoteController.enableAllCibilFields.value,
-                     ),
+                     ),*/
                    ],
                  )
 
@@ -202,98 +252,22 @@ class Step2CamNote extends StatelessWidget {
                 ],
               ),
 
+
+              ///Section B
               ExpansionTile(
                 initiallyExpanded: true,
 
 
                 childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
-                title:const Text( AppText.sectionB, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                title:const Text( AppText.section2, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                 leading: const Icon(Icons.list_alt, size: 20,),
                 children: [
 
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-                      CustomLabeledTextField(
-                        label: AppText.closedCases,
-                        controller: camNoteController.camClosedCasesController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterClosedCases,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.writtenOffCases,
-                        controller: camNoteController.camWrittenOffCasesController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterWrittenOffCases,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.settlementCases,
-                        controller: camNoteController.camSettlementCasesController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterSettlementCases,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.suitFiledWillfulDefaultCases,
-                        controller: camNoteController.camSuitFiledWillfulDefaultCasesController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterSuitFiledWillfulDefaultCases,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.totalSanctionedAmount,
-                        controller: camNoteController.camTotalSanctionedAmountController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterTotalSanctionedAmount,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.currentBalance,
-                        controller: camNoteController.camCurrentBalanceController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterCurrentBalance,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.closedAmount,
-                        controller: camNoteController.camClosedAmountController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterClosedAmount,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.writtenOffAmount,
-                        controller: camNoteController.camWrittenOffAmountController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterWrittenOffAmount,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.settlementAmount,
-                        controller: camNoteController.camSettlementAmountController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterSettlementAmount,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.suitFiledWillfulDefaultAmount,
-                        controller: camNoteController.camSuitFiledWillfulDefaultAmountController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterSuitFiledWillfulDefaultAmount,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
+                      const Text(AppText.LOAN_REPAYMENT_HISTORY, style: TextStyle(color: AppColor.secondaryColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      SizedBox(height: 20,),
 
                       CustomLabeledTextField(
                         label: AppText.standardCount,
@@ -302,7 +276,13 @@ class Step2CamNote extends StatelessWidget {
                         hintText: AppText.enterStandardCount,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
-
+                      CustomLabeledTextField(
+                        label: AppText.doubtfulCount,
+                        controller: camNoteController.camDoubtfulCountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterDoubtfulCount,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                      ),
                       CustomLabeledTextField(
                         label: AppText.numberOfDaysPastDueCount,
                         controller: camNoteController.camNumberOfDaysPastDueCountController,
@@ -312,10 +292,24 @@ class Step2CamNote extends StatelessWidget {
                       ),
 
                       CustomLabeledTextField(
+                        label: AppText.specialMentionAccountCount,
+                        controller: camNoteController.camSpecialMentionAccountCountController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterSpecialMentionAccountCount,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                      ),
+                      CustomLabeledTextField(
                         label: AppText.lossCount,
                         controller: camNoteController.camLossCountController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterLossCount,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                      ),
+                      CustomLabeledTextField(
+                        label: AppText.npt,
+                        controller: camNoteController.camNptController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterNpt,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
@@ -328,58 +322,18 @@ class Step2CamNote extends StatelessWidget {
                       ),
 
                       CustomLabeledTextField(
-                        label: AppText.doubtfulCount,
-                        controller: camNoteController.camDoubtfulCountController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterDoubtfulCount,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.specialMentionAccountCount,
-                        controller: camNoteController.camSpecialMentionAccountCountController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterSpecialMentionAccountCount,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.npt,
-                        controller: camNoteController.camNptController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterNpt,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
                         label: AppText.totalCounts,
                         controller: camNoteController.camTotalCountsController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterTotalCounts,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
-
-                      CustomLabeledTextField(
-                        label: AppText.currentlyCasesBeingServed,
-                        controller: camNoteController.camCurrentlyCasesBeingServedController,
+                      ///ends
+                      /*CustomLabeledTextField(
+                        label: AppText.totalSanctionedAmount,
+                        controller: camNoteController.camTotalSanctionedAmountController,
                         inputType: TextInputType.number,
-                        hintText: AppText.enterCurrentlyCasesBeingServed,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.casesToBeForeclosedOnOrBeforeDisb,
-                        controller: camNoteController.camCasesToBeForeclosedOnOrBeforeDisbController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterCasesToBeForeclosedOnOrBeforeDisb,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.casesToBeContenued,
-                        controller: camNoteController.camCasesToBeContenuedController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterCasesToBeContenued,
+                        hintText: AppText.enterTotalSanctionedAmount,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
@@ -389,15 +343,7 @@ class Step2CamNote extends StatelessWidget {
                         inputType: TextInputType.number,
                         hintText: AppText.enterEmisOfExistingLiabilities,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
-
-                      CustomLabeledTextField(
-                        label: AppText.iir,
-                        controller: camNoteController.camIirController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterIir,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
-                      ),
+                      ),*/
 
 
                     ],
@@ -407,7 +353,8 @@ class Step2CamNote extends StatelessWidget {
                 ],
               ),
 
-              ExpansionTile(
+              /// Section C
+              /*ExpansionTile(
                 initiallyExpanded: true,
 
 
@@ -560,12 +507,17 @@ class Step2CamNote extends StatelessWidget {
                         isInputEnabled: false,
                       ),
 
-                     /* CustomLabeledTextField(
+                     */
+
+
+              /* CustomLabeledTextField(
                         label: AppText.offeredSecurityType,
                         controller: camNoteController.camOfferedSecurityTypeController,
                         inputType: TextInputType.name,
                         hintText: AppText.enterSecurityType,
                       ),*/
+
+              /*
                       const SizedBox(
                         height: 20,
                       ),
@@ -587,9 +539,14 @@ class Step2CamNote extends StatelessWidget {
                           items: newDDController.primeSecurityList.value ?? [],
                           getId: (item) => item.id.toString(),  // Adjust based on your model structure
                           getName: (item) => item.description.toString(),
-                         /* selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
+                         */
+
+
+              /* selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
                                 (item) => item.description == camNoteController.camOfferedSecurityTypeController.text,
                           ),*/
+
+              /*
                           selectedValue: newDDController.primeSecurityList.value.firstWhereOrNull(
                                 (item) =>
                             item.description?.trim().toLowerCase() ==
@@ -614,9 +571,10 @@ class Step2CamNote extends StatelessWidget {
 
 
                 ],
-              ),
+              ),*/
 
-              ///retail account list
+              /// section 3 - retail account list
+
               ExpansionTile(
                 initiallyExpanded: true,
 
@@ -633,155 +591,101 @@ class Step2CamNote extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       accountSection(context),
-                      const CustomTextLabel(
-                        label: AppText.incomeType,
-                        isRequired: false,
-                      ),
-
-                      const SizedBox(height: 10),
-
-
-                      Obx((){
-                        if (camNoteController.isLoading.value) {
-                          return  Center(child:CustomSkelton.productShimmerList(context));
-                        }
-
-
-                        return CustomDropdown<String>(
-                          items: addProductController.incomeTypeList,
-                          getId: (item) => item,  // Adjust based on your model structure
-                          getName: (item) => item,
-                          selectedValue: camNoteController.selectedCamIncomeTypeList.value,
-                          onChanged: (value) {
-                            camNoteController.selectedCamIncomeTypeList.value =  value;
-                          },
-                        );
-                      }),
-
-                      const SizedBox(height: 20),
-
                       CustomLabeledTextField(
-                        label: AppText.earningCustomerAge,
-                        controller: camNoteController.camEarningCustomerAgeController,
+                        label: AppText.currentlyCasesBeingServed,
+                        controller: camNoteController.camCurrentlyCasesBeingServedController,
                         inputType: TextInputType.number,
-                        hintText: AppText.enterEarningCustomerAge,
-                        isInputEnabled: false,
-                      ),
-
-
-                      CustomLabeledTextField(
-                        label: AppText.nonEarningCustomerAge,
-                        controller: camNoteController.camNonEarningCustomerAgeController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.nonEarningCustomerAge,
+                        hintText: AppText.enterCurrentlyCasesBeingServed,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
-                        label: AppText.totalFamilyIncome,
-                        controller: camNoteController.camTotalFamilyIncomeController,
+                        label: AppText.casesToBeForeclosedOnOrBeforeDisb,
+                        controller: camNoteController.camCasesToBeForeclosedOnOrBeforeDisbController,
                         inputType: TextInputType.number,
-                        hintText: AppText.enterTotalFamilyIncome,
+                        hintText: AppText.enterCasesToBeForeclosedOnOrBeforeDisb,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.casesToBeContenued,
+                        controller: camNoteController.camCasesToBeContenuedController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterCasesToBeContenued,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.totalEnquiriesWithin12months,
+                        controller: camNoteController.camTotalEnquiriesWithin12monthsCibilController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.entertotalEnquiriesWithin12months,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                      ),
+                      CustomLabeledTextField(
+                        label: AppText.totalEmi,
+                        controller: camNoteController.camTotalEmiController,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterTotalEmi,
                       ),
 
                       CustomLabeledTextField2(
-                        label: AppText.incomeCanBeConsidered,
-                        controller: camNoteController.camIncomeCanBeConsideredController,
+                        label: AppText.emiStoppedBefore,
+                        controller: camNoteController.camEmiStoppedBeforeController,
                         inputType: TextInputType.number,
-                        hintText: AppText.enterConsideredIncome,
-                        isInputEnabled: true,
+                        hintText: AppText.enterEmiStoppedBefore,
                         isRequired: false,
+
+                        onChanged: (value) {
+                          camNoteController.calculateEmilWillContinue();
+                        },
+                      ),
+
+                      CustomLabeledTextField2(
+                        label: AppText.emiWillContinue,
+                        controller: camNoteController.camEmiWillContinueController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterEmiWillContinue,
+                        isInputEnabled:false, //camNoteController.enableAllCibilFields.value,
+                        isRequired: false,
+
                         onChanged: (value) {
                           camNoteController.calculateLoanDetails();
                         },
-                      ),
 
-                      CustomLabeledTextField2(
-                        label: AppText.loanAmountRequested,
-                        controller: camNoteController.camLoanAmtReqController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterConsideredIncome,
-                        isInputEnabled: false,
-                        isRequired: false,
-                        onChanged: (value) {
-                          camNoteController.calculateLoanDetails();
-                        },
-                      ),
-
-                      CustomLabeledTextField2(
-                        label: AppText.loanTenorRequested,
-                        controller: camNoteController.camLoanTenorRequestedController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterLoanTenorRequested,
-                        isRequired: false,
-                        isInputEnabled: true,
-                        onChanged: (value) {
-                          camNoteController.calculateLoanDetails();
-                        },
-                      ),
-
-                      CustomLabeledTextField2(
-                        label: AppText.rateOfInterest,
-                        controller: camNoteController.camRateOfInterestController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterRateOfInterest,
-                        isRequired: false,
-                        isInputEnabled: true,
-                        onChanged: (value){
-                          ValidationHelper.validatePercentageInput(
-                            controller:  camNoteController.camRateOfInterestController,
-                            value: value,
-                            maxValue: 100,
-                            errorMessage: "The rate of interest (ROI) should not be more than 100 %",
-                          );
-                          camNoteController.calculateLoanDetails();
-                        },
                       ),
 
                       CustomLabeledTextField(
-                        label: AppText.proposedEmi,
-                        controller: camNoteController.camProposedEmiController,
+                        label: AppText.EMIsCcasesNotReflecting,
+                        controller: camNoteController.camEMIsCcasesNotReflectingCibilController,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
                         inputType: TextInputType.number,
-                        hintText: AppText.autoCalculatedProposedEmi,
-                        isInputEnabled: false,
+                        hintText: AppText.enterEMIsCcasesNotReflecting,
                       ),
+                    ],
+                  )
 
-                      CustomLabeledTextField2(
-                        label: AppText.propertyValue,
-                        controller: camNoteController.camPropertyValueController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.enterPropertyValue,
-                        isInputEnabled: true,
-                        isRequired: false,
-                        onChanged: (value) {
-                          camNoteController.calculateLoanDetails();
-                        },
-                      ),
 
-                      CustomLabeledTextField(
-                        label: AppText.foir,
-                        controller: camNoteController.camFoirController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.autoCalculatedFoir,
-                        isInputEnabled: false,
-                      ),
+                ],
+              ),
 
-                      CustomLabeledTextField(
-                        label: AppText.ltv,
-                        controller: camNoteController.camLtvController,
-                        inputType: TextInputType.number,
-                        hintText: AppText.autoCalculatedLtv,
-                        isInputEnabled: false,
-                      ),
 
-                      /* CustomLabeledTextField(
-                        label: AppText.offeredSecurityType,
-                        controller: camNoteController.camOfferedSecurityTypeController,
-                        inputType: TextInputType.name,
-                        hintText: AppText.enterSecurityType,
-                      ),*/
-                      const SizedBox(
-                        height: 20,
-                      ),
+              /// Section D
+              ExpansionTile(
+                initiallyExpanded: true,
+
+
+                childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
+                title:const Text(AppText.section4, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                leading: const Icon(Icons.list_alt, size: 20,),
+                children: [
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(AppText.LOAN_SYNOPSIS, style: TextStyle(color: AppColor.secondaryColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      SizedBox(height: 20,),
 
                       CustomTextLabel(
                         label: AppText.offeredSecurityType,
@@ -820,17 +724,167 @@ class Step2CamNote extends StatelessWidget {
                       }),
 
                       const SizedBox(
-                        height: 40,
+                        height: 20,
                       ),
+                      CustomLabeledTextField2(
+                        label: AppText.propertyValue,
+                        controller: camNoteController.camPropertyValueController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterPropertyValue,
+                        isInputEnabled: true,
+                        isRequired: false,
+                        onChanged: (value) {
+                          camNoteController.calculateLoanDetails();
+                        },
+                      ),
+                      CustomLabeledTextField2(
+                        label: AppText.loanTenorRequested,
+                        controller: camNoteController.camLoanTenorRequestedController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterLoanTenorRequested,
+                        isRequired: false,
+                        isInputEnabled: true,
+                        onChanged: (value) {
+                          camNoteController.calculateLoanDetails();
+                        },
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.ltv,
+                        controller: camNoteController.camLtvController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.autoCalculatedLtv,
+                        isInputEnabled: false,
+                      ),
+
+                      const CustomTextLabel(
+                        label: AppText.incomeType,
+                        isRequired: false,
+                      ),
+
+                      const SizedBox(height: 10),
+
+
+                      Obx((){
+                        if (camNoteController.isLoading.value) {
+                          return  Center(child:CustomSkelton.productShimmerList(context));
+                        }
+
+
+                        return CustomDropdown<String>(
+                          items: addProductController.incomeTypeList,
+                          getId: (item) => item,  // Adjust based on your model structure
+                          getName: (item) => item,
+                          selectedValue: camNoteController.selectedCamIncomeTypeList.value,
+                          onChanged: (value) {
+                            camNoteController.selectedCamIncomeTypeList.value =  value;
+                          },
+                        );
+                      }),
+
+                      const SizedBox(height: 20),
+
+                      CustomLabeledTextField(
+                        label: AppText.totalFamilyIncome,
+                        controller: camNoteController.camTotalFamilyIncomeController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterTotalFamilyIncome,
+                      ),
+
+                      CustomLabeledTextField2(
+                        label: AppText.incomeCanBeConsidered,
+                        controller: camNoteController.camIncomeCanBeConsideredController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterConsideredIncome,
+                        isInputEnabled: true,
+                        isRequired: false,
+                        onChanged: (value) {
+                          camNoteController.calculateLoanDetails();
+                        },
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.earningCustomerAge,
+                        controller: camNoteController.camEarningCustomerAgeController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterEarningCustomerAge,
+                        isInputEnabled: false,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.nonEarningCustomerAge,
+                        controller: camNoteController.camNonEarningCustomerAgeController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.nonEarningCustomerAge,
+                      ),
+
+
+                      CustomLabeledTextField2(
+                        label: AppText.loanAmountRequested,
+                        controller: camNoteController.camLoanAmtReqController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterConsideredIncome,
+                        isInputEnabled: false,
+                        isRequired: false,
+                        onChanged: (value) {
+                          camNoteController.calculateLoanDetails();
+                        },
+                      ),
+
+                      CustomLabeledTextField2(
+                        label: AppText.rateOfInterest,
+                        controller: camNoteController.camRateOfInterestController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterRateOfInterest,
+                        isRequired: false,
+                        isInputEnabled: true,
+                        onChanged: (value){
+                          ValidationHelper.validatePercentageInput(
+                            controller:  camNoteController.camRateOfInterestController,
+                            value: value,
+                            maxValue: 100,
+                            errorMessage: "The rate of interest (ROI) should not be more than 100 %",
+                          );
+                          camNoteController.calculateLoanDetails();
+                        },
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.proposedEmi,
+                        controller: camNoteController.camProposedEmiController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.autoCalculatedProposedEmi,
+                        isInputEnabled: false,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.iir,
+                        controller: camNoteController.camIirController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.enterIir,
+                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                      ),
+
+                      CustomLabeledTextField(
+                        label: AppText.foir,
+                        controller: camNoteController.camFoirController,
+                        inputType: TextInputType.number,
+                        hintText: AppText.autoCalculatedFoir,
+                        isInputEnabled: false,
+                      ),
+
+
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
                     ],
                   )
 
 
                 ],
               ),
-
-
-
               const SizedBox(
                 height: 90,
               ),

@@ -16,9 +16,9 @@ static const String tutorialVideoBaseUrl = 'https://devksdpl-uploads.s3.ap-south
 
   ///🚨⚠️ ALERT / WARNING
   ///Do change below devVersion also according to Live or UAT apk other wise it will give error in apk
- //static const String devVersion = 'LIVE';
+// static const String devVersion = 'LIVE';
  static const String devVersion = 'UAT';
   //static const String devVersion = 'LOCAL';
-  static const String buildDate = 'Build Date : 3 Dec 2025';
+  static const String buildDate = 'Build Date : 5 Dec 2025';
 }
 

@@ -317,6 +317,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   final TextEditingController qrCustomerNameController = TextEditingController();
   final TextEditingController qrWhatsappController = TextEditingController();
+
+
+  ///Cam step 2 new fields
+  final TextEditingController camTotalLiveLoanAvailedOnCibilController = TextEditingController();
+  final TextEditingController camTotalEnquiriesWithin12monthsCibilController = TextEditingController();
+  final TextEditingController camEMIsCcasesNotReflectingCibilController = TextEditingController();
+
   var camSelectedState = Rxn<String>();
   var camSelectedDistrict = Rxn<String>();
   var camSelectedCity = Rxn<String>();

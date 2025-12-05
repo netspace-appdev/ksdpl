@@ -668,11 +668,15 @@ class AppText{
 
   static const String processingCharges2 = "Processing Charges (₹)";
   /// cam note
-  static const String totalLoanAvaileCibil = "Total Loan Availed On CIBIL (No)";
+  static const String totalLoanAvaileCibil = "Total Loan Availed On CIBIL (Amount)";
   static const String enterTotalLoanAvaileCibil = "Enter Total Loan Availed";
 
   static const String totalLiveLoan = "Total Live Loan";
   static const String enterTotalLiveLoan = "Enter Total Live Loan";
+
+
+  static const String totalLiveLoanAvailedOnCibil = "Total Live Loan Availed on Cibil";
+  static const String enterTotalLiveLoanAvailedOnCibil = "Enter Total Live Loan Availed on Cibil";
 
   static const String cibil = "CIBIL";
   static const String cibilRecord = "CIBIL Record List";
@@ -731,13 +735,13 @@ class AppText{
   static const String cannotupload = "you can not upload photos now";
   static const String enterEarningCustomerAge = "Enter Age";
 
-  static const String nonEarningCustomerAge = "Non-Earning Customer Age";
+  static const String nonEarningCustomerAge = "Oldest Non-Earning Customer Age";
   static const String enterNonEarningCustomerAge = "Enter Age";
 
-  static const String totalFamilyIncome = "Total Family Income (In Monthly)";
+  static const String totalFamilyIncome = "Total Family Income (Monthly)";
   static const String enterTotalFamilyIncome = "Enter Total Income";
 
-  static const String incomeCanBeConsidered = "Income Can Be Considered (In Monthly)";
+  static const String incomeCanBeConsidered = "Income Can Be Considered (Monthly)";
   static const String enterConsideredIncome = "Enter Considered Income";
 
   static const String loanAmountRequested = "Loan Amount Requested";
@@ -766,9 +770,15 @@ class AppText{
   static const String sectionC = "Section C";
   static const String sectionD = "Section D";
 
-  static const String section3 = "SECTION 3 ";
+  static const String section1 = "Section 1";
+  static const String section2 = "Section 2";
+  static const String section4 = "Section 4";
+  static const String section3 = "Section 3 ";
   static const String obligation = "OBLIGATION FOR THE PROPOSED LOAN";
+  static const String  CIBIL_REPORT_OVERVIEW = "CIBIL REPORT OVERVIEW";
+  static const String  LOAN_REPAYMENT_HISTORY = "LOAN REPAYMENT HISTORY";
   static const String loanAccountSummary = "Loan Account Summary";
+  static const String LOAN_SYNOPSIS = "LOAN SYNOPSIS";
 
   static const String todaycall = "Today's Calls";
   static const String convertedToInterested = "Converted to Interested";
@@ -1139,6 +1149,11 @@ class AppText{
   static const String plsSelectCity = "Please select a City";
   static const String plsSelectDist = "Please select a District";
 
+  static const String totalEnquiriesWithin12months = "Total Enquiries within 12 months";
+  static const String entertotalEnquiriesWithin12months = "Enter Total Enquiries within 12 months";
+
+  static const String EMIsCcasesNotReflecting = "EMIs Of cases not reflecting in CIBIL Report";
+  static const String enterEMIsCcasesNotReflecting = "Enter EMIs Of cases not reflecting";
 
   static const String available  = "Available";
   static const String notAvailable  = "Not Available";
