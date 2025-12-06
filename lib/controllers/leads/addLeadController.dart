@@ -437,39 +437,64 @@ class Addleadcontroller extends GetxController{
           );
 
           ///6 oct 2025
+          ///Section 1
           camNoteController.camCibilController.text=(result['Cibil']=="NA" || result['Cibil']=="NA")?"0": result['Cibil'].toString();
           camNoteController.camTotalLoanAvailedController.text=result['TotalLoanAvailedOnCibil'].toString();
+          camNoteController.camTotalLiveLoanAvailedOnCibilController.text=result['TotalLiveLoanAvailedOnCibil'].toString(); //new
+          camNoteController.camClosedCasesController.text=result['ClosedCases'].toString();
+          camNoteController.camClosedAmountController.text=result['ClosedAmount'].toString();
           camNoteController.camTotalLiveLoanController.text=result['TotalLiveLoan'].toString();
-          camNoteController.camTotalEmiController.text= (result['TotalEMI'] ?? 0).toDouble().toStringAsFixed(2);
-          camNoteController.camEmiWillContinueController.text=result['EMIWillContinue'].toString();
+          camNoteController.camCurrentBalanceController.text=result['CurrentBalance'].toString();
           camNoteController.camTotalOverdueCasesController.text=result['TotalOverdueCasesAsPerCibil'].toString();
           camNoteController.camTotalOverdueAmountController.text=result['TotalOverdueAmountAsPerCibil'].toString();
-          camNoteController.camTotalEnquiriesController.text=result['TotalEnquiriesMadeAsPerCibil'].toString();
-
-          ///
-          camNoteController.camClosedCasesController.text=result['ClosedCases'].toString();
           camNoteController.camWrittenOffCasesController.text=result['WrittenOffCases'].toString();
-          camNoteController.camSettlementCasesController.text=result['SettlementCases'].toString();
-          camNoteController.camSuitFiledWillfulDefaultCasesController.text=result['SuitFiledWillfulDefaultCases'].toString();
-          camNoteController.camTotalSanctionedAmountController.text=result['TotalSanctionedAmount'].toString();
-          camNoteController.camCurrentBalanceController.text=result['CurrentBalance'].toString();
-          camNoteController.camClosedAmountController.text=result['ClosedAmount'].toString();
           camNoteController.camWrittenOffAmountController.text=result['WrittenOffAmount'].toString();
+          camNoteController.camSettlementCasesController.text=result['SettlementCases'].toString();
           camNoteController.camSettlementAmountController.text=result['SettlementAmount'].toString();
+          camNoteController.camSuitFiledWillfulDefaultCasesController.text=result['SuitFiledWillfulDefaultCases'].toString();
           camNoteController.camSuitFiledWillfulDefaultAmountController.text=result['SuitFiledWillfulDefaultAmount'].toString();
+
+          ///Section 2
           camNoteController.camStandardCountController.text=result['StandardCount'].toString();
-          camNoteController.camNumberOfDaysPastDueCountController.text=result['SettlementCases'].toString();
-          camNoteController.camLossCountController.text=result['LossCount'].toString();
-          camNoteController.camSubstandardCountController.text=result['SubstandardCount'].toString();
           camNoteController.camDoubtfulCountController.text=result['DoubtfulCount'].toString();
+          camNoteController.camNumberOfDaysPastDueCountController.text=result['Number_of_days_past_due_Count'].toString();
           camNoteController.camSpecialMentionAccountCountController.text=result['SpecialMentionAccountCount'].toString();
+          camNoteController.camLossCountController.text=result['LossCount'].toString();
           camNoteController.camNptController.text=result['Npt'].toString();
+          camNoteController.camSubstandardCountController.text=result['SubstandardCount'].toString();
           camNoteController.camTotalCountsController.text=result['TotalCounts'].toString();
-          camNoteController.camCurrentlyCasesBeingServedController.text=result['CurrentlyCasesBeingServed'].toString();
-          camNoteController.camCasesToBeForeclosedOnOrBeforeDisbController.text=result['CasesToBeForeclosedOnOrBeforeDisb'].toString();
-          camNoteController.camCasesToBeContenuedController.text=result['CasesToBeContenued'].toString();
+
+          ///Section 3
+          final countYes = camNoteController.retailAccountList
+              .where((item) => item.open == "Yes")
+              .length;
+          double totalInstallments = camNoteController.retailAccountList
+              .where((item) => item.open == "Yes")
+              .fold(0.0, (sum, item) {
+            final emi = double.tryParse(item.installmentAmount ?? "0") ?? 0;
+            return sum + emi;
+          });
+          camNoteController.camEmiWillContinueController.text =
+              totalInstallments.toStringAsFixed(2);
+          camNoteController.camEmiStoppedBeforeController.text="0";
+          camNoteController.camCurrentlyCasesBeingServedController.text= (countYes??0).toString();
+         // camNoteController.camCasesToBeForeclosedOnOrBeforeDisbController.text=result['CasesToBeForeclosedOnOrBeforeDisb'].toString();
+          //camNoteController.camCasesToBeContenuedController.text=result['CasesToBeContenued'].toString();
+          camNoteController.camTotalEnquiriesWithin12monthsCibilController.text=result['Total_Enquiries_within_12_months'].toString();
+          camNoteController.camTotalEmiController.text= (result['TotalEMI'] ?? 0).toDouble().toStringAsFixed(2);
+        //  camNoteController.camEmiWillContinueController.text=result['EMIWillContinue'].toString();
+
+
+
+
+
+
+          camNoteController.camTotalEnquiriesController.text=result['TotalEnquiriesMadeAsPerCibil'].toString();
+          camNoteController.camTotalSanctionedAmountController.text=result['TotalSanctionedAmount'].toString();
+          camNoteController.camNumberOfDaysPastDueCountController.text=result['SettlementCases'].toString();
           camNoteController.camEmisOfExistingLiabilitiesController.text=result['EmisOfExistingLiabilities'].toString();
           camNoteController.camIirController.text=result['Iir'].toString();
+
 
           print("Iir======>${result['Iir'].toString()}");
           print("Iir======>${camNoteController.camIirController.text}");
@@ -505,158 +530,8 @@ class Addleadcontroller extends GetxController{
         (pow(1 + monthlyInterest, months) - 1);
   }
 
-  ///working
-/*
-  Future<Map<String, dynamic>> parseCibilData({
-    required String? cibilJson,
-    required double annualInterestRate,
-    required int tenureMonths,
-  }) async {
-    print("here---->parseCibilData");
-    if (cibilJson == null) return {};
-    print("here---->11");
-    final parsedData = json.decode(cibilJson);
-    final cibilData = parsedData['data'];
-    final addressList = cibilData?['credit_report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountDetails'];
-    print("here---->22");
-    if (addressList == null || addressList is! List) return {};
 
-    print("here---->33");
-    final accounts = addressList.map<CibilAccount>((e) => CibilAccount.fromJson(e)).toList();
-    print("here---->${accounts.first.institution.toString()}");
-    double totalLoanAvailed = 0;
-    int totalLiveLoan = 0;
-    double totalEMI = 0;
-    int emiWillContinue = 0;
-    int overdueCases = 0;
-    double totalOverdueAmount = 0;
-
-    // New fields added 👇
-    int closedCases = 0;
-    int writtenOffCases = 0;
-    int settlementCases = 0;
-    int suitFiledWillfulDefaultCases = 0;
-    double totalSanctionedAmount = 0;
-    double currentBalance = 0;
-    double closedAmount = 0;
-    double writtenOffAmount = 0;
-    double settlementAmount = 0;
-    double suitFiledWillfulDefaultAmount = 0;
-    int standardCount = 0;
-    int substandardCount = 0;
-    int doubtfulCount = 0;
-    int lossCount = 0;
-    int specialMentionAccountCount = 0;
-
-    for (var account in accounts) {
-      final sanctionAmount = double.tryParse(account.sanctionAmount ?? '0') ?? 0;
-      final balance = double.tryParse(account.balance ?? '0') ?? 0;
-      final overdueAmount = double.tryParse(account.pastDueAmount ?? '0') ?? 0;
-
-      totalLoanAvailed += sanctionAmount;
-      totalSanctionedAmount += sanctionAmount;
-      currentBalance += balance;
-
-      if (account.open == "Yes") {
-        totalLiveLoan += 1;
-        if (account.sanctionAmount != null) {
-          totalEMI += calculateEMI(sanctionAmount, annualInterestRate, tenureMonths);
-        }
-        if (account.dateClosed == null) {
-          emiWillContinue += 1;
-        }
-      }
-
-      // Overdue calculation
-      if (overdueAmount > 0) {
-        totalOverdueAmount += overdueAmount;
-        overdueCases += 1;
-      } else if (account.history48Months != null) {
-        bool hasOverdueHistory = account.history48Months!.any((entry) =>
-            ['30+', '60+', '90+', '120+', 'SUB', 'SPM'].contains(entry.paymentStatus));
-        if (hasOverdueHistory) overdueCases += 1;
-      }
-
-      // Account status checks
-      final status = account.accountStatus?.toLowerCase() ?? '';
-
-      if (status.contains("closed")) {
-        closedCases++;
-        closedAmount += sanctionAmount;
-      }
-      if (status.contains("write-off")) {
-        writtenOffCases++;
-        writtenOffAmount += sanctionAmount;
-      }
-      if (status.contains("settlement")) {
-        settlementCases++;
-        settlementAmount += sanctionAmount;
-      }
-      if (status.contains("suit filed") || status.contains("willful default")) {
-        suitFiledWillfulDefaultCases++;
-        suitFiledWillfulDefaultAmount += sanctionAmount;
-      }
-
-      // Asset classification
-      switch (account.assetClassification) {
-        case "STD":
-          standardCount++;
-          break;
-        case "SUB":
-          substandardCount++;
-          break;
-        case "DBT":
-          doubtfulCount++;
-          break;
-        case "LOSS":
-          lossCount++;
-          break;
-        case "SMA":
-          specialMentionAccountCount++;
-          break;
-      }
-    }
-
-    return {
-      'Cibil': cibilData?['credit_score'] ?? '0',
-      'TotalLoanAvailedOnCibil': totalLoanAvailed,
-      'TotalLiveLoan': totalLiveLoan,
-      'TotalEMI': totalEMI,
-      'EMIWillContinue': emiWillContinue,
-      'TotalOverdueCasesAsPerCibil': overdueCases,
-      'TotalOverdueAmountAsPerCibil': totalOverdueAmount,
-      'TotalEnquiriesMadeAsPerCibil':
-      cibilData?['credit_report']?['CCRResponse']?['CIRReportDataLst']?.length ?? 0,
-
-      // 🆕 Newly added stats
-      'ClosedCases': closedCases,
-      'WrittenOffCases': writtenOffCases,
-      'SettlementCases': settlementCases,
-      'SuitFiledWillfulDefaultCases': suitFiledWillfulDefaultCases,
-      'TotalSanctionedAmount': totalSanctionedAmount,
-      'CurrentBalance': currentBalance,
-      'ClosedAmount': closedAmount,
-      'WrittenOffAmount': writtenOffAmount,
-      'SettlementAmount': settlementAmount,
-      'SuitFiledWillfulDefaultAmount': suitFiledWillfulDefaultAmount,
-      'StandardCount': standardCount,
-      'SubstandardCount': substandardCount,
-      'DoubtfulCount': doubtfulCount,
-      'LossCount': lossCount,
-      'SpecialMentionAccountCount': specialMentionAccountCount,
-
-      'Npt': "0",
-      'TotalCounts': "0",
-      'CurrentlyCasesBeingServed': "0",
-      'CasesToBeForeclosedOnOrBeforeDisb': "0",
-      'CasesToBeContenued': "0",
-      'EmisOfExistingLiabilities': "0",
-      'Iir': "0",
-    };
-  }
-*/
-
-///experimenmt
+///Working
   Future<Map<String, dynamic>> parseCibilData({
     required String? cibilJson,
     required double annualInterestRate,
@@ -672,7 +547,19 @@ class Addleadcontroller extends GetxController{
 
     final retailList =
     cibilData?['Credit_Report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountDetails'];
+    final totalSanctionAmount =
+    cibilData?['Credit_Report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountsSummary']?['TotalSanctionAmount'];
 
+    final totalPastDue =
+    cibilData?['Credit_Report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountsSummary']?['TotalPastDue'];
+
+    final noOfPastDueAccounts =
+    cibilData?['Credit_Report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountsSummary']?['NoOfPastDueAccounts'];
+
+
+
+    final past12Months =
+    cibilData?['Credit_Report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['EnquirySummary']?['Past12Months'];
     print("here---->22");
     print("here---->${addressList.toString()}");
     if (addressList == null || addressList is! List) return {};
@@ -690,6 +577,7 @@ class Addleadcontroller extends GetxController{
     }
     print("here retailAccountList---->${camNoteController.retailAccountList[0].institution.toString()}");
     double totalLoanAvailed = 0;
+
     int totalLiveLoan = 0;
     double totalEMI = 0;
     int emiWillContinue = 0;
@@ -731,7 +619,7 @@ class Addleadcontroller extends GetxController{
           emiWillContinue += 1;
         }
       }
-
+      print("totalEMI====>${totalEMI}");
       // Overdue calculation
       if (overdueAmount > 0) {
         totalOverdueAmount += overdueAmount;
@@ -757,10 +645,12 @@ class Addleadcontroller extends GetxController{
         settlementCases++;
         settlementAmount += sanctionAmount;
       }
-      if (status.contains("suit filed") || status.contains("willful default")) {
+      /*if (status.contains("suit filed") || status.contains("willful default")) {
         suitFiledWillfulDefaultCases++;
         suitFiledWillfulDefaultAmount += sanctionAmount;
-      }
+      }*/
+
+
 
       // Asset classification
       switch (account.assetClassification) {
@@ -785,33 +675,43 @@ class Addleadcontroller extends GetxController{
     return {
       'Cibil': cibilData?['Credit_Score'] ?? '0',
       'TotalLoanAvailedOnCibil': totalLoanAvailed,
+      'TotalLiveLoanAvailedOnCibil': totalSanctionAmount,
+      'ClosedCases': closedCases,
+      'ClosedAmount': closedAmount,
       'TotalLiveLoan': totalLiveLoan,
+      'CurrentBalance': currentBalance,
+      'TotalOverdueCasesAsPerCibil':noOfPastDueAccounts,//overdueCases,
+      'TotalOverdueAmountAsPerCibil':totalPastDue, //totalOverdueAmount,
+      'WrittenOffCases': writtenOffCases,
+      'WrittenOffAmount': writtenOffAmount,
+      'SettlementCases': settlementCases,
+      'SuitFiledWillfulDefaultCases': suitFiledWillfulDefaultCases,
+      'SuitFiledWillfulDefaultAmount': suitFiledWillfulDefaultAmount,
+      'StandardCount': standardCount,
+      'DoubtfulCount': doubtfulCount,
+      'Number_of_days_past_due_Count': "0",
+      'SpecialMentionAccountCount': specialMentionAccountCount,
+      'LossCount': lossCount,
+      'Npt': "0",
+      'SubstandardCount': substandardCount,
+      'TotalCounts': retailList.length??0,
+
+
+
       'TotalEMI': totalEMI,
       'EMIWillContinue': emiWillContinue,
-      'TotalOverdueCasesAsPerCibil': overdueCases,
-      'TotalOverdueAmountAsPerCibil': totalOverdueAmount,
+
       'TotalEnquiriesMadeAsPerCibil':
       cibilData?['credit_report']?['CCRResponse']?['CIRReportDataLst']?.length ?? 0,
 
       // 🆕 Newly added stats
-      'ClosedCases': closedCases,
-      'WrittenOffCases': writtenOffCases,
-      'SettlementCases': settlementCases,
-      'SuitFiledWillfulDefaultCases': suitFiledWillfulDefaultCases,
       'TotalSanctionedAmount': totalSanctionedAmount,
-      'CurrentBalance': currentBalance,
-      'ClosedAmount': closedAmount,
-      'WrittenOffAmount': writtenOffAmount,
-      'SettlementAmount': settlementAmount,
-      'SuitFiledWillfulDefaultAmount': suitFiledWillfulDefaultAmount,
-      'StandardCount': standardCount,
-      'SubstandardCount': substandardCount,
-      'DoubtfulCount': doubtfulCount,
-      'LossCount': lossCount,
-      'SpecialMentionAccountCount': specialMentionAccountCount,
 
-      'Npt': "0",
-      'TotalCounts': "0",
+
+      'SettlementAmount': settlementAmount,
+      'Total_Enquiries_within_12_months': past12Months,
+
+      "Number_of_days_past_due_Count": "0",
       'CurrentlyCasesBeingServed': "0",
       'CasesToBeForeclosedOnOrBeforeDisb': "0",
       'CasesToBeContenued': "0",
@@ -1276,6 +1176,7 @@ class CibilAccount {
   final List<HistoryEntry>? history48Months;
   final String? installmentAmount;
   RxBool isSelected = false.obs;
+  RxInt casesCounter = 0.obs;
   CibilAccount({
     this.seq,
     this.accountNumber,

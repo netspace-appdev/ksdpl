@@ -491,6 +491,104 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     } else {
     }
   }
+/*  void updateSelectedRanks() {
+    // Get selected items
+    final selectedItems = retailAccountList.where((e) => e.isSelected.value).toList();
+
+    // Sort by selection order (optional)
+    // You could maintain an order list – but simplest is natural index order:
+
+    int rankCounter = 0;
+    for (var item in selectedItems) {
+      item.casesCounter.value = rankCounter;
+      rankCounter++;
+    }
+
+    // Unselected items = rank 0
+    for (var item in retailAccountList) {
+      if (!item.isSelected.value) item.casesCounter.value = 0;
+    }
+
+    camCasesToBeForeclosedOnOrBeforeDisbController.text=rankCounter.toString();
+
+    final current = int.tryParse(camCurrentlyCasesBeingServedController.text) ?? 0;
+    final foreclose = int.tryParse(camCasesToBeForeclosedOnOrBeforeDisbController.text) ?? 0;
+
+    final result = current - foreclose;
+
+    camCasesToBeContenuedController.text = result.toString();
+
+    // 6️⃣ SUM OF INSTALLMENTS (New)
+    double totalInstallments = 0;
+
+    for (var item in selectedItems) {
+      final emi = double.tryParse(item.installmentAmount?.toString() ?? "0") ?? 0;
+      totalInstallments += emi;
+    }
+
+    // 7️⃣ Set it into your TextFormField
+    camEmiStoppedBeforeController.text =
+        totalInstallments.toStringAsFixed(2);
+
+
+
+  }*/
+
+  void updateSelectedRanks() {
+    // Selected items
+    final selectedItems = retailAccountList.where((e) => e.isSelected.value).toList();
+
+    // Assign ranks
+    int rankCounter = 0;
+    for (var item in selectedItems) {
+      item.casesCounter.value = rankCounter;
+      rankCounter++;
+    }
+
+    // Reset unselected
+    for (var item in retailAccountList) {
+      if (!item.isSelected.value) item.casesCounter.value = 0;
+    }
+
+    // Counts update
+    camCasesToBeForeclosedOnOrBeforeDisbController.text = rankCounter.toString();
+
+    final current = int.tryParse(camCurrentlyCasesBeingServedController.text) ?? 0;
+    final foreclose = int.tryParse(camCasesToBeForeclosedOnOrBeforeDisbController.text) ?? 0;
+
+    camCasesToBeContenuedController.text = (current - foreclose).toString();
+
+
+    // 🔥 1️⃣ SUM OF SELECTED INSTALLMENTS
+    double selectedInstallments = selectedItems.fold(
+        0.0,
+            (sum, item) =>
+        sum + (double.tryParse(item.installmentAmount ?? "0") ?? 0));
+
+    // Update "EMI Stopped Before" controller
+    camEmiStoppedBeforeController.text =
+        selectedInstallments.toStringAsFixed(2);
+
+
+    // 🔥 2️⃣ TOTAL OF LIVE (OPEN == "Yes") INSTALLMENTS
+    double totalOpenInstallments = retailAccountList
+        .where((item) => item.open == "Yes")
+        .fold(0.0, (sum, item) {
+      final emi = double.tryParse(item.installmentAmount ?? "0") ?? 0;
+      return sum + emi;
+    });
+
+    // Put this base value into camEmiWillContinueController ONLY IF you set it earlier
+    // (You already do that before calling this function)
+    // But here we update it based on subtracting selected EMIs ↓
+
+
+    // 🔥 3️⃣ FINAL CALCULATION YOU WANT
+    double finalRemainingEmi = totalOpenInstallments - selectedInstallments;
+
+    camEmiWillContinueController.text =
+        finalRemainingEmi.toStringAsFixed(2);
+  }
 
   ///multi package
   void addMultiPackage() {
@@ -3244,6 +3342,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     final double P = double.tryParse(camLoanAmtReqController.text) ?? 0.0; // Loan Amount
     final int n = int.tryParse(camLoanTenorRequestedController.text) ?? 0; // Tenor
     final double annualROI = double.tryParse(camRateOfInterestController.text) ?? 0.0; // ROI
+    final double incomeCanBeConsidered = double.tryParse(camIncomeCanBeConsideredController.text) ?? 0.0; // ROI
     final double r = annualROI / 12 / 100; // Monthly ROI
 
     double emi = 0.0;
@@ -3263,6 +3362,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camProposedEmiController.text = emi > 0 ? emi.toStringAsFixed(2) : "";
     camFoirController.text = foir > 0 ? foir.toStringAsFixed(2) : "";
     camLtvController.text = ltv > 0 ? ltv.toStringAsFixed(2) : "";
+
+    if (proposedEMI > 0 && incomeCanBeConsidered > 0) {
+      final iir = (proposedEMI / incomeCanBeConsidered) * 100;
+      camIirController.text= iir.toStringAsFixed(2);
+    } else {
+      camIirController.text= "0.0";
+    }
   }
 
   void calculateEmilWillContinue() {
@@ -3281,6 +3387,16 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     // Update controller
     camEmiWillContinueController.text = willContinue.toString();
+  }
+
+  void calculateEMIWIllContAfterNotReflecting(){
+    final willContinue = double.tryParse(camEmiWillContinueController.text) ?? 0;
+    final notReflecting = double.tryParse(camEMIsCcasesNotReflectingCibilController.text) ?? 0;
+
+    final result = willContinue + notReflecting;
+
+    camEmiWillContinueController.text = result.toStringAsFixed(2);
+
   }
 
   Future<void> addCustomerDetailsApi({

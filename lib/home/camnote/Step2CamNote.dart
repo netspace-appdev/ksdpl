@@ -656,12 +656,17 @@ class Step2CamNote extends StatelessWidget {
 
                       ),
 
-                      CustomLabeledTextField(
+                      CustomLabeledTextField2(
                         label: AppText.EMIsCcasesNotReflecting,
                         controller: camNoteController.camEMIsCcasesNotReflectingCibilController,
-                        isInputEnabled: camNoteController.enableAllCibilFields.value,
+                        isInputEnabled: true,
                         inputType: TextInputType.number,
                         hintText: AppText.enterEMIsCcasesNotReflecting,
+                        isRequired: false,
+
+                        onChanged: (value) {
+                          camNoteController.calculateEMIWIllContAfterNotReflecting();
+                        },
                       ),
                     ],
                   )
@@ -1002,7 +1007,7 @@ class Step2CamNote extends StatelessWidget {
       }
 
       return  SizedBox(
-        height: 410,
+        height: 450,
         child: ListView.builder(
           itemCount:camNoteController.retailAccountList.length??0,//
           shrinkWrap: true,
@@ -1022,18 +1027,21 @@ class Step2CamNote extends StatelessWidget {
                   buildCard("#${index+1}", [
                     DetailRow2(label: AppText.institution, value: item.institution??""),
                     DetailRow2(label: AppText.prodType, value:  item.accountType??""),
+                    DetailRow2(label: AppText.status, value:  item.open=="Yes"?"Live":"Closed"),
                     SizedBox(height: 10,),
+                    item.open=="Yes"?
                     Row(
                       children: [
                         Obx(() => Checkbox(
                           value: item.isSelected.value,
                           onChanged: (val) {
                             item.isSelected.value = val ?? false;
+                            camNoteController.updateSelectedRanks();
                           },
                         )),
                         const Text(AppText.markForForeclosure, style: TextStyle(color: AppColor.secondaryColor,),),
                       ],
-                    ),
+                    ):Container(),
                     SizedBox(height: 10,),
                     _buildTextButton("View", context, Colors.pink, Icons.insert_drive_file, "0",item),
                   ],
