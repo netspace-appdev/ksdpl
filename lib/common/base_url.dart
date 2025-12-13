@@ -19,6 +19,6 @@ static const String tutorialVideoBaseUrl = 'https://devksdpl-uploads.s3.ap-south
 // static const String devVersion = 'LIVE';
  static const String devVersion = 'UAT';
   //static const String devVersion = 'LOCAL';
-  static const String buildDate = 'Build Date : 5 Dec 2025';
+  static const String buildDate = 'Build Date : 8 Dec 2025';
 }
 

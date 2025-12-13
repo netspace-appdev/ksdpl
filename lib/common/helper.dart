@@ -914,6 +914,7 @@ class AppText{
   static const String robmLogin="RO/BM Login";
   static const String aicLogin="AIC Login";
   static const String submitBasicDetails="Submit Basic Details";
+  static const String submitCamnoteDetails="Submit Camnote Details";
   static const String sendEmailToCustomer="Send Email & WhatsApp to Customer";
   static const String reqCibilMsg="Do you want to send an email requesting the CIBIL report?";
 

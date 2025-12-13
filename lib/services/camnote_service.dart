@@ -36,6 +36,7 @@ class CamNoteService {
   static const String addCustomerDetails = BaseUrl.baseUrl + 'Customer/AddCustomerDetails';
   static const String sendPaymentQRCodeOnWhatsAppToCustomer = BaseUrl.baseUrl + 'CamNoteDetail/SendPaymentQRCodeOnWhatsAppToCustomer';
   static const String checkReceiptStatusForCamNote = BaseUrl.baseUrl + 'CamNoteDetail/CheckReceiptStatusForCamNote';
+  static const String saveCamnoteDetails = BaseUrl.baseUrl + 'CamNoteDetail/SaveCamnoteDetails';
 
 
 
@@ -1209,4 +1210,79 @@ class CamNoteService {
       throw Exception('Error : $e');
     }
   }
+
+
+
+ //CamNoteDetail/SaveCamnoteDetails
+  static saveCamnoteDetailsApi({
+    String? LeadId,
+    String? CasesToBeForeclosedOnOrBeforeDisb,
+    String? CasesToBeContenued,
+    String? EMIStoppedOnBeforeThisLoan,
+    String? EMIWillContinue,
+    String? EMIsOfExistingLiabilities,
+    String? OfferedSecurityType,
+    String? PropertyValueAsPerCustomer,
+    String? LoanTenorRequested,
+    String? LTV,
+    String? IncomeType,
+    String? TotalFamilyIncome,
+    String? IncomeCanBeConsidered,
+    String? NonEarningCustomerAge,
+    String? ROI,
+    String? ProposedEMI,
+    String? IIR,
+    String? FOIR,
+  })
+  async {
+    print("saveCamnoteDetailsApi--->");
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(saveCamnoteDetails),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LeadId', LeadId, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'CasesToBeForeclosedOnOrBeforeDisb', CasesToBeForeclosedOnOrBeforeDisb, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'CasesToBeForeclosedOnOrBeforeDisb', CasesToBeForeclosedOnOrBeforeDisb, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'CasesToBeContenued', CasesToBeContenued, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'EMIStoppedOnBeforeThisLoan', EMIStoppedOnBeforeThisLoan, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'EMIWillContinue', EMIWillContinue, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'EMIsOfExistingLiabilities', EMIsOfExistingLiabilities, fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'OfferedSecurityType', OfferedSecurityType);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'PropertyValueAsPerCustomer', PropertyValueAsPerCustomer, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LoanTenorRequested', LoanTenorRequested, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LTV', LTV, fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'IncomeType', IncomeType,);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalFamilyIncome', TotalFamilyIncome, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'IncomeCanBeConsidered', IncomeCanBeConsidered, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'NonEarningCustomerAge', NonEarningCustomerAge, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ROI', ROI, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ProposedEMI', ProposedEMI, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'IIR', IIR, fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'FOIR', FOIR, fallback: "0");
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(saveCamnoteDetails, request.fields);
+      Helper.ApiRes(saveCamnoteDetails, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
+    }
+  }
+
 }

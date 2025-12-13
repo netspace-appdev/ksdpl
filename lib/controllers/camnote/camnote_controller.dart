@@ -37,6 +37,7 @@ import '../../models/camnote/GetPackageDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart' as otherBankBranch;
 import '../../models/camnote/GetProductDetailsByFilterModel.dart' as pdFModel;
 import '../../models/camnote/RequestForFinancialServicesModel.dart';
+import '../../models/camnote/SaveCamnoteDetailsModel.dart';
 import '../../models/camnote/SendMailForLocationOfCustomerModel.dart';
 import '../../models/camnote/SendMailToBankerCamNoteModel.dart';
 import '../../models/camnote/SendQRCodeOnWACustModel.dart';
@@ -93,6 +94,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   var isBankerLoading = false.obs;
   var isBankerSuperiorLoading = false.obs;
+  var isCaNoteStep2Loading = false.obs;
   var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
   var addAdSrcIncomModel = Rxn<AddAdSrcIncomModel>(); //
@@ -111,6 +113,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   var fetchBankDetailSegKSDPLProdModel = Rxn<otherBank.FetchBankDetailSegKSDPLProdModel>(); //
   var getProductDetailBySegmentAndProductModel = Rxn<otherBankBranch.GetProductDetailBySegmentAndProductModel>(); //
+  var saveCamnoteDetailsModel = Rxn<SaveCamnoteDetailsModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
 
 
@@ -355,6 +358,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   final Map<String, RxList<CamImage>> _imageMap = {};
 
   RxInt maxAllowedBank = 0.obs;
+  double baseWillContinue = 0.0;
+
 
   @override
   Map<String, RxList<CamImage>> get imageMap => _imageMap;
@@ -578,16 +583,20 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       return sum + emi;
     });
 
-    // Put this base value into camEmiWillContinueController ONLY IF you set it earlier
-    // (You already do that before calling this function)
-    // But here we update it based on subtracting selected EMIs ↓
+// 🔥 Get "Not Reflecting in CIBIL" value
+    double notReflecting = double.tryParse(
+        camEMIsCcasesNotReflectingCibilController.text.trim()) ??
+        0;
 
 
     // 🔥 3️⃣ FINAL CALCULATION YOU WANT
-    double finalRemainingEmi = totalOpenInstallments - selectedInstallments;
+    double finalRemainingEmi = totalOpenInstallments - selectedInstallments + notReflecting;;
+
 
     camEmiWillContinueController.text =
         finalRemainingEmi.toStringAsFixed(2);
+
+    baseWillContinue = double.tryParse(camEmiWillContinueController.text) ?? 0.0;
   }
 
   ///multi package
@@ -1101,7 +1110,29 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
 
+  void submitSaveCamnoteDetails(){
+    saveCamnoteDetailsApi(
+      LeadId:getLeadId.value.toString(),
+      CasesToBeForeclosedOnOrBeforeDisb:camCasesToBeForeclosedOnOrBeforeDisbController.text.trim().toString(),
+      CasesToBeContenued:camCasesToBeContenuedController.text.trim().toString(),
+      EMIStoppedOnBeforeThisLoan:camEmiStoppedBeforeController.text.trim().toString(),
+      EMIWillContinue:camEmiWillContinueController.text.trim().toString(),
+      EMIsOfExistingLiabilities:camEmisOfExistingLiabilitiesController.text.trim().toString(), //This controller is not visible on step 2, I have just get the value from cibil json and submitted it here
+      OfferedSecurityType:camOfferedSecurityTypeController.text.trim(),
+      PropertyValueAsPerCustomer:camPropertyValueController.text.trim().toString(),
+      LoanTenorRequested:camLoanTenorRequestedController.text.trim().toString(),
+      LTV:camLtvController.text.trim().toString(),
+      IncomeType:(selectedCamIncomeTypeList.value==null||selectedCamIncomeTypeList.value=="null")?"":selectedCamIncomeTypeList.value,
+      TotalFamilyIncome:camTotalFamilyIncomeController.text.trim().toString(),
+      IncomeCanBeConsidered:camIncomeCanBeConsideredController.text.trim().toString(),
+      NonEarningCustomerAge:camNonEarningCustomerAgeController.text.trim().toString(),
+      ROI:camRateOfInterestController.text.trim().toString(),
+      ProposedEMI:camProposedEmiController.text.trim().toString(),
+      IIR:camIirController.text.trim().toString(),
+      FOIR:camFoirController.text.trim().toString(),
 
+    );
+  }
 
   List<GlobalKey<FormState>> stepFormKeys = List.generate(3, (_) => GlobalKey<FormState>());
   var selectedCamIncomeTypeList = Rxn<String>();
@@ -2259,6 +2290,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camLtvController.clear();
     camOfferedSecurityTypeController.clear();
     camCibilMobController.clear();
+    camEMIsCcasesNotReflectingCibilController.clear();
     selectedCamIncomeTypeList.value=null;
   }
 
@@ -3390,10 +3422,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
   void calculateEMIWIllContAfterNotReflecting(){
-    final willContinue = double.tryParse(camEmiWillContinueController.text) ?? 0;
+
     final notReflecting = double.tryParse(camEMIsCcasesNotReflectingCibilController.text) ?? 0;
 
-    final result = willContinue + notReflecting;
+    final result = baseWillContinue + notReflecting;
 
     camEmiWillContinueController.text = result.toStringAsFixed(2);
 
@@ -3624,6 +3656,86 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
       isBankerSuperiorLoading(false);
+    }
+  }
+
+
+  ///Save cam note detials API
+
+  Future<void>  saveCamnoteDetailsApi({
+    String? LeadId,
+    String? CasesToBeForeclosedOnOrBeforeDisb,
+    String? CasesToBeContenued,
+    String? EMIStoppedOnBeforeThisLoan,
+    String? EMIWillContinue,
+    String? EMIsOfExistingLiabilities,
+    String? OfferedSecurityType,
+    String? PropertyValueAsPerCustomer,
+    String? LoanTenorRequested,
+    String? LTV,
+    String? IncomeType,
+    String? TotalFamilyIncome,
+    String? IncomeCanBeConsidered,
+    String? NonEarningCustomerAge,
+    String? ROI,
+    String? ProposedEMI,
+    String? IIR,
+    String? FOIR,
+  }) async {
+    try {
+
+      isCaNoteStep2Loading(true);
+
+
+      var data = await CamNoteService.saveCamnoteDetailsApi(
+        LeadId: LeadId,
+        CasesToBeForeclosedOnOrBeforeDisb: CasesToBeForeclosedOnOrBeforeDisb,
+        CasesToBeContenued: CasesToBeContenued,
+        EMIStoppedOnBeforeThisLoan: EMIStoppedOnBeforeThisLoan,
+        EMIWillContinue: EMIWillContinue,
+        EMIsOfExistingLiabilities: EMIsOfExistingLiabilities,
+        OfferedSecurityType: OfferedSecurityType,
+        PropertyValueAsPerCustomer: PropertyValueAsPerCustomer,
+        LoanTenorRequested: LoanTenorRequested,
+        LTV: LTV,
+        IncomeType: IncomeType,
+        TotalFamilyIncome: TotalFamilyIncome,
+        IncomeCanBeConsidered: IncomeCanBeConsidered,
+        NonEarningCustomerAge: NonEarningCustomerAge,
+        ROI: ROI,
+        ProposedEMI: ProposedEMI,
+        IIR: IIR,
+        FOIR: FOIR,
+      );
+
+
+      if(data['success'] == true){
+
+
+
+        saveCamnoteDetailsModel.value= SaveCamnoteDetailsModel.fromJson(data);
+
+        isCaNoteStep2Loading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        saveCamnoteDetailsModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error saveCamnoteDetailsApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isCaNoteStep2Loading(false);
+    } finally {
+
+
+      isCaNoteStep2Loading(false);
     }
   }
 

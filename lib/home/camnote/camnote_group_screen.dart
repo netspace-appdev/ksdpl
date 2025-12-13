@@ -249,7 +249,45 @@ class CamNoteGroupScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: camNoteController.isAllCamnoteSubmit.value? CustomLoadingOverlay():Container(),
                   ))),
+              if(camNoteController.currentStep.value == 1 )
+                Positioned(
+                  bottom: 0,
+                  left: 5,
+                  right: 5,
+                  child: Container(
+                    height: 70, // <-- You can adjust this as needed
+                    padding: const EdgeInsets.all(10), // Optional: add inner spacing
+                    decoration: BoxDecoration(
+                      color: Colors.white,
 
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                       // camNoteController.saveCamnoteDetailsApi
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        backgroundColor: AppColor.secondaryColor,
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        AppText.submitCamnoteDetails,
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
               if(camNoteController.isLoadingMainScreen.value==true)
                 Container()
               else
@@ -275,7 +313,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          camNoteController.saveSubmitDetails();
+                          camNoteController.submitSaveCamnoteDetails();
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(50),

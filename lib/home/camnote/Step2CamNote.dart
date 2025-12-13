@@ -630,29 +630,29 @@ class Step2CamNote extends StatelessWidget {
                         hintText: AppText.enterTotalEmi,
                       ),
 
-                      CustomLabeledTextField2(
+                      CustomLabeledTextField(
                         label: AppText.emiStoppedBefore,
                         controller: camNoteController.camEmiStoppedBeforeController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterEmiStoppedBefore,
                         isRequired: false,
-
-                        onChanged: (value) {
+                        isInputEnabled:camNoteController.enableAllCibilFields.value,
+                      /*  onChanged: (value) {
                           camNoteController.calculateEmilWillContinue();
-                        },
+                        },*/
                       ),
 
-                      CustomLabeledTextField2(
+                      CustomLabeledTextField(
                         label: AppText.emiWillContinue,
                         controller: camNoteController.camEmiWillContinueController,
                         inputType: TextInputType.number,
                         hintText: AppText.enterEmiWillContinue,
-                        isInputEnabled:false, //camNoteController.enableAllCibilFields.value,
+                        isInputEnabled:camNoteController.enableAllCibilFields.value,
                         isRequired: false,
 
-                        onChanged: (value) {
+                      /*  onChanged: (value) {
                           camNoteController.calculateLoanDetails();
-                        },
+                        },*/
 
                       ),
 
@@ -1024,7 +1024,7 @@ class Step2CamNote extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildCard("#${index+1}", [
+               /*   buildCardOuter("#${index+1}", [
                     DetailRow2(label: AppText.institution, value: item.institution??""),
                     DetailRow2(label: AppText.prodType, value:  item.accountType??""),
                     DetailRow2(label: AppText.status, value:  item.open=="Yes"?"Live":"Closed"),
@@ -1047,7 +1047,100 @@ class Step2CamNote extends StatelessWidget {
                   ],
                       Icons.info_outline
 
-                  ),
+                  ),*/
+
+                  Container(
+                    height: 430,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColor.grey4, width: 1),
+                    ),
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Column(
+                      children: [
+                        // Header
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: AppColor.primaryColor,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon( Icons.info_outline, color: Colors.white),
+                              const SizedBox(width: 5),
+                              Text(
+                                "#${index+1}",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Scrollable content
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: ListView(
+                              children: [
+                                DetailRow2(label: AppText.institution, value: item.institution??""),
+                                DetailRow2(label: AppText.prodType, value:  item.accountType??""),
+                                DetailRow2(label: AppText.status, value:  item.open=="Yes"?"Live":"Closed"),
+
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // Fixed Footer
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(12),
+                              bottomRight: Radius.circular(12),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  item.open=="Yes"?
+                                  Row(
+                                    children: [
+                                      Obx(() => Checkbox(
+                                        value: item.isSelected.value,
+                                        onChanged: (val) {
+                                          item.isSelected.value = val ?? false;
+                                          camNoteController.updateSelectedRanks();
+                                        },
+                                      )),
+                                      const Text(AppText.markForForeclosure, style: TextStyle(color: AppColor.secondaryColor,),),
+                                    ],
+                                  ):Container(),
+
+                                  SizedBox(height: 10,),
+
+                                ],
+                              ),
+                              _buildTextButton("View", context, Colors.pink, Icons.insert_drive_file, "0",item),
+                            ],
+                          ),
+
+                        ),
+                      ],
+                    ),
+                  )
 
                 ],
               ),
@@ -1137,6 +1230,64 @@ class Step2CamNote extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             child: Column(
               children: children,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildCardOuter(String title, List<Widget> children, IconData icon) {
+    return Container(
+      height: 430,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        border: Border.all(color: AppColor.grey4, width: 1),
+
+
+      ),
+      margin: EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            decoration: BoxDecoration(
+              color: AppColor.primaryColor, // Blue background
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: Colors.white,),
+                SizedBox(width: 5,),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Content section
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: ListView(
+                children: children,
+              ),
             ),
           ),
         ],

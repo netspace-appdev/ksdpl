@@ -116,7 +116,7 @@ class Addleadcontroller extends GetxController{
     required String leadId,
   }) async {
     try {
-      print("getLeadDetailByIdApi===>");
+
       isLoading(true);
 
 
@@ -152,8 +152,6 @@ class Addleadcontroller extends GetxController{
         camNoteController.camPhoneController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
         loanApplicationController.applMobController.text = getLeadDetailModel.value?.data?.mobileNumber ?? "";
 
-        print("here addlead applMobController==${getLeadDetailModel.value?.data?.mobileNumber ?? ""}");
-        print("here addlead applMobController==${loanApplicationController.applMobController.text}");
 
         phoneController.text=getLeadDetailModel.value?.data?.mobileNumber??"";
         camNoteController.camWhatsappController.text = getLeadDetailModel.value?.data?.whatsappNumber ?? "";
@@ -282,7 +280,6 @@ class Addleadcontroller extends GetxController{
 
         camNoteController.getAddIncUniqueLeadApi(uniqueLeadNumber:getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"0");
 
-        print("checkReceiptStatusForCamNoteApi before--->");
 
          /*camNoteController.checkReceiptStatusForCamNoteApi(
             Mobile: getLeadDetailModel.value?.data?.transactionDetails.toString()??"0",
@@ -478,26 +475,16 @@ class Addleadcontroller extends GetxController{
               totalInstallments.toStringAsFixed(2);
           camNoteController.camEmiStoppedBeforeController.text="0";
           camNoteController.camCurrentlyCasesBeingServedController.text= (countYes??0).toString();
-         // camNoteController.camCasesToBeForeclosedOnOrBeforeDisbController.text=result['CasesToBeForeclosedOnOrBeforeDisb'].toString();
-          //camNoteController.camCasesToBeContenuedController.text=result['CasesToBeContenued'].toString();
+
           camNoteController.camTotalEnquiriesWithin12monthsCibilController.text=result['Total_Enquiries_within_12_months'].toString();
           camNoteController.camTotalEmiController.text= (result['TotalEMI'] ?? 0).toDouble().toStringAsFixed(2);
-        //  camNoteController.camEmiWillContinueController.text=result['EMIWillContinue'].toString();
-
-
-
-
-
-
+          print("TotalEMI======>${(result['TotalEMI'] ?? 0).toDouble().toStringAsFixed(2)}");
+          print("TotalEMI controller======>${camNoteController.camTotalEmiController.text}");
           camNoteController.camTotalEnquiriesController.text=result['TotalEnquiriesMadeAsPerCibil'].toString();
           camNoteController.camTotalSanctionedAmountController.text=result['TotalSanctionedAmount'].toString();
           camNoteController.camNumberOfDaysPastDueCountController.text=result['SettlementCases'].toString();
           camNoteController.camEmisOfExistingLiabilitiesController.text=result['EmisOfExistingLiabilities'].toString();
           camNoteController.camIirController.text=result['Iir'].toString();
-
-
-          print("Iir======>${result['Iir'].toString()}");
-          print("Iir======>${camNoteController.camIirController.text}");
 
 
           camNoteController.enableAllCibilFields.value=false;
@@ -613,13 +600,17 @@ class Addleadcontroller extends GetxController{
       if (account.open == "Yes") {
         totalLiveLoan += 1;
         if (account.sanctionAmount != null) {
-          totalEMI += calculateEMI(sanctionAmount, annualInterestRate, tenureMonths);
+          //totalEMI += calculateEMI(sanctionAmount, annualInterestRate, tenureMonths);
+
+         // totalEMI += calculateEMI(principal, rate, months);
+          final installment = double.tryParse(account.installmentAmount ?? '0') ?? 0;
+          totalEMI += installment;
         }
         if (account.dateClosed == null) {
           emiWillContinue += 1;
         }
       }
-      print("totalEMI====>${totalEMI}");
+      print("totalEMI in cibil Json====>${totalEMI}");
       // Overdue calculation
       if (overdueAmount > 0) {
         totalOverdueAmount += overdueAmount;
@@ -1173,6 +1164,9 @@ class CibilAccount {
   final String? accountStatus;
   final String? assetClassification;
   final String? source;
+  final String? interestRate;
+  final String? repaymentTenure;
+
   final List<HistoryEntry>? history48Months;
   final String? installmentAmount;
   RxBool isSelected = false.obs;
@@ -1196,6 +1190,8 @@ class CibilAccount {
     this.accountStatus,
     this.assetClassification,
     this.source,
+    this.interestRate,
+    this.repaymentTenure,
     this.history48Months,
     this.installmentAmount,
   });
@@ -1220,6 +1216,8 @@ class CibilAccount {
       accountStatus: json['AccountStatus'],
       assetClassification: json['AssetClassification'],
       source: json['source'],
+      interestRate: json['InterestRate'],
+      repaymentTenure: json['RepaymentTenure'],
       installmentAmount: json['InstallmentAmount'],
       history48Months: (json['History48Months'] as List?)
           ?.map((e) => HistoryEntry.fromJson(e))
@@ -1247,6 +1245,8 @@ class CibilAccount {
       'AccountStatus': accountStatus,
       'AssetClassification': assetClassification,
       'source': source,
+      'InterestRate': interestRate,
+      'RepaymentTenure': repaymentTenure,
       'History48Months': history48Months?.map((e) => e.toJson()).toList(),
       'InstallmentAmount': installmentAmount,
     };
