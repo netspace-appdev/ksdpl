@@ -187,13 +187,17 @@ class NewDDService {
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'Utr', Utr);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'User_ID', User_ID);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'PackageId', PackageId);
-      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'LeadId', PackageId);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'LeadId', LeadId);
 
 
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
 
+
+
+      Helper.ApiReq(insertCustomerPackageRequestOnCamnote, request.fields);
+      Helper.ApiRes(insertCustomerPackageRequestOnCamnote, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

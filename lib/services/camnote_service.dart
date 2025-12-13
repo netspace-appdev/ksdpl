@@ -37,6 +37,7 @@ class CamNoteService {
   static const String sendPaymentQRCodeOnWhatsAppToCustomer = BaseUrl.baseUrl + 'CamNoteDetail/SendPaymentQRCodeOnWhatsAppToCustomer';
   static const String checkReceiptStatusForCamNote = BaseUrl.baseUrl + 'CamNoteDetail/CheckReceiptStatusForCamNote';
   static const String saveCamnoteDetails = BaseUrl.baseUrl + 'CamNoteDetail/SaveCamnoteDetails';
+  static const String getSalePackagesByLeadId = BaseUrl.baseUrl + 'CamNoteDetail/GetSalePackagesByLeadId';
 
 
 
@@ -1284,5 +1285,45 @@ class CamNoteService {
       throw Exception('Error : $e');
     }
   }
+
+
+  ///GetSalePackagesByLeadId
+  static getSalePackagesByLeadIdApi({
+    required String LeadId,
+  })
+  async {
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getSalePackagesByLeadId),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'LeadId', LeadId, fallback: "0");
+
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getSalePackagesByLeadId, request.fields);
+      Helper.ApiRes(getSalePackagesByLeadId, response.body);
+
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed : ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error : $e');
+    }
+  }
+
 
 }

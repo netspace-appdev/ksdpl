@@ -1372,8 +1372,10 @@ overflow: TextOverflow.ellipsis,
 
           NewDDController newDDController=Get.put(NewDDController());
           newDDController.getAllPrimeSecurityMasterApi();
-         // camNoteController.multiPackageList.clear();
-          //camNoteController.multiPackageList.add(MultiPackageModelController());
+          camNoteController.multiPackageList.clear();
+
+
+          camNoteController.getSalePackagesByLeadIdApi(LeadId: leadId);
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {

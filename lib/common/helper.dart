@@ -862,7 +862,9 @@ class AppText{
   static const String jobDescription  = "Job Desicription";
 
   static const String transactionDetails  = "UTR";
+  static const String invoiceNumber  = "Invoice Number"; //UTR
   static const String enterTransactionDetails  = "Enter UTR";
+  static const String enterinvoiceNumber  = "Enter invoice Number";
   static const String remark  = "Remark";
   static const String enterRemark  = "Enter Remark";
   static const String enterZipcode  = "Please Add Zipcode in Step 1";
@@ -1172,6 +1174,9 @@ class AppText{
   static const String installmentAmount="Installment Amount";
   static const String DPD="DPD";
   static const String postDueAmount="Post Due Amount";
+  static const String addPackage="Add Package";
+  static const String generateQR="Generate QR";
+  static const String paymentStatus="Payment Status";
 
 
 

@@ -36,6 +36,8 @@ import '../../models/camnote/GetCamNoteLeadIdModel.dart';
 import '../../models/camnote/GetPackageDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart' as otherBankBranch;
 import '../../models/camnote/GetProductDetailsByFilterModel.dart' as pdFModel;
+import '../../models/camnote/GetSalePackagesByLeadIdModel.dart';
+import '../../models/camnote/InsertCustomerPackageRequestOnCamnoteModel.dart';
 import '../../models/camnote/RequestForFinancialServicesModel.dart';
 import '../../models/camnote/SaveCamnoteDetailsModel.dart';
 import '../../models/camnote/SendMailForLocationOfCustomerModel.dart';
@@ -114,6 +116,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var fetchBankDetailSegKSDPLProdModel = Rxn<otherBank.FetchBankDetailSegKSDPLProdModel>(); //
   var getProductDetailBySegmentAndProductModel = Rxn<otherBankBranch.GetProductDetailBySegmentAndProductModel>(); //
   var saveCamnoteDetailsModel = Rxn<SaveCamnoteDetailsModel>(); //
+  var insertCustomerPackageRequestOnCamnoteModel = Rxn<InsertCustomerPackageRequestOnCamnoteModel>(); //
+  var getSalePackagesByLeadIdModel = Rxn<GetSalePackagesByLeadIdModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
 
 
@@ -3633,21 +3637,21 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         print("superiorMobile==>${getBankerDetailsByIdModel.value?.data?.superiorMobile??""}");
 
-        getBankerDetailsByIdModel.value= GetBankerDetailsByIdModel.fromJson(data);
+        insertCustomerPackageRequestOnCamnoteModel.value= InsertCustomerPackageRequestOnCamnoteModel.fromJson(data);
 
         isBankerSuperiorLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
-        getBankerDetailsByIdModel.value=null;
+        insertCustomerPackageRequestOnCamnoteModel.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 
 
     } catch (e) {
-      print("Error getBankerDetailsByIdModel: $e");
+      print("Error insertCustomerPackageRequestOnCamnoteModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
 
@@ -3739,6 +3743,87 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
+
+  ///
+  Future<void>  getSalePackagesByLeadIdApi({
+    required String LeadId,
+  }) async {
+    try {
+
+      isLoadingMainScreen(true);
+
+
+      var data = await CamNoteService.getSalePackagesByLeadIdApi(
+        LeadId: LeadId,
+
+      );
+
+
+      if(data['success'] == true){
+
+        print("superiorMobile==>${getBankerDetailsByIdModel.value?.data?.superiorMobile??""}");
+
+        getSalePackagesByLeadIdModel.value= GetSalePackagesByLeadIdModel.fromJson(data);
+        populateMultiPackage();
+        isLoadingMainScreen(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        getSalePackagesByLeadIdModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+        multiPackageList.add(MultiPackageModelController());
+      }
+
+
+    } catch (e) {
+      print("Error getSalePackagesByLeadIdModel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoadingMainScreen(false);
+
+    } finally {
+
+
+      isLoadingMainScreen(false);
+
+    }
+  }
+
+
+
+  void populateMultiPackage() async {
+    print("populateMultiPackage=========>: ""${getSalePackagesByLeadIdModel.value?.data}",
+    );
+
+    final multiPackageData = getSalePackagesByLeadIdModel.value?.data??[];
+
+    if (multiPackageData == null || multiPackageData.isEmpty) {
+      print("No populateMultiPackage data found");
+      return;
+    }
+
+    for (var item in multiPackageData) {
+      final multiPkController = MultiPackageModelController();
+      await getAllPackageMasterApi();
+      multiPkController.selectedPackageMulti.value = item.id?? 0;
+      multiPkController.camPackageAmtMultiController.text = item.amount.toString() ?? '';
+     // multiPkController.camReceivableAmtMultiController.text = item..toString() ?? '';
+     multiPkController.camReceivableDateMultiController.text = item.receiveDate.toString() ?? '';
+     //multiPkController.camTransactionDetailsUtrMultiController.text = item.receiveDate.toString() ?? '';
+
+
+
+      multiPackageList.add(multiPkController);
+
+      print(
+        "multiPackageList length for checking=========>: "
+            "${multiPackageList.length}",
+      );
+    }
+  }
 }
 
 extension ParseStringExtension on String? {

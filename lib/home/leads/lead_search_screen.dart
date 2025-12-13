@@ -27,6 +27,7 @@ import '../../../custom_widgets/CustomDropdown.dart';
 import '../../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../../custom_widgets/CustomLabeledTextField.dart';
 import '../../common/storage_service.dart';
+import '../../controllers/camnote/MultiPackageModelController.dart';
 import '../../controllers/camnote/camnote_controller.dart';
 import '../../controllers/leads/leadlist_controller.dart';
 import '../../controllers/leads/loan_appl_controller.dart';
@@ -1087,6 +1088,10 @@ class LeadSearchScreen extends StatelessWidget {
           camNoteController.getProductDetailsByFilterModel.value=null;
           NewDDController newDDController=Get.put(NewDDController());
           newDDController.getAllPrimeSecurityMasterApi();
+          camNoteController.multiPackageList.clear();
+          camNoteController.multiPackageList.add(MultiPackageModelController());
+
+          camNoteController.getSalePackagesByLeadIdApi(LeadId: leadId);
           Get.toNamed("/camNoteGroupScreen",);
 
         }else if (label_code == "add_feedback") {
