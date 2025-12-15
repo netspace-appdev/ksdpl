@@ -152,6 +152,7 @@ class Step1CamNote extends StatelessWidget {
                               children: [
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
                                       AppText.paymentStatus,
@@ -162,11 +163,12 @@ class Step1CamNote extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      "FAILURE",
+                                     mp.multiPackageStatus.value??"N/A",
                                       style: GoogleFonts.merriweather(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w900,
-                                        color: AppColor.redColor,
+                                        color: mp.multiPackageStatus.value=="N/A"? AppColor.blackColor: mp.multiPackageStatus.value=="SUCCESS"?AppColor.greenColor:
+                                        mp.multiPackageStatus.value=="FAILURE"?AppColor.redColor:AppColor.blackColor,
 
                                       ),
                                     ),
@@ -331,9 +333,9 @@ class Step1CamNote extends StatelessWidget {
                                 }):
                                 Container(),
 
-                               /* SizedBox(height: 20),
-
-                                Obx((){
+                                SizedBox(height: 20),
+                                if(mp.canBeDeleted.value==true)
+                                  Obx((){
                                   if(camNoteController.isLoading.value){
                                     return const Align(
                                       alignment: Alignment.center,
@@ -367,9 +369,13 @@ class Step1CamNote extends StatelessWidget {
                                         )
                                     ),
                                   );
-                                })*/
+                                })
                               ],
-                            )
+                            ),
+                            if (index != camNoteController.multiPackageList.length - 1)
+                              Helper.customDivider(color: AppColor.secondaryColor),
+
+                            const SizedBox(height: 10,)
                           ],
                         );
                       }),
@@ -380,7 +386,7 @@ class Step1CamNote extends StatelessWidget {
                   ],
                 ),
 
-                Helper.customDivider(color: Colors.grey),
+
 
                 SizedBox(height: 10,),
 

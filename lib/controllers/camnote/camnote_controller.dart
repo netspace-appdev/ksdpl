@@ -605,7 +605,14 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   ///multi package
   void addMultiPackage() {
-    multiPackageList.add(MultiPackageModelController());
+    /*multiPackageList.add(MultiPackageModelController());*/
+
+    final mp = MultiPackageModelController();
+
+    mp.canBeDeleted.value = true; // 🔥 THIS is the missing piece
+
+    multiPackageList.add(mp);
+
   }
 
   void removeMultiPackage(int index) {
@@ -3794,7 +3801,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
 
-  void populateMultiPackage() async {
+/*  void populateMultiPackage() async {
     print("populateMultiPackage=========>: ""${getSalePackagesByLeadIdModel.value?.data}",
     );
 
@@ -3809,6 +3816,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       final multiPkController = MultiPackageModelController();
       await getAllPackageMasterApi();
       multiPkController.selectedPackageMulti.value = item.id?? 0;
+      print("multiPkController.selectedPackageMulti.value===>${multiPkController.selectedPackageMulti.value} }");
+      print("item.id.toString()===>${item.id.toString()} }");
       multiPkController.camPackageAmtMultiController.text = item.amount.toString() ?? '';
      // multiPkController.camReceivableAmtMultiController.text = item..toString() ?? '';
      multiPkController.camReceivableDateMultiController.text = item.receiveDate.toString() ?? '';
@@ -3818,10 +3827,32 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       multiPackageList.add(multiPkController);
 
-      print(
-        "multiPackageList length for checking=========>: "
-            "${multiPackageList.length}",
-      );
+    }
+  }*/
+
+  void populateMultiPackage() async {
+    final multiPackageData = getSalePackagesByLeadIdModel.value?.data ?? [];
+
+    if (multiPackageData.isEmpty) {
+      print("No populateMultiPackage data found");
+      return;
+    }
+
+    // 🔥 Load dropdown items first
+    await getAllPackageMasterApi();
+
+    for (var item in multiPackageData) {
+      final multiPkController = MultiPackageModelController();
+
+      multiPkController.selectedPackageMulti.value = item.packageId ?? 0;
+      multiPkController.camPackageAmtMultiController.text =item.amount?.toString() ?? '';
+      multiPkController.camReceivableAmtMultiController.text =   item.txnStatus == "SUCCESS" ? item.payerAmount?.toString() ?? ''  : "";
+      multiPkController.camReceivableDateMultiController.text = Helper.convertFromIso8601(item.txnCompletionDate?.toString() ?? '');
+      multiPkController.camTransactionDetailsUtrMultiController.text =  item.billNumber?.toString() ?? '';
+      multiPkController.multiPackageStatus.value =  item.txnStatus?.toString() ?? 'N/A';
+      multiPkController.canBeDeleted.value =  false;
+
+      multiPackageList.add(multiPkController);
     }
   }
 }
