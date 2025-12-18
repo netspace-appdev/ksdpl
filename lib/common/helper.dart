@@ -1106,17 +1106,30 @@ class AppText{
   static const String standardCount = "Standard Count";
   static const String enterStandardCount = "Enter Standard Count";
 
+
+  static const String standardCases = "Standard Cases";
+  static const String enterStandardCases = "Enter Standard Cases";
+
   static const String numberOfDaysPastDueCount = "Number of days past due Count";
   static const String enterNumberOfDaysPastDueCount = "Enter Number of days past due Count";
 
   static const String lossCount = "Loss Count";
   static const String enterLossCount = "Enter Loss Count";
 
+  static const String lossCases = "Loss Cases";
+  static const String enterLossCases = "Enter Loss Cases";
+
   static const String substandardCount = "Substandard Count";
   static const String enterSubstandardCount = "Enter Substandard Count";
 
+  static const String substandardCases = "Substandard Cases";
+  static const String enterSubstandardCases = "Enter Substandard Cases";
+
   static const String doubtfulCount = "Doubtful Count";
   static const String enterDoubtfulCount = "Enter Doubtful Count";
+
+  static const String doubtfulCases = "Doubtful Cases";
+  static const String enterDoubtfulCases = "Enter Doubtful Cases";
 
   static const String specialMentionAccountCount = "Special Mention account Count";
   static const String enterSpecialMentionAccountCount = "Enter Special Mention account Count";
@@ -1126,6 +1139,9 @@ class AppText{
 
   static const String totalCounts = "Total Counts";
   static const String enterTotalCounts = "Enter Total Counts";
+
+  static const String totalCases = "Total Cases";
+  static const String enterTotalCases = "Enter Total Cases";
 
   static const String currentlyCasesBeingServed = "Currently Cases Being Served";
   static const String enterCurrentlyCasesBeingServed = "Enter Currently Cases Being Served";

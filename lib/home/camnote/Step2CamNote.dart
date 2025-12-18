@@ -270,17 +270,17 @@ class Step2CamNote extends StatelessWidget {
                       SizedBox(height: 20,),
 
                       CustomLabeledTextField(
-                        label: AppText.standardCount,
+                        label: AppText.standardCases,
                         controller: camNoteController.camStandardCountController,
                         inputType: TextInputType.number,
-                        hintText: AppText.enterStandardCount,
+                        hintText: AppText.enterStandardCases,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
                       CustomLabeledTextField(
-                        label: AppText.doubtfulCount,
+                        label: AppText.doubtfulCases,
                         controller: camNoteController.camDoubtfulCountController,
                         inputType: TextInputType.number,
-                        hintText: AppText.enterDoubtfulCount,
+                        hintText: AppText.enterDoubtfulCases,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
                       CustomLabeledTextField(
@@ -299,10 +299,10 @@ class Step2CamNote extends StatelessWidget {
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
                       CustomLabeledTextField(
-                        label: AppText.lossCount,
+                        label: AppText.lossCases,
                         controller: camNoteController.camLossCountController,
                         inputType: TextInputType.number,
-                        hintText: AppText.enterLossCount,
+                        hintText: AppText.enterLossCases,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
                       CustomLabeledTextField(
@@ -314,18 +314,18 @@ class Step2CamNote extends StatelessWidget {
                       ),
 
                       CustomLabeledTextField(
-                        label: AppText.substandardCount,
+                        label: AppText.substandardCases,
                         controller: camNoteController.camSubstandardCountController,
                         inputType: TextInputType.number,
-                        hintText: AppText.enterSubstandardCount,
+                        hintText: AppText.enterSubstandardCases,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
 
                       CustomLabeledTextField(
-                        label: AppText.totalCounts,
+                        label: AppText.totalCases,
                         controller: camNoteController.camTotalCountsController,
                         inputType: TextInputType.number,
-                        hintText: AppText.enterTotalCounts,
+                        hintText: AppText.enterTotalCases,
                         isInputEnabled: camNoteController.enableAllCibilFields.value,
                       ),
                       ///ends

@@ -351,6 +351,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var selectedBankerBranch = Rxn<int>();
   var selectedIndexGenCibil = (-1).obs;
   var enableAllCibilFields = true.obs;
+
   var fromDoableOrInterested="".obs;
   void selectCheckboxCibil(int index) {
     selectedIndexGenCibil.value = index;
@@ -610,6 +611,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     final mp = MultiPackageModelController();
 
     mp.canBeDeleted.value = true; // 🔥 THIS is the missing piece
+    mp.enableAllPackageFields.value = true; // 🔥 THIS is the missing piece
 
     multiPackageList.add(mp);
 
@@ -3697,7 +3699,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       isCaNoteStep2Loading(true);
 
-
+      isAllCamnoteSubmit(true);
       var data = await CamNoteService.saveCamnoteDetailsApi(
         LeadId: LeadId,
         CasesToBeForeclosedOnOrBeforeDisb: CasesToBeForeclosedOnOrBeforeDisb,
@@ -3728,6 +3730,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
         isCaNoteStep2Loading(false);
 
+        SnackbarHelper.showSnackbar(title: "Submitted Successfully", message: saveCamnoteDetailsModel.value?.message??"Saved Successfully");
+
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
@@ -3743,10 +3747,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       ToastMessage.msg(AppText.somethingWentWrong);
 
       isCaNoteStep2Loading(false);
+      isAllCamnoteSubmit(false);
     } finally {
 
 
       isCaNoteStep2Loading(false);
+      isAllCamnoteSubmit(false);
     }
   }
 
@@ -3853,6 +3859,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       multiPkController.canBeDeleted.value =  false;
 
       multiPackageList.add(multiPkController);
+
+      multiPkController.enableAllPackageFields.value=false;
     }
   }
 }

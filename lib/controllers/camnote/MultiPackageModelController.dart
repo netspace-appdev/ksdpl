@@ -6,6 +6,7 @@ class MultiPackageModelController {
   var selectedPackageMulti = Rxn<int>();
   var multiPackageStatus = Rxn<String>();
   var canBeDeleted = Rxn<bool>();
+  var enableAllPackageFields = Rxn<bool>();
   final TextEditingController camPackageAmtMultiController = TextEditingController();
   final TextEditingController camReceivableAmtMultiController = TextEditingController();
   final TextEditingController camReceivableDateMultiController = TextEditingController();

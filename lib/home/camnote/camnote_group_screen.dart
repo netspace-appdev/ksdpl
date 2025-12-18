@@ -249,7 +249,12 @@ class CamNoteGroupScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: camNoteController.isAllCamnoteSubmit.value? CustomLoadingOverlay():Container(),
                   ))),
-              if(camNoteController.currentStep.value == 1 )
+
+              ///Step 2 submission
+              if(camNoteController.isLoadingMainScreen.value==true)
+                Container()
+              else
+                if(camNoteController.currentStep.value == 1 )
                 Positioned(
                   bottom: 0,
                   left: 5,
@@ -270,7 +275,8 @@ class CamNoteGroupScreen extends StatelessWidget {
                     ),
                     child: ElevatedButton(
                       onPressed: () {
-                       // camNoteController.saveCamnoteDetailsApi
+                        //Step 2 Submission
+                        camNoteController.submitSaveCamnoteDetails();
 
                       },
                       style: ElevatedButton.styleFrom(
@@ -288,6 +294,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+              ///Step 1 submission
               if(camNoteController.isLoadingMainScreen.value==true)
                 Container()
               else
@@ -314,7 +321,8 @@ class CamNoteGroupScreen extends StatelessWidget {
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          camNoteController.submitSaveCamnoteDetails();
+                          //Step 1 Submission
+                          camNoteController.saveSubmitDetails();
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size.fromHeight(50),

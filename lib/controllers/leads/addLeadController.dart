@@ -645,7 +645,7 @@ class Addleadcontroller extends GetxController{
 
       // Asset classification
       switch (account.assetClassification) {
-        case "STD":
+        case "STD" || null:
           standardCount++;
           break;
         case "SUB":

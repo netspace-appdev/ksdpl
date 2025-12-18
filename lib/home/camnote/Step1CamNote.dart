@@ -136,13 +136,14 @@ class Step1CamNote extends StatelessWidget {
                                 },
                                 onClear: (){
                                   camNoteController.selectedPackage.value = 0;
-                                  camNoteController.camPackageAmtController..clear();
+                                  camNoteController.camPackageAmtController.clear();
                                   camNoteController.camReceivableAmtController.clear();
                                   camNoteController.camReceivableDateController.clear();
                                   camNoteController.camTransactionDetailsController.clear();
                                   camNoteController.camRemarkController.clear();
 
                                 },
+                                isEnabled: mp.enableAllPackageFields.value??true,
                               );
                             }),
                             const SizedBox(height: 10),
@@ -243,7 +244,8 @@ class Step1CamNote extends StatelessWidget {
                               controller: mp.camPackageAmtMultiController,
                               inputType: TextInputType.number,
                               hintText: AppText.enterPackageAmount,
-                              isInputEnabled: false,
+                              isInputEnabled: mp.enableAllPackageFields.value??true,
+
                               isRequired: camNoteController.selectedPackage.value==0?false:true,
                             ),
 
@@ -254,7 +256,7 @@ class Step1CamNote extends StatelessWidget {
                               inputType: TextInputType.number,
                               hintText: AppText.enterReceivableAmount,
                               isRequired: camNoteController.selectedPackage.value==0?false:true,
-
+                              isInputEnabled: mp.enableAllPackageFields.value??true,
                             ),
 
                             CustomLabeledPickerTextField(
@@ -266,6 +268,7 @@ class Step1CamNote extends StatelessWidget {
                               isDateField: true,
                               isFutureDisabled: true,
                               isRequired: camNoteController.selectedPackage.value==0?false:true,
+                              enabled:mp.enableAllPackageFields.value??true,
                             ),
 
                             CustomLabeledTextField(
@@ -274,6 +277,7 @@ class Step1CamNote extends StatelessWidget {
                               inputType: TextInputType.name,
                               hintText: AppText.enterinvoiceNumber,
                               isRequired: camNoteController.selectedPackage.value==0?false:true,
+                              isInputEnabled: mp.enableAllPackageFields.value??true,
                             ),
 
                            /* CustomLabeledTextField(
@@ -319,9 +323,9 @@ class Step1CamNote extends StatelessWidget {
                                             ),
                                             padding: EdgeInsets.all(10),
 
-                                            child: Text(
+                                            child: const Text(
                                               AppText.addPackage,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                                 color: AppColor.primaryColor,
