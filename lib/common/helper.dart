@@ -779,6 +779,7 @@ class AppText{
   static const String  LOAN_REPAYMENT_HISTORY = "LOAN REPAYMENT HISTORY";
   static const String loanAccountSummary = "Loan Account Summary";
   static const String LOAN_SYNOPSIS = "LOAN SYNOPSIS";
+  static const String downloadCibil = "Download CIBIL";
 
   static const String todaycall = "Today's Calls";
   static const String convertedToInterested = "Converted to Interested";

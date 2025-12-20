@@ -1374,7 +1374,6 @@ overflow: TextOverflow.ellipsis,
           newDDController.getAllPrimeSecurityMasterApi();
           camNoteController.multiPackageList.clear();
 
-
           camNoteController.getSalePackagesByLeadIdApi(LeadId: leadId);
           Get.toNamed("/camNoteGroupScreen",);
 

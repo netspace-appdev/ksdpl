@@ -11,6 +11,7 @@ import '../../common/validation_helper.dart';
 import '../../controllers/camnote/camnote_controller.dart';
 import '../../controllers/lead_dd_controller.dart';
 
+import '../../controllers/leads/leadlist_controller.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
@@ -48,7 +49,21 @@ class Step2CamNote extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(AppText.downloadCibil, style: TextStyle(color: AppColor.secondaryColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                  _buildIconButtonDownload(
+                    icon: AppImage.downloadImg,
+                    disableIcon: AppImage.downloadImg_disable,
+                    context: context,
+                    // url: lead.filePath
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               ///Section A
               ExpansionTile(
                 initiallyExpanded: true,
@@ -1385,6 +1400,40 @@ class Step2CamNote extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+  Widget _buildIconButtonDownload({
+    required String icon,
+    required String disableIcon,
+    required BuildContext context,
+    String ? url,
+  })
+  {
+    return IconButton(
+      onPressed:url==null || url==""?null: () {
+        print("button tapped");
+        LeadListController leadListController=Get.find();
+        leadListController.launchInBrowser(url??"");
+      },
+
+      icon: Container(
+        width: 50,
+
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration:  BoxDecoration(
+          border: Border.all(color: AppColor.secondaryColor),
+          color: AppColor.appWhite,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(2),
+          ),
+
+        ),
+        child: Center(
+          // child: Icon(icon, color: color),
+          child: url==null || url=="" ?Image.asset(disableIcon, height: 12,) :Image.asset(icon, height: 12,),
+        ),
+      ),
     );
   }
 }

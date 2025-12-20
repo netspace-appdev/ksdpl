@@ -3841,6 +3841,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     if (multiPackageData.isEmpty) {
       print("No populateMultiPackage data found");
+      final multiPkController = MultiPackageModelController();
+      multiPkController.canBeDeleted.value =  true;
+      multiPackageList.add(multiPkController);
       return;
     }
 
