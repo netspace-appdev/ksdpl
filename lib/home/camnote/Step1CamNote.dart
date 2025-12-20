@@ -129,7 +129,7 @@ class Step1CamNote extends StatelessWidget {
                                       );
                                     }*/
                                     camNoteController.getPackageDetailsByIdApi(packageId: mp.selectedPackageMulti.value.toString());
-                                    camNoteController.maxAllowedBank.value = value?.noOfBank ??0;
+                                   /* camNoteController.maxAllowedBank.value = value?.noOfBank ??0;*/
 
 
                                   }
@@ -311,7 +311,16 @@ class Step1CamNote extends StatelessWidget {
                                   return Align(
                                     alignment: Alignment.centerRight,
                                     child: IconButton(
-                                        onPressed: (){
+                                        onPressed:(){
+                                          if (!camNoteController.canAddNewPackage()) {
+                                            SnackbarHelper.showSnackbar(
+                                              title: AppText.actionNotAllowed,
+                                              message:  AppText.actionNotAllowedMsg,
+                                              backgroundColor: AppColor.primaryColor,
+                                              textColor: AppColor.appWhite
+                                            );
+                                            return;
+                                          }
                                           camNoteController.addMultiPackage();
                                         },
                                         icon: Container(

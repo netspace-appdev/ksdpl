@@ -860,6 +860,8 @@ class LeadListMain extends StatelessWidget  {
                           ),
                         ],
                       ),
+
+
                     if(lead.leadStage.toString()=="6" || lead.leadStage.toString()=="8"|| lead.leadStage.toString()=="9"
                         ||lead.leadStage.toString()=="10" ||  lead.leadStage.toString()=="11" ||lead.leadStage.toString()=="12")
                       Column(

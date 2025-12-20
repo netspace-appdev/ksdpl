@@ -1194,6 +1194,8 @@ class AppText{
   static const String addPackage="Add Package";
   static const String generateQR="Generate QR";
   static const String paymentStatus="Payment Status";
+  static const String actionNotAllowed="Action Not Allowed";
+  static const String actionNotAllowedMsg="Please complete the previous package payment successfully before adding a new package.";
 
 
 

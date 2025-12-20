@@ -486,6 +486,8 @@ class Addleadcontroller extends GetxController{
           camNoteController.camEmisOfExistingLiabilitiesController.text=result['EmisOfExistingLiabilities'].toString();
           camNoteController.camIirController.text=result['Iir'].toString();
 
+          camNoteController.cibilJsonPdfUrl.value=result['Pdf_Url'].toString();
+
 
           camNoteController.enableAllCibilFields.value=false;
 
@@ -530,6 +532,8 @@ class Addleadcontroller extends GetxController{
     final parsedData = json.decode(cibilJson);
     final cibilData = parsedData['Data'];
     print("cibilData---->${cibilData}");
+    print("cibil json url---->${cibilData?['Pdf_Url']}");
+    final pdf_url=cibilData?['Pdf_Url'];
     final addressList = cibilData?['Credit_Report']?['CCRResponse']?['CIRReportDataLst']?[0]?['CIRReportData']?['RetailAccountDetails'];
 
     final retailList =
@@ -708,6 +712,7 @@ class Addleadcontroller extends GetxController{
       'CasesToBeContenued': "0",
       'EmisOfExistingLiabilities': "0",
       'Iir': "0",
+      'Pdf_Url': pdf_url,
     };
   }
 

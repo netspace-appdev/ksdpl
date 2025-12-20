@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -49,21 +51,7 @@ class Step2CamNote extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(AppText.downloadCibil, style: TextStyle(color: AppColor.secondaryColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                  _buildIconButtonDownload(
-                    icon: AppImage.downloadImg,
-                    disableIcon: AppImage.downloadImg_disable,
-                    context: context,
-                    // url: lead.filePath
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+
               ///Section A
               ExpansionTile(
                 initiallyExpanded: true,
@@ -77,6 +65,23 @@ class Step2CamNote extends StatelessWidget {
                  Column(
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
+
+                     Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         const Text(AppText.downloadCibil, style: TextStyle(color: AppColor.secondaryColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                         _buildIconButtonDownload(
+                           icon: AppImage.downloadImg,
+                           disableIcon: AppImage.downloadImg_disable,
+                           context: context,
+                           url: camNoteController.cibilJsonPdfUrl.value
+                         ),
+                       ],
+                     ),
+                     const SizedBox(
+                       height: 20,
+                     ),
+
                      const Text(AppText.CIBIL_REPORT_OVERVIEW, style: TextStyle(color: AppColor.secondaryColor, fontSize: 16, fontWeight: FontWeight.w500),),
                      SizedBox(height: 20,),
                         Column(
@@ -1412,7 +1417,7 @@ class Step2CamNote extends StatelessWidget {
   {
     return IconButton(
       onPressed:url==null || url==""?null: () {
-        print("button tapped");
+        print("button tapped===>${url}");
         LeadListController leadListController=Get.find();
         leadListController.launchInBrowser(url??"");
       },

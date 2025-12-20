@@ -447,7 +447,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   bool isBankerSelected(String bankId) => selectedBankers.contains(bankId);
   final RxSet<String> camNoteLeadBankIds = <String>{}.obs;
   var camNoteLeadMap = <String, String>{}.obs;
-
+  var cibilJsonPdfUrl = "".obs;
   void clearBankerDetails(){
 
     selectedBankerBranch.value= null;
@@ -1279,6 +1279,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     selectedBankers.clear();
     uniqueLeadNUmber="";
     loanApplicationNumber="";
+    cibilJsonPdfUrl.value="";
     clearStep1();
     clearStep2();
     clearBankDetails();
@@ -3647,7 +3648,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         print("superiorMobile==>${getBankerDetailsByIdModel.value?.data?.superiorMobile??""}");
 
         insertCustomerPackageRequestOnCamnoteModel.value= InsertCustomerPackageRequestOnCamnoteModel.fromJson(data);
-
+        await getSalePackagesByLeadIdApi(LeadId:LeadId??"0" );
         isBankerSuperiorLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -3756,6 +3757,12 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
+  bool canAddNewPackage() {
+    if (multiPackageList.isEmpty) return true;
+
+    final lastPackage = multiPackageList.last;
+    return lastPackage.multiPackageStatus.value == "SUCCESS";
+  }
 
   ///
   Future<void>  getSalePackagesByLeadIdApi({
@@ -3777,7 +3784,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         print("superiorMobile==>${getBankerDetailsByIdModel.value?.data?.superiorMobile??""}");
 
         getSalePackagesByLeadIdModel.value= GetSalePackagesByLeadIdModel.fromJson(data);
-        populateMultiPackage();
+        multiPackageList.clear();
+        await populateMultiPackage();
         isLoadingMainScreen(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
@@ -3836,7 +3844,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }*/
 
-  void populateMultiPackage() async {
+  Future<void> populateMultiPackage() async {
     final multiPackageData = getSalePackagesByLeadIdModel.value?.data ?? [];
 
     if (multiPackageData.isEmpty) {
@@ -3844,6 +3852,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       final multiPkController = MultiPackageModelController();
       multiPkController.canBeDeleted.value =  true;
       multiPackageList.add(multiPkController);
+      maxAllowedBank.value = 0;
       return;
     }
 
@@ -3860,7 +3869,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       multiPkController.camTransactionDetailsUtrMultiController.text =  item.billNumber?.toString() ?? '';
       multiPkController.multiPackageStatus.value =  item.txnStatus?.toString() ?? 'N/A';
       multiPkController.canBeDeleted.value =  false;
-
+      maxAllowedBank.value = item.txnStatus == "SUCCESS" ? (item.noOfBank?.toInt()??0): 0;
       multiPackageList.add(multiPkController);
 
       multiPkController.enableAllPackageFields.value=false;

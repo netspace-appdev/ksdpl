@@ -299,7 +299,7 @@ class CamNoteGroupScreen extends StatelessWidget {
                 Container()
               else
 
-                if(camNoteController.currentStep.value == 0 && (camNoteController.getCamNoteLeadIdModel.value!.data!=null && camNoteController.getCamNoteLeadIdModel.value!.data!.isEmpty) )
+                if(camNoteController.currentStep.value == 0 && camNoteController.getCamNoteLeadIdModel.value?.data?.isEmpty == true )
 
                   Positioned(
                     bottom: 0,
