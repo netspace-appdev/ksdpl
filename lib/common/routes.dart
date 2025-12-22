@@ -14,6 +14,7 @@ import '../exp.dart';
 import '../home/EditProfile2.dart';
 import '../home/InsuranceIllustrations/InsuranceIllustrationDetailLeads.dart';
 import '../home/LeadListScreen.dart';
+import '../home/SeniorList/seniorListScreen.dart';
 import '../home/attandance/manage_leave_screen.dart';
 import '../home/attandance/view_attendance.dart';
 import '../home/camnote/cam_note_details.dart';
@@ -88,4 +89,5 @@ final routes = [
   GetPage(name: '/openPollDetailsScreen', page: () => OpenPollDetailsScreen()),
   GetPage(name: '/disbursedHistory', page: () => DisbursedHistoryListScreen()),
   GetPage(name: '/LoanApplicationOnlyDetails', page: () => LoanApplicationOnlyDetailsScreen()),
+  GetPage(name: '/seniorlistScreen', page: () => SeniorlistScreen()),
 ];

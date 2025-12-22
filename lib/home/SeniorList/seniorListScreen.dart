@@ -21,9 +21,9 @@ import '../custom_drawer.dart';
 
 class SeniorlistScreen extends StatelessWidget {
  // const SeniorlistScreen({super.key});
-  SeniorScreenController seniorScreenController = Get.put(SeniorScreenController());
-  LeadDDController leadDDController = Get.put(LeadDDController());
-  AddProductController addProductController = Get.put(AddProductController());
+  SeniorScreenController seniorScreenController = Get.find();
+  LeadDDController leadDDController = Get.find();
+  AddProductController addProductController = Get.find();
 
 
   @override
@@ -314,11 +314,11 @@ class SeniorlistScreen extends StatelessWidget {
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.stateName.toString(),
                   selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedState.value,
+                        (item) => item.id.toString() == seniorScreenController.selectedState.value,
                   ),
                   onChanged: (value) {
-                    leadDDController.selectedState.value =  value?.id?.toString();
-                    leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+                    seniorScreenController.selectedState.value =  value?.id?.toString();
+                    leadDDController.getDistrictByStateIdApi(stateId: seniorScreenController.selectedState.value);
                   },
                 );
               }),
@@ -346,11 +346,11 @@ class SeniorlistScreen extends StatelessWidget {
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.districtName.toString(),
                   selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedDistrict.value,
+                        (item) => item.id.toString() == seniorScreenController.selectedDistrict.value,
                   ),
                   onChanged: (value) {
-                    leadDDController.selectedDistrict.value =  value?.id?.toString();
-                    leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+                    seniorScreenController.selectedDistrict.value =  value?.id?.toString();
+                    leadDDController.getCityByDistrictIdApi(districtId: seniorScreenController.selectedDistrict.value);
                   },
                 );
               }),
@@ -378,10 +378,10 @@ class SeniorlistScreen extends StatelessWidget {
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.cityName.toString(),
                   selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
-                        (item) => item.id.toString() == leadDDController.selectedCity.value,
+                        (item) => item.id.toString() == seniorScreenController.selectedCity.value,
                   ),
                   onChanged: (value) {
-                    leadDDController.selectedCity.value =  value?.id?.toString();
+                    seniorScreenController.selectedCity.value =  value?.id?.toString();
                   },
                 );
               }),
@@ -500,13 +500,13 @@ class SeniorlistScreen extends StatelessWidget {
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.productCategoryName.toString(),
                   selectedValue: addProductController.productCategoryList.firstWhereOrNull(
-                        (item) => item.id == addProductController.selectedProductCategory.value,
+                        (item) => item.id == seniorScreenController.selectedProductCategory.value,
                   ),
                   onChanged: (value) {
-                    addProductController.selectedProductCategory.value =  value?.id;
+                    seniorScreenController.selectedProductCategory.value =  value?.id;
                   },
                   onClear: (){
-                    addProductController.selectedProductCategory.value = 0;
+                    seniorScreenController.selectedProductCategory.value = 0;
                     addProductController.productCategoryList.clear(); // reset dependent dropdown
 
                   },
@@ -516,7 +516,7 @@ class SeniorlistScreen extends StatelessWidget {
           ),
           onSubmit: () {
             seniorScreenController.filterSubmit();
-            Navigator.pop(context);
+           Get.back();
           },
         );
       },

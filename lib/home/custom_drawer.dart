@@ -343,10 +343,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ],
                 ),*/
 
-                ExpansionTile(
+               /* ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title:const Text(AppText.manageSenorList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                  leading: Image.asset(AppImage.division, height: 20,),
+                  leading:Image.asset(AppImage.manInBlack, height: 20,),
                   children: [
                     ListTile(
                       leading:  Icon(Icons.list_alt_rounded,color: AppColor.blackColor),
@@ -365,7 +365,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       },
                     ),
                   ],
-                ),
+                ),*/
 
 
                 ExpansionTile(
@@ -506,6 +506,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       },
                     ),
                   ],
+                ),
+
+                CustomListTile(
+                  title:  AppText.manageSenorList,
+                  imagePath:AppImage.personIcon,
+                  onTap: () {
+                    SeniorScreenController seniorScreenController =Get.put(SeniorScreenController());
+                    AddProductController addProductController =Get.put(AddProductController());
+                    LeadDDController leadDDController = Get.put(LeadDDController());
+
+                    addProductController =Get.put(AddProductController());
+                    seniorScreenController.getAllSeniorListApi();
+                    addProductController.getAllProductCategoryApi();
+                    leadDDController.getAllJobRoleListApi();
+                    Get.toNamed("/seniorlistScreen");
+                  },
                 ),
                 
                 CustomListTile(
