@@ -10,6 +10,7 @@ import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/addLeadController.dart';
 import 'package:ksdpl/controllers/vacancyListController/vacancyListController.dart';
 import 'package:ksdpl/home/InsuranceIllustrations/InsuranceIllustrationScreen.dart';
+import 'package:ksdpl/home/SeniorList/seniorListScreen.dart';
 import 'package:ksdpl/home/cibilgenerate/CibilGeneratePage.dart';
 import 'package:ksdpl/home/insuranceLeads/insuranceLeadScreen.dart';
 import 'package:ksdpl/home/tutorial_screen/tutorial_video.dart';
@@ -24,6 +25,7 @@ import '../common/storage_service.dart';
 import '../controllers/cibilgenerate_controller/cibilRecordListController.dart';
 import '../controllers/insuranceLeadsController/insuranceLeadController.dart';
 import '../controllers/new_dd_controller.dart';
+import '../controllers/seniorController.dart';
 import '../controllers/viewExpenseController/viewExpenseController.dart';
 import '../controllers/webController.dart';
 import '../controllers/attendance/attendance_controller.dart';
@@ -341,6 +343,30 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ],
                 ),*/
 
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title:const Text(AppText.manageSenorList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                  leading: Image.asset(AppImage.division, height: 20,),
+                  children: [
+                    ListTile(
+                      leading:  Icon(Icons.list_alt_rounded,color: AppColor.blackColor),
+                      title:  Text(AppText.manageSenorList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      onTap: () {
+                        SeniorScreenController seniorScreenController =Get.put(SeniorScreenController());
+                        AddProductController addProductController =Get.put(AddProductController());
+                        LeadDDController leadDDController = Get.put(LeadDDController());
+
+                        addProductController =Get.put(AddProductController());
+                        seniorScreenController.getAllSeniorListApi();
+                        addProductController.getAllProductCategoryApi();
+                        leadDDController.getAllJobRoleListApi();
+
+                        Get.to(() => SeniorlistScreen());
+                      },
+                    ),
+                  ],
+                ),
+
 
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -369,7 +395,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ],
                 ),
-
 
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),

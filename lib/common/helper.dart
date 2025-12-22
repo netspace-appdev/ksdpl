@@ -103,6 +103,7 @@ class AppText{
   static const String uploaddoc ="Please upload a document";
 
   static const String manageProfile ="Manage Expense";
+  static const String manageSenorList ="Senior List";
   static const String editProfile ="Edit Profile";
   static const String changePassword ="Change Password";
   static const String changePhoneNum ="Change Phone Number";
@@ -346,6 +347,7 @@ class AppText{
   static const String iAmFresher = "I am a fresher (No prior work experience)";
   static const String enterCompanyName = "Enter Company Name";
   static const String jobTitle = "Job Title";
+  static const String jobRoll = "Job Role";
   static const String enterJobTitle = "Enter Job Title";
 
   static const String department = "Department";
@@ -395,6 +397,7 @@ class AppText{
   static const String enterUniqueLeadNumber = "Enter Unique Lead Number";
   static const String enterLeadName = "Enter Lead Name";
   static const String channel = "Channel";
+  static const String channelName = "Channel Name";
   static const String selectChannel = "Select your Channel";
   static const String channelCode = "Channel Code";
   static const String enterChannelCode = "Enter Channel Code";
@@ -855,6 +858,7 @@ class AppText{
 
   static const String expenseDate = "Expense Date";
   static const String dateposted = "Date Posted";
+  static const String postalcode = "Postal Code";
   static const String noOfVacancies = "No Of Vacancies";
   static const String jobLevel = "Job Level";
   static const String hiringManager = "Hiring Manager";
@@ -1338,6 +1342,7 @@ class AppImage{
   static const String telephone="assets/images/telephone.png";
   static const String lock="assets/images/lock.png";
   static const String user="assets/images/user.png";
+  static const String division="assets/images/division.png";
   static const String changePassword="assets/images/change_password.png";
   static const String changePhone="assets/images/change_number.png";
   static const String changeEmail="assets/images/change_email.png";

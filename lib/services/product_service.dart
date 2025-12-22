@@ -14,6 +14,7 @@ class ProductService {
   static const String addProductList = BaseUrl.baseUrl + 'ProductList/AddProductList';
   static const String getAllProductList = BaseUrl.baseUrl + 'ProductList/GetAllProductList';
   static const String getProductListById = BaseUrl.baseUrl + 'ProductList/GetProductListById';
+  static const String getSeniorListById = BaseUrl.baseUrl + 'Employee/GetAllEmployee';
   static const String updateProductList = BaseUrl.baseUrl + 'ProductList/UpdateProductList';
   static const String addProductDocument = BaseUrl.baseUrl + 'ProductList/AddProductDocument';
   static const String getDocumentListByProductId = BaseUrl.baseUrl + 'ProductList/GetDocumentListByProductId';
@@ -610,6 +611,93 @@ class ProductService {
       throw Exception('Error while submitting: $e');
     }
   }
+  static Future<Map<String, dynamic>> getAllSeniorListRequestApi() async {
+    try {
+      final headers = await MyHeader.getHeaders2();
+
+      final body = {
+        "stateId": 0,
+        "districtId": 0,
+        "cityId": 0,
+        "pincode": "",
+        "jobrole": "",
+        "channelId": 0
+      };
+
+      final response = await http.post(
+        Uri.parse(getSeniorListById),
+        headers: {
+          ...headers,
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(body),
+      );
+
+      Helper.ApiReq(getSeniorListById, body);
+      Helper.ApiReq(getSeniorListById, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(
+          "Failed to submit application: ${response.statusCode}",
+        );
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception("Error while submitting: $e");
+    }
+  }
+
+/*
+  static Future<Map<String, dynamic>> getAllSeniorListRequestApi() async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getSeniorListById),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'channelId', '0',fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'cityId', '0',fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'districtId', '0',fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'jobrole', 'string',fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'pincode', 'string',fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'stateId', '0',fallback: "0");
+
+*/
+/*
+      request.fields['channelId'] = '0';
+      request.fields['cityId'] = '0';
+      request.fields['districtId'] = '0';
+      request.fields['jobrole'] = 'string';
+      request.fields['pincode'] = 'string';
+      request.fields['stateId'] = '0';
+*//*
+
+
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+      Helper.ApiReq(getSeniorListById, request.fields);
+      Helper.ApiReq(getSeniorListById, response.body);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+*/
 
   static Future<Map<String, dynamic>> getInsuranceLeadsApi() async {
     try {
