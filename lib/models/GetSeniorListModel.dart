@@ -69,7 +69,7 @@ class Data {
   String? offerLetterUrl;
   int? acceptanceStatus;
   String? acceptanceDate;
-  Null? leftDate;
+  String? leftDate;
   int? channelId;
   String? channelName;
   String? channelCode;

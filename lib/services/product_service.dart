@@ -619,8 +619,8 @@ class ProductService {
         "stateId": 0,
         "districtId": 0,
         "cityId": 0,
-        "pincode": "string",
-        "jobrole": "string",
+        "pincode": "",
+        "jobrole": "",
         "channelId": 0
       };
 

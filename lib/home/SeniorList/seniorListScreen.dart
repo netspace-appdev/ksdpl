@@ -2,16 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:ksdpl/models/JobRoleModelResponse.dart';
+import 'package:ksdpl/models/dashboard/GetAllStateModel.dart' as state;
+import 'package:ksdpl/models/dashboard/GetAllChannelModel.dart' as channel;
 
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
+import '../../controllers/lead_dd_controller.dart';
+import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/seniorController.dart';
-import '../../controllers/vacancyListController/vacancyListController.dart';
+import '../../custom_widgets/CustomBigDialogBox.dart';
+import '../../custom_widgets/CustomDropdown.dart';
+import 'package:ksdpl/models/dashboard/GetDistrictByStateModel.dart' as dist;
+import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
+import '../../custom_widgets/CustomTextLabel.dart';
+import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../custom_drawer.dart';
 
 class SeniorlistScreen extends StatelessWidget {
  // const SeniorlistScreen({super.key});
   SeniorScreenController seniorScreenController = Get.put(SeniorScreenController());
+  LeadDDController leadDDController = Get.put(LeadDDController());
+  AddProductController addProductController = Get.put(AddProductController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,20 +129,19 @@ class SeniorlistScreen extends StatelessWidget {
 
           InkWell(
             onTap: () {
-
+             showFilterDialogEmployeeList(context: context);
             },
             child: Container(
-
               width: 40,
-              height: 40,
+              height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              decoration: const BoxDecoration(
-                color: Colors.transparent,
+              decoration:  BoxDecoration(
+                color: AppColor.appWhite.withOpacity(0.15),
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
-
+              child: Center(child: Image.asset(AppImage.filterIcon, height: 17,)),
             ),
           )
         ],
@@ -139,49 +151,6 @@ class SeniorlistScreen extends StatelessWidget {
 
   Widget productSection(BuildContext context) {
     return Obx(() {
-      /*  if (productDetailsController.isLoadingMainScreen.value || productDetailsController.isLoadingMainScreen.value) {
-        return Center(child: CustomSkelton.productShimmerList(context));
-      }
-
-      final data = productDetailsController.getDocumentProductIdModel.value?.data?.first;
-      print('object${data?.jobTitle.toString()}');
-      if (data == null || data == "") {
-        return /// Header with profile and menu icon
-          const Align(
-              alignment: Alignment.center,
-              child: Text(
-                  "No data found",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.grey700
-                  )));
-      }
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildCard("Info", [
-            DetailRow(label: AppText.jobTitle, value: data.jobTitle?.toString()??''),
-            DetailRow(label: AppText.employeeRole, value: data.employeeRole?.toString()??''),
-            DetailRow(label: AppText.workLocation, value: data.workLocation?.toString()??''),
-            DetailRow(label: AppText.salaryRange, value: '${data.salaryRangeMax?.toString()??''} - ${data?.salaryRangeMin?.toString()??''}'),
-            DetailRow(label: AppText.workExperience, value: '${data.experienceRequired?.toString()??''}'),
-            DetailRow(label: AppText.skillRequired, value: '${data.skillsRequired?.toString()??''}'),
-            DetailRow(label: AppText.dateposted, value: '${data.datePosted?.toString()??''}'),
-            DetailRow(label: AppText.noOfVacancies, value: '${data.numberOfVacancies?.toString()??''}'),
-            DetailRow(label: AppText.jobLevel, value: '${data.jobLevel?.toString()??''}'),
-            DetailRow(label: AppText.hiringManager, value: '${data.hiringManager?.toString()??''}'),
-            DetailRow(label: AppText.qualificationRequired, value: '${data.qualificationsRequired?.toString()??''}'),
-            DetailRow(label: AppText.jobDescription, value: '${data.jobDescription?.toString()??''}'),
-          ],
-              Icons.info_outline
-
-          ),
-          SizedBox(height: 20),
-        ],
-      );
-      */
 
       ///
       /// New code
@@ -189,9 +158,9 @@ class SeniorlistScreen extends StatelessWidget {
         return Center(child: CustomSkelton.productShimmerList(context));
       }
 
-      final data =  seniorScreenController.getSeniorListModel.value;
+      final data =  seniorScreenController.seniorFilteredList;
 
-      if (data == null || data.data == null || data.data!.isEmpty) {
+      if (data.isEmpty) {
         return Container(
           height: MediaQuery.of(context).size.height * 0.50,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -214,7 +183,7 @@ class SeniorlistScreen extends StatelessWidget {
         );
       }
 
-      final dataList = data.data!;
+      final dataList = data;
 
       return ListView.builder(
         shrinkWrap: true,
@@ -230,13 +199,13 @@ class SeniorlistScreen extends StatelessWidget {
                 DetailRow(label:  AppText.employeeName, value: data1.employeeName?.toString()??''),
                 DetailRow(label: AppText.emailNoStar, value: data1.email?.toString()??''),
                 DetailRow(label: AppText.contactNo2, value: data1.phoneNumber?.toString()??''),
-                DetailRow(label: AppText.whatsappNoNoStar, value: '${data1.whatsappNumber?.toString()??''}'),
-                DetailRow(label: AppText.jobRoll, value: '${data1.jobRole?.toString()??''}'),
-                DetailRow(label: AppText.channelName, value: '${data1.channelName?.toString()??''}'),
-                DetailRow(label: AppText.state, value: '${data1.stateName?.toString()??''}'),
-                DetailRow(label: AppText.city, value: '${data1.cityName?.toString()??''}'),
-                DetailRow(label: AppText.district, value: '${data1.districtName?.toString()??''}'),
-                DetailRow(label: AppText.postalcode, value: '${data1.postalCode?.toString()??''}'),
+                DetailRow(label: AppText.whatsappNoNoStar, value: data1.whatsappNumber?.toString()??''),
+                DetailRow(label: AppText.jobRoll, value: data1.jobRole?.toString()??''),
+                DetailRow(label: AppText.channelName, value: data1.channelName?.toString()??''),
+                DetailRow(label: AppText.state, value: data1.stateName?.toString()??''),
+                DetailRow(label: AppText.city, value: data1.cityName?.toString()??''),
+                DetailRow(label: AppText.district, value: data1.districtName?.toString()??''),
+                DetailRow(label: AppText.postalcode, value: data1.postalCode?.toString()??''),
               ],
                   Icons.info_outline
 
@@ -270,9 +239,9 @@ class SeniorlistScreen extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColor.primaryColor, // Blue background
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
@@ -281,7 +250,7 @@ class SeniorlistScreen extends StatelessWidget {
             child: Row(
               children: [
                 Icon(icon, color: Colors.white,),
-                SizedBox(width: 5,),
+                const SizedBox(width: 5,),
                 Text(
                   title,
                   style: const TextStyle(
@@ -305,6 +274,256 @@ class SeniorlistScreen extends StatelessWidget {
       ),
     );
   }
+  void showFilterDialogEmployeeList({
+    required BuildContext context,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "Employee List Filter",
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+
+              const Text(
+                AppText.state,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.grey2,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              Obx((){
+                if (leadDDController.isStateLoading.value) {
+                  return  Center(child:CustomSkelton.productShimmerList(context));
+                }
+
+                return CustomDropdown<state.Data>(
+                  items: leadDDController.getAllStateModel.value?.data ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.stateName.toString(),
+                  selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
+                        (item) => item.id.toString() == leadDDController.selectedState.value,
+                  ),
+                  onChanged: (value) {
+                    leadDDController.selectedState.value =  value?.id?.toString();
+                    leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
+                  },
+                );
+              }),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                AppText.district,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.grey2,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              Obx((){
+                if (leadDDController.isDistrictLoading.value) {
+                  return  Center(child:CustomSkelton.productShimmerList(context));
+                }
+                return CustomDropdown<dist.Data>(
+                  items: leadDDController.getDistrictByStateModel.value?.data ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.districtName.toString(),
+                  selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
+                        (item) => item.id.toString() == leadDDController.selectedDistrict.value,
+                  ),
+                  onChanged: (value) {
+                    leadDDController.selectedDistrict.value =  value?.id?.toString();
+                    leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+                  },
+                );
+              }),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                AppText.city,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.grey2,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              Obx((){
+                if (leadDDController.isCityLoading.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+                return CustomDropdown<city.Data>(
+                  items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.cityName.toString(),
+                  selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
+                        (item) => item.id.toString() == leadDDController.selectedCity.value,
+                  ),
+                  onChanged: (value) {
+                    leadDDController.selectedCity.value =  value?.id?.toString();
+                  },
+                );
+              }),
+
+              const SizedBox(
+                height: 10,
+              ),
+
+              const Text(
+                AppText.channelName,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.grey2,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              Obx((){
+                if (leadDDController.isChannelLoading.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+
+                return CustomDropdown<channel.Data>(
+                  items: leadDDController.getAllChannelModel.value?.data ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.channelName.toString()+" (${item.channelCode.toString()})",
+                  selectedValue: leadDDController.getAllChannelModel.value?.data?.firstWhereOrNull(
+                        (item) => item.id == seniorScreenController.selectedChannel.value,
+                  ),
+                  onChanged: (value) {
+
+                    seniorScreenController.selectedChannel.value =  value?.id;
+                  },
+                );
+              }),
+              const SizedBox(height: 10),
+
+              const CustomTextLabel(
+                label: AppText.jobRoll,
+                isRequired: true,
+              ),
+
+              const SizedBox(height: 10),
+
+              Obx(() {
+                if (seniorScreenController.isLoadingProductCategory.value) {
+                  return Center(child: CustomSkelton.leadShimmerList(context));
+                }
+
+                final items = seniorScreenController.jobRoleFiltered;
+                print('object________${items.isEmpty}');
+
+                return CustomDropdown<JobRoleData>(
+                  items: items,
+                  getId: (item) => item.id.toString(),
+                  getName: (item) => item.name ?? "",
+                  selectedValue: items.firstWhereOrNull(
+                        (item) =>
+                    item.id.toString() ==
+                        seniorScreenController.selectedJobroleId.value,
+                  ),
+                  onChanged: (value) {
+                    seniorScreenController.selectedJobroleId.value =
+                        value?.id.toString();
+                  },
+
+                  onClear: () {
+                    seniorScreenController.selectedJobroleId.value = null;
+                  },
+                );
+              }),
+
+/*
+              Obx((){
+                if (seniorScreenController.isLoadingProductCategory.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+
+                return CustomDropdown<JobRoleData>(
+                  items: seniorScreenController.jobRoleFiltered  ?? [],
+                  getId: (item) => item.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.name.toString(),
+                  selectedValue: seniorScreenController.jobRoleFiltered.firstWhereOrNull(
+                        (item) => item.id == seniorScreenController.selectedJobroleId.value,
+                  ),
+                  onChanged: (value) {
+                    seniorScreenController.selectedJobroleId.value =  value?.id.toString();
+                  },
+                  onClear: (){
+                    seniorScreenController.selectedJobroleId.value = null;
+                //    addProductController.productCategoryList.clear(); // reset dependent dropdown
+                  },
+                );
+              }),
+*/
+
+              const SizedBox(height: 10),
+
+              const CustomTextLabel(
+                label: AppText.productSegment,
+                isRequired: true,
+              ),
+
+              const SizedBox(height: 10),
+
+              Obx((){
+                if (seniorScreenController.isLoadingProductCategory.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+
+                return CustomDropdown<productCat.Data>(
+                  items: addProductController.productCategoryList  ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.productCategoryName.toString(),
+                  selectedValue: addProductController.productCategoryList.firstWhereOrNull(
+                        (item) => item.id == addProductController.selectedProductCategory.value,
+                  ),
+                  onChanged: (value) {
+                    addProductController.selectedProductCategory.value =  value?.id;
+                  },
+                  onClear: (){
+                    addProductController.selectedProductCategory.value = 0;
+                    addProductController.productCategoryList.clear(); // reset dependent dropdown
+
+                  },
+                );
+              }),
+            ],
+          ),
+          onSubmit: () {
+            seniorScreenController.filterSubmit();
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
+  }
+
+
 }
 
 

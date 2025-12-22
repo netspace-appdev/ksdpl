@@ -6,6 +6,7 @@ import '../common/storage_service.dart';
 import '../models/AdminSupervisorModel.dart';
 import '../models/FunctionalSupervisorModel.dart';
 import '../models/GetCampaignNameModel.dart';
+import '../models/JobRoleModelResponse.dart';
 import '../models/dashboard/GetAllBankModel.dart' as allBank;
 import '../models/GetAllBranchByBankIdModel.dart';
 import '../models/GetBankerRoleByLevelAndBankIdModel.dart';
@@ -40,6 +41,7 @@ class LeadDDController extends GetxController{
   var getAllLeadStageModel = Rxn<GetAllLeadStageModel>(); //
   var getAllBranchBIModel = Rxn<GetAllBranchBIModel>();
   var getAllChannelModel = Rxn<GetAllChannelModel>();
+  var getAllJobRoleModel = Rxn<JobRoleModelResponse>();
   var selectedState = Rxn<String>();
   var selectedDistrict = Rxn<String>();
   var selectedCity = Rxn<String>();
@@ -66,6 +68,7 @@ class LeadDDController extends GetxController{
   var isLeadStageLoading = false.obs;
   var isBranchLoading = false.obs;
   var isChannelLoading = false.obs;
+  var isJobRoleLoading = false.obs;
   var activeStatus = "".obs;
 
 
@@ -143,6 +146,7 @@ class LeadDDController extends GetxController{
     getAllKsdplBranchApi();
     getAllLeadStageApi();
     getAllChannelListApi();
+    getAllJobRoleListApi();
   }
   @override
   void onClose() {
@@ -187,6 +191,7 @@ class LeadDDController extends GetxController{
     isLeadStageLoading.value = false;
     isBranchLoading.value = false;
     isChannelLoading.value = false;
+    isJobRoleLoading.value = false;
     activeStatus.value = "";
 
     selectedStateCurr.value = null;
@@ -838,18 +843,12 @@ class LeadDDController extends GetxController{
 
 
       var data = await DrawerApiService.getAllChannelListApi();
-
-
       if(data['success'] == true){
 
         getAllChannelModel.value= GetAllChannelModel.fromJson(data);
-
-
         isChannelLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
-
-
         getAllChannelModel.value=null;
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
@@ -868,6 +867,40 @@ class LeadDDController extends GetxController{
       isChannelLoading(false);
     }
   }
+
+  void  getAllJobRoleListApi() async {
+    try {
+
+      isJobRoleLoading(true);
+
+      var data = await DrawerApiService.getAllJobRoleApi();
+      if(data['success'] == true){
+
+        print('getAllJobRoleModel____${data.toString()}');
+
+        getAllJobRoleModel.value= JobRoleModelResponse.fromJson(data);
+        isJobRoleLoading(false);
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+        getAllJobRoleModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllChannel: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isJobRoleLoading(false);
+    } finally {
+
+
+      isChannelLoading(false);
+    }
+  }
+
 
   int? getDistrictIdByNameCurr(String dName) {
   print("dName--dd------>${dName}");

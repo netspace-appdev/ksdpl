@@ -342,6 +342,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ],
                 ),*/
+
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
                   title:const Text(AppText.manageSenorList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
@@ -352,7 +353,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       title:  Text(AppText.manageSenorList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
                       onTap: () {
                         SeniorScreenController seniorScreenController =Get.put(SeniorScreenController());
+                        AddProductController addProductController =Get.put(AddProductController());
+                        LeadDDController leadDDController = Get.put(LeadDDController());
+
+                        addProductController =Get.put(AddProductController());
                         seniorScreenController.getAllSeniorListApi();
+                        addProductController.getAllProductCategoryApi();
+                        leadDDController.getAllJobRoleListApi();
+
                         Get.to(() => SeniorlistScreen());
                       },
                     ),
@@ -387,7 +395,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ],
                 ),
-
 
                 ExpansionTile(
                   childrenPadding: EdgeInsets.symmetric(horizontal: 20),
