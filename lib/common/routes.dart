@@ -24,6 +24,7 @@ import '../home/change_password.dart';
 import '../home/dashboard_screen.dart';
 import '../home/disbursedHistoryList/DisbursedHistoryList.dart';
 import '../home/edit_profile.dart';
+import '../home/interestedLeadsPayoutScreen.dart';
 import '../home/leads/GetAllReminderScreen.dart';
 import '../home/leads/lead_details.dart';
 import '../home/leads/LeadDetailsMain.dart';
@@ -90,4 +91,5 @@ final routes = [
   GetPage(name: '/disbursedHistory', page: () => DisbursedHistoryListScreen()),
   GetPage(name: '/LoanApplicationOnlyDetails', page: () => LoanApplicationOnlyDetailsScreen()),
   GetPage(name: '/seniorlistScreen', page: () => SeniorlistScreen()),
+  GetPage(name: '/interestedLeadsPayoutPage', page: () => InterestedLeadsPayoutPage()),
 ];
