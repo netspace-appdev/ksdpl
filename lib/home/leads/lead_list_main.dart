@@ -1560,8 +1560,8 @@ overflow: TextOverflow.ellipsis,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
             label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update"
-                || label_code=="aic_add_feedback"  || label_code=="loan_appl_single_details"?MediaQuery.of(context).size.width*0.82:
-            (label_code=="add_feedback" || label_code=="payout" ) ?
+                || label_code=="aic_add_feedback"  || label_code=="loan_appl_single_details" ||  label_code=="payout" ?MediaQuery.of(context).size.width*0.82:
+            (label_code=="add_feedback") ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,
 
