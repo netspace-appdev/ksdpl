@@ -871,6 +871,8 @@ class AppText{
   static const String enterTransactionDetails  = "Enter UTR";
   static const String enterinvoiceNumber  = "Enter invoice Number";
   static const String remark  = "Remark";
+  static const String invoicePdf  = "Invoice Pdf";
+  static const String ReceiptPdf  = "Receipt PDF";
   static const String enterRemark  = "Enter Remark";
   static const String enterZipcode  = "Please Add Zipcode in Step 1";
   static const String forgotMsg  = "We’ve sent a password reset link to your email address. Please check your inbox";
@@ -1200,6 +1202,8 @@ class AppText{
   static const String paymentStatus="Payment Status";
   static const String actionNotAllowed="Action Not Allowed";
   static const String actionNotAllowedMsg="Please complete the previous package payment successfully before adding a new package.";
+
+  static const String Payout="Payout";
 
 
 
