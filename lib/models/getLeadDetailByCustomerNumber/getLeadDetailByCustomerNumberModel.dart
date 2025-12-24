@@ -290,9 +290,16 @@ class GetLeadDetailByCustomerNumberModel {
   GetLeadDetailByCustomerNumberModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     success = json['success'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+
+    if (json['data'] is Map) {
+      data = Data.fromJson(json['data']);
+    } else {
+      data = null; // when data is []
+    }
+
     message = json['message'];
   }
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

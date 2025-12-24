@@ -179,7 +179,7 @@ class Step1CamNote extends StatelessWidget {
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
-                                      onPressed: (){
+                                      onPressed: mp.multiPackageStatus.value=="SUCCESS"?null: (){
                                         final selectedPackage =
                                         camNoteController.packageList.firstWhereOrNull(
                                               (item) => item.id == mp.selectedPackageMulti.value,
@@ -220,7 +220,7 @@ class Step1CamNote extends StatelessWidget {
 
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                            color: AppColor.primaryColor,
+                                            color: mp.multiPackageStatus.value=="SUCCESS"?Colors.grey: AppColor.primaryColor,
 
                                           ),
                                           padding: EdgeInsets.all(10),
