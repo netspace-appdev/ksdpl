@@ -44,7 +44,7 @@ class Data {
   String? receiptDate;
   String? invoiceDate;
 
-  double? leadId;
+  int? leadId;
   double? merchantId;
   double? subMerchantId;
   double? terminalId;
@@ -185,7 +185,7 @@ class Data {
       receiptDate: json['receiptDate']?.toString(),
       invoiceDate: json['invoiceDate']?.toString(),
 
-      leadId: (json['leadId'] as num?)?.toDouble(),
+      leadId: json['leadId'],
       merchantId: (json['merchantId'] as num?)?.toDouble(),
       subMerchantId: (json['subMerchantId'] as num?)?.toDouble(),
       terminalId: (json['terminalId'] as num?)?.toDouble(),

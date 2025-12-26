@@ -1535,7 +1535,8 @@ class DrawerApiService {
       // Sending request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-
+      Helper.ApiReq(getAllJobRoleList, request.fields);
+      Helper.ApiRes(getAllJobRoleList, response.body);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
@@ -1546,6 +1547,7 @@ class DrawerApiService {
           //throw Exception('Invalid API response');
           return jsonResponse;
         }
+
       } else {
         throw Exception('Failed to load data: ${response.statusCode}');
       }

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:ksdpl/models/GetChannelDetailsByProductIdModel.dart';
 
 
 import '../common/helper.dart';
@@ -8,11 +9,10 @@ import '../services/product_service.dart';
 
 class SeniorScreenController extends GetxController{
 
-  /// Loader
   final isLoadingMainScreen = false.obs;
 
   final Rxn<senorList.GetSeniorListModel> seniorListModel = Rxn<senorList.GetSeniorListModel>();
-  final Rxn<JobRoleModelResponse> jobRoleListModel = Rxn<JobRoleModelResponse>();
+  final Rxn<GetChannelDetailsByProductIdModel> getChannelDetailsByProduct = Rxn<GetChannelDetailsByProductIdModel>();
 
   final Set<String> excludedRoles = {
     "INDEPENDENT BUSINESS MANAGER",
@@ -31,23 +31,12 @@ class SeniorScreenController extends GetxController{
   }*/
 
 
-  List<JobRoleData> get jobRoleFiltered {
-    final list = jobRoleListModel.value?.data ?? [];
-
-    return list.where((item) {
-      final role = item.name?.trim().toUpperCase();
-      return role != null && !excludedRoles.contains(role);
-    }).toList();
-
-
-  }
-
-
   final selectedState = Rxn<String>();
   final selectedDistrict = Rxn<String>();
   final selectedCity = Rxn<String>();
 
   var selectedChannel = Rxn<int>();
+  var isChannelDisable =Rxn<bool>();
   var selectedJobroleId = Rxn<String>();
   final isLoadingProductCategory = false.obs;
 
@@ -63,7 +52,6 @@ class SeniorScreenController extends GetxController{
 }) async {
     try {
       isLoadingMainScreen.value = true;
-
       final data = await ProductService.getAllSeniorListRequestApi(
         stateId:stateId,
         districtId:districtId,
@@ -85,7 +73,7 @@ class SeniorScreenController extends GetxController{
           return role == null || !excludedRoles.contains(role);
         }).toList();
 
-
+        filterClear();
 
       } else {
         ToastMessage.msg(
@@ -143,5 +131,54 @@ class SeniorScreenController extends GetxController{
       pincode:""
 
     );
+  }
+
+
+  Future<void> getChannelDetailsByProductIdApiRequest({
+    String? ProductId,
+  }) async {
+    try {
+      isLoadingMainScreen.value = true;
+      final data = await ProductService.getChannelDetailsByProductIdRequest(
+        ProductId:ProductId,
+      );
+
+      print('data is here ${data.toString()}');
+      if (data['success'] == true) {
+        getChannelDetailsByProduct.value = GetChannelDetailsByProductIdModel.fromJson(data);
+        final channelId = getChannelDetailsByProduct.value?.data?.first.channelId;
+        //selectedChannel.value = null;
+        await Future.delayed(const Duration(milliseconds: 10));
+
+        selectedChannel.value = channelId;
+        isChannelDisable.value =true;
+      } else {
+        ToastMessage.msg(
+          data['message'] ?? AppText.somethingWentWrong,
+        );
+      }
+    } catch (e) {
+      print("Error getAllSeniorListApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoadingMainScreen.value = false;
+    }
+  }
+
+  void filterClear() {
+   /* final selectedState = Rxn<String>();
+    final selectedDistrict = Rxn<String>();
+    final selectedCity = Rxn<String>();
+
+    var selectedChannel = Rxn<int>();
+    var isChannelDisable =Rxn<bool>();
+    var selectedJobroleId = Rxn<String>();*/
+    selectedDistrict.value=null;
+    selectedCity.value=null;
+    selectedState.value=null;
+    selectedChannel.value=0;
+    isChannelDisable.value=false;
+    selectedJobroleId.value=null;
+    selectedProductCategory.value=0;
   }
 }

@@ -134,6 +134,11 @@ class LeadDDController extends GetxController{
   RxList<dist.Data> districtListOfficeAd = <dist.Data>[].obs;
   RxList<city.Data> cityListOfficeAd = <city.Data>[].obs;
 
+  final Set<String> excludedRoles = {
+    "INDEPENDENT BUSINESS MANAGER",
+    "CHANNEL BUSINESS MANAGER",
+  };
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -901,6 +906,17 @@ class LeadDDController extends GetxController{
     }
   }
 
+
+  List<JobRoleData> get jobRoleFiltered {
+    final list = getAllJobRoleModel.value?.data ?? [];
+
+    return list.where((item) {
+      final role = item.name?.trim().toUpperCase();
+      return role != null && !excludedRoles.contains(role);
+    }).toList();
+
+
+  }
 
   int? getDistrictIdByNameCurr(String dName) {
   print("dName--dd------>${dName}");
