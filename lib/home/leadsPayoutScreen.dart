@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ksdpl/common/base_url.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../common/helper.dart';
@@ -19,7 +20,7 @@ import '../common/helper.dart';
 import '../common/skelton.dart';
 import '../controllers/payoutController.dart';
 
-class InterestedLeadsPayoutPage extends StatelessWidget {
+class LeadsPayoutPage extends StatelessWidget {
   PayoutController payoutController = Get.find();
 
   @override
@@ -109,8 +110,8 @@ class InterestedLeadsPayoutPage extends StatelessWidget {
                                 final data1 = data[index];
 
                                 // Generate Receipt URL
-                                final invoiceUrl = 'https://devsales.kanchaneshver.com/#/invoice/${data1.leadId}/${data1.packageId}/${data1.id}';
-                                final receiptUrl = 'https://devsales.kanchaneshver.com/#/receipt-preview/${data1.leadId}/${data1.packageId}/${data1.id}';
+                                final invoiceUrl = '${BaseUrl.salesPanel}/#/invoice/${data1.leadId}/${data1.packageId}/${data1.id}';
+                                final receiptUrl = '${BaseUrl.salesPanel}/#/receipt-preview/${data1.leadId}/${data1.packageId}/${data1.id}';
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -128,30 +129,35 @@ class InterestedLeadsPayoutPage extends StatelessWidget {
                                         value: data1.txnStatus?.toString() ?? '',
                                         valueColor: _getStatusColor(data1.txnStatus),
                                       ),
-                                      DetailRow(
-                                        label: AppText.ReceiptPdf,
-                                        value: (data1.id != null && data1.leadId != null && data1.packageId != null)
-                                            ? 'View Invoice'
-                                            : 'Invoice Not Generated',
-                                        valueColor: (data1.id != null && data1.leadId != null && data1.packageId != null)
-                                            ? AppColor.primaryColor
-                                            : Colors.black,
-                                        onTap: (data1.id != null && data1.leadId != null && data1.packageId != null)
-                                            ?() => _openUrl(receiptUrl) : null
 
-                                      ),
+
+
                                       DetailRow(
                                         label: AppText.invoicePdf,
-                                        value: (data1.id != null && data1.leadId != null && data1.packageId != null)
-                                            ? 'View Receipt'
-                                            : 'Receipt Not Generated',
-                                        valueColor: (data1.id != null && data1.leadId != null && data1.packageId != null)
-                                            ? AppColor.primaryColor
-                                            : Colors.black,
-                                        onTap: (data1.id != null && data1.leadId != null && data1.packageId != null)
+                                        value: data1.txnStatus=="SUCCESS"
+                                            ? AppText.viewInvoice
+                                            : AppText.invoiceNotGenerated,
+                                        valueColor: data1.txnStatus=="SUCCESS"
+                                            ? AppColor.secondaryColor
+                                            :  AppColor.gre4,
+                                        onTap: data1.txnStatus=="SUCCESS"
                                             ? () => _openUrl(invoiceUrl)
                                             : null,
                                       ),
+
+                                      DetailRow(
+                                          label: AppText.ReceiptPdf,
+                                          value: data1.txnStatus=="SUCCESS"
+                                              ? AppText.viewReceipt
+                                              : AppText.receiptNotGenerated,
+                                          valueColor:data1.txnStatus=="SUCCESS"
+                                              ? AppColor.secondaryColor
+                                              : AppColor.gre4,
+                                          onTap: data1.txnStatus=="SUCCESS"
+                                              ?() => _openUrl(receiptUrl) : null
+
+                                      ),
+
                                     ], Icons.info_outline),
                                     const SizedBox(height: 20),
                                   ],
@@ -195,7 +201,7 @@ class InterestedLeadsPayoutPage extends StatelessWidget {
             child: Image.asset(AppImage.arrowLeft, height: 24),
           ),
           const Text(
-            AppText.Payout,
+            AppText.payoutInvoiceReceipt,
             style: TextStyle(
               fontSize: 20,
               color: AppColor.grey3,

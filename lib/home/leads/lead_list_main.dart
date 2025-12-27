@@ -867,10 +867,10 @@ class LeadListMain extends StatelessWidget  {
                         children: [
                           SizedBox(height: 10,),
                           _buildTextButton(
-                              label:"Payout",
+                              label:AppText.payoutInvoiceReceipt,
                               context: context,
                               color: Colors.purple,
-                              icon:  Icons.money_outlined,
+                              icon:  Icons.monetization_on_outlined,
                               leadId: lead.id.toString(),
                               label_code: "payout",
                               currentLeadStage: lead.leadStage.toString(),
@@ -1547,7 +1547,7 @@ overflow: TextOverflow.ellipsis,
          // print('object___${addLeadController.getLeadId.value=leadId}');
           PayoutController payoutController =Get.put(PayoutController());
           payoutController.getPayoutListApi(LeadId: leadId);
-          Get.toNamed("/interestedLeadsPayoutPage");
+          Get.toNamed("/leadsPayoutPage");
         }else{
 
         }

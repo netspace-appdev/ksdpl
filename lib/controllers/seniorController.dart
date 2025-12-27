@@ -68,14 +68,23 @@ class SeniorScreenController extends GetxController{
        // seniorFilteredList.value = List<senorList.Data>.from(li);
 
 
-        seniorFilteredList.value = li .where((item) {
+      /*  seniorFilteredList.value = li .where((item) {
           final role = item.jobRole?.trim();
           return role == null || !excludedRoles.contains(role);
+        }).toList();*/
+
+        seniorFilteredList.value = li.where((item) {
+          final role = item.jobRole?.trim();
+
+          return item.active == true &&
+              (role == null || !excludedRoles.contains(role));
         }).toList();
 
-        filterClear();
+       // filterClear();
 
       } else {
+        seniorListModel.value?.data?.clear();
+        seniorFilteredList.clear();
         ToastMessage.msg(
           data['message'] ?? AppText.somethingWentWrong,
         );
@@ -122,6 +131,13 @@ class SeniorScreenController extends GetxController{
   }*/
 
   void filterSubmit() {
+
+    print("selectedState.value.toString()====>${selectedState.value.toString()}");
+    print("selectedDistrict.value.toString()====>${selectedDistrict.value.toString()}");
+    print("selectedCity.value.toString()====>${selectedCity.value.toString()}");
+    print(" selectedChannel.value.toString()====>${ selectedChannel.value.toString()}");
+    print("selectedJobroleId.value.toString()===>${selectedJobroleId.value.toString()}");
+
     getAllSeniorListApi(
       stateId:selectedState.value.toString(),
       districtId:selectedDistrict.value.toString(),
@@ -134,7 +150,7 @@ class SeniorScreenController extends GetxController{
   }
 
 
-  Future<void> getChannelDetailsByProductIdApiRequest({
+  Future<bool> getChannelDetailsByProductIdApiRequest({
     String? ProductId,
   }) async {
     try {
@@ -147,38 +163,44 @@ class SeniorScreenController extends GetxController{
       if (data['success'] == true) {
         getChannelDetailsByProduct.value = GetChannelDetailsByProductIdModel.fromJson(data);
         final channelId = getChannelDetailsByProduct.value?.data?.first.channelId;
-        //selectedChannel.value = null;
-        await Future.delayed(const Duration(milliseconds: 10));
 
-        selectedChannel.value = channelId;
+
+        if (channelId != null) {
+
+          selectedChannel.value = channelId;
+        //"${getChannelDetailsByProduct.value?.data?.first.channelName} +${getChannelDetailsByProduct.value?.data?.first.channelCode}
+
+          //item.channelName.toString()+" (${item.channelCode.toString()})"
+        }
+
+        print("Selected channel in API: ${selectedChannel.value}");
         isChannelDisable.value =true;
+        return true; // 🎉 success
       } else {
         ToastMessage.msg(
           data['message'] ?? AppText.somethingWentWrong,
         );
+        return false; // 🎉 success
       }
     } catch (e) {
       print("Error getAllSeniorListApi: $e");
       ToastMessage.msg(AppText.somethingWentWrong);
+      return false; // 🎉 success
     } finally {
       isLoadingMainScreen.value = false;
     }
   }
 
   void filterClear() {
-   /* final selectedState = Rxn<String>();
-    final selectedDistrict = Rxn<String>();
-    final selectedCity = Rxn<String>();
 
-    var selectedChannel = Rxn<int>();
-    var isChannelDisable =Rxn<bool>();
-    var selectedJobroleId = Rxn<String>();*/
-    selectedDistrict.value=null;
-    selectedCity.value=null;
-    selectedState.value=null;
+    selectedDistrict.value="0";
+    selectedCity.value="0";
+    selectedState.value="0";
     selectedChannel.value=0;
     isChannelDisable.value=false;
-    selectedJobroleId.value=null;
+    selectedJobroleId.value="";
     selectedProductCategory.value=0;
+
+    filterSubmit();
   }
 }

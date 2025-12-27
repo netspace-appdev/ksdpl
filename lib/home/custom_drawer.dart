@@ -232,7 +232,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                   leading: Image.asset(AppImage.addcivil, height: 20),
                   children: [
-                    ListTile(
+                   /* ListTile(
                       leading: Icon(Icons.add_task, color: AppColor.blackColor),
                       title: Text(
                         "Cibil Generate",
@@ -245,7 +245,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       onTap: () {
                         Get.to(() => Cibilgeneratepage());
                       },
-                    ),
+                    ),*/
                     ListTile(
                       leading: Icon(Icons.menu, color: AppColor.blackColor),
                       title: Text(
@@ -509,10 +509,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
 
                 CustomListTile(
-                  title:  AppText.manageSenorList,
-                  imagePath:AppImage.personIcon,
+                  title:  AppText.leadersOfHub,
+                  imagePath:AppImage.user,
                   onTap: () {
                     SeniorScreenController seniorScreenController =Get.put(SeniorScreenController());
+                    seniorScreenController.filterClear();
                     AddProductController addProductController =Get.put(AddProductController());
                     LeadDDController leadDDController = Get.put(LeadDDController());
 
@@ -520,6 +521,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     seniorScreenController.getAllSeniorListApi();
                     addProductController.getAllProductCategoryApi();
                     leadDDController.getAllJobRoleListApi();
+
                     Get.toNamed("/seniorlistScreen");
                   },
                 ),

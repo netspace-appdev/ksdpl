@@ -34,6 +34,7 @@ class AppText{
   static const String mobileNumber="Mobile Number";
   static const String password="Password";
   static const String submit="Submit";
+  static const String clearFilter="Clear Filter";
   static const String adharVarify="Aadhar Verify";
   static const String phoneNumberRequired="Mobile number is required";
   static const String enterValidPhone="Enter a valid 10-digit phone number";
@@ -104,6 +105,7 @@ class AppText{
 
   static const String manageProfile ="Manage Expense";
   static const String manageSenorList ="Senior List";
+  static const String leadersOfHub ="Leaders of Hub";
   static const String editProfile ="Edit Profile";
   static const String changePassword ="Change Password";
   static const String changePhoneNum ="Change Phone Number";
@@ -1203,7 +1205,11 @@ class AppText{
   static const String actionNotAllowed="Action Not Allowed";
   static const String actionNotAllowedMsg="Please complete the previous package payment successfully before adding a new package.";
 
-  static const String Payout="Payout";
+  static const String payoutInvoiceReceipt="Payout, Invoice and Receipt";
+  static const String viewInvoice="View Invoice";
+  static const String invoiceNotGenerated="Invoice Not Generated";
+  static const String viewReceipt="View Receipt";
+  static const String receiptNotGenerated="Receipt Not Generated";
 
 
 
@@ -1236,6 +1242,7 @@ class AppColor{
   static const Color grey1=Color(0xFF8A7B7B);
   static const Color grey2=Color(0xFF5E5F60);
   static const Color grey3=Color(0xFFEBEBEB);
+  static const Color gre4=Color(0xFF9D9696);
   // static const Color orangeColor=Color(0xFFFFB057);
   static const Color orangeColor=Color(0xFFFF8900);
 /*  static const Color primaryLight=Color(0xFF384F9F);

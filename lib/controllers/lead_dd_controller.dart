@@ -12,7 +12,7 @@ import '../models/GetAllBranchByBankIdModel.dart';
 import '../models/GetBankerRoleByLevelAndBankIdModel.dart';
 import '../models/GetLevelOfBankerRoleModel.dart';
 import '../models/dashboard/GetAllBranchBIModel.dart';
-import '../models/dashboard/GetAllChannelModel.dart';
+import '../models/dashboard/GetAllChannelModel.dart' as channelListData;
 import '../models/dashboard/GetAllKsdplProductModel.dart' as ksdplProduct;
 import '../models/dashboard/GetAllStateModel.dart' as stateModel;
 import '../models/dashboard/GetCityByDistrictIdModel.dart';
@@ -40,7 +40,7 @@ class LeadDDController extends GetxController{
   var getAllKsdplBranchModel = Rxn<GetAllKsdplBranchModel>(); //
   var getAllLeadStageModel = Rxn<GetAllLeadStageModel>(); //
   var getAllBranchBIModel = Rxn<GetAllBranchBIModel>();
-  var getAllChannelModel = Rxn<GetAllChannelModel>();
+  var getAllChannelModel = Rxn<channelListData.GetAllChannelModel>();
   var getAllJobRoleModel = Rxn<JobRoleModelResponse>();
   var selectedState = Rxn<String>();
   var selectedDistrict = Rxn<String>();
@@ -111,6 +111,8 @@ class LeadDDController extends GetxController{
   RxList<allBank.Data> bankList = <allBank.Data>[].obs;
 
   RxList<ksdplProduct.Data> ksdplProductList = <ksdplProduct.Data>[].obs;
+
+  RxList<channelListData.Data> channelList = <channelListData.Data>[].obs;
   var isStateLoadingCurr = false.obs;
   var isDistrictLoadingCurr = false.obs;
   var isCityLoadingCurr = false.obs;
@@ -841,7 +843,7 @@ class LeadDDController extends GetxController{
     }
   }
 
-  void  getAllChannelListApi() async {
+  Future<void>  getAllChannelListApi() async {
     try {
 
       isChannelLoading(true);
@@ -850,7 +852,19 @@ class LeadDDController extends GetxController{
       var data = await DrawerApiService.getAllChannelListApi();
       if(data['success'] == true){
 
-        getAllChannelModel.value= GetAllChannelModel.fromJson(data);
+        getAllChannelModel.value= channelListData.GetAllChannelModel.fromJson(data);
+
+
+
+        final List<channelListData.Data> channnels = getAllChannelModel.value?.data ?? [];
+
+        print("channnels====>${channnels}");
+
+        channelList.value = channnels
+            .where((e) => e.active == true)
+            .toList();
+
+        print("channelList.value====>${channelList.value}");
         isChannelLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){

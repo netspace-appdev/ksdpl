@@ -142,9 +142,9 @@ class AddLeadScreen extends StatelessWidget {
                                 validator: ValidationHelper.validatePhoneNumber,
                                 maxLength: 10,
                                 onChanged: (value) {
-                                  if (value.length == 10) {
+                                  /*if (value.length == 10) {
                                     camNoteController.getLeadDetailByCustomerNumberApi(value);
-                                  }
+                                  }*/
                                 },
                               ),
 
@@ -894,46 +894,13 @@ class AddLeadScreen extends StatelessWidget {
       if (addleadcontroller.selectedGender.value==null) {
 
         SnackbarHelper.showSnackbar(title: "Incomplete", message: "Please select gender");
-      }else if(camNoteController.isaddedMobileNumber.value == true){
+      }
+      /*else if(camNoteController.isaddedMobileNumber.value == true){
         SnackbarHelper.showSnackbar(title: "Incomplete", message: "This Number already added ");
         return;
-      }else {
-    /*    if(addleadcontroller.fromWhere.value=="interested"){
+      }*/
+      else {
 
-          addleadcontroller.fillLeadFormApi(
-            id: addleadcontroller.getLeadId.value.toString(),
-
-            dob:  addleadcontroller.dobController.text.toString(),
-
-            gender:  addleadcontroller.selectedGender.toString(),
-            loanAmtReq:  addleadcontroller.loanAmtReqController.text.toString(),
-            email:  addleadcontroller.emailController.text.toString(),
-            aadhar:  addleadcontroller.aadharController.text.toString(),
-            pan:  addleadcontroller.panController.text.toString(),
-            streetAdd:  addleadcontroller.streetAddController.text.toString(),
-            state:  leadDDController.selectedState.value==null?"0":leadDDController.selectedState.value.toString(),
-            district: leadDDController.selectedDistrict.value==null?"0":leadDDController.selectedDistrict.value.toString(),
-            city: leadDDController.selectedCity.value==null?"0":leadDDController.selectedCity.value.toString(),
-            zip: addleadcontroller.zipController.text.toString(),
-            nationality: addleadcontroller.nationalityController.text.toString(),
-            currEmpSt: leadDDController.currEmpStatus.value??"",
-            employerName: addleadcontroller.employerNameController.text.toString(),
-            ///Now this is not working, Have different API for Additional source of income
-            monthlyIncome: addleadcontroller.monthlyIncomeController.text.toString(),
-            addSrcIncome: addleadcontroller.addSourceIncomeController.text.toString(),
-            prefBank: leadDDController.selectedBank.value.toString(),
-            exRelBank:addleadcontroller.selectedIndexRelBank.value==-1?"":addleadcontroller.selectedIndexRelBank.value==0?"Yes":"No",
-            branchLoc:addleadcontroller.branchLocController.text.toString(),
-            prodTypeInt: leadDDController.selectedProdType.value.toString(),
-            connName: addleadcontroller.connNameController.text.toString(),
-            connMob: addleadcontroller.connMobController.text.toString(),
-            connShare: addleadcontroller.connShareController.text.toString(),
-            loanApplNo: "",
-            WhatsappNumber:  addleadcontroller.addLeadwhatsappController.text.toString(),
-          ).then((_){
-            Get.back();
-          });
-        }else{*/
 
           var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
           addleadcontroller.individualLeadUploadApi(
@@ -977,8 +944,6 @@ class AddLeadScreen extends StatelessWidget {
             botNavController.selectedIndex.value = 1;
             Get.offAllNamed("/bottomNavbar");
           });
-        //}
-
       }
     }
   }

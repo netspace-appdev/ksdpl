@@ -179,7 +179,7 @@ class Step1CamNote extends StatelessWidget {
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
-                                      onPressed: mp.multiPackageStatus.value=="SUCCESS"?null: (){
+                                      onPressed: (mp.multiPackageStatus.value=="SUCCESS" || mp.multiPackageStatus.value=="REFUND_FAILED" || mp.multiPackageStatus.value=="REFUND_SUCCESS")?null: (){
                                         final selectedPackage =
                                         camNoteController.packageList.firstWhereOrNull(
                                               (item) => item.id == mp.selectedPackageMulti.value,
@@ -220,7 +220,7 @@ class Step1CamNote extends StatelessWidget {
 
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                            color: mp.multiPackageStatus.value=="SUCCESS"?Colors.grey: AppColor.primaryColor,
+                                            color: (mp.multiPackageStatus.value=="SUCCESS" || mp.multiPackageStatus.value=="REFUND_FAILED" || mp.multiPackageStatus.value=="REFUND_SUCCESS")?Colors.grey: AppColor.primaryColor,
 
                                           ),
                                           padding: EdgeInsets.all(10),
@@ -447,9 +447,9 @@ class Step1CamNote extends StatelessWidget {
                           maxLength: 10,
                           onChanged: (value) {
 
-                            if(value.isNotEmpty){
+                           /* if(value.isNotEmpty){
                               camNoteController.getLeadDetailByCustomerNumberApi(value);
-                            }
+                            }*/
                           },
                         ),
 

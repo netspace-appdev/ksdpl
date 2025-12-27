@@ -623,16 +623,22 @@ class ProductService {
 }) async {
     try {
       final headers = await MyHeader.getHeaders2();
+      print("stateId inside--------->${stateId}");
+      print("districtId inside--------->${districtId}");
+      print("cityId inside--------->${cityId}");
+      print("pincode inside--------->${pincode}");
+      print("jobrole inside--------->${jobrole}");
+      print("channelId inside--------->${channelId}");
 
       final body = {
-        "stateId": 0,
-        "districtId": 0,
-        "cityId": 0,
-        "pincode": "",
-        "jobrole": "",
-        "channelId": 0
+        "stateId": int.tryParse(stateId ?? '') ?? 0,
+        "districtId": int.tryParse(districtId ?? '') ?? 0,
+        "cityId": int.tryParse(cityId ?? '') ?? 0,
+        "pincode": pincode ?? "",
+        "jobrole": jobrole=="null" || jobrole==null?"": jobrole ?? "",
+        "channelId": int.tryParse(channelId ?? '') ?? 0,
       };
-
+     print("getAllEmployee request--------->${body}");
       final response = await http.post(
         Uri.parse(getAllEmployee),
         headers: {
@@ -642,7 +648,7 @@ class ProductService {
         body: jsonEncode(body),
       );
 
-      Helper.ApiReq(getAllEmployee, body);
+
       Helper.ApiReq(getAllEmployee, response.body);
 
       if (response.statusCode == 200) {

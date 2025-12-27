@@ -112,7 +112,7 @@ class SeniorlistScreen extends StatelessWidget {
               child: Image.asset(AppImage.arrowLeft, height: 24,)),
 
           const Text(
-            AppText.manageSenorList,
+            AppText.leadersOfHub,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
@@ -122,6 +122,8 @@ class SeniorlistScreen extends StatelessWidget {
 
           InkWell(
             onTap: () {
+              LeadDDController leadDDController = Get.find();
+              leadDDController.getAllChannelListApi();
              showFilterDialogEmployeeList(context: context);
             },
             child: Container(
@@ -301,43 +303,60 @@ class SeniorlistScreen extends StatelessWidget {
                   selectedValue: addProductController.productCategoryList.firstWhereOrNull(
                         (item) => item.id == seniorScreenController.selectedProductCategory.value,
                   ),
-                  onChanged: (value) {
+                  onChanged: (value) async {
                     seniorScreenController.selectedProductCategory.value =  value?.id;
-                    seniorScreenController.selectedChannel.value = null;
-                    seniorScreenController.getChannelDetailsByProductIdApiRequest(ProductId:value?.id.toString());
+
+                   await seniorScreenController.getChannelDetailsByProductIdApiRequest(ProductId:value?.id.toString());
+                    print("Channel list size: ${leadDDController.channelList.length}");
+                    print("Selected channel: ${seniorScreenController.selectedChannel.value}");
 
                   },
                   onClear: (){
                     seniorScreenController.selectedProductCategory.value = 0;
-                    addProductController.productCategoryList.clear(); // reset dependent dropdown
+                    seniorScreenController.selectedChannel.value=0;
+                    seniorScreenController.isChannelDisable.value=false;
+                    leadDDController.channelList.clear();
                   },
                 );
               }),
+
               const SizedBox(
                 height: 10,
               ),
-              const Text(
+
+               Text(
                 AppText.channelName,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColor.grey2,
+                  color:
+                  AppColor.grey2,
                 ),
               ),
               const SizedBox(
                 height: 10,
               ),
-
+              seniorScreenController.isChannelDisable.value==true?
+              Text(
+                "${seniorScreenController.getChannelDetailsByProduct.value?.data?.first.channelName} -${seniorScreenController.getChannelDetailsByProduct.value?.data?.first.channelCode}",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color:
+                  AppColor.secondaryColor,
+                ),
+              )
+                  :
               Obx((){
                 if (leadDDController.isChannelLoading.value) {
                   return  Center(child:CustomSkelton.leadShimmerList(context));
                 }
 
                 return CustomDropdown<channel.Data>(
-                  items: leadDDController.getAllChannelModel.value?.data ?? [],
+                  items: leadDDController.channelList ?? [],
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.channelName.toString()+" (${item.channelCode.toString()})",
-                  selectedValue: leadDDController.getAllChannelModel.value?.data?.firstWhereOrNull(
+                  selectedValue:  leadDDController.channelList.firstWhereOrNull(
                         (item) => item.id == seniorScreenController.selectedChannel.value,
                   ),
                   onChanged: (value) {
@@ -522,13 +541,13 @@ class SeniorlistScreen extends StatelessWidget {
             ),
           )
               : const Text(
-            "Submit",
+            AppText.submit,
             style: TextStyle(color: Colors.white),
           ),
 
-          secondButtonText: "Cancel",
-          firstButtonColor: AppColor.primaryColor,
-          secondButtonColor: AppColor.redColor,
+          secondButtonText: AppText.clearFilter,
+          firstButtonColor: AppColor.secondaryColor,
+          secondButtonColor: AppColor.primaryColor,
 
           onFirstButtonPressed: () {
             seniorScreenController.filterSubmit();

@@ -1028,9 +1028,13 @@ class Addleadcontroller extends GetxController{
         individualLeadUploadModel.value= IndividualLeadUploadModel.fromJson(data);
 
         ToastMessage.msg( individualLeadUploadModel.value!.message!.toString());
+        String uln="";
 
-        var uln=individualLeadUploadModel.value!.data!.uniqueLeadNumber.toString();
-
+        if (individualLeadUploadModel.value?.data != null) {
+          uln=individualLeadUploadModel.value!.data!.uniqueLeadNumber.toString();
+        } else {
+          print("No lead here---><");
+        }
 
         final List<IncomeModel> addIncomeSrcModels = [];
 
