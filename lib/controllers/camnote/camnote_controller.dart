@@ -38,6 +38,7 @@ import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart' as o
 import '../../models/camnote/GetProductDetailsByFilterModel.dart' as pdFModel;
 import '../../models/camnote/GetSalePackagesByLeadIdModel.dart';
 import '../../models/camnote/InsertCustomerPackageRequestOnCamnoteModel.dart';
+import '../../models/camnote/NewGenerateQRModel.dart';
 import '../../models/camnote/RequestForFinancialServicesModel.dart';
 import '../../models/camnote/SaveCamnoteDetailsModel.dart';
 import '../../models/camnote/SendMailForLocationOfCustomerModel.dart';
@@ -118,6 +119,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var saveCamnoteDetailsModel = Rxn<SaveCamnoteDetailsModel>(); //
   var insertCustomerPackageRequestOnCamnoteModel = Rxn<InsertCustomerPackageRequestOnCamnoteModel>(); //
   var getSalePackagesByLeadIdModel = Rxn<GetSalePackagesByLeadIdModel>(); //
+  var newGenerateQRModel = Rxn<NewGenerateQRModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
 
 
@@ -3517,6 +3519,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? PackageId,
     String? CustomerName,
     String? CustomerWhatsAppNo,
+    String? QRString,
   }) async {
     try {
       print("addCamNoteDetailApi-->1");
@@ -3526,6 +3529,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         PackageId: PackageId,
         CustomerName: CustomerName,
         CustomerWhatsAppNo: CustomerWhatsAppNo,
+        QRString: QRString,
       );
 
 
@@ -3614,7 +3618,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   }
 
 
-  Future<void>  insertCustomerPackageRequestOnCamnoteApi({
+  Future<bool>  insertCustomerPackageRequestOnCamnoteApi({
     String? Id,
     String? Name,
     String? Mobile,
@@ -3628,6 +3632,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     try {
 
       isBankerSuperiorLoading(true);
+      isLoadingMainScreen(true);
 
 
       var data = await NewDDService.insertCustomerPackageRequestOnCamnoteApi(
@@ -3648,14 +3653,17 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         print("superiorMobile==>${getBankerDetailsByIdModel.value?.data?.superiorMobile??""}");
 
         insertCustomerPackageRequestOnCamnoteModel.value= InsertCustomerPackageRequestOnCamnoteModel.fromJson(data);
-        await getSalePackagesByLeadIdApi(LeadId:LeadId??"0" );
+      /*  await getSalePackagesByLeadIdApi(LeadId:LeadId??"0" );*/
+        return true;
         isBankerSuperiorLoading(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
 
         insertCustomerPackageRequestOnCamnoteModel.value=null;
+        return false;
       }else{
+        return false;
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }
 
@@ -3664,12 +3672,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       print("Error insertCustomerPackageRequestOnCamnoteModel: $e");
 
       ToastMessage.msg(AppText.somethingWentWrong);
-
+      return false;
       isBankerSuperiorLoading(false);
     } finally {
 
 
       isBankerSuperiorLoading(false);
+      isLoadingMainScreen(false);
     }
   }
 
@@ -3754,6 +3763,64 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       isCaNoteStep2Loading(false);
       isAllCamnoteSubmit(false);
+    }
+  }
+
+  ///New genderate QR API
+
+
+  Future<bool>  newGenerateQRApi({
+    required String serviceId,
+    required String amount,
+    required String leadId,
+  }) async {
+    try {
+
+      isBankerSuperiorLoading(true);
+      isLoadingMainScreen(true);
+
+      var data = await CamNoteService.newGenerateQRApi(
+        serviceId: serviceId,
+        amount: amount,
+
+      );
+
+
+      if(data['success'] == true){
+
+
+
+        newGenerateQRModel.value= NewGenerateQRModel.fromJson(data);
+
+        isBankerSuperiorLoading(false);
+
+        return true;
+
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        saveCamnoteDetailsModel.value=null;
+        return false;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+        return false;
+      }
+
+
+    } catch (e) {
+      print("Error newGenerateQRApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isBankerSuperiorLoading(false);
+      return false;
+    } finally {
+
+
+      isBankerSuperiorLoading(false);
+      isLoadingMainScreen(false);
     }
   }
 

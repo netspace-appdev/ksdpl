@@ -38,6 +38,7 @@ class CamNoteService {
   static const String checkReceiptStatusForCamNote = BaseUrl.baseUrl + 'CamNoteDetail/CheckReceiptStatusForCamNote';
   static const String saveCamnoteDetails = BaseUrl.baseUrl + 'CamNoteDetail/SaveCamnoteDetails';
   static const String getSalePackagesByLeadId = BaseUrl.baseUrl + 'CamNoteDetail/GetSalePackagesByLeadId';
+  static const String UPIAPisGenerateQR = BaseUrl.baseUrl + 'UPIAPis/generate-qr';
 
 
 
@@ -1135,6 +1136,7 @@ class CamNoteService {
     String? PackageId,
     String? CustomerName,
     String? CustomerWhatsAppNo,
+    String? QRString,
   })
   async {
     print("addCustomerDetails--->");
@@ -1152,6 +1154,7 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'PackageId', PackageId, fallback: "0");
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CustomerName', CustomerName);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CustomerWhatsAppNo', CustomerWhatsAppNo);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'QRString', QRString);
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
@@ -1322,6 +1325,46 @@ class CamNoteService {
     } catch (e) {
       print("Error: $e");
       throw Exception('Error : $e');
+    }
+  }
+
+
+  ///generate QR new API
+  static Future<Map<String, dynamic>> newGenerateQRApi({
+    required String serviceId,
+    required String amount,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(UPIAPisGenerateQR),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Amount', amount,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'ServiceId', serviceId, fallback: "0");
+
+
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+
+      Helper.ApiReq(UPIAPisGenerateQR, request.fields);
+      Helper.ApiRes(UPIAPisGenerateQR, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
     }
   }
 
