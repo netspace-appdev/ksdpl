@@ -103,8 +103,8 @@ class Step2CamNote extends StatelessWidget {
                                        color: AppColor.grey2,
                                      ),
                                    ),
-                                   if(camNoteController.enableAllCibilFields.value)
-                                   if (camNoteController.isGenerateCibilVisible.value)
+                                   /*if(camNoteController.enableAllCibilFields.value)
+                                   if (camNoteController.isGenerateCibilVisible.value)*/
                                      InkWell(
                                        onTap: () {
                                          camNoteController.selectedIndexGenCibil.value = -1;

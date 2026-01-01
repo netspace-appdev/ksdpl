@@ -202,6 +202,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         addProductController.isFirstSave.value=0;
                         NewDDController newDDController=Get.put(NewDDController());
                         newDDController.getAllPrimeSecurityMasterApi();
+                        leadDDController.getAllBankApi();
                         Get.toNamed("/addProductScreen");
 
                       },

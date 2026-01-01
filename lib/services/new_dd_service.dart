@@ -12,7 +12,7 @@ class NewDDService {
 
 
   static const String getBranchListOfDistrictByZipAndBank = BaseUrl.baseUrl + 'Branch/GetBranchListOfDistrictByZipAndBank';
-  static const String getBankerDetailsByBranchId = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetailsByBranchId';
+  static const String getBankerDetailsByBranchId = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetailsByBranchId'; //fetch bank
   static const String getBankerDetailsById = BaseUrl.baseUrl + 'CamNoteDetail/GetBankerDetailsById';
   static const String getAllPrimeSecurityMaster = BaseUrl.baseUrl + 'BankMaster/GetAllPrimeSecurityMaster';
   static const String insertCustomerPackageRequestOnCamnote = BaseUrl.baseUrl + 'FileUpload/InsertCustomerPackageRequestOnCamnote';
