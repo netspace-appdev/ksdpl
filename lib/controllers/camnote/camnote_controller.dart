@@ -614,7 +614,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     mp.canBeDeleted.value = true; // 🔥 THIS is the missing piece
     mp.enableAllPackageFields.value = true; // 🔥 THIS is the missing piece
-
+    mp.enablePackageDropdown.value =  true;
+    mp.multiPackageId.value =  "0";
     multiPackageList.add(mp);
 
   }
@@ -640,6 +641,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         removed.camReceivableDateMultiController .dispose();
         removed.camTransactionDetailsUtrMultiController .dispose();
         removed.camRemarkMultiController .dispose();
+
+        removed.canBeDeleted.close();
+        removed.enableAllPackageFields.close();
+        removed.enablePackageDropdown.close();
+        removed.multiPackageId.close();
       });
     } else {
     }
@@ -735,7 +741,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     stepCompleted[currentStep.value] = true;
   }
 
-  void saveForm(String autoIndividual) async {
+  void saveForm(String autoIndividual,pdFModel.Data bankerData,) async {
     if(camFullNameController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
       return;
@@ -810,7 +816,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
             } else {
               print("No branchId stored yet for bankId: $bankId");
             }
-
+            var eId=StorageService.get(StorageService.EMPLOYEE_ID);
             print("inside this-->4");
             addCamNoteDetailApi(
               Id:"0",
@@ -872,6 +878,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               CasesToBeContenued: camCasesToBeContenuedController.text.trim().toString(),
               EMIsOfExistingLiabilities: camEmisOfExistingLiabilitiesController.text.trim().toString(),
               IIR: camIirController.text.trim().toString(),
+
+              CreatedBy:eId,
+              DSACode:bankerData.dsaCode.toString(),
+              DSAName:bankerData.dsaCode.toString(),
             );
 
           }
@@ -896,7 +906,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1",
           message: "Please enter received amount");
       return false;
-    } else if (double.tryParse(camReceivableAmtController.text ?? "0")! < 118) {
+    }
+    else if (double.tryParse(camReceivableAmtController.text ?? "0")! < 118) {
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1",
           message: "Amount must not be less than 118");
       return false;
@@ -1158,7 +1169,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     super.onInit();
   }
 
-  void forBankDetailSubmit(){
+  void forBankDetailSubmit() {
+    //await getCamNoteDetailByLeadIdApi(leadId: getLeadId.value.toString());
     getProductDetailsByFilterApi(
         cibil: double.tryParse(camCibilController .text.trim())
             ?.toInt()
@@ -2082,7 +2094,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     String? EMIsOfExistingLiabilities,
     String? IIR,
 
-
+    String? CreatedBy,
+    String? DSACode,
+    String? DSAName,
   }) async {
     try {
       print("addCamNoteDetailApi-->1");
@@ -2148,6 +2162,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         CasesToBeContenued: CasesToBeContenued,
         EMIsOfExistingLiabilities: EMIsOfExistingLiabilities,
         IIR: IIR,
+        CreatedBy: CreatedBy,
+        DSACode: DSACode,
+        DSAName: DSAName,
 
       );
 
@@ -2308,6 +2325,63 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camCibilMobController.clear();
     camEMIsCcasesNotReflectingCibilController.clear();
     selectedCamIncomeTypeList.value=null;
+
+    ///3 Jan 2026
+    isGenerateCibilVisible.value=false;
+    camCibilController.clear();
+    camTotalLoanAvailedController.clear();
+    camTotalLiveLoanAvailedOnCibilController.clear();
+    camClosedCasesController.clear();
+    camClosedAmountController.clear();
+    camTotalLiveLoanController.clear();
+    camCurrentBalanceController.clear();
+    camTotalOverdueCasesController.clear();
+    camTotalOverdueAmountController.clear();
+    camTotalOverdueAmountController.clear();
+    camWrittenOffAmountController.clear();
+    camSettlementCasesController.clear();
+    camSettlementAmountController.clear();
+    camSuitFiledWillfulDefaultCasesController.clear();
+    camSuitFiledWillfulDefaultAmountController.clear();
+    camSuitFiledWillfulDefaultAmountController.clear();
+
+    //Section B
+    camStandardCountController.clear();
+    camDoubtfulCountController.clear();
+    camNumberOfDaysPastDueCountController.clear();
+    camSpecialMentionAccountCountController.clear();
+    camLossCountController.clear();
+    camNptController.clear();
+    camSubstandardCountController.clear();
+    camTotalCountsController.clear();
+    camTotalCountsController.clear();
+
+
+    //Section C
+    camCurrentlyCasesBeingServedController.clear();
+    camCasesToBeForeclosedOnOrBeforeDisbController.clear();
+    camCasesToBeContenuedController.clear();
+    camTotalEnquiriesWithin12monthsCibilController.clear();
+    camTotalEmiController.clear();
+    camEmiStoppedBeforeController.clear();
+    camEmiWillContinueController.clear();
+    camEMIsCcasesNotReflectingCibilController.clear();
+
+   // Secton D
+    camOfferedSecurityTypeController.clear();
+    camPropertyValueController.clear();
+    camLoanTenorRequestedController.clear();
+    selectedCamIncomeTypeList.value="";
+    camTotalFamilyIncomeController.clear();
+    camIncomeCanBeConsideredController.clear();
+    camEarningCustomerAgeController.clear();
+    camNonEarningCustomerAgeController.clear();
+    camLoanAmtReqController.clear();
+    camRateOfInterestController.clear();
+    camProposedEmiController.clear();
+    camIirController.clear();
+    camFoirController.clear();
+
   }
 
 
@@ -3913,13 +3987,19 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   Future<void> populateMultiPackage() async {
     final multiPackageData = getSalePackagesByLeadIdModel.value?.data ?? [];
+    // 👀 Check if any package is SUCCESS
+    isGenerateCibilVisible.value =
+        multiPackageData.any((item) => item.txnStatus == "SUCCESS");
 
     if (multiPackageData.isEmpty) {
       print("No populateMultiPackage data found");
       final multiPkController = MultiPackageModelController();
       multiPkController.canBeDeleted.value =  true;
+      multiPkController.enablePackageDropdown.value =  true;
+      multiPkController.multiPackageId.value =  "0";
       multiPackageList.add(multiPkController);
       maxAllowedBank.value = 0;
+
       return;
     }
 
@@ -3928,7 +4008,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     for (var item in multiPackageData) {
       final multiPkController = MultiPackageModelController();
-
+      print("item.txnStatus ===>${item.txnStatus }");
       multiPkController.selectedPackageMulti.value = item.packageId ?? 0;
       multiPkController.camPackageAmtMultiController.text =item.amount?.toString() ?? '';
       multiPkController.camReceivableAmtMultiController.text =   item.txnStatus == "SUCCESS" ? item.payerAmount?.toString() ?? ''  : "";
@@ -3937,6 +4017,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       multiPkController.multiPackageStatus.value =  item.txnStatus?.toString() ?? 'N/A';
       multiPkController.canBeDeleted.value =  false;
       maxAllowedBank.value = item.txnStatus == "SUCCESS" ? (item.noOfBank?.toInt()??0): 0;
+      multiPkController.enablePackageDropdown.value = (item.txnStatus == "PENDING" || item.txnStatus.toString() == "null" )? true:false;
+      multiPkController.multiPackageId.value =  (item.id??0).toString() ;
       multiPackageList.add(multiPkController);
 
       multiPkController.enableAllPackageFields.value=false;

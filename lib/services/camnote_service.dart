@@ -405,6 +405,9 @@ class CamNoteService {
     String? CasesToBeContenued,
     String? EMIsOfExistingLiabilities,
     String? IIR,
+    String? CreatedBy,
+    String? DSACode,
+    String? DSAName,
 
   }) async {
     try {
@@ -480,6 +483,11 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'CasesToBeContenued', CasesToBeContenued, fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'EMIsOfExistingLiabilities', EMIsOfExistingLiabilities, fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'IIR', IIR, fallback: "0");
+
+
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'CreatedBy', CreatedBy, fallback: "0");
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'DSACode', DSACode);
+      MultipartFieldHelper.addFieldWithoutNull(request.fields, 'DSAName', DSAName);
 
       var streamedResponse = await request.send();
 
@@ -671,7 +679,7 @@ class CamNoteService {
       var response = await http.Response.fromStream(streamedResponse);
 
       Helper.ApiReq(getCamNoteDetailByLeadId, request.fields);
-      Helper.ApiReq(getCamNoteDetailByLeadId,response.statusCode);
+      Helper.ApiReq(getCamNoteDetailByLeadId,response.body);
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {

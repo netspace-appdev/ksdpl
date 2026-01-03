@@ -216,6 +216,8 @@ class Step3CamNote extends StatelessWidget {
                 return buildCard(
                   Helper.capitalizeEachWord(banker.bankName.toString()), // title
                   [
+                    _buildDetailRow(AppText.dsaCode, banker.dsaCode.toString()=="null"?"":banker.dsaCode.toString()),
+                    _buildDetailRow(AppText.dsaName, banker.dsaName.toString()=="null"?"":banker.dsaName.toString()),
                     _buildDetailRow(AppText.bankerName, banker.bankersName.toString()),
                     _buildDetailRow(AppText.bankerMobile, banker.bankersMobileNumber.toString()),
                     _buildDetailRow(AppText.bankerWhatsapp, banker.bankersWhatsAppNumber.toString()),
@@ -239,7 +241,8 @@ class Step3CamNote extends StatelessWidget {
                           textColor: camNoteController.bankerThemes[2]["textColor"],
                           iconColor:camNoteController.bankerThemes[2]["iconColor"],
                           boxId: banker.id.toString(),
-                          autoIndividual: banker.autoindividual.toString()
+                          autoIndividual: banker.autoindividual.toString(),
+                          bankerData: banker
                         ):
                         _buildTextButton(
                           label:"Add",
@@ -251,7 +254,8 @@ class Step3CamNote extends StatelessWidget {
                           textColor: camNoteController.bankerThemes[0]["textColor"],
                           iconColor:camNoteController.bankerThemes[0]["iconColor"],
                           boxId: banker.id.toString(),
-                          autoIndividual: banker.autoindividual.toString()
+                          autoIndividual: banker.autoindividual.toString(),
+                          bankerData: banker
                         ),
                         SizedBox(height: 10,),
 
@@ -266,7 +270,8 @@ class Step3CamNote extends StatelessWidget {
                             textColor:isSelected ? camNoteController.bankerThemes[1]["textColor"]:camNoteController.bankerThemes[0]["textColor"],
                             iconColor:isSelected ? camNoteController.bankerThemes[1]["iconColor"]:camNoteController.bankerThemes[0]["iconColor"],
                             boxId: banker.id.toString(),
-                            autoIndividual: banker.autoindividual.toString()
+                            autoIndividual: banker.autoindividual.toString(),
+                            bankerData: banker
                           ),
 
                       ],
@@ -417,6 +422,7 @@ class Step3CamNote extends StatelessWidget {
     required Color iconColor,
     required String boxId,
     required String autoIndividual,
+    required proFilter.Data bankerData,
 }) {
     return GestureDetector(
       onTap: () {
@@ -437,7 +443,7 @@ class Step3CamNote extends StatelessWidget {
                   iconColor: AppColor.secondaryColor,
                   description: AppText.sendCamMsg,
                   onYes: () {
-                    camNoteController.saveForm(autoIndividual);
+                    camNoteController.saveForm(autoIndividual, bankerData);
                   },
                   onNo: () {
                     camNoteController.selectedBankers.clear();

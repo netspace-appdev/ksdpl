@@ -376,6 +376,7 @@ class AppText{
   static const String uploadDocNote = "Only PDF files. Max 2 MB";
 
   static const String dsaCode = "DSA Code";
+  static const String dsaName = "DSA Name";
   static const String enterDsaCode = "Enter DSA Code";
   static const String loanApplicationNo = "Loan Application No";
   static const String loanApplicationDetails = "Loan Application Details";
@@ -764,10 +765,10 @@ class AppText{
   static const String propertyValue = "Property Value As Per Customer";
   static const String enterPropertyValue = "Enter Property Value";
 
-  static const String foir = "FOIR";
+  static const String foir = "FOIR (%)";
   static const String autoCalculatedFoir = "Auto-calculated FOIR";
 
-  static const String ltv = "LTV";
+  static const String ltv = "LTV (%)";
   static const String doc = "Doc1";
   static const String autoCalculatedLtv = "Auto-calculated LTV";
   static const String sectionA = "Section A";
@@ -1164,7 +1165,7 @@ class AppText{
   static const String emisOfExistingLiabilities = "EMIs Of Existing Liabilities";
   static const String enterEmisOfExistingLiabilities = "Enter EMIs Of Existing Liabilities";
 
-  static const String iir = "IIR";
+  static const String iir = "IIR (%)";
   static const String enterIir = "Enter IIR";
   static const String customerName = "Customer Name";
   static const String enterCustomerName = "Enter Customer Name";

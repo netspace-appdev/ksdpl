@@ -120,17 +120,7 @@ class Step1CamNote extends StatelessWidget {
                                   mp.camPackageAmtMultiController.text=value?.amount.toString() ??"0";
                                   print("camNoteController.camPackageAmtController.text---->${mp.camPackageAmtMultiController.text} and ${value?.amount.toString()}");
                                   if(mp.selectedPackageMulti.value!=null){
-                                 /*   if(value?.qRImage!=null){
-                                      showPackageQRDialog(
-                                          context: context,
-                                          imageURL:  BaseUrl.imageBaseUrl+value!.qRImage.toString()??"",
-                                          packageId: mp.selectedPackageMulti.value.toString()
-
-                                      );
-                                    }*/
                                     camNoteController.getPackageDetailsByIdApi(packageId: mp.selectedPackageMulti.value.toString());
-                                   /* camNoteController.maxAllowedBank.value = value?.noOfBank ??0;*/
-
 
                                   }
 
@@ -144,7 +134,7 @@ class Step1CamNote extends StatelessWidget {
                                   camNoteController.camRemarkController.clear();
 
                                 },
-                                isEnabled: mp.enableAllPackageFields.value??true,
+                                isEnabled: mp.enablePackageDropdown.value??false,
                               );
                             }),
                             const SizedBox(height: 10),
@@ -194,7 +184,7 @@ class Step1CamNote extends StatelessWidget {
                                         if (selectedPackage.qRImage != null) {
                                           var empId=StorageService.get(StorageService.EMPLOYEE_ID);
                                            var success=await camNoteController.insertCustomerPackageRequestOnCamnoteApi(
-                                            Id: "0",
+                                            Id: mp.multiPackageId.toString(),
                                             Name: camNoteController.camFullNameController.text.trim().toString(),
                                             Mobile:camNoteController.camPhoneController.text.trim().toString(),
                                             Amount: mp.camPackageAmtMultiController.text.trim().toString(),
@@ -217,7 +207,7 @@ class Step1CamNote extends StatelessWidget {
 
                                                  imageURL:
                                                      (camNoteController.newGenerateQRModel.value?.data?.qrImageUrl??""),
-                                                 packageId: selectedPackage.id.toString(),
+                                                 packageId:mp.selectedPackageMulti.value.toString(), //selectedPackage.id.toString(),
                                                  packageAmount: camNoteController.newGenerateQRModel.value?.data?.amount.toString()??"0",
                                                  refId: camNoteController.newGenerateQRModel.value?.data?.refId==null || camNoteController.newGenerateQRModel.value?.data?.refId=="null"?"":
                                                  camNoteController.newGenerateQRModel.value?.data?.refId.toString()??"",
@@ -265,7 +255,7 @@ class Step1CamNote extends StatelessWidget {
                               hintText: AppText.enterPackageAmount,
                               isInputEnabled: mp.enableAllPackageFields.value??true,
 
-                              isRequired: camNoteController.selectedPackage.value==0?false:true,
+                             // isRequired: camNoteController.selectedPackage.value==0?false:true,
                             ),
 
 
@@ -275,27 +265,27 @@ class Step1CamNote extends StatelessWidget {
                               inputType: TextInputType.number,
                               hintText: AppText.enterReceivableAmount,
                               isRequired: camNoteController.selectedPackage.value==0?false:true,
-                              isInputEnabled: mp.enableAllPackageFields.value??true,
+                            //  isInputEnabled: mp.enableAllPackageFields.value??true,
                             ),
 
                             CustomLabeledPickerTextField(
                               label: AppText.receivableDate,
 
-                              controller: mp.camReceivableDateMultiController,// camNoteController.camReceivableDateController
+                              controller: mp.camReceivableDateMultiController,
                               inputType: TextInputType.name,
                               hintText: AppText.mmddyyyy,
                               isDateField: true,
                               isFutureDisabled: true,
-                              isRequired: camNoteController.selectedPackage.value==0?false:true,
+                             // isRequired: camNoteController.selectedPackage.value==0?false:true,
                               enabled:mp.enableAllPackageFields.value??true,
                             ),
 
                             CustomLabeledTextField(
                               label: AppText.invoiceNumber,
-                              controller: mp.camTransactionDetailsUtrMultiController,//camNoteController.camTransactionDetailsController
+                              controller: mp.camTransactionDetailsUtrMultiController,
                               inputType: TextInputType.name,
                               hintText: AppText.enterinvoiceNumber,
-                              isRequired: camNoteController.selectedPackage.value==0?false:true,
+                             // isRequired: camNoteController.selectedPackage.value==0?false:true,
                               isInputEnabled: mp.enableAllPackageFields.value??true,
                             ),
 
@@ -1155,258 +1145,6 @@ class Step1CamNote extends StatelessWidget {
                     )
                   ],
                 ),
-
-                ///working package
-               /* ExpansionTile(
-                  initiallyExpanded: true,
-                  childrenPadding: const EdgeInsets.symmetric(horizontal: 0),
-                  title:const Text( AppText.packageDetails, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                  leading: const Icon(Icons.list_alt, size: 20,),
-                  children: [
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomTextLabel(
-                          label: AppText.packageName,
-                          isRequired: camNoteController.selectedPackage.value==0?false:true,
-
-                        ),
-
-                        const SizedBox(height: 10),
-
-
-                        Obx((){
-                          if (camNoteController.isPackageLoading.value) {
-                            return  Center(child:CustomSkelton.leadShimmerList(context));
-                          }
-
-
-                          return CustomDropdown<pkg.Data>(
-                            items: camNoteController.packageList  ?? [],
-                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                            getName: (item) => item.packageName.toString(),
-                            selectedValue: camNoteController.packageList.firstWhereOrNull(
-                                  (item) => item.id == camNoteController.selectedPackage.value,
-
-                            ),
-                            onChanged: (value) {
-                              // print("value image--->${value?.qRImage.toString()}");
-                              camNoteController.selectedPackage.value =  value?.id;
-                              print("packageid---->${camNoteController.selectedPackage.value}");
-                              camNoteController.camPackageAmtController.text=value?.amount.toString() ??"0";
-                              if(camNoteController.selectedPackage.value!=null){
-                                if(value?.qRImage!=null){
-                                  showPackageQRDialog(
-                                      context: context,
-                                      imageURL:  BaseUrl.imageBaseUrl+value!.qRImage.toString()??"",
-                                      packageId: camNoteController.selectedPackage.value.toString()
-
-                                  );
-                                }
-                                camNoteController.getPackageDetailsByIdApi(packageId: camNoteController.selectedPackage.toString());
-                                // camNoteController.maxAllowedBank = camNoteController.getMaxBankSelection(value?.packageName.toString() ??"0", value?.amount.toString() ??"0")??-1;
-                                camNoteController.maxAllowedBank.value = value?.noOfBank ??0;
-
-
-                              }
-
-                            },
-                            onClear: (){
-                              camNoteController.selectedPackage.value = 0;
-                              camNoteController.camPackageAmtController..clear();
-                              camNoteController.camReceivableAmtController.clear();
-                              camNoteController.camReceivableDateController.clear();
-                              camNoteController.camTransactionDetailsController.clear();
-                              camNoteController.camRemarkController.clear();
-
-                            },
-                          );
-                        }),
-                        SizedBox(height: 20,),
-
-                        CustomLabeledTextField(
-                          label: AppText.packageAmount,
-                          controller: camNoteController.camPackageAmtController,
-                          inputType: TextInputType.number,
-                          hintText: AppText.enterPackageAmount,
-                          isInputEnabled: false,
-                          isRequired: camNoteController.selectedPackage.value==0?false:true,
-                        ),
-
-                        CustomLabeledTextField(
-                          label: AppText.receivableAmount,
-                          controller: camNoteController.camReceivableAmtController,
-                          inputType: TextInputType.number,
-                          hintText: AppText.enterReceivableAmount,
-                          isRequired: camNoteController.selectedPackage.value==0?false:true,
-
-                        ),
-
-                        CustomLabeledPickerTextField(
-                          label: AppText.receivableDate,
-
-                          controller: camNoteController.camReceivableDateController,
-                          inputType: TextInputType.name,
-                          hintText: AppText.mmddyyyy,
-                          isDateField: true,
-                          isFutureDisabled: true,
-                          isRequired: camNoteController.selectedPackage.value==0?false:true,
-                        ),
-
-                        CustomLabeledTextField(
-                          label: AppText.transactionDetails,
-                          controller: camNoteController.camTransactionDetailsController,
-                          inputType: TextInputType.name,
-                          hintText: AppText.enterTransactionDetails,
-                          isRequired: camNoteController.selectedPackage.value==0?false:true,
-                        ),
-
-                        CustomLabeledTextField(
-                          label: AppText.remark,
-                          controller: camNoteController.camRemarkController,
-                          inputType: TextInputType.name,
-                          hintText: AppText.enterRemark,
-
-                        ),
-
-                        Helper.customDivider(color: Colors.grey),
-
-                        SizedBox(height: 10,),
-
-                        CustomTextLabel(
-                          label: AppText.addIncome,
-                        ),
-
-                        Obx(() => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(camNoteController.addIncomeList.length, (index) {
-                            final ai = camNoteController.addIncomeList[index];
-
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-
-                                SizedBox(height: 20,),
-
-
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-
-                                    CustomLabeledTextField(
-                                      label: AppText.source,
-                                      isRequired: false,
-                                      controller: ai.aiSourceController,
-                                      inputType: TextInputType.name,
-                                      hintText: AppText.enterSource,
-
-                                    ),
-
-
-                                    CustomLabeledTextField(
-                                      label: AppText.income,
-                                      isRequired: false,
-                                      controller: ai.aiIncomeController,
-                                      inputType: TextInputType.number,
-                                      hintText: AppText.enterIncome,
-
-                                    ),
-
-                                  ],
-                                ),
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-
-                                  children: [
-                                    index== camNoteController.addIncomeList.length-1?
-                                    Obx((){
-                                      if(camNoteController.isLoading.value){
-                                        return const Align(
-                                          alignment: Alignment.centerRight,
-                                          child: SizedBox(
-                                            height: 30,
-                                            width: 30,
-                                            child: CircularProgressIndicator(
-                                              color: AppColor.primaryColor,
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                      return Align(
-                                        alignment: Alignment.centerRight,
-                                        child: IconButton(
-                                            onPressed: (){
-                                              camNoteController.addAdditionalSrcIncome();
-                                            },
-                                            icon: Container(
-
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                                  color: AppColor.primaryColor,
-
-                                                ),
-                                                padding: EdgeInsets.all(10),
-
-                                                child: Icon(Icons.add, color: AppColor.appWhite,)
-                                            )
-                                        ),
-                                      );
-                                    }):
-                                    Container(),
-
-                                    SizedBox(height: 20),
-
-                                    Obx((){
-                                      if(camNoteController.isLoading.value){
-                                        return const Align(
-                                          alignment: Alignment.center,
-                                          child: SizedBox(
-                                            height: 30,
-                                            width: 30,
-                                            child: CircularProgressIndicator(
-                                              color: AppColor.primaryColor,
-                                            ),
-                                          ),
-                                        );
-                                      }
-
-
-                                      return Align(
-                                        alignment: Alignment.centerRight,
-                                        child: IconButton(
-                                            onPressed: camNoteController.addIncomeList.length <= 1?(){}: (){
-                                              camNoteController.removeAdditionalSrcIncome(index);
-                                            },
-                                            icon: Container(
-
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                                  color: camNoteController.addIncomeList.length <= 1?AppColor.lightRed: AppColor.redColor,
-
-                                                ),
-                                                padding: EdgeInsets.all(10),
-
-                                                child: Icon(Icons.remove, color: AppColor.appWhite,)
-                                            )
-                                        ),
-                                      );
-                                    })
-                                  ],
-                                )
-                              ],
-                            );
-                          }),
-                        )),
-
-                        SizedBox(height: 10,),
-
-                      ],
-                    )
-                  ],
-                ),*/
-
 
                 Helper.customDivider(color: Colors.grey),
 

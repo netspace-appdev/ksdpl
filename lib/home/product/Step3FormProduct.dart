@@ -186,25 +186,6 @@ class Step3FormProduct extends StatelessWidget {
                 },
               ),
 
-          /*    TextFormField(
-                key: addProductController.processingFeeFieldKey,
-                focusNode: addProductController.processingFeeFocusNode,
-                controller: addProductController.prodProcessingFeeController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Enter Processing Fee",
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  final numValue = num.tryParse(value ?? '') ?? 0;
-                  if (numValue > 100) {
-                    return "Percentage can't be more than 100!";
-                  }
-                  return null;
-                },
-              ),*/
-
-
 
               CustomLabeledTextField(
                 label: AppText.legalFee,

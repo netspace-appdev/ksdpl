@@ -263,11 +263,12 @@ class Addleadcontroller extends GetxController{
 
 
         await camNoteController.getAllPackageMasterApi();
-        camNoteController.selectedPackage.value=getLeadDetailModel.value?.data?.packageId??0;
+        ///Commented on 03 Jan 2026, uncomment if you find abnormal behaviour
+       /* camNoteController.selectedPackage.value=getLeadDetailModel.value?.data?.packageId??0;
 
         if(camNoteController.selectedPackage.value!=null){
           camNoteController.getPackageDetailsByIdApi(packageId: camNoteController.selectedPackage.toString());
-        }
+        }*/
 
 
         camNoteController.camPackageAmtController.text=getLeadDetailModel.value?.data?.packageAmount.toString()??"0";
@@ -280,11 +281,6 @@ class Addleadcontroller extends GetxController{
 
         camNoteController.getAddIncUniqueLeadApi(uniqueLeadNumber:getLeadDetailModel.value!.data!.uniqueLeadNumber?.toString()??"0");
 
-
-         /*camNoteController.checkReceiptStatusForCamNoteApi(
-            Mobile: getLeadDetailModel.value?.data?.transactionDetails.toString()??"0",
-            Utr: getLeadDetailModel.value?.data?.mobileNumber ?? ""
-        );*/
 
         final geoLocationProp = getLeadDetailModel.value!.data!.geoLocationOfProperty;
 

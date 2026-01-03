@@ -88,6 +88,8 @@ class Data {
   String? ksdplProduct;
   num? specialBranchId;
   String? autoindividual; // <-- Add this in your data model
+  String? dsaCode;
+  String? dsaName;
 
   Data(
       {this.id,
@@ -145,6 +147,8 @@ class Data {
         this.ksdplProduct,
         this.specialBranchId, // 👈 include in constructor
         this.autoindividual, // 👈 include in constructor
+        this.dsaCode,
+        this.dsaName
       });
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -202,6 +206,8 @@ class Data {
     bankName = json['bankName'];
     productSegment = json['productSegment'];
     ksdplProduct = json['ksdplProduct'];
+    dsaCode = json['dsaCode'];
+    dsaName = json['dsaName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -262,6 +268,8 @@ class Data {
     data['bankName'] = this.bankName;
     data['productSegment'] = this.productSegment;
     data['ksdplProduct'] = this.ksdplProduct;
+    data['dsaCode'] = this.dsaCode;
+    data['dsaName'] = this.dsaName;
     return data;
   }
 
