@@ -413,6 +413,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var infoFilledBankers = <String>{}.obs;
   var selectedBankers = <String>{}.obs;
   var isGenerateCibilVisible = false.obs;
+
   var isRequiredVisibleSecure = false.obs;
   Map<String, String> bankerBranchMap = {};
 
@@ -430,6 +431,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var photosResEnabled =true.obs;
   var photosOffEnabled =true.obs;
   var is2and3StepActive = true.obs;
+  var isStep3Active = true.obs;
   void markBankerAsSubmitted(String boxId) {
     infoFilledBankers.add(boxId);
   }
@@ -676,9 +678,19 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     print("tappedIndex===>${tappedIndex} and ${is2and3StepActive.value}");
     if((tappedIndex+1==1 ||tappedIndex+1==2) && is2and3StepActive.value==false ){
 
-      ToastMessage.msg(AppText.accessRestrictedStep2and3Msg);
+
+
+      SnackbarHelper.showSnackbar(
+          title: AppText.accessRestrictedStep2and3Msg,
+          message: AppText.accessRestrictedStep2and3Msg2,
+          backgroundColor: AppColor.redColor,
+        textColor: AppColor.appWhite
+      );
 
     }else{
+
+
+
       if (currentStep.value < 2) {
         currentStep.value++;
         scrollToStep(currentStep.value);
@@ -708,7 +720,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   void jumpToStep(int step) {
    if((step==1 ||step==2) && is2and3StepActive.value==false ){
-     ToastMessage.msg(AppText.accessRestrictedStep2and3Msg);
+
+     SnackbarHelper.showSnackbar(
+         title: AppText.accessRestrictedStep2and3Msg,
+         message: AppText.accessRestrictedStep2and3Msg2,
+         backgroundColor: AppColor.redColor,
+         textColor: AppColor.appWhite
+     );
    }else{
      if(step==1 || step==2){
        setAgeFromDob(camDobController, camEarningCustomerAgeController);
@@ -776,14 +794,14 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select zipcode");
       return;
     }else if(camSelectedProdSegment.value==null ||  camSelectedProdSegment.value==0){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Segment");
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter product Segment");
       return;
     }else if(camSelectedProdType.value==null || camSelectedProdType.value=="0"){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter KSDPL Product");
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Scheme");// KSDPL Product
       return;
     }
 
-    if (!packageFieldsIfRequired()) return;
+    //if (!packageFieldsIfRequired()) return;
     if (!securedFieldsIfRequired()) return;
     if (!idOfferedScurityRequired()) return;
 
@@ -984,6 +1002,54 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     return true;
   }
 
+  bool step3ValidationCheck() {
+
+    // Start validating each required field
+    if(camFullNameController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter full name");
+      return false;
+    }else if(camDobController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter DOB");
+      return false;
+    }else if(camPhoneController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
+      return false;
+    }else if(selectedGender.value==null || selectedGender.value==""){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
+      return false;
+    }else if(camLoanAmtReqController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Amount");
+      return false;
+    }else if(camEmailController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter email");
+      return false;
+    }else if(camAadharController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Aadhar");
+      return false;
+    }else if(camSelectedState.value==null || camSelectedState.value=="0"){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select state");
+      return false;
+    }else if(camSelectedDistrict.value == null || camSelectedDistrict.value=="0"){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select district");
+      return false;
+    }else if(camSelectedCity.value == null || camSelectedCity.value=="0"){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select city");
+      return false;
+    }else if(camZipController.text.isEmpty ){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select zipcode");
+      return false;
+    }else if(camSelectedProdSegment.value==null ||  camSelectedProdSegment.value==0){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter product Segment");
+      return false;
+    }else if(camSelectedProdType.value==null || camSelectedProdType.value=="0"){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Scheme");// KSDPL Product
+      return false;
+    }
+
+    // All fields are filled
+    return true;
+  }
+
   void saveSubmitDetails() async{
     print("saveSubmitDetails");
     print("camSelectedState.value===>${camSelectedState.value}");
@@ -1032,14 +1098,14 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select zipcode");
       return;
     }else if(camSelectedProdSegment.value==null ||  camSelectedProdSegment.value==0){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Segment");
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter product Segment");
       return;
     }else if(camSelectedProdType.value==null || camSelectedProdType.value=="0"){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter KSDPL Product");
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter scheme"); //KSDPL Product
     return;
     }
 
-    if (!packageFieldsIfRequired()) return;
+   // if (!packageFieldsIfRequired()) return;
     if (!securedFieldsIfRequired()) return;
 
       print("I am here-===>2");
@@ -2937,7 +3003,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       if(data['success'] == true){
 
         getPackageDetailsByIdModel.value= GetPackageDetailsByIdModel.fromJson(data);
-        final cibilPackages = getPackageDetailsByIdModel.value!.data?.where((d) => d.isCibilService).toList();
+
+        ///old functionality for enabling cibil download button
+    /*    final cibilPackages = getPackageDetailsByIdModel.value!.data?.where((d) => d.isCibilService).toList();
         print("cibilPackages====>${cibilPackages}");
 
         if(cibilPackages!.isEmpty){
@@ -2946,7 +3014,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         }else{
 
           isGenerateCibilVisible.value=true;
-        }
+        }*/
 
 
 
@@ -3991,6 +4059,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     isGenerateCibilVisible.value =
         multiPackageData.any((item) => item.txnStatus == "SUCCESS");
 
+
+    is2and3StepActive.value =
+        multiPackageData.any((item) => item.txnStatus == "SUCCESS");
+
     if (multiPackageData.isEmpty) {
       print("No populateMultiPackage data found");
       final multiPkController = MultiPackageModelController();
@@ -3999,7 +4071,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       multiPkController.multiPackageId.value =  "0";
       multiPackageList.add(multiPkController);
       maxAllowedBank.value = 0;
-
+      isGenerateCibilVisible.value =false;
       return;
     }
 

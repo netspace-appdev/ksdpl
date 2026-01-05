@@ -92,7 +92,7 @@ class Step1CamNote extends StatelessWidget {
                           children: [
                             CustomTextLabel(
                               label: AppText.packageName,
-                              isRequired: camNoteController.selectedPackage.value==0?false:true,
+                             // isRequired: camNoteController.selectedPackage.value==0?false:true,
 
                             ),
 
@@ -264,7 +264,7 @@ class Step1CamNote extends StatelessWidget {
                               controller:mp.camReceivableAmtMultiController,
                               inputType: TextInputType.number,
                               hintText: AppText.enterReceivableAmount,
-                              isRequired: camNoteController.selectedPackage.value==0?false:true,
+                              //isRequired: camNoteController.selectedPackage.value==0?false:true,
                             //  isInputEnabled: mp.enableAllPackageFields.value??true,
                             ),
 
@@ -824,7 +824,7 @@ class Step1CamNote extends StatelessWidget {
 
                         CustomLabeledTextField(
                           label: AppText.monIncome,
-                          isRequired: false,
+                          isRequired: true,
                           controller: camNoteController.camMonthlyIncomeController ,
                           inputType: TextInputType.number,
                           hintText: AppText.enterMonIncome,
@@ -924,7 +924,7 @@ class Step1CamNote extends StatelessWidget {
 
 
                         const CustomTextLabel(
-                          label: AppText.productTypeInt,
+                          label: AppText.productTypeInt, //KSDPL product is now scheme
                           isRequired: true,
 
                         ),
