@@ -81,6 +81,9 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CustomerCategory', customerCategory);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CollateralSecurityCategory', collateralSecurityCategory);
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CollateralSecurityExcluded', collateralSecurityExcluded);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueCasesCibil',  totalOverdueCases,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueAmountCibil',  totalOverdueAmount,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalEnquiriesMadeCibil',  totalEnquiries,fallback: "0");
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'IncomeTypes', incomeTypes);
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'AgeEarningApplicants', ageEarningApplicants,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'AgeNonEarningCoApplicant',  ageNonEarningCoApplicant,fallback: "0");
@@ -90,10 +93,6 @@ class CamNoteService {
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'Roi',  roi,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'MaximumTenorEligibilityCriteria',  maximumTenorEligibilityCriteria,fallback: "0");
       MultipartFieldHelper.addFieldWithoutNull(request.fields, 'CustomerAddress', customerAddress);
-
-      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueCases',  totalOverdueCases,fallback: "0");
-      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalOverdueAmount',  totalOverdueAmount,fallback: "0");
-      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TotalEnquiries',  totalEnquiries,fallback: "0");
       MultipartFieldHelper.addFieldWithDefault(request.fields, 'KSDPLProductId',  kSDPLProductId,fallback: "0");
       var streamedResponse = await request.send();
 

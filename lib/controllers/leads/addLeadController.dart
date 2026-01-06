@@ -19,6 +19,7 @@ import '../../models/leads/special_model/AddIncModel.dart';
 import '../../services/drawer_api_service.dart';
 import '../../services/lead_api_service.dart';
 import '../camnote/calculateCibilData.dart';
+import '../new_dd_controller.dart';
 import '../product/add_product_controller.dart';
 import '../registration_dd_controller.dart';
 import 'add_income_model_controller.dart';
@@ -481,16 +482,31 @@ class Addleadcontroller extends GetxController{
           camNoteController.camNumberOfDaysPastDueCountController.text=result['SettlementCases'].toString();
           camNoteController.camEmisOfExistingLiabilitiesController.text=result['EmisOfExistingLiabilities'].toString();
           camNoteController.camIirController.text=result['Iir'].toString();
-
           camNoteController.cibilJsonPdfUrl.value=result['Pdf_Url'].toString();
-
-
           camNoteController.enableAllCibilFields.value=false;
-
-
-
-
         }
+
+        ///06 Jan 2026 This would be out of cibil data we have got from cibil json
+        NewDDController newDDController=Get.find();
+        await newDDController.getAllPrimeSecurityMasterApi();
+
+        camNoteController.camOfferedSecurityTypeController.text=getLeadDetailModel.value?.data?.offeredSecurityType??"";
+
+        camNoteController.camPropertyValueController.text=getLeadDetailModel.value?.data?.offeredSecurityType??"";
+        camNoteController.camLoanTenorRequestedController.text=(getLeadDetailModel.value?.data?.loanTenorRequested??"0").toString();
+        camNoteController.camLtvController.text=(getLeadDetailModel.value?.data?.ltv??"0").toString();
+        camNoteController.selectedCamIncomeTypeList.value=(getLeadDetailModel.value?.data?.incomeType??"").toString();
+
+        camNoteController.camTotalFamilyIncomeController.text=(getLeadDetailModel.value?.data?.totalFamilyIncome??"0").toString();
+        camNoteController.camIncomeCanBeConsideredController.text=(getLeadDetailModel.value?.data?.incomeCanBeConsidered??"0").toString();
+        camNoteController.camNonEarningCustomerAgeController.text=(getLeadDetailModel.value?.data?.nonEarningCustomerAge??"0").toString();
+        camNoteController.camLoanAmtReqController.text=(getLeadDetailModel.value?.data?.loanAmountRequested??"0").toString();
+        camNoteController.camRateOfInterestController.text=(getLeadDetailModel.value?.data?.roi??"0").toString();
+        camNoteController.camProposedEmiController.text=(getLeadDetailModel.value?.data?.proposedEMI??"0").toString();
+        camNoteController.camIirController.text=(getLeadDetailModel.value?.data?.iir??"0").toString();
+        camNoteController.camFoirController.text=(getLeadDetailModel.value?.data?.foir??"0").toString();
+
+        print("nonEarningCustomerAge in addlead======>${getLeadDetailModel.value?.data?.nonEarningCustomerAge??"0"}");
 
         isLoading(false);
 

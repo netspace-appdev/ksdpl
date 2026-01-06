@@ -689,8 +689,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
     }else{
 
-
-
       if (currentStep.value < 2) {
         currentStep.value++;
         scrollToStep(currentStep.value);
@@ -700,12 +698,14 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         setAgeFromDob(camDobController, camEarningCustomerAgeController);
       }
 
-      if(currentStep.value==1){
+      /* if(currentStep.value==1){
         if(getCamNoteLeadIdModel.value!.data!.isNotEmpty){
           getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
         }
 
-      }
+      }*/
+
+
     }
 
 
@@ -731,10 +731,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
      if(step==1 || step==2){
        setAgeFromDob(camDobController, camEarningCustomerAgeController);
      }
-     if(step==1){
+    /* if(step==1){
        print("1");
        getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
-     }
+     }*/
      currentStep.value = step;
 
      scrollToStep(step);
@@ -769,6 +769,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camPhoneController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
       return;
+    }else if(camWhatsappController.text.isEmpty){//camWhatsappController
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Whatsapp Number");
+      return;
     }else if(selectedGender.value==null || selectedGender.value==""){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
       return;
@@ -797,7 +800,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter product Segment");
       return;
     }else if(camSelectedProdType.value==null || camSelectedProdType.value=="0"){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Scheme");// KSDPL Product
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter KSDPL Product (Scheme)");// KSDPL Product
+      return;
+    }else if(camMonthlyIncomeController.text.isEmpty ){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Monthly Income");
       return;
     }
 
@@ -1011,41 +1017,10 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }else if(camDobController.text.isEmpty){
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter DOB");
       return false;
-    }else if(camPhoneController.text.isEmpty){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Phone Number");
-      return false;
-    }else if(selectedGender.value==null || selectedGender.value==""){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Gender");
-      return false;
-    }else if(camLoanAmtReqController.text.isEmpty){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Loan Amount");
-      return false;
-    }else if(camEmailController.text.isEmpty){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter email");
-      return false;
-    }else if(camAadharController.text.isEmpty){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Aadhar");
-      return false;
-    }else if(camSelectedState.value==null || camSelectedState.value=="0"){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select state");
-      return false;
-    }else if(camSelectedDistrict.value == null || camSelectedDistrict.value=="0"){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select district");
-      return false;
-    }else if(camSelectedCity.value == null || camSelectedCity.value=="0"){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select city");
-      return false;
-    }else if(camZipController.text.isEmpty ){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select zipcode");
-      return false;
-    }else if(camSelectedProdSegment.value==null ||  camSelectedProdSegment.value==0){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter product Segment");
-      return false;
-    }else if(camSelectedProdType.value==null || camSelectedProdType.value=="0"){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Scheme");// KSDPL Product
+    }else if(camOfferedSecurityTypeController.text.isEmpty){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please select offered security");
       return false;
     }
-
     // All fields are filled
     return true;
   }
@@ -1101,8 +1076,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter product Segment");
       return;
     }else if(camSelectedProdType.value==null || camSelectedProdType.value=="0"){
-      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter scheme"); //KSDPL Product
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter KSDPL Product (scheme)"); //KSDPL Product
     return;
+    }else if(camMonthlyIncomeController.text.isEmpty ){
+      SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter Monthly Income");
+      return;
     }
 
    // if (!packageFieldsIfRequired()) return;
@@ -1244,11 +1222,11 @@ class CamNoteController extends GetxController with ImagePickerMixin{
             ?? "0",//camCibilController.text.trim().toString(),
         segmentVertical: camSelectedProdSegment.value.toString(),
         customerCategory: "",
-        collateralSecurityCategory: "",
+        collateralSecurityCategory: camOfferedSecurityTypeController.text.trim(),
         collateralSecurityExcluded: "",
         incomeTypes:(selectedCamIncomeTypeList.value==null||selectedCamIncomeTypeList.value=="null")?"":selectedCamIncomeTypeList.value,
         ageEarningApplicants: camEarningCustomerAgeController.text,
-        ageNonEarningCoApplicant:camEarningCustomerAgeController.text,
+        ageNonEarningCoApplicant:camNonEarningCustomerAgeController.text,
         applicantMonthlySalary:camTotalFamilyIncomeController.text,
         loanAmount:camLoanAmtReqController.text.trim().toString(),
         tenor: double.tryParse(camLoanTenorRequestedController .text.trim())
@@ -3489,7 +3467,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
 
         NewDDController newDDController=Get.find();
-        newDDController.getAllPrimeSecurityMasterApi();
+        await newDDController.getAllPrimeSecurityMasterApi();
         camOfferedSecurityTypeController.text=getCamNoteDetailsModel.value?.data?.offeredSecurityType??"";
 
 
@@ -3505,6 +3483,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
         camLtvController.text=(getCamNoteDetailsModel.value?.data?.ltv??"").toString();
         camEmiStoppedBeforeController.text=(getCamNoteDetailsModel.value?.data?.emiStoppedOnBeforeThisLoan??"").toString();
         selectedCamIncomeTypeList.value=(getCamNoteDetailsModel.value?.data?.incomeType??"").toString();
+
+
 
 
 

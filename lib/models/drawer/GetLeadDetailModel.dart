@@ -103,7 +103,29 @@ class Data {
   String? cibilJSON;
   String? reminderDate;
   String? whatsappNumber;
-
+  num? paymentstatus;
+  String? statusUpdatedBy;
+  String? otp;
+  num? srPID;
+  num? casesToBeForeclosedOnOrBeforeDisb;
+  num? casesToBeContenued;
+  num? emiStoppedOnBeforeThisLoan;
+  num? emiWillContinue;
+  num? emIsOfExistingLiabilities;
+  String? offeredSecurityType;
+  num? propertyValueAsPerCustomer;
+  num? loanTenorRequested;
+  num? ltv;
+  String? incomeType;
+  num? totalFamilyIncome;
+  num? incomeCanBeConsidered;
+  num? nonEarningCustomerAge;
+  num? roi;
+  num? proposedEMI;
+  num? iir;
+  num? foir;
+  num? sourceChannelId;
+  num? operationChannelId;
   Data(
       {this.id,
         this.name,
@@ -181,7 +203,30 @@ class Data {
         this.photosOfOffice,
         this.cibilJSON,
         this.reminderDate,
-        this.whatsappNumber
+        this.whatsappNumber,
+        this.paymentstatus,
+        this.statusUpdatedBy,
+        this.otp,
+        this.srPID,
+        this.casesToBeForeclosedOnOrBeforeDisb,
+        this.casesToBeContenued,
+        this.emiStoppedOnBeforeThisLoan,
+        this.emiWillContinue,
+        this.emIsOfExistingLiabilities,
+        this.offeredSecurityType,
+        this.propertyValueAsPerCustomer,
+        this.loanTenorRequested,
+        this.ltv,
+        this.incomeType,
+        this.totalFamilyIncome,
+        this.incomeCanBeConsidered,
+        this.nonEarningCustomerAge,
+        this.roi,
+        this.proposedEMI,
+        this.iir,
+        this.foir,
+        this.sourceChannelId,
+        this.operationChannelId
 
       });
 
@@ -262,6 +307,30 @@ class Data {
     cibilJSON = json['cibilJSON'];
     reminderDate = json['reminderDate'];
     whatsappNumber = json['whatsappNumber'];
+    paymentstatus = json['paymentstatus'];
+    statusUpdatedBy = json['statusUpdatedBy'];
+    otp = json['otp'];
+    srPID = json['srP_ID'];
+    casesToBeForeclosedOnOrBeforeDisb =
+    json['casesToBeForeclosedOnOrBeforeDisb'];
+    casesToBeContenued = json['casesToBeContenued'];
+    emiStoppedOnBeforeThisLoan = json['emiStoppedOnBeforeThisLoan'];
+    emiWillContinue = json['emiWillContinue'];
+    emIsOfExistingLiabilities = json['emIsOfExistingLiabilities'];
+    offeredSecurityType = json['offeredSecurityType'];
+    propertyValueAsPerCustomer = json['propertyValueAsPerCustomer'];
+    loanTenorRequested = json['loanTenorRequested'];
+    ltv = json['ltv'];
+    incomeType = json['incomeType'];
+    totalFamilyIncome = json['totalFamilyIncome'];
+    incomeCanBeConsidered = json['incomeCanBeConsidered'];
+    nonEarningCustomerAge = json['nonEarningCustomerAge'];
+    roi = json['roi'];
+    proposedEMI = json['proposedEMI'];
+    iir = json['iir'];
+    foir = json['foir'];
+    sourceChannelId = json['sourceChannelId'];
+    operationChannelId = json['operationChannelId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -342,6 +411,30 @@ class Data {
     data['cibilJSON'] = this.cibilJSON;
     data['reminderDate'] = this.reminderDate;
     data['whatsappNumber'] = this.whatsappNumber;
+    data['paymentstatus'] = this.paymentstatus;
+    data['statusUpdatedBy'] = this.statusUpdatedBy;
+    data['otp'] = this.otp;
+    data['srP_ID'] = this.srPID;
+    data['casesToBeForeclosedOnOrBeforeDisb'] =
+        this.casesToBeForeclosedOnOrBeforeDisb;
+    data['casesToBeContenued'] = this.casesToBeContenued;
+    data['emiStoppedOnBeforeThisLoan'] = this.emiStoppedOnBeforeThisLoan;
+    data['emiWillContinue'] = this.emiWillContinue;
+    data['emIsOfExistingLiabilities'] = this.emIsOfExistingLiabilities;
+    data['offeredSecurityType'] = this.offeredSecurityType;
+    data['propertyValueAsPerCustomer'] = this.propertyValueAsPerCustomer;
+    data['loanTenorRequested'] = this.loanTenorRequested;
+    data['ltv'] = this.ltv;
+    data['incomeType'] = this.incomeType;
+    data['totalFamilyIncome'] = this.totalFamilyIncome;
+    data['incomeCanBeConsidered'] = this.incomeCanBeConsidered;
+    data['nonEarningCustomerAge'] = this.nonEarningCustomerAge;
+    data['roi'] = this.roi;
+    data['proposedEMI'] = this.proposedEMI;
+    data['iir'] = this.iir;
+    data['foir'] = this.foir;
+    data['sourceChannelId'] = this.sourceChannelId;
+    data['operationChannelId'] = this.operationChannelId;
     return data;
   }
 }
