@@ -1,13 +1,12 @@
-class GetBankerDetailSanctionModel {
+class GetBankerDetailsModel {
   String? status;
   bool? success;
   Data? data;
   String? message;
 
-  GetBankerDetailSanctionModel(
-      {this.status, this.success, this.data, this.message});
+  GetBankerDetailsModel({this.status, this.success, this.data, this.message});
 
-  GetBankerDetailSanctionModel.fromJson(Map<String, dynamic> json) {
+  GetBankerDetailsModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     success = json['success'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
@@ -36,9 +35,9 @@ class Data {
   String? bankersEmailId;
   int? city;
   String? superiorName;
-  String? superiorMobile;
-  String? superiorWhatsApp;
-  String? superiorEmail;
+  Null? superiorMobile;
+  Null? superiorWhatsApp;
+  Null? superiorEmail;
   String? createdBy;
   String? createdDate;
   String? updatedBy;

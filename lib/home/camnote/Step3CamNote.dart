@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/validation_helper.dart';
+import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
+import 'package:ksdpl/controllers/seniorController.dart';
 import 'package:ksdpl/custom_widgets/custom_photo_picker_widget.dart';
 import 'package:lottie/lottie.dart';
 import '../../common/helper.dart';
@@ -23,7 +25,9 @@ import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomDropdown.dart';
 import '../../custom_widgets/CustomIconDilogBox.dart';
 import '../../custom_widgets/CustomLabeledTextField.dart';
+import '../../custom_widgets/CustomLabeledTextField2.dart';
 import '../../custom_widgets/CustomLoadingOverlay.dart';
+import '../../custom_widgets/CustomShortButton.dart';
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
 import '../../models/camnote/GetProductDetailsByFilterModel.dart' as proFilter;
@@ -471,6 +475,8 @@ class Step3CamNote extends StatelessWidget {
             }else{
 
               newDDController.getBranchListOfDistrictByZipAndBankApi(bankId: bankId, zipcode:  camNoteController.camZipController.text);
+              SeniorScreenController seniorScreenController=Get.put(SeniorScreenController());
+              seniorScreenController.getChannelDetailsByProductIdApiRequest(ProductId: (camNoteController.camSelectedProdSegment.value??0).toString());
               showCustomBottomSheet(context, bankId, boxId);
             }
           }
@@ -513,6 +519,7 @@ class Step3CamNote extends StatelessWidget {
 
 
   void showCustomBottomSheet(BuildContext context, String bankId, String boxId) {
+    SeniorScreenController seniorScreenController=Get.find();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -622,7 +629,7 @@ class Step3CamNote extends StatelessWidget {
                                );
                               return  Column(
                                children: [
-                                 CustomLabeledTextField(
+                               /*  CustomLabeledTextField(
                                    label: AppText.bankerMobile,
                                    controller: camNoteController.camBankerMobileNoController,
                                    inputType: TextInputType.number,
@@ -630,6 +637,27 @@ class Step3CamNote extends StatelessWidget {
                                    isRequired: true,
                                    validator: ValidationHelper.validatePhoneNumber,
                                    maxLength: 10,
+                                 ),*/
+
+                                 CustomLabeledTextField2(
+                                   isInputEnabled: true,
+                                   label: AppText.bankerMobile,
+                                   isRequired: true,
+                                   controller: camNoteController.camBankerMobileNoController,
+                                   hintText: AppText.enterBankerMobile,
+                                   inputType: TextInputType.number,
+                                   maxLength: 10,
+                                   validator:ValidationHelper.validatePhoneNumber,
+                                   onChanged: (value) async {
+                                     if (value.length == 10) {
+
+                                      var success= await camNoteController.getBankerDetaillV2Api(bankersMobileNumber: value);
+                                      if(success){
+                                        camNoteController.populateDataBankerBottomSheet();
+
+                                      }
+                                     }
+                                   },
                                  ),
                                  CustomLabeledTextField(
                                    label: AppText.bankerName,
@@ -689,7 +717,84 @@ class Step3CamNote extends StatelessWidget {
                              );
                            }),
 
-                            const SizedBox(height: 30), // Give some space above the fixed button
+                            const SizedBox(height: 20),
+                            Obx((){
+                              return Column(
+                                children: [
+                                  seniorScreenController.isLoadingMainScreen.value?
+                                  CustomSkelton.singleShimmer(context):
+                                  RichText(
+                                    text:  TextSpan(
+                                      text: AppText.branchRelatedAssistanceMsg1,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: AppColor.redColor,
+                                      ),
+                                      children:  [
+
+                                        TextSpan(
+                                          text: seniorScreenController.getChannelDetailsByProduct.value?.data?.first.contactPersonName??"",
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: "(${seniorScreenController.getChannelDetailsByProduct.value?.data?.first.contactNumber})",
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                            const SizedBox(height: 10),
+                            const Text(
+                              AppText.branchRelatedAssistanceMsg2,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColor.secondaryColor,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            const Text(
+                              AppText.branchRelatedAssistanceMsg3,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColor.black87,
+                              ),
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            Obx(() {
+                              if (camNoteController.isLinkSendLoading.value) {
+                                return const SizedBox(
+                                  height: 50,
+                                  child: Center(
+                                    child: CircularProgressIndicator(color: AppColor.greenColor),
+                                  ),
+                                );
+                              }
+
+                              return Align(
+                                alignment: Alignment.center,
+                                child: CustomShortButton(
+                                  backgroundColor: Colors.green,
+                                  textColor: AppColor.appWhite,
+                                  text: AppText.sendLink,
+                                  onPressed: (){
+                                    camNoteController.sendBankerSelfUpdateLinkApi(bankerId:( camNoteController.getBankerDetailsModel.value?.data?.id??0).toString());
+                                  },
+                                ),
+                              );
+                            }),
+                            const SizedBox(height: 30),
+// Give some space above the fixed button
                           ],
                         ),
                       ),
@@ -773,6 +878,7 @@ class Step3CamNote extends StatelessWidget {
                       ),
                     );
                   }),
+                  SizedBox(height: 30,)
                 ],
               ),
             ),

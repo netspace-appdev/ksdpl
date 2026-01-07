@@ -39,6 +39,8 @@ class CamNoteService {
   static const String saveCamnoteDetails = BaseUrl.baseUrl + 'CamNoteDetail/SaveCamnoteDetails';
   static const String getSalePackagesByLeadId = BaseUrl.baseUrl + 'CamNoteDetail/GetSalePackagesByLeadId';
   static const String UPIAPisGenerateQR = BaseUrl.baseUrl + 'UPIAPis/generate-qr';
+  static const String sendBankerSelfUpdateLink = BaseUrl.baseUrl + 'CamNoteDetail/SendBankerSelfUpdateLink';
+
 
 
 
@@ -299,6 +301,9 @@ class CamNoteService {
       var streamedResponse = await request.send();
 
       var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getBankerDetail, request.fields);
+      Helper.ApiRes(getBankerDetail, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -1375,5 +1380,37 @@ class CamNoteService {
     }
   }
 
+  static Future<Map<String, dynamic>> sendBankerSelfUpdateLinkApi({
+    required String bankerId,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(sendBankerSelfUpdateLink),
+      );
 
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'BankerId', bankerId,fallback: "0");
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+
+      Helper.ApiReq(sendBankerSelfUpdateLink, request.fields);
+      Helper.ApiRes(sendBankerSelfUpdateLink, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
 }

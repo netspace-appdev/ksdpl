@@ -459,12 +459,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              onTap: () {
+                             /* onTap: () {
                                 Get.to(() => RestrictedWebView(
                                   url: _webController.hindiUrl,
                                   title: "PPT in Hindi",
                                 ));
-                              },
+                              },*/
+                              onTap: () => _launchURL(_webController.hindiUrl),
                             ),
                             ListTile(
                               leading: Icon(Icons.circle, color: AppColor.blackColor,size: 10,),
@@ -476,12 +477,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              onTap: () {
+                             /* onTap: () {
                                 Get.to(() => RestrictedWebView(
                                   url: _webController.englishUrl,
                                   title: "PPT in English",
                                 ));
-                              },
+                              },*/
+                              onTap: () => _launchURL(_webController.englishUrl),
                             ),
                           ],
                         ),
@@ -543,11 +545,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   onTap: () => _launchURL("https://aic.kanchaneshver.com/"),
                 ),
 
-                CustomListTile(
+             /*   CustomListTile(
                   title:  "Bank Credentials",
                   imagePath:AppImage.webImg,
                   onTap: () => _launchURL("https://docs.google.com/spreadsheets/d/1__iYzKKiDthxhfTqh8WEsdVolIcl2ymi0fqnShwNqto/edit?gid=0#gid=0"),
-                ),
+                ),*/
 
 
                 // Logout Button

@@ -1212,7 +1212,10 @@ class AppText{
   static const String invoiceNotGenerated="Invoice Not Generated";
   static const String viewReceipt="View Receipt";
   static const String receiptNotGenerated="Receipt Not Generated";
-
+  static const String  branchRelatedAssistanceMsg1="For any branch-related assistance, please contact: ";
+  static const String  branchRelatedAssistanceMsg2="Support Team (9201963012)";
+  static const String  branchRelatedAssistanceMsg3="If you want to update banker Detail, then send WhatsApp to banker registered mobile number. Banker can update their details through the link sent.";
+  static const String  sendLink="Send Link";
 
 
 

@@ -30,6 +30,7 @@ import '../../models/camnote/GetAddIncUniqueLeadModel.dart';
 import '../../models/camnote/GetAllPackageMasterModel.dart' as pkg;
 import '../../models/camnote/GetBankerDetailModelForCheck.dart';
 import '../../models/camnote/GetBankerDetailsByIdModel.dart';
+import '../../models/camnote/GetBankerDetailsModel.dart';
 import '../../models/camnote/GetCamNoteDetailByIdModeli.dart';
 import '../../models/camnote/GetCamNoteDetailsByLeadIdForUpdateModel.dart';
 import '../../models/camnote/GetCamNoteLeadIdModel.dart';
@@ -97,6 +98,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
   var isBankerLoading = false.obs;
   var isBankerSuperiorLoading = false.obs;
+  var isLinkSendLoading = false.obs;
   var isCaNoteStep2Loading = false.obs;
   var isLoadingMainScreen = false.obs;
   var addLoanApplicationModel = Rxn<AddLoanApplicationModel>(); //
@@ -121,7 +123,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var getSalePackagesByLeadIdModel = Rxn<GetSalePackagesByLeadIdModel>(); //
   var newGenerateQRModel = Rxn<NewGenerateQRModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
-
+  var getBankerDetailsModel = Rxn<GetBankerDetailsModel>(); //
 
   var selectedGenderCoAP = Rxn<String>();
   var selectedGenderDependent = Rxn<String>();
@@ -1907,6 +1909,68 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       isLoading(false);
     }
   }
+
+
+
+
+  Future<bool>  getBankerDetaillV2Api({
+
+    required String bankersMobileNumber,
+
+  }) async {
+    try {
+
+      isLoading(true);
+
+
+      var data = await CamNoteService.getBankerDetaillApi(
+        phoneNo:bankersMobileNumber,
+      );
+
+
+      if(data['success'] == true){
+
+        getBankerDetailsModel.value= GetBankerDetailsModel.fromJson(data);
+
+
+        isLoading(false);
+        return true;
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+        return false;
+        // getBankerDetailModelForCheck.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+        return false;
+      }
+
+
+    } catch (e) {
+      print("Error getBankerDetaillV2Api: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLoading(false);
+      return false;
+    } finally {
+
+
+      isLoading(false);
+    }
+  }
+
+  void populateDataBankerBottomSheet(){
+    camBankerNameController.text=getBankerDetailsModel.value?.data?.bankersName??"";
+    camBankerWhatsappController.text=getBankerDetailsModel.value?.data?.bankersWhatsAppNumber??"";
+    camBankerEmailController.text=getBankerDetailsModel.value?.data?.bankersEmailId??"";
+    camBankerSuperiorMobController.text=getBankerDetailsModel.value?.data?.superiorMobile??"";
+    camBankerSuperiorNameController.text=getBankerDetailsModel.value?.data?.superiorName??"";
+    camBankerSuperiorWhatsappController.text=getBankerDetailsModel.value?.data?.superiorWhatsApp??"";
+    camBankerSuperiorEmailController.text=getBankerDetailsModel.value?.data?.superiorEmail??"";
+  }
+
 
 
   void onFormSubmit(String bankId, Map<String, dynamic> updatedFields,  String whichScreen,) {
@@ -4004,34 +4068,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
 
-/*  void populateMultiPackage() async {
-    print("populateMultiPackage=========>: ""${getSalePackagesByLeadIdModel.value?.data}",
-    );
-
-    final multiPackageData = getSalePackagesByLeadIdModel.value?.data??[];
-
-    if (multiPackageData == null || multiPackageData.isEmpty) {
-      print("No populateMultiPackage data found");
-      return;
-    }
-
-    for (var item in multiPackageData) {
-      final multiPkController = MultiPackageModelController();
-      await getAllPackageMasterApi();
-      multiPkController.selectedPackageMulti.value = item.id?? 0;
-      print("multiPkController.selectedPackageMulti.value===>${multiPkController.selectedPackageMulti.value} }");
-      print("item.id.toString()===>${item.id.toString()} }");
-      multiPkController.camPackageAmtMultiController.text = item.amount.toString() ?? '';
-     // multiPkController.camReceivableAmtMultiController.text = item..toString() ?? '';
-     multiPkController.camReceivableDateMultiController.text = item.receiveDate.toString() ?? '';
-     //multiPkController.camTransactionDetailsUtrMultiController.text = item.receiveDate.toString() ?? '';
-
-
-
-      multiPackageList.add(multiPkController);
-
-    }
-  }*/
 
   Future<void> populateMultiPackage() async {
     final multiPackageData = getSalePackagesByLeadIdModel.value?.data ?? [];
@@ -4076,6 +4112,58 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       multiPkController.enableAllPackageFields.value=false;
     }
   }
+
+
+
+  Future<void>  sendBankerSelfUpdateLinkApi({
+    required String bankerId,
+  }) async {
+    try {
+
+      isLinkSendLoading(true);
+
+
+      var data = await CamNoteService.sendBankerSelfUpdateLinkApi(
+        bankerId: bankerId,
+      );
+
+
+      if(data['success'] == true){
+
+
+
+       ToastMessage.msg(data['message']??"Link sent successfully");
+
+       isLinkSendLoading(false);
+
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+
+      }
+
+
+    } catch (e) {
+      print("Error newGenerateQRApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLinkSendLoading(false);
+
+    } finally {
+
+
+      isLinkSendLoading(false);
+
+    }
+  }
+
 }
 
 extension ParseStringExtension on String? {
