@@ -226,9 +226,9 @@ class Step3CamNote extends StatelessWidget {
                     _buildDetailRow(AppText.bankerMobile, banker.bankersMobileNumber.toString()),
                     _buildDetailRow(AppText.bankerWhatsapp, banker.bankersWhatsAppNumber.toString()),
                     _buildDetailRow(AppText.bankerEmail, banker.bankersEmailID.toString()),
-                    _buildDetailRow(AppText.selectCustomerCategory, banker.customerCategory.toString()),
-                    _buildDetailRow(AppText.ksdplProduct, banker.ksdplProduct.toString()),
-                    _buildDetailRow(AppText.incomeType, banker.incomeTypes.toString()),
+                    _buildDetailRow(AppText.product, banker.ksdplProduct.toString()),//ksdplProduct
+                   // _buildDetailRow(AppText.selectCustomerCategory, banker.customerCategory.toString()),
+                   // _buildDetailRow(AppText.incomeType, banker.incomeTypes.toString()),
 
                     const SizedBox(height: 10),
 
@@ -655,6 +655,8 @@ class Step3CamNote extends StatelessWidget {
                                       if(success){
                                         camNoteController.populateDataBankerBottomSheet();
 
+                                      }else{
+                                        camNoteController.clearDataBankerBottomSheet();
                                       }
                                      }
                                    },

@@ -1089,8 +1089,6 @@ class LeadSearchScreen extends StatelessWidget {
           NewDDController newDDController=Get.put(NewDDController());
           newDDController.getAllPrimeSecurityMasterApi();
           camNoteController.multiPackageList.clear();
-          camNoteController.multiPackageList.add(MultiPackageModelController());
-
           camNoteController.getSalePackagesByLeadIdApi(LeadId: leadId);
           Get.toNamed("/camNoteGroupScreen",);
 

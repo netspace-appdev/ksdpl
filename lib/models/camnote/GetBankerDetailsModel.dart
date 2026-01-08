@@ -35,9 +35,9 @@ class Data {
   String? bankersEmailId;
   int? city;
   String? superiorName;
-  Null? superiorMobile;
-  Null? superiorWhatsApp;
-  Null? superiorEmail;
+  String? superiorMobile;
+  String? superiorWhatsApp;
+  String? superiorEmail;
   String? createdBy;
   String? createdDate;
   String? updatedBy;
@@ -78,9 +78,10 @@ class Data {
     superiorEmail = json['superiorEmail'];
     createdBy = json['createdBy'];
     createdDate = json['createdDate'];
-    updatedBy = json['updatedBy'];
-    updatedDate = json['updatedDate'];
-    otp = json['otp'];
+    updatedBy = json['updatedBy']?.toString();
+    updatedDate = json['updatedDate']?.toString();
+   /* otp = json['otp'];*/
+    otp = json['otp']?.toString();
   }
 
   Map<String, dynamic> toJson() {

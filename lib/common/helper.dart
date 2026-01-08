@@ -631,6 +631,7 @@ class AppText{
   static const String enterValuationCharges = "Enter Valuation Charges";
 
   static const String ksdplProduct = "KSDPL Product";
+  static const String product = "Product";
   static const String selectKsdplProduct = "Select KSDPL Product";
 
   static const String productValidateFrom = "Product Validate From (If Festival Specific)";

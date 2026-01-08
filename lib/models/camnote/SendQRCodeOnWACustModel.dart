@@ -1,4 +1,4 @@
-
+/*
 class SendQRCodeOnWACustModel {
   String? status;
   bool? success;
@@ -76,4 +76,52 @@ class Response {
     data['request_id'] = this.requestId;
     return data;
   }
+}*/
+
+
+class SendQRCodeOnWACustModel {
+  String? status;
+  bool? success;
+  Data? data;
+  String? message;
+
+  SendQRCodeOnWACustModel({this.status, this.success, this.data, this.message});
+
+  SendQRCodeOnWACustModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    success = json['success'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    message = json['message'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['success'] = this.success;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    data['message'] = this.message;
+    return data;
+  }
 }
+
+class Data {
+  bool? status;
+  String? response;
+
+  Data({this.status, this.response});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    response = json['response'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['response'] = this.response;
+    return data;
+  }
+}
+

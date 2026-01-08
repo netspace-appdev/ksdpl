@@ -211,7 +211,7 @@ class Step1CamNote extends StatelessWidget {
                                                  packageAmount: camNoteController.newGenerateQRModel.value?.data?.amount.toString()??"0",
                                                  refId: camNoteController.newGenerateQRModel.value?.data?.refId==null || camNoteController.newGenerateQRModel.value?.data?.refId=="null"?"":
                                                  camNoteController.newGenerateQRModel.value?.data?.refId.toString()??"",
-                                                 qrString: camNoteController.newGenerateQRModel.value?.data?.qrString.toString()??"0",
+                                                 qrString: camNoteController.newGenerateQRModel.value?.data?.qrImageUrl.toString()??"0",
                                                );
                                                camNoteController.getSalePackagesByLeadIdApi(LeadId:camNoteController.insertCustomerPackageRequestOnCamnoteModel.value?.data?.leadId.toString()??"0" );
                                              }
@@ -1495,98 +1495,7 @@ class Step1CamNote extends StatelessWidget {
   }
 
 
-/*  void showQRCustomerNUmberDialog({
-    required BuildContext context,
-    required String packageId,
-  })
-  {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Obx(() => CustomBigYesNoLoaderDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-          title: "Customer Details",
-          content: SingleChildScrollView(
-            child: Form(
-              key: _formKeyQr,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomLabeledTextField(
-                    label: AppText.customerName,
-                    isRequired: true,
-                    controller: camNoteController.qrCustomerNameController,
-                    inputType: TextInputType.name,
-                    hintText: AppText.enterCustomerName,
-                    validator: ValidationHelper.validateName,
-                  ),
-                  const SizedBox(height: 15),
-                  CustomLabeledTextField(
-                    label: AppText.whatsappNoNoStar,
-                    isRequired: true,
-                    controller: camNoteController.qrWhatsappController,
-                    inputType: TextInputType.number,
-                    hintText: AppText.enterWhatsappNo,
-                    validator: ValidationHelper.validateWhatsapp,
-                  ),
-                  const SizedBox(height: 12),
-                   RichText(
-                    text: TextSpan(
-                      style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
-                      children: [
-                        TextSpan(
-                          text: "Send QR on above WhatsApp Number",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
 
-          // 👇 Loader logic right here
-          firstButtonChild: camNoteController.isQRApiLoading.value
-              ? const SizedBox(
-            height: 18,
-            width: 18,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: Colors.white,
-            ),
-          )
-              : const Text(
-            "Send",
-            style: TextStyle(color: Colors.white),
-          ),
-
-          secondButtonText: "Cancel",
-          firstButtonColor: AppColor.primaryColor,
-          secondButtonColor: AppColor.redColor,
-
-          onFirstButtonPressed: () {
-            if (!camNoteController.isQRApiLoading.value &&
-                _formKeyQr.currentState!.validate()) {
-              camNoteController.sendPaymentQRCodeOnWhatsAppToCustomerApi(
-                CustomerName: camNoteController.qrCustomerNameController.text.trim(),
-                CustomerWhatsAppNo: camNoteController.qrWhatsappController.text.trim(),
-                PackageId: packageId,
-              ).then((_){
-                Get.back();
-              });
-            }
-          },
-          onSecondButtonPressed: () {
-            Get.back();
-          },
-        ));
-      },
-    );
-  }*/
   void showQRCustomerNUmberDialog({
   /*  required BuildContext context,*/
     required String packageId,

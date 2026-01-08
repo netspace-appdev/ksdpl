@@ -1938,9 +1938,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
-
+        getBankerDetailsModel.value=null;
         return false;
-        // getBankerDetailModelForCheck.value=null;
+
       }else{
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
         return false;
@@ -1969,6 +1969,16 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     camBankerSuperiorNameController.text=getBankerDetailsModel.value?.data?.superiorName??"";
     camBankerSuperiorWhatsappController.text=getBankerDetailsModel.value?.data?.superiorWhatsApp??"";
     camBankerSuperiorEmailController.text=getBankerDetailsModel.value?.data?.superiorEmail??"";
+  }
+
+  void clearDataBankerBottomSheet(){
+    camBankerNameController.clear();
+    camBankerWhatsappController.clear();
+    camBankerEmailController.clear();
+    camBankerSuperiorMobController.clear();
+    camBankerSuperiorNameController.clear();
+    camBankerSuperiorWhatsappController.clear();
+    camBankerSuperiorEmailController.clear();
   }
 
 
