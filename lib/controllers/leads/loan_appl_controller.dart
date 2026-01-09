@@ -1398,8 +1398,10 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           natureOfBizController.text = employer?['NatureOfBusiness'] ?? '';
           staffStrengthController.text = employer?['StaffStrength']?.toString() ?? '0';
 
-          salaryDateController.text =
-              Helper.convertFromIso8601(applicant?['DateOfSalary']) ?? 'null';
+         /* salaryDateController.text =
+              Helper.convertFromIso8601(applicant?['DateOfSalary']) ?? 'null';*/
+
+          salaryDateController.text = Helper.convertFromIso8601(employer?['DateOfSalary']) ?? 'null';
           // Present Add
           final presentAdd = applicant?['PresentAddress'];
           houseFlatController.text = presentAdd?['HouseFlatNo'] ?? '';

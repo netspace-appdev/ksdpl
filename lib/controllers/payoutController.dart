@@ -14,6 +14,12 @@ class PayoutController extends GetxController{
 
   final Rxn<InterestedPayoutModel> interestedPayoutModel = Rxn<InterestedPayoutModel>();
 
+  final allowedStatuses = [
+    "SUCCESS",
+    "REFUND_FAILED",
+    "REFUND_PENDING",
+    "REFUNDED_SUCCESS",
+  ];
 
   Future<void> getPayoutListApi({
     String? LeadId,

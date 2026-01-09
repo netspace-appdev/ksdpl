@@ -112,6 +112,10 @@ class LeadsPayoutPage extends StatelessWidget {
                                 // Generate Receipt URL
                                 final invoiceUrl = '${BaseUrl.salesPanel}/#/invoice/${data1.leadId}/${data1.packageId}/${data1.id}';
                                 final receiptUrl = '${BaseUrl.salesPanel}/#/receipt-preview/${data1.leadId}/${data1.packageId}/${data1.id}';
+                                final creditNoteUrl = '${BaseUrl.salesPanel}/#/credit-note/${data1.leadId}/${data1.packageId}/${data1.id}';
+                                final refundReceiptNoteUrl = '${BaseUrl.salesPanel}/#/refund-receipt-voucher/${data1.leadId}/${data1.packageId}/${data1.id}';
+
+
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -132,7 +136,7 @@ class LeadsPayoutPage extends StatelessWidget {
 
 
 
-                                      DetailRow(
+                                    /*  DetailRow(
                                         label: AppText.invoicePdf,
                                         value: data1.txnStatus=="SUCCESS"
                                             ? AppText.viewInvoice
@@ -156,7 +160,65 @@ class LeadsPayoutPage extends StatelessWidget {
                                           onTap: data1.txnStatus=="SUCCESS"
                                               ?() => _openUrl(receiptUrl) : null
 
+                                      ),*/
+
+                                      if (payoutController.allowedStatuses.contains(data1.txnStatus)) ...[
+                                        DetailRow(
+                                          label: AppText.invoicePdf,
+                                          value: payoutController.allowedStatuses.contains(data1.txnStatus)
+                                              ? AppText.viewInvoice
+                                              : AppText.invoiceNotGenerated,
+                                          valueColor: payoutController.allowedStatuses.contains(data1.txnStatus)
+                                              ? AppColor.secondaryColor
+                                              : AppColor.gre4,
+                                          onTap: payoutController.allowedStatuses.contains(data1.txnStatus)
+                                              ? () => _openUrl(invoiceUrl)
+                                              : null,
+                                        ),
+
+                                        DetailRow(
+                                          label: AppText.ReceiptPdf,
+                                          value: payoutController.allowedStatuses.contains(data1.txnStatus)
+                                              ? AppText.viewReceipt
+                                              : AppText.receiptNotGenerated,
+                                          valueColor: payoutController.allowedStatuses.contains(data1.txnStatus)
+                                              ? AppColor.secondaryColor
+                                              : AppColor.gre4,
+                                          onTap: payoutController.allowedStatuses.contains(data1.txnStatus)
+                                              ? () => _openUrl(receiptUrl)
+                                              : null,
+                                        ),
+                                      ],
+
+                                      ///09 Jan 2026
+                                      if(data1.txnStatus=="REFUNDED_SUCCESS")
+                                        DetailRow(
+                                          label: AppText.creditNotePDF,
+                                          value: data1.txnStatus=="REFUNDED_SUCCESS"
+                                              ? AppText.viewPDF
+                                              : AppText.pdfNotGenerated,
+                                          valueColor:data1.txnStatus=="REFUNDED_SUCCESS"
+                                              ? AppColor.secondaryColor
+                                              : AppColor.gre4,
+                                          onTap: data1.txnStatus=="REFUNDED_SUCCESS"
+                                              ?() => _openUrl(creditNoteUrl) : null
+
                                       ),
+
+                                      if(data1.txnStatus=="REFUNDED_SUCCESS")
+                                        DetailRow(
+                                          label: AppText.refundReceiptVoucherPDF,
+                                          value: data1.txnStatus=="REFUNDED_SUCCESS"
+                                              ? AppText.viewPDF
+                                              : AppText.pdfNotGenerated,
+                                          valueColor:data1.txnStatus=="REFUNDED_SUCCESS"
+                                              ? AppColor.secondaryColor
+                                              : AppColor.gre4,
+                                          onTap: data1.txnStatus=="REFUNDED_SUCCESS"
+                                              ?() => _openUrl(refundReceiptNoteUrl) : null
+
+                                      ),
+
 
                                     ], Icons.info_outline),
                                     const SizedBox(height: 20),
@@ -266,7 +328,7 @@ class LeadsPayoutPage extends StatelessWidget {
   }
 
   Future<void> _openUrl(String url) async {
-    print('url__${url}');
+    print('url==>${url}');
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       Get.snackbar(
@@ -276,6 +338,9 @@ class LeadsPayoutPage extends StatelessWidget {
       );
     }
   }
+
+
+
 }
 
 class DetailRow extends StatelessWidget {

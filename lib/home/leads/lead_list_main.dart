@@ -862,7 +862,7 @@ class LeadListMain extends StatelessWidget  {
                         ],
                       ),
 
-                    if(lead.leadStage.toString()=="4")
+                    if(lead.leadStage.toString()=="4" || lead.leadStage.toString()=="6")
                       Column(
                         children: [
                           SizedBox(height: 10,),

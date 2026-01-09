@@ -257,7 +257,7 @@ class Step1Form extends StatelessWidget {
 
                     ),
 
-
+/*
                     CustomTextLabel(
                       label: AppText.channel,
                     ),
@@ -293,7 +293,7 @@ class Step1Form extends StatelessWidget {
                       validator:  ValidationHelper.validateName,
                       isInputEnabled: false,
 
-                    ),
+                    ),*/
                     CustomLabeledTextField(
                       label: AppText.processingFee,
                       isRequired: false,

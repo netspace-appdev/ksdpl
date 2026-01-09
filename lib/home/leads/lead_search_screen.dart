@@ -36,6 +36,7 @@ import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/leads/seachLeadController.dart';
 import '../../controllers/new_dd_controller.dart';
 import '../../controllers/open_poll_filter_controller.dart';
+import '../../controllers/payoutController.dart';
 import '../../controllers/product/add_product_controller.dart';
 import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
@@ -926,7 +927,22 @@ class LeadSearchScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-
+                    if(lead.leadStage.toString()=="4" || lead.leadStage.toString()=="6")
+                      Column(
+                        children: [
+                          SizedBox(height: 10,),
+                          _buildTextButton(
+                              label:AppText.payoutInvoiceReceipt,
+                              context: context,
+                              color: Colors.purple,
+                              icon:  Icons.monetization_on_outlined,
+                              leadId: lead.id.toString(),
+                              label_code: "payout",
+                              currentLeadStage: lead.leadStage.toString(),
+                              uln: lead.uniqueLeadNumber.toString()
+                          ),
+                        ],
+                      ),
 
                     if(lead.leadStage.toString()=="6" || lead.leadStage.toString()=="8"|| lead.leadStage.toString()=="9"
                         ||lead.leadStage.toString()=="10" ||  lead.leadStage.toString()=="11" ||lead.leadStage.toString()=="12")
@@ -1199,8 +1215,13 @@ class LeadSearchScreen extends StatelessWidget {
 
 
           Get.toNamed("/LoanApplicationOnlyDetails");
-        }
-        else{
+        } else if(label_code=="payout"){
+          //  addLeadController.getLeadDetailByIdApi(leadId: leadId);
+          // print('object___${addLeadController.getLeadId.value=leadId}');
+          PayoutController payoutController =Get.put(PayoutController());
+          payoutController.getPayoutListApi(LeadId: leadId);
+          Get.toNamed("/leadsPayoutPage");
+        }else{
 
         }
       },
@@ -1212,7 +1233,7 @@ class LeadSearchScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             width:
-            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" || label_code=="aic_add_feedback" || label_code=='change_lead_st'?MediaQuery.of(context).size.width*0.82:
+            label_code=="loan_appl_form" || label_code=="cam_note_details"|| label_code=="update_loan_update" || label_code=="aic_add_feedback" || label_code=='change_lead_st' || label_code=="loan_appl_single_details" ||  label_code=="payout" ?MediaQuery.of(context).size.width*0.82:
             (label_code=="add_feedback" ) ?
             MediaQuery.of(context).size.width*0.40: label_code=="open_poll"?
             MediaQuery.of(context).size.width*0.25 :MediaQuery.of(context).size.width*0.40,

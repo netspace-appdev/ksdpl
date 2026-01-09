@@ -690,10 +690,27 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       );
 
     }else{
-
-      if (currentStep.value < 2) {
+      ///working
+     /* if (currentStep.value < 2) {
         currentStep.value++;
         scrollToStep(currentStep.value);
+      }*/
+
+      //experiment
+      print("currentStep.value======>${currentStep.value} and enableAllCibilFields.value===>${enableAllCibilFields.value}");
+      if (currentStep.value < 2) {
+        if(currentStep.value==1 && enableAllCibilFields.value==true){
+          SnackbarHelper.showSnackbar(
+              title: AppText.accessRestrictedStep2and3Msg,
+              message: AppText.accessRestrictedStep2and3Msg3,
+              backgroundColor: AppColor.redColor,
+              textColor: AppColor.appWhite
+          );
+        }else{
+          currentStep.value++;
+          scrollToStep(currentStep.value);
+        }
+
       }
 
       if(currentStep.value==1 || currentStep.value==2){

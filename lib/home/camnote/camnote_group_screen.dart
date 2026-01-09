@@ -49,6 +49,7 @@ class CamNoteGroupScreen extends StatelessWidget {
               RefreshIndicator(
                 onRefresh: () async {
                   await addLeadController.getLeadDetailByIdApi(leadId: camNoteController.getLeadId.toString());
+                  camNoteController.getSalePackagesByLeadIdApi(LeadId: camNoteController.getLeadId.toString());
                 },
                 child: SingleChildScrollView(
                   child: Column(

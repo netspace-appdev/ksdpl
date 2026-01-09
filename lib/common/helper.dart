@@ -877,6 +877,8 @@ class AppText{
   static const String remark  = "Remark";
   static const String invoicePdf  = "Invoice Pdf";
   static const String ReceiptPdf  = "Receipt PDF";
+  static const String creditNotePDF  = "Credit Note PDF";
+  static const String refundReceiptVoucherPDF  = "Refund receipt Voucher PDF";
   static const String enterRemark  = "Enter Remark";
   static const String enterZipcode  = "Please Add Zipcode in Step 1";
   static const String forgotMsg  = "We’ve sent a password reset link to your email address. Please check your inbox";
@@ -1172,6 +1174,7 @@ class AppText{
   static const String enterCustomerName = "Enter Customer Name";
   static const String accessRestrictedStep2and3Msg = "Access Restricted";
   static const String accessRestrictedStep2and3Msg2 = "Your payment must be successfully completed to access Step 2 and Step 3";
+  static const String accessRestrictedStep2and3Msg3 = "Your CiBIL must be successfully generated to access Step 3";
   static const String grade = "Grade";
   static const String feedback = "Feedback";
   static const String enterFeedback = "Enter feedback here";
@@ -1212,7 +1215,9 @@ class AppText{
   static const String viewInvoice="View Invoice";
   static const String invoiceNotGenerated="Invoice Not Generated";
   static const String viewReceipt="View Receipt";
+  static const String viewPDF="View PDF";
   static const String receiptNotGenerated="Receipt Not Generated";
+  static const String pdfNotGenerated="PDF Not Generated";
   static const String  branchRelatedAssistanceMsg1="For any branch-related assistance, please contact: ";
   static const String  branchRelatedAssistanceMsg2="Support Team (9201963012)";
   static const String  branchRelatedAssistanceMsg3="If you want to update banker Detail, then send WhatsApp to banker registered mobile number. Banker can update their details through the link sent.";
