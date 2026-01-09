@@ -824,7 +824,7 @@ class Step2CamNote extends StatelessWidget {
           itemCount:camNoteController.retailAccountList.length??0,//
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,   // 👈 Add this
-          //physics: const NeverScrollableScrollPhysics(),
+
           itemBuilder: (context, index) {
 
 
@@ -836,30 +836,7 @@ class Step2CamNote extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-               /*   buildCardOuter("#${index+1}", [
-                    DetailRow2(label: AppText.institution, value: item.institution??""),
-                    DetailRow2(label: AppText.prodType, value:  item.accountType??""),
-                    DetailRow2(label: AppText.status, value:  item.open=="Yes"?"Live":"Closed"),
-                    SizedBox(height: 10,),
-                    item.open=="Yes"?
-                    Row(
-                      children: [
-                        Obx(() => Checkbox(
-                          value: item.isSelected.value,
-                          onChanged: (val) {
-                            item.isSelected.value = val ?? false;
-                            camNoteController.updateSelectedRanks();
-                          },
-                        )),
-                        const Text(AppText.markForForeclosure, style: TextStyle(color: AppColor.secondaryColor,),),
-                      ],
-                    ):Container(),
-                    SizedBox(height: 10,),
-                    _buildTextButton("View", context, Colors.pink, Icons.insert_drive_file, "0",item),
-                  ],
-                      Icons.info_outline
 
-                  ),*/
 
                   Container(
                     height: 430,
@@ -906,7 +883,7 @@ class Step2CamNote extends StatelessWidget {
                                 DetailRow2(label: AppText.institution, value: item.institution??""),
                                 DetailRow2(label: AppText.prodType, value:  item.accountType??""),
                                 DetailRow2(label: AppText.status, value:  item.open=="Yes"?"Live":"Closed"),
-
+                                DetailRow2(label: AppText.installmentAmount, value:  item.installmentAmount??""),
                               ],
                             ),
                           ),

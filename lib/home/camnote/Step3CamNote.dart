@@ -476,6 +476,8 @@ class Step3CamNote extends StatelessWidget {
 
               newDDController.getBranchListOfDistrictByZipAndBankApi(bankId: bankId, zipcode:  camNoteController.camZipController.text);
               SeniorScreenController seniorScreenController=Get.put(SeniorScreenController());
+
+              print("camNoteController.camSelectedProdSegment.value??0).toString() in step 3===>${(camNoteController.camSelectedProdSegment.value??0).toString()}");
               seniorScreenController.getChannelDetailsByProductIdApiRequest(ProductId: (camNoteController.camSelectedProdSegment.value??0).toString());
               showCustomBottomSheet(context, bankId, boxId);
             }

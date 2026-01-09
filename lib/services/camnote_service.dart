@@ -40,6 +40,8 @@ class CamNoteService {
   static const String getSalePackagesByLeadId = BaseUrl.baseUrl + 'CamNoteDetail/GetSalePackagesByLeadId';
   static const String UPIAPisGenerateQR = BaseUrl.baseUrl + 'UPIAPis/generate-qr';
   static const String sendBankerSelfUpdateLink = BaseUrl.baseUrl + 'CamNoteDetail/SendBankerSelfUpdateLink';
+  static const String addCibilAccountSummary = BaseUrl.baseUrl + 'CamNoteDetail/AddCibilAccountSummary';
+  static const String getCibilAccountSummaryByLeadId = BaseUrl.baseUrl + 'CamNoteDetail/GetCibilAccountSummaryByLeadId';
 
 
 
@@ -1413,4 +1415,67 @@ class CamNoteService {
       throw Exception('Error while submitting: $e');
     }
   }
+
+
+  static Future<Map<String, dynamic>> addCibilAccountSummaryApi({
+    required List<Map<String, dynamic>> body,
+  })
+  async {
+    try {
+      var headers = await MyHeader.getHeaders3(); // should return 'Authorization' and 'Content-Type: application/json'
+
+      var response = await http.post(
+        Uri.parse(addCibilAccountSummary),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+      const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+      Helper.ApiReq(addCibilAccountSummary, jsonEncode(body));
+      Helper.ApiRes(addCibilAccountSummary, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getCibilAccountSummaryByLeadIdApi({
+    required String leadId,
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getCibilAccountSummaryByLeadId),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'leadId', leadId,fallback: "0");
+
+      var streamedResponse = await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+
+
+
+      Helper.ApiReq(getCibilAccountSummaryByLeadId, request.fields);
+      Helper.ApiRes(getCibilAccountSummaryByLeadId, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+  }
+
 }

@@ -35,13 +35,13 @@ class LoanApplService {
       var headers = await MyHeader.getHeaders3(); // should return 'Authorization' and 'Content-Type: application/json'
 
       var response = await http.post(
-        Uri.parse('https://devapi.kanchaneshver.com/api/LeadDetail/AddLoanApplicationDetails'),
+        Uri.parse(addLoanApplicationDetails),
         headers: headers,
         body: jsonEncode(body),
       );
       const JsonEncoder encoder = JsonEncoder.withIndent('  ');
-      Helper.ApiReq('AddLoanApplicationDetails', jsonEncode(body));
-      Helper.ApiRes('AddLoanApplicationDetails', response.body);
+      Helper.ApiReq(addLoanApplicationDetails, jsonEncode(body));
+      Helper.ApiRes(addLoanApplicationDetails, response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

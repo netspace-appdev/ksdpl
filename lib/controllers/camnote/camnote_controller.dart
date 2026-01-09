@@ -34,6 +34,7 @@ import '../../models/camnote/GetBankerDetailsModel.dart';
 import '../../models/camnote/GetCamNoteDetailByIdModeli.dart';
 import '../../models/camnote/GetCamNoteDetailsByLeadIdForUpdateModel.dart';
 import '../../models/camnote/GetCamNoteLeadIdModel.dart';
+import '../../models/camnote/GetCibilAccountSummaryModel.dart';
 import '../../models/camnote/GetPackageDetailsByIdModel.dart';
 import '../../models/camnote/GetProductDetailBySegmentAndProductModel.dart' as otherBankBranch;
 import '../../models/camnote/GetProductDetailsByFilterModel.dart' as pdFModel;
@@ -124,6 +125,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var newGenerateQRModel = Rxn<NewGenerateQRModel>(); //
   SendMailToBankerCamNoteModel? sendMailToBankerCamNoteModel;
   var getBankerDetailsModel = Rxn<GetBankerDetailsModel>(); //
+  var getCibilAccountSummaryModel = Rxn<GetCibilAccountSummaryModel>(); //
 
   var selectedGenderCoAP = Rxn<String>();
   var selectedGenderDependent = Rxn<String>();
@@ -507,48 +509,6 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     } else {
     }
   }
-/*  void updateSelectedRanks() {
-    // Get selected items
-    final selectedItems = retailAccountList.where((e) => e.isSelected.value).toList();
-
-    // Sort by selection order (optional)
-    // You could maintain an order list – but simplest is natural index order:
-
-    int rankCounter = 0;
-    for (var item in selectedItems) {
-      item.casesCounter.value = rankCounter;
-      rankCounter++;
-    }
-
-    // Unselected items = rank 0
-    for (var item in retailAccountList) {
-      if (!item.isSelected.value) item.casesCounter.value = 0;
-    }
-
-    camCasesToBeForeclosedOnOrBeforeDisbController.text=rankCounter.toString();
-
-    final current = int.tryParse(camCurrentlyCasesBeingServedController.text) ?? 0;
-    final foreclose = int.tryParse(camCasesToBeForeclosedOnOrBeforeDisbController.text) ?? 0;
-
-    final result = current - foreclose;
-
-    camCasesToBeContenuedController.text = result.toString();
-
-    // 6️⃣ SUM OF INSTALLMENTS (New)
-    double totalInstallments = 0;
-
-    for (var item in selectedItems) {
-      final emi = double.tryParse(item.installmentAmount?.toString() ?? "0") ?? 0;
-      totalInstallments += emi;
-    }
-
-    // 7️⃣ Set it into your TextFormField
-    camEmiStoppedBeforeController.text =
-        totalInstallments.toStringAsFixed(2);
-
-
-
-  }*/
 
   void updateSelectedRanks() {
     // Selected items
@@ -690,14 +650,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       );
 
     }else{
-      ///working
-     /* if (currentStep.value < 2) {
+      ///for by pass
+      /*if (currentStep.value < 2) {
         currentStep.value++;
         scrollToStep(currentStep.value);
       }*/
 
-      //experiment
-      print("currentStep.value======>${currentStep.value} and enableAllCibilFields.value===>${enableAllCibilFields.value}");
+      //Working
       if (currentStep.value < 2) {
         if(currentStep.value==1 && enableAllCibilFields.value==true){
           SnackbarHelper.showSnackbar(
@@ -923,8 +882,8 @@ class CamNoteController extends GetxController with ImagePickerMixin{
               IIR: camIirController.text.trim().toString(),
 
               CreatedBy:eId,
-              DSACode:bankerData.dsaCode.toString(),
-              DSAName:bankerData.dsaCode.toString(),
+              DSACode:(bankerData.dsaCode==null || bankerData.dsaCode=="null")?"": bankerData.dsaCode.toString(),
+              DSAName:(bankerData.dsaName==null || bankerData.dsaName=="null")?"": bankerData.dsaName.toString(),
             );
 
           }
@@ -1197,9 +1156,35 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       }
 
   }
+  List<Map<String, dynamic>> buildCibilSummaryPayload() {
+    return retailAccountList.asMap().entries.map((entry) {
+      final index = entry.key;
+      final item = entry.value;
+
+      return {
+        "accountNumber": item.accountNumber ?? "",
+        "accountStatus": item.accountStatus ?? "",
+        "accountType": item.accountType ?? "",
+        "balance": item.balance ?? "",
+        "installmentAmount": item.installmentAmount ?? "0",
+        "institution": item.institution ?? "",
+        "leadId": getLeadId.value.toString(),
+        "markForForeclosure": item.isSelected.value ? 1 : 0,
+        "ownershipType": item.ownershipType ?? "",
+        "pastDueAmount": item.pastDueAmount ?? "0",
+        "paymentStatusDPD": "",
+        "sanctionAmount": item.sanctionAmount ?? "0",
+        "seq": (index + 1).toString(),
+      };
+    }).toList();
+  }
 
 
-  void submitSaveCamnoteDetails(){
+  void submitSaveCamnoteDetails() async {
+
+    final payload = buildCibilSummaryPayload();
+    print("payload for summary===>${payload}");
+    await addCibilAccountSummaryApi(summaryPayload:payload);
     saveCamnoteDetailsApi(
       LeadId:getLeadId.value.toString(),
       CasesToBeForeclosedOnOrBeforeDisb:camCasesToBeForeclosedOnOrBeforeDisbController.text.trim().toString(),
@@ -4191,6 +4176,89 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     }
   }
 
+
+  Future<void> addCibilAccountSummaryApi({
+    required List<Map<String, dynamic>> summaryPayload,
+
+
+  }) async
+  {
+    try {
+      isCaNoteStep2Loading(true);
+
+
+      var data = await CamNoteService.addCibilAccountSummaryApi(
+          body: summaryPayload
+      );
+
+
+      if (data['success'] == true) {
+        addLoanApplicationModel.value = AddLoanApplicationModel.fromJson(data);
+
+
+
+      } else {
+        //  ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error getLeadDetailByIdApi: $e");
+
+      //  ToastMessage.msg(AppText.somethingWentWrong);
+      isCaNoteStep2Loading(false);
+    } finally {
+      // isLoading(false);
+    }
+  }
+
+
+  Future<void>  getCibilAccountSummaryByLeadIdApi({
+    required String leadId,
+  }) async {
+    try {
+
+      isLinkSendLoading(true);
+
+
+      var data = await CamNoteService.getCibilAccountSummaryByLeadIdApi(
+        leadId: leadId,
+      );
+
+
+      if(data['success'] == true){
+
+
+        getCibilAccountSummaryModel.value= GetCibilAccountSummaryModel.fromJson(data);
+        ToastMessage.msg(data['message']??"Link sent successfully");
+
+        isLinkSendLoading(false);
+
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+
+
+
+
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+
+      }
+
+
+    } catch (e) {
+      print("Error newGenerateQRApi: $e");
+
+      ToastMessage.msg(AppText.somethingWentWrong);
+
+      isLinkSendLoading(false);
+
+    } finally {
+
+
+      isLinkSendLoading(false);
+
+    }
+  }
 }
 
 extension ParseStringExtension on String? {
