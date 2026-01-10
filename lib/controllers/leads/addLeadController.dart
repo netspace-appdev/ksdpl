@@ -183,6 +183,7 @@ class Addleadcontroller extends GetxController{
 
         panController.text=getLeadDetailModel.value?.data?.panCard??"";
         camNoteController.camPanController.text = getLeadDetailModel.value?.data?.panCard ?? "";
+        loanApplicationController.panController.text = getLeadDetailModel.value?.data?.panCard ?? "";
 
         streetAddController.text=getLeadDetailModel.value?.data?.streetAddress??"";
         camNoteController.camStreetAddController.text = getLeadDetailModel.value?.data?.streetAddress ?? "";
@@ -422,7 +423,7 @@ class Addleadcontroller extends GetxController{
           camNoteController.photosOffEnabled.value=true;
         }
 
-       print("now cibil parse--->");
+
         if (getLeadDetailModel.value?.data?.cibilJSON!=null) {
           final result = await parseCibilData(
             cibilJson: getLeadDetailModel.value?.data?.cibilJSON,
@@ -475,8 +476,7 @@ class Addleadcontroller extends GetxController{
 
           camNoteController.camTotalEnquiriesWithin12monthsCibilController.text=result['Total_Enquiries_within_12_months'].toString();
           camNoteController.camTotalEmiController.text= (result['TotalEMI'] ?? 0).toDouble().toStringAsFixed(2);
-          print("TotalEMI======>${(result['TotalEMI'] ?? 0).toDouble().toStringAsFixed(2)}");
-          print("TotalEMI controller======>${camNoteController.camTotalEmiController.text}");
+
           camNoteController.camTotalEnquiriesController.text=result['TotalEnquiriesMadeAsPerCibil'].toString();
           camNoteController.camTotalSanctionedAmountController.text=result['TotalSanctionedAmount'].toString();
           camNoteController.camNumberOfDaysPastDueCountController.text=result['SettlementCases'].toString();
@@ -484,6 +484,9 @@ class Addleadcontroller extends GetxController{
           camNoteController.camIirController.text=result['Iir'].toString();
           camNoteController.cibilJsonPdfUrl.value=result['Pdf_Url'].toString();
           camNoteController.enableAllCibilFields.value=false;
+          camNoteController.getCibilAccountSummaryByLeadIdApi(leadId: getLeadDetailModel.value!.data!.id!.toString());
+
+
         }
 
         ///06 Jan 2026 This would be out of cibil data we have got from cibil json
@@ -492,8 +495,11 @@ class Addleadcontroller extends GetxController{
 
         camNoteController.camOfferedSecurityTypeController.text=getLeadDetailModel.value?.data?.offeredSecurityType??"";
 
-        camNoteController.camPropertyValueController.text=getLeadDetailModel.value?.data?.offeredSecurityType??"";
+        camNoteController.camPropertyValueController.text=(getLeadDetailModel.value?.data?.propertyValueAsPerCustomer??0).toString();
         camNoteController.camLoanTenorRequestedController.text=(getLeadDetailModel.value?.data?.loanTenorRequested??"0").toString();
+        
+        print("camNoteController.camLoanTenorRequestedController.text===>${camNoteController.camLoanTenorRequestedController.text}");
+        print("getLeadDetailModel.value?.data?.loanTenorRequested===>${getLeadDetailModel.value?.data?.loanTenorRequested??"0"}");
         camNoteController.camLtvController.text=(getLeadDetailModel.value?.data?.ltv??"0").toString();
         camNoteController.selectedCamIncomeTypeList.value=(getLeadDetailModel.value?.data?.incomeType??"").toString();
 
@@ -505,9 +511,13 @@ class Addleadcontroller extends GetxController{
         camNoteController.camProposedEmiController.text=(getLeadDetailModel.value?.data?.proposedEMI??"0").toString();
         camNoteController.camIirController.text=(getLeadDetailModel.value?.data?.iir??"0").toString();
         camNoteController.camFoirController.text=(getLeadDetailModel.value?.data?.foir??"0").toString();
+        camNoteController.calculateLoanDetails();
 
-        print("nonEarningCustomerAge in addlead======>${getLeadDetailModel.value?.data?.nonEarningCustomerAge??"0"}");
-
+        ///only for loan Application controllers
+        loanApplicationController.loanApplicationNoController.text=(getLeadDetailModel.value?.data?.loanApplicationNo??"0").toString();
+        loanApplicationController.selectedBank.value=int.parse(getLeadDetailModel.value?.data?.prefferedBank??"0");
+        loanApplicationController.selectedBankBranch.value =int.parse(getLeadDetailModel.value?.data?.branch??"0");
+        //loanApplicationController.selectedProdTypeOrTypeLoan.value =int.parse(getLeadDetailModel.value?.data?.branch??"0");
         isLoading(false);
 
       }else{
@@ -578,7 +588,7 @@ class Addleadcontroller extends GetxController{
 
       camNoteController.retailAccountList=accounts;
     }
-    print("here retailAccountList---->${camNoteController.retailAccountList[0].institution.toString()}");
+
     double totalLoanAvailed = 0;
 
     int totalLiveLoan = 0;

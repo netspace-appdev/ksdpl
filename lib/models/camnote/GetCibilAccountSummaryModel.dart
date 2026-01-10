@@ -1,9 +1,11 @@
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+
 class GetCibilAccountSummaryModel {
   String? status;
   bool? success;
   List<Data>? data;
   String? message;
-
+  RxBool isSelected = false.obs;
   GetCibilAccountSummaryModel(
       {this.status, this.success, this.data, this.message});
 
