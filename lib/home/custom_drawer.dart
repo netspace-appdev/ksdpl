@@ -517,12 +517,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   onTap: () {
                     SeniorScreenController seniorScreenController =Get.put(SeniorScreenController());
                     seniorScreenController.filterClear();
-                    AddProductController addProductController =Get.put(AddProductController());
                     LeadDDController leadDDController = Get.put(LeadDDController());
-
-                    addProductController =Get.put(AddProductController());
                     seniorScreenController.getAllSeniorListApi();
-                    addProductController.getAllProductCategoryApi();
+                    leadDDController.getAllKsdplProductApi();
                     leadDDController.getAllJobRoleListApi();
 
                     Get.toNamed("/seniorlistScreen");

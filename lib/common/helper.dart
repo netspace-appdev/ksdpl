@@ -651,6 +651,7 @@ class AppText{
   static const String writeYourContent = "Write your content";
   static const String workLocation = "Work Location";
 
+
   static const String prodName = "Product Name";
   static const String selectCustomerCategory = "Customer Category";
   static const String selectCustomerCategoryServied = "Customer Category (Servied)";
@@ -1222,7 +1223,8 @@ class AppText{
   static const String  branchRelatedAssistanceMsg2="Support Team (9201963012)";
   static const String  branchRelatedAssistanceMsg3="If you want to update banker Detail, then send WhatsApp to banker registered mobile number. Banker can update their details through the link sent.";
   static const String  sendLink="Send Link";
-
+  static const String searchVerticalByProduct = "Search Vertical by Product";
+  static const String noChannelFound = "No Channel Found";
 
 
 

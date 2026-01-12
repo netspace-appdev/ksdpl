@@ -65,13 +65,7 @@ class SeniorScreenController extends GetxController{
         seniorListModel.value = senorList.GetSeniorListModel.fromJson(data);
 
         final List<senorList.Data> li = seniorListModel.value?.data ?? [];
-       // seniorFilteredList.value = List<senorList.Data>.from(li);
 
-
-      /*  seniorFilteredList.value = li .where((item) {
-          final role = item.jobRole?.trim();
-          return role == null || !excludedRoles.contains(role);
-        }).toList();*/
 
         seniorFilteredList.value = li.where((item) {
           final role = item.jobRole?.trim();
@@ -80,7 +74,7 @@ class SeniorScreenController extends GetxController{
               (role == null || !excludedRoles.contains(role));
         }).toList();
 
-       // filterClear();
+
 
       } else {
         seniorListModel.value?.data?.clear();
@@ -97,46 +91,9 @@ class SeniorScreenController extends GetxController{
     }
   }
 
-/*  Future<void> getAllSeniorListApi() async {
-    try {
-      isLoadingMainScreen.value = true;
 
-      final data = await ProductService.getAllSeniorListRequestApi();
-
-      if (data['success'] == true) {
-        seniorListModel.value = senorList.GetSeniorListModel.fromJson(data);
-
-        final List<senorList.Data> li = seniorListModel.value?.data ?? [];
-        // seniorFilteredList.value = List<senorList.Data>.from(li);
-
-
-        seniorFilteredList.value = li .where((item) {
-          final role = item.jobRole?.trim();
-          return role == null || !excludedRoles.contains(role);
-        }).toList();
-
-
-
-      } else {
-        ToastMessage.msg(
-          data['message'] ?? AppText.somethingWentWrong,
-        );
-      }
-    } catch (e) {
-      print("Error getAllSeniorListApi: $e");
-      ToastMessage.msg(AppText.somethingWentWrong);
-    } finally {
-      isLoadingMainScreen.value = false;
-    }
-  }*/
 
   void filterSubmit() {
-
-    print("selectedState.value.toString()====>${selectedState.value.toString()}");
-    print("selectedDistrict.value.toString()====>${selectedDistrict.value.toString()}");
-    print("selectedCity.value.toString()====>${selectedCity.value.toString()}");
-    print(" selectedChannel.value.toString()====>${ selectedChannel.value.toString()}");
-    print("selectedJobroleId.value.toString()===>${selectedJobroleId.value.toString()}");
 
     getAllSeniorListApi(
       stateId:selectedState.value.toString(),
@@ -168,15 +125,17 @@ class SeniorScreenController extends GetxController{
         if (channelId != null) {
 
           selectedChannel.value = channelId;
-        //"${getChannelDetailsByProduct.value?.data?.first.channelName} +${getChannelDetailsByProduct.value?.data?.first.channelCode}
 
-          //item.channelName.toString()+" (${item.channelCode.toString()})"
+        }else{
+          selectedChannel.value = 0;
         }
 
         print("Selected channel in API: ${selectedChannel.value}");
         isChannelDisable.value =true;
         return true; // 🎉 success
       } else {
+        selectedChannel.value = 0;
+        isChannelDisable.value =true;
         ToastMessage.msg(
           data['message'] ?? AppText.somethingWentWrong,
         );

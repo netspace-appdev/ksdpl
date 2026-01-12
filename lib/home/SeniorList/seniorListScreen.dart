@@ -19,6 +19,7 @@ import 'package:ksdpl/models/dashboard/GetCityByDistrictIdModel.dart' as city;
 import '../../custom_widgets/CustomTextLabel.dart';
 import '../../models/product/GetAllProductCategoryModel.dart' as productCat;
 import '../custom_drawer.dart';
+import 'package:ksdpl/models/dashboard/GetAllKsdplProductModel.dart' as product;
 
 class SeniorlistScreen extends StatelessWidget {
  // const SeniorlistScreen({super.key});
@@ -187,7 +188,7 @@ class SeniorlistScreen extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildCard("${index + 1}", [
+              buildCard("${index + 1}.  ${data1.employeeName?.toString()??''} ", [
                 DetailRow(label:  AppText.employeeName, value: data1.employeeName?.toString()??''),
                 DetailRow(label: AppText.emailNoStar, value: data1.email?.toString()??''),
                 DetailRow(label: AppText.contactNo2, value: data1.phoneNumber?.toString()??''),
@@ -243,12 +244,16 @@ class SeniorlistScreen extends StatelessWidget {
               children: [
                 Icon(icon, color: Colors.white,),
                 const SizedBox(width: 5,),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -285,13 +290,13 @@ class SeniorlistScreen extends StatelessWidget {
               ),
 
               const CustomTextLabel(
-                label: AppText.productSegment,
+                label: AppText.searchVerticalByProduct,
                 isRequired: true,
               ),
 
               const SizedBox(height: 10),
 
-              Obx((){
+             /* Obx((){
                 if (seniorScreenController.isLoadingProductCategory.value) {
                   return  Center(child:CustomSkelton.leadShimmerList(context));
                 }
@@ -310,6 +315,36 @@ class SeniorlistScreen extends StatelessWidget {
                     print("Channel list size: ${leadDDController.channelList.length}");
                     print("Selected channel: ${seniorScreenController.selectedChannel.value}");
 
+                  },
+                  onClear: (){
+                    seniorScreenController.selectedProductCategory.value = 0;
+                    seniorScreenController.selectedChannel.value=0;
+                    seniorScreenController.isChannelDisable.value=false;
+                    leadDDController.channelList.clear();
+                  },
+                );
+              }),*/
+
+
+              Obx((){
+                if (leadDDController.isProductLoading.value) {
+                  return  Center(child:CustomSkelton.leadShimmerList(context));
+                }
+
+
+                return CustomDropdown<product.Data>(
+                  items: leadDDController.ksdplProductList ?? [],
+                  getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                  getName: (item) => item.productName.toString(),
+                  selectedValue: leadDDController.ksdplProductList.firstWhereOrNull(
+                        (item) => item.id == seniorScreenController.selectedProductCategory.value,
+                  ),
+                  onChanged: (value) async {
+                    seniorScreenController.selectedProductCategory.value =  value?.id;
+
+                    await seniorScreenController.getChannelDetailsByProductIdApiRequest(ProductId:value?.id.toString());
+                    print("Channel list size: ${leadDDController.channelList.length}");
+                    print("Selected channel: ${seniorScreenController.selectedChannel.value}");
                   },
                   onClear: (){
                     seniorScreenController.selectedProductCategory.value = 0;
@@ -337,9 +372,19 @@ class SeniorlistScreen extends StatelessWidget {
                 height: 10,
               ),
               seniorScreenController.isChannelDisable.value==true?
+              seniorScreenController.selectedChannel.value==0 ?
+              const Text(
+                AppText.noChannelFound,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color:
+                  AppColor.redColor,
+                ),
+              ):
               Text(
                 "${seniorScreenController.getChannelDetailsByProduct.value?.data?.first.channelName} -${seniorScreenController.getChannelDetailsByProduct.value?.data?.first.channelCode}",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color:
@@ -493,7 +538,7 @@ class SeniorlistScreen extends StatelessWidget {
                   ),
                   onChanged: (value) {
                     seniorScreenController.selectedJobroleId.value =
-                        value?.id.toString();
+                        value?.normalizedName;
                   },
 
                   onClear: () {
@@ -501,6 +546,7 @@ class SeniorlistScreen extends StatelessWidget {
                   },
                 );
               }),
+
 
 /*
               Obx((){
@@ -526,7 +572,9 @@ class SeniorlistScreen extends StatelessWidget {
               }),
 */
 
-
+              const SizedBox(
+                height: 100,
+              ),
             ],
           ),
 
