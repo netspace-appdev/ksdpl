@@ -15,6 +15,7 @@ class ApiService {
 
 
   static const String authenticate = baseUrl + 'Auth/AuthenticateForApp';
+  static const String authenticateWeb = baseUrl + 'Auth/Authenticate';
   static const String getAllBank = baseUrl + 'BankMaster/GetAllBank';
   static const String getAllBranchByBankId = baseUrl + 'Branch/GetAllBranchByBankId';
   static const String getLevelOfBankerRole = baseUrl + 'BankerRole/GetLevelOfBankerRole';
@@ -105,7 +106,7 @@ class ApiService {
 
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(authenticate),
+        Uri.parse(authenticateWeb),
       );
 
       // Headers
@@ -121,8 +122,8 @@ class ApiService {
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      Helper.ApiReq(authenticate, request.fields);
-      Helper.ApiRes(authenticate, response.body);
+      Helper.ApiReq(authenticateWeb, request.fields);
+      Helper.ApiRes(authenticateWeb, response.body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

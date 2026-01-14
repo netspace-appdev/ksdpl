@@ -25,9 +25,9 @@ static const String tutorialVideoBaseUrl = 'https://devksdpl-uploads.s3.ap-south
  static const String devVersion = 'LIVE';
 //static const String devVersion = 'UAT';
   //static const String devVersion = 'LOCAL';
-  static const String buildDate = 'Build Date : 13 Jan 2026';
-  static const String appType = 'Multi Role';
-  //static const String appType = 'RO/BM and AIC';
+  static const String buildDate = 'Build Date : 14 Jan 2026';
+  static const String appType = 'Access : Multi Role (Experiment)';
+
 
 
 }
