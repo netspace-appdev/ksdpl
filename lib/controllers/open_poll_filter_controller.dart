@@ -21,6 +21,9 @@ class OpenPollFilterController extends GetxController{
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
   var pickLeadComTaskModel = Rxn<PickLeadComTaskModel>(); //
   var getCommonLeadListFModel = Rxn<GetCommonLeadListFModel>(); //
+
+  final districtDropdownKey = UniqueKey().obs;
+  final cityDropdownKey = UniqueKey().obs;
   @override
   void onInit() {
     // TODO: implement onInit

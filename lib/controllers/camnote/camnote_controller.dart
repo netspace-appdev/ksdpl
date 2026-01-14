@@ -417,6 +417,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
   var infoFilledBankers = <String>{}.obs;
   var selectedBankers = <String>{}.obs;
   var isGenerateCibilVisible = false.obs;
+  var canUserPickLead = false.obs;
 
   var isRequiredVisibleSecure = false.obs;
   Map<String, String> bankerBranchMap = {};
@@ -713,9 +714,25 @@ class CamNoteController extends GetxController with ImagePickerMixin{
        print("1");
        getCamNoteDetailsByLeadIdForUpdateApi(getLeadId.value.toString());
      }*/
-     currentStep.value = step;
 
-     scrollToStep(step);
+     ///experimenmt
+     if(step==2 && enableAllCibilFields.value==true){
+       SnackbarHelper.showSnackbar(
+           title: AppText.accessRestrictedStep2and3Msg,
+           message: AppText.accessRestrictedStep2and3Msg3,
+           backgroundColor: AppColor.redColor,
+           textColor: AppColor.appWhite
+       );
+     }else{
+       currentStep.value = step;
+
+       scrollToStep(step);
+     }
+     ///end
+     //uncomment below
+     /*currentStep.value = step;
+
+     scrollToStep(step);*/
    }
 
   }
@@ -1315,6 +1332,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     uniqueLeadNUmber="";
     loanApplicationNumber="";
     cibilJsonPdfUrl.value="";
+    canUserPickLead.value=false;
     clearStep1();
     clearStep2();
     clearBankDetails();
@@ -3770,9 +3788,9 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
         insertCustomerPackageRequestOnCamnoteModel.value= InsertCustomerPackageRequestOnCamnoteModel.fromJson(data);
-      /*  await getSalePackagesByLeadIdApi(LeadId:LeadId??"0" );*/
+
         return true;
-        isBankerSuperiorLoading(false);
+
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 
@@ -4006,6 +4024,13 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     isGenerateCibilVisible.value =
         multiPackageData.any((item) => item.txnStatus == "SUCCESS");
 
+    canUserPickLead.value = multiPackageData.any((item) {
+      final amount = double.tryParse(item.amount.toString()) ?? 0.0;
+
+      return item.txnStatus == "SUCCESS" && amount >= 118;
+    });
+
+    print("canUserPickLead in controller===>${canUserPickLead}");
 
     is2and3StepActive.value =
         multiPackageData.any((item) => item.txnStatus == "SUCCESS");

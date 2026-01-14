@@ -428,6 +428,8 @@ class LeadListMain extends StatelessWidget  {
                           ),
 
                           if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6" )
+                            camNoteController.isLoadingMainScreen.value?
+                                CircularProgressIndicator():
                             _buildTextButton(
                               label:AppText.leh,
                               context: context,
@@ -862,7 +864,7 @@ class LeadListMain extends StatelessWidget  {
                         ],
                       ),
 
-                    if(lead.leadStage.toString()=="4" || lead.leadStage.toString()=="6")
+                    if(lead.leadStage.toString()!="1" && lead.leadStage.toString()!="2" && lead.leadStage.toString()!="3" && lead.leadStage.toString()!="13")
                       Column(
                         children: [
                           SizedBox(height: 10,),
@@ -1350,11 +1352,17 @@ overflow: TextOverflow.ellipsis,
   }) {
 
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (label_code == "open_poll") {
           leadListController.openPollPercentController.clear();
+         await camNoteController.getSalePackagesByLeadIdApi(LeadId: leadId);
+         if(camNoteController.canUserPickLead.value){
+           showSendToLEHConditionDialog(context: context,leadId: leadId);
+         }else{
+           showPaymentForPickDialog(context: context);
+         }
 
-          showSendToLEHConditionDialog(context: context,leadId: leadId);
+
         }else if (label_code == "add_lead_form") {
 
           addLeadController.fromWhere.value="interested";
@@ -3757,6 +3765,67 @@ overflow: TextOverflow.ellipsis,
           },
           onThirdButtonPressed: (){
             Get.back();
+
+          },
+        );
+      },
+    );
+  }
+
+
+  void showPaymentForPickDialog({
+    required BuildContext context,
+
+  })
+  {
+
+
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "",
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(Get.context!).size.height * 0.7, // Prevents overflow
+            ),
+            child:  const SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+
+
+                  Text(
+                    AppText.paymentRequired,
+                    style: TextStyle(
+                      color:  AppColor.redColor,
+                      fontSize: 20,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 10,),
+
+                  Text(
+                    textAlign: TextAlign.center,
+                    AppText.paymentRequiredMsg,
+                    style: TextStyle(
+                      color:  AppColor.black87,
+                      fontSize: 16,
+                    ),
+
+                  )
+                ],
+              ),
+            ),
+          ),
+          submitButtonText: "Ok",
+          onSubmit: () {
+            Get.back();
+
 
           },
         );

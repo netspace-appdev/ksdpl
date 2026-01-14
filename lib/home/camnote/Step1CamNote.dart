@@ -183,6 +183,7 @@ class Step1CamNote extends StatelessWidget {
 
                                         if (selectedPackage.qRImage != null) {
                                           var empId=StorageService.get(StorageService.EMPLOYEE_ID);
+                                          camNoteController.insertCustomerPackageRequestOnCamnoteModel.value=null;
                                            var success=await camNoteController.insertCustomerPackageRequestOnCamnoteApi(
                                             Id: mp.multiPackageId.toString(),
                                             Name: camNoteController.camFullNameController.text.trim().toString(),

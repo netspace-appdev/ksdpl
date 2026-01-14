@@ -1225,6 +1225,8 @@ class AppText{
   static const String  sendLink="Send Link";
   static const String searchVerticalByProduct = "Search Vertical by Product";
   static const String noChannelFound = "No Channel Found";
+  static const String paymentRequired = "Payment Required";
+  static const String paymentRequiredMsg = "At least one successful payment is required to upload this lead to Loan Exchange Hub.";
 
 
 

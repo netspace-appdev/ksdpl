@@ -927,7 +927,7 @@ class LeadSearchScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                    if(lead.leadStage.toString()=="4" || lead.leadStage.toString()=="6")
+                    if(lead.leadStage.toString()!="1" && lead.leadStage.toString()!="2" && lead.leadStage.toString()!="3" && lead.leadStage.toString()!="13")
                       Column(
                         children: [
                           SizedBox(height: 10,),
