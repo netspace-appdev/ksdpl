@@ -573,7 +573,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
+                  padding: const EdgeInsets.only(bottom: 0.0),
                   child: Text(
                     BaseUrl.buildDate,
                     style: TextStyle(
@@ -583,7 +583,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 5,
+                ),
 
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Text(
+                    BaseUrl.appType,
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
                 SizedBox(
                   height: 50,
                 )
