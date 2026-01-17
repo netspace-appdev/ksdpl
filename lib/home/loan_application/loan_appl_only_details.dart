@@ -35,6 +35,7 @@ import '../../controllers/product/view_product_controller.dart';
 import '../../custom_widgets/CustomBigDialogBox.dart';
 import '../../custom_widgets/CustomCard.dart';
 import '../../custom_widgets/CustomDialogBox.dart';
+import '../../custom_widgets/CustomMaskedIdTextWidget.dart';
 import '../../custom_widgets/CustomTextFieldPrefix.dart';
 import '../camnote/camnot_photo_view.dart';
 import '../custom_drawer.dart';
@@ -144,11 +145,10 @@ class LoanApplicationOnlyDetailsScreen extends StatelessWidget {
 
             },
             child: Container(
-
               width: 40,
               height:40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              decoration:  BoxDecoration(
+              decoration:  const BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
@@ -215,8 +215,11 @@ class LoanApplicationOnlyDetailsScreen extends StatelessWidget {
             DetailRow(label: AppText.bankerMobile, value:Helper.safeValueForField(data.bankerMobile)),
             DetailRow(label: AppText.bankerEmail, value:Helper.safeValueForField(data.bankerEmail)),
             DetailRow(label: AppText.loanApplicationNo, value:Helper.safeValueForField(data.loanApplicationNo)),
-            DetailRow(label: AppText.aadharCardNo, value:Helper.safeValueForField(data.addharCardNumber)),
-            DetailRow(label: AppText.panCardNo, value:Helper.safeValueForField(data.panCardNumber)),
+            CustomDetailRow(label: AppText.aadharCardNo, value:Helper.safeValueForField(data.addharCardNumber)),
+            CustomDetailRow(label: AppText.panCardNo, value:Helper.safeValueForField(data.panCardNumber)),
+
+            //  DetailRow(label: AppText.aadharCardNo, value:Helper.safeValueForField(data.addharCardNumber)),
+          //  DetailRow(label: AppText.panCardNo, value:Helper.safeValueForField(data.panCardNumber)),
             DetailRow(label: AppText.uniqueLeadNumber, value:Helper.safeValueForField(data.uniqueLeadNumber)),
             DetailRow(label: AppText.dsaCode, value:Helper.safeValueForField(data.dsaCode)),
             DetailRow(label: AppText.dsaStaffName, value:Helper.safeValueForField(data.detailForLoanApplication?.dsaStaffName)),
@@ -752,11 +755,56 @@ class LoanApplicationOnlyDetailsScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
-
 }
+
+
+//manshi
+
+class CustomDetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const CustomDetailRow({
+    super.key,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child:   value=="null" || value==AppText.customdash?
+      Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor
+            ),
+          ),
+          const Row(
+            children: [
+              Icon(Icons.horizontal_rule, size: 15,),
+            ],),
+        ],
+      ):CustomMaskedIdTextWidget(
+        label: label,
+        value: value,
+      ),
+    );
+  }
+}
+
 
 
 //details

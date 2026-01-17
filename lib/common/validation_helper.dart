@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../custom_widgets/SnackBarHelper.dart';
 import 'helper.dart';
 class ValidationHelper {
+ // static var validateSubject;
+
 
 
   static String? validatecardNumber(String? value) {
@@ -35,7 +37,11 @@ class ValidationHelper {
 
     return null; // Name is valid
   }
-
+  static String? validateSubject(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Subject is required";
+    }
+  }
   static String? validatePostalCode(String? value) {
     if (value == null || value.isEmpty) {
       return "Postal Code is required";

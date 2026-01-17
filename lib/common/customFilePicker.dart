@@ -90,7 +90,7 @@ class CustomFilePickerWidget extends StatelessWidget {
                           ),
                         ),
                         child: const Text(
-                          "Choose Files",
+                          AppText.ChooseFiles,
                           style: TextStyle(
                             color: AppColor.grey2,
                             fontWeight: FontWeight.w500,

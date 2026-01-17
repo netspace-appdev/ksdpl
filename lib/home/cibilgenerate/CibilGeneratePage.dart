@@ -345,6 +345,7 @@ class Cibilgeneratepage extends StatelessWidget {
       ),
     );
   }
+
   void showPackageQRDialog({
     required BuildContext context,
     required String imageURL,

@@ -1099,11 +1099,14 @@ class Step1CamNote extends StatelessWidget {
                           controller: camNoteController,
                           imageKey: 'property_photo',
                           label: 'Upload Property Photos',
-                          isCloseVisible:camNoteController.photosPropEnabled.value,
-                          isUploadActive:camNoteController.isUserAIC.value==false?false: camNoteController.photosPropEnabled.value,
+                          isCloseVisible: camNoteController.photosPropEnabled.value,
+                          isUploadActive: camNoteController.isUserAIC.value == false
+                              ? false
+                              : camNoteController.photosPropEnabled.value,
                           toastMessage: "you can not upload photos now",
                           isRequired: camNoteController.isRequiredVisibleSecure.value,
-                          isUploadButtonVisible: camNoteController.isUserAIC.value==true?true:false,
+                          isUploadButtonVisible:
+                          camNoteController.isUserAIC.value == true ? true : false,
                         ),
 
                         const SizedBox(height: 20,),

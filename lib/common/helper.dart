@@ -1206,6 +1206,37 @@ class AppText{
   static const String Payout="Payout";
 
 
+//manshi
+  static const String manageTicket="Manage Ticket";
+  static const String raiseTicket="Raise Ticket";
+  static const String ticketRaise="Ticket Raise";
+  static const String ticketList="Ticket List";
+  static const String subject="Subject";
+  static const String panel="Panel";
+  static const String priority="Priority";
+  static const String file="file";
+  static const String image="Image";
+  static const String success="Success";
+  static const String ticketNo="Ticket No";
+  static const String ChooseFiles="Choose Files";
+  static const String issueDetail="Issue Details";
+  static const String issueDetailDes="Start Typing Here.......";
+
+  static const String ticketId = "Ticket ID";
+  static const String panelId = "Panel ID";
+  static const String issueDetails = "Issue Details";
+  static const String response = "Response";
+  static const String createdBy = "Created By";
+  static const String createdDate = "Created Date";
+  static const String updatedBy = "Updated By";
+  static const String updatedDate = "Updated Date";
+  static const String closeBy = "Closed By";
+  static const String closingDate = "Closing Date";
+  static const String reopenDate = "Reopen Date";
+  static const String recloseBy = "Reclosed By";
+  static const String recloseDate = "Reclosed Date";
+  static const String channelId = "Channel ID";
+
 
 
 
@@ -1354,6 +1385,11 @@ class AppImage{
   static const String downloadImg="assets/images/downloadImg.png";
   static const String downloadImg_disable="assets/images/downloadImg_disable.png";
   static const String noDataFound="assets/images/noDataFound.png";
+
+  //manshi
+  static const String ticket="assets/images/tickets.png";
+
+
 
 }
 
