@@ -849,7 +849,11 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
       final EmployerDetailsModel employerDetails = EmployerDetailsModel(
         organizationName: cleanText(coAp.coApOrgNameController.text),
-        ownershipType: coAp.selectedCityPerm.value.toIntOrZero().toString(),
+    //    ownershipType: coAp.selectedCityPerm.value.toIntOrZero().toString(),
+
+        //manshi
+        ownershipType: coAp.selectedOwnershipList.value.toString(),
+
         natureOfBusiness: cleanText(coAp.coApNatureOfBizController.text),
         staffStrength: coAp.coApStaffStrengthController.toIntOrZero(),
         dateOfSalary: coAp.coApSalaryDateController.text.isNotEmpty ? Helper
@@ -1617,14 +1621,25 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
           coApController.coApMaritalController.text =
               item["MaritalStatus"] ?? '';
           coApController.coApEmplStatusController.text = item["Status"] ?? '';
-          coApController.coApNationalityController.text =
-              item["Nationality"] ?? '';
-          coApController.coApOccupationController.text =
-              item["Occupation"] ?? '';
-          coApController.coApOccSectorController.text =
-              item["OccupationSector"] ?? '';
+          coApController.coApNationalityController.text = item["Nationality"] ?? '';
+          coApController.coApOccupationController.text = item["Occupation"] ?? '';
+          coApController.coApOccSectorController.text = item["OccupationSector"] ?? '';
           coApController.coApEmailController.text = item["EmailID"] ?? '';
           coApController.coApMobController.text = item["Mobile"] ?? '';
+//manshi
+          final coApplicant = item?['EmployerDetails'];
+
+          coApController.coApOrgNameController.text = cleanNullText(coApplicant['OrganizationName']);
+          coApController.coApNatureOfBizController.text = cleanNullText(coApplicant['NatureOfBusiness']);
+          coApController.coApStaffStrengthController.text = cleanNullText(coApplicant['StaffStrength'].toString());
+          coApController.selectedOwnershipList.value = cleanNullText(coApplicant['OwnershipType'].toString());
+          coApController.coApSalaryDateController.text =
+          coApplicant["DateOfSalary"] == "" ? "" : cleanNullText(Helper.convertFromIso8601(coApplicant["DateOfSalary"]) ?? '');
+
+          print('detail of co Applicant${coApplicant['OrganizationName']}');
+          print('detail of co Applicant${coApplicant['NatureOfBusiness']}');
+          print('detail of co Applicant${coApplicant['StaffStrength']}');
+          print('detail of co Applicant${coApplicant['OwnerShipType']}');
 
           final presentAdd = item?['PresentAddress'];
           coApController.coApCurrHouseFlatController.text =
@@ -2302,6 +2317,12 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
     } finally {
       isLoadingOnlyDetails(false);
     }
+  }
+
+  //manshi
+  String cleanNullText(String? text) {
+    if (text == 'null') return '';
+    return text!.trim().isEmpty ? '' : text.trim();
   }
 }
 
