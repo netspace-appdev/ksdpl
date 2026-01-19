@@ -646,7 +646,7 @@ class AppText{
   static const String productDescriptions = "Product Descriptions";
   static const String pofileDescriptions = "Descriptions";
   static const String enterProductDescriptions = "Enter Product Descriptions";
-  static const String productSegment = "Product Segment";
+  static const String productSegment = "Loan Segment"; //product Segment
   static const String enterProductSegment = "Enter Product Segment";
   static const String writeYourContent = "Write your content";
   static const String workLocation = "Work Location";

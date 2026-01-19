@@ -1075,7 +1075,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
       return;
     }
 
-   // if (!packageFieldsIfRequired()) return;
+
     if (!securedFieldsIfRequired()) return;
 
 
@@ -3599,6 +3599,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
     try {
 
       isLoading(true);
+      isAllCamnoteSubmit(true);
 
       var data = await CamNoteService.addCustomerDetailsApi(
         Id: Id,
@@ -3624,6 +3625,7 @@ class CamNoteController extends GetxController with ImagePickerMixin{
 
 
         isLoading(false);
+        isAllCamnoteSubmit(false);
 
       }else if(data['success'] == false && (data['data'] as List).isEmpty ){
 

@@ -843,6 +843,23 @@ class Addleadcontroller extends GetxController{
 
         getLeadDetailModel.value= GetLeadDetailModel.fromJson(data);
         ToastMessage.msg( getLeadDetailModel.value!.message!.toString());
+        camNoteController.addCustomerDetailsApi(
+          Id:"0",
+          CustomerName:name,
+          MobileNumber:mobileNumber,
+          Email:email,
+          Gender:gender,
+          AdharCard:aadhar,
+          PanCard:pan,
+          StreetAddress:streetAdd,
+          State:state,
+          District:district,
+          City:city,
+          Nationality:nationality,
+
+        );
+
+
 
     /*    if(fromWhere=="camnote"){
           camNoteController.addCustomerDetailsApi(
@@ -1078,7 +1095,21 @@ class Addleadcontroller extends GetxController{
         }
 
 
+        await camNoteController.addCustomerDetailsApi(
+          Id:"0",
+          CustomerName:name,
+          MobileNumber:mobileNo,
+          Email:email,
+          Gender:gender,
+          AdharCard:aadhar,
+          PanCard:pan,
+          StreetAddress:streetAdd,
+          State:state,
+          District:district,
+          City:city,
+          Nationality:nationality,
 
+        );
         clearControllers();
         isLoading(false);
 

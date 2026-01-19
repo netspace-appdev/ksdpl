@@ -407,7 +407,8 @@ class AddLeadScreen extends StatelessWidget {
 
 
                               CustomTextLabel(
-                                label: AppText.productSegment,
+                                label: AppText.productSegment, ////product Segment-loan segment
+                                isRequired: true,
 
 
                               ),
@@ -475,13 +476,19 @@ class AddLeadScreen extends StatelessWidget {
 
                               const SizedBox(height: 20),
 
-                              const Text(
+                              /*const Text(
                                 AppText.productTypeInt,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: AppColor.grey2,
                                 ),
+                              ),*/
+                              const CustomTextLabel(
+                                label: AppText.productTypeInt, //ksdpl production scheme
+                                isRequired: true,
+
+
                               ),
                               const SizedBox(height: 10),
                               Obx((){
@@ -720,7 +727,7 @@ class AddLeadScreen extends StatelessWidget {
                                         const SizedBox(height: 10),
                                         CustomLabeledTextField(
                                           label: AppText.conName,
-                                          isRequired: false,
+                                          isRequired: true,
                                           controller: addleadcontroller.connNameController ,
                                           inputType: TextInputType.name,
                                           hintText: AppText.enterConName,
@@ -728,7 +735,7 @@ class AddLeadScreen extends StatelessWidget {
                                         ),
                                         CustomLabeledTextField(
                                           label: AppText.conMob,
-                                          isRequired: false,
+                                          isRequired: true,
                                           controller: addleadcontroller.connMobController ,
                                           inputType: TextInputType.number,
                                           hintText: AppText.enterConMob,
@@ -738,7 +745,7 @@ class AddLeadScreen extends StatelessWidget {
 
                                         CustomLabeledTextField(
                                           label: AppText.conShare,
-                                          isRequired: false,
+                                          isRequired: true,
                                           controller: addleadcontroller.connShareController ,
                                           inputType: TextInputType.number,
                                           hintText: AppText.enterConShare,
@@ -895,6 +902,13 @@ class AddLeadScreen extends StatelessWidget {
 
         SnackbarHelper.showSnackbar(title: "Incomplete", message: "Please select gender");
       }
+      else if( addleadcontroller.selectedProdSegment.value==null ||   addleadcontroller.selectedProdSegment.value==0){
+        SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter loan Segment");
+        return;
+      }else if(leadDDController.selectedProdType.value==null || leadDDController.selectedProdType.value=="0"){
+        SnackbarHelper.showSnackbar(title: "Incomplete Step 1", message: "Please enter KSDPL Product (scheme)"); //KSDPL Product
+        return;
+      }
       /*else if(camNoteController.isaddedMobileNumber.value == true){
         SnackbarHelper.showSnackbar(title: "Incomplete", message: "This Number already added ");
         return;
@@ -940,9 +954,10 @@ class AddLeadScreen extends StatelessWidget {
 
           ).then((_){
 
-            BotNavController botNavController=Get.put(BotNavController());
-            botNavController.selectedIndex.value = 1;
-            Get.offAllNamed("/bottomNavbar");
+            /*BotNavController botNavController=Get.put(BotNavController());
+            botNavController.selectedIndex.value = 1;*/
+            Get.offNamed("/bottomNavbar");
+
           });
       }
     }
