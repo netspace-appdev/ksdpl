@@ -335,14 +335,18 @@ class OpenPollFilter extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Column(
                     children: [
-                     /* _buildDetailRow("Email", lead.email.toString()),
-                      _buildDetailRow("Assigned", lead.assignedEmployeeDate.toString()),
-                      _buildDetailRow("Uploaded on", lead.uploadedDate.toString()),*/
-
-                      _buildDetailRow("Dropped by Name", lead.assignedEmployeeName.toString()=="null"?AppText.customdash: lead.assignedEmployeeName.toString() ),
+                     /* _buildDetailRow("Dropped by Name", lead.assignedEmployeeName.toString()=="null"?AppText.customdash: lead.assignedEmployeeName.toString() ),
                       _buildDetailRow("Dropped by Phone No.", lead.assignedEmployeePhoneNumber.toString()=="null"?AppText.customdash: lead.assignedEmployeePhoneNumber.toString() ),
                       _buildDetailRow("share %", "${lead.assignedEmployeePercentage} %" ),
                       _buildDetailRow("City ", lead.cityName.toString()),
+                      _buildDetailRow("City ", lead.cityName.toString()),*/
+
+                      DetailRow(label: "Dropped by Name",value: lead.assignedEmployeeName.toString()=="null"?AppText.customdash: lead.assignedEmployeeName.toString(),),
+                      DetailRow(label: "Dropped by Phone No.",value: lead.assignedEmployeePhoneNumber.toString()=="null"?AppText.customdash: lead.assignedEmployeePhoneNumber.toString(),),
+                      DetailRow(label: "share %",value: "${lead.assignedEmployeePercentage} %" ,),
+                      DetailRow(label: "City",value: lead.cityName.toString(),),
+                      DetailRow(label: "KSDPL Product Name",value: lead.ksdplProductName.toString(),),
+
 
 
 
@@ -411,45 +415,6 @@ class OpenPollFilter extends StatelessWidget {
     );
   }
 
-  /// Helper widget for icon buttons
-  Widget _buildIconButton({
-    required String icon,
-    required Color color,
-    required String phoneNumber,
-    required String label,
-  }) {
-    return IconButton(
-      onPressed: () {
-        if(label=="call"){
-          leadListController.makePhoneCall(phoneNumber);
-        }
-        if(label=="whatsapp"){
-          leadListController.openWhatsApp(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
-        }
-        if(label=="message"){
-          leadListController.sendSMS(phoneNumber: phoneNumber, message: AppText.whatsappMsg);
-        }
-
-      },
-
-      icon: Container(
-
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        decoration:  BoxDecoration(
-          border: Border.all(color: AppColor.grey200),
-          color: AppColor.appWhite,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(2),
-          ),
-
-        ),
-        child: Center(
-          // child: Icon(icon, color: color),
-          child: Image.asset(icon, height: 12,),
-        ),
-      ),
-    );
-  }
 
   Widget _noDataCard(BuildContext context) {
     return Center(
@@ -492,34 +457,6 @@ class OpenPollFilter extends StatelessWidget {
       onTap: () {
         if (label == "Pick Lead") {
 
-          /*showDialog(
-            context: context,
-            builder: (context) {
-              return CustomDialogBox(
-                title: "Are you sure?",
-
-                onYes: () {
-                  var eId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
-                  openPollFilterController.pickupLeadFromCommonTasksApi(
-                      employeeId: eId,
-                      leadId: leadId
-                  ).then((_){
-                    openPollFilterController. getCommonLeadListByFilterApi(
-                      stateId: leadDDController.selectedState.value??"0",
-                      distId: leadDDController.selectedDistrict.value??"0",
-                      cityId:  leadDDController.selectedCity.value??"0",
-                      KsdplBranchId: leadDDController.selectedKsdplBr.value??"0",
-                    );
-                  });
-
-
-                },
-                onNo: () {
-
-                },
-              );
-            },
-          );*/
           showPickUpConditionDialog(context, leadId);
 
         }else if (label == "Details") {
@@ -847,122 +784,7 @@ class OpenPollFilter extends StatelessWidget {
     return null;
   }
 
- /* void showPickUpConditionDialog(BuildContext context, String uid) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomBigDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-          title: "Rules for Picking Cases / केस हैंडलिंग नियम",
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
 
-                // A. English
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
-                    children: [
-                      TextSpan(
-                          text: "A. 3 at a Time:\n",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.primaryColor)),
-                      TextSpan(
-                          text:
-                          "Members can hold only 3 cases; must report 3 lender outcomes per case before picking more."),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // B. English
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
-                    children: [
-                      TextSpan(
-                          text: "B. Performance Monitoring:\n",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.primaryColor)),
-                      TextSpan(
-                          text:
-                          "3 failed outcomes = temporary suspension; reinstated by uploading 3 new cases."),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // C. English
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
-                    children: [
-                      TextSpan(
-                          text: "C. Compensation Negotiation:\n",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.primaryColor)),
-                      TextSpan(
-                          text:
-                          "Sharing ratio negotiable before disbursement, by mutual agreement."),
-                    ],
-                  ),
-                ),
-                const Divider(height: 24, thickness: 1),
-
-                // A. Hindi
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
-                    children: [
-                      TextSpan(
-                          text: "ए. एक समय में 3:\n",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.primaryColor)),
-                      TextSpan(
-                          text:
-                          "सदस्य एक समय में केवल 3 केस रख सकते हैं; और अधिक केस लेने से पहले प्रत्येक केस के 3 ऋणदाता परिणाम रिपोर्ट करना आवश्यक है।"),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // B. Hindi
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
-                    children: [
-                      TextSpan(
-                          text: "बी. प्रदर्शन मॉनिटरिंग:\n",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.primaryColor)),
-                      TextSpan(
-                          text:
-                          "3 असफल परिणाम = अस्थायी निलंबन; 3 नए केस अपलोड करने पर पुनः सक्रिय किया जाएगा।"),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // C. Hindi
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
-                    children: [
-                      TextSpan(
-                          text: "सी. मुआवजा वार्ता:\n",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.primaryColor)),
-                      TextSpan(
-                          text:
-                          "डिस्बर्समेंट से पहले आपसी सहमति से शेयरिंग अनुपात पर बातचीत की जा सकती है।"),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          onSubmit: () {
-
-          },
-        );
-      },
-    );
-  }*/
   void showPickUpConditionDialog(BuildContext context, String leadId) {
     showDialog(
       context: context,
@@ -1101,4 +923,52 @@ class OpenPollFilter extends StatelessWidget {
   }
 }
 
+class DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
 
+  const DetailRow({
+    Key? key,
+    required this.label,
+    required this.value,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 14, color: AppColor.primaryColor
+            ),
+          ),
+          const SizedBox(height: 4),
+          value=="null" || value==AppText.customdash?
+          const Row(
+            children: [
+              Icon(Icons.horizontal_rule, size: 15,),
+            ],):
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

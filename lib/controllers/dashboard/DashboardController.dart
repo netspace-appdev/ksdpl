@@ -47,7 +47,7 @@ class DashboardController extends GetxController {
   UpdateFCMTokenModel? updateFCMTokenModel;
   List<int> fixedLeadIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  var isLeadCountYearly = '0'.obs;
+  var isLeadCountYearly = '2'.obs;
 
   var selectedIndex = (0).obs;
   var appUserRoleGlobal="".obs;
@@ -66,7 +66,7 @@ class DashboardController extends GetxController {
   void selectCheckbox(int index) {
 
     selectedIndex.value = index;
-    if( selectedIndex.value==0){
+/*    if( selectedIndex.value==0){
      isLeadCountYearly.value="0";
 
     } else if( selectedIndex.value==1){
@@ -75,6 +75,17 @@ class DashboardController extends GetxController {
 
     }else if( selectedIndex.value==2){
       isLeadCountYearly.value="2";
+
+
+    }else{
+
+    }*/
+
+    if( selectedIndex.value==0){
+      isLeadCountYearly.value="2";
+
+    } else if( selectedIndex.value==1){
+      isLeadCountYearly.value="1";
 
 
     }else{
@@ -144,7 +155,7 @@ class DashboardController extends GetxController {
          todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
          getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
         getTodayAttendanceDetailOfEmployeeIdApi(employeeId: getEmployeeModel!.data!.id.toString());
-        isAIC?selectedIndex.value=2:selectedIndex.value=0;
+        isAIC?selectedIndex.value=0:selectedIndex.value=0; //2,0
         isAIC?isLeadCountYearly.value="2":isLeadCountYearly.value="0";
          await getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
 

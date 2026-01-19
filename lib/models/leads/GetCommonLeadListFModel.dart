@@ -87,6 +87,7 @@ class Data {
   String? branchName;
   String? productCategoryName;
   num? assignedEmployeePercentage;
+  String? ksdplProductName;
 
   Data(
       {this.id,
@@ -144,7 +145,8 @@ class Data {
         this.bankName,
         this.branchName,
         this.productCategoryName,
-        this.assignedEmployeePercentage});
+        this.assignedEmployeePercentage,
+        this.ksdplProductName,});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -203,6 +205,7 @@ class Data {
     branchName = json['branchName'];
     productCategoryName = json['productCategoryName'];
     assignedEmployeePercentage = json['assignedEmployeePercentage'];
+    ksdplProductName = json['ksdplProductName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -263,6 +266,7 @@ class Data {
     data['branchName'] = this.branchName;
     data['productCategoryName'] = this.productCategoryName;
     data['assignedEmployeePercentage'] = this.assignedEmployeePercentage;
+    data['ksdplProductName'] = this.ksdplProductName;
     return data;
   }
 }

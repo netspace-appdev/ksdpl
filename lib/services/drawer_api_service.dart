@@ -1031,6 +1031,8 @@ class DrawerApiService {
     String distId="0",
     String cityId="0",
     String KsdplBranchId="0",
+    String KsdplProduct="0",
+    String ChannelId="0",
 
   }) async {
 
@@ -1049,6 +1051,8 @@ class DrawerApiService {
       request.fields['District'] = distId.toString();
       request.fields['City'] = cityId.toString();
       request.fields['KsdplBranchId'] = KsdplBranchId.toString();
+      request.fields['KsdplProduct'] = KsdplProduct.toString();
+      request.fields['ChannelId'] = ChannelId.toString();
 
 
       // Sending request

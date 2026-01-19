@@ -562,7 +562,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }) {
 
     //working leads is now ongoing call
-    List<String> options = ["Yearly Lead Counts","Monthly Lead Counts","Daily Lead Counts"];
+    // List<String> options = ["Yearly Lead Counts","Monthly Lead Counts","Daily Lead Counts"];
+    List<String> options = ["Daily Lead Counts","Monthly Lead Counts"];
     showDialog(
       context: context,
       builder: (BuildContext context) {
