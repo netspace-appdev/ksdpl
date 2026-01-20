@@ -924,7 +924,7 @@ class LeadListMain extends StatelessWidget  {
                       ),
 
                    ///add feedback for AIC
-                    if (lead.leadStage != null && lead.leadStage! >= 4 && leadListController.rolRx.value=="INDEPENDENT AREA HEAD")
+                    if (lead.leadStage != null && lead.leadStage! >= 4 && leadListController.rolRx.value==AppConstants.independentAreaHead)
                       Column(
                         children: [
                           SizedBox(height: 10),
@@ -3489,7 +3489,7 @@ overflow: TextOverflow.ellipsis,
                           "Grade-A",
                           "Grade-B",
                           "Grade-C",
-                          "Grade-D (${tempStage})",
+                          "Grade-D (${tempStage}) ${currentLeadStage=="4"?"/(Not Doable)":""}",
                         ],
                         getId: (item) => item,  // Adjust based on your model structure
                         getName: (item) => item,

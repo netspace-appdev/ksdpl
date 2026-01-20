@@ -1390,6 +1390,11 @@ class AppStyles {
     fontSize: 14,
   );
 }
+
+class AppConstants {
+  static const String independentAreaHead = "INDEPENDENT AREA HEAD";
+}
+
 class Helper{
   static Future<void> checkInternet(Future<void> Function() onConnected) async {
     var connectivityResult = await Connectivity().checkConnectivity();

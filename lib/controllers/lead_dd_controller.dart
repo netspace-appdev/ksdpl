@@ -310,7 +310,7 @@ class LeadDDController extends GetxController{
           allowedStageIds = [4, 5];
           break;
         case 4:
-          allowedStageIds = [4, 5]; //remove this line, added on 20 sep
+          allowedStageIds = [4, 5,7]; //remove this line, added on 20 jan
         case 6:
         case 7:
           allowedStageIds = [6, 7];
