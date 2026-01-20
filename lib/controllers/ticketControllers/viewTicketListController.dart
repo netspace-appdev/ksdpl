@@ -23,7 +23,7 @@ class ViewRaiseListController extends GetxController{
       if (data['success'] == true) {
         viewRaiseTicketListModel.value = ViewRaiseTicketListModel.fromJson(data);
         isLoadingValue(false);
-        SnackbarHelper.showSnackbar(title: AppText.success, message: data['message'] );
+     //   SnackbarHelper.showSnackbar(title: AppText.success, message: data['message'] );
       } else {
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }

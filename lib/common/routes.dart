@@ -92,4 +92,5 @@ final routes = [
   GetPage(name: '/LoanApplicationOnlyDetails', page: () => LoanApplicationOnlyDetailsScreen()),
   GetPage(name: '/seniorlistScreen', page: () => SeniorlistScreen()),
   GetPage(name: '/interestedLeadsPayoutPage', page: () => InterestedLeadsPayoutPage()),
+
 ];

@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/controllers/ticketControllers/raiseTicketController.dart';
+import 'package:ksdpl/custom_widgets/CustomElevatedButton.dart';
+import 'package:ksdpl/home/raiseTIcket/viewChatScreen.dart';
+import '../../custom_widgets/commonActionButton.dart';
 import '../../common/helper.dart';
 import '../../common/skelton.dart';
+import '../../controllers/ticketControllers/viewChatController.dart';
 import '../../controllers/ticketControllers/viewTicketListController.dart';
 
 class ViewTicketListScreen extends StatelessWidget {
@@ -184,8 +188,12 @@ class ViewTicketListScreen extends StatelessWidget {
                 DetailRow(label: AppText.panel, value: '${raiseTicketController.getQueryTypeName(int.tryParse(data.panelId.toString() ?? ""))} ',statusId:0),
                 DetailRow(label: AppText.category, value: 'Category-${data.category?.toString()??''}', statusId:0),
                 DetailRow(label: AppText.closeBy, value: '${data.closeBy?.toString()??''}', statusId:0),
-                DetailRow(label: AppText.closeBy, value: '${data.issueDetails?.toString()??''}', statusId:0),
-
+               // CustomElevatedButton(text: AppText.view, onPressed:  myFunction(data.id))
+                CommonActionButton(
+                  text: AppText.view,
+                  icon: Icons.remove_red_eye_sharp,
+                  onPressed: () => myFunction(data.id),
+                ),
               ],
                   Icons.info_outline
 
@@ -246,6 +254,12 @@ class ViewTicketListScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  myFunction(int? id) {
+    ViewChatController viewChatController = Get.put(ViewChatController());
+    viewChatController.getTicketById(id:id);
+    Get.to(() => ViewChatScreen());
   }
 }
 

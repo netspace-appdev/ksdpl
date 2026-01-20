@@ -511,7 +511,32 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ],
                 ),
+                //manshi
+                ExpansionTile(
+                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
+                  title:const Text(AppText.manageTicket, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                  leading: Image.asset(AppImage.ticket, height: 20,),
+                  children: [
+                    ListTile(
+                      leading:  Icon(Icons.contact_support,color: AppColor.blackColor),
+                      title:  Text(AppText.raiseTicket, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      onTap: () {
+                        RaiseTicketController raiseController=Get.put(RaiseTicketController());
+                        Get.to(() => RaiseTicketScreen());
+                      },
+                    ),
+                    ListTile(
+                      leading:  Icon(Icons.preview,color: AppColor.blackColor),
+                      title:  Text(AppText.ticketList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
+                      onTap: () {
+                        ViewRaiseListController viewRaiseListController=Get.put(ViewRaiseListController());
+                        viewRaiseListController.getAllTicketApiResponse();
+                        Get.to(() => ViewTicketListScreen());
+                      },
+                    ),
 
+                  ],
+                ),
                 CustomListTile(
                   title:  AppText.manageSenorList,
                   imagePath:AppImage.personIcon,
@@ -551,32 +576,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   onTap: () => _launchURL("https://docs.google.com/spreadsheets/d/1__iYzKKiDthxhfTqh8WEsdVolIcl2ymi0fqnShwNqto/edit?gid=0#gid=0"),
                 ),
 
-        //manshi
-                ExpansionTile(
-                  childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                  title:const Text(AppText.manageTicket, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                  leading: Image.asset(AppImage.ticket, height: 20,),
-                  children: [
-                    ListTile(
-                      leading:  Icon(Icons.contact_support,color: AppColor.blackColor),
-                      title:  Text(AppText.raiseTicket, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                      onTap: () {
-                        RaiseTicketController raiseController=Get.put(RaiseTicketController());
-                        Get.to(() => RaiseTicketScreen());
-                      },
-                    ),
-                    ListTile(
-                      leading:  Icon(Icons.preview,color: AppColor.blackColor),
-                      title:  Text(AppText.ticketList, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                      onTap: () {
-                        ViewRaiseListController viewRaiseListController=Get.put(ViewRaiseListController());
-                        viewRaiseListController.getAllTicketApiResponse();
-                          Get.to(() => ViewTicketListScreen());
-                      },
-                    ),
 
-                  ],
-                ),
 
                 // Logout Button
                 CustomListTile(

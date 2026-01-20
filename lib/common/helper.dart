@@ -1236,6 +1236,13 @@ class AppText{
   static const String recloseBy = "Reclosed By";
   static const String recloseDate = "Reclosed Date";
   static const String channelId = "Channel ID";
+  static const String view="View";
+  static const String viewChat="View Chat";
+  static const String userName="User Name";
+  static const String close="Close";
+
+
+
 
 
 
@@ -1388,6 +1395,7 @@ class AppImage{
 
   //manshi
   static const String ticket="assets/images/tickets.png";
+  static const String message ="assets/images/message.png";
 
 
 

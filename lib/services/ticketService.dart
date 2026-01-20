@@ -9,6 +9,7 @@ class TicketService {
 
   static const String addTicketRequest = BaseUrl.baseUrl + 'Ticket/AddTicket';
   static const String getAllTicketRequest = BaseUrl.baseUrl + 'Ticket/GetAllTicket';
+  static const String getTicketByIdRequest = BaseUrl.baseUrl + 'Ticket/GetTicketById';
 
 
   static Future<Map<String, dynamic>> addTicketApi({
@@ -93,6 +94,40 @@ class TicketService {
     }
 
   }
+
+  static Future<Map<String, dynamic>> getTicketByIdApi({int? id}) async {
+
+    try {
+      var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getTicketByIdRequest),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Id', id.toString() ,fallback: "0");
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getTicketByIdRequest, request.fields);
+      Helper.ApiRes(getTicketByIdRequest, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+
+  }
+
 
 
 
