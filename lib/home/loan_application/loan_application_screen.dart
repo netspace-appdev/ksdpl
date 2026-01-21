@@ -247,7 +247,7 @@ class LoanApplicationScreen extends StatelessWidget {
                       onPressed: loanApplicationController.isLoading.value
                           ? null
                           : () {
-                        print(loanApplicationController.currentStep.value);
+
 
                         final pan = loanApplicationController.panController.text.trim().toString();
                         if (pan.isNotEmpty) {

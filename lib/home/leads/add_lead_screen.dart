@@ -894,10 +894,10 @@ class AddLeadScreen extends StatelessWidget {
   }
 
   void onPressed(){
-    print("onpressed===>");
+
 
     if (_formKey.currentState!.validate()) {
-      print("onpressed===>2");
+
       if (addleadcontroller.selectedGender.value==null) {
 
         SnackbarHelper.showSnackbar(title: "Incomplete", message: "Please select gender");

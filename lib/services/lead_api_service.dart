@@ -304,7 +304,7 @@ class LeadApiService {
     String? uniqueLeadNumber,
     String leadSegment = "0",
   }) async {
-  print("leadSegment in service==>${leadSegment}");
+
     try {
       var request = http.MultipartRequest(
         'POST',

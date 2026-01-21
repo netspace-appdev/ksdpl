@@ -216,8 +216,7 @@ class LeadListController extends GetxController {
 
     if (callLogs.isNotEmpty) {
       CallLogEntry lastCall = callLogs.first;
-      print("Call Type: ${lastCall.callType}");
-      print("Duration: ${lastCall.duration} seconds");
+
 
       if (lastCall.duration! > 0) {
         print("Call was connected and lasted ${lastCall.duration} seconds.");

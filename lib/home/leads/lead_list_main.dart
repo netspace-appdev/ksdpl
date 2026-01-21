@@ -17,6 +17,7 @@ import 'package:ksdpl/controllers/leads/loan_appl_controller.dart';
 import 'package:lottie/lottie.dart';
 import '../../common/CustomSearchBar.dart';
 import '../../common/helper.dart';
+import '../../common/role_permission.dart';
 import '../../common/skelton.dart';
 import '../../common/storage_service.dart';
 import '../../common/validation_helper.dart';
@@ -452,11 +453,12 @@ class LeadListMain extends StatelessWidget  {
                         children: [
                           _buildDetailRow("Email", lead.email==null?"  -  ":lead.email.toString(), lead.leadStage??0),
                           _buildDetailRow("Updated at",Helper.convertDateTime(lead.lastUpdatedDate.toString()) ,lead.leadStage??0),
-                          _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  ",lead.leadStage??0),
+                          _buildDetailRow("Campaign", lead.campaign??"  -  ",lead.leadStage??0),
                           _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage??0),
                           if(lead.leadStage==4)
                             _buildDetailRow("Cam Note Count", lead.camNoteCount.toString()??"0",lead.leadStage??0),
-                          if(leadListController.rolRx.value=="INDEPENDENT AREA HEAD")
+                          // if(leadListController.rolRx.value=="INDEPENDENT AREA HEAD")
+                          if(RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value))
                             _buildDetailRow("Assigned Employee Name", lead.assignedEmployeeName.toString()??"0",lead.leadStage??0),
 
                         ],
@@ -517,7 +519,7 @@ class LeadListMain extends StatelessWidget  {
                       padding:  EdgeInsets.symmetric(horizontal: 8.0),
                           child: InkWell(
                             onTap:(){
-                              print('dvashgvdvad${lead.uniqueLeadNumber}');
+
                               leadListController.callGetDisburseHistoryByUniqueLeadNoApi(lead.uniqueLeadNumber.toString());
                               leadListController.getHistoryOfDisbursedList(lead.uniqueLeadNumber);
 
@@ -579,7 +581,7 @@ class LeadListMain extends StatelessWidget  {
                         onTap: leadListController.isLoading2.value
                             ? null
                             : () {
-                          print('Downloading for ${lead.uniqueLeadNumber}');
+
                           leadListController
                               .getDetailForDisuburseDocumentDownload(lead.id);
                         },
@@ -634,7 +636,7 @@ class LeadListMain extends StatelessWidget  {
                                     iconColor: AppColor.secondaryColor,
                                     description: "Do you want this lead to be added to Under Review ?",
                                     onYes: () {
-                                      print('here call update lead stage');
+
 
                                       var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
 
@@ -719,7 +721,9 @@ class LeadListMain extends StatelessWidget  {
                       mainAxisAlignment:leadListController.leadCode.value=="6"? MainAxisAlignment.center: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        if(lead.leadStage.toString()=="4" && leadListController.rolRx.value=="INDEPENDENT AREA HEAD")...[
+                       /* if(lead.leadStage.toString()=="4" && leadListController.rolRx.value != AppConstants.independentBusinessManager &&
+                            leadListController.rolRx.value != AppConstants.channelBusinessManager)...[*/
+                        if(lead.leadStage.toString()=="4" && RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value))...[
 
                           _buildTextButton(
                             label:AppText.doable,
@@ -924,7 +928,7 @@ class LeadListMain extends StatelessWidget  {
                       ),
 
                    ///add feedback for AIC
-                    if (lead.leadStage != null && lead.leadStage! >= 4 && leadListController.rolRx.value==AppConstants.independentAreaHead)
+                    if (lead.leadStage != null && lead.leadStage! >= 4 && RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value))
                       Column(
                         children: [
                           SizedBox(height: 10),
@@ -959,7 +963,7 @@ class LeadListMain extends StatelessWidget  {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
                 onPressed: () {
-                  print("load more===>00${leadListController.fromWhereLeads.value}");
+
 
                   DashboardController dashboardController = Get.find();
                   leadListController.fromWhereLeads.value=="dashboard"?
@@ -1201,8 +1205,8 @@ overflow: TextOverflow.ellipsis,
   {
     return IconButton(
       onPressed: () {
-        print("currentLeadStage on call tap===>${currentLeadStage}");
-        print("leadId on call tap===>${leadId}");
+
+
 
         if(label=="call"){
           leadListController.isFBDetailsShow.value=false;
@@ -1264,7 +1268,7 @@ overflow: TextOverflow.ellipsis,
   {
     return IconButton(
       onPressed:url==null || url==""?null: () {
-        print("button tapped");
+
         leadListController.launchInBrowser(url??"");
       },
 
@@ -1505,7 +1509,7 @@ overflow: TextOverflow.ellipsis,
 
        //here we are call cam not update form
         else if (label_code == "cam_note_details") {
-          print("leadId on tap-->${leadId}");
+
 
 
           addLeadController.getLeadDetailByIdApi(leadId: leadId);
@@ -1952,7 +1956,7 @@ overflow: TextOverflow.ellipsis,
                               leadListController.lehSelectedState.value =  value?.id?.toString();
                               leadDDController.getDistrictByStateIdApi(stateId: leadListController.lehSelectedState.value);
 
-                              print("camNoteController.camSelectedState.value in dd--->${leadListController.lehSelectedState.value}");
+
                             },
                             onClear: (){
                               leadListController.lehSelectedState.value=null;
@@ -2106,10 +2110,10 @@ overflow: TextOverflow.ellipsis,
 
                   // ✅ All validations passed
                   leadListController.isOpenPollApiLoading(true);
-                    print("first then--->");
+
                     //addLeadController.getLeadDetailByIdApi(leadId: leadId).then((_) async {
 
-                    print("Second then--->");
+
 
                     List<File> propertyPhotos = camNoteController.getImages("property_photo")
                         .where((img) => img.isLocal)

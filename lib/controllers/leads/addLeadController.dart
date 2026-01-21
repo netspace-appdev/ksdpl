@@ -11,6 +11,7 @@ import 'package:ksdpl/controllers/lead_dd_controller.dart';
 import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
 
 import '../../common/helper.dart';
+import '../../common/role_permission.dart';
 import '../../common/storage_service.dart';
 import '../../models/IndividualLeadUploadModel.dart';
 import '../../models/camnote/special_model/IncomeModel.dart';
@@ -290,8 +291,8 @@ class Addleadcontroller extends GetxController{
         var rawRole = StorageService.get(StorageService.ROLE).toString();
         var role = rawRole.replaceAll('[', '').replaceAll(']', '');
 
-        if(role=="INDEPENDENT AREA HEAD"){
-          camNoteController.isUserAIC.value=true;
+        if(RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value)){ //role=="INDEPENDENT AREA HEAD"
+          camNoteController.isUserAIC.value=true; //isUserAIC now for all seniors
         }
         else{
           camNoteController.isUserAIC.value=false;
@@ -497,9 +498,7 @@ class Addleadcontroller extends GetxController{
 
         camNoteController.camPropertyValueController.text=(getLeadDetailModel.value?.data?.propertyValueAsPerCustomer??0).toString();
         camNoteController.camLoanTenorRequestedController.text=(getLeadDetailModel.value?.data?.loanTenorRequested??"0").toString();
-        
-        print("camNoteController.camLoanTenorRequestedController.text===>${camNoteController.camLoanTenorRequestedController.text}");
-        print("getLeadDetailModel.value?.data?.loanTenorRequested===>${getLeadDetailModel.value?.data?.loanTenorRequested??"0"}");
+
         camNoteController.camLtvController.text=(getLeadDetailModel.value?.data?.ltv??"0").toString();
         camNoteController.selectedCamIncomeTypeList.value=(getLeadDetailModel.value?.data?.incomeType??"").toString();
 

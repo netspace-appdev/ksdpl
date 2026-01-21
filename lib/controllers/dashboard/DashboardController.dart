@@ -8,9 +8,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
 import 'package:ksdpl/custom_widgets/SnackBarHelper.dart';
 import '../../common/helper.dart';
 import '../../common/notification_helper.dart';
+import '../../common/role_permission.dart';
 import '../../common/storage_service.dart';
 import '../../models/UpdateFCMTokenModel.dart';
 import '../../models/dashboard/GetCountOfLeadsModel.dart';
@@ -134,14 +136,15 @@ class DashboardController extends GetxController {
         var rawRole = StorageService.get(StorageService.ROLE).toString();
         var role = rawRole.replaceAll('[', '').replaceAll(']', '');
         appUserRoleGlobal.value=role;
-        bool isAIC=false;
+        /*bool isAIC=false;
+        LeadListController leadListController =Get.find();
 
-        if(role=="INDEPENDENT AREA HEAD"){
+        if(RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value)){ // role=="INDEPENDENT AREA HEAD"
           isAIC=true;
         }
         else{
           isAIC=false;
-        }
+        }*/
         ///end
         String fcmToken = await getFCMToken();
         String deviceId = await getDeviceId();
@@ -156,8 +159,10 @@ class DashboardController extends GetxController {
          getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
 
         getTodayAttendanceDetailOfEmployeeIdApi(employeeId: getEmployeeModel!.data!.id.toString());
-        isAIC?selectedIndex.value=0:selectedIndex.value=0; //2,0
-        isAIC?isLeadCountYearly.value="2":isLeadCountYearly.value="0";
+       /* isAIC?selectedIndex.value=0:selectedIndex.value=0; //2,0
+        isAIC?isLeadCountYearly.value="2":isLeadCountYearly.value="0";*/
+        selectedIndex.value=0;
+        isLeadCountYearly.value="2";
          await getDetailsCountOfLeadsForDashboardApi(employeeId: getEmployeeModel!.data!.id.toString(), applyDateFilter: isLeadCountYearly.value);
 
 

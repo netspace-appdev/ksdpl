@@ -44,7 +44,7 @@ class Step1Form extends StatelessWidget {
             child: CustomSkelton.productShimmerList(context),
           );
 
-        print('here applMobController.text=========. ${loanApplicationController.applMobController.text}');
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,7 +98,7 @@ class Step1Form extends StatelessWidget {
                         ),
                         onChanged: (value) {
 
-                          print('value----->${value.toString()}');
+
                           loanApplicationController.selectedBank.value =  value?.id;
 
 
@@ -1058,7 +1058,7 @@ class Step1Form extends StatelessWidget {
 
                           leadDDController.selectedStatePerm.value =  value?.stateName?.toString();
 
-                          print('stateid is herev ${leadDDController.selectedStatePerm.value}');
+
                           if( leadDDController.selectedStatePerm.value!=null){
                             leadDDController.getDistrictByStateIdPermApi(stateId:  value?.id?.toString());
                           }

@@ -26,6 +26,7 @@ import '../../../controllers/leads/infoController.dart';
 import '../../../custom_widgets/CustomDropdown.dart';
 import '../../../custom_widgets/CustomLabelPickerTextField.dart';
 import '../../../custom_widgets/CustomLabeledTextField.dart';
+import '../../common/role_permission.dart';
 import '../../common/storage_service.dart';
 import '../../controllers/camnote/MultiPackageModelController.dart';
 import '../../controllers/camnote/camnote_controller.dart';
@@ -773,7 +774,7 @@ class LeadSearchScreen extends StatelessWidget {
                           //_buildDetailRow("Uploaded on", lead.uploadedDate.toString()),
                           _buildDetailRow("Campaign",/*"Summer Sale"*/ lead.campaign??"  -  ",lead.leadStage??0),
                           _buildDetailRow("Status", lead.stageName.toString()??"",lead.leadStage??0),
-                          if(leadListController.rolRx.value=="INDEPENDENT AREA HEAD")
+                          if(RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value))
                             _buildDetailRow("Assigned Employee Name", lead.assignedEmployeeName.toString()??"0",lead.leadStage??0),
                         ],
                       ),

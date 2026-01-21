@@ -1392,7 +1392,20 @@ class AppStyles {
 }
 
 class AppConstants {
-  static const String independentAreaHead = "INDEPENDENT AREA HEAD";
+  /*INDEPENDENT BUSINESS MANAGER (RO)
+  CHANNEL BUSINESS MANAGER (BM)
+  INDEPENDENT AREA HEAD (AIC)
+  CHANNEL CLUSTER HEAD (CH)
+  CHANNEL REGIONAL HEAD (RH)*/
+  static const String independentBusinessManager = "INDEPENDENT BUSINESS MANAGER"; //(RO)
+
+  static const String channelBusinessManager = "CHANNEL BUSINESS MANAGER"; //(BM)
+
+  static const String independentAreaHead = "INDEPENDENT AREA HEAD"; //(AIC)
+
+  static const String channelClusterHead = "CHANNEL CLUSTER HEAD"; //(CH)
+
+  static const String channelRegionalHead = "CHANNEL REGIONAL HEAD"; //(RH)
 }
 
 class Helper{

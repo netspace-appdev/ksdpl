@@ -397,7 +397,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
 
     if (currentStep.value < (isShortTrackActive.value?6: 11)) {
       currentStep.value++;
-      print("currentStep--->${currentStep.value.toString()}");
+
       scrollToStep(currentStep.value);
     }
   }
@@ -858,7 +858,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
         ///its static
       );
 
-      print("presentAddress--->${presentAddress}");
+
 
 
       final coApModel = CoApplicantModel(
@@ -1138,7 +1138,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       if (data['success'] == true) {
         addLoanApplicationModel.value = AddLoanApplicationModel.fromJson(data);
         //ToastMessage.msg(addLoanApplicationModel.value!.message!.toString());
-        print('status______${status}');
+
 
         if(status=="0"){
           SnackbarHelper.showSnackbar(
@@ -1350,7 +1350,7 @@ class LoanApplicationController extends GetxController with ImagePickerMixin {
       if (req['success'] == true) {
 
         getLoanApplIdModel.value = GetLoanApplIdModel.fromJson(req);
-        print("at first populateCoApplicantControllers=========>: ${coApplicantList.length}");
+
         if (getLoanApplIdModel.value!.data!.detailForLoanApplication != null) {
           detailMap = jsonDecode(getLoanApplIdModel.value!.data!.detailForLoanApplication!);
 

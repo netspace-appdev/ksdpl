@@ -25,7 +25,7 @@ class SeniorlistScreen extends StatelessWidget {
  // const SeniorlistScreen({super.key});
   SeniorScreenController seniorScreenController = Get.find();
   LeadDDController leadDDController = Get.find();
-  AddProductController addProductController = Get.find();
+  AddProductController addProductController = Get.put(AddProductController());
 
 
   @override

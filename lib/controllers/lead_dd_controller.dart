@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../common/helper.dart';
+import '../common/role_permission.dart';
 import '../common/storage_service.dart';
 import '../models/AdminSupervisorModel.dart';
 import '../models/FunctionalSupervisorModel.dart';
@@ -145,7 +146,6 @@ class LeadDDController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    print("here KSD prod");
     getAllStateApi();
     getAllBankApi();
     getAllKsdplProductApi();
@@ -257,6 +257,9 @@ class LeadDDController extends GetxController{
       List<int> allowedStageIds;
       var rawRole = StorageService.get(StorageService.ROLE).toString();
       var role = rawRole.replaceAll('[', '').replaceAll(']', '');
+      ///21 Jan 2026
+      final isSeniorLevel =
+      RolePermissions.seniorLevelLike.contains(role);
       switch (leadCode) {
         case 2:
         case 3:
@@ -265,7 +268,8 @@ class LeadDDController extends GetxController{
           allowedStageIds = [4, 5];
           break;
         case 4:
-          role=="INDEPENDENT AREA HEAD"?allowedStageIds = [6, 7]:allowedStageIds = [4, 5]; //remove this line, added on 20 sep
+          // role=="INDEPENDENT AREA HEAD"?allowedStageIds = [6, 7]:allowedStageIds = [4, 5];
+          allowedStageIds = isSeniorLevel ? [6, 7] : [4, 5]; //change on 21 Jan 2026
         case 6:
         case 7:
           allowedStageIds = [6, 7];
@@ -926,7 +930,8 @@ class LeadDDController extends GetxController{
 
     return list.where((item) {
       final role = item.name?.trim().toUpperCase();
-      return role != null && !excludedRoles.contains(role);
+      // return role != null && !excludedRoles.contains(role);
+      return role != null && !RolePermissions.juniorLevelLike.contains(role);
     }).toList();
 
 
