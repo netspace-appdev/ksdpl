@@ -172,25 +172,27 @@ class CustomPhotoPickerWidget extends StatelessWidget {
       context: context,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       builder: (_) {
-        return Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Take Photo'),
-              onTap: () {
-                Navigator.pop(context);
-                controller.pickImages(imageKey, ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Choose from Gallery'),
-              onTap: () {
-                Navigator.pop(context);
-                controller.pickImages(imageKey, ImageSource.gallery);
-              },
-            ),
-          ],
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Take Photo'),
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.pickImages(imageKey, ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from Gallery'),
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.pickImages(imageKey, ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
         );
       },
     );

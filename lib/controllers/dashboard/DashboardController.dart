@@ -154,6 +154,7 @@ class DashboardController extends GetxController {
         );
          todayWorkStatusOfRoBmApi(employeeId: getEmployeeModel!.data!.id.toString());
          getRemindersApi( employeeId: getEmployeeModel!.data!.id.toString());
+
         getTodayAttendanceDetailOfEmployeeIdApi(employeeId: getEmployeeModel!.data!.id.toString());
         isAIC?selectedIndex.value=0:selectedIndex.value=0; //2,0
         isAIC?isLeadCountYearly.value="2":isLeadCountYearly.value="0";

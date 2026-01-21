@@ -1,9 +1,11 @@
 
+
 ///This is experiment-multi-role branch to make app avaiable for all upper level employees of KSDPL
 
 class BaseUrl{
   ///Local Server
   //static const String baseUrl = 'http://192.168.29.70:98/api/';
+
 
   ///UAT Server experiment-multi-role
  static const String mainBaseUrl = 'https://devapi.kanchaneshver.com';
@@ -11,6 +13,7 @@ static const String baseUrl = '$mainBaseUrl/api/';
 static const String imageBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
 static const String tutorialVideoBaseUrl = 'https://devksdpl-uploads.s3.ap-south-1.amazonaws.com/';
  static const String salesPanel = 'https://devsales.kanchaneshver.com';
+
 
   ///Live Server experiment-multi-role
 /*
@@ -22,15 +25,16 @@ static const String tutorialVideoBaseUrl = 'https://devksdpl-uploads.s3.ap-south
 */
 
 
+
+
   ///🚨⚠️ ALERT / WARNING
   ///Do change below devVersion also according to Live or UAT apk other wise it will give error in apk
+
 // static const String devVersion = 'LIVE';
 static const String devVersion = 'UAT';
   //static const String devVersion = 'LOCAL';
   static const String buildDate = 'Build Date : 14 Jan 2026';
-  static const String appType = 'Access : Multi Role (Experiment)';
-
-
+  static const String appType = 'Access : Multi Role (Final)';
 
 }
 

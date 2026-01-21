@@ -428,6 +428,8 @@ class LeadListMain extends StatelessWidget  {
                           ),
 
                           if(lead.leadStage.toString()=="4" ||lead.leadStage.toString()=="6" )
+                            camNoteController.isLoadingMainScreen.value?
+                                CircularProgressIndicator():
                             _buildTextButton(
                               label:AppText.leh,
                               context: context,
@@ -862,7 +864,7 @@ class LeadListMain extends StatelessWidget  {
                         ],
                       ),
 
-                    if(lead.leadStage.toString()=="4" || lead.leadStage.toString()=="6")
+                    if(lead.leadStage.toString()!="1" && lead.leadStage.toString()!="2" && lead.leadStage.toString()!="3" && lead.leadStage.toString()!="13")
                       Column(
                         children: [
                           SizedBox(height: 10,),
@@ -922,7 +924,7 @@ class LeadListMain extends StatelessWidget  {
                       ),
 
                    ///add feedback for AIC
-                    if (lead.leadStage != null && lead.leadStage! >= 4 && leadListController.rolRx.value=="INDEPENDENT AREA HEAD")
+                    if (lead.leadStage != null && lead.leadStage! >= 4 && leadListController.rolRx.value==AppConstants.independentAreaHead)
                       Column(
                         children: [
                           SizedBox(height: 10),
@@ -1350,11 +1352,17 @@ overflow: TextOverflow.ellipsis,
   }) {
 
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (label_code == "open_poll") {
           leadListController.openPollPercentController.clear();
+         await camNoteController.getSalePackagesByLeadIdApi(LeadId: leadId);
+         if(camNoteController.canUserPickLead.value){
+           showSendToLEHConditionDialog(context: context,leadId: leadId);
+         }else{
+           showPaymentForPickDialog(context: context);
+         }
 
-          showSendToLEHConditionDialog(context: context,leadId: leadId);
+
         }else if (label_code == "add_lead_form") {
 
           addLeadController.fromWhere.value="interested";
@@ -3481,7 +3489,7 @@ overflow: TextOverflow.ellipsis,
                           "Grade-A",
                           "Grade-B",
                           "Grade-C",
-                          "Grade-D (${tempStage})",
+                          "Grade-D (${tempStage}) ${currentLeadStage=="4"?"/(Not Doable)":""}",
                         ],
                         getId: (item) => item,  // Adjust based on your model structure
                         getName: (item) => item,
@@ -3502,6 +3510,7 @@ overflow: TextOverflow.ellipsis,
                       );
                     }),
                     const SizedBox(height: 20),
+
                     CustomLabeledTextField(
                       label: AppText.feedback,
                       isRequired: true,
@@ -3510,6 +3519,7 @@ overflow: TextOverflow.ellipsis,
                       hintText: AppText.enterFeedback,
                       validator: ValidationHelper.validateData,
                     ),
+
                     if(currentLeadStage=="4" || currentLeadStage=="5"  || currentLeadStage=="6"  || currentLeadStage=="7")
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -3520,7 +3530,7 @@ overflow: TextOverflow.ellipsis,
                             isRequired: true,
                           ),
                           const SizedBox(height: 10),
-                          if(!leadListController.isAICStageDropdownDisabled.value)
+                          //if(!leadListController.isAICStageDropdownDisabled.value)
                             Obx((){
                             if (leadDDController.isLeadStageLoading.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
@@ -3534,7 +3544,7 @@ overflow: TextOverflow.ellipsis,
                                     (item) => item.id.toString() == leadDDController.selectedStage.value.toString(),
 
                               ),
-                              isEnabled: !leadListController.isAICStageDropdownDisabled.value,
+                              isEnabled: true,//!leadListController.isAICStageDropdownDisabled.value,
                               onChanged: (value) {
                                 leadDDController.selectedStage.value =  value?.id?.toString();
 
@@ -3567,8 +3577,8 @@ overflow: TextOverflow.ellipsis,
 
                               },
                             );
-                          })
-                          else
+                          }),
+                         /* else
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
@@ -3595,7 +3605,7 @@ overflow: TextOverflow.ellipsis,
                                   // Right side (icons similar to suffixIcon)
                                 ],
                               ),
-                            ),
+                            ),*/
 
                           const SizedBox(height: 20),
                         ],
@@ -3757,6 +3767,67 @@ overflow: TextOverflow.ellipsis,
           },
           onThirdButtonPressed: (){
             Get.back();
+
+          },
+        );
+      },
+    );
+  }
+
+
+  void showPaymentForPickDialog({
+    required BuildContext context,
+
+  })
+  {
+
+
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+
+      builder: (BuildContext context) {
+        return CustomBigDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: "",
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(Get.context!).size.height * 0.7, // Prevents overflow
+            ),
+            child:  const SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+
+
+                  Text(
+                    AppText.paymentRequired,
+                    style: TextStyle(
+                      color:  AppColor.redColor,
+                      fontSize: 20,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 10,),
+
+                  Text(
+                    textAlign: TextAlign.center,
+                    AppText.paymentRequiredMsg,
+                    style: TextStyle(
+                      color:  AppColor.black87,
+                      fontSize: 16,
+                    ),
+
+                  )
+                ],
+              ),
+            ),
+          ),
+          submitButtonText: "Ok",
+          onSubmit: () {
+            Get.back();
+
 
           },
         );

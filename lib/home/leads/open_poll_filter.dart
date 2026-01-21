@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -547,6 +549,18 @@ class OpenPollFilter extends StatelessWidget {
                     leadDDController.selectedState.value =  value?.id?.toString();
                     leadDDController.getDistrictByStateIdApi(stateId: leadDDController.selectedState.value);
                   },
+                  onClear: (){
+                    leadDDController.selectedState.value=null;
+                    leadDDController.selectedDistrict.value = null;
+                    leadDDController.districtListCurr.clear(); // reset dependent dropdown
+
+                    leadDDController.selectedCity.value = null;
+                    leadDDController. cityListCurr.clear(); // reset dependent dropdown
+
+                    // 🔥 FORCE widget reset
+                    openPollFilterController.districtDropdownKey.value = UniqueKey();
+                    openPollFilterController.cityDropdownKey.value = UniqueKey();
+                  },
                 );
               }),
               const SizedBox(height: 20),
@@ -566,15 +580,22 @@ class OpenPollFilter extends StatelessWidget {
 
 
                 return CustomDropdown<dist.Data>(
-                  items: leadDDController.getDistrictByStateModel.value?.data ?? [],
+                  key: openPollFilterController.districtDropdownKey .value,
+                  items: leadDDController.districtListCurr ?? [],
                   getId: (item) => item.id.toString(),  // Adjust based on your model structure
                   getName: (item) => item.districtName.toString(),
-                  selectedValue: leadDDController.getDistrictByStateModel.value?.data?.firstWhereOrNull(
+                  selectedValue: leadDDController.districtListCurr.firstWhereOrNull(
                         (item) => item.id.toString() == leadDDController.selectedDistrict.value,
                   ),
                   onChanged: (value) {
                     leadDDController.selectedDistrict.value =  value?.id?.toString();
                     leadDDController.getCityByDistrictIdApi(districtId: leadDDController.selectedDistrict.value);
+                  },
+                  onClear: (){
+                    leadDDController.selectedDistrict.value = null;
+                    leadDDController.cityListCurr.clear(); // reset dependent dropdown
+
+                    openPollFilterController.cityDropdownKey.value = UniqueKey();
                   },
                 );
               }),
@@ -595,14 +616,21 @@ class OpenPollFilter extends StatelessWidget {
 
 
                   return CustomDropdown<city.Data>(
-                    items: leadDDController.getCityByDistrictIdModel.value?.data ?? [],
+                    key: openPollFilterController.cityDropdownKey .value,
+                    items: leadDDController.cityListCurr ?? [],
                     getId: (item) => item.id.toString(),  // Adjust based on your model structure
                     getName: (item) => item.cityName.toString(),
-                    selectedValue: leadDDController.getCityByDistrictIdModel.value?.data?.firstWhereOrNull(
+                    selectedValue:leadDDController.cityListCurr.firstWhereOrNull(
                           (item) => item.id.toString() == leadDDController.selectedCity.value,
                     ),
                     onChanged: (value) {
                       leadDDController.selectedCity.value =  value?.id?.toString();
+
+                    },
+                    onClear: (){
+                      leadDDController.selectedCity.value  = null;
+
+
                     },
                   );
                 }),

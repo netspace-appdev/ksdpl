@@ -646,7 +646,7 @@ class AppText{
   static const String productDescriptions = "Product Descriptions";
   static const String pofileDescriptions = "Descriptions";
   static const String enterProductDescriptions = "Enter Product Descriptions";
-  static const String productSegment = "Product Segment";
+  static const String productSegment = "Loan Segment"; //product Segment
   static const String enterProductSegment = "Enter Product Segment";
   static const String writeYourContent = "Write your content";
   static const String workLocation = "Work Location";
@@ -1225,6 +1225,8 @@ class AppText{
   static const String  sendLink="Send Link";
   static const String searchVerticalByProduct = "Search Vertical by Product";
   static const String noChannelFound = "No Channel Found";
+  static const String paymentRequired = "Payment Required";
+  static const String paymentRequiredMsg = "At least one successful payment is required to upload this lead to Loan Exchange Hub.";
 
 
 
@@ -1388,6 +1390,11 @@ class AppStyles {
     fontSize: 14,
   );
 }
+
+class AppConstants {
+  static const String independentAreaHead = "INDEPENDENT AREA HEAD";
+}
+
 class Helper{
   static Future<void> checkInternet(Future<void> Function() onConnected) async {
     var connectivityResult = await Connectivity().checkConnectivity();

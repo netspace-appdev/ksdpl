@@ -598,7 +598,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                   ),
                 ),
-
                 SizedBox(
                   height: 50,
                 )
