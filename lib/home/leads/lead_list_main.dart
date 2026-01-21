@@ -3510,6 +3510,7 @@ overflow: TextOverflow.ellipsis,
                       );
                     }),
                     const SizedBox(height: 20),
+
                     CustomLabeledTextField(
                       label: AppText.feedback,
                       isRequired: true,
@@ -3518,6 +3519,7 @@ overflow: TextOverflow.ellipsis,
                       hintText: AppText.enterFeedback,
                       validator: ValidationHelper.validateData,
                     ),
+
                     if(currentLeadStage=="4" || currentLeadStage=="5"  || currentLeadStage=="6"  || currentLeadStage=="7")
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -3528,7 +3530,7 @@ overflow: TextOverflow.ellipsis,
                             isRequired: true,
                           ),
                           const SizedBox(height: 10),
-                          if(!leadListController.isAICStageDropdownDisabled.value)
+                          //if(!leadListController.isAICStageDropdownDisabled.value)
                             Obx((){
                             if (leadDDController.isLeadStageLoading.value) {
                               return  Center(child:CustomSkelton.leadShimmerList(context));
@@ -3542,7 +3544,7 @@ overflow: TextOverflow.ellipsis,
                                     (item) => item.id.toString() == leadDDController.selectedStage.value.toString(),
 
                               ),
-                              isEnabled: !leadListController.isAICStageDropdownDisabled.value,
+                              isEnabled: true,//!leadListController.isAICStageDropdownDisabled.value,
                               onChanged: (value) {
                                 leadDDController.selectedStage.value =  value?.id?.toString();
 
@@ -3575,8 +3577,8 @@ overflow: TextOverflow.ellipsis,
 
                               },
                             );
-                          })
-                          else
+                          }),
+                         /* else
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
@@ -3603,7 +3605,7 @@ overflow: TextOverflow.ellipsis,
                                   // Right side (icons similar to suffixIcon)
                                 ],
                               ),
-                            ),
+                            ),*/
 
                           const SizedBox(height: 20),
                         ],
