@@ -298,10 +298,12 @@ class LeadDDController extends GetxController{
 
 
   ///AIC stage only
-  List<stage.Data> getAICStagesByLeadStageId(String currentLeadStage) {
+  List<stage.Data> getAICStagesByLeadStageId(
+      String currentLeadStage,{
+  required bool isGradeDSelected,
+  }){
     try {
       int leadCode = int.tryParse(currentLeadStage) ?? 0;
-
 
       List<int> allowedStageIds;
       var rawRole = StorageService.get(StorageService.ROLE).toString();
@@ -314,7 +316,14 @@ class LeadDDController extends GetxController{
           allowedStageIds = [4, 5];
           break;
         case 4:
-          allowedStageIds = [4, 5,7]; //remove this line, added on 20 jan
+        //  allowedStageIds = [4, 5,7]; //remove this line, added on 20 jan
+          allowedStageIds = [4, 5, 7];
+
+          // ⭐ Grade-D logic
+          if (isGradeDSelected) {
+            allowedStageIds.remove(4);
+          }
+          break;
         case 6:
         case 7:
           allowedStageIds = [6, 7];

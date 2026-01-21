@@ -2208,301 +2208,6 @@ overflow: TextOverflow.ellipsis,
     );
   }
 
-/*  void showOpenPollDialog2({
-    required BuildContext context,
-    required String leadId,
-  })
-  {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Obx(() => CustomBigYesNoLoaderDialogBox(
-          titleBackgroundColor: AppColor.secondaryColor,
-          title:  AppText.moveLeh,
-          content: SingleChildScrollView(
-            child: Form(
-              key: _formKeyOpenPoll,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                    child:  Column(
-                      children: [
-                        CustomTextLabel(
-                          label: AppText.state,
-                          isRequired: true,
-                        ),
-
-                        SizedBox(height: 10),
-
-                        Obx((){
-                          if (leadDDController.isStateLoading.value) {
-                            return  Center(child:CustomSkelton.leadShimmerList(context));
-                          }
-
-                          return CustomDropdown<state.Data>(
-                            items: leadDDController.getAllStateModel.value?.data ?? [],
-                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                            getName: (item) => item.stateName.toString(),
-                            selectedValue: leadDDController.getAllStateModel.value?.data?.firstWhereOrNull(
-                                  (item) => item.id.toString() == leadListController.lehSelectedState.value,
-                            ),
-                            onChanged: (value) {
-                              leadListController.lehSelectedState.value =  value?.id?.toString();
-                              leadDDController.getDistrictByStateIdApi(stateId: leadListController.lehSelectedState.value);
-                            },
-                            onClear: (){
-                              leadListController.lehSelectedState.value=null;
-                              leadListController.lehSelectedDistrict.value = null;
-                              leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
-
-                              leadListController.lehSelectedCity.value = null;
-                              leadDDController.cityListCurr.value.clear(); // reset dependent dropdown
-                            },
-                          );
-                        }),
-
-
-                        const SizedBox(height: 20),
-
-
-                        CustomTextLabel(
-                          label: AppText.district,
-                          isRequired: true,
-                        ),
-
-                        const SizedBox(height: 10),
-
-                        Obx((){
-                          if (leadDDController.isDistrictLoading.value) {
-                            return  Center(child:CustomSkelton.leadShimmerList(context));
-                          }
-
-
-                          return CustomDropdown<dist.Data>(
-                            items: leadDDController.districtListCurr.value ?? [],
-                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                            getName: (item) => item.districtName.toString(),
-                            selectedValue: leadDDController.districtListCurr.value.firstWhereOrNull(
-                                  (item) => item.id.toString() == leadListController.lehSelectedDistrict.value,
-                            ),
-                            onChanged: (value) {
-                              leadListController.lehSelectedDistrict.value =  value?.id?.toString();
-                              leadDDController.getCityByDistrictIdApi(districtId: leadListController.lehSelectedDistrict.value);
-                            },
-                            onClear: (){
-                              leadListController.lehSelectedDistrict.value = null;
-                              leadDDController.districtListCurr.value.clear(); // reset dependent dropdown
-
-                            },
-                          );
-                        }),
-
-
-                        const SizedBox(height: 20),
-
-
-
-                        CustomTextLabel(
-                          label: AppText.city,
-                          isRequired: true,
-                        ),
-
-                        const SizedBox(height: 10),
-
-
-
-                        Obx((){
-                          if (leadDDController.isCityLoading.value) {
-                            return  Center(child:CustomSkelton.leadShimmerList(context));
-                          }
-
-
-                          return CustomDropdown<city.Data>(
-                            items: leadDDController.cityListCurr.value  ?? [],
-                            getId: (item) => item.id.toString(),  // Adjust based on your model structure
-                            getName: (item) => item.cityName.toString(),
-                            selectedValue: leadDDController.cityListCurr.value.firstWhereOrNull(
-                                  (item) => item.id.toString() == leadListController.lehSelectedCity.value,
-                            ),
-                            onChanged: (value) {
-                              leadListController.lehSelectedCity.value=  value?.id?.toString();
-                            },
-                            onClear: (){
-                              leadListController.lehSelectedCity.value = null;
-                              leadDDController.cityListCurr.value.clear(); // reset dependent dropdown
-
-                            },
-                          );
-                        }),
-
-                        const SizedBox(height: 20),
-
-                        CustomLabeledTextField(
-                          label: AppText.zipCode,
-                          isRequired: true,
-
-                          controller: leadListController.lehZipController ,
-                          inputType: TextInputType.number,
-                          hintText: AppText.enterZipCode,
-                          maxLength: 6,
-                          validator: ValidationHelper.validateData,
-                        ),
-
-                        CustomLabeledTextField2(
-                          inputType:  TextInputType.number,
-                          controller: leadListController.openPollPercentController,
-                          hintText: AppText.enterPercentage,
-                          validator: validatePercentage,
-
-                          label: AppText.enterLeh,
-                          isRequired: true,
-                          onChanged: (value){
-                            ValidationHelper.validatePercentageInput(
-                              controller:  leadListController.openPollPercentController,
-                              value: value,
-                              maxValue: 100,
-                              errorMessage: AppText.maxPercentMsg.toString(),
-                            );
-                            // camNoteController.calculateLoanDetails();
-                          },                      ),
-                      ],
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-          ),
-
-          // 👇 Loader logic right here
-          firstButtonChild: leadListController.isOpenPollApiLoading.value
-              ? const SizedBox(
-            height: 18,
-            width: 18,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: Colors.white,
-            ),
-          )
-              : const Text(
-            "Send",
-            style: TextStyle(color: Colors.white),
-          ),
-
-          secondButtonText: "Cancel",
-          firstButtonColor: AppColor.primaryColor,
-          secondButtonColor: AppColor.redColor,
-
-          onFirstButtonPressed: () {
-
-            if (!leadListController.isOpenPollApiLoading.value &&
-                _formKeyOpenPoll.currentState!.validate()) {
-              if (camNoteController.camSelectedState.value != null &&
-                  camNoteController.camSelectedDistrict.value != null &&
-                  camNoteController.camSelectedCity.value != null &&
-                  camNoteController.camZipController.text.trim().isNotEmpty) {
-
-                // ✅ All validations passed
-                leadListController.leadMoveToCommonTaskApi(
-                  leadId: leadId,
-                  percentage: leadListController.openPollPercentController.text.trim(),
-                ).then((_){
-                  addLeadController.getLeadDetailByIdApi(leadId: leadId);
-                }).then((_){
-
-
-                  List<File> propertyPhotos = camNoteController.getImages("property_photo")
-                      .where((img) => img.isLocal)
-                      .map((img) => img.file!)
-                      .toList();
-
-                  List<File> residencePhotos = camNoteController.getImages("residence_photo")
-                      .where((img) => img.isLocal)
-                      .map((img) => img.file!)
-                      .toList();
-
-                  List<File> officePhotos = camNoteController.getImages("office_photo")
-                      .where((img) => img.isLocal)
-                      .map((img) => img.file!)
-                      .toList();
-
-                  addLeadController.fillLeadFormApi(
-                    id: camNoteController.getLeadId.value.toString(),
-                    dob: camNoteController.camDobController.text.toString(),
-                    gender: camNoteController.selectedGender.toString(),
-                    loanAmtReq:camNoteController.camLoanAmtReqController.text.toString(),
-                    email: camNoteController.camEmailController.text.toString(),
-                    aadhar: camNoteController.camAadharController.text.toString(),
-                    pan: camNoteController.camPanController.text.toString(),
-                    streetAdd: camNoteController.camStreetAddController.text.toString(),
-                    state:  camNoteController.camSelectedState.value.toString(),
-                    district: camNoteController.camSelectedDistrict.value.toString(),
-                    city: camNoteController.camSelectedCity.value.toString(),
-                    zip: camNoteController.camZipController.text.toString(),
-                    nationality: camNoteController.camNationalityController.text.toString(),
-                    currEmpSt: camNoteController.camCurrEmpStatus.value,
-                    employerName: camNoteController.camEmployerNameController.text.toString(),
-                    monthlyIncome:camNoteController.camMonthlyIncomeController.text.toString(),
-                    ///Now this is not working, Have different API for Additional source of income
-                    addSrcIncome: "",
-                    prefBank: camNoteController.camSelectedBank.value.toString(),
-                    exRelBank:camNoteController.camSelectedIndexRelBank.value==-1?"":camNoteController.camSelectedIndexRelBank.value==0?"Yes":"No",
-                    branchLoc:camNoteController.camBranchLocController.text.toString(),
-                    prodTypeInt: camNoteController.camSelectedProdType.value.toString(),
-                    /// connection name mob and percent are not sent
-                    loanApplNo: camNoteController.loanApplicationNumber.toString(),
-
-                    name: camNoteController.camFullNameController.text.toString(),
-                    mobileNumber: camNoteController.camPhoneController.text.toString(),
-                    packageId: camNoteController.selectedPackage.value.toString(),
-                    packageAmount: camNoteController.camPackageAmtController.text.toString(),
-                    receivableAmount:camNoteController.camReceivableAmtController.text.toString(),
-                    receivableDate:camNoteController.camReceivableDateController.text.toString(),
-                    transactionDetails:camNoteController.camTransactionDetailsController.text.toString(),
-                    remark:camNoteController.camRemarkController.text.toString(),
-                    leadSegment:camNoteController.camSelectedProdSegment.value.toString(),
-
-                    GeoLocationOfProperty:camNoteController.camGeoLocationPropertyLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationPropertyLongController.text.trim().toString(),
-                    GeoLocationOfResidence:camNoteController.camGeoLocationResidenceLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationResidenceLongController.text.trim().toString(),
-                    GeoLocationOfOffice:camNoteController.camGeoLocationOfficeLatController.text.trim().toString()+"-"+camNoteController.camGeoLocationOfficeLongController.text.trim().toString(),
-                    PhotosOfProperty: propertyPhotos,
-                    PhotosOfResidence: residencePhotos,
-                    PhotosOfOffice: officePhotos,
-                    fromWhere: "camnote",
-                    WhatsappNumber:camNoteController.camWhatsappController.text.toString(),
-                  );
-                }).then((_){
-                  Get.back();
-                });
-
-              } else {
-                // ❌ Show proper messages
-                if (leadListController.lehSelectedState.value == null) {
-                  SnackbarHelper.showSnackbar(title: AppText.missingField, message: AppText.plsSelectState);
-                } else if (leadListController.lehSelectedDistrict.value == null) {
-                  SnackbarHelper.showSnackbar(title: AppText.missingField, message:  AppText.plsSelectDist);
-                } else if (leadListController.lehSelectedCity.value == null) {
-                  SnackbarHelper.showSnackbar(title: AppText.missingField,  message: AppText.plsSelectCity);
-                } else{}
-              }
-
-              // Validate form fields first
-
-            }
-          },
-          onSecondButtonPressed: () {
-            Get.back();
-          },
-        ));
-      },
-    );
-  }*/
 
   void showSendToLEHConditionDialog({
     required BuildContext context,
@@ -3451,9 +3156,10 @@ overflow: TextOverflow.ellipsis,
       context: context,
       builder: (BuildContext context) {
         return Obx(() {
-
+          final isGradeDSelected = leadListController.selectedValAicGradeList.value?.contains("Grade-D") ?? false;
           final filteredStages = leadDDController.getAICStagesByLeadStageId(
             currentLeadStage.toString(),
+            isGradeDSelected: isGradeDSelected,
           );
           var tempStage="";
           var tempStageId="";
@@ -3509,6 +3215,7 @@ overflow: TextOverflow.ellipsis,
                             leadListController.isAICStageDropdownDisabled.value = false;
                             leadDDController.selectedStage.value="";
                           }
+
 
                         },
                       );
@@ -3638,6 +3345,9 @@ overflow: TextOverflow.ellipsis,
                         ],
                       ),
                     ),
+
+
+
                   ],
                 ),
               ),
@@ -3683,16 +3393,24 @@ overflow: TextOverflow.ellipsis,
                       message: "Please Select Stage"
                   );
                 }else{
-                  leadListController.workOnLeadApi(
+                 /* leadListController.workOnLeadApi(
                       leadId: leadId.toString(),
                       leadStageStatus:stage.toString(),
                       feedbackRelatedToLead: feedback.toString()
                   ).then((_){
                     Get.back();
-                  });
+                  });*/
+                  Get.back();
 
+                  showRefundNoticeDialog(
+                      context: context,
+                      leadId: leadId,
+                      leadStageStatus: stage.toString(),
+                      feedbackRelatedToLead: feedback.toString()
+                  );
                 }
               }
+
             },
             onSecondButtonPressed: () {
               Get.back();
@@ -3703,6 +3421,79 @@ overflow: TextOverflow.ellipsis,
     );
   }
 
+
+///For refund notice dialog box
+  void showRefundNoticeDialog({
+    required BuildContext context,
+    required String leadId,
+    required String leadStageStatus,
+    required String  feedbackRelatedToLead,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomBigYesNoDialogBox(
+          titleBackgroundColor: AppColor.secondaryColor,
+          title: AppText.importantNotice,
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                // English Section
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black87, fontSize: 14, height: 1.6),
+                    children: [
+                      TextSpan(
+                        text: AppText.refundNoticeMessage,
+                        style: TextStyle(
+
+                          color: AppColor.grey700,
+                        ),
+                      ),
+                      TextSpan(
+                        text: AppText.refundNoticeMessage2,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  AppText.continueQuestion,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.secondaryColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          firstButtonText: AppText.yesProceed,
+          onFirstButtonPressed: ()  {
+
+       /*     leadListController.workOnLeadApi(
+                leadId: leadId.toString(),
+                leadStageStatus:leadStageStatus.toString(),
+                feedbackRelatedToLead: feedbackRelatedToLead.toString()
+            ).then((_){
+              Get.back();
+            });*/
+          },
+          secondButtonText: AppText.cancel,
+          onSecondButtonPressed: () {
+            Get.back();
+          },
+          firstButtonColor: AppColor.secondaryColor,
+          secondButtonColor: AppColor.redColor,
+        );
+      },
+    );
+  }
 
 
   void loanApplTypeDialog({

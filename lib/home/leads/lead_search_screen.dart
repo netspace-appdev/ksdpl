@@ -2075,9 +2075,10 @@ class LeadSearchScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return Obx(() {
-
+          final isGradeDSelected = leadListController.selectedValAicGradeList.value?.contains("Grade-D") ?? false;
           final filteredStages = leadDDController.getAICStagesByLeadStageId(
             currentLeadStage.toString(),
+            isGradeDSelected: isGradeDSelected,
           );
           var tempStage="";
           var tempStageId="";

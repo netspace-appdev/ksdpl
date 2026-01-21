@@ -1228,7 +1228,15 @@ class AppText{
   static const String paymentRequired = "Payment Required";
   static const String paymentRequiredMsg = "At least one successful payment is required to upload this lead to Loan Exchange Hub.";
 
-
+  static const String importantNotice = "Important Notice";
+  static const String refundNoticeMessage =
+      "If you proceed, the amount received from the customer will";
+  static const String refundNoticeMessage2 =
+      " automatically refunded after deducting the ₹118 Expert Consultation Fee.";
+  static const String continueQuestion =
+      "Do you want to continue?";
+  static const String cancel = "Cancel";
+  static const String yesProceed = "Yes, Proceed";
 
 
 }
