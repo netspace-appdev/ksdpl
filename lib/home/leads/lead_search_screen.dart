@@ -51,7 +51,7 @@ import '../../custom_widgets/CustomTextLabel.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
 import '../../services/call_service.dart';
 import '../custom_drawer.dart';
-
+import '../../models/leads/GetJuniorListModel.dart' as jrList;
 
 
 class LeadSearchScreen extends StatelessWidget {
@@ -375,6 +375,45 @@ class LeadSearchScreen extends StatelessWidget {
 
                                     const SizedBox(height: 10),
 
+                                    if(RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value))
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                                        children: [
+                                          const Text(
+                                            AppText.employee,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColor.grey2,
+                                            ),
+                                          ),
+
+                                          const SizedBox(height: 10),
+                                          Obx((){
+                                            if (searchLeadController.isLoading.value) {
+                                              return  Center(child:CustomSkelton.productShimmerList(context));
+                                            }
+
+
+                                            return CustomDropdown<jrList.Data>(
+                                              items: searchLeadController.juniorList ?? [],
+                                              getId: (item) => item.id.toString(),  // Adjust based on your model structure
+                                              getName: (item) => item.employeeName.toString(),
+                                              selectedValue: searchLeadController.juniorList.firstWhereOrNull(
+                                                    (item) => item.id.toString() == searchLeadController.selectedJunior.value,
+                                              ),
+                                              onChanged: (value) {
+                                                searchLeadController.selectedJunior.value =  value?.id?.toString();
+
+                                              },
+                                            );
+                                          }),
+                                          const SizedBox(height: 20),
+                                        ],
+                                      ),
+
+
                                     CustomLabeledPickerTextField(
                                       label: AppText.fromDate,
                                       isRequired: false,
@@ -572,7 +611,8 @@ class LeadSearchScreen extends StatelessWidget {
     leadListController.filteredleadCode.value=temp;
 
     leadListController.getFilteredLeadsApi(
-      employeeId: leadListController.eId.value.toString(),
+      employeeId: (RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value) && searchLeadController.selectedJunior.value!=null)?
+      searchLeadController.selectedJunior.value.toString() :leadListController.eId.value.toString(),
       leadStage:temp,
       stateId: leadDDController.selectedState.value??"0",
       distId: leadDDController.selectedDistrict.value??"0",

@@ -46,6 +46,7 @@ class DrawerApiService {
   static const String UpdateLoanApplicationNumberByLead = baseUrl + 'LeadDetail/UpdateLoanApplicationNumberByLead';
 
   static const String getDetailsListOfLeadsForDashboard = baseUrl + 'LeadDetail/GetDetailsListOfLeadsForDashboard';
+  static const String getJuniorList = baseUrl + 'Employee/GetJuniorList';
 
   static Future<Map<String, dynamic>> getBankerByIdApi({
     required String bankerId,
@@ -1560,6 +1561,50 @@ class DrawerApiService {
     }
   }
 
+
+
+
+  static Future<Map<String, dynamic>> getGetJuniorListApi({
+    required managerId,
+    required channelId
+  }) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(getJuniorList),
+      );
+
+      // Headers
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      request.fields['ManagerId'] = managerId;
+      request.fields['ChannelId'] = channelId;
+      // Sending request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(getJuniorList, request.fields);
+      Helper.ApiReq(getJuniorList, response.body);
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['status'] == "200" && jsonResponse['success'] == true) {
+
+          return jsonResponse;
+        } else {
+          //throw Exception('Invalid API response');
+          return jsonResponse;
+        }
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
 
 
 }

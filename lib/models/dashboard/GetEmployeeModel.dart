@@ -48,9 +48,9 @@ class Data {
   String? createdDate;
   String? upatedBy;
   String? updatedDate;
-  Null? deletedBy;
-  Null? deletedDate;
-
+  String? deletedBy;
+  String? deletedDate;
+  int? channelId;
   Data(
       {this.id,
         this.branchId,
@@ -75,7 +75,9 @@ class Data {
         this.upatedBy,
         this.updatedDate,
         this.deletedBy,
-        this.deletedDate});
+        this.deletedDate,
+        this.channelId,
+      });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -102,6 +104,7 @@ class Data {
     updatedDate = json['updatedDate'];
     deletedBy = json['deletedBy'];
     deletedDate = json['deletedDate'];
+    channelId = json['channelId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -130,6 +133,7 @@ class Data {
     data['updatedDate'] = this.updatedDate;
     data['deletedBy'] = this.deletedBy;
     data['deletedDate'] = this.deletedDate;
+    data['channelId'] = this.channelId;
     return data;
   }
 }

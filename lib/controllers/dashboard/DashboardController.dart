@@ -131,6 +131,7 @@ class DashboardController extends GetxController {
 
         StorageService.put(StorageService.EMPLOYEE_ID, getEmployeeModel!.data!.id.toString());
         StorageService.put(StorageService.ROLE, getEmployeeModel!.data!.jobRole.toString());
+        StorageService.put(StorageService.CHANNEL_ID, getEmployeeModel!.data!.channelId.toString());
         var genToekn=StorageService.get(StorageService.TOKEN);
        ///6 oct
         var rawRole = StorageService.get(StorageService.ROLE).toString();

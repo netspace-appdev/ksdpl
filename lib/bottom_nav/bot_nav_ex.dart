@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ksdpl/common/helper.dart';
 import 'package:ksdpl/models/drawer/GetLeadDetailModel.dart';
+import '../common/storage_service.dart';
 import '../controllers/bot_nav_controller.dart';
 import '../controllers/lead_dd_controller.dart';
 import '../controllers/leads/addLeadController.dart';
@@ -91,6 +92,11 @@ class _BottomNavBarExampleState extends State<BottomNavBarExample> {
               SearchLeadController searchLeadController=Get.put(SearchLeadController());
               searchLeadController.clearSearchFilter();
               leadListController.filteredGetAllLeadsModel.value=null;
+
+              var managerId=StorageService.get(StorageService.EMPLOYEE_ID);
+              var channelId=StorageService.get(StorageService.CHANNEL_ID);
+              searchLeadController.getGetJuniorListApi(channelId: channelId,managerId: managerId);
+
               Get.toNamed("/leadSearchScreen");
             },
             shape: const CircleBorder(),

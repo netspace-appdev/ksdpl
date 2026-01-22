@@ -5,9 +5,11 @@ import 'package:ksdpl/controllers/leads/leadlist_controller.dart';
 
 
 import '../../common/helper.dart';
+import '../../common/storage_service.dart';
 import '../../models/dashboard/GetAllLeadsModel.dart';
 import '../../models/dashboard/PickLeadComTaskModel.dart';
 import '../../models/leads/GetCommonLeadListFModel.dart';
+import '../../models/leads/GetJuniorListModel.dart' as jrList;
 import '../../services/drawer_api_service.dart';
 
 
@@ -21,20 +23,20 @@ class SearchLeadController extends GetxController{
   var getAllLeadsModel = Rxn<GetAllLeadsModel>(); //
 
   var getCommonLeadListFModel = Rxn<GetCommonLeadListFModel>(); //
+  var getJuniorListModel = Rxn<jrList.GetJuniorListModel>(); //
+  RxList<jrList.Data> juniorList = <jrList.Data>[].obs;
   final TextEditingController uniqueLeadNumberController = TextEditingController();
   final TextEditingController leadMobileNumberController = TextEditingController();
   final TextEditingController leadNameController = TextEditingController();
-/*  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    print("on delete list");
-    Get.delete<LeadListController>(tag: 'list');
-  }*/
+  var selectedJunior = Rxn<String>();
+
+
+
   void clearSearchFilter(){
     uniqueLeadNumberController.clear();
     leadMobileNumberController.clear();
     leadNameController.clear();
+    selectedJunior.value="";
 
   }
 
@@ -107,4 +109,50 @@ class SearchLeadController extends GetxController{
       isLoading(false);
     }
   }
+
+  void  getGetJuniorListApi({
+    required managerId,
+    required channelId
+  }) async {
+    try {
+      isLoading(true);
+
+
+      var data = await DrawerApiService.getGetJuniorListApi(managerId: managerId,channelId:channelId);
+
+      if(data['success'] == true){
+
+        getJuniorListModel.value= jrList.GetJuniorListModel.fromJson(data);
+
+        final List<jrList.Data> allJuniors =
+            getJuniorListModel.value?.data ?? [];
+
+        juniorList.value = allJuniors
+            .where((e) => e.active == true)
+            .toList();
+
+
+        isLoading(false);
+
+
+      }else if(data['success'] == false && (data['data'] as List).isEmpty ){
+        getJuniorListModel.value=null;
+      }else{
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+
+
+    } catch (e) {
+      print("Error getAllStateApi:leadcontroller $e");
+
+      // ToastMessage.msg(AppText.somethingWentWrong);
+      isLoading(false);
+
+    } finally {
+
+      isLoading(false);
+
+    }
+  }
+
 }
