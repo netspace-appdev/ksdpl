@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:ksdpl/home/custom_drawer.dart';
+import 'package:ksdpl/home/raiseTIcket/viewTicketsScreen.dart';
 
 import '../../common/helper.dart';
 import '../../custom_widgets/SnackBarHelper.dart';
@@ -18,7 +22,12 @@ class ViewChatController extends GetxController{
   final TextEditingController priorityController = TextEditingController();
   final TextEditingController messageController = TextEditingController();
   var isLoadingValue = RxBool(false);
+  var isLoadingValue1 = RxBool(false);
+  var isStatusUpdating = RxBool(false);
+
   var viewChatDetailModel = Rxn<ViewChatDetailModel>();
+
+  Rx<File?> selectedFile = Rx<File?>(null);
 
 
 
@@ -70,15 +79,71 @@ class ViewChatController extends GetxController{
   }
   String _getStatusText(int? status) {
     switch (status) {
-      case 0:
-        return 'Open';
       case 1:
-        return 'In Progress';
+        return 'Open';
       case 2:
+        return 'In Progress';
+      case 3:
         return 'Closed';
       default:
         return '';
     }
+  }
+
+  Future<void> sendMessageApiRequest({File? image, required String ticketId, required String message}) async {
+
+    try {
+      isLoadingValue1(true);
+
+      var data = await TicketService.sendMessageApi(
+        ticketId:ticketId,
+          message:message,
+          image:image
+      );
+
+      if (data['success'] == true) {
+           SnackbarHelper.showSnackbar(title: AppText.success, message: data['message'] );
+           getTicketById(id:int.tryParse(ticketId));
+        clear();
+
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error in updateBankerDetailApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isLoadingValue1(false);
+    }
+  }
+  Future<void> statusUpdateTicketApiRequest({ required String TicketNo, required String PanelId,required String status }) async {
+
+    try {
+      isStatusUpdating(true);
+
+      var data = await TicketService.statusUpdateTicketApi(
+          TicketNo:TicketNo,
+          PanelId:PanelId,
+          status:status
+      );
+
+      if (data['success'] == true) {
+           SnackbarHelper.showSnackbar(title: AppText.success, message: data['message'] );
+           Get.to(() => ViewTicketListScreen());
+      } else {
+        ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
+      }
+    } catch (e) {
+      print("Error in updateBankerDetailApi: $e");
+      ToastMessage.msg(AppText.somethingWentWrong);
+    } finally {
+      isStatusUpdating(false);
+    }
+  }
+
+  void clear() {
+    messageController.clear();
+    selectedFile.value = null;
   }
 
 }

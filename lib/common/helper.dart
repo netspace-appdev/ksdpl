@@ -1240,6 +1240,7 @@ class AppText{
   static const String viewChat="View Chat";
   static const String userName="User Name";
   static const String close="Close";
+  static const String ReClose="Re-Close";
 
 
 

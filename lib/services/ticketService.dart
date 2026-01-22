@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import '../common/base_url.dart';
 import 'package:http/http.dart'as http;
 import '../common/get_header.dart';
@@ -10,6 +11,8 @@ class TicketService {
   static const String addTicketRequest = BaseUrl.baseUrl + 'Ticket/AddTicket';
   static const String getAllTicketRequest = BaseUrl.baseUrl + 'Ticket/GetAllTicket';
   static const String getTicketByIdRequest = BaseUrl.baseUrl + 'Ticket/GetTicketById';
+  static const String sendRequestResponse = BaseUrl.baseUrl + 'Ticket/SendRequestResponse';
+  static const String statusUpdateTicketRequest = BaseUrl.baseUrl + 'Ticket/StatusUpdateTicket';
 
 
   static Future<Map<String, dynamic>> addTicketApi({
@@ -128,6 +131,91 @@ class TicketService {
 
   }
 
+
+    static Future<Map<String, dynamic>>sendMessageApi({required String ticketId, required String message, File? image}) async {
+
+
+      try {
+        var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+
+        var request = http.MultipartRequest(
+          'POST',
+          Uri.parse(sendRequestResponse),
+        );
+
+        var header=await MyHeader.getHeaders2();
+
+        request.headers.addAll(header);
+        MultipartFieldHelper.addFieldWithDefault(request.fields, 'TicketId', ticketId.toString() ,fallback: "0");
+        MultipartFieldHelper.addFieldWithDefault(request.fields, 'Request', message.toString() ,fallback: "");
+        MultipartFieldHelper.addFieldWithDefault(request.fields, 'Response', '' ,fallback: "");
+        MultipartFieldHelper.addFieldWithDefault(request.fields, 'ActionBy', empId ,fallback: "0");
+        if (image != null) {
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              'Image',
+              image.path,
+            ),
+          );
+        } else {
+          request.fields['Image'] = '';
+        }
+
+        var streamedResponse = await request.send();
+        var response = await http.Response.fromStream(streamedResponse);
+
+        Helper.ApiReq(sendRequestResponse, request.fields);
+        Helper.ApiRes(sendRequestResponse, response.body);
+
+        if (response.statusCode == 200) {
+          return jsonDecode(response.body);
+        } else {
+          throw Exception('Failed to submit application: ${response.statusCode}');
+        }
+      } catch (e) {
+        print("Error: $e");
+        throw Exception('Error while submitting: $e');
+      }
+
+  }
+
+
+  static statusUpdateTicketApi({required String TicketNo, required String PanelId, required String status})async {
+
+
+    try {
+      var empId=StorageService.get(StorageService.EMPLOYEE_ID).toString();
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(statusUpdateTicketRequest),
+      );
+
+      var header=await MyHeader.getHeaders2();
+
+      request.headers.addAll(header);
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'TicketNo', TicketNo.toString() ,fallback: "0");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'PanelId', PanelId.toString() ,fallback: "");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'Status', status ,fallback: "");
+      MultipartFieldHelper.addFieldWithDefault(request.fields, 'CloseBy', empId ,fallback: "0");
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      Helper.ApiReq(statusUpdateTicketRequest, request.fields);
+      Helper.ApiRes(statusUpdateTicketRequest, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to submit application: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception('Error while submitting: $e');
+    }
+
+  }
 
 
 

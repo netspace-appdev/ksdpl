@@ -67,6 +67,7 @@ class RaiseTicketController extends GetxController {
         isLoading(false);
         clear();
         SnackbarHelper.showSnackbar(title: AppText.success, message: data['message'] );
+        Get.back();
       } else {
         ToastMessage.msg(data['message'] ?? AppText.somethingWentWrong);
       }

@@ -1,11 +1,16 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/base_url.dart';
+import 'package:ksdpl/common/customFilePicker.dart';
 import 'package:ksdpl/models/raiseTicketModel/ViewChatDetailModel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/skelton.dart';
+import '../../controllers/FilePickerController.dart';
 import '../../custom_widgets/CustomMessageTextField.dart';
 import '../../custom_widgets/commonActionButton.dart';
 import '../../common/helper.dart';
@@ -17,17 +22,19 @@ class ViewChatScreen extends StatelessWidget {
   //const ViewChatScreen({super.key});
 
   ViewChatController viewChatController = Get.find();
+  final FilePickerController filePickerController = FilePickerController();
 
+  // filePicker = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
+    return SafeArea(
       child: Scaffold(
         backgroundColor: AppColor.backgroundColor,
         body: Stack(
           children: [
             Form(
-              key:  viewChatController.formKey ,
+              key: viewChatController.formKey,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -38,13 +45,16 @@ class ViewChatScreen extends StatelessWidget {
                           height: MediaQuery.of(context).size.height * 0.9,
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [AppColor.primaryLight, AppColor.primaryDark],
+                              colors: [
+                                AppColor.primaryLight,
+                                AppColor.primaryDark
+                              ],
                               begin: Alignment.centerRight,
                               end: Alignment.centerLeft,
                             ),
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 5),
-                          child:Column(
+                          child: Column(
                             children: [
                               const SizedBox(
                                 height: 20,
@@ -55,57 +65,71 @@ class ViewChatScreen extends StatelessWidget {
                         ),
                         // White Container
                         Align(
-                          alignment: Alignment.topCenter,  // Centers it
+                          alignment: Alignment.topCenter, // Centers it
                           child: Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Container(
-                              margin:  EdgeInsets.only(top:90 ), // <-- Moves it 30px from top
+                              margin: EdgeInsets.only(top: 90),
+                              // <-- Moves it 30px from top
                               width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 30),
                               decoration: const BoxDecoration(
                                 color: AppColor.backgroundColor,
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(45),
                                   topRight: Radius.circular(45),
                                 ),
-
                               ),
 
                               child: Column(
                                 children: [
                                   ExpansionTile(
-                                    childrenPadding: EdgeInsets.symmetric(horizontal: 20),
-                                    title:const Text(AppText.viewChat, style: TextStyle(color: AppColor.blackColor, fontSize: 16, fontWeight: FontWeight.w500),),
-                                    leading: Image.asset(AppImage.message, height: 20,),
+                                    childrenPadding:
+                                    EdgeInsets.symmetric(horizontal: 20),
+                                    title: const Text(
+                                      AppText.viewChat,
+                                      style: TextStyle(
+                                          color: AppColor.blackColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    leading: Image.asset(
+                                      AppImage.message,
+                                      height: 20,
+                                    ),
                                     children: [
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min, // Prevents extra spacing
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        // Prevents extra spacing
                                         children: [
                                           CustomLabeledTextField(
                                             label: AppText.ticketNo,
                                             isRequired: false,
                                             isInputEnabled: false,
-
-                                            controller: viewChatController.ticketNoController,
+                                            controller: viewChatController
+                                                .ticketNoController,
                                             inputType: TextInputType.name,
                                             hintText: '',
-                                            validator:  ValidationHelper.validateSubject,
+                                            validator: ValidationHelper
+                                                .validateSubject,
                                           ),
-
-                                          SizedBox(height: 5,),
-
+                                          SizedBox(
+                                            height: 5,
+                                          ),
                                           CustomLabeledTextField(
                                             label: AppText.subject,
                                             isRequired: false,
                                             isInputEnabled: false,
-
-                                            controller: viewChatController.subjectController,
+                                            controller: viewChatController
+                                                .subjectController,
                                             inputType: TextInputType.name,
                                             hintText: '',
-                                            validator:  ValidationHelper.validateSubject,
+                                            validator: ValidationHelper
+                                                .validateSubject,
                                           ),
-
                                           CustomLabeledTextField(
                                             label: AppText.status,
                                             isRequired: false,
@@ -113,84 +137,122 @@ class ViewChatScreen extends StatelessWidget {
                                             controller: viewChatController.statusController,
                                             inputType: TextInputType.name,
                                             hintText: '',
-                                            validator:  ValidationHelper.validateSubject,
+                                            validator: ValidationHelper
+                                                .validateSubject,
                                           ),
-
                                           CustomLabeledTextField(
                                             label: AppText.userName,
                                             isRequired: false,
                                             isInputEnabled: false,
-                                            controller: viewChatController.userNameController,
+                                            controller: viewChatController
+                                                .userNameController,
                                             inputType: TextInputType.name,
                                             hintText: '',
-                                            validator:  ValidationHelper.validateSubject,
+                                            validator: ValidationHelper
+                                                .validateSubject,
                                           ),
                                           CustomLabeledTextField(
                                             label: AppText.category,
                                             isRequired: false,
                                             isInputEnabled: false,
-
-                                            controller: viewChatController.categoryController,
+                                            controller: viewChatController
+                                                .categoryController,
                                             inputType: TextInputType.name,
                                             hintText: '',
-                                            validator:  ValidationHelper.validateSubject,
+                                            validator: ValidationHelper
+                                                .validateSubject,
                                           ),
                                           CustomLabeledTextField(
                                             label: AppText.priority,
                                             isRequired: false,
                                             isInputEnabled: false,
-                                            controller: viewChatController.priorityController,
+                                            controller: viewChatController
+                                                .priorityController,
                                             inputType: TextInputType.name,
                                             hintText: '',
-                                            validator:  ValidationHelper.validateSubject,
+                                            validator: ValidationHelper
+                                                .validateSubject,
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 148.0),
-                                            child: CommonActionButton(
-                                              text: AppText.close,
+                                          Obx(() => Padding(
+                                            padding: const EdgeInsets.all(0),
+                                            child: viewChatController
+                                                .isStatusUpdating.value
+                                                ? const Center(
+                                              child:
+                                              CircularProgressIndicator(
+                                                  color: Colors
+                                                      .white),
+                                            )
+                                                : CommonActionButton(
+                                              text: viewChatController.viewChatDetailModel.value?.data?.status=="3"?
+                                              AppText.close: AppText.ReClose,
                                               icon: Icons.refresh,
                                               onPressed: () {
-
+                                                viewChatController.statusUpdateTicketApiRequest(
+                                                  TicketNo: viewChatController.viewChatDetailModel.value?.data?.ticketNo.toString() ?? '',
+                                                  status: viewChatController.viewChatDetailModel.value?.data?.status
+                                                      .toString() ??
+                                                      '',
+                                                  PanelId: viewChatController
+                                                      .viewChatDetailModel
+                                                      .value
+                                                      ?.data
+                                                      ?.panelId
+                                                      .toString() ??
+                                                      '',
+                                                );
                                               },
                                             ),
-                                          ),
-                                          SizedBox(height: 20,)
+                                          )),
+                                          SizedBox(
+                                            height: 20,
+                                          )
                                         ],
                                       ),
-
                                     ],
                                   ),
                                   Obx(() {
-                                    if (viewChatController.isLoadingValue.value) {
-                                      return Center(child: CustomSkelton.productShimmerList(context));
+                                    if (viewChatController
+                                        .isLoadingValue.value) {
+                                      return Center(
+                                          child:
+                                          CustomSkelton.productShimmerList(
+                                              context));
                                     }
+
                                     final messages = viewChatController
-                                        .viewChatDetailModel.value
+                                        .viewChatDetailModel
+                                        .value
                                         ?.data
                                         ?.message ??
                                         [];
 
                                     if (messages.isEmpty) {
-                                      return  const Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 30),
-                                      child: Text(
-                                        AppText.noData,
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                    );
+                                      return const Padding(
+                                        padding:
+                                        EdgeInsets.symmetric(vertical: 30),
+                                        child: Text(
+                                          AppText.noData,
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      );
                                     }
                                     ();
 
                                     return ListView.builder(
-                                      shrinkWrap: true, // 🔥 VERY IMPORTANT
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      physics:
+                                      const NeverScrollableScrollPhysics(),
                                       itemCount: messages.length,
                                       itemBuilder: (context, index) {
-                                        return _messageBubble(messages[index], context);
+                                        return _messageBubble(
+                                            messages[index], context);
                                       },
                                     );
                                   }),
-                                  SizedBox(height: 50,),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
                                 ],
                               ),
                             ),
@@ -206,31 +268,68 @@ class ViewChatScreen extends StatelessWidget {
               left: 16,
               right: 16,
               bottom: 16,
-              child:Container(
-                decoration: BoxDecoration(
-                    color: AppColor.appBlue
-                ),
-                child: CustomMessageTextField(
-                  controller: viewChatController.messageController,
-                  onImageTap: () {
-                    // open gallery / camera
-                  },
-                  onSendTap: () {
-                    // send message
-                  },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Obx(() {
+                      final file = viewChatController.selectedFile.value;
+                      if (file == null) return const SizedBox();
+
+                      return SelectedAttachmentPreview(
+                        file: file,
+                        onRemove: () {
+                          viewChatController.selectedFile.value = null;
+                        },
+                      );
+                    }),
+                    Obx(() {
+                      if (viewChatController.isLoadingValue.value) {
+                        return Center(
+                          child: CustomSkelton.productShimmerList(context),
+                        );
+                      }
+                      return Container(
+                          decoration:
+                          const BoxDecoration(color: AppColor.appBlue),
+                          child: CustomMessageTextField(
+                            controller: viewChatController.messageController,
+                            hasAttachment:
+                            viewChatController.selectedFile.value != null,
+                            onImageTap: () {
+                              getFile();
+                            },
+                            onSendTap: () {
+                              viewChatController.sendMessageApiRequest(
+                                  image: viewChatController.selectedFile.value,
+                                  ticketId: viewChatController
+                                      .viewChatDetailModel.value?.data?.id
+                                      .toString() ??
+                                      '',
+                                  message: viewChatController
+                                      .messageController.text
+                                      .trim()
+                                      .toString());
+
+                              print(viewChatController.messageController.text);
+
+                              // filePickerController.clear();
+                            },
+                          ));
+                    }),
+                  ],
                 ),
               ),
             ),
-
           ],
         ),
       ),
     );
   }
 
-  Widget header(context){
+  Widget header(context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -242,7 +341,8 @@ class ViewChatScreen extends StatelessWidget {
             child: Container(
               width: 48,
               height: 48,
-              padding: const EdgeInsets.all(12), // optional internal padding
+              padding: const EdgeInsets.all(12),
+              // optional internal padding
               alignment: Alignment.center,
               child: Image.asset(
                 AppImage.arrowLeft,
@@ -250,35 +350,33 @@ class ViewChatScreen extends StatelessWidget {
               ),
             ),
           ),
-
           const Text(
             AppText.viewChat,
             style: TextStyle(
                 fontSize: 20,
                 color: AppColor.grey3,
-                fontWeight: FontWeight.w700
-            ),
+                fontWeight: FontWeight.w700),
           ),
-
           InkWell(
-            onTap: (){
-
-            },
+            onTap: () {},
             child: Container(
-
               width: 40,
-              height:40,
+              height: 40,
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              decoration:  const BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
-              child: Center(child: Icon(Icons.filter_alt_outlined, color: Colors.transparent,),),
+              child: Center(
+                child: Icon(
+                  Icons.filter_alt_outlined,
+                  color: Colors.transparent,
+                ),
+              ),
             ),
           )
-
         ],
       ),
     );
@@ -320,23 +418,45 @@ class ViewChatScreen extends StatelessWidget {
     }
 
     /// IMAGE FILE
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Image.network(
-        url,
-        height: 30,
-        width: 30,
-        fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return const SizedBox(
-            height: 160,
-            child: Center(child: CircularProgressIndicator()),
-          );
-        },
-        errorBuilder: (context, error, stackTrace) {
-          return const Icon(Icons.broken_image, size: 40);
-        },
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: Get.context!,
+          barrierDismissible: true,
+          builder: (_) => Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.all(16),
+            child: InteractiveViewer(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  url,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.network(
+          url,
+          height: 30,
+          width: 30,
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const SizedBox(
+              height: 30,
+              width: 30,
+              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return const Icon(Icons.broken_image, size: 30);
+          },
+        ),
       ),
     );
   }
@@ -364,7 +484,6 @@ class ViewChatScreen extends StatelessWidget {
                   color: AppColor.primaryColor,
                 ),
               ),
-
             if ((data.image ?? '').isNotEmpty) ...[
               const SizedBox(height: 6),
               _buildMessageAttachment(data.image!),
@@ -375,4 +494,77 @@ class ViewChatScreen extends StatelessWidget {
     );
   }
 
+  Future<void> getFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.any,
+    );
+
+    if (result != null && result.files.single.path != null) {
+      viewChatController.selectedFile.value = File(result.files.single.path!);
+
+      debugPrint(
+        'Picked file: ${viewChatController.selectedFile.value!.path}',
+      );
+    }
+  }
+}
+
+class SelectedAttachmentPreview extends StatelessWidget {
+  final File file;
+  final VoidCallback onRemove;
+
+  const SelectedAttachmentPreview({
+    super.key,
+    required this.file,
+    required this.onRemove,
+  });
+
+  bool get isImage {
+    final ext = file.path.toLowerCase();
+    return ext.endsWith('.png') ||
+        ext.endsWith('.jpg') ||
+        ext.endsWith('.jpeg') ||
+        ext.endsWith('.webp');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        children: [
+          isImage
+              ? ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.file(
+              file,
+              width: 48,
+              height: 48,
+              fit: BoxFit.cover,
+            ),
+          )
+              : const Icon(Icons.insert_drive_file, size: 40),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              file.path.split('/').last,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          InkWell(
+            onTap: onRemove,
+            child: const Icon(Icons.close, color: Colors.red),
+          ),
+        ],
+      ),
+    );
+  }
 }
