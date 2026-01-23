@@ -1237,6 +1237,7 @@ class AppText{
   static const String recloseDate = "Reclosed Date";
   static const String channelId = "Channel ID";
   static const String view="View";
+  static const String ticketInfo="Ticket Info";
   static const String viewChat="View Chat";
   static const String userName="User Name";
   static const String close="Close";

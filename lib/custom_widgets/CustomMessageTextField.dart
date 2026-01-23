@@ -37,6 +37,8 @@ class CustomMessageTextField extends StatelessWidget {
           textInputAction: TextInputAction.newline,
           decoration: InputDecoration(
             hintText: hintText,
+            fillColor: AppColor.appBlue,
+            filled: true,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 14,
               vertical: 14,
@@ -68,7 +70,6 @@ class CustomMessageTextField extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
 
-                  /// 📷 IMAGE PICKER
                   InkWell(
                     onTap: onImageTap,
                     borderRadius: BorderRadius.circular(20),
@@ -84,7 +85,6 @@ class CustomMessageTextField extends StatelessWidget {
 
                   const SizedBox(width: 6),
 
-                  /// 🚀 SEND BUTTON (AUTO DISABLE)
                   InkWell(
                     onTap: isSendEnabled ? onSendTap : null,
                     child: Container(
@@ -92,7 +92,7 @@ class CustomMessageTextField extends StatelessWidget {
                       width: 36,
                       decoration: BoxDecoration(
                         color: isSendEnabled
-                            ? AppColor.primaryColor
+                            ? AppColor.secondaryColor
                             : Colors.grey,
                         shape: BoxShape.circle,
                       ),

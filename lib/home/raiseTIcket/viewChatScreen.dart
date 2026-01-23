@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:ksdpl/common/base_url.dart';
-import 'package:ksdpl/common/customFilePicker.dart';
 import 'package:ksdpl/models/raiseTicketModel/ViewChatDetailModel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../common/skelton.dart';
 import '../../controllers/FilePickerController.dart';
 import '../../custom_widgets/CustomMessageTextField.dart';
+import '../../custom_widgets/CustomTextField.dart';
 import '../../custom_widgets/commonActionButton.dart';
 import '../../common/helper.dart';
 import '../../common/validation_helper.dart';
@@ -88,7 +88,7 @@ class ViewChatScreen extends StatelessWidget {
                                     childrenPadding:
                                     EdgeInsets.symmetric(horizontal: 20),
                                     title: const Text(
-                                      AppText.viewChat,
+                                      AppText.ticketInfo,
                                       style: TextStyle(
                                           color: AppColor.blackColor,
                                           fontSize: 16,
@@ -116,7 +116,7 @@ class ViewChatScreen extends StatelessWidget {
                                             validator: ValidationHelper
                                                 .validateSubject,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 5,
                                           ),
                                           CustomLabeledTextField(
@@ -166,8 +166,7 @@ class ViewChatScreen extends StatelessWidget {
                                             label: AppText.priority,
                                             isRequired: false,
                                             isInputEnabled: false,
-                                            controller: viewChatController
-                                                .priorityController,
+                                            controller: viewChatController.priorityController,
                                             inputType: TextInputType.name,
                                             hintText: '',
                                             validator: ValidationHelper
@@ -180,31 +179,32 @@ class ViewChatScreen extends StatelessWidget {
                                                 ? const Center(
                                               child:
                                               CircularProgressIndicator(
-                                                  color: Colors
-                                                      .white),
+                                                  color: AppColor.primaryColor),
                                             )
-                                                : CommonActionButton(
-                                              text: viewChatController.viewChatDetailModel.value?.data?.status=="3"?
-                                              AppText.close: AppText.ReClose,
-                                              icon: Icons.refresh,
-                                              onPressed: () {
-                                                viewChatController.statusUpdateTicketApiRequest(
-                                                  TicketNo: viewChatController.viewChatDetailModel.value?.data?.ticketNo.toString() ?? '',
-                                                  status: viewChatController.viewChatDetailModel.value?.data?.status
-                                                      .toString() ??
-                                                      '',
-                                                  PanelId: viewChatController
-                                                      .viewChatDetailModel
-                                                      .value
-                                                      ?.data
-                                                      ?.panelId
-                                                      .toString() ??
-                                                      '',
-                                                );
-                                              },
-                                            ),
+                                                : Center(
+                                                  child: CommonActionButton(
+                                                                                                text: viewChatController.viewChatDetailModel.value?.data?.status=="3"?
+                                                                                                AppText.close: AppText.ReClose,
+                                                                                                icon: Icons.refresh,
+                                                                                                onPressed: () {
+                                                  viewChatController.statusUpdateTicketApiRequest(
+                                                    TicketNo: viewChatController.viewChatDetailModel.value?.data?.ticketNo.toString() ?? '',
+                                                    status: viewChatController.viewChatDetailModel.value?.data?.status
+                                                        .toString() ??
+                                                        '',
+                                                    PanelId: viewChatController
+                                                        .viewChatDetailModel
+                                                        .value
+                                                        ?.data
+                                                        ?.panelId
+                                                        .toString() ??
+                                                        '',
+                                                  );
+                                                                                                },
+                                                                                              ),
+                                                ),
                                           )),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 20,
                                           )
                                         ],
@@ -215,9 +215,9 @@ class ViewChatScreen extends StatelessWidget {
                                     if (viewChatController
                                         .isLoadingValue.value) {
                                       return Center(
-                                          child:
-                                          CustomSkelton.productShimmerList(
-                                              context));
+                                        child: CustomSkelton.productShimmerList(
+                                            context),
+                                      );
                                     }
 
                                     final messages = viewChatController
@@ -250,7 +250,7 @@ class ViewChatScreen extends StatelessWidget {
                                       },
                                     );
                                   }),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 50,
                                   ),
                                 ],
@@ -284,38 +284,35 @@ class ViewChatScreen extends StatelessWidget {
                       );
                     }),
                     Obx(() {
-                      if (viewChatController.isLoadingValue.value) {
-                        return Center(
-                          child: CustomSkelton.productShimmerList(context),
+                      if (viewChatController.isLoadingValue1.value) {
+                        return const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         );
                       }
-                      return Container(
-                          decoration:
-                          const BoxDecoration(color: AppColor.appBlue),
-                          child: CustomMessageTextField(
-                            controller: viewChatController.messageController,
-                            hasAttachment:
-                            viewChatController.selectedFile.value != null,
-                            onImageTap: () {
-                              getFile();
-                            },
-                            onSendTap: () {
-                              viewChatController.sendMessageApiRequest(
-                                  image: viewChatController.selectedFile.value,
-                                  ticketId: viewChatController
-                                      .viewChatDetailModel.value?.data?.id
-                                      .toString() ??
-                                      '',
-                                  message: viewChatController
-                                      .messageController.text
-                                      .trim()
-                                      .toString());
+                      return CustomMessageTextField(
+                        controller: viewChatController.messageController,
+                        hasAttachment:
+                        viewChatController.selectedFile.value != null,
+                        onImageTap: () {
+                          getFile();
+                        },
+                        onSendTap: () {
+                          viewChatController.sendMessageApiRequest(
+                              image: viewChatController.selectedFile.value,
+                              ticketId: viewChatController
+                                  .viewChatDetailModel.value?.data?.id
+                                  .toString() ??
+                                  '',
+                              message: viewChatController
+                                  .messageController.text
+                                  .trim()
+                                  .toString());
 
-                              print(viewChatController.messageController.text);
+                          print(viewChatController.messageController.text);
 
-                              // filePickerController.clear();
-                            },
-                          ));
+                          // filePickerController.clear();
+                        },
+                      );
                     }),
                   ],
                 ),
@@ -426,14 +423,39 @@ class ViewChatScreen extends StatelessWidget {
           builder: (_) => Dialog(
             backgroundColor: Colors.transparent,
             insetPadding: const EdgeInsets.all(16),
-            child: InteractiveViewer(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  url,
-                  fit: BoxFit.contain,
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                /// 📷 Image (Centered)
+                InteractiveViewer(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      url,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
-              ),
+
+                /// ❌ Close button (Top Right)
+                Positioned(
+                  top: -40, // 🔥 move icon upward
+                  right: 30,
+                  child: InkWell(
+                    onTap: () => Get.back(),
+                    child: const CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Colors.black54,
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 25,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -442,8 +464,8 @@ class ViewChatScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         child: Image.network(
           url,
-          height: 30,
-          width: 30,
+          height: 80,
+          width: 80,
           fit: BoxFit.cover,
           loadingBuilder: (context, child, loadingProgress) {
             if (loadingProgress == null) return child;
@@ -464,31 +486,40 @@ class ViewChatScreen extends StatelessWidget {
   Widget _messageBubble(Message data, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min, // 🔥 KEY
-          children: [
-            if ((data.messageText ?? '').isNotEmpty)
-              Text(
-                data.messageText!,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColor.primaryColor,
-                ),
-              ),
-            if ((data.image ?? '').isNotEmpty) ...[
-              const SizedBox(height: 6),
-              _buildMessageAttachment(data.image!),
-            ],
-          ],
+      child: Align(
+        alignment: Alignment.centerRight, // or left for receiver
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.75,
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade50,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if ((data.messageText ?? '').isNotEmpty)
+                  Text(
+                    data.messageText!,
+                    softWrap: true,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColor.primaryColor,
+                    ),
+                  ),
+
+                if ((data.image ?? '').isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  _buildMessageAttachment(data.image!),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
