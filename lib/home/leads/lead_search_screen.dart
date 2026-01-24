@@ -611,8 +611,9 @@ class LeadSearchScreen extends StatelessWidget {
     leadListController.filteredleadCode.value=temp;
 
     leadListController.getFilteredLeadsApi(
-      employeeId: (RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value) && searchLeadController.selectedJunior.value!=null)?
-      searchLeadController.selectedJunior.value.toString() :leadListController.eId.value.toString(),
+      /*employeeId: (RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value) && searchLeadController.selectedJunior.value!=null)?
+      searchLeadController.selectedJunior.value.toString() :leadListController.eId.value.toString(),*/
+      employeeId: leadListController.eId.value.toString(),
       leadStage:temp,
       stateId: leadDDController.selectedState.value??"0",
       distId: leadDDController.selectedDistrict.value??"0",
