@@ -172,6 +172,8 @@ class OpenPollFilterController extends GetxController{
     String distId="0",
     String cityId="0",
     String KsdplBranchId="0",
+   String ChannelId="0",
+   String EmployeeId="0",
 
   }) async {
     try {
@@ -184,6 +186,9 @@ class OpenPollFilterController extends GetxController{
         distId: distId,
         cityId: cityId,
         KsdplBranchId: KsdplBranchId,
+        ChannelId: ChannelId,
+        EmployeeId: EmployeeId,
+
       );
 
 

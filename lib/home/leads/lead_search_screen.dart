@@ -610,10 +610,20 @@ class LeadSearchScreen extends StatelessWidget {
     // leadListController.leadCode.value=temp;
     leadListController.filteredleadCode.value=temp;
 
+    print("see here====>${(RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value) && searchLeadController.selectedJunior.value!=null)?
+    searchLeadController.selectedJunior.value.toString() :leadListController.eId.value.toString()}");
+
+    print("see here====>2====>${RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value) }");
+    print("see here====>3====>${searchLeadController.selectedJunior.value!=null}");
+    print("see here====>4====>${searchLeadController.selectedJunior.value.toString()}");
+    print("see here====>5====>${leadListController.eId.value.toString()}");
+
     leadListController.getFilteredLeadsApi(
-      /*employeeId: (RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value) && searchLeadController.selectedJunior.value!=null)?
-      searchLeadController.selectedJunior.value.toString() :leadListController.eId.value.toString(),*/
-      employeeId: leadListController.eId.value.toString(),
+      employeeId: (RolePermissions.seniorLevelLike.contains(leadListController.rolRx.value) && (searchLeadController.selectedJunior.value != null &&
+          searchLeadController.selectedJunior.value!.isNotEmpty
+      ))?
+      searchLeadController.selectedJunior.value.toString() :leadListController.eId.value.toString(),
+      //employeeId: leadListController.eId.value.toString(),
       leadStage:temp,
       stateId: leadDDController.selectedState.value??"0",
       distId: leadDDController.selectedDistrict.value??"0",
