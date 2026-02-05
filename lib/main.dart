@@ -61,14 +61,14 @@ void main() async{
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  // Local notification settings
-  const AndroidInitializationSettings initializationSettingsAndroid =
+  // Local notification settings commented on 24 jan 2025
+  /*const AndroidInitializationSettings initializationSettingsAndroid =
   AndroidInitializationSettings('@mipmap/ic_launcher');
 
   const InitializationSettings initializationSettings =
   InitializationSettings(android: initializationSettingsAndroid);
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);*/
   ///push end
   await GetStorage.init();
 

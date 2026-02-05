@@ -16,9 +16,10 @@ class NotificationHelper {
 
     const AndroidInitializationSettings androidSettings =
     AndroidInitializationSettings('@mipmap/ic_launcher');
-
+    const DarwinInitializationSettings iosInit = DarwinInitializationSettings();
     const InitializationSettings initSettings = InitializationSettings(
       android: androidSettings,
+      iOS: iosInit,
     );
 
     await _notificationsPlugin.initialize(initSettings);

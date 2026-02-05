@@ -76,6 +76,9 @@ dependencies:
   pdf: ^3.11.3
   open_file: ^3.5.10
 
+dependency_overrides:
+    wakelock_plus: 1.1.6
+
 
 
 
